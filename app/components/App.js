@@ -14,7 +14,8 @@ import {
 } from 'react-native'
 import LandingScene from '../scenes/LandingScene'
 import MapScene from '../scenes/MapScene'
-import CameraScene from '../scenes/CameraScene'
+import FormScene from '../scenes/formScene'
+//import CameraScene from '../scenes/CameraScene'
 
 export default class WildType extends Component {
   renderScene(route, navigator) {
@@ -27,12 +28,15 @@ export default class WildType extends Component {
     }
 
     if(route.index == 2) {
-      return <CameraScene navigator={navigator}/>
+      return <FormScene title={route.title} navigator={navigator}/>
     }
   }
 
   render() {
     return (
+
+      //question: initialRouteStack would go here below initialRoute?
+      //https://facebook.github.io/react-native/docs/navigator.html
       <View style={styles.container}>
         <StatusBar
           backgroundColor="#25897d"
