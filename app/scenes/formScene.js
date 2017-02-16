@@ -8,7 +8,9 @@ import {
     Navigator,
     Dimensions,
     StyleSheet,
-    Picker
+    Picker,
+    Button,
+    Alert
 } from 'react-native'
 import {getTheme} from 'react-native-material-kit'
 import Header from '../components/Header'
@@ -20,6 +22,30 @@ const myIcon = (<Icon name="md-arrow-dropright-circle" size={22} color="#959595"
 let thisDate = new Date();
 let thisDateDisplay = String(thisDate);
 var PickerItem = Picker.Item;
+
+
+
+const plants = [{
+    title: 'Dogwood',
+    image: require('../img/dogwood.jpg'),
+},
+    {
+        title: 'Hydrangea',
+        image: require('../img/hydrangea.jpg'),
+    },
+    {
+        title: 'Green Ash',
+        image: require('../img/ash.jpg'),
+    },
+    {
+        title: 'Dogwood',
+        image: require('../img/dogwood.jpg'),
+    }]
+
+const onButtonPress = () => {
+    Alert.alert('Button has been pressed!');
+};
+
 
 
 export default class FormScene extends Component {
@@ -59,8 +85,10 @@ export default class FormScene extends Component {
                                     label={s} />
                             }) }
                         </Picker>
-
-
+                        <Button
+                            onPress={onButtonPress}
+                            title="Submit!"
+                        />
                 </View>
             </View>
         )
