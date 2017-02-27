@@ -96,7 +96,7 @@ const style = StyleSheet.create({
   title    : {
     fontSize       : 16,
     flex           : 1,
-    paddingVertical: 15
+    paddingVertical: 17
   },
   text     : {
     color     : Colors.primaryText,
