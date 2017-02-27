@@ -21,13 +21,14 @@ export default class Header extends Component {
   }
 
   toggleMenu() {
-    //this.props.navigator.pop()
+    console.log(this.props.sidebar)
+    //this.props.sidebar.toggleMenu()
   }
 
   getLeftIcon() {
     if (this.props.initial) {
       return (
-        <TouchableHighlight style={style.touchable} onPress={this.toggleMenu} underlayColor={Colors.primary}>
+        <TouchableHighlight style={style.touchable} onPress={this.toggleMenu.bind(this)} underlayColor={Colors.primary}>
           {menuIcon}
         </TouchableHighlight>
       )
@@ -70,6 +71,7 @@ export default class Header extends Component {
 Header.propTypes = {
   title    : PropTypes.string.isRequired,
   navigator: PropTypes.object.isRequired,
+  sidebar  : PropTypes.object,
   initial  : PropTypes.bool
 }
 
