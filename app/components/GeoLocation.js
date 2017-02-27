@@ -2,6 +2,25 @@ import React, {Component, PropTypes} from 'react'
 import {StyleSheet, Dimensions} from 'react-native'
 import MapView from 'react-native-maps'
 
+const markers = [
+  {
+    title      : 'Dogwood',
+    description: '>100 ft2',
+    coord      : {
+      latitude : 35.921918,
+      longitude: -84.028698
+    }
+  },
+  {
+    title      : 'Hydrangea',
+    description: '>1000 ft2',
+    coord      : {
+      latitude : 32.950287,
+      longitude: -88.844245
+    }
+  }]
+
+
 export default class GeoLocation extends Component {
   constructor(props) {
     super(props)
@@ -14,8 +33,24 @@ export default class GeoLocation extends Component {
       },
       initialPosition: 'unknown',
       lastPosition   : 'unknown',
-      markers        : []
+      markers        : [{
+        coords: {
+          latitude : 35.921918,
+          longitude: -84.028698
+        }
+      }]
     }
+
+    this.circles = [
+      {
+        radius: 7000,
+        center: {
+          latitude : 36.830540,
+          longitude: -84.390603
+        }
+      }
+    ]
+
   }
 
   watchID: ?number = null;
@@ -52,22 +87,43 @@ export default class GeoLocation extends Component {
     return (
       <MapView
         style={styles.map}
-        region={this.state.currentLocation}
-        onRegionChange={this.onRegionChange.bind(this)}
         showsUserLocation={true}
-        showsCompass={true}
-        showsMyLocationButton={true}
         followUserLocation={true}
-        zoomEnabled={true}>
-        {this.state.markers.map((marker, index) => {
+        ref="map">
+        {markers.map((marker, index) => {
           if (typeof marker == "undefined") return;
 
-          <MapView.Marker key="index"
-            coordinate={marker.coords}
+          return (
+            <MapView.Marker
+              onPress={() => this.onPressMarker(marker.coord)}
+              onSelect={() => this.onPressMarker(marker.coord)}
+              key={index}
+              coordinate={marker.coord}
+              description={marker.description}
+              title={marker.title}
+            />
+          )
+        })}
+        {this.circles.map((circle, index) => {
+          <MapView.Circle
+            key={index}
+            center={circle.center}
+            radius={circle.radius}
+            fillColor={"#000"}
+            onPress={() => this.onPressMarker(marker.coord)}
           />
         })}
       </MapView>
     )
+  }
+
+  onPressMarker(marker) {
+    this.refs.map.animateToRegion({
+      latitude      : parseFloat(marker.latitude),
+      longitude     : parseFloat(marker.longitude),
+      latitudeDelta : 0.0922,
+      longitudeDelta: 0.0421
+    }, 1000);
   }
 }
 
