@@ -30,6 +30,10 @@ export default class WildType extends Component {
     if(route.index == 2) {
       return <FormScene title={route.title} navigator={navigator}/>
     }
+
+    if(route.index == 3) {
+      // Scene loader here
+    }
   }
 
   render() {

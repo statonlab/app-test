@@ -3,9 +3,9 @@ import {
   View,
   StyleSheet,
   Dimensions,
-  Text
+  Text,
+  Image
 } from 'react-native'
-import Camera from 'react-native-camera'
 import Header from '../components/Header'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import Colors from '../helpers/Colors'
@@ -14,31 +14,10 @@ export default class CameraScene extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Header title="Camera" navigator={this.props.navigator}/>
-        <Camera
-          ref={(cam) => {
-            this.camera = cam;
-          }}
-          style={styles.preview}
-          keepAwake={true}
-          mirrorImage={true}>
-          <View style={styles.toolsContainer}>
-            <Text style={styles.capture} onPress={this.takePicture.bind(this)}>
-              <Icon name="camera" size={36} color={"#fff"}/>
-            </Text>
-          </View>
-        </Camera>
+        <Header title="Confirm" navigator={this.props.navigator}/>
+        <Image source={}/>
       </View>
     );
-  }
-
-  takePicture() {
-    try {
-      this.camera.capture()
-        .then((data) => console.log(`Right HERE!!`, data))
-    } catch (err) {
-      console.error(err)
-    }
   }
 }
 
