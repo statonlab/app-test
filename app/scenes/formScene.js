@@ -23,7 +23,8 @@ import {
     MKRadioButton,
     mdl,
 } from 'react-native-material-kit'
-import {GiftedForm, GiftedFormManager} from 'react-native-gifted-form'
+
+import ModalDropdown from 'react-native-modal-dropdown';
 
 
 const theme  = getTheme();
@@ -95,74 +96,55 @@ const plants = [{
     }]
 
 
-const options = [{
-
-
-
-
-}]
-
-
 const onButtonPress = () => {
     Alert.alert('Form has been submitted');
 };
+
+
+const treeDensities = ['0-10/100 sq feet', '11-50/100 sq feet', '>50/100 sq feet'];
+const diseaseCoverage = ['0-25%', '26-50%', '51-75%', '76-100%'];
+
 
 //https://github.com/xinthink/react-native-material-kit
 
 export default class FormScene extends Component {
     constructor(props){
         super(props);
-        this.state = { densities: ['1-10 trees/100ft2', '10-50 trees/100ft2', '50-100 trees/100ft2', '100-1000 trees/100ft2', '>1000 trees/100ft2'],
-            selectedDensity: '1-10 trees/100ft2',
-            diseaseRatings: ['0%', '50%', '100%'],
-            selectedDiseaseRating: '0%',
-            images: [],
-            selectedImage: '',
         }
-        this.radioGroup = new MKRadioButton.Group();
-    }
 
     render() {
         return (
             <View style={{backgroundColor: '#f5f5f5', flex: 1, flexDirection: 'column'}}>
                 <Header title={this.props.title} navigator={this.props.navigator} initial={true}/>
-                <View style={theme.cardStyle}>
+                <View>
                     <Text>{thisDateDisplay}</Text>
-                        <TouchableHighlight
-                        style={styles.card}
-                        >
-                            <View>
-                            <Text style={styles.cardTitle}>
-                                    Tree density: </Text>
-                            {/*<Picker selectedValue={this.state.selectedDensity}*/}
-                                    {/*onValueChange={ (densities) => (*/}
-                                        {/*this.setState({selectedDensity:densities}) ) } >*/}
-                                {/*{ this.state.densities.map((s, i) => {*/}
-                                    {/*return <PickerItem*/}
-                                        {/*key={i}*/}
-                                        {/*value={s}*/}
-                                        {/*label={s} />*/}
-                                {/*}) }*/}
-                            {/*</Picker>*/}
-                            </View>
-                        </TouchableHighlight>
-                    <TouchableHighlight
+                    <View
                         style={styles.card}
                     >
-                        <View>
-                            <Text style={styles.cardTitle}>
+                        <View style={{flexGrow:1, padding: 0, height: 50, flexDirection:'row'}}>
+                            <Text>
+                                Tree density: </Text>
+                            <ModalDropdown options={treeDensities}/>
+                        </View>
+                    </View>
+                    <View
+                        style={styles.card}
+                    >
+
+                        <View style={{flexGrow:1, height: 50, flexDirection:'row'}}>
+                            <Text>
                                 % Disease coverage </Text>
+                            <ModalDropdown options={diseaseCoverage}/>
                         </View>
-                    </TouchableHighlight>
-                        <View style = {{flexDirection: 'row'}}>
-                            <MKRadioButton
-                                checked={true}
-                                group={this.radioGroup}
-                            />
-                        </View>
-                        <Textfield/>
-                            <Text></Text>
-                            <ColoredRaisedButton/>
+                    </View>
+                    <View style = {{flexDirection: 'row'}}>
+
+                    </View>
+                    <Textfield/>
+                    <Text></Text>
+                    <ColoredRaisedButton/>
+                    <Text>Selected image:
+                    (Selected image and/or GPS coordinate below)</Text>
                 </View>
             </View>
         )

@@ -7,12 +7,16 @@
     "test": "jest"
   },
   "dependencies": {
+    "@exponent/react-native-navigator": "^0.4.9",
+    "moment": "^2.17.1",
     "react": "~15.4.0-rc.4",
     "react-native": "0.41.2",
     "react-native-gifted-form": "0.0.13",
     "react-native-maps": "^0.13.0",
     "react-native-material-kit": "^0.4.1",
-    "react-native-vector-icons": "^4.0.0"
+    "react-native-modal-dropdown": "^0.4.1",
+    "react-native-vector-icons": "^4.0.0",
+    "react-validation": "^2.10.9"
   },
   "devDependencies": {
     "babel-jest": "18.0.0",
