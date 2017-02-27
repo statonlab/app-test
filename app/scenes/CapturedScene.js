@@ -19,7 +19,6 @@ export default class CapturedScene extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Header title="Confirm" navigator={this.props.navigator}/>
         <Image source={{uri: this.props.image.path}} style={styles.preview}/>
         <View style={styles.toolsContainer}>
           <TouchableHighlight onPress={this._back.bind(this)} style={styles.choice}>
@@ -58,21 +57,23 @@ const styles = StyleSheet.create({
     flex: 1
   },
   preview       : {
-    flex          : 1,
-    justifyContent: 'flex-end',
-    alignItems    : 'center',
-    height        : undefined,
-    width         : undefined,
-    resizeMode    : 'contain'
+    flex      : 1,
+    height    : undefined,
+    width     : undefined,
+    resizeMode: 'contain'
   },
   toolsContainer: {
     flex           : 0,
     flexDirection  : 'row',
     justifyContent : 'space-between',
-    width          : Dimensions.get('window').width,
+    width          : undefined,
     height         : 70,
     alignItems     : 'center',
-    backgroundColor: '#000'
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    position       : 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0
   },
   text          : {
     color  : "#fff",
