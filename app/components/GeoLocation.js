@@ -56,9 +56,11 @@ export default class GeoLocation extends Component {
         onRegionChange={this.onRegionChange.bind(this)}
         showsUserLocation={true}
         showsCompass={true}
-        showsMyLocationButton={true}>
+        showsMyLocationButton={true}
+        followUserLocation={true}
+        zoomEnabled={true}>
         {this.state.markers.map((marker, index) => {
-          if(typeof marker == "undefined") return;
+          if (typeof marker == "undefined") return;
 
           <MapView.Marker key="index"
             coordinate={marker.coords}
