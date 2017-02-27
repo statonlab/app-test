@@ -41,7 +41,6 @@ export default class LandingScene extends Component {
         <Header title={this.props.title} navigator={this.props.navigator} initial={true}/>
         <ScrollView style={{flex: 0}}>
           <View style={{marginHorizontal: 5, flex: 1, flexDirection: 'column', paddingVertical: 10}}>
-
             {plants.map((plant, index) => {
               return (
                 <TouchableHighlight
@@ -53,10 +52,10 @@ export default class LandingScene extends Component {
                   <View>
                     <Image source={plant.image} style={styles.cardImage}/>
                     <View style={styles.cardBody}>
+                      {myIcon}
                       <Text style={styles.cardTitle}>
                         {plant.title}
                       </Text>
-                      {myIcon}
                     </View>
                   </View>
                 </TouchableHighlight>
@@ -108,7 +107,7 @@ const styles = StyleSheet.create({
   cardBody : {
     flexDirection : 'row',
     flex          : 1,
-    padding       : 10,
+    padding       : 0,
     alignItems    : 'center',
     justifyContent: 'center'
   }
