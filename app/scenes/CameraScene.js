@@ -35,7 +35,7 @@ export default class CameraScene extends Component {
   takePicture() {
     try {
       this.camera.capture()
-        .then((data) => console.log(data))
+        .then((data) => console.log(`Right HERE!!`, data))
     } catch (err) {
       console.error(err)
     }
