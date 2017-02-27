@@ -15,6 +15,7 @@
     "react-native-maps": "^0.13.0",
     "react-native-material-kit": "^0.4.1",
     "react-native-modal-dropdown": "^0.4.1",
+    "react-native-modal-picker": "0.0.16",
     "react-native-vector-icons": "^4.0.0",
     "react-validation": "^2.10.9"
   },
