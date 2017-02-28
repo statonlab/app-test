@@ -83,7 +83,6 @@ const deadTrees = [
             treeStandNumber: '',
             textAddComment: '',
           nearbyDeadTrees: 'none'
-
         }
     }
     render() {
