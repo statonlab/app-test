@@ -77,6 +77,7 @@ export default class LandingScene extends Component {
                   <View>
                     <Image source={plant.image} style={styles.cardImage}/>
                     <View style={styles.cardBody}>
+                      {myIcon}
                       <Text style={styles.cardTitle}>
                         {plant.title}
                       </Text>
@@ -138,7 +139,7 @@ const styles = StyleSheet.create({
   cardBody       : {
     flexDirection : 'row',
     flex          : 1,
-    padding       : 10,
+    padding       : 0,
     alignItems    : 'center',
     justifyContent: 'center'
   },
