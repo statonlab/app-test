@@ -14,25 +14,25 @@ import Header from '../components/Header'
 import Sidebar from '../components/Sidebar'
 import Icon from 'react-native-vector-icons/Ionicons'
 import Elevation from '../helpers/Elevation'
+import Colors from '../helpers/Colors'
 
 const theme  = getTheme()
-const myIcon = (<Icon name="md-arrow-dropright-circle" size={22} color="#959595"/>)
 const plants = [
   {
-    title: 'Dogwood',
-    image: require('../img/dogwood.jpg'),
-  },
-  {
-    title: 'Hydrangea',
-    image: require('../img/hydrangea.jpg'),
+    title: 'American Chestnut',
+    image: require('../img/am_chestnut4.jpg'),
   },
   {
     title: 'Green Ash',
     image: require('../img/ash.jpg'),
   },
   {
-    title: 'Dogwood',
-    image: require('../img/dogwood.jpg'),
+    title: 'Hemlock',
+    image: require('../img/hemlock.jpg'),
+  },
+  {
+    title: 'White Oak',
+    image: require('../img/white_oak.jpg'),
   }
 ]
 
@@ -79,7 +79,7 @@ export default class LandingScene extends Component {
                       <Text style={styles.cardTitle}>
                         {plant.title}
                       </Text>
-                      {myIcon}
+                      <Icon name="md-arrow-dropright-circle" size={22} color={Colors.primary} style={styles.icon}/>
                     </View>
                   </View>
                 </TouchableHighlight>
@@ -102,6 +102,7 @@ LandingScene.propTypes = {
 }
 
 const elevationStyle = new Elevation(2)
+const iconElevation  = new Elevation(2)
 
 const styles = StyleSheet.create({
   container: {
@@ -138,5 +139,8 @@ const styles = StyleSheet.create({
     padding       : 10,
     alignItems    : 'center',
     justifyContent: 'center'
+  },
+  icon     : {
+    backgroundColor: 'transparent'
   }
 })
