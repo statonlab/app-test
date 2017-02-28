@@ -47,6 +47,9 @@ export default class GetLocation extends Component {
     return (
       <View {...this.props} style={styles.container}>
         <View style={styles.card}>
+          <Image source={{uri: this.props.image.path}} style={styles.cardImage}/>
+        </View>
+        <View style={styles.card}>
           <View style={styles.cardBody}>
             <View style={{alignItems: 'center', marginTop: 10, marginBottom: 20}}>
               <MKSpinner prgress={.5} buffer={.5}></MKSpinner>
@@ -67,9 +70,6 @@ export default class GetLocation extends Component {
               </MKButton>
             </View>
           </View>
-        </View>
-        <View style={styles.card}>
-          <Image source={{uri: this.props.image.path}} style={styles.cardImage}/>
         </View>
       </View>
     )
