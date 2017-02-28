@@ -71,13 +71,12 @@ export default class LandingScene extends Component {
                   style={styles.card}
                   key={index}
                   onPress={() => {
-                    this.props.navigator.push({index: 5, title: plant.title})
+                    this.props.navigator.push({index: 6, title: plant.title})
                   }}
                   underlayColor="#fff">
                   <View>
                     <Image source={plant.image} style={styles.cardImage}/>
                     <View style={styles.cardBody}>
-                      {/*{myIcon}*/}
                       <Text style={styles.cardTitle}>
                         {plant.title}
                       </Text>
@@ -139,7 +138,7 @@ const styles = StyleSheet.create({
   cardBody       : {
     flexDirection : 'row',
     flex          : 1,
-    padding       : 0,
+    padding       : 10,
     alignItems    : 'center',
     justifyContent: 'center'
   },

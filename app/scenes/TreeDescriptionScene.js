@@ -19,31 +19,31 @@ import {
 
 const theme  = getTheme()
 const plants = {
-    'American Chestnut': {
-      image                 : require('../img/am_chestnut4.jpg'),
-      latinName             : 'A. chestnuticus',
-      descriptionBody       : 'This is where the body text would go describing the majestic American Chestnut.',
-      collectionInstructions: 'This is where the specific collection instructions would go.  Only collect disease trees for this species!'
-    },
-    'Green Ash'        : {
-      image                 : require('../img/ash.jpg'),
-      latinName             : 'G. ashicus',
-      descriptionBody       : 'This is where the body text would go describing the gorgeous green ash.',
-      collectionInstructions: 'This is where the specific collection instructions would go.  Only collect disease trees for this species!'
-    },
-    'Hemlock'          : {
-      image                 : require('../img/hemlock.jpg'),
-      latinName             : 'H. lockicus',
-      descriptionBody       : 'This is where the body text would go describing the heroic hemlock.',
-      collectionInstructions: 'This is where the specific collection instructions would go.  Only collect disease trees for this species!'
-    },
-    'White Oak'        : {
-      image                 : require('../img/white_oak.jpg'),
-      latinName             : 'W. oakicus',
-      descriptionBody       : 'This is where the body text would go describing the witty white oak.',
-      collectionInstructions: 'This is where the specific collection instructions would go.  Only collect disease trees for this species!'
-    }
+  'American Chestnut': {
+    image                 : require('../img/am_chestnut4.jpg'),
+    latinName             : 'A. chestnuticus',
+    descriptionBody       : 'This is where the body text would go describing the majestic American Chestnut.',
+    collectionInstructions: 'This is where the specific collection instructions would go.  Only collect disease trees for this species!'
+  },
+  'Green Ash'        : {
+    image                 : require('../img/ash.jpg'),
+    latinName             : 'G. ashicus',
+    descriptionBody       : 'This is where the body text would go describing the gorgeous green ash.',
+    collectionInstructions: 'This is where the specific collection instructions would go.  Only collect disease trees for this species!'
+  },
+  'Hemlock'          : {
+    image                 : require('../img/hemlock.jpg'),
+    latinName             : 'H. lockicus',
+    descriptionBody       : 'This is where the body text would go describing the heroic hemlock.',
+    collectionInstructions: 'This is where the specific collection instructions would go.  Only collect disease trees for this species!'
+  },
+  'White Oak'        : {
+    image                 : require('../img/white_oak.jpg'),
+    latinName             : 'W. oakicus',
+    descriptionBody       : 'This is where the body text would go describing the witty white oak.',
+    collectionInstructions: 'This is where the specific collection instructions would go.  Only collect disease trees for this species!'
   }
+}
 
 
 let plant = plants['Hemlock'];
@@ -68,23 +68,23 @@ export default class TreeDescriptionScene extends Component {
         <Header
           title={this.props.title}
           navigator={this.props.navigator}
-          />
+        />
         <ScrollView>
           <Image source={plants[this.props.title].image} style={styles.cardImage}/>
           <View style={styles.descriptionItemView}>
-          <Text style={styles.cardTitle}>Latin name:</Text>
-          <Text style={styles.cardBody}>{plants[this.props.title].latinName}</Text>
+            <Text style={styles.cardTitle}>Latin name:</Text>
+            <Text style={styles.cardBody}>{plants[this.props.title].latinName}</Text>
           </View>
           <View style={styles.descriptionItemView}>
-          <Text style={styles.cardTitle}>Tree Description:</Text>
-          <Text style={styles.cardBody}>{plants[this.props.title].descriptionBody}</Text>
+            <Text style={styles.cardTitle}>Tree Description:</Text>
+            <Text style={styles.cardBody}>{plants[this.props.title].descriptionBody}</Text>
           </View>
           <View style={styles.descriptionItemView}>
             <Text style={styles.cardTitle}>Collection Instructions:</Text>
-          <Text style={styles.cardBody}>{plants[this.props.title].collectionInstructions}</Text>
+            <Text style={styles.cardBody}>{plants[this.props.title].collectionInstructions}</Text>
           </View>
         </ScrollView>
-        <MKButton style={styles.button}   onPress={() => {
+        <MKButton style={styles.button} onPress={() => {
                     this.props.navigator.push({index: 3, title: this.props.title})
                   }}>
           <Text style={styles.buttonText}>
@@ -97,7 +97,7 @@ export default class TreeDescriptionScene extends Component {
 
 }
 
-  TreeDescriptionScene.propTypes = {
+TreeDescriptionScene.propTypes = {
   title    : PropTypes.string.isRequired,
   navigator: PropTypes.object.isRequired,
 }
@@ -106,18 +106,18 @@ const elevationStyle = new Elevation(2)
 const iconElevation  = new Elevation(2)
 
 const styles = StyleSheet.create({
-  container      : {
+  container           : {
     backgroundColor: '#f5f5f5',
     flex           : 1,
     flexDirection  : 'column'
   },
-  card           : {
+  card                : {
     ...theme.cardStyle,
     ...elevationStyle,
     marginBottom: 10,
     borderRadius: 3
   },
-  cardImage      : {
+  cardImage           : {
     ...theme.cardImageStyle,
     height              : 150,
     resizeMode          : 'cover',
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius : 3,
     backgroundColor     : '#fff',
   },
-  cardTitle      : {
+  cardTitle           : {
     ...theme.cardTitleStyle,
     fontSize: 14,
     flex    : 50,
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     top     : 0,
     left    : 0
   },
-  cardBody       : {
+  cardBody            : {
     flexDirection : 'row',
     flex          : 1,
     padding       : 10,
@@ -143,41 +143,41 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   descriptionContainer: {
-  marginHorizontal: 5,
+    marginHorizontal: 5,
     flex            : 1,
     flexDirection   : 'column',
     paddingVertical : 10
   },
-  button : {
-    flexDirection: 'column',
-    borderRadius: 2,
-    shadowRadius: 1,
-    shadowOffset: { width: 0, height: 0.5 },
-    shadowOpacity: 0.24,
-    shadowColor: 'black',
-    elevation: 4,
+  button              : {
+    flexDirection  : 'column',
+    borderRadius   : 2,
+    shadowRadius   : 1,
+    shadowOffset   : {width: 0, height: 0.5},
+    shadowOpacity  : 0.24,
+    shadowColor    : 'black',
+    elevation      : 4,
     backgroundColor: Colors.primary,
-    padding: 5,
-    marginVertical: 50,
-    maxWidth: 300,
-    marginLeft: 75
+    padding        : 5,
+    marginVertical : 50,
+    maxWidth       : 300,
+    marginLeft     : 75
 
   },
-  buttonText : {
+  buttonText          : {
     fontWeight: 'bold',
-    textAlign: 'center',
-    color: '#fff',
+    textAlign : 'center',
+    color     : '#fff',
   },
   descriptionItemView : {
     flex          : 1,
     padding       : 10,
     justifyContent: 'center',
-    borderRadius: 2,
-    shadowRadius: 1,
-    shadowOffset: { width: 0, height: 0.5 },
-    shadowOpacity: 0.24,
-    shadowColor: 'black',
-    elevation: 4,
+    borderRadius  : 2,
+    shadowRadius  : 1,
+    shadowOffset  : {width: 0, height: 0.5},
+    shadowOpacity : 0.24,
+    shadowColor   : 'black',
+    elevation     : 4,
 
   }
 })
