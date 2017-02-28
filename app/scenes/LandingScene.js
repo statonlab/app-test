@@ -53,7 +53,7 @@ export default class LandingScene extends Component {
 
   render() {
     return (
-      <View style={{backgroundColor: '#f5f5f5', flex: 1, flexDirection: 'column'}}>
+      <View style={styles.container}>
         <Header
           title={this.props.title}
           navigator={this.props.navigator}
@@ -64,7 +64,7 @@ export default class LandingScene extends Component {
           navigator={this.props.navigator}
           routes={sidebarLinks}/>
         <ScrollView style={{flex: 0}}>
-          <View style={{marginHorizontal: 5, flex: 1, flexDirection: 'column', paddingVertical: 10}}>
+          <View style={styles.plantsContainer}>
             {plants.map((plant, index) => {
               return (
                 <TouchableHighlight
@@ -106,17 +106,18 @@ const elevationStyle = new Elevation(2)
 const iconElevation  = new Elevation(2)
 
 const styles = StyleSheet.create({
-  container: {
-    height: 200,
-    width : undefined,
+  container      : {
+    backgroundColor: '#f5f5f5',
+    flex           : 1,
+    flexDirection  : 'column'
   },
-  card     : {
+  card           : {
     ...theme.cardStyle,
     ...elevationStyle,
     marginBottom: 10,
     borderRadius: 3
   },
-  cardImage: {
+  cardImage      : {
     ...theme.cardImageStyle,
     height              : 150,
     resizeMode          : 'cover',
@@ -125,7 +126,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius : 3,
     backgroundColor     : '#fff',
   },
-  cardTitle: {
+  cardTitle      : {
     ...theme.cardTitleStyle,
     fontSize: 14,
     flex    : 50,
@@ -134,14 +135,20 @@ const styles = StyleSheet.create({
     top     : 0,
     left    : 0
   },
-  cardBody : {
+  cardBody       : {
     flexDirection : 'row',
     flex          : 1,
     padding       : 10,
     alignItems    : 'center',
     justifyContent: 'center'
   },
-  icon     : {
+  icon           : {
     backgroundColor: 'transparent'
+  },
+  plantsContainer: {
+    marginHorizontal: 5,
+    flex            : 1,
+    flexDirection   : 'column',
+    paddingVertical : 10
   }
 })
