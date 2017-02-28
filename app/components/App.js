@@ -17,6 +17,7 @@ import MapScene from '../scenes/MapScene'
 import FormScene from '../scenes/formScene'
 import CameraScene from '../scenes/CameraScene'
 import CapturedScene from '../scenes/CapturedScene'
+import CaptureLocatinScene from '../scenes/CaptureLocationScene'
 import TreeDescriptionScene from '../scenes/TreeDescriptionScene'
 
 export default class WildType extends Component {
@@ -40,7 +41,12 @@ export default class WildType extends Component {
     if(route.index == 4) {
       return <CapturedScene navigator={navigator} image={route.image}/>
     }
+
     if(route.index == 5) {
+      return <CaptureLocatinScene title={route.title} navigator={navigator} image={route.image}/>
+    }
+    
+    if(route.index == 6) {
       return <TreeDescriptionScene title={route.title} navigator={navigator} image={route.image}/>
     }
   }
@@ -57,7 +63,7 @@ export default class WildType extends Component {
         />
         <Navigator
           style={styles.navigator}
-          initialRoute={{ title: 'Overview', index: 0 }}
+          initialRoute={{ title: 'Overview', index: 0}}
           renderScene={this.renderScene}
         />
       </View>
