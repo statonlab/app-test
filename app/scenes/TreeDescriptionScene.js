@@ -4,7 +4,8 @@ import {
   Navigator,
   Image,
   Dimensions,
-  StyleSheet
+  StyleSheet,
+  Text
 } from 'react-native'
 import {getTheme} from 'react-native-material-kit'
 import Header from '../components/Header'
@@ -27,16 +28,38 @@ const plants = [
   {
     title: 'Green Ash',
     image: require('../img/ash.jpg'),
+    description: {
+      latinName: 'G. ashicus',
+      descriptionBody: 'This is where the body text would go describing the Tree.',
+      collectionInstructions: 'This is where the specific collection instructions would go.  Only collect disease trees for this species!'
+    }
   },
   {
     title: 'Hemlock',
     image: require('../img/hemlock.jpg'),
+    description: {
+      latinName: 'H. lockicus',
+      descriptionBody: 'This is where the body text would go describing the Tree.',
+      collectionInstructions: 'This is where the specific collection instructions would go.  Only collect disease trees for this species!'
+    }
   },
   {
     title: 'White Oak',
     image: require('../img/white_oak.jpg'),
+    description: {
+      latinName: 'W. oakicus',
+      descriptionBody: 'This is where the body text would go describing the Tree.',
+      collectionInstructions: 'This is where the specific collection instructions would go.  Only collect disease trees for this species!'
+    }
   }
 ]
+
+
+let plant = plants.filter(function(entry){
+ return entry.title == "Hemlock"});
+
+let body = plant.description.latinName;
+
 
 const sidebarLinks = [
   {
@@ -50,9 +73,6 @@ export default class TreeDescriptionScene extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      title: 'hello'
-    }
   }
 
   render() {
@@ -67,6 +87,14 @@ export default class TreeDescriptionScene extends Component {
           ref="sidebar"
           navigator={this.props.navigator}
           routes={sidebarLinks}/>
+        <View style={styles.descriptionContainer}>
+          <Text>
+            {body}
+          </Text>
+
+
+        </View>
+
 
       </View>
     )
@@ -122,11 +150,8 @@ const styles = StyleSheet.create({
     alignItems    : 'center',
     justifyContent: 'center'
   },
-  icon           : {
-    backgroundColor: 'transparent'
-  },
-  plantsContainer: {
-    marginHorizontal: 5,
+  descriptionContainer: {
+  marginHorizontal: 5,
     flex            : 1,
     flexDirection   : 'column',
     paddingVertical : 10
