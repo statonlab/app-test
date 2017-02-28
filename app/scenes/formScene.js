@@ -49,10 +49,10 @@ const onButtonPress = () => {
 
 let index = 0;
 const treeSize = [
-    { key: index++, label: '0-10/100 sq feet' },
-    { key: index++, label: '11-50/100 sq feet' },
-    { key: index++, label: '51-100/100 sq feet' },
-    { key: index++, label: '>100/100 sq feet' },
+    { key: index++, label: '0-10 feet' },
+    { key: index++, label: '11-50 feet' },
+    { key: index++, label: '51-100 feet' },
+    { key: index++, label: '>100 feet' },
 ];
 
 index = 0;
@@ -62,14 +62,27 @@ const diseaseCoverage = [
     { key: index++, label: '51-75%' },
         { key: index++, label: '76-100%'}]
 
+index = 0;
+const treeStand = [
+  { key: index++, label: '1-10'},
+  { key: index++, label:'11-50'},
+  { key: index++, label: '51+' }]
+
+index = 0;
+const deadTrees = [
+  { key: index++, label: 'none'},
+  { key: index++, label:'1-50'},
+  { key: index++, label: '51+' }]
+
 
         export default class FormScene extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            textInputValue: '',
-            textDensityPicked: '',
-            textAddComment: ''
+            treeHeightPicked: '',
+            treeStandNumber: '',
+            textAddComment: '',
+          nearbyDeadTrees: 'none'
 
         }
     }
@@ -81,32 +94,46 @@ const diseaseCoverage = [
                     <Text>{thisDateDisplay}</Text>
                         <ModalPicker
                             data={treeSize}
-                            onChange={(option)=>{ this.setState({textDensityPicked:option.label})}}>
+                            onChange={(option)=>{ this.setState({treeHeightPicked:option.label})}}>
                             <View style={styles.cardBody}>
-                            <Text>Tree density: </Text>
+                            <Text>Tree height: </Text>
                         <TextInput
                                 style={{borderWidth:1, borderColor:'#ccc', height:25, width: 200}}
                                 editable={false}
                                 placeholder="please select"
-                                value={this.state.textDensityPicked}
+                                value={this.state.treeHeightPicked}
                             />
                                 {myIcon}
                             </View>
                         </ModalPicker>
                             <ModalPicker
-                                data={diseaseCoverage}
-                                onChange={(option)=>{ this.setState({textInputValue:option.label})}}>
+                                data={treeStand}
+                                onChange={(option)=>{ this.setState({treeStandNumber:option.label})}}>
                                 <View style={styles.cardBody}>
-                                        <Text> % Disease:</Text>
+                                        <Text> Number of Trees </Text>
                                     <TextInput
                                         style={{borderWidth:1, borderColor:'#ccc', height:25, width: 200}}
                                         editable={false}
                                         placeholder="please select"
-                                        value={this.state.textInputValue}
+                                        value={this.state.treeStandNumber}
                                     />
                                     {myIcon}
                                 </View>
                             </ModalPicker>
+                    <ModalPicker
+                      data={deadTrees}
+                      onChange={(option)=>{ this.setState({nearbyDeadTrees:option.label})}}>
+                        <View style={styles.cardBody}>
+                            <Text> Number of Trees </Text>
+                            <TextInput
+                              style={{borderWidth:1, borderColor:'#ccc', height:25, width: 200}}
+                              editable={false}
+                              placeholder="none"
+                              value={this.state.nearbyDeadTrees}
+                            />
+                          {myIcon}
+                        </View>
+                    </ModalPicker>
                     <MKButton style={styles.button} onPress={() => console.log("Submit the tree form")}>
                         <Text style={styles.buttonText}>
                           {cameraIcon} Choose photo
