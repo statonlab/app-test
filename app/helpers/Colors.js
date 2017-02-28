@@ -30,6 +30,9 @@ const Colors = {
   successText: "#ffffff",
 
   transparentDark: "rgba(0,0,0,.5)",
+
+  sidebarBackground: "#eeeeee",
+  sidebarText: "#595959"
 }
 
 export default Colors;

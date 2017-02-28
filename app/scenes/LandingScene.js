@@ -11,12 +11,14 @@ import {
 } from 'react-native'
 import {getTheme} from 'react-native-material-kit'
 import Header from '../components/Header'
+import Sidebar from '../components/Sidebar'
 import Icon from 'react-native-vector-icons/Ionicons'
 import Elevation from '../helpers/Elevation'
 
 const theme  = getTheme()
 const myIcon = (<Icon name="md-arrow-dropright-circle" size={22} color="#959595"/>)
-const plants = [{
+const plants = [
+  {
     title: 'Dogwood',
     image: require('../img/dogwood.jpg'),
   },
@@ -31,17 +33,38 @@ const plants = [{
   {
     title: 'Dogwood',
     image: require('../img/dogwood.jpg'),
-  }]
+  }
+]
+
+const sidebarLinks = [
+  {
+    title: 'Map',
+    index: 1
+  }, {
+    title: 'Camera',
+    index: 2,
+  }, {
+    title: 'Form',
+    index: 3
+  }
+]
 
 export default class LandingScene extends Component {
 
   render() {
     return (
       <View style={{backgroundColor: '#f5f5f5', flex: 1, flexDirection: 'column'}}>
-        <Header title={this.props.title} navigator={this.props.navigator} initial={true}/>
+        <Header
+          title={this.props.title}
+          navigator={this.props.navigator}
+          initial={true}
+          onMenuPress={this.toggleMenu.bind(this)}/>
+        <Sidebar
+          ref="sidebar"
+          navigator={this.props.navigator}
+          routes={sidebarLinks}/>
         <ScrollView style={{flex: 0}}>
           <View style={{marginHorizontal: 5, flex: 1, flexDirection: 'column', paddingVertical: 10}}>
-
             {plants.map((plant, index) => {
               return (
                 <TouchableHighlight
@@ -66,6 +89,10 @@ export default class LandingScene extends Component {
         </ScrollView>
       </View>
     )
+  }
+
+  toggleMenu() {
+    this.refs.sidebar.toggleMenu()
   }
 }
 
