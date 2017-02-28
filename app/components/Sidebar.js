@@ -32,7 +32,10 @@ export default class Sidebar extends Component {
       }, 500)
       Animated.timing(
         this.state.position,
-        {toValue: -250}
+        {
+          toValue: -250,
+          duration: 500
+        }
       ).start();
     }
     else {
@@ -41,7 +44,10 @@ export default class Sidebar extends Component {
       })
       Animated.timing(
         this.state.position,
-        {toValue: 0}
+        {
+          toValue: 0,
+          duration: 500
+        }
       ).start();
     }
 
@@ -90,11 +96,8 @@ function getVerticalMargin() {
     return 70.5;
 }
 
-const elevationStyle = new Elevation(5)
-
 const style = StyleSheet.create({
   container: {
-    ...elevationStyle,
     width          : 0,
     flex           : 0,
     position       : 'absolute',
@@ -107,11 +110,7 @@ const style = StyleSheet.create({
   },
   sidebar  : {
     flex           : 0,
-    ...elevationStyle,
-    shadowOffset   : {
-      height: 5,
-      width : 7
-    },
+    elevation      : 5,
     backgroundColor: Colors.sidebarBackground,
     zIndex         : 1000,
     position       : 'absolute',
