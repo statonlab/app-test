@@ -88,7 +88,7 @@ export default class FormScene extends Component {
   render() {
     return (
       <View style={{backgroundColor: '#f5f5f5', flex: 1, flexDirection: 'column'}}>
-        <Header title={this.props.title} navigator={this.props.navigator} initial={true}/>
+        <Header title={this.props.title} navigator={this.props.navigator}/>
         <View style={{marginHorizontal: 10, paddingVertical:15}}>
           <Text>{thisDateDisplay}</Text>
           <ModalPicker
@@ -137,7 +137,6 @@ export default class FormScene extends Component {
             <Text style={styles.buttonText}>
               {cameraIcon} Choose photo
             </Text>
-
           </MKButton>
           <TextInput
             style={styles.textAddComment}
