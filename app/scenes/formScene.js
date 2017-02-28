@@ -31,15 +31,6 @@ const cameraIcon = (<Icon name="md-camera" size={22} color="#959595"/>);
     let thisDate = new Date();
     let thisDateDisplay = String(thisDate);
 
-
-    const ColoredRaisedButton = MKButton.coloredButton()
-        .withText('Submit Entry')
-        .withBackgroundColor(MKColor.palette_red_500)
-        .withOnPress(() => {
-        console.log("Submit the tree form");
-    })
-    .build();
-
 const SelectPictureButton = MKButton.coloredButton()
     .withText('Add photo')
     .withBackgroundColor(MKColor.palette_green_500)
@@ -53,6 +44,10 @@ const plants = [{
     title: 'Dogwood',
     image: require('../img/dogwood.jpg'),
 },
+    {
+    title: 'Overview',
+    image: require('../img/dogwood.jpg'),
+    } ,
     {
         title: 'Hydrangea',
         image: require('../img/hydrangea.jpg'),
@@ -103,13 +98,12 @@ const diseaseCoverage = [
         return (
             <View style={{backgroundColor: '#f5f5f5', flex: 1, flexDirection: 'column'}}>
                 <Header title={this.props.title} navigator={this.props.navigator} initial={true}/>
-                <View>
+                <View style={{marginHorizontal: 10, paddingVertical:15}}>
                     <Text>{thisDateDisplay}</Text>
                         <ModalPicker
                             data={treeDensities}
-                            initValue="Select disease coverage for this tree."
                             onChange={(option)=>{ this.setState({textDensityPicked:option.label})}}>
-                            <View style={{flexGrow:1, height: 50, flexDirection:'row', alignItems: 'stretch', justifyContent: 'space-between', padding: 5}}>
+                            <View style={styles.cardBody}>
                             <Text>Tree density: </Text>
                         <TextInput
                                 style={{borderWidth:1, borderColor:'#ccc', height:25, width: 200}}
@@ -122,9 +116,8 @@ const diseaseCoverage = [
                         </ModalPicker>
                             <ModalPicker
                                 data={diseaseCoverage}
-                                initValue="Select disease coverage for this tree."
                                 onChange={(option)=>{ this.setState({textInputValue:option.label})}}>
-                                <View style={{flexGrow:1, height: 50, flexDirection:'row', alignItems: 'stretch', justifyContent: 'space-between', padding: 5}}>
+                                <View style={styles.cardBody}>
                                         <Text> % Disease:</Text>
                                     <TextInput
                                         style={{borderWidth:1, borderColor:'#ccc', height:25, width: 200}}
@@ -135,12 +128,18 @@ const diseaseCoverage = [
                                     {myIcon}
                                 </View>
                             </ModalPicker>
-                    <SelectPictureButton />
+                    <MKButton style={styles.button} onPress={() => console.log("Submit the tree form")}>
+                        <Text style={styles.buttonText}>
+                            Choose photo
+                        </Text>
+                        {cameraIcon}
+                    </MKButton>
                     <Textfield/>
-                    <Text></Text>
-                    <ColoredRaisedButton/>
-                    <Text>Selected image:
-                    (Selected image and/or GPS coordinate below)</Text>
+                    <MKButton style={styles.button}  onPress={() => console.log("Submit the tree form")}>
+                        <Text style={styles.buttonText}>
+                        Submit Entry
+                        </Text>
+                    </MKButton>
                 </View>
             </View>
         );
@@ -169,10 +168,10 @@ const styles = StyleSheet.create({
     },
     cardBody : {
         flexDirection : 'row',
-        flex          : 1,
+        flexGrow          : 1,
         padding       : 10,
         alignItems    : 'center',
-        justifyContent: 'center'
+        justifyContent: 'space-between'
     },
     textfield : {
         height: 28,  // have to do it on iOS
@@ -182,6 +181,20 @@ const styles = StyleSheet.create({
         fontSize : 22,
         flex : 1
     },
+    button : {
+        borderRadius: 2,
+        shadowRadius: 1,
+        shadowOffset: { width: 0, height: 0.5 },
+        shadowOpacity: 0.7,
+        shadowColor: 'black',
+        elevation: 4
+    },
+    buttonText : {
+        fontSize: 20,
+        fontWeight: 'bold',
+        textAlign: 'center',
+
+    }
 
 })
 
