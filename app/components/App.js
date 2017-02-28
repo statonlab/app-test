@@ -16,6 +16,7 @@ import LandingScene from '../scenes/LandingScene'
 import MapScene from '../scenes/MapScene'
 import FormScene from '../scenes/formScene'
 import CameraScene from '../scenes/CameraScene'
+import CapturedScene from '../scenes/CapturedScene'
 
 export default class WildType extends Component {
   renderScene(route, navigator) {
@@ -34,6 +35,10 @@ export default class WildType extends Component {
       if (route.index == 3) {
           return <FormScene title={route.title} navigator={navigator} />
       }
+
+    if(route.index == 4) {
+      return <CapturedScene navigator={navigator} image={route.image}/>
+    }
   }
 
   render() {

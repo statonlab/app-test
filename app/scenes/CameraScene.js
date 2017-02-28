@@ -19,9 +19,10 @@ export default class CameraScene extends Component {
           ref={(cam) => {
             this.camera = cam;
           }}
+          captureTarget={Camera.constants.CaptureTarget.disk}
           style={styles.preview}
           keepAwake={true}
-          mirrorImage={true}>
+          mirrorImage={false}>
           <View style={styles.toolsContainer}>
             <Text style={styles.capture} onPress={this.takePicture.bind(this)}>
               <Icon name="camera" size={36} color={"#fff"}/>
@@ -35,7 +36,10 @@ export default class CameraScene extends Component {
   takePicture() {
     try {
       this.camera.capture()
-        .then((data) => console.log(`Right HERE!!`, data))
+        .then((data) => {
+          console.log(`Right HERE!!`, data)
+          this.props.navigator.push({index: 4, image: data})
+        })
     } catch (err) {
       console.error(err)
     }
@@ -58,16 +62,16 @@ const styles = StyleSheet.create({
     width         : undefined
   },
   toolsContainer: {
-    flex          : 0,
-    width         : Dimensions.get('window').width,
-    height        : 70,
-    justifyContent: 'center',
-    alignItems    : 'center',
+    flex           : 0,
+    width          : Dimensions.get('window').width,
+    height         : 70,
+    justifyContent : 'center',
+    alignItems     : 'center',
     backgroundColor: Colors.transparentDark
   },
   capture       : {
-    flex           : 0,
-    color          : '#000',
-    padding        : 10,
+    flex   : 0,
+    color  : '#000',
+    padding: 10,
   }
 });

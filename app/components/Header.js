@@ -1,46 +1,49 @@
 import React, {Component, PropTypes} from 'react'
-import {View, Text, TouchableHighlight, StyleSheet, Alert, Navigator, Platform} from 'react-native'
+import {
+  View,
+  Text, TouchableHighlight,
+  StyleSheet,
+  Alert,
+  Navigator,
+  Platform
+} from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
 
-const menuIcon      = (<Icon name="menu" size={20} color="#fff"/>)
-const secondaryIcon = (<Icon name="map-marker-multiple" size={23} color="#fff"/>)
-const backIcon      = (<Icon name="chevron-left" size={20} color="#fff"/>)
-
 export default class Header extends Component {
   constructor(props) {
     super(props)
-  }
 
-  back() {
-    let routes = this.props.navigator.getCurrentRoutes()
-    if (routes.length > 1) {
-      this.props.navigator.pop();
+    this.state = {
+      menuIcon: 'menu'
     }
   }
 
-  toggleMenu() {
-    //this.props.navigator.pop()
+  back = () => {
+    let routes = this.props.navigator.getCurrentRoutes()
+    if (routes.length > 1) {
+      this.props.navigator.pop()
+    }
   }
 
-  getLeftIcon() {
+  getLeftIcon = () => {
     if (this.props.initial) {
       return (
-        <TouchableHighlight style={style.touchable} onPress={this.toggleMenu} underlayColor={Colors.primary}>
-          {menuIcon}
+        <TouchableHighlight style={style.touchable} onPress={this.onMenuPress} underlayColor={Colors.primary}>
+          <Icon name={this.state.menuIcon} size={20} color="#fff" onToggleMenu={() => {console.log(this)}}/>
         </TouchableHighlight>
       )
     } else {
       return (
-        <TouchableHighlight style={style.touchable} onPress={this.back.bind(this)} underlayColor={Colors.primary}>
-          {backIcon}
+        <TouchableHighlight style={style.touchable} onPress={this.back} underlayColor={Colors.primary}>
+          <Icon name="chevron-left" size={20} color="#fff"/>
         </TouchableHighlight>
       )
     }
   }
 
-  navigateToMap() {
+  navigateToMap = () => {
     let routes = this.props.navigator.getCurrentRoutes()
     let route  = routes[routes.length - 1]
     if (route.index != 1) {
@@ -48,9 +51,23 @@ export default class Header extends Component {
     }
   }
 
+  onMenuPress = () => {
+    this.props.onMenuPress()
+
+    let icon
+
+    if (this.state.menuIcon == 'menu') {
+      icon = 'backburger'
+    } else {
+      icon = 'menu'
+    }
+
+    this.setState({menuIcon: icon})
+  }
+
   render() {
     return (
-      <View style={style.wrapper}>
+      <View style={style.wrapper} ref="header">
         {this.getLeftIcon()}
 
         <View style={{flex: 1}}>
@@ -59,8 +76,8 @@ export default class Header extends Component {
 
         <TouchableHighlight style={style.touchable}
           underlayColor={Colors.primary}
-          onPress={this.navigateToMap.bind(this)}>
-          {secondaryIcon}
+          onPress={this.navigateToMap}>
+          <Icon name="map-marker-multiple" size={23} color="#fff"/>
         </TouchableHighlight>
       </View>
     )
@@ -68,9 +85,10 @@ export default class Header extends Component {
 }
 
 Header.propTypes = {
-  title    : PropTypes.string.isRequired,
-  navigator: PropTypes.object.isRequired,
-  initial  : PropTypes.bool
+  title      : PropTypes.string.isRequired,
+  navigator  : PropTypes.object.isRequired,
+  initial    : PropTypes.bool,
+  onMenuPress: PropTypes.func
 }
 
 function getVerticalPadding() {
@@ -96,7 +114,7 @@ const style = StyleSheet.create({
   title    : {
     fontSize       : 16,
     flex           : 1,
-    paddingVertical: 15
+    paddingVertical: 17
   },
   text     : {
     color     : Colors.primaryText,

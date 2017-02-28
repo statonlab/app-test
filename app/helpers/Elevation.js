@@ -25,6 +25,7 @@ export default class Elevation {
     switch (this.level) {
       case 1:
         iosShadowElevation = {
+          shadowColor: 'black',
           shadowOpacity: 0.24,
           shadowRadius: 0.8,
           shadowOffset: {
@@ -34,6 +35,7 @@ export default class Elevation {
         break
       case 2:
         iosShadowElevation = {
+          shadowColor: 'black',
           shadowOpacity: 0.24,
           shadowRadius: 0.9,
           shadowOffset: {
@@ -43,6 +45,7 @@ export default class Elevation {
         break
       case 3:
         iosShadowElevation = {
+          shadowColor: 'black',
           shadowOpacity: 0.24,
           shadowRadius: 1.4,
           shadowOffset: {
@@ -52,6 +55,7 @@ export default class Elevation {
         break
       case 4:
         iosShadowElevation = {
+          shadowColor: 'black',
           shadowOpacity: 0.24,
           shadowRadius: 2.5,
           shadowOffset: {
@@ -61,6 +65,7 @@ export default class Elevation {
         break
       case 5:
         iosShadowElevation = {
+          shadowColor: 'black',
           shadowOpacity: 0.24,
           shadowRadius: 3.2,
           shadowOffset: {

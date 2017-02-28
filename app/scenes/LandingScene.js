@@ -11,36 +11,60 @@ import {
 } from 'react-native'
 import {getTheme} from 'react-native-material-kit'
 import Header from '../components/Header'
+import Sidebar from '../components/Sidebar'
 import Icon from 'react-native-vector-icons/Ionicons'
 import Elevation from '../helpers/Elevation'
+import Colors from '../helpers/Colors'
 
 const theme  = getTheme()
-const myIcon = (<Icon name="md-arrow-dropright-circle" size={22} color="#959595"/>)
-const plants = [{
-    title: 'Dogwood',
-    image: require('../img/dogwood.jpg'),
-  },
+const plants = [
   {
-    title: 'Hydrangea',
-    image: require('../img/hydrangea.jpg'),
+    title: 'American Chestnut',
+    image: require('../img/am_chestnut4.jpg'),
   },
   {
     title: 'Green Ash',
     image: require('../img/ash.jpg'),
   },
   {
-    title: 'Dogwood',
-    image: require('../img/dogwood.jpg'),
-  }]
+    title: 'Hemlock',
+    image: require('../img/hemlock.jpg'),
+  },
+  {
+    title: 'White Oak',
+    image: require('../img/white_oak.jpg'),
+  }
+]
+
+const sidebarLinks = [
+  {
+    title: 'Map',
+    index: 1
+  }, {
+    title: 'Camera',
+    index: 2,
+  }, {
+    title: 'Form',
+    index: 3
+  }
+]
 
 export default class LandingScene extends Component {
 
   render() {
     return (
-      <View style={{backgroundColor: '#f5f5f5', flex: 1, flexDirection: 'column'}}>
-        <Header title={this.props.title} navigator={this.props.navigator} initial={true}/>
+      <View style={styles.container}>
+        <Header
+          title={this.props.title}
+          navigator={this.props.navigator}
+          initial={true}
+          onMenuPress={this.toggleMenu.bind(this)}/>
+        <Sidebar
+          ref="sidebar"
+          navigator={this.props.navigator}
+          routes={sidebarLinks}/>
         <ScrollView style={{flex: 0}}>
-          <View style={{marginHorizontal: 5, flex: 1, flexDirection: 'column', paddingVertical: 10}}>
+          <View style={styles.plantsContainer}>
             {plants.map((plant, index) => {
               return (
                 <TouchableHighlight
@@ -48,7 +72,8 @@ export default class LandingScene extends Component {
                   key={index}
                   onPress={() => {
                     this.props.navigator.push({index: 2, title: plant.title})
-                  }}>
+                  }}
+                  underlayColor="#fff">
                   <View>
                     <Image source={plant.image} style={styles.cardImage}/>
                     <View style={styles.cardBody}>
@@ -56,6 +81,7 @@ export default class LandingScene extends Component {
                       <Text style={styles.cardTitle}>
                         {plant.title}
                       </Text>
+                      <Icon name="md-arrow-dropright-circle" size={22} color={Colors.primary} style={styles.icon}/>
                     </View>
                   </View>
                 </TouchableHighlight>
@@ -66,6 +92,10 @@ export default class LandingScene extends Component {
       </View>
     )
   }
+
+  toggleMenu() {
+    this.refs.sidebar.toggleMenu()
+  }
 }
 
 LandingScene.propTypes = {
@@ -74,19 +104,21 @@ LandingScene.propTypes = {
 }
 
 const elevationStyle = new Elevation(2)
+const iconElevation  = new Elevation(2)
 
 const styles = StyleSheet.create({
-  container: {
-    height: 200,
-    width : undefined,
+  container      : {
+    backgroundColor: '#f5f5f5',
+    flex           : 1,
+    flexDirection  : 'column'
   },
-  card     : {
+  card           : {
     ...theme.cardStyle,
     ...elevationStyle,
     marginBottom: 10,
     borderRadius: 3
   },
-  cardImage: {
+  cardImage      : {
     ...theme.cardImageStyle,
     height              : 150,
     resizeMode          : 'cover',
@@ -95,7 +127,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius : 3,
     backgroundColor     : '#fff',
   },
-  cardTitle: {
+  cardTitle      : {
     ...theme.cardTitleStyle,
     fontSize: 14,
     flex    : 50,
@@ -104,11 +136,20 @@ const styles = StyleSheet.create({
     top     : 0,
     left    : 0
   },
-  cardBody : {
+  cardBody       : {
     flexDirection : 'row',
     flex          : 1,
     padding       : 0,
     alignItems    : 'center',
     justifyContent: 'center'
+  },
+  icon           : {
+    backgroundColor: 'transparent'
+  },
+  plantsContainer: {
+    marginHorizontal: 5,
+    flex            : 1,
+    flexDirection   : 'column',
+    paddingVertical : 10
   }
 })
