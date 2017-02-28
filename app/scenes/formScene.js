@@ -18,7 +18,6 @@ import Header from '../components/Header'
 import Icon from 'react-native-vector-icons/Ionicons'
 import Elevation from '../helpers/Elevation'
 import {
-    MKTextField,
     MKColor,
     MKButton,
 } from 'react-native-material-kit'
@@ -27,8 +26,10 @@ import Colors from '../helpers/Colors'
 import ModalPicker from 'react-native-modal-picker'
 
 const theme  = getTheme();
-const myIcon = (<Icon name="md-menu" size={16} color="#fff"/>);
+
 const cameraIcon = (<Icon name="md-camera" size={16} color="#fff"/>);
+const myIcon = (<Icon name="md-menu" size={16} color="#2A9D8F"/>);
+
     let thisDate = new Date();
     let thisDateDisplay = String(thisDate);
 
@@ -40,29 +41,6 @@ const SelectPictureButton = MKButton.coloredButton()
     })
     .build();
 
-
-const plants = [{
-    title: 'Dogwood',
-    image: require('../img/dogwood.jpg'),
-},
-    {
-    title: 'Overview',
-    image: require('../img/dogwood.jpg'),
-    } ,
-    {
-        title: 'Hydrangea',
-        image: require('../img/hydrangea.jpg'),
-    },
-    {
-        title: 'Green Ash',
-        image: require('../img/ash.jpg'),
-    },
-    {
-        title: 'Dogwood',
-        image: require('../img/dogwood.jpg'),
-    }]
-
-
 const onButtonPress = () => {
     Alert.alert('Form has been submitted');
 };
@@ -70,14 +48,13 @@ const onButtonPress = () => {
 
 
 let index = 0;
-const treeDensities = [
+const treeSize = [
     { key: index++, label: '0-10/100 sq feet' },
     { key: index++, label: '11-50/100 sq feet' },
     { key: index++, label: '51-100/100 sq feet' },
     { key: index++, label: '>100/100 sq feet' },
 ];
 
-//const treeDensities = ['0-10/100 sq feet', '11-50/100 sq feet', '>50/100 sq feet'];
 index = 0;
 const diseaseCoverage = [
     { key: index++, label: '0-25%'},
@@ -96,7 +73,6 @@ const diseaseCoverage = [
 
         }
     }
-
     render() {
         return (
             <View style={{backgroundColor: '#f5f5f5', flex: 1, flexDirection: 'column'}}>
@@ -104,7 +80,7 @@ const diseaseCoverage = [
                 <View style={{marginHorizontal: 10, paddingVertical:15}}>
                     <Text>{thisDateDisplay}</Text>
                         <ModalPicker
-                            data={treeDensities}
+                            data={treeSize}
                             onChange={(option)=>{ this.setState({textDensityPicked:option.label})}}>
                             <View style={styles.cardBody}>
                             <Text>Tree density: </Text>
@@ -198,9 +174,10 @@ const styles = StyleSheet.create({
         shadowColor: 'black',
         elevation: 4,
         backgroundColor: Colors.primary,
-      padding: 5,
-      marginVertical: 10,
-      maxWidth: 300
+        padding: 5,
+        marginVertical: 10,
+        marginLeft: 50,
+        maxWidth: 300
     },
     buttonText : {
         fontWeight: 'bold',
@@ -211,7 +188,8 @@ textAddComment: {
     borderWidth: 1,
     borderColor: '#ccc',
     height: 150,
-    width: 300
-}
+    width: 300,
+    marginLeft: 25
+    }
 })
 
