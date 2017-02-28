@@ -3,6 +3,7 @@ import {View, Text, TouchableHighlight, StyleSheet, Alert, Navigator, Platform} 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
+import Sidebar from './Sidebar'
 
 const menuIcon      = (<Icon name="menu" size={20} color="#fff"/>)
 const secondaryIcon = (<Icon name="map-marker-multiple" size={23} color="#fff"/>)
@@ -16,19 +17,14 @@ export default class Header extends Component {
   back() {
     let routes = this.props.navigator.getCurrentRoutes()
     if (routes.length > 1) {
-      this.props.navigator.pop();
+      this.props.navigator.pop()
     }
-  }
-
-  toggleMenu() {
-    console.log(this.props.sidebar)
-    //this.props.sidebar.toggleMenu()
   }
 
   getLeftIcon() {
     if (this.props.initial) {
       return (
-        <TouchableHighlight style={style.touchable} onPress={this.toggleMenu.bind(this)} underlayColor={Colors.primary}>
+        <TouchableHighlight style={style.touchable} onPress={this.props.onMenuPress} underlayColor={Colors.primary}>
           {menuIcon}
         </TouchableHighlight>
       )
@@ -69,10 +65,10 @@ export default class Header extends Component {
 }
 
 Header.propTypes = {
-  title    : PropTypes.string.isRequired,
-  navigator: PropTypes.object.isRequired,
-  sidebar  : PropTypes.object,
-  initial  : PropTypes.bool
+  title      : PropTypes.string.isRequired,
+  navigator  : PropTypes.object.isRequired,
+  initial    : PropTypes.bool,
+  onMenuPress: PropTypes.func
 }
 
 function getVerticalPadding() {

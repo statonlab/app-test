@@ -1,5 +1,13 @@
 import React, {Component, PropTypes} from 'react'
-import {ScrollView, View, Text, TouchableHighlight, StyleSheet, Platform} from 'react-native'
+import {
+  Animated,
+  View,
+  ScrollView,
+  Text,
+  StyleSheet,
+  Platform,
+  TouchableWithoutFeedback
+} from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
@@ -8,47 +16,65 @@ import {MKRipple} from 'react-native-material-kit'
 export default class Sidebar extends Component {
   constructor(props) {
     super(props)
+
+    this.state = {
+      open    : false,
+      position: new Animated.Value(-250)
+    }
   }
 
   toggleMenu() {
-    console.log(this.refs.sidebar)/*
-    if (this.refs.sidebar.style.left < 0) {
-      this.refs.sidebar.style.left = 0
+    if (this.state.open) {
+      setTimeout(() => {
+        this.refs['container'].setNativeProps({
+          style: {width: 0}
+        })
+      }, 500)
+      Animated.timing(
+        this.state.position,
+        {toValue: -250}
+      ).start();
     }
     else {
-      this.refs.sidebar.style.left = -250
-    }*/
+      this.refs['container'].setNativeProps({
+        style: {width: 7000}
+      })
+      Animated.timing(
+        this.state.position,
+        {toValue: 0}
+      ).start();
+    }
+
+    this.setState({open: !this.state.open})
   }
 
   render() {
     return (
-      <ScrollView style={style.container} ref="sidebar">
-        <MKRipple
-          onTouch={() => console.log("test")}
-          style={style.touchable}
-          rippleColor={"rgba(0,0,0,0.1)"}>
-          <Text style={style.text}>Link</Text>
-        </MKRipple>
-        <MKRipple
-          onTouch={() => console.log("test")}
-          style={style.touchable}
-          rippleColor={"rgba(0,0,0,0.1)"}>
-          <Text style={style.text}>Link</Text>
-        </MKRipple>
-        <MKRipple
-          onTouch={() => console.log("test")}
-          style={style.touchable}
-          rippleColor={"rgba(0,0,0,0.1)"}>
-          <Text style={style.text}>Link</Text>
-        </MKRipple>
-        <MKRipple
-          onTouch={() => console.log("test")}
-          style={style.touchable}
-          rippleColor={"rgba(0,0,0,0.1)"}>
-          <Text style={style.text}>Text</Text>
-        </MKRipple>
-      </ScrollView>
+      <View ref="container" style={style.container}>
+        <Animated.ScrollView style={[style.sidebar, {left: this.state.position}]} ref="sidebar">
+          {this.props.routes.map((route, index) => {
+            return (
+              <TouchableWithoutFeedback
+                key={index}
+                onPress={() => {this.goTo.call(this, route)}}>
+                <MKRipple
+                  style={style.touchable}
+                  rippleColor={"rgba(0,0,0,0.1)"}>
+                  <Text style={style.text}>
+                    {route.title}
+                  </Text>
+                </MKRipple>
+              </TouchableWithoutFeedback>
+            )
+          })}
+        </Animated.ScrollView>
+      </View>
     )
+  }
+
+  goTo(route) {
+    this.toggleMenu()
+    this.props.navigator.push(route)
   }
 }
 
@@ -57,9 +83,9 @@ Sidebar.propTypes = {
   routes   : PropTypes.array.isRequired
 }
 
-function getVerticalPadding() {
+function getVerticalMargin() {
   if (Platform.OS == 'android')
-    return 70.5;
+    return 54;
   else
     return 70.5;
 }
@@ -68,6 +94,18 @@ const elevationStyle = new Elevation(5)
 
 const style = StyleSheet.create({
   container: {
+    ...elevationStyle,
+    width          : 0,
+    flex           : 0,
+    position       : 'absolute',
+    left           : 0,
+    right          : 0,
+    top            : getVerticalMargin(),
+    bottom         : 0,
+    zIndex         : 1000,
+    backgroundColor: 'rgba(0,0,0,0.3)'
+  },
+  sidebar  : {
     flex           : 0,
     ...elevationStyle,
     shadowOffset   : {
@@ -77,8 +115,7 @@ const style = StyleSheet.create({
     backgroundColor: Colors.sidebarBackground,
     zIndex         : 1000,
     position       : 'absolute',
-    top            : getVerticalPadding(),
-    left           : -250,
+    top            : 0,
     bottom         : 0,
     width          : 250
   },

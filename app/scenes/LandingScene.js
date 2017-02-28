@@ -36,6 +36,19 @@ const plants = [
   }
 ]
 
+const sidebarLinks = [
+  {
+    title: 'Map',
+    index: 1
+  }, {
+    title: 'Camera',
+    index: 2,
+  }, {
+    title: 'Form',
+    index: 3
+  }
+]
+
 export default class LandingScene extends Component {
 
   render() {
@@ -45,11 +58,11 @@ export default class LandingScene extends Component {
           title={this.props.title}
           navigator={this.props.navigator}
           initial={true}
-          sidebar={function() { return this.refs.sidebar }.bind(this)}/>
+          onMenuPress={this.toggleMenu.bind(this)}/>
         <Sidebar
           ref="sidebar"
           navigator={this.props.navigator}
-          routes={[{title: 'title', index: 2}]}/>
+          routes={sidebarLinks}/>
         <ScrollView style={{flex: 0}}>
           <View style={{marginHorizontal: 5, flex: 1, flexDirection: 'column', paddingVertical: 10}}>
             {plants.map((plant, index) => {
@@ -76,6 +89,10 @@ export default class LandingScene extends Component {
         </ScrollView>
       </View>
     )
+  }
+
+  toggleMenu() {
+    this.refs.sidebar.toggleMenu()
   }
 }
 
