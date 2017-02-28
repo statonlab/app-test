@@ -41,7 +41,7 @@ export default class WildType extends Component {
       return <CapturedScene navigator={navigator} image={route.image}/>
     }
     if(route.index == 5) {
-      return <TreeDescriptionScene navigator={navigator} image={route.image}/>
+      return <TreeDescriptionScene title={route.title} navigator={navigator} image={route.image}/>
     }
   }
 
@@ -57,7 +57,7 @@ export default class WildType extends Component {
         />
         <Navigator
           style={styles.navigator}
-          initialRoute={{ title: 'Overview', index: 5 }}
+          initialRoute={{ title: 'Overview', index: 0 }}
           renderScene={this.renderScene}
         />
       </View>
