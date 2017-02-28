@@ -90,7 +90,9 @@ const diseaseCoverage = [
         super(props);
         this.state = {
             textInputValue: '',
-            textDensityPicked: ''
+            textDensityPicked: '',
+            textAddComment: ''
+
         }
     }
 
@@ -134,7 +136,12 @@ const diseaseCoverage = [
                         </Text>
                         {cameraIcon}
                     </MKButton>
-                    <Textfield/>
+                    <TextInput
+                        style={styles.textAddComment}
+                        placeholder="Add additional comments here"
+                        value={this.state.textAddComment}
+                        onChangeText={(textAddComment) => this.setState({textAddComment})}
+                    />
                     <MKButton style={styles.button}  onPress={() => console.log("Submit the tree form")}>
                         <Text style={styles.buttonText}>
                         Submit Entry
@@ -182,6 +189,7 @@ const styles = StyleSheet.create({
         flex : 1
     },
     button : {
+        flexDirection: 'column',
         borderRadius: 2,
         shadowRadius: 1,
         shadowOffset: { width: 0, height: 0.5 },
@@ -193,14 +201,11 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         textAlign: 'center',
-
-    }
+    },
+textAddComment: {borderWidth:1,
+        borderColor:'#ccc',
+        height:150,
+        width: 300}
 
 })
 
-
-const Textfield = MKTextField.textfield()
-    .withPlaceholder('Add additional comments here...')
-    .withStyle(styles.textfield)
-    .withTextInputStyle({flex: 1})
-    .build();
