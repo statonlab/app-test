@@ -5,6 +5,7 @@ import {
     TouchableHighlight,
     ScrollView,
     Image,
+    TextInput,
     Navigator,
     Dimensions,
     StyleSheet,
@@ -20,8 +21,6 @@ import {
     MKTextField,
     MKColor,
     MKButton,
-    MKRadioButton,
-    mdl,
 } from 'react-native-material-kit'
 
 import ModalPicker from 'react-native-modal-picker'
@@ -30,42 +29,6 @@ const theme  = getTheme();
 const myIcon = (<Icon name="md-arrow-dropright-circle" size={22} color="#959595"/>);
 let thisDate = new Date();
 let thisDateDisplay = String(thisDate);
-var PickerItem = Picker.Item;
-const styles = StyleSheet.create({
-    card     : {
-        ...theme.cardStyle,
-        ...elevationStyle,
-        marginBottom: 10,
-        borderRadius: 3
-    },
-    container: {
-        height: 200,
-        width : undefined,
-        flex: 1
-    },
-    cardBody : {
-        flexDirection : 'row',
-        flex          : 1,
-        padding       : 10,
-        alignItems    : 'center',
-        justifyContent: 'center'
-    },
-    textfield : {
-        height: 28,  // have to do it on iOS
-        marginTop: 32
-    },
-    subHeadText : {
-        fontSize : 22,
-        flex : 1
-    },
-
-})
-
-const Textfield = MKTextField.textfield()
-    .withPlaceholder('Add additional comments here...')
-    .withStyle(styles.textfield)
-    .withTextInputStyle({flex: 1})
-    .build();
 
 
 const ColoredRaisedButton = MKButton.coloredButton()
@@ -76,6 +39,13 @@ const ColoredRaisedButton = MKButton.coloredButton()
     })
     .build();
 
+const SelectPictureButton = MKButton.coloredButton()
+    .withText('Add photo')
+    .withBackgroundColor(MKColor.palette_green_500)
+    .withOnPress(() => {
+        console.log("Add photo");
+    })
+    .build();
 
 
 const plants = [{
@@ -122,6 +92,9 @@ const diseaseCoverage = [
         export default class FormScene extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            textInputValue: ''
+        }
     }
 
     render() {
@@ -153,11 +126,20 @@ const diseaseCoverage = [
                             <ModalPicker
                                 data={diseaseCoverage}
                                 initValue="Select disease coverage for this tree."
-                                onChange={(option)=>{ alert(`${option.label} (${option.key}) Updated disease coverage`) }} />
+                                onChange={(option)=>{ this.setState({textInputValue:option.label})}}>
+
+                            <TextInput
+                                style={{borderWidth:1, borderColor:'#ccc', padding:10, height:30, width: 200}}
+                                editable={false}
+                                placeholder="%"
+                                value={this.state.textInputValue} />
+
+                            </ModalPicker>
                         </View>
                     </View>
                     <View style = {{flexDirection: 'row'}}>
                     </View>
+                    <SelectPictureButton/>
                     <Textfield/>
                     <Text></Text>
                     <ColoredRaisedButton/>
@@ -177,3 +159,39 @@ FormScene.propTypes = {
 
 const elevationStyle = new Elevation(2)
 
+const styles = StyleSheet.create({
+    card     : {
+        ...theme.cardStyle,
+        ...elevationStyle,
+        marginBottom: 10,
+        borderRadius: 3
+    },
+    container: {
+        height: 200,
+        width : undefined,
+        flex: 1
+    },
+    cardBody : {
+        flexDirection : 'row',
+        flex          : 1,
+        padding       : 10,
+        alignItems    : 'center',
+        justifyContent: 'center'
+    },
+    textfield : {
+        height: 28,  // have to do it on iOS
+        marginTop: 32
+    },
+    subHeadText : {
+        fontSize : 22,
+        flex : 1
+    },
+
+})
+
+
+const Textfield = MKTextField.textfield()
+    .withPlaceholder('Add additional comments here...')
+    .withStyle(styles.textfield)
+    .withTextInputStyle({flex: 1})
+    .build();
