@@ -84,7 +84,9 @@ export default class TreeDescriptionScene extends Component {
           <Text style={styles.cardBody}>{plants[this.props.title].collectionInstructions}</Text>
           </View>
         </ScrollView>
-        <MKButton style={styles.button} onPress={() => console.log("Add an entry")}>
+        <MKButton style={styles.button}   onPress={() => {
+                    this.props.navigator.push({index: 3, title: this.props.title})
+                  }}>
           <Text style={styles.buttonText}>
             Add an entry
           </Text>
