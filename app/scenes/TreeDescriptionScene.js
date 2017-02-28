@@ -10,7 +10,6 @@ import {
 } from 'react-native'
 import {getTheme} from 'react-native-material-kit'
 import Header from '../components/Header'
-import Sidebar from '../components/Sidebar'
 import Icon from 'react-native-vector-icons/Ionicons'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
@@ -69,12 +68,7 @@ export default class TreeDescriptionScene extends Component {
         <Header
           title={this.props.title}
           navigator={this.props.navigator}
-          initial={true}
-          onMenuPress={this.toggleMenu.bind(this)}/>
-        <Sidebar
-          ref="sidebar"
-          navigator={this.props.navigator}
-          routes={sidebarLinks}/>
+          />
         <ScrollView>
           <Image source={plants[this.props.title].image} style={styles.cardImage}/>
           <View style={styles.descriptionItemView}>
@@ -99,9 +93,6 @@ export default class TreeDescriptionScene extends Component {
     )
   }
 
-  toggleMenu() {
-    this.refs.sidebar.toggleMenu()
-  }
 }
 
   TreeDescriptionScene.propTypes = {
