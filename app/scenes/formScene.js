@@ -22,12 +22,13 @@ import {
     MKColor,
     MKButton,
 } from 'react-native-material-kit'
+import Colors from '../helpers/Colors'
 
 import ModalPicker from 'react-native-modal-picker'
 
 const theme  = getTheme();
-const myIcon = (<Icon name="md-menu" size={22} color="#959595"/>);
-const cameraIcon = (<Icon name="md-camera" size={22} color="#959595"/>);
+const myIcon = (<Icon name="md-menu" size={16} color="#fff"/>);
+const cameraIcon = (<Icon name="md-camera" size={16} color="#fff"/>);
     let thisDate = new Date();
     let thisDateDisplay = String(thisDate);
 
@@ -132,9 +133,9 @@ const diseaseCoverage = [
                             </ModalPicker>
                     <MKButton style={styles.button} onPress={() => console.log("Submit the tree form")}>
                         <Text style={styles.buttonText}>
-                            Choose photo
+                          {cameraIcon} Choose photo
                         </Text>
-                        {cameraIcon}
+
                     </MKButton>
                     <TextInput
                         style={styles.textAddComment}
@@ -193,19 +194,24 @@ const styles = StyleSheet.create({
         borderRadius: 2,
         shadowRadius: 1,
         shadowOffset: { width: 0, height: 0.5 },
-        shadowOpacity: 0.7,
+        shadowOpacity: 0.24,
         shadowColor: 'black',
-        elevation: 4
+        elevation: 4,
+        backgroundColor: Colors.primary,
+      padding: 5,
+      marginVertical: 10,
+      maxWidth: 300
     },
     buttonText : {
-        fontSize: 20,
         fontWeight: 'bold',
         textAlign: 'center',
+        color: '#fff',
     },
-textAddComment: {borderWidth:1,
-        borderColor:'#ccc',
-        height:150,
-        width: 300}
-
+textAddComment: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    height: 150,
+    width: 300
+}
 })
 
