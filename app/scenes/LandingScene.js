@@ -72,7 +72,8 @@ export default class LandingScene extends Component {
                   key={index}
                   onPress={() => {
                     this.props.navigator.push({index: 2, title: plant.title})
-                  }}>
+                  }}
+                  underlayColor="#fff">
                   <View>
                     <Image source={plant.image} style={styles.cardImage}/>
                     <View style={styles.cardBody}>
