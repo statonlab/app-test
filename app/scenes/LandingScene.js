@@ -77,7 +77,7 @@ export default class LandingScene extends Component {
                   <View>
                     <Image source={plant.image} style={styles.cardImage}/>
                     <View style={styles.cardBody}>
-                      {myIcon}
+                      {/*{myIcon}*/}
                       <Text style={styles.cardTitle}>
                         {plant.title}
                       </Text>
