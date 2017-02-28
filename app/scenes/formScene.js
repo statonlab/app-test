@@ -26,15 +26,16 @@ import {
 import ModalPicker from 'react-native-modal-picker'
 
 const theme  = getTheme();
-const myIcon = (<Icon name="md-arrow-dropright-circle" size={22} color="#959595"/>);
-let thisDate = new Date();
-let thisDateDisplay = String(thisDate);
+const myIcon = (<Icon name="md-menu" size={22} color="#959595"/>);
+const cameraIcon = (<Icon name="md-camera" size={22} color="#959595"/>);
+    let thisDate = new Date();
+    let thisDateDisplay = String(thisDate);
 
 
-const ColoredRaisedButton = MKButton.coloredButton()
-    .withText('Submit Entry')
-    .withBackgroundColor(MKColor.palette_red_500)
-    .withOnPress(() => {
+    const ColoredRaisedButton = MKButton.coloredButton()
+        .withText('Submit Entry')
+        .withBackgroundColor(MKColor.palette_red_500)
+        .withOnPress(() => {
         console.log("Submit the tree form");
     })
     .build();
@@ -93,53 +94,48 @@ const diseaseCoverage = [
     constructor(props) {
         super(props);
         this.state = {
-            textInputValue: ''
+            textInputValue: '',
+            textDensityPicked: ''
         }
     }
 
     render() {
-
         return (
             <View style={{backgroundColor: '#f5f5f5', flex: 1, flexDirection: 'column'}}>
                 <Header title={this.props.title} navigator={this.props.navigator} initial={true}/>
                 <View>
                     <Text>{thisDateDisplay}</Text>
-                    <View
-                        style={styles.card}
-                    >
-                        <View style={{flexGrow:1, padding: 0, height: 50, flexDirection:'row'}}>
-                            <Text>
-                                Tree density: </Text>
-                            <ModalPicker
-                                data={treeDensities}
-                                initValue="Select density of this tree species for this entry."
-                                onChange={(option)=>{ alert(`${option.label} (${option.key}) Updated tree density`) }} />
-                        </View>
-                    </View>
-                    <View
-                        style={styles.card}
-                    >
-
-                        <View style={{flexGrow:1, height: 50, flexDirection:'row'}}>
-                            <Text>
-                                % Disease coverage </Text>
+                        <ModalPicker
+                            data={treeDensities}
+                            initValue="Select disease coverage for this tree."
+                            onChange={(option)=>{ this.setState({textDensityPicked:option.label})}}>
+                            <View style={{flexGrow:1, height: 50, flexDirection:'row', alignItems: 'stretch', justifyContent: 'space-between', padding: 5}}>
+                            <Text>Tree density: </Text>
+                        <TextInput
+                                style={{borderWidth:1, borderColor:'#ccc', height:25, width: 200}}
+                                editable={false}
+                                placeholder="please select"
+                                value={this.state.textDensityPicked}
+                            />
+                                {myIcon}
+                            </View>
+                        </ModalPicker>
                             <ModalPicker
                                 data={diseaseCoverage}
                                 initValue="Select disease coverage for this tree."
                                 onChange={(option)=>{ this.setState({textInputValue:option.label})}}>
-
-                            <TextInput
-                                style={{borderWidth:1, borderColor:'#ccc', padding:10, height:30, width: 200}}
-                                editable={false}
-                                placeholder="%"
-                                value={this.state.textInputValue} />
-
+                                <View style={{flexGrow:1, height: 50, flexDirection:'row', alignItems: 'stretch', justifyContent: 'space-between', padding: 5}}>
+                                        <Text> % Disease:</Text>
+                                    <TextInput
+                                        style={{borderWidth:1, borderColor:'#ccc', height:25, width: 200}}
+                                        editable={false}
+                                        placeholder="please select"
+                                        value={this.state.textInputValue}
+                                    />
+                                    {myIcon}
+                                </View>
                             </ModalPicker>
-                        </View>
-                    </View>
-                    <View style = {{flexDirection: 'row'}}>
-                    </View>
-                    <SelectPictureButton/>
+                    <SelectPictureButton />
                     <Textfield/>
                     <Text></Text>
                     <ColoredRaisedButton/>
@@ -180,7 +176,7 @@ const styles = StyleSheet.create({
     },
     textfield : {
         height: 28,  // have to do it on iOS
-        marginTop: 32
+        marginTop: 32,
     },
     subHeadText : {
         fontSize : 22,
