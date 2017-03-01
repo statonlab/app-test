@@ -207,10 +207,10 @@ const styles = StyleSheet.create({
   },
 
   textField: {
-    height           : 30,
+    height           : 40,
     paddingHorizontal: 15,
     color            : "#444",
-    fontSize: 14
+    fontSize         : 14
   },
 
   subHeadText: {
@@ -240,18 +240,18 @@ const styles = StyleSheet.create({
     width            : undefined,
     backgroundColor  : "transparent",
     paddingHorizontal: 15,
-    height: 30,
-    justifyContent: 'center'
+    height           : 40,
+    justifyContent   : 'center'
   },
 
   buttonText: {
-    textAlign : 'center',
-    color     : '#fff',
+    textAlign: 'center',
+    color    : '#fff',
   },
 
   buttonAltText: {
-    textAlign : 'center',
-    color     : '#666'
+    textAlign: 'center',
+    color    : '#666'
   },
 
   buttonLinkText: {
@@ -259,8 +259,8 @@ const styles = StyleSheet.create({
   },
 
   textAddComment: {
-    flex      : 1,
-    width     : undefined,
+    flex  : 1,
+    width : undefined,
     height: 150
   },
 
