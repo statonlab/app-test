@@ -14,7 +14,7 @@ import {
 } from 'react-native'
 import LandingScene from '../scenes/LandingScene'
 import MapScene from '../scenes/MapScene'
-import FormScene from '../scenes/formScene'
+import FormScene from '../scenes/FormScene'
 import CameraScene from '../scenes/CameraScene'
 import CapturedScene from '../scenes/CapturedScene'
 import CaptureLocationScene from '../scenes/CaptureLocationScene'
