@@ -31,14 +31,6 @@ const treeSize = [
   {key: index++, label: '>100 feet'},
 ];
 
-index                 = 0;
-const diseaseCoverage = [
-  {key: index++, label: '0-25%'},
-  {key: index++, label: '26-50%'},
-  {key: index++, label: '51-75%'},
-  {key: index++, label: '76-100%'}
-]
-
 index           = 0;
 const treeStand = [
   {key: index++, label: '1-10'},
@@ -89,7 +81,7 @@ export default class FormScene extends Component {
           </View>
 
           <View style={styles.formGroup}>
-            <Text style={styles.label}>Number of Trees</Text>
+            <Text style={styles.label}>Number of Trees in Stand</Text>
             <ModalPicker
               style={styles.picker}
               data={treeStand}
@@ -106,7 +98,7 @@ export default class FormScene extends Component {
           </View>
 
           <View style={styles.formGroup}>
-            <Text style={styles.label}>Number of Trees</Text>
+            <Text style={styles.label}>Number of Dead Trees</Text>
             <ModalPicker
               style={styles.picker}
               data={deadTrees}
