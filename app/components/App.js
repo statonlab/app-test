@@ -60,7 +60,7 @@ export default class WildType extends Component {
         />
         <Navigator
           style={styles.navigator}
-          initialRoute={{ title: 'Overview', index: 3}}
+          initialRoute={{ title: 'Overview', index: 0}}
           renderScene={this.renderScene}
         />
       </View>
