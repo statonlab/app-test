@@ -98,10 +98,10 @@ function getVerticalPadding() {
     return 15;
 }
 
-const elevationStyle = new Elevation(5)
+const elevationStyle = new Elevation(3)
 
 const style = StyleSheet.create({
-  wrapper  : {
+  wrapper: {
     ...elevationStyle,
     paddingTop     : getVerticalPadding(),
     flex           : 0,
@@ -111,19 +111,23 @@ const style = StyleSheet.create({
     alignItems     : 'center',
     justifyContent : 'center'
   },
-  title    : {
+
+  title: {
     fontSize       : 16,
     flex           : 1,
     paddingVertical: 17
   },
-  text     : {
+
+  text: {
     color     : Colors.primaryText,
     fontSize  : 16,
     fontWeight: '500',
   },
-  right    : {
+
+  right: {
     textAlign: 'right'
   },
+
   touchable: {
     flex             : 0,
     paddingHorizontal: 15,
