@@ -6,7 +6,7 @@ import {
 import GetLocation from '../components/GetLocation'
 import Header from '../components/Header'
 
-export default class LandingScene extends Component {
+export default class CaptureLocationScene extends Component {
   render() {
     return (
       <View style={styles.container}>
@@ -27,7 +27,7 @@ export default class LandingScene extends Component {
   }
 }
 
-LandingScene.propTypes = {
+CaptureLocationScene.propTypes = {
   title    : PropTypes.string.isRequired,
   navigator: PropTypes.object.isRequired,
   image    : PropTypes.object.isRequired

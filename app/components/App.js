@@ -17,7 +17,7 @@ import MapScene from '../scenes/MapScene'
 import FormScene from '../scenes/formScene'
 import CameraScene from '../scenes/CameraScene'
 import CapturedScene from '../scenes/CapturedScene'
-import CaptureLocatinScene from '../scenes/CaptureLocationScene'
+import CaptureLocationScene from '../scenes/CaptureLocationScene'
 import TreeDescriptionScene from '../scenes/TreeDescriptionScene'
 
 export default class WildType extends Component {
@@ -43,7 +43,7 @@ export default class WildType extends Component {
     }
 
     if(route.index == 5) {
-      return <CaptureLocatinScene title={route.title} navigator={navigator} image={route.image}/>
+      return <CaptureLocationScene title={route.title} navigator={navigator} image={route.image}/>
     }
     
     if(route.index == 6) {
@@ -53,9 +53,6 @@ export default class WildType extends Component {
 
   render() {
     return (
-
-      //question: initialRouteStack would go here below initialRoute?
-      //https://facebook.github.io/react-native/docs/navigator.html
       <View style={styles.container}>
         <StatusBar
           backgroundColor="#25897d"
