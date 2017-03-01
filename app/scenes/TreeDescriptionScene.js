@@ -10,7 +10,7 @@ import {
 } from 'react-native'
 import {getTheme} from 'react-native-material-kit'
 import Header from '../components/Header'
-import Icon from 'react-native-vector-icons/Ionicons'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
 import {
@@ -45,17 +45,6 @@ const plants = {
   }
 }
 
-
-let plant = plants['Hemlock'];
-
-const sidebarLinks = [
-  {
-    title: 'Home',
-    index: 0
-  },
-]
-
-
 export default class TreeDescriptionScene extends Component {
 
   constructor(props) {
@@ -69,28 +58,34 @@ export default class TreeDescriptionScene extends Component {
           title={this.props.title}
           navigator={this.props.navigator}
         />
-        <ScrollView>
+        <ScrollView style={styles.scrollView}>
           <Image source={plants[this.props.title].image} style={styles.cardImage}/>
-          <View style={styles.descriptionItemView}>
-            <Text style={styles.cardTitle}>Latin name:</Text>
-            <Text style={styles.cardBody}>{plants[this.props.title].latinName}</Text>
-          </View>
-          <View style={styles.descriptionItemView}>
-            <Text style={styles.cardTitle}>Tree Description:</Text>
-            <Text style={styles.cardBody}>{plants[this.props.title].descriptionBody}</Text>
-          </View>
-          <View style={styles.descriptionItemView}>
-            <Text style={styles.cardTitle}>Collection Instructions:</Text>
-            <Text style={styles.cardBody}>{plants[this.props.title].collectionInstructions}</Text>
+          <View style={styles.card}>
+            <View style={[styles.cardBody, {paddingTop: 0}]}>
+              <Text style={styles.cardTitle}>Latin name</Text>
+              <Text style={styles.cardText}>{plants[this.props.title].latinName}</Text>
+            </View>
+
+            <View style={styles.cardBody}>
+              <Text style={styles.cardTitle}>Tree Description</Text>
+              <Text style={styles.cardText}>{plants[this.props.title].descriptionBody}</Text>
+            </View>
+
+            <View style={[styles.cardBody, {borderBottomWidth: 0, paddingBottom: 0}]}>
+              <Text style={styles.cardTitle}>Collection Instructions</Text>
+              <Text style={styles.cardText}>{plants[this.props.title].collectionInstructions}</Text>
+            </View>
           </View>
         </ScrollView>
-        <MKButton style={styles.button} onPress={() => {
+        <View style={styles.footer}>
+          <MKButton style={styles.button} onPress={() => {
                     this.props.navigator.push({index: 3, title: this.props.title})
                   }}>
-          <Text style={styles.buttonText}>
-            Add an entry
-          </Text>
-        </MKButton>
+            <Text style={styles.buttonText}>
+              Add New Entry
+            </Text>
+          </MKButton>
+        </View>
       </View>
     )
   }
@@ -103,81 +98,65 @@ TreeDescriptionScene.propTypes = {
 }
 
 const elevationStyle = new Elevation(2)
-const iconElevation  = new Elevation(2)
 
 const styles = StyleSheet.create({
-  container           : {
+  container : {
     backgroundColor: '#f5f5f5',
     flex           : 1,
     flexDirection  : 'column'
   },
-  card                : {
+  scrollView: {
+    flex: 1
+  },
+  card      : {
     ...theme.cardStyle,
     ...elevationStyle,
-    marginBottom: 10,
-    borderRadius: 3
-  },
-  cardImage           : {
-    ...theme.cardImageStyle,
-    height              : 150,
-    resizeMode          : 'cover',
-    width               : undefined,
-    borderTopRightRadius: 3,
-    borderTopLeftRadius : 3,
-    backgroundColor     : '#fff',
-  },
-  cardTitle           : {
-    ...theme.cardTitleStyle,
-    fontSize: 14,
-    flex    : 50,
-    padding : 0,
-    position: undefined,
-    top     : 0,
-    left    : 0
-  },
-  cardBody            : {
-    flexDirection : 'row',
-    flex          : 1,
-    padding       : 10,
-    alignItems    : 'center',
-    justifyContent: 'center'
-  },
-  descriptionContainer: {
-    marginHorizontal: 5,
+    borderRadius    : 3,
     flex            : 1,
-    flexDirection   : 'column',
-    paddingVertical : 10
+    padding         : 10,
+    justifyContent  : 'center',
+    marginVertical  : 5,
+    marginHorizontal: 5,
   },
-  button              : {
-    flexDirection  : 'column',
-    borderRadius   : 2,
-    shadowRadius   : 1,
-    shadowOffset   : {width: 0, height: 0.5},
-    shadowOpacity  : 0.24,
-    shadowColor    : 'black',
-    elevation      : 4,
-    backgroundColor: Colors.primary,
-    padding        : 5,
-    marginVertical : 50,
-    maxWidth       : 300,
-    marginLeft     : 75
-
+  cardImage : {
+    ...theme.cardImageStyle,
+    height         : 150,
+    resizeMode     : 'cover',
+    width          : undefined,
+    backgroundColor: '#fff',
   },
-  buttonText          : {
+  cardTitle : {
+    fontSize: 14,
+    flex    : 1,
     fontWeight: 'bold',
-    textAlign : 'center',
-    color     : '#fff',
+    color: "#222"
   },
-  descriptionItemView : {
-    flex          : 1,
-    padding       : 10,
+  cardBody  : {
+    paddingVertical  : 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee'
+  },
+  cardText  : {
+    padding: 10,
+    color: '#666'
+  },
+  footer    : {
+    flex          : 0,
+    height        : 60,
     justifyContent: 'center',
-    borderRadius  : 2,
-    shadowRadius  : 1,
-    shadowOffset  : {width: 0, height: 0.5},
-    shadowOpacity : 0.24,
-    shadowColor   : 'black',
-    elevation     : 4,
-
-  }
+    alignItems    : 'center'
+  },
+  button    : {
+    ...elevationStyle,
+    borderRadius   : 2,
+    backgroundColor: Colors.primary,
+    padding        : 10,
+    width          : 300,
+    maxWidth       : 300,
+  },
+  buttonText: {
+    textAlign: 'center',
+    color    : '#fff',
+    fontSize : 14
+  },
 })
