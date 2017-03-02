@@ -2,11 +2,15 @@ import React, {Component, PropTypes} from 'react'
 import {
   View,
   StyleSheet,
+  Text,
+  Image,
   AsyncStorage
 } from 'react-native'
-import GeoLocation from '../components/GeoLocation'
 import Header from '../components/Header'
 import MapView from 'react-native-maps'
+import {MKButton} from 'react-native-material-kit'
+import Colors from '../helpers/Colors'
+import Elevation from '../helpers/Elevation'
 
 export default class SubmittedScene extends Component {
   constructor(props) {
@@ -22,7 +26,8 @@ export default class SubmittedScene extends Component {
         let markers = [
           {
             title      : data.title,
-            description: `${data.treeStandNumber} Trees`,
+            image      : data.image,
+            description: `${data.treeStandNumber} trees`,
             coord      : {
               latitude : data.location.latitude,
               longitude: data.location.longitude
@@ -40,7 +45,7 @@ export default class SubmittedScene extends Component {
 
   goToMarker(marker) {
     this.onPressMarker(marker)
-    this.refs.markers.showCallout()
+    this.marker.showCallout()
   }
 
   onPressMarker(marker) {
@@ -55,7 +60,7 @@ export default class SubmittedScene extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Header title={"Submission View"} navigator={this.props.navigator}/>
+        <Header title={"Submission Aerial View"} navigator={this.props.navigator}/>
         <MapView
           style={styles.map}
           showsUserLocation={true}
@@ -66,17 +71,30 @@ export default class SubmittedScene extends Component {
 
             return (
               <MapView.Marker
-                ref="markers"
-                onPress={() => this.onPressMarker(marker.coord)}
-                onSelect={() => this.onPressMarker(marker.coord)}
+                ref={ref => { this.marker = ref; }}
                 key={index}
-                coordinate={marker.coord}
-                description={marker.description}
-                title={marker.title}
-              />
+                coordinate={marker.coord}>
+                <MapView.Callout style={{width: 165}}>
+                  <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+                    <Image source={{uri: marker.image}} style={{width: 45, height: 45}}/>
+                    <View style={{flex: 1, marginLeft: 5, flexDirection: 'column', justifyContent: 'space-between', alignItems: 'flex-start'}}>
+                      <Text style={[styles.calloutText, {flex: 1, fontWeight: '500'}]}>{marker.title}</Text>
+                      <Text style={[styles.calloutText, {color: '#666'}]}>{marker.description} found in this area</Text>
+                    </View>
+                  </View>
+                </MapView.Callout>
+              </MapView.Marker>
             )
           })}
         </MapView>
+        <View style={styles.footer}>
+          <Text style={styles.text}>Your entry has been saved!</Text>
+          <MKButton
+            style={styles.button}
+            onPress={() => this.props.navigator.popToTop()}>
+            <Text style={styles.buttonText}>Continue</Text>
+          </MKButton>
+        </View>
       </View>
     )
   }
@@ -94,5 +112,38 @@ const styles = StyleSheet.create({
   map: {
     width: undefined,
     flex : 1
+  },
+
+  calloutText: {
+    fontSize: 12,
+    color: '#444'
+  },
+
+  footer: {
+    flex           : 0,
+    flexDirection  : 'row',
+    justifyContent : 'space-between',
+    alignItems     : 'center',
+    padding        : 10,
+    backgroundColor: '#24292e'
+  },
+
+  button: {
+    ...(new Elevation(2)),
+    backgroundColor  : Colors.warning,
+    paddingVertical  : 10,
+    paddingHorizontal: 15,
+    borderRadius     : 2,
+    marginLeft       : 15
+  },
+
+  buttonText: {
+    color    : Colors.warningText,
+    textAlign: 'center'
+  },
+
+  text: {
+    color     : '#eee',
+    fontWeight: '500'
   },
 })
