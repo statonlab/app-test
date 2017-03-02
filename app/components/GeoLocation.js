@@ -18,8 +18,8 @@ const markers = [
       latitude : 32.950287,
       longitude: -88.844245
     }
-  }]
-
+  }
+]
 
 export default class GeoLocation extends Component {
   constructor(props) {
@@ -43,9 +43,9 @@ export default class GeoLocation extends Component {
 
     this.circles = [
       {
-        radius: 7000,
+        radius: 70000,
         center: {
-          latitude : 36.830540,
+          latitude : 32.830540,
           longitude: -84.390603
         }
       }
@@ -105,13 +105,13 @@ export default class GeoLocation extends Component {
           )
         })}
         {this.circles.map((circle, index) => {
-          <MapView.Circle
+          return (<MapView.Circle
             key={index}
             center={circle.center}
             radius={circle.radius}
-            fillColor={"#000"}
-            onPress={() => this.onPressMarker(marker.coord)}
-          />
+            fillColor={"rgba(0,0,0,.4)"}
+            onPress={() => this.onPressMarker(circle.center)}
+          />)
         })}
       </MapView>
     )

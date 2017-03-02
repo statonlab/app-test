@@ -6,12 +6,9 @@ import {
   ScrollView,
   Image,
   TextInput,
-  Navigator,
   Dimensions,
   StyleSheet,
-  Picker,
-  Button,
-  Alert,
+  AsyncStorage
 } from 'react-native'
 import {getTheme, MKColor, MKButton} from 'react-native-material-kit'
 import Header from '../components/Header'
@@ -49,100 +46,153 @@ const deadTrees = [
 export default class FormScene extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       treeHeightPicked: '',
       treeStandNumber : '',
       textAddComment  : '',
-      nearbyDeadTrees : ''
+      nearbyDeadTrees : '',
+      image           : '',
+      title           : this.props.title,
+      location        : {
+        latitude : '',
+        longitude: ''
+      }
     }
+
+    try {
+      let formData = AsyncStorage.getItem('@WildType:formData').then((formData) => {
+        if (formData !== null) {
+          this.setState(JSON.parse(formData))
+        }
+      })
+    } catch (error) {
+      throw new Error('Couldn\'t fetch form data')
+    }
+
+    this.fetchData()
+  }
+
+  async saveData(data) {
+    this.setState(data)
+    try {
+      await AsyncStorage.setItem('@WildType:formData', JSON.stringify(this.state))
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
+
+  fetchData() {
+    return AsyncStorage.getItem('@WildType:formData')
+  }
+
+  submit = () => {
+    AsyncStorage.setItem('@WildType:savedForm', JSON.stringify(this.state))
+    AsyncStorage.removeItem('@WildType:formData')
+    this.props.navigator.push({index: 7})
+  }
+
+  cancel = () => {
+    AsyncStorage.removeItem('@WildType:formData')
+    this.props.navigator.popToTop()
   }
 
   render() {
     return (
       <View style={styles.container}>
 
-        <Header title={this.props.title} navigator={this.props.navigator}/>
+        <Header title={this.state.title} navigator={this.props.navigator}/>
 
-        <View style={styles.card}>
-          <View style={styles.formGroup}>
-            <Text style={styles.label}>Tree Height</Text>
-            <ModalPicker
-              style={styles.picker}
-              data={treeSize}
-              onChange={(option)=>{ this.setState({treeHeightPicked:option.label})}}>
+        <ScrollView>
+          <View style={styles.card}>
+            <View style={styles.formGroup}>
+              <Text style={styles.label}>Tree Height</Text>
+              <ModalPicker
+                style={styles.picker}
+                data={treeSize}
+                onChange={(option)=>{this.saveData({treeHeightPicked:option.label})}}>
+                <TextInput
+                  style={styles.textField}
+                  editable={false}
+                  placeholder="Tree Height"
+                  value={this.state.treeHeightPicked}
+                />
+              </ModalPicker>
+              {dropdownIcon}
+            </View>
+
+            <View style={styles.formGroup}>
+              <Text style={styles.label}>Trees in Stand</Text>
+              <ModalPicker
+                style={styles.picker}
+                data={treeStand}
+                onChange={(option)=>{this.saveData({treeStandNumber:option.label})}}>
+                <TextInput
+                  style={styles.textField}
+                  editable={false}
+                  placeholder="Number of Trees in Stand"
+                  value={this.state.treeStandNumber}
+                  underlineColorAndroid="#fff"
+                />
+              </ModalPicker>
+              {dropdownIcon}
+            </View>
+
+            <View style={styles.formGroup}>
+              <Text style={styles.label}>Dead Trees</Text>
+              <ModalPicker
+                style={styles.picker}
+                data={deadTrees}
+                onChange={(option)=>{this.saveData({nearbyDeadTrees:option.label})}}>
+                <TextInput
+                  style={styles.textField}
+                  editable={false}
+                  placeholder="Number of Dead Trees"
+                  value={this.state.nearbyDeadTrees}
+                />
+              </ModalPicker>
+              {dropdownIcon}
+            </View>
+
+            <View style={[styles.formGroup]}>
+              <Text style={styles.label}>Photo</Text>
+              <MKButton style={styles.buttonLink} onPress={() => this.saveData({}).then(this.props.navigator.push({index: 2, plantTitle: this.props.title}))}>
+                <Text style={styles.buttonLinkText}>
+                  {this.state.image === '' ? 'Add Photo' : this.state.image.substr(-20)}
+                </Text>
+              </MKButton>
+              <Icon name="camera" style={styles.dropdownIcon}/>
+            </View>
+
+            <View style={[styles.formGroup]}>
               <TextInput
-                style={styles.textField}
-                editable={false}
-                placeholder="Tree Height"
-                value={this.state.treeHeightPicked}
+                style={[styles.textField, styles.textAddComment]}
+                placeholder="Add additional comments here"
+                value={this.state.textAddComment}
+                onChangeText={(textAddComment) => this.saveData({textAddComment: textAddComment})}
+                multiline={true}
+                numberOfLines={4}
               />
-            </ModalPicker>
-            {dropdownIcon}
-          </View>
+            </View>
 
-          <View style={styles.formGroup}>
-            <Text style={styles.label}>Number of Trees in Stand</Text>
-            <ModalPicker
-              style={styles.picker}
-              data={treeStand}
-              onChange={(option)=>{ this.setState({treeStandNumber:option.label})}}>
-              <TextInput
-                style={styles.textField}
-                editable={false}
-                placeholder="Number of Trees"
-                value={this.state.treeStandNumber}
-                underlineColorAndroid="#fff"
-              />
-            </ModalPicker>
-            {dropdownIcon}
-          </View>
-
-          <View style={styles.formGroup}>
-            <Text style={styles.label}>Number of Dead Trees</Text>
-            <ModalPicker
-              style={styles.picker}
-              data={deadTrees}
-              onChange={(option)=>{ this.setState({nearbyDeadTrees:option.label})}}>
-              <TextInput
-                style={styles.textField}
-                editable={false}
-                placeholder="Number of Trees"
-                value={this.state.nearbyDeadTrees}
-              />
-            </ModalPicker>
-            {dropdownIcon}
-          </View>
-
-          <View style={[styles.formGroup]}>
-            <Text style={styles.label}>Photo</Text>
-            <MKButton style={styles.buttonLink} onPress={() => this.props.navigator.push({index: 2})}>
-              <Text style={styles.buttonLinkText}>
-                Choose photo
+            <View style={[styles.formGroup, {borderBottomWidth: 0}]}>
+              <Text style={styles.label}>Location</Text>
+              <Text style={[{flex: 1, width: undefined, color: '#444'}]}>
+                {this.state.location.latitude === '' ? 'Will get set after adding a photo' : `${this.state.location.latitude},${this.state.location.longitude}`}
               </Text>
-            </MKButton>
-            <Icon name="camera" style={styles.dropdownIcon}/>
+              <Icon name="map" style={styles.dropdownIcon}/>
+            </View>
           </View>
-
-          <View style={[styles.formGroup, {borderBottomWidth: 0}]}>
-            <TextInput
-              style={[styles.textField, styles.textAddComment]}
-              placeholder="Add additional comments here"
-              value={this.state.textAddComment}
-              onChangeText={(textAddComment) => this.setState({textAddComment})}
-              multiline={true}
-              numberOfLines={4}
-            />
-          </View>
-        </View>
+        </ScrollView>
 
         <View style={[styles.footer, {borderBottomWidth: 0}]}>
-          <MKButton style={[styles.button, styles.flex0]} onPress={() => console.log("Submit the tree form")}>
+          <MKButton style={[styles.button, styles.flex0]} onPress={this.submit} rippleColor="rgba(0,0,0,0.5)">
             <Text style={styles.buttonText}>
               Submit Entry
             </Text>
           </MKButton>
 
-          <MKButton style={[styles.button, styles.buttonAlt, styles.flex0]} onPress={() => console.log("Submit the tree form")}>
+          <MKButton style={[styles.button, styles.buttonAlt, styles.flex0]} onPress={this.cancel}>
             <Text style={styles.buttonAltText}>
               Cancel
             </Text>
@@ -152,7 +202,6 @@ export default class FormScene extends Component {
       </View>
     );
   }
-
 }
 
 FormScene.propTypes = {
@@ -194,8 +243,9 @@ const styles = StyleSheet.create({
   },
 
   label: {
-    width: 110,
-    color: '#444'
+    width     : 110,
+    color     : '#444',
+    fontWeight: 'bold'
   },
 
   textField: {
@@ -260,6 +310,12 @@ const styles = StyleSheet.create({
     width   : 20,
     fontSize: 20,
     color   : '#aaa'
+  },
+
+  image: {
+    width     : 50,
+    height    : 50,
+    resizeMode: 'cover'
   },
 
   footer: {

@@ -5,7 +5,8 @@ import {
   Dimensions,
   Text,
   Image,
-  TouchableHighlight
+  TouchableHighlight,
+  AsyncStorage
 } from 'react-native'
 import Header from '../components/Header'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -40,17 +41,24 @@ export default class CapturedScene extends Component {
   }
 
   _use() {
-    this.props.navigator.push({
-      image: this.props.image,
-      index: 5,
-      title: 'Capture Location'
+    this._setFormImage().then(() => {
+      this.props.navigator.push({
+        image: this.props.image,
+        index: 5,
+        plantTitle: this.props.plantTitle
+      })
     })
+  }
+
+  async _setFormImage() {
+    await AsyncStorage.mergeItem('@WildType:formData', JSON.stringify({image: this.props.image.path}))
   }
 }
 
 CapturedScene.PropTypes = {
-  navigator: PropTypes.object.isRequired,
-  image    : PropTypes.object.isRequired
+  navigator : PropTypes.object.isRequired,
+  image     : PropTypes.object.isRequired,
+  plantTitle: PropTypes.string.isRequired
 }
 
 const styles = StyleSheet.create({
@@ -72,9 +80,9 @@ const styles = StyleSheet.create({
     alignItems     : 'center',
     backgroundColor: 'rgba(0,0,0,0.6)',
     position       : 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0
+    bottom         : 0,
+    left           : 0,
+    right          : 0
   },
   text          : {
     color  : "#fff",
