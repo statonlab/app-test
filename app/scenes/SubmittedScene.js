@@ -45,7 +45,6 @@ export default class SubmittedScene extends Component {
 
   goToMarker(marker) {
     this.onPressMarker(marker)
-    this.marker.showCallout()
   }
 
   onPressMarker(marker) {
@@ -65,7 +64,8 @@ export default class SubmittedScene extends Component {
           style={styles.map}
           showsUserLocation={true}
           followUserLocation={true}
-          ref="map">
+          ref="map"
+          onRegionChangeComplete={() => this.marker.showCallout()}>
           {this.state.markers.map((marker, index) => {
             if (typeof marker == "undefined") return;
 
@@ -73,7 +73,8 @@ export default class SubmittedScene extends Component {
               <MapView.Marker
                 ref={ref => { this.marker = ref; }}
                 key={index}
-                coordinate={marker.coord}>
+                coordinate={marker.coord}
+                pinColor={Colors.primary}>
                 <MapView.Callout style={{width: 165}}>
                   <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
                     <Image source={{uri: marker.image}} style={{width: 45, height: 45}}/>
