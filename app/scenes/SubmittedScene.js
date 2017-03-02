@@ -57,6 +57,7 @@ export default class SubmittedScene extends Component {
   }
 
   render() {
+    let done = false;
     return (
       <View style={styles.container}>
         <Header title={"Submission Aerial View"} navigator={this.props.navigator}/>
@@ -65,7 +66,14 @@ export default class SubmittedScene extends Component {
           showsUserLocation={true}
           followUserLocation={true}
           ref="map"
-          onRegionChangeComplete={() => this.marker.showCallout()}>
+          onRegionChangeComplete={() => {
+            if(!done) {
+              setTimeout(() => {
+                this.marker.showCallout()
+              }, 1000)
+            }
+            done = true
+          }}>
           {this.state.markers.map((marker, index) => {
             if (typeof marker == "undefined") return;
 
