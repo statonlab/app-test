@@ -4,7 +4,8 @@ import {
   Dimensions,
   View,
   Image,
-  Text
+  Text,
+  AsyncStorage
 } from 'react-native'
 import {MKSpinner, MKButton, getTheme} from 'react-native-material-kit'
 import Colors from '../helpers/Colors'
@@ -35,7 +36,14 @@ export default class GetLocation extends Component {
     this.watchID = navigator.geolocation.watchPosition((position) => {
       let lastPosition = position //JSON.stringify(position)
       this.setState({lastPosition})
+      this.saveLocation(position)
     })
+  }
+
+  saveLocation(position) {
+    AsyncStorage.mergeItem('@WildType:formData', JSON.stringify({
+      location: position.coords
+    }))
   }
 
   componentWillUnmount() {

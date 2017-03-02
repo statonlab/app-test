@@ -1,7 +1,6 @@
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
+ * WildType - application entry point
+ * https://github.com/statonlab/app-test
  */
 
 import React, {Component} from 'react'
@@ -19,35 +18,40 @@ import CameraScene from '../scenes/CameraScene'
 import CapturedScene from '../scenes/CapturedScene'
 import CaptureLocationScene from '../scenes/CaptureLocationScene'
 import TreeDescriptionScene from '../scenes/TreeDescriptionScene'
+import SubmittedScene from '../scenes/SubmittedScene'
 
 export default class WildType extends Component {
   renderScene(route, navigator) {
-      if (route.index == 0) {
-          return <LandingScene title={route.title} navigator={navigator}/>
-      }
+    if (route.index == 0) {
+      return <LandingScene title={route.title} navigator={navigator}/>
+    }
 
-      if (route.index == 1) {
-          return <MapScene title={route.title} navigator={navigator}/>
-      }
+    if (route.index == 1) {
+      return <MapScene title={route.title} navigator={navigator}/>
+    }
 
-      if (route.index == 2) {
-          return <CameraScene navigator={navigator}/>
-      }
+    if (route.index == 2) {
+      return <CameraScene navigator={navigator}/>
+    }
 
-      if (route.index == 3) {
-          return <FormScene title={route.title} navigator={navigator} />
-      }
+    if (route.index == 3) {
+      return <FormScene title={route.title} navigator={navigator}/>
+    }
 
-    if(route.index == 4) {
+    if (route.index == 4) {
       return <CapturedScene navigator={navigator} image={route.image}/>
     }
 
-    if(route.index == 5) {
+    if (route.index == 5) {
       return <CaptureLocationScene title={route.title} navigator={navigator} image={route.image}/>
     }
-    
-    if(route.index == 6) {
+
+    if (route.index == 6) {
       return <TreeDescriptionScene title={route.title} navigator={navigator} image={route.image}/>
+    }
+
+    if (route.index == 7) {
+      return <SubmittedScene navigator={navigator}/>
     }
   }
 

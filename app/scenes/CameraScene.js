@@ -30,15 +30,14 @@ export default class CameraScene extends Component {
           </View>
         </Camera>
       </View>
-    );
+    )
   }
 
   takePicture() {
     try {
       this.camera.capture()
         .then((data) => {
-          console.log(`Right HERE!!`, data)
-          this.props.navigator.push({index: 4, image: data})
+          this.props.navigator.push({index: 4, image: data, plantTitle: this.props.plantTitle})
         })
     } catch (err) {
       console.error(err)
@@ -47,7 +46,8 @@ export default class CameraScene extends Component {
 }
 
 CameraScene.PropTypes = {
-  navigator: PropTypes.object.isRequired
+  navigator: PropTypes.object.isRequired,
+  plantTitle: PropTypes.string.isRequired
 }
 
 const styles = StyleSheet.create({
@@ -74,4 +74,4 @@ const styles = StyleSheet.create({
     color  : '#000',
     padding: 10,
   }
-});
+})

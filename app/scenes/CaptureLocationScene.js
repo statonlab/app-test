@@ -28,9 +28,9 @@ export default class CaptureLocationScene extends Component {
 }
 
 CaptureLocationScene.propTypes = {
-  title    : PropTypes.string.isRequired,
   navigator: PropTypes.object.isRequired,
-  image    : PropTypes.object.isRequired
+  image    : PropTypes.object.isRequired,
+  plantTitle: PropTypes.string
 }
 
 const styles = StyleSheet.create({
