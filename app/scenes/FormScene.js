@@ -58,11 +58,7 @@ const deadTrees = {
 export default class FormScene extends Component {
   constructor(props) {
     super(props)
-
-    // let formItems = new Map(this.props.formProps.map((i) => [i, 1]))
-    console.log("logging form items")
-
-
+    
     //Turn array from props into object for state to display form items
     var formItems = {}
    for (var i=0;i < this.props.formProps.length; i++){
