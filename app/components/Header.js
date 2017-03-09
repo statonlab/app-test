@@ -47,7 +47,7 @@ export default class Header extends Component {
     let routes = this.props.navigator.getCurrentRoutes()
     let route  = routes[routes.length - 1]
     if (route.index != 1) {
-      this.props.navigator.push({title: 'Map', index: 1})
+      this.props.navigator.push({title: 'Map', label: 'MapScene'})
     }
   }
 

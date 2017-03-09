@@ -20,17 +20,18 @@ export default class CaptureLocationScene extends Component {
   }
 
   goToForm = () => {
+    let title = this.props.plantTitle
     this.props.navigator.push({
-      index: 3,
-      title: 'Submission Form'
+      label: 'FormScene',
+      title: title
     })
   }
 }
 
 CaptureLocationScene.propTypes = {
-  navigator: PropTypes.object.isRequired,
-  image    : PropTypes.object.isRequired,
-  plantTitle: PropTypes.string
+  navigator : PropTypes.object.isRequired,
+  image     : PropTypes.object.isRequired,
+  plantTitle: PropTypes.string.isRequired
 }
 
 const styles = StyleSheet.create({

@@ -89,19 +89,12 @@ export default class FormScene extends Component {
   submit = () => {
     AsyncStorage.setItem('@WildType:savedForm', JSON.stringify(this.state))
     AsyncStorage.removeItem('@WildType:formData')
-    this.props.navigator.push({index: 7})
+    this.props.navigator.push({label: 'SubmittedScene'})
   }
 
   cancel = () => {
     AsyncStorage.removeItem('@WildType:formData')
     this.props.navigator.popToTop()
-  }
-
-  validate(option, choices) {
-    for (let choice in choices) {
-      if(option == choice.label) return true
-    }
-    return false
   }
 
   render() {
@@ -112,23 +105,21 @@ export default class FormScene extends Component {
 
         <ScrollView>
           <View style={styles.card}>
-            {!this.props.formElements.treeHeight ? '' :
-              <View style={styles.formGroup}>
-                <Text style={styles.label}>Tree Height</Text>
-                <ModalPicker
-                  style={styles.picker}
-                  data={treeSize}
-                  onChange={(option)=>{this.saveData({treeHeightPicked:option.label})}}>
-                  <TextInput
-                    style={styles.textField}
-                    editable={false}
-                    placeholder="Tree Height"
-                    value={this.state.treeHeightPicked}
-                  />
-                </ModalPicker>
-                {dropdownIcon}
-              </View>
-            }
+            <View style={styles.formGroup}>
+              <Text style={styles.label}>Tree Height</Text>
+              <ModalPicker
+                style={styles.picker}
+                data={treeSize}
+                onChange={(option)=>{this.saveData({treeHeightPicked:option.label})}}>
+                <TextInput
+                  style={styles.textField}
+                  editable={false}
+                  placeholder="Tree Height"
+                  value={this.state.treeHeightPicked}
+                />
+              </ModalPicker>
+              {dropdownIcon}
+            </View>
 
             <View style={styles.formGroup}>
               <Text style={styles.label}>Trees in Stand</Text>
@@ -165,7 +156,7 @@ export default class FormScene extends Component {
 
             <View style={[styles.formGroup]}>
               <Text style={styles.label}>Photo</Text>
-              <MKButton style={styles.buttonLink} onPress={() => this.saveData({}).then(this.props.navigator.push({index: 2, plantTitle: this.props.title}))}>
+              <MKButton style={styles.buttonLink} onPress={() => this.saveData({}).then(this.props.navigator.push({label: 'CameraScene', plantTitle: this.props.title}))}>
                 <Text style={styles.buttonLinkText}>
                   {this.state.image === '' ? 'Add Photo' : this.state.image.substr(-20)}
                 </Text>

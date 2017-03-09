@@ -79,7 +79,7 @@ export default class TreeDescriptionScene extends Component {
         </ScrollView>
         <View style={styles.footer}>
           <MKButton style={styles.button} onPress={() => {
-                    this.props.navigator.push({index: 3, title: this.props.title})
+                    this.props.navigator.push({label: 'FormScene', title: this.props.title})
                   }}>
             <Text style={styles.buttonText}>
               Add New Entry

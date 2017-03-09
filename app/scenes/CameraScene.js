@@ -33,11 +33,11 @@ export default class CameraScene extends Component {
     )
   }
 
-  takePicture() {
+  takePicture = () => {
     try {
       this.camera.capture()
         .then((data) => {
-          this.props.navigator.push({index: 4, image: data, plantTitle: this.props.plantTitle})
+          this.props.navigator.push({label: 'CapturedScene', image: data, plantTitle: this.props.plantTitle})
         })
     } catch (err) {
       console.error(err)
