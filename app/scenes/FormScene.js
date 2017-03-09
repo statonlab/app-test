@@ -20,38 +20,53 @@ import ModalPicker from 'react-native-modal-picker'
 
 const theme = getTheme()
 
-let index      = 0;
-const treeSize = [
-  {key: index++, label: '0-10 feet'},
-  {key: index++, label: '11-50 feet'},
-  {key: index++, label: '51-100 feet'},
-  {key: index++, label: '>100 feet'},
-];
+let index        = 0
+const treeHeight = {
+  selectChoices: [
+    {key: index++, label: '0-10 feet'},
+    {key: index++, label: '11-50 feet'},
+    {key: index++, label: '51-100 feet'},
+    {key: index++, label: '>100 feet'}
+  ],
+  isRequired   : false
+}
 
-index           = 0;
-const treeStand = [
-  {key: index++, label: '1-10'},
-  {key: index++, label: '11-50'},
-  {key: index++, label: '51+'}
-]
 
-index           = 0;
-const deadTrees = [
-  {key: index++, label: 'none'},
-  {key: index++, label: '1-50'},
-  {key: index++, label: '51+'}
-]
+
+index           = 0
+const treeStand = {
+  selectChoices: [
+    {key: index++, label: '1-10'},
+    {key: index++, label: '11-50'},
+    {key: index++, label: '51+'}
+  ],
+  isRequired   : true
+}
+
+
+index           = 0
+const deadTrees = {
+  selectChoices: [
+    {key: index++, label: 'none'},
+    {key: index++, label: '1-50'},
+    {key: index++, label: '51+'}
+  ],
+  isRequired   : false
+}
 
 
 export default class FormScene extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       treeHeightPicked: '',
+       // treeHeightDisplay: true,
       treeStandNumber : '',
-      textAddComment  : '',
+      // treeStandNumberDisplay: true,
       nearbyDeadTrees : '',
+      // deadTreeDisplay: true,
+      textAddComment  : '',
       image           : '',
       title           : this.props.title,
       location        : {
@@ -97,6 +112,15 @@ export default class FormScene extends Component {
     this.props.navigator.popToTop()
   }
 
+  validate = (selection, choices) => {
+
+    for (choice in choices) {
+      if (selection == choice) return true
+    }
+    return false
+  }
+
+
   render() {
     return (
       <View style={styles.container}>
@@ -105,11 +129,12 @@ export default class FormScene extends Component {
 
         <ScrollView>
           <View style={styles.card}>
+            {!this.props.treeHeightDisplay ? null :
             <View style={styles.formGroup}>
               <Text style={styles.label}>Tree Height</Text>
               <ModalPicker
                 style={styles.picker}
-                data={treeSize}
+                data={treeHeight.selectChoices}
                 onChange={(option)=>{this.saveData({treeHeightPicked:option.label})}}>
                 <TextInput
                   style={styles.textField}
@@ -120,40 +145,42 @@ export default class FormScene extends Component {
               </ModalPicker>
               {dropdownIcon}
             </View>
-
-            <View style={styles.formGroup}>
-              <Text style={styles.label}>Trees in Stand</Text>
-              <ModalPicker
-                style={styles.picker}
-                data={treeStand}
-                onChange={(option)=>{this.saveData({treeStandNumber:option.label})}}>
-                <TextInput
-                  style={styles.textField}
-                  editable={false}
-                  placeholder="Number of Trees in Stand"
-                  value={this.state.treeStandNumber}
-                  underlineColorAndroid="#fff"
-                />
-              </ModalPicker>
-              {dropdownIcon}
-            </View>
-
-            <View style={styles.formGroup}>
-              <Text style={styles.label}>Dead Trees</Text>
-              <ModalPicker
-                style={styles.picker}
-                data={deadTrees}
-                onChange={(option)=>{this.saveData({nearbyDeadTrees:option.label})}}>
-                <TextInput
-                  style={styles.textField}
-                  editable={false}
-                  placeholder="Number of Dead Trees"
-                  value={this.state.nearbyDeadTrees}
-                />
-              </ModalPicker>
-              {dropdownIcon}
-            </View>
-
+            }
+            {!this.props.treeStandNumberDisplay ? null :
+              <View style={styles.formGroup}>
+                <Text style={styles.label}>Trees in Stand</Text>
+                <ModalPicker
+                  style={styles.picker}
+                  data={treeStand.selectChoices}
+                  onChange={(option)=>{this.saveData({treeStandNumber:option.label})}}>
+                  <TextInput
+                    style={styles.textField}
+                    editable={false}
+                    placeholder="Number of Trees in Stand"
+                    value={this.state.treeStandNumber}
+                    underlineColorAndroid="#fff"
+                  />
+                </ModalPicker>
+                {dropdownIcon}
+              </View>
+            }
+            {!this.props.deadTreeDisplay ? null :
+              <View style={styles.formGroup}>
+                <Text style={styles.label}>Dead Trees</Text>
+                <ModalPicker
+                  style={styles.picker}
+                  data={deadTrees.selectChoices}
+                  onChange={(option)=>{this.saveData({nearbyDeadTrees:option.label})}}>
+                  <TextInput
+                    style={styles.textField}
+                    editable={false}
+                    placeholder="Number of Dead Trees"
+                    value={this.state.nearbyDeadTrees}
+                  />
+                </ModalPicker>
+                {dropdownIcon}
+              </View>
+            }
             <View style={[styles.formGroup]}>
               <Text style={styles.label}>Photo</Text>
               <MKButton style={styles.buttonLink} onPress={() => this.saveData({}).then(this.props.navigator.push({index: 2, plantTitle: this.props.title}))}>
@@ -200,7 +227,7 @@ export default class FormScene extends Component {
         </View>
 
       </View>
-    );
+    )
   }
 }
 
