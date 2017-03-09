@@ -23,25 +23,31 @@ const plants = {
     image                 : require('../img/am_chestnut4.jpg'),
     latinName             : 'A. chestnuticus',
     descriptionBody       : 'This is where the body text would go describing the majestic American Chestnut.',
-    collectionInstructions: 'This is where the specific collection instructions would go.  Only collect disease trees for this species!'
+    collectionInstructions: 'This is where the specific collection instructions would go.  Only collect disease trees for this species!',
+    formProps             : [
+      'treeHeightDisplay', 'treeStandNumberDisplay', 'deadTreeDisplay'
+    ]
   },
   'Green Ash'        : {
     image                 : require('../img/ash.jpg'),
     latinName             : 'G. ashicus',
     descriptionBody       : 'This is where the body text would go describing the gorgeous green ash.',
-    collectionInstructions: 'This is where the specific collection instructions would go.  Only collect disease trees for this species!'
+    collectionInstructions: 'This is where the specific collection instructions would go.  Only collect disease trees for this species!',
+    formProps             : []
   },
   'Hemlock'          : {
     image                 : require('../img/hemlock.jpg'),
     latinName             : 'H. lockicus',
     descriptionBody       : 'This is where the body text would go describing the heroic hemlock.',
-    collectionInstructions: 'This is where the specific collection instructions would go.  Only collect disease trees for this species!'
+    collectionInstructions: 'This is where the specific collection instructions would go.  Only collect disease trees for this species!',
+    formProps             : []
   },
   'White Oak'        : {
     image                 : require('../img/white_oak.jpg'),
     latinName             : 'W. oakicus',
     descriptionBody       : 'This is where the body text would go describing the witty white oak.',
-    collectionInstructions: 'This is where the specific collection instructions would go.  Only collect disease trees for this species!'
+    collectionInstructions: 'This is where the specific collection instructions would go.  Only collect disease trees for this species!',
+    formProps             : []
   }
 }
 
@@ -79,7 +85,10 @@ export default class TreeDescriptionScene extends Component {
         </ScrollView>
         <View style={styles.footer}>
           <MKButton style={styles.button} onPress={() => {
-                    this.props.navigator.push({index: 3, title: this.props.title})
+                    this.props.navigator.push({index: 3,
+                    title: this.props.title, formProps: plants[this.props.title].formProps
+
+                    })
                   }}>
             <Text style={styles.buttonText}>
               Add New Entry
@@ -126,10 +135,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   cardTitle : {
-    fontSize: 14,
-    flex    : 1,
+    fontSize  : 14,
+    flex      : 1,
     fontWeight: 'bold',
-    color: "#222"
+    color     : "#222"
   },
   cardBody  : {
     paddingVertical  : 10,
@@ -138,7 +147,7 @@ const styles = StyleSheet.create({
   },
   cardText  : {
     padding: 10,
-    color: '#666'
+    color  : '#666'
   },
   footer    : {
     flex          : 0,

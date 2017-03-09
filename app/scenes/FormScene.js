@@ -59,20 +59,30 @@ export default class FormScene extends Component {
   constructor(props) {
     super(props)
 
+    // let formItems = new Map(this.props.formProps.map((i) => [i, 1]))
+    console.log("logging form items")
+
+
+    //Turn array from props into object for state to display form items
+    var formItems = {}
+   for (var i=0;i < this.props.formProps.length; i++){
+      var thisItem = (this.props.formProps[i])
+     formItems[thisItem] = true
+   }
+
     this.state = {
       treeHeightPicked: '',
-       // treeHeightDisplay: true,
       treeStandNumber : '',
-      // treeStandNumberDisplay: true,
       nearbyDeadTrees : '',
-      // deadTreeDisplay: true,
       textAddComment  : '',
       image           : '',
       title           : this.props.title,
       location        : {
         latitude : '',
         longitude: ''
-      }
+      },
+       formProps: formItems
+
     }
 
     try {
@@ -129,7 +139,7 @@ export default class FormScene extends Component {
 
         <ScrollView>
           <View style={styles.card}>
-            {!this.props.treeHeightDisplay ? null :
+            {!this.state.formProps.treeHeightDisplay ? null :
             <View style={styles.formGroup}>
               <Text style={styles.label}>Tree Height</Text>
               <ModalPicker
@@ -146,7 +156,7 @@ export default class FormScene extends Component {
               {dropdownIcon}
             </View>
             }
-            {!this.props.treeStandNumberDisplay ? null :
+            {!this.state.formProps.treeStandNumberDisplay ? null :
               <View style={styles.formGroup}>
                 <Text style={styles.label}>Trees in Stand</Text>
                 <ModalPicker
@@ -164,7 +174,7 @@ export default class FormScene extends Component {
                 {dropdownIcon}
               </View>
             }
-            {!this.props.deadTreeDisplay ? null :
+            {!this.state.formProps.deadTreeDisplay ? null :
               <View style={styles.formGroup}>
                 <Text style={styles.label}>Dead Trees</Text>
                 <ModalPicker

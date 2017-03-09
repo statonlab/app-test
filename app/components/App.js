@@ -35,8 +35,11 @@ export default class WildType extends Component {
     }
 
     if (route.index == 3) {
-      return <FormScene title={route.title} navigator={navigator}/>
+      return <FormScene  navigator={navigator} title={route.title} formProps = {route.formProps}/>
     }
+    // if (route.index == 3) {
+    //   return <FormScene  navigator={navigator} {... route.passProps}/>
+    // }
 
     if (route.index == 4) {
       return <CapturedScene navigator={navigator} image={route.image}/>
