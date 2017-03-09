@@ -97,6 +97,13 @@ export default class FormScene extends Component {
     this.props.navigator.popToTop()
   }
 
+  validate(option, choices) {
+    for (let choice in choices) {
+      if(option == choice.label) return true
+    }
+    return false
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -105,21 +112,23 @@ export default class FormScene extends Component {
 
         <ScrollView>
           <View style={styles.card}>
-            <View style={styles.formGroup}>
-              <Text style={styles.label}>Tree Height</Text>
-              <ModalPicker
-                style={styles.picker}
-                data={treeSize}
-                onChange={(option)=>{this.saveData({treeHeightPicked:option.label})}}>
-                <TextInput
-                  style={styles.textField}
-                  editable={false}
-                  placeholder="Tree Height"
-                  value={this.state.treeHeightPicked}
-                />
-              </ModalPicker>
-              {dropdownIcon}
-            </View>
+            {!this.props.formElements.treeHeight ? '' :
+              <View style={styles.formGroup}>
+                <Text style={styles.label}>Tree Height</Text>
+                <ModalPicker
+                  style={styles.picker}
+                  data={treeSize}
+                  onChange={(option)=>{this.saveData({treeHeightPicked:option.label})}}>
+                  <TextInput
+                    style={styles.textField}
+                    editable={false}
+                    placeholder="Tree Height"
+                    value={this.state.treeHeightPicked}
+                  />
+                </ModalPicker>
+                {dropdownIcon}
+              </View>
+            }
 
             <View style={styles.formGroup}>
               <Text style={styles.label}>Trees in Stand</Text>

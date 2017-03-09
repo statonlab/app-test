@@ -8,6 +8,8 @@
   },
   "dependencies": {
     "@exponent/react-native-navigator": "^0.4.9",
+    "classname": "0.0.0",
+    "classnames": "^2.2.5",
     "moment": "^2.17.1",
     "react": "~15.4.0-rc.4",
     "react-native": "0.41.2",
@@ -17,7 +19,9 @@
     "react-native-modal-dropdown": "^0.4.1",
     "react-native-modal-picker": "0.0.16",
     "react-native-vector-icons": "^4.0.0",
-    "react-validation": "^2.10.9"
+    "react-redux": "^5.0.3",
+    "react-validation": "^2.10.9",
+    "redux": "^3.6.0"
   },
   "devDependencies": {
     "babel-jest": "18.0.0",
