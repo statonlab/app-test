@@ -156,7 +156,7 @@ export default class FormScene extends Component {
 
             <View style={[styles.formGroup]}>
               <Text style={styles.label}>Photo</Text>
-              <MKButton style={styles.buttonLink} onPress={() => this.saveData({}).then(this.props.navigator.push({label: 'CameraScene', plantTitle: this.props.title}))}>
+              <MKButton style={styles.buttonLink} onPress={() => this.saveData({}).then(this.props.navigator.push({label: 'CameraScene', plantTitle: this.props.title, transition: 'VerticalUpSwipeJump'}))}>
                 <Text style={styles.buttonLinkText}>
                   {this.state.image === '' ? 'Add Photo' : this.state.image.substr(-20)}
                 </Text>

@@ -61,15 +61,14 @@ export default class WildType extends Component {
     }
   }
 
-  configScene(route, routeStack) {
-    switch (route.label) {
-      case 'CameraScene':
-        return Navigator.SceneConfigs.FloatFromBottom
-        break
-      default:
-        return Navigator.SceneConfigs.PushFromRight
-        break
+  configureScene(route, routeStack) {
+    if (typeof route.transition !== 'undefined') {
+      if (typeof Navigator.SceneConfigs[route.transition] !== 'undefined') {
+        return Navigator.SceneConfigs[route.transition]
+      }
     }
+
+    return Navigator.SceneConfigs.PushFromRight
   }
 
   render() {
@@ -83,7 +82,7 @@ export default class WildType extends Component {
           style={styles.navigator}
           initialRouteStack={initialRouteStack}
           renderScene={this.renderScene}
-          configureScene={this.configScene}
+          configureScene={this.configureScene}
         />
       </View>
     )

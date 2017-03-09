@@ -23,7 +23,8 @@ export default class CaptureLocationScene extends Component {
     let title = this.props.plantTitle
     this.props.navigator.push({
       label: 'FormScene',
-      title: title
+      title: title,
+      transition: 'VerticalDownSwipeJump'
     })
   }
 }

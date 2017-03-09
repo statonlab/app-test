@@ -31,7 +31,7 @@ export default class Header extends Component {
     if (this.props.initial) {
       return (
         <TouchableHighlight style={style.touchable} onPress={this.onMenuPress} underlayColor={Colors.primary}>
-          <Icon name={this.state.menuIcon} size={20} color="#fff" onToggleMenu={() => {console.log(this)}}/>
+          <Icon name={this.state.menuIcon} size={20} color="#fff"/>
         </TouchableHighlight>
       )
     } else {
