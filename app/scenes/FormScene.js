@@ -152,19 +152,8 @@ export default class FormScene extends Component {
       message = message + errorPath + " \n"
     }
       alert(message)
-    //Now tell state
   }
 
-
-  // validateEntry = (selection, choices, type) => {
-  //     for (choicePair in choices) {
-  //       let choice = choices[choicePair].label
-  //       if (selection == choice) {
-  //         return t.validate(selection, type).isValid() //returns true or false
-  //       }
-  //     }
-  //     return false
-  //   }
 
   render() {
     return (
