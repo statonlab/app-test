@@ -8,7 +8,8 @@ import {
   TextInput,
   Dimensions,
   StyleSheet,
-  AsyncStorage
+  AsyncStorage,
+  Alert
 } from 'react-native'
 import {getTheme, MKColor, MKButton} from 'react-native-material-kit'
 import Realm from 'realm'
@@ -143,11 +144,15 @@ export default class FormScene extends Component {
 
   notifyIncomplete= (validationAttempt) => {
     missingFields = {}
+    message = "Please supply a value for the following required fields: \n"
+    console.log(validationAttempt)
     for (errorIndex in validationAttempt.errors){
       errorPath = validationAttempt.errors[errorIndex].path[0]
       missingFields[errorPath] = true
+      message = message + errorPath + " \n"
     }
-    return missingFields
+      alert(message)
+    //Now tell state
   }
 
 
