@@ -17,7 +17,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
 import {FormSchema} from '../db/Schema'
-
+import t from 'tcomb-validation'
 import ModalPicker from 'react-native-modal-picker'
 
 const theme = getTheme()
@@ -33,6 +33,20 @@ const treeHeight = {
   isRequired   : false
 }
 
+const TreeHeightIndex = t.enums.of(['0-10 feet', '11-50 feet', '51-100 feet', '>100 feet'], "height")
+const TreeStandIndex = t.enums.of(["1-10", "11-50", "51+"], "stand")
+const DeadTreesIndex = t.enums.of(['none', '1-50', '51+'], "dead")
+var Location = t.dict(t.String, t.Num)
+
+var formT = t.struct({
+  treeHeightPicked: TreeHeightIndex,
+  treeStandNumber : TreeStandIndex,
+  nearbyDeadTrees : t.maybe(DeadTreesIndex),
+  textAddComment  : t.String,
+  image           : t.String,
+  title           : t.String,
+  location        : t.maybe(Location) //actually needs to expect a hash of longitude: string and lattitude: string
+}, "formT")
 
 index           = 0
 const treeStand = {
@@ -60,8 +74,8 @@ export default class FormScene extends Component {
   constructor(props) {
     super(props)
 
-    this.formProps = this.props.formProps
 
+    this.formProps = this.props.formProps
 
     this.state = {
       treeHeightPicked: '',
@@ -93,36 +107,54 @@ export default class FormScene extends Component {
   }
 
   async saveData(data) {
-    this.setState(data)
-    try {
-      await AsyncStorage.setItem('@WildType:formData', JSON.stringify(this.state))
-    } catch (error) {
-      throw new Error(error)
-    }
+
+      this.setState(data)
+      try {
+        await AsyncStorage.setItem('@WildType:formData', JSON.stringify(this.state))
+      } catch (error) {
+        throw new Error(error)
+      }
+
   }
 
   fetchData() {
     return AsyncStorage.getItem('@WildType:formData')
   }
 
-  submit = () => {
-    AsyncStorage.setItem('@WildType:savedForm', JSON.stringify(this.state))
-    AsyncStorage.removeItem('@WildType:formData')
-    this.props.navigator.push({label: 'SubmittedScene'})
-  }
 
   cancel = () => {
     AsyncStorage.removeItem('@WildType:formData')
     this.props.navigator.popToTop()
   }
 
-  validate = (selection, choices) => {
 
-    for (choice in choices) {
-      if (selection == choice) return true
+  submit = () => {
+    if (this.validateState().isValid()) {
+      AsyncStorage.setItem('@WildType:savedForm', JSON.stringify(this.state))
+      AsyncStorage.removeItem('@WildType:formData')
+      this.props.navigator.push({label: 'SubmittedScene'})
     }
-    return false
+    else {
+      console.log(this.validateState().firstError())
+    }
   }
+
+
+
+validateState = () => {
+  return t.validate(this.state, formT)
+  }
+
+
+  // validateEntry = (selection, choices, type) => {
+  //     for (choicePair in choices) {
+  //       let choice = choices[choicePair].label
+  //       if (selection == choice) {
+  //         return t.validate(selection, type).isValid() //returns true or false
+  //       }
+  //     }
+  //     return false
+  //   }
 
 
   render() {
