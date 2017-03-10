@@ -7,7 +7,6 @@ import {
   Text,
   AsyncStorage
 } from 'react-native'
-import Realm from 'realm'
 import {MKSpinner, MKButton, getTheme} from 'react-native-material-kit'
 import Colors from '../helpers/Colors'
 import Elevation from '../helpers/Elevation'
@@ -22,8 +21,6 @@ export default class GetLocation extends Component {
       initialPosition: 'unknown',
       lastPosition   : 'unknown',
     }
-
-    this.realm = new Realm({schema: FormSchema})
   }
 
   watchID: ?number = null;
@@ -45,13 +42,7 @@ export default class GetLocation extends Component {
   }
 
   async saveLocation(position) {
-    await this.realm.write(() => {
-      let form  = this.realm.objects('Form').filtered('id = 0')
-      let state = JSON.parse(form[0].state)
-
-      state.location   = position.coords
-      form[0].state = JSON.stringify(state)
-    })
+    await AsyncStorage.mergeItem('@WildType:formData', JSON.stringify({location: position.coords}))
   }
 
   componentWillUnmount() {

@@ -14,8 +14,6 @@ import FormSchema from '../db/Schema'
 export default class CapturedScene extends Component {
   constructor(props) {
     super(props)
-
-    this.realm = new Realm({schema: FormSchema})
   }
 
   render() {
@@ -53,13 +51,7 @@ export default class CapturedScene extends Component {
   }
 
   async _setFormImage() {
-    await this.realm.write(() => {
-      let form  = this.realm.objects('Form').filtered('id = 0')
-      let state = JSON.parse(form[0].state)
-
-      state.image = this.props.image.path
-      form[0].state  = JSON.stringify(state)
-    })
+    await AsyncStorage.mergeItem('@WildType:formData', JSON.stringify({image: this.props.image.path}))
   }
 }
 
