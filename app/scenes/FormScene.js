@@ -51,18 +51,16 @@ const deadTrees = {
 }
 
 const TreeHeightIndex = t.enums.of(['0-10 feet', '11-50 feet', '51-100 feet', '>100 feet'], "height")
-const TreeStandIndex = t.enums.of(["1-10", "11-50", "51+"], "stand")
-const DeadTreesIndex = t.enums.of(['','none', '1-50', '51+'], "dead")
-let Location = t.dict(t.String, t.Num)
-
+const TreeStandIndex  = t.enums.of(["1-10", "11-50", "51+"], "stand")
+const DeadTreesIndex  = t.enums.of(['', 'none', '1-50', '51+'], "dead")
+let Location          = t.dict(t.String, t.Num)
 
 
 export default class FormScene extends Component {
   constructor(props) {
     super(props)
 
-
-    this.state = {
+    this.state     = {
       treeHeightPicked: null,
       treeStandNumber : null,
       nearbyDeadTrees : null,
@@ -76,30 +74,26 @@ export default class FormScene extends Component {
     }
     this.formProps = this.props.formProps
 
-  //set rules for base field values
+    //set rules for base field values
     let formRules = {
-      textAddComment  : t.String,
-      image           : t.String,
-      title           : t.String,
-      location        : Location,
+      textAddComment: t.String,
+      image         : t.String,
+      title         : t.String,
+      location      : Location,
       textAddComment: t.String
     }
 
     //Add in rules for optional field values
-    if (this.formProps.deadTreeDisplay){
+    if (this.formProps.deadTreeDisplay) {
       formRules.nearbyDeadTrees = t.maybe(DeadTreesIndex)//optional
     }
-    if (this.formProps.treeHeightDisplay){
+    if (this.formProps.treeHeightDisplay) {
       formRules.treeHeightPicked = TreeHeightIndex//required
     }
-    if (this.formProps.treeStandNumberDisplay){
+    if (this.formProps.treeStandNumberDisplay) {
       formRules.treeStandNumber = TreeStandIndex
     }
     this.formT = t.struct(formRules, "formT")
-
-
-    // Initiate Realm Form Schema
-    this.realm = new Realm({schema: [FormSchema]})
 
     try {
       let formData = AsyncStorage.getItem('@WildType:formData').then((formData) => {
@@ -112,30 +106,25 @@ export default class FormScene extends Component {
     }
 
     this.fetchData()
-
   }
 
   async saveData(data) {
-
-      this.setState(data)
-      try {
-        await AsyncStorage.setItem('@WildType:formData', JSON.stringify(this.state))
-      } catch (error) {
-        throw new Error(error)
-      }
-
+    this.setState(data)
+    try {
+      await AsyncStorage.setItem('@WildType:formData', JSON.stringify(this.state))
+    } catch (error) {
+      throw new Error(error)
+    }
   }
 
   fetchData() {
     return AsyncStorage.getItem('@WildType:formData')
   }
 
-
   cancel = () => {
     AsyncStorage.removeItem('@WildType:formData')
     this.props.navigator.popToTop()
   }
-
 
   submit = () => {
     if (this.validateState().isValid()) {
@@ -148,10 +137,8 @@ export default class FormScene extends Component {
     }
   }
 
-
-
-validateState = () => {
-  return t.validate(this.state, this.formT)
+  validateState = () => {
+    return t.validate(this.state, this.formT)
   }
 
   notifyIncomplete= (validationAttempt) => {
@@ -174,7 +161,6 @@ validateState = () => {
   //     return false
   //   }
 
-
   render() {
     return (
       <View style={styles.container}>
@@ -184,21 +170,21 @@ validateState = () => {
         <ScrollView>
           <View style={styles.card}>
             {!this.formProps.treeHeightDisplay ? null :
-            <View style={styles.formGroup}>
-              <Text style={styles.label}>Tree Height</Text>
-              <ModalPicker
-                style={styles.picker}
-                data={treeHeight.selectChoices}
-                onChange={(option)=>{this.saveData({treeHeightPicked:option.label})}}>
-                <TextInput
-                  style={styles.textField}
-                  editable={false}
-                  placeholder="Tree Height"
-                  value={this.state.treeHeightPicked}
-                />
-              </ModalPicker>
-              {dropdownIcon}
-            </View>
+              <View style={styles.formGroup}>
+                <Text style={styles.label}>Tree Height</Text>
+                <ModalPicker
+                  style={styles.picker}
+                  data={treeHeight.selectChoices}
+                  onChange={(option)=>{this.saveData({treeHeightPicked:option.label})}}>
+                  <TextInput
+                    style={styles.textField}
+                    editable={false}
+                    placeholder="Tree Height"
+                    value={this.state.treeHeightPicked}
+                  />
+                </ModalPicker>
+                {dropdownIcon}
+              </View>
             }
             {!this.formProps.treeStandNumberDisplay ? null :
               <View style={styles.formGroup}>
@@ -237,7 +223,12 @@ validateState = () => {
             }
             <View style={[styles.formGroup]}>
               <Text style={styles.label}>Photo</Text>
-              <MKButton style={styles.buttonLink} onPress={() => this.saveData({}).then(this.props.navigator.push({label: 'CameraScene', plantTitle: this.props.title, transition: 'VerticalUpSwipeJump'}))}>
+              <MKButton style={styles.buttonLink} onPress={() => this.saveData({}).then(this.props.navigator.push({
+                label: 'CameraScene',
+                plantTitle: this.props.title,
+                transition: 'VerticalUpSwipeJump',
+                formProps: this.props.formProps
+              }))}>
                 <Text style={styles.buttonLinkText}>
                   {this.state.image === '' ? 'Add Photo' : this.state.image.substr(-20)}
                 </Text>
