@@ -24,30 +24,32 @@ const plants = {
     latinName             : 'A. chestnuticus',
     descriptionBody       : 'This is where the body text would go describing the majestic American Chestnut.',
     collectionInstructions: 'This is where the specific collection instructions would go.  Only collect disease trees for this species!',
-    formProps             : [
-      'treeHeightDisplay', 'treeStandNumberDisplay', 'deadTreeDisplay'
-    ]
+    formProps             : {
+      treeHeightDisplay: true,
+      treeStandNumberDisplay: true ,
+      deadTreeDisplay: true
+    }
   },
   'Green Ash'        : {
     image                 : require('../img/ash.jpg'),
     latinName             : 'G. ashicus',
     descriptionBody       : 'This is where the body text would go describing the gorgeous green ash.',
     collectionInstructions: 'This is where the specific collection instructions would go.  Only collect disease trees for this species!',
-    formProps             : []
+    formProps             : {}
   },
   'Hemlock'          : {
     image                 : require('../img/hemlock.jpg'),
     latinName             : 'H. lockicus',
     descriptionBody       : 'This is where the body text would go describing the heroic hemlock.',
     collectionInstructions: 'This is where the specific collection instructions would go.  Only collect disease trees for this species!',
-    formProps             : []
+    formProps             : {}
   },
   'White Oak'        : {
     image                 : require('../img/white_oak.jpg'),
     latinName             : 'W. oakicus',
     descriptionBody       : 'This is where the body text would go describing the witty white oak.',
     collectionInstructions: 'This is where the specific collection instructions would go.  Only collect disease trees for this species!',
-    formProps             : []
+    formProps             : {}
   }
 }
 
@@ -76,7 +78,6 @@ export default class TreeDescriptionScene extends Component {
               <Text style={styles.cardTitle}>Tree Description</Text>
               <Text style={styles.cardText}>{plants[this.props.title].descriptionBody}</Text>
             </View>
-
             <View style={[styles.cardBody, {borderBottomWidth: 0, paddingBottom: 0}]}>
               <Text style={styles.cardTitle}>Collection Instructions</Text>
               <Text style={styles.cardText}>{plants[this.props.title].collectionInstructions}</Text>

@@ -32,7 +32,6 @@ const treeHeight = {
 }
 
 
-
 index           = 0
 const treeStand = {
   selectChoices: [
@@ -58,13 +57,13 @@ const deadTrees = {
 export default class FormScene extends Component {
   constructor(props) {
     super(props)
-    
-    //Turn array from props into object for state to display form items
-    var formItems = {}
-   for (var i=0;i < this.props.formProps.length; i++){
-      var thisItem = (this.props.formProps[i])
-     formItems[thisItem] = true
-   }
+
+console.log( "printing form props")
+    console.log(this.props.formProps)
+    console.log(this.props.formProps.treeStandNumberDisplay)
+
+    this.formProps = this.props.formProps
+
 
     this.state = {
       treeHeightPicked: '',
@@ -76,9 +75,7 @@ export default class FormScene extends Component {
       location        : {
         latitude : '',
         longitude: ''
-      },
-       formProps: formItems
-
+      }
     }
 
     try {
@@ -135,7 +132,7 @@ export default class FormScene extends Component {
 
         <ScrollView>
           <View style={styles.card}>
-            {!this.state.formProps.treeHeightDisplay ? null :
+            {!this.formProps.treeHeightDisplay ? null :
             <View style={styles.formGroup}>
               <Text style={styles.label}>Tree Height</Text>
               <ModalPicker
@@ -152,7 +149,7 @@ export default class FormScene extends Component {
               {dropdownIcon}
             </View>
             }
-            {!this.state.formProps.treeStandNumberDisplay ? null :
+            {!this.formProps.treeStandNumberDisplay ? null :
               <View style={styles.formGroup}>
                 <Text style={styles.label}>Trees in Stand</Text>
                 <ModalPicker
@@ -170,7 +167,7 @@ export default class FormScene extends Component {
                 {dropdownIcon}
               </View>
             }
-            {!this.state.formProps.deadTreeDisplay ? null :
+            {!this.formProps.deadTreeDisplay ? null :
               <View style={styles.formGroup}>
                 <Text style={styles.label}>Dead Trees</Text>
                 <ModalPicker
@@ -240,6 +237,7 @@ export default class FormScene extends Component {
 FormScene.propTypes = {
   title    : PropTypes.string.isRequired,
   navigator: PropTypes.object.isRequired,
+  formProps: PropTypes.object
 }
 
 const elevationStyle = new Elevation(1)
