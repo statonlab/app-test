@@ -11,10 +11,12 @@ import {
   AsyncStorage
 } from 'react-native'
 import {getTheme, MKColor, MKButton} from 'react-native-material-kit'
+import Realm from 'realm'
 import Header from '../components/Header'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
+import {FormSchema} from '../db/Schema'
 
 import ModalPicker from 'react-native-modal-picker'
 
@@ -58,10 +60,6 @@ export default class FormScene extends Component {
   constructor(props) {
     super(props)
 
-console.log( "printing form props")
-    console.log(this.props.formProps)
-    console.log(this.props.formProps.treeStandNumberDisplay)
-
     this.formProps = this.props.formProps
 
 
@@ -77,6 +75,9 @@ console.log( "printing form props")
         longitude: ''
       }
     }
+
+    // Initiate Realm Form Schema
+    this.realm = new Realm({schema: [FormSchema]})
 
     try {
       let formData = AsyncStorage.getItem('@WildType:formData').then((formData) => {
@@ -107,7 +108,7 @@ console.log( "printing form props")
   submit = () => {
     AsyncStorage.setItem('@WildType:savedForm', JSON.stringify(this.state))
     AsyncStorage.removeItem('@WildType:formData')
-    this.props.navigator.push({index: 7})
+    this.props.navigator.push({label: 'SubmittedScene'})
   }
 
   cancel = () => {
@@ -186,7 +187,7 @@ console.log( "printing form props")
             }
             <View style={[styles.formGroup]}>
               <Text style={styles.label}>Photo</Text>
-              <MKButton style={styles.buttonLink} onPress={() => this.saveData({}).then(this.props.navigator.push({index: 2, plantTitle: this.props.title}))}>
+              <MKButton style={styles.buttonLink} onPress={() => this.saveData({}).then(this.props.navigator.push({label: 'CameraScene', plantTitle: this.props.title, transition: 'VerticalUpSwipeJump'}))}>
                 <Text style={styles.buttonLinkText}>
                   {this.state.image === '' ? 'Add Photo' : this.state.image.substr(-20)}
                 </Text>

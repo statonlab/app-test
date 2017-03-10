@@ -20,42 +20,55 @@ import CaptureLocationScene from '../scenes/CaptureLocationScene'
 import TreeDescriptionScene from '../scenes/TreeDescriptionScene'
 import SubmittedScene from '../scenes/SubmittedScene'
 
+const initialRouteStack = [
+  {
+    label: 'LandingScene'
+  }
+]
+
 export default class WildType extends Component {
   renderScene(route, navigator) {
-    if (route.index == 0) {
-      return <LandingScene title={route.title} navigator={navigator}/>
+    if (route.label == 'LandingScene') {
+      return <LandingScene title="Overview" navigator={navigator}/>
     }
 
-    if (route.index == 1) {
+    if (route.label == 'MapScene') {
       return <MapScene title={route.title} navigator={navigator}/>
     }
 
-    if (route.index == 2) {
-      return <CameraScene navigator={navigator}/>
+    if (route.label == 'FormScene') {
+      return <FormScene title={route.title} navigator={navigator} formProps={route.formProps}/>
     }
 
-    if (route.index == 3) {
-      return <FormScene  navigator={navigator} title={route.title} formProps = {route.formProps}/>
-    }
-    // if (route.index == 3) {
-    //   return <FormScene  navigator={navigator} {... route.passProps}/>
-    // }
-
-    if (route.index == 4) {
-      return <CapturedScene navigator={navigator} image={route.image}/>
+    if (route.label == 'CameraScene') {
+      return <CameraScene navigator={navigator} plantTitle={route.plantTitle}/>
     }
 
-    if (route.index == 5) {
-      return <CaptureLocationScene title={route.title} navigator={navigator} image={route.image}/>
+    if (route.label == 'CapturedScene') {
+      return <CapturedScene navigator={navigator} image={route.image} plantTitle={route.plantTitle}/>
     }
 
-    if (route.index == 6) {
+    if (route.label == 'CaptureLocationScene') {
+      return <CaptureLocationScene title={route.title} navigator={navigator} image={route.image} plantTitle={route.plantTitle}/>
+    }
+
+    if (route.label == 'TreeDescriptionScene') {
       return <TreeDescriptionScene title={route.title} navigator={navigator} image={route.image}/>
     }
 
-    if (route.index == 7) {
+    if (route.label == 'SubmittedScene') {
       return <SubmittedScene navigator={navigator}/>
     }
+  }
+
+  configureScene(route, routeStack) {
+    if (typeof route.transition !== 'undefined') {
+      if (typeof Navigator.SceneConfigs[route.transition] !== 'undefined') {
+        return Navigator.SceneConfigs[route.transition]
+      }
+    }
+
+    return Navigator.SceneConfigs.PushFromRight
   }
 
   render() {
@@ -67,8 +80,9 @@ export default class WildType extends Component {
         />
         <Navigator
           style={styles.navigator}
-          initialRoute={{ title: 'Overview', index: 0}}
+          initialRouteStack={initialRouteStack}
           renderScene={this.renderScene}
+          configureScene={this.configureScene}
         />
       </View>
     )
