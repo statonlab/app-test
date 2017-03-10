@@ -41,15 +41,15 @@ export default class WildType extends Component {
     }
 
     if (route.label == 'CameraScene') {
-      return <CameraScene navigator={navigator} plantTitle={route.plantTitle}/>
+      return <CameraScene navigator={navigator} plantTitle={route.plantTitle} formProps={route.formProps}/>
     }
 
     if (route.label == 'CapturedScene') {
-      return <CapturedScene navigator={navigator} image={route.image} plantTitle={route.plantTitle}/>
+      return <CapturedScene navigator={navigator} image={route.image} plantTitle={route.plantTitle} formProps={route.formProps}/>
     }
 
     if (route.label == 'CaptureLocationScene') {
-      return <CaptureLocationScene title={route.title} navigator={navigator} image={route.image} plantTitle={route.plantTitle}/>
+      return <CaptureLocationScene title={route.title} navigator={navigator} image={route.image} plantTitle={route.plantTitle} formProps={route.formProps}/>
     }
 
     if (route.label == 'TreeDescriptionScene') {

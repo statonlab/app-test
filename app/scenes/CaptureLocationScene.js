@@ -22,9 +22,10 @@ export default class CaptureLocationScene extends Component {
   goToForm = () => {
     let title = this.props.plantTitle
     this.props.navigator.push({
-      label: 'FormScene',
-      title: title,
-      transition: 'VerticalDownSwipeJump'
+      label     : 'FormScene',
+      title     : title,
+      transition: 'VerticalDownSwipeJump',
+      formProps: this.props.formProps
     })
   }
 }
@@ -32,7 +33,8 @@ export default class CaptureLocationScene extends Component {
 CaptureLocationScene.propTypes = {
   navigator : PropTypes.object.isRequired,
   image     : PropTypes.object.isRequired,
-  plantTitle: PropTypes.string.isRequired
+  plantTitle: PropTypes.string.isRequired,
+  formProps : PropTypes.object.isRequired
 }
 
 const styles = StyleSheet.create({
