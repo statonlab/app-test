@@ -22,52 +22,39 @@ import ModalPicker from 'react-native-modal-picker'
 
 const theme = getTheme()
 
-let index        = 0
+let index        = 1
 const treeHeight = {
   selectChoices: [
     {key: index++, label: '0-10 feet'},
     {key: index++, label: '11-50 feet'},
     {key: index++, label: '51-100 feet'},
     {key: index++, label: '>100 feet'}
-  ],
-  isRequired   : false
+  ]
 }
 
-const TreeHeightIndex = t.enums.of(['0-10 feet', '11-50 feet', '51-100 feet', '>100 feet'], "height")
-const TreeStandIndex = t.enums.of(["1-10", "11-50", "51+"], "stand")
-const DeadTreesIndex = t.enums.of(['none', '1-50', '51+'], "dead")
-var Location = t.dict(t.String, t.Num)
-
-var formT = t.struct({
-  treeHeightPicked: TreeHeightIndex,
-  treeStandNumber : TreeStandIndex,
-  nearbyDeadTrees : t.maybe(DeadTreesIndex),
-  textAddComment  : t.String,
-  image           : t.String,
-  title           : t.String,
-  location        : t.maybe(Location) //actually needs to expect a hash of longitude: string and lattitude: string
-}, "formT")
-
-index           = 0
+index           = 1
 const treeStand = {
   selectChoices: [
     {key: index++, label: '1-10'},
     {key: index++, label: '11-50'},
     {key: index++, label: '51+'}
-  ],
-  isRequired   : true
+  ]
 }
 
-
-index           = 0
+index           = 1
 const deadTrees = {
   selectChoices: [
     {key: index++, label: 'none'},
     {key: index++, label: '1-50'},
     {key: index++, label: '51+'}
-  ],
-  isRequired   : false
+  ]
 }
+
+const TreeHeightIndex = t.enums.of(['0-10 feet', '11-50 feet', '51-100 feet', '>100 feet'], "height")
+const TreeStandIndex = t.enums.of(["1-10", "11-50", "51+"], "stand")
+const DeadTreesIndex = t.enums.of(['','none', '1-50', '51+'], "dead")
+let Location = t.dict(t.String, t.Num)
+
 
 
 export default class FormScene extends Component {
@@ -75,12 +62,10 @@ export default class FormScene extends Component {
     super(props)
 
 
-    this.formProps = this.props.formProps
-
     this.state = {
-      treeHeightPicked: '',
-      treeStandNumber : '',
-      nearbyDeadTrees : '',
+      treeHeightPicked: null,
+      treeStandNumber : null,
+      nearbyDeadTrees : null,
       textAddComment  : '',
       image           : '',
       title           : this.props.title,
@@ -89,6 +74,29 @@ export default class FormScene extends Component {
         longitude: ''
       }
     }
+    this.formProps = this.props.formProps
+
+  //set rules for base field values
+    let formRules = {
+      textAddComment  : t.String,
+      image           : t.String,
+      title           : t.String,
+      location        : Location,
+      textAddComment: t.String
+    }
+
+    //Add in rules for optional field values
+    if (this.formProps.deadTreeDisplay){
+      formRules.nearbyDeadTrees = t.maybe(DeadTreesIndex)//optional
+    }
+    if (this.formProps.treeHeightDisplay){
+      formRules.treeHeightPicked = TreeHeightIndex//required
+    }
+    if (this.formProps.treeStandNumberDisplay){
+      formRules.treeStandNumber = TreeStandIndex
+    }
+    this.formT = t.struct(formRules, "formT")
+
 
     // Initiate Realm Form Schema
     this.realm = new Realm({schema: [FormSchema]})
@@ -104,6 +112,7 @@ export default class FormScene extends Component {
     }
 
     this.fetchData()
+
   }
 
   async saveData(data) {
@@ -135,14 +144,14 @@ export default class FormScene extends Component {
       this.props.navigator.push({label: 'SubmittedScene'})
     }
     else {
-      console.log(this.validateState().firstError())
+      console.log(this.validateState())
     }
   }
 
 
 
 validateState = () => {
-  return t.validate(this.state, formT)
+  return t.validate(this.state, this.formT)
   }
 
 
