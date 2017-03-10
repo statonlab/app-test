@@ -7,22 +7,15 @@
     "test": "jest"
   },
   "dependencies": {
-    "@exponent/react-native-navigator": "^0.4.9",
-    "classname": "0.0.0",
-    "classnames": "^2.2.5",
     "moment": "^2.17.1",
     "react": "~15.4.0-rc.4",
     "react-native": "0.41.2",
-    "react-native-gifted-form": "0.0.13",
+    "react-native-camera": "^0.6.0",
     "react-native-maps": "^0.13.0",
     "react-native-material-kit": "^0.4.1",
-    "react-native-modal-dropdown": "^0.4.1",
     "react-native-modal-picker": "0.0.16",
     "react-native-vector-icons": "^4.0.0",
-    "react-redux": "^5.0.3",
-    "react-validation": "^2.10.9",
     "realm": "^1.1.1",
-    "redux": "^3.6.0",
     "tcomb": "^3.2.20",
     "tcomb-validation": "^3.3.0"
   },
@@ -30,7 +23,6 @@
     "babel-jest": "18.0.0",
     "babel-preset-react-native": "1.9.1",
     "jest": "18.1.0",
-    "react-native-camera": "^0.6.0",
     "react-test-renderer": "~15.4.0-rc.4"
   },
   "jest": {
