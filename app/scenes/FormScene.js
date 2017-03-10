@@ -155,7 +155,12 @@ validateState = () => {
   }
 
   notifyIncomplete= (validationAttempt) => {
-console.log(validationAttempt)
+    missingFields = {}
+    for (errorIndex in validationAttempt.errors){
+      errorPath = validationAttempt.errors[errorIndex].path[0]
+      missingFields[errorPath] = true
+    }
+    return missingFields
   }
 
 
