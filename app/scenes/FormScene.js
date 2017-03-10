@@ -11,10 +11,12 @@ import {
   AsyncStorage
 } from 'react-native'
 import {getTheme, MKColor, MKButton} from 'react-native-material-kit'
+import Realm from 'realm'
 import Header from '../components/Header'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
+import {FormSchema} from '../db/Schema'
 
 import ModalPicker from 'react-native-modal-picker'
 
@@ -59,6 +61,9 @@ export default class FormScene extends Component {
         longitude: ''
       }
     }
+
+    // Initiate Realm Form Schema
+    this.realm = new Realm({schema: [FormSchema]})
 
     try {
       let formData = AsyncStorage.getItem('@WildType:formData').then((formData) => {

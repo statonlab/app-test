@@ -126,6 +126,7 @@ android {
 }
 
 dependencies {
+    compile project(':realm')
     compile project(':react-native-camera')
     compile project(':react-native-maps')
     compile project(':react-native-vector-icons')

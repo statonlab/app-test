@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -50,6 +49,9 @@
 		CDF360E8AE4D4AB1BEA0D1AE /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 05270A5120C14EBDBCE27D53 /* EvilIcons.ttf */; };
 		E98D079FEFF340568195CF77 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E2540FE6B4884A4AB25FB8A9 /* MaterialIcons.ttf */; };
 		EEF15192A6EC4DA1BCC3824D /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DC7F59FA814645D78A9909D2 /* SimpleLineIcons.ttf */; };
+		FC31CADB8A674D5BABF108B9 /* libRealmReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 73735196684E4AAE87265EC3 /* libRealmReact.a */; };
+		AF6036CA996F4692B88FA140 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C7B3FAE88AF456BA158E298 /* libc++.tbd */; };
+		609015747A9A4A48B754EDB1 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = CEC9CD4769C34EFC90E46EF9 /* libz.tbd */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -346,6 +348,10 @@
 		F24D6515B04840ADB7FC49D3 /* RNVectorIcons.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNVectorIcons.xcodeproj; path = "../node_modules/react-native-vector-icons/RNVectorIcons.xcodeproj"; sourceTree = "<group>"; };
 		F640C2F1BEE844A0BE69EF89 /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		FF3FD49B4F224737B6E49A0F /* libAirMaps.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libAirMaps.a; sourceTree = "<group>"; };
+		23646EBD731749C3A3696DA3 /* RealmReact.xcodeproj */ = {isa = PBXFileReference; name = "RealmReact.xcodeproj"; path = "../node_modules/realm/react-native/ios/RealmReact.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		73735196684E4AAE87265EC3 /* libRealmReact.a */ = {isa = PBXFileReference; name = "libRealmReact.a"; path = "libRealmReact.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		4C7B3FAE88AF456BA158E298 /* libc++.tbd */ = {isa = PBXFileReference; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = sourcecode.text-based-dylib-definition; explicitFileType = undefined; includeInIndex = 0; };
+		CEC9CD4769C34EFC90E46EF9 /* libz.tbd */ = {isa = PBXFileReference; name = "libz.tbd"; path = "usr/lib/libz.tbd"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = sourcecode.text-based-dylib-definition; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -376,6 +382,9 @@
 				7211E8F2CB0D404291B2A6E5 /* libRNVectorIcons.a in Frameworks */,
 				31A3F6E8776C422A8F0464E1 /* libAirMaps.a in Frameworks */,
 				B836DD1982BF48B2A07A6823 /* libRCTCamera.a in Frameworks */,
+				FC31CADB8A674D5BABF108B9 /* libRealmReact.a in Frameworks */,
+				AF6036CA996F4692B88FA140 /* libc++.tbd in Frameworks */,
+				609015747A9A4A48B754EDB1 /* libz.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -619,6 +628,7 @@
 				8E61B7215BC04236B48EBAE3 /* RNVectorIcons.xcodeproj */,
 				24679620029D4DD4A8A865F8 /* AirMaps.xcodeproj */,
 				100509D91730484FA5411796 /* RCTCamera.xcodeproj */,
+				23646EBD731749C3A3696DA3 /* RealmReact.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -641,6 +651,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2F204E9AB82F4F15B7CB2031 /* Resources */,
 				E51B1788F07F4DF194C2B612 /* Libraries */,
+				8B809E2F75B8416FAA242CD8 /* Frameworks */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -664,6 +675,16 @@
 				F24D6515B04840ADB7FC49D3 /* RNVectorIcons.xcodeproj */,
 			);
 			name = Libraries;
+			sourceTree = "<group>";
+		};
+		8B809E2F75B8416FAA242CD8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4C7B3FAE88AF456BA158E298 /* libc++.tbd */,
+				CEC9CD4769C34EFC90E46EF9 /* libz.tbd */,
+			);
+			name = Frameworks;
+			path = "";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1253,6 +1274,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -1274,6 +1296,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
@@ -1346,6 +1369,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -1376,6 +1400,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
@@ -1409,6 +1434,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.WildType-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1434,6 +1460,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
