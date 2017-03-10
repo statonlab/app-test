@@ -8,7 +8,8 @@ import {
   TextInput,
   Dimensions,
   StyleSheet,
-  AsyncStorage
+  AsyncStorage,
+  Alert
 } from 'react-native'
 import {getTheme, MKColor, MKButton} from 'react-native-material-kit'
 import Realm from 'realm'
@@ -133,7 +134,7 @@ export default class FormScene extends Component {
       this.props.navigator.push({label: 'SubmittedScene'})
     }
     else {
-      console.log(this.validateState())
+      this.notifyIncomplete(this.validateState())
     }
   }
 
@@ -141,16 +142,18 @@ export default class FormScene extends Component {
     return t.validate(this.state, this.formT)
   }
 
+  notifyIncomplete= (validationAttempt) => {
+    missingFields = {}
+    message = "Please supply a value for the following required fields: \n"
+    console.log(validationAttempt)
+    for (errorIndex in validationAttempt.errors){
+      errorPath = validationAttempt.errors[errorIndex].path[0]
+      missingFields[errorPath] = true
+      message = message + errorPath + " \n"
+    }
+      alert(message)
+  }
 
-  // validateEntry = (selection, choices, type) => {
-  //     for (choicePair in choices) {
-  //       let choice = choices[choicePair].label
-  //       if (selection == choice) {
-  //         return t.validate(selection, type).isValid() //returns true or false
-  //       }
-  //     }
-  //     return false
-  //   }
 
   render() {
     return (
