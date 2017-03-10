@@ -51,7 +51,6 @@ export default class GetLocation extends Component {
   }
 
   render() {
-    console.log(this.props.image)
     return (
       <View {...this.props} style={styles.container}>
         <View style={styles.card}>

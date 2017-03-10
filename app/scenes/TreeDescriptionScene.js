@@ -25,9 +25,9 @@ const plants = {
     descriptionBody       : 'This is where the body text would go describing the majestic American Chestnut.',
     collectionInstructions: 'This is where the specific collection instructions would go.  Only collect disease trees for this species!',
     formProps             : {
-      treeHeightDisplay: true,
-      treeStandNumberDisplay: true ,
-      deadTreeDisplay: true
+      treeHeightDisplay     : true,
+      treeStandNumberDisplay: true,
+      deadTreeDisplay       : true
     }
   },
   'Green Ash'        : {
@@ -86,10 +86,7 @@ export default class TreeDescriptionScene extends Component {
         </ScrollView>
         <View style={styles.footer}>
           <MKButton style={styles.button} onPress={() => {
-                    this.props.navigator.push({index: 3,
-                    title: this.props.title, formProps: plants[this.props.title].formProps
-
-                    })
+                    this.props.navigator.push({label: 'FormScene', title: this.props.title, formProps: plants[this.props.title].formProps})
                   }}>
             <Text style={styles.buttonText}>
               Add New Entry

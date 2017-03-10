@@ -11,64 +11,61 @@ import {
   AsyncStorage
 } from 'react-native'
 import {getTheme, MKColor, MKButton} from 'react-native-material-kit'
+import Realm from 'realm'
 import Header from '../components/Header'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
-
+import {FormSchema} from '../db/Schema'
+import t from 'tcomb-validation'
 import ModalPicker from 'react-native-modal-picker'
 
 const theme = getTheme()
 
-let index        = 0
+let index        = 1
 const treeHeight = {
   selectChoices: [
     {key: index++, label: '0-10 feet'},
     {key: index++, label: '11-50 feet'},
     {key: index++, label: '51-100 feet'},
     {key: index++, label: '>100 feet'}
-  ],
-  isRequired   : false
+  ]
 }
 
-
-index           = 0
+index           = 1
 const treeStand = {
   selectChoices: [
     {key: index++, label: '1-10'},
     {key: index++, label: '11-50'},
     {key: index++, label: '51+'}
-  ],
-  isRequired   : true
+  ]
 }
 
-
-index           = 0
+index           = 1
 const deadTrees = {
   selectChoices: [
     {key: index++, label: 'none'},
     {key: index++, label: '1-50'},
     {key: index++, label: '51+'}
-  ],
-  isRequired   : false
+  ]
 }
+
+const TreeHeightIndex = t.enums.of(['0-10 feet', '11-50 feet', '51-100 feet', '>100 feet'], "height")
+const TreeStandIndex = t.enums.of(["1-10", "11-50", "51+"], "stand")
+const DeadTreesIndex = t.enums.of(['','none', '1-50', '51+'], "dead")
+let Location = t.dict(t.String, t.Num)
+
 
 
 export default class FormScene extends Component {
   constructor(props) {
     super(props)
 
-console.log( "printing form props")
-    console.log(this.props.formProps)
-    console.log(this.props.formProps.treeStandNumberDisplay)
-
-    this.formProps = this.props.formProps
-
 
     this.state = {
-      treeHeightPicked: '',
-      treeStandNumber : '',
-      nearbyDeadTrees : '',
+      treeHeightPicked: null,
+      treeStandNumber : null,
+      nearbyDeadTrees : null,
       textAddComment  : '',
       image           : '',
       title           : this.props.title,
@@ -77,6 +74,32 @@ console.log( "printing form props")
         longitude: ''
       }
     }
+    this.formProps = this.props.formProps
+
+  //set rules for base field values
+    let formRules = {
+      textAddComment  : t.String,
+      image           : t.String,
+      title           : t.String,
+      location        : Location,
+      textAddComment: t.String
+    }
+
+    //Add in rules for optional field values
+    if (this.formProps.deadTreeDisplay){
+      formRules.nearbyDeadTrees = t.maybe(DeadTreesIndex)//optional
+    }
+    if (this.formProps.treeHeightDisplay){
+      formRules.treeHeightPicked = TreeHeightIndex//required
+    }
+    if (this.formProps.treeStandNumberDisplay){
+      formRules.treeStandNumber = TreeStandIndex
+    }
+    this.formT = t.struct(formRules, "formT")
+
+
+    // Initiate Realm Form Schema
+    this.realm = new Realm({schema: [FormSchema]})
 
     try {
       let formData = AsyncStorage.getItem('@WildType:formData').then((formData) => {
@@ -89,39 +112,58 @@ console.log( "printing form props")
     }
 
     this.fetchData()
+
   }
 
   async saveData(data) {
-    this.setState(data)
-    try {
-      await AsyncStorage.setItem('@WildType:formData', JSON.stringify(this.state))
-    } catch (error) {
-      throw new Error(error)
-    }
+
+      this.setState(data)
+      try {
+        await AsyncStorage.setItem('@WildType:formData', JSON.stringify(this.state))
+      } catch (error) {
+        throw new Error(error)
+      }
+
   }
 
   fetchData() {
     return AsyncStorage.getItem('@WildType:formData')
   }
 
-  submit = () => {
-    AsyncStorage.setItem('@WildType:savedForm', JSON.stringify(this.state))
-    AsyncStorage.removeItem('@WildType:formData')
-    this.props.navigator.push({index: 7})
-  }
 
   cancel = () => {
     AsyncStorage.removeItem('@WildType:formData')
     this.props.navigator.popToTop()
   }
 
-  validate = (selection, choices) => {
 
-    for (choice in choices) {
-      if (selection == choice) return true
+  submit = () => {
+    if (this.validateState().isValid()) {
+      AsyncStorage.setItem('@WildType:savedForm', JSON.stringify(this.state))
+      AsyncStorage.removeItem('@WildType:formData')
+      this.props.navigator.push({label: 'SubmittedScene'})
     }
-    return false
+    else {
+      console.log(this.validateState())
+    }
   }
+
+
+
+validateState = () => {
+  return t.validate(this.state, this.formT)
+  }
+
+
+  // validateEntry = (selection, choices, type) => {
+  //     for (choicePair in choices) {
+  //       let choice = choices[choicePair].label
+  //       if (selection == choice) {
+  //         return t.validate(selection, type).isValid() //returns true or false
+  //       }
+  //     }
+  //     return false
+  //   }
 
 
   render() {
@@ -186,7 +228,7 @@ console.log( "printing form props")
             }
             <View style={[styles.formGroup]}>
               <Text style={styles.label}>Photo</Text>
-              <MKButton style={styles.buttonLink} onPress={() => this.saveData({}).then(this.props.navigator.push({index: 2, plantTitle: this.props.title}))}>
+              <MKButton style={styles.buttonLink} onPress={() => this.saveData({}).then(this.props.navigator.push({label: 'CameraScene', plantTitle: this.props.title, transition: 'VerticalUpSwipeJump'}))}>
                 <Text style={styles.buttonLinkText}>
                   {this.state.image === '' ? 'Add Photo' : this.state.image.substr(-20)}
                 </Text>

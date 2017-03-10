@@ -40,11 +40,11 @@ export default class CapturedScene extends Component {
     }
   }
 
-  _use() {
+  _use = () => {
     this._setFormImage().then(() => {
       this.props.navigator.push({
-        image: this.props.image,
-        index: 5,
+        image     : this.props.image,
+        label     : 'CaptureLocationScene',
         plantTitle: this.props.plantTitle
       })
     })

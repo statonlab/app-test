@@ -39,13 +39,13 @@ const plants = [
 const sidebarLinks = [
   {
     title: 'Map',
-    index: 1
+    label: 'MapScene'
   }, {
     title: 'Camera',
-    index: 2,
+    label: 'CameraScene'
   }, {
     title: 'Form',
-    index: 3
+    label: 'FormScene'
   }
 ]
 
@@ -71,7 +71,7 @@ export default class LandingScene extends Component {
                   style={styles.card}
                   key={index}
                   onPress={() => {
-                    this.props.navigator.push({index: 6, title: plant.title})
+                    this.props.navigator.push({label: 'TreeDescriptionScene', title: plant.title})
                   }}
                   underlayColor="#fff">
                   <View>
