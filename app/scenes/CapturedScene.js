@@ -8,13 +8,14 @@ import {
   TouchableHighlight,
   AsyncStorage
 } from 'react-native'
-import Header from '../components/Header'
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import Colors from '../helpers/Colors'
+import Realm from 'realm'
+import FormSchema from '../db/Schema'
 
 export default class CapturedScene extends Component {
   constructor(props) {
     super(props)
+
+    this.realm = new Realm({schema: FormSchema})
   }
 
   render() {
@@ -45,20 +46,28 @@ export default class CapturedScene extends Component {
       this.props.navigator.push({
         image     : this.props.image,
         label     : 'CaptureLocationScene',
-        plantTitle: this.props.plantTitle
+        plantTitle: this.props.plantTitle,
+        formProps : this.props.formProps
       })
     })
   }
 
   async _setFormImage() {
-    await AsyncStorage.mergeItem('@WildType:formData', JSON.stringify({image: this.props.image.path}))
+    await this.realm.write(() => {
+      let form  = this.realm.objects('Form').filtered('id = 0')
+      let state = JSON.parse(form[0].state)
+
+      state.image = this.props.image.path
+      form[0].state  = JSON.stringify(state)
+    })
   }
 }
 
 CapturedScene.PropTypes = {
   navigator : PropTypes.object.isRequired,
   image     : PropTypes.object.isRequired,
-  plantTitle: PropTypes.string.isRequired
+  plantTitle: PropTypes.string.isRequired,
+  formProps : PropTypes.object.isRequired
 }
 
 const styles = StyleSheet.create({
