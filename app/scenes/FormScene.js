@@ -144,7 +144,7 @@ export default class FormScene extends Component {
       this.props.navigator.push({label: 'SubmittedScene'})
     }
     else {
-      console.log(this.validateState())
+      this.notifyIncomplete(this.validateState())
     }
   }
 
@@ -152,6 +152,10 @@ export default class FormScene extends Component {
 
 validateState = () => {
   return t.validate(this.state, this.formT)
+  }
+
+  notifyIncomplete= (validationAttempt) => {
+console.log(validationAttempt)
   }
 
 
