@@ -4,7 +4,6 @@ import {
   StyleSheet,
   DeviceEventEmitter
 } from 'react-native'
-import Emmiter from 'emitter'
 import GetLocation from '../components/GetLocation'
 import Header from '../components/Header'
 
@@ -14,7 +13,6 @@ export default class CaptureLocationScene extends Component {
       <View style={styles.container}>
         <Header title="Capture Location" navigator={this.props.navigator}/>
         <GetLocation
-          image={this.props.image}
           accept={this.goToForm}
           cancel={this.goToForm}/>
       </View>
@@ -22,16 +20,13 @@ export default class CaptureLocationScene extends Component {
   }
 
   goToForm = () => {
-    this.props.navigator.popN(3)
     DeviceEventEmitter.emit('LocationCaptured')
+    this.props.navigator.popN(3)
   }
 }
 
 CaptureLocationScene.propTypes = {
-  navigator : PropTypes.object.isRequired,
-  image     : PropTypes.object.isRequired,
-  plantTitle: PropTypes.string.isRequired,
-  formProps : PropTypes.object.isRequired
+  navigator : PropTypes.object.isRequired
 }
 
 const styles = StyleSheet.create({

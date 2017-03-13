@@ -19,28 +19,23 @@ export default class SubmittedScene extends Component {
     this.state = {
       markers: []
     }
+  }
 
-    try {
-      AsyncStorage.getItem('@WildType:savedForm').then((savedData) => {
-        let data    = JSON.parse(savedData)
-        let markers = [
-          {
-            title      : data.title,
-            image      : data.image,
-            description: `${data.treeStandNumber} trees`,
-            coord      : {
-              latitude : data.location.latitude,
-              longitude: data.location.longitude
-            }
-          }
-        ]
-        this.setState({markers: markers})
-        this.goToMarker({latitude: markers[0].coord.latitude, longitude: markers[0].coord.longitude})
-      })
-    } catch (error) {
-      console.log(error)
-    }
-
+  componentDidMount() {
+    let data    = this.props.plant
+    let markers = [
+      {
+        title      : data.title,
+        image      : data.image,
+        description: `${data.numberOfTrees} trees`,
+        coord      : {
+          latitude : data.location.latitude,
+          longitude: data.location.longitude
+        }
+      }
+    ]
+    this.setState({markers: markers})
+    this.goToMarker({latitude: markers[0].coord.latitude, longitude: markers[0].coord.longitude})
   }
 
   goToMarker(marker) {
@@ -111,6 +106,7 @@ export default class SubmittedScene extends Component {
 
 SubmittedScene.propTypes = {
   navigator: PropTypes.object.isRequired,
+  plant    : PropTypes.object.isRequired
 }
 
 const styles = StyleSheet.create({
@@ -125,7 +121,7 @@ const styles = StyleSheet.create({
 
   calloutText: {
     fontSize: 12,
-    color: '#444'
+    color   : '#444'
   },
 
   footer: {

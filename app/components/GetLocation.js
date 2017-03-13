@@ -10,7 +10,6 @@ import {
 import {MKSpinner, MKButton, getTheme} from 'react-native-material-kit'
 import Colors from '../helpers/Colors'
 import Elevation from '../helpers/Elevation'
-import FormSchema from '../db/Schema'
 
 const theme = getTheme()
 
@@ -18,43 +17,47 @@ export default class GetLocation extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      initialPosition: 'unknown',
-      lastPosition   : 'unknown',
+      currentPosition: 'unknown'
     }
   }
 
-  watchID: ?number = null;
-
   componentDidMount() {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        let initialPosition = JSON.stringify(position);
-        this.setState({initialPosition});
-      },
-      (error) => alert(JSON.stringify(error)),
-      {enableHighAccuracy: true, timeout: 500, maximumAge: 500}
-    )
-    this.watchID = navigator.geolocation.watchPosition((position) => {
-      let lastPosition = position //JSON.stringify(position)
-      this.setState({lastPosition})
-      this.saveLocation(position)
-    })
+    this.updateLocation()
+  }
+
+  updateLocation() {
+    this.time = setTimeout(() => {
+      let done = false;
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          this.setState({currentPosition: position});
+          this.saveLocation(position).then(() => {
+            console.log('Saved location', position)
+          })
+          if (position.coords.accuracy <= 50) {
+            done = true;
+            clearTimeout(this.time)
+          }
+        },
+        (error) => console.log(JSON.stringify(error)),
+        {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+      )
+
+      if(done) {
+        return
+      }
+
+      this.updateLocation()
+    }, 500)
   }
 
   async saveLocation(position) {
     await AsyncStorage.mergeItem('@WildType:formData', JSON.stringify({location: position.coords}))
   }
 
-  componentWillUnmount() {
-    navigator.geolocation.clearWatch(this.watchID)
-  }
-
   render() {
     return (
       <View {...this.props} style={styles.container}>
-        <View style={styles.card}>
-          <Image source={{uri: this.props.image.path}} style={styles.cardImage}/>
-        </View>
         <View style={styles.card}>
           <View style={styles.cardBody}>
             <View style={{alignItems: 'center', marginTop: 10, marginBottom: 20}}>
@@ -62,16 +65,22 @@ export default class GetLocation extends Component {
             </View>
             <Text style={styles.text}>Attempting to enhance accuracy</Text>
             <Text style={[styles.text, {fontSize: 14}]}>This may take up to 2 minutes</Text>
-            <Text style={[styles.text, {fontWeight: 'bold'}]}>{typeof this.state.lastPosition == 'object' && this.state.lastPosition.coords.accuracy} meters</Text>
+            <Text style={[styles.text, {fontWeight: 'bold'}]}>{typeof this.state.currentPosition == 'object' && this.state.currentPosition.coords.accuracy} meters</Text>
             <View style={styles.row}>
               <MKButton
                 style={styles.button}
-                onPress={this.props.accept}>
+                onPress={() => {
+                  clearTimeout(this.time)
+                  this.props.accept()
+                }}>
                 <Text style={styles.buttonText}>Accept Location</Text>
               </MKButton>
               <MKButton
                 style={[styles.button, {backgroundColor: "#eee"}]}
-                onPress={this.props.cancel}>
+                onPress={() => {
+                  clearTimeout(this.time)
+                  this.props.cancel()
+                }}>
                 <Text style={[styles.buttonText, {color: "#666"}]}>Cancel</Text>
               </MKButton>
             </View>
@@ -84,7 +93,6 @@ export default class GetLocation extends Component {
 
 GetLocation.propTypes = {
   ...View.propTypes,
-  image : PropTypes.object.isRequired,
   accept: PropTypes.func.isRequired,
   cancel: PropTypes.func.isRequired
 }

@@ -41,15 +41,15 @@ export default class WildType extends Component {
     }
 
     if (route.label == 'CameraScene') {
-      return <CameraScene navigator={navigator} plantTitle={route.plantTitle} formProps={route.formProps}/>
+      return <CameraScene navigator={navigator}/>
     }
 
     if (route.label == 'CapturedScene') {
-      return <CapturedScene navigator={navigator} image={route.image} plantTitle={route.plantTitle} formProps={route.formProps}/>
+      return <CapturedScene navigator={navigator} image={route.image}/>
     }
 
     if (route.label == 'CaptureLocationScene') {
-      return <CaptureLocationScene title={route.title} navigator={navigator} image={route.image} plantTitle={route.plantTitle} formProps={route.formProps}/>
+      return <CaptureLocationScene title={route.title} navigator={navigator}/>
     }
 
     if (route.label == 'TreeDescriptionScene') {
@@ -57,7 +57,7 @@ export default class WildType extends Component {
     }
 
     if (route.label == 'SubmittedScene') {
-      return <SubmittedScene navigator={navigator}/>
+      return <SubmittedScene navigator={navigator} plant={route.plant}/>
     }
   }
 

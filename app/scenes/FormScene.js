@@ -10,8 +10,10 @@ import {
   StyleSheet,
   AsyncStorage,
   Alert,
-  DeviceEventEmitter
+  DeviceEventEmitter,
+  Modal
 } from 'react-native'
+import moment from 'moment'
 import {getTheme, MKColor, MKButton} from 'react-native-material-kit'
 import Realm from 'realm'
 import Header from '../components/Header'
@@ -64,6 +66,7 @@ export default class FormScene extends Component {
 
     this.state = {
       treeHeight   : '',
+      species      : '',
       numberOfTrees: '',
       deadTrees    : '',
       comment      : '',
@@ -97,6 +100,14 @@ export default class FormScene extends Component {
     }
     this.formT = t.struct(formRules, "formT")
 
+    this.fetchData()
+  }
+
+  componentDidMount() {
+    this.event = DeviceEventEmitter.addListener('LocationCaptured', this.fetchData)
+  }
+
+  fetchData = () => {
     try {
       let formData = AsyncStorage.getItem('@WildType:formData').then((formData) => {
         if (formData !== null) {
@@ -106,30 +117,6 @@ export default class FormScene extends Component {
     } catch (error) {
       throw new Error('Couldn\'t fetch form data')
     }
-  }
-
-  componentDidMount() {
-    let _that = this
-
-    DeviceEventEmitter.addListener('LocationCaptured', () => {
-      try {
-        let formData = AsyncStorage.getItem('@WildType:formData').then((formData) => {
-          if (formData !== null) {
-            _that.setState(JSON.parse(formData))
-          }
-        })
-      } catch (error) {
-        throw new Error('Couldn\'t fetch form data')
-      }
-    })
-  }
-
-  async saveData(data) {
-    this.setState(data)
-  }
-
-  async fetchData() {
-    return await AsyncStorage.getItem('@WildType:formData')
   }
 
   cancel = () => {
@@ -144,28 +131,46 @@ export default class FormScene extends Component {
     }
 
     AsyncStorage.setItem('@WildType:savedForm', JSON.stringify(this.state))
-    AsyncStorage.removeItem('@WildType:formData')
 
-    let realm = new Realm({schema: [CoordinateSchema, SubmissionSchema]})
+    let realm = new Realm({
+      schema       : [CoordinateSchema, SubmissionSchema],
+      schemaVersion: 3,
+      migration    : function (oldRealm, newRealm) {
+        // only apply this change if upgrading to schemaVersion 1
+        if (oldRealm.schemaVersion < 1) {
+          var oldObjects = oldRealm.objects('Submission');
+          var newObjects = newRealm.objects('Submission');
+
+          // loop through all objects and set the name property in the new schema
+          for (var i = 0; i < oldObjects.length; i++) {
+            newObjects[i].date = moment().format();
+          }
+        }
+      }
+    })
+
     realm.write(() => {
-      let primaryKey = realm.objects('Submission').sorted('id', true)[0] + 1
-      if (typeof primaryKey != 'number') {
+      let primaryKey = realm.objects('Submission')
+      if (primaryKey.length <= 0) {
         primaryKey = 1;
+      } else {
+        primaryKey = primaryKey.sorted('id', true)[0].id + 1
       }
       realm.create('Submission', {
         id           : primaryKey,
-        name         : this.state.title,
-        species      : this.state.species,
-        numberOfTrees: this.state.numberOfTrees,
-        treeHeight   : this.state.treeHeight,
-        deadTrees    : this.state.deadTrees,
-        image        : this.state.image,
+        name         : this.state.title.toString(),
+        species      : this.state.species.toString(),
+        numberOfTrees: this.state.numberOfTrees.toString(),
+        treeHeight   : this.state.treeHeight.toString(),
+        deadTrees    : this.state.deadTrees.toString(),
+        image        : this.state.image.toString(),
         location     : this.state.location,
-        comment      : this.state.comment
+        comment      : this.state.comment.toString(),
+        date         : moment().format().toString()
       })
     })
 
-    this.props.navigator.push({label: 'SubmittedScene'})
+    this.props.navigator.push({label: 'SubmittedScene', plant: this.state})
   }
 
   validateState = () => {
@@ -184,6 +189,11 @@ export default class FormScene extends Component {
     Alert.alert(message)
   }
 
+  componentWillUnmount() {
+    this.event.remove()
+    AsyncStorage.removeItem('@WildType:formData')
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -196,7 +206,7 @@ export default class FormScene extends Component {
                 <ModalPicker
                   style={styles.picker}
                   data={treeHeight.selectChoices}
-                  onChange={(option)=>{this.saveData({treeHeight:option.label})}}>
+                  onChange={(option)=>{this.setState({treeHeight:option.label})}}>
                   <TextInput
                     style={styles.textField}
                     editable={false}
@@ -213,7 +223,7 @@ export default class FormScene extends Component {
                 <ModalPicker
                   style={styles.picker}
                   data={treeStand.selectChoices}
-                  onChange={(option)=>{this.saveData({numberOfTrees:option.label})}}>
+                  onChange={(option)=>{this.setState({numberOfTrees:option.label})}}>
                   <TextInput
                     style={styles.textField}
                     editable={false}
@@ -231,7 +241,7 @@ export default class FormScene extends Component {
                 <ModalPicker
                   style={styles.picker}
                   data={deadTrees.selectChoices}
-                  onChange={(option)=>{this.saveData({deadTrees:option.label})}}>
+                  onChange={(option)=>{this.setState({deadTrees:option.label})}}>
                   <TextInput
                     style={styles.textField}
                     editable={false}
@@ -244,13 +254,10 @@ export default class FormScene extends Component {
             }
             <View style={[styles.formGroup]}>
               <Text style={styles.label}>Photo</Text>
-              <MKButton style={styles.buttonLink} onPress={() => this.saveData({})
-              .then(this.props.navigator.push({
+              <MKButton style={styles.buttonLink} onPress={() => this.props.navigator.push({
                 label: 'CameraScene',
-                plantTitle: this.props.title,
-                transition: 'VerticalUpSwipeJump',
-                formProps: this.props.formProps}))
-              }>
+                transition: 'VerticalUpSwipeJump'
+              })}>
                 <Text style={styles.buttonLinkText}>
                   {this.state.image === '' ? 'Add Photo' : this.state.image.substr(-20)}
                 </Text>
@@ -263,7 +270,7 @@ export default class FormScene extends Component {
                 style={[styles.textField, styles.comment]}
                 placeholder="Add additional comments here"
                 value={this.state.comment}
-                onChangeText={(comment) => this.saveData({comment: comment})}
+                onChangeText={(comment) => this.setState({comment: comment})}
                 multiline={true}
                 numberOfLines={4}
               />
