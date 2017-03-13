@@ -1,8 +1,10 @@
 import React, {Component, PropTypes} from 'react'
 import {
   View,
-  StyleSheet
+  StyleSheet,
+  DeviceEventEmitter
 } from 'react-native'
+import Emmiter from 'emitter'
 import GetLocation from '../components/GetLocation'
 import Header from '../components/Header'
 
@@ -20,13 +22,8 @@ export default class CaptureLocationScene extends Component {
   }
 
   goToForm = () => {
-    let title = this.props.plantTitle
-    this.props.navigator.push({
-      label     : 'FormScene',
-      title     : title,
-      transition: 'VerticalDownSwipeJump',
-      formProps: this.props.formProps
-    })
+    this.props.navigator.popN(3)
+    DeviceEventEmitter.emit('LocationCaptured')
   }
 }
 

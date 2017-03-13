@@ -25,9 +25,9 @@ const plants = {
     descriptionBody       : 'This is where the body text would go describing the majestic American Chestnut.',
     collectionInstructions: 'This is where the specific collection instructions would go.  Only collect disease trees for this species!',
     formProps             : {
-      treeHeightDisplay     : true,
-      treeStandNumberDisplay: true,
-      deadTreeDisplay       : true
+      treeHeightDisplay   : true,
+      numberOfTreesDisplay: true,
+      deadTreeDisplay     : true
     }
   },
   'Green Ash'        : {

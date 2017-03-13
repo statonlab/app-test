@@ -9,7 +9,8 @@ import {
   Dimensions,
   StyleSheet,
   AsyncStorage,
-  Alert
+  Alert,
+  DeviceEventEmitter
 } from 'react-native'
 import {getTheme, MKColor, MKButton} from 'react-native-material-kit'
 import Realm from 'realm'
@@ -17,7 +18,7 @@ import Header from '../components/Header'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
-import {FormSchema} from '../db/Schema'
+import {CoordinateSchema, SubmissionSchema} from '../db/Schema'
 import t from 'tcomb-validation'
 import ModalPicker from 'react-native-modal-picker'
 
@@ -54,45 +55,45 @@ const deadTrees = {
 const TreeHeightIndex = t.enums.of(['0-10 feet', '11-50 feet', '51-100 feet', '>100 feet'], "height")
 const TreeStandIndex  = t.enums.of(["1-10", "11-50", "51+"], "stand")
 const DeadTreesIndex  = t.enums.of(['', 'none', '1-50', '51+'], "dead")
-let Location          = t.dict(t.String, t.Num)
+const Location        = t.dict(t.String, t.Num)
 
 
 export default class FormScene extends Component {
   constructor(props) {
     super(props)
 
-    this.state     = {
-      treeHeightPicked: null,
-      treeStandNumber : null,
-      nearbyDeadTrees : null,
-      textAddComment  : '',
-      image           : '',
-      title           : this.props.title,
-      location        : {
-        latitude : '',
-        longitude: ''
+    this.state = {
+      treeHeight   : '',
+      numberOfTrees: '',
+      deadTrees    : '',
+      comment      : '',
+      image        : '',
+      title        : this.props.title,
+      location     : {
+        latitude : 0,
+        longitude: 0
       }
     }
+
     this.formProps = this.props.formProps
 
     //set rules for base field values
     let formRules = {
-      textAddComment: t.String,
-      image         : t.String,
-      title         : t.String,
-      location      : Location,
-      textAddComment: t.String
+      comment : t.String,
+      image   : t.String,
+      title   : t.String,
+      location: Location
     }
 
     //Add in rules for optional field values
     if (this.formProps.deadTreeDisplay) {
-      formRules.nearbyDeadTrees = t.maybe(DeadTreesIndex)//optional
+      formRules.deadTrees = t.maybe(DeadTreesIndex)//optional
     }
     if (this.formProps.treeHeightDisplay) {
-      formRules.treeHeightPicked = TreeHeightIndex//required
+      formRules.treeHeight = TreeHeightIndex//required
     }
-    if (this.formProps.treeStandNumberDisplay) {
-      formRules.treeStandNumber = TreeStandIndex
+    if (this.formProps.numberOfTreesDisplay) {
+      formRules.numberOfTrees = TreeStandIndex
     }
     this.formT = t.struct(formRules, "formT")
 
@@ -105,21 +106,30 @@ export default class FormScene extends Component {
     } catch (error) {
       throw new Error('Couldn\'t fetch form data')
     }
+  }
 
-    this.fetchData()
+  componentDidMount() {
+    let _that = this
+
+    DeviceEventEmitter.addListener('LocationCaptured', () => {
+      try {
+        let formData = AsyncStorage.getItem('@WildType:formData').then((formData) => {
+          if (formData !== null) {
+            _that.setState(JSON.parse(formData))
+          }
+        })
+      } catch (error) {
+        throw new Error('Couldn\'t fetch form data')
+      }
+    })
   }
 
   async saveData(data) {
     this.setState(data)
-    try {
-      await AsyncStorage.setItem('@WildType:formData', JSON.stringify(this.state))
-    } catch (error) {
-      throw new Error(error)
-    }
   }
 
-  fetchData() {
-    return AsyncStorage.getItem('@WildType:formData')
+  async fetchData() {
+    return await AsyncStorage.getItem('@WildType:formData')
   }
 
   cancel = () => {
@@ -128,39 +138,56 @@ export default class FormScene extends Component {
   }
 
   submit = () => {
-    if (this.validateState().isValid()) {
-      AsyncStorage.setItem('@WildType:savedForm', JSON.stringify(this.state))
-      AsyncStorage.removeItem('@WildType:formData')
-      this.props.navigator.push({label: 'SubmittedScene'})
-    }
-    else {
+    if (!this.validateState().isValid()) {
       this.notifyIncomplete(this.validateState())
+      return
     }
+
+    AsyncStorage.setItem('@WildType:savedForm', JSON.stringify(this.state))
+    AsyncStorage.removeItem('@WildType:formData')
+
+    let realm = new Realm({schema: [CoordinateSchema, SubmissionSchema]})
+    realm.write(() => {
+      let primaryKey = realm.objects('Submission').sorted('id', true)[0] + 1
+      if (typeof primaryKey != 'number') {
+        primaryKey = 1;
+      }
+      realm.create('Submission', {
+        id           : primaryKey,
+        name         : this.state.title,
+        species      : this.state.species,
+        numberOfTrees: this.state.numberOfTrees,
+        treeHeight   : this.state.treeHeight,
+        deadTrees    : this.state.deadTrees,
+        image        : this.state.image,
+        location     : this.state.location,
+        comment      : this.state.comment
+      })
+    })
+
+    this.props.navigator.push({label: 'SubmittedScene'})
   }
 
   validateState = () => {
     return t.validate(this.state, this.formT)
   }
 
-  notifyIncomplete= (validationAttempt) => {
-    missingFields = {}
-    message = "Please supply a value for the following required fields: \n"
+  notifyIncomplete = (validationAttempt) => {
+    let missingFields = {}
+    let message       = "Please supply a value for the following required fields: \n"
     console.log(validationAttempt)
-    for (errorIndex in validationAttempt.errors){
-      errorPath = validationAttempt.errors[errorIndex].path[0]
+    for (let errorIndex in validationAttempt.errors) {
+      let errorPath            = validationAttempt.errors[errorIndex].path[0]
       missingFields[errorPath] = true
-      message = message + errorPath + " \n"
+      message                  = message + errorPath + " \n"
     }
-      alert(message)
+    Alert.alert(message)
   }
-
 
   render() {
     return (
       <View style={styles.container}>
-
         <Header title={this.state.title} navigator={this.props.navigator}/>
-
         <ScrollView>
           <View style={styles.card}>
             {!this.formProps.treeHeightDisplay ? null :
@@ -169,29 +196,29 @@ export default class FormScene extends Component {
                 <ModalPicker
                   style={styles.picker}
                   data={treeHeight.selectChoices}
-                  onChange={(option)=>{this.saveData({treeHeightPicked:option.label})}}>
+                  onChange={(option)=>{this.saveData({treeHeight:option.label})}}>
                   <TextInput
                     style={styles.textField}
                     editable={false}
                     placeholder="Tree Height"
-                    value={this.state.treeHeightPicked}
+                    value={this.state.treeHeight}
                   />
                 </ModalPicker>
                 {dropdownIcon}
               </View>
             }
-            {!this.formProps.treeStandNumberDisplay ? null :
+            {!this.formProps.numberOfTreesDisplay ? null :
               <View style={styles.formGroup}>
                 <Text style={styles.label}>Trees in Stand</Text>
                 <ModalPicker
                   style={styles.picker}
                   data={treeStand.selectChoices}
-                  onChange={(option)=>{this.saveData({treeStandNumber:option.label})}}>
+                  onChange={(option)=>{this.saveData({numberOfTrees:option.label})}}>
                   <TextInput
                     style={styles.textField}
                     editable={false}
                     placeholder="Number of Trees in Stand"
-                    value={this.state.treeStandNumber}
+                    value={this.state.numberOfTrees}
                     underlineColorAndroid="#fff"
                   />
                 </ModalPicker>
@@ -204,12 +231,12 @@ export default class FormScene extends Component {
                 <ModalPicker
                   style={styles.picker}
                   data={deadTrees.selectChoices}
-                  onChange={(option)=>{this.saveData({nearbyDeadTrees:option.label})}}>
+                  onChange={(option)=>{this.saveData({deadTrees:option.label})}}>
                   <TextInput
                     style={styles.textField}
                     editable={false}
                     placeholder="Number of Dead Trees"
-                    value={this.state.nearbyDeadTrees}
+                    value={this.state.deadTrees}
                   />
                 </ModalPicker>
                 {dropdownIcon}
@@ -217,12 +244,13 @@ export default class FormScene extends Component {
             }
             <View style={[styles.formGroup]}>
               <Text style={styles.label}>Photo</Text>
-              <MKButton style={styles.buttonLink} onPress={() => this.saveData({}).then(this.props.navigator.push({
+              <MKButton style={styles.buttonLink} onPress={() => this.saveData({})
+              .then(this.props.navigator.push({
                 label: 'CameraScene',
                 plantTitle: this.props.title,
                 transition: 'VerticalUpSwipeJump',
-                formProps: this.props.formProps
-              }))}>
+                formProps: this.props.formProps}))
+              }>
                 <Text style={styles.buttonLinkText}>
                   {this.state.image === '' ? 'Add Photo' : this.state.image.substr(-20)}
                 </Text>
@@ -232,10 +260,10 @@ export default class FormScene extends Component {
 
             <View style={[styles.formGroup]}>
               <TextInput
-                style={[styles.textField, styles.textAddComment]}
+                style={[styles.textField, styles.comment]}
                 placeholder="Add additional comments here"
-                value={this.state.textAddComment}
-                onChangeText={(textAddComment) => this.saveData({textAddComment: textAddComment})}
+                value={this.state.comment}
+                onChangeText={(comment) => this.saveData({comment: comment})}
                 multiline={true}
                 numberOfLines={4}
               />
@@ -264,7 +292,6 @@ export default class FormScene extends Component {
             </Text>
           </MKButton>
         </View>
-
       </View>
     )
   }
@@ -367,7 +394,7 @@ const styles = StyleSheet.create({
     color: "#666"
   },
 
-  textAddComment: {
+  comment: {
     flex  : 1,
     width : undefined,
     height: 150

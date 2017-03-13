@@ -47,6 +47,7 @@ export const SubmissionSchema = {
     image        : {type: 'string', default: ''},
     // Example, {longitude: 'int', latitude: 'int'}
     location     : {type: 'Coordinate'},
-    comment      : {type: 'string', default: ''}
+    comment      : {type: 'string', default: ''},
+    date: {type: 'string', default: ''}
   }
 }

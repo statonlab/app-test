@@ -24,7 +24,7 @@ export default class CapturedScene extends Component {
           <TouchableHighlight onPress={this._back.bind(this)} style={styles.choice}>
             <Text style={styles.text}>Retake</Text>
           </TouchableHighlight>
-          <TouchableHighlight onPress={this._use.bind(this)} style={styles.choice}>
+          <TouchableHighlight onPress={this._use} style={styles.choice}>
             <Text style={[styles.text, {textAlign:'right'}]}>Use</Text>
           </TouchableHighlight>
         </View>
