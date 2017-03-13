@@ -12,21 +12,6 @@ export const CoordinateSchema = {
 }
 
 /**
- * Form Schema
- * -------------------------------------------------
- * Saves form data to persist between scenes.
- *
- * @type object
- */
-export const FormSchema = {
-  name      : 'Form',
-  properties: {
-    id   : 'int',
-    state: 'string' // Json string
-  }
-}
-
-/**
  * Submissions Schema
  * -------------------------------------------------
  * Saves user's submissions locally and permanently.
@@ -37,7 +22,7 @@ export const SubmissionSchema = {
   name      : 'Submission',
   primaryKey: 'id',
   properties: {
-    id           : {type: 'int'},
+    id           : {type: 'int', default: 1},
     name         : {type: 'string', default: 'Tree'},
     species      : {type: 'string', default: ''},
     numberOfTrees: {type: 'string', default: '1-10'},
@@ -48,6 +33,6 @@ export const SubmissionSchema = {
     // Example, {longitude: 'int', latitude: 'int'}
     location     : {type: 'Coordinate'},
     comment      : {type: 'string', default: ''},
-    date: {type: 'string', default: ''}
+    date         : {type: 'string', default: ''}
   }
 }

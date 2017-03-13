@@ -43,9 +43,7 @@ export default class CapturedScene extends Component {
     this._setFormImage().then(() => {
       this.props.navigator.push({
         image     : this.props.image,
-        label     : 'CaptureLocationScene',
-        plantTitle: this.props.plantTitle,
-        formProps : this.props.formProps
+        label     : 'CaptureLocationScene'
       })
     })
   }

@@ -39,9 +39,7 @@ export default class CameraScene extends Component {
         .then((data) => {
           this.props.navigator.push({
             label: 'CapturedScene',
-            image: data,
-            plantTitle: this.props.plantTitle,
-            formProps: this.props.formProps
+            image: data
           })
         })
     } catch (err) {
@@ -51,9 +49,7 @@ export default class CameraScene extends Component {
 }
 
 CameraScene.PropTypes = {
-  navigator: PropTypes.object.isRequired,
-  plantTitle: PropTypes.string.isRequired,
-  formProps: PropTypes.object.isRequired
+  navigator: PropTypes.object.isRequired
 }
 
 const styles = StyleSheet.create({
