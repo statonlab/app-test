@@ -33,7 +33,7 @@ export default class WildType extends Component {
     }
 
     if (route.label == 'MapScene') {
-      return <MapScene title={route.title} navigator={navigator}/>
+      return <MapScene title="Your Entries" navigator={navigator}/>
     }
 
     if (route.label == 'FormScene') {
@@ -62,13 +62,21 @@ export default class WildType extends Component {
   }
 
   configureScene(route, routeStack) {
+    let config = Navigator.SceneConfigs.PushFromRight
     if (typeof route.transition !== 'undefined') {
       if (typeof Navigator.SceneConfigs[route.transition] !== 'undefined') {
-        return Navigator.SceneConfigs[route.transition]
+        config = Navigator.SceneConfigs[route.transition]
       }
     }
 
-    return Navigator.SceneConfigs.PushFromRight
+    if (typeof route.gestures !== 'undefined') {
+      config = {
+        ...config,
+        gestures: route.gestures
+      }
+    }
+
+    return config
   }
 
   render() {

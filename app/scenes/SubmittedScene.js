@@ -16,33 +16,26 @@ export default class SubmittedScene extends Component {
   constructor(props) {
     super(props)
 
-    this.state = {
-      markers: []
+    let data    = this.props.plant
+    this.marker = {
+      title      : data.title,
+      image      : data.image,
+      description: `${data.numberOfTrees} trees`,
+      coordinates: {
+        latitude : data.location.latitude,
+        longitude: data.location.longitude
+      }
     }
   }
 
   componentDidMount() {
-    let data    = this.props.plant
-    let markers = [
-      {
-        title      : data.title,
-        image      : data.image,
-        description: `${data.numberOfTrees} trees`,
-        coord      : {
-          latitude : data.location.latitude,
-          longitude: data.location.longitude
-        }
-      }
-    ]
-    this.setState({markers: markers})
-    this.goToMarker({latitude: markers[0].coord.latitude, longitude: markers[0].coord.longitude})
+    this.goToMarker({
+      latitude : this.marker.coordinates.latitude,
+      longitude: this.marker.coordinates.longitude
+    })
   }
 
   goToMarker(marker) {
-    this.onPressMarker(marker)
-  }
-
-  onPressMarker(marker) {
     this.refs.map.animateToRegion({
       latitude      : parseFloat(marker.latitude),
       longitude     : parseFloat(marker.longitude),
@@ -52,45 +45,30 @@ export default class SubmittedScene extends Component {
   }
 
   render() {
-    let done = false;
+    let marker = this.marker
     return (
       <View style={styles.container}>
-        <Header title={"Submission Aerial View"} navigator={this.props.navigator}/>
+        <Header title="Submission Aerial View" navigator={this.props.navigator} showLeftIcon={false} showRightIcon={false}/>
         <MapView
           style={styles.map}
-          showsUserLocation={true}
-          followUserLocation={true}
           ref="map"
-          onRegionChangeComplete={() => {
-            if(!done) {
-              setTimeout(() => {
-                this.marker.showCallout()
-              }, 1000)
-            }
-            done = true
-          }}>
-          {this.state.markers.map((marker, index) => {
-            if (typeof marker == "undefined") return;
-
-            return (
-              <MapView.Marker
-                ref={ref => { this.marker = ref; }}
-                key={index}
-                coordinate={marker.coord}
-                pinColor={Colors.primary}>
-                <MapView.Callout style={{width: 165}}>
-                  <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-                    <Image source={{uri: marker.image}} style={{width: 45, height: 45}}/>
-                    <View style={{flex: 1, marginLeft: 5, flexDirection: 'column', justifyContent: 'space-between', alignItems: 'flex-start'}}>
-                      <Text style={[styles.calloutText, {flex: 1, fontWeight: '500'}]}>{marker.title}</Text>
-                      <Text style={[styles.calloutText, {color: '#666'}]}>{marker.description} found in this area</Text>
-                    </View>
-                  </View>
-                </MapView.Callout>
-              </MapView.Marker>
-            )
-          })}
+          onRegionChangeComplete={() => {this.refs.marker.showCallout()}}>
+          <MapView.Marker
+            ref="marker"
+            coordinate={marker.coordinates}
+            pinColor={Colors.primary}>
+            <MapView.Callout style={{width: 165}}>
+              <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+                <Image source={{uri: marker.image}} style={{width: 45, height: 45}}/>
+                <View style={{flex: 1, marginLeft: 5, flexDirection: 'column', justifyContent: 'space-between', alignItems: 'flex-start'}}>
+                  <Text style={[styles.calloutText, {flex: 1, fontWeight: '500'}]}>{marker.title}</Text>
+                  <Text style={[styles.calloutText, {color: '#666'}]}>{marker.description} found in this area</Text>
+                </View>
+              </View>
+            </MapView.Callout>
+          </MapView.Marker>
         </MapView>
+
         <View style={styles.footer}>
           <Text style={styles.text}>Your entry has been saved!</Text>
           <MKButton

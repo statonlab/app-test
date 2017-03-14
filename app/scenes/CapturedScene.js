@@ -5,12 +5,10 @@ import {
   Dimensions,
   Text,
   Image,
-  TouchableHighlight,
+  TouchableOpacity,
   AsyncStorage,
   DeviceEventEmitter
 } from 'react-native'
-import Realm from 'realm'
-import FormSchema from '../db/Schema'
 
 export default class CapturedScene extends Component {
   constructor(props) {
@@ -22,12 +20,12 @@ export default class CapturedScene extends Component {
       <View style={styles.container}>
         <Image source={{uri: this.props.image.path}} style={styles.preview}/>
         <View style={styles.toolsContainer}>
-          <TouchableHighlight onPress={this._back.bind(this)} style={styles.choice}>
+          <TouchableOpacity onPress={this._back.bind(this)} style={styles.choice}>
             <Text style={styles.text}>Retake</Text>
-          </TouchableHighlight>
-          <TouchableHighlight onPress={this._use} style={styles.choice}>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={this._use} style={styles.choice}>
             <Text style={[styles.text, {textAlign:'right'}]}>Use</Text>
-          </TouchableHighlight>
+          </TouchableOpacity>
         </View>
       </View>
     );

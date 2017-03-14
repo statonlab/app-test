@@ -28,6 +28,10 @@ export default class Header extends Component {
   }
 
   getLeftIcon = () => {
+    if (!this.props.showLeftIcon) {
+      return
+    }
+
     if (this.props.initial) {
       return (
         <TouchableHighlight style={style.touchable} onPress={this.onMenuPress} underlayColor={Colors.primary}>
@@ -41,6 +45,20 @@ export default class Header extends Component {
         </TouchableHighlight>
       )
     }
+  }
+
+  getRightIcon = () => {
+    if (!this.props.showRightIcon) {
+      return
+    }
+
+    return (
+      <TouchableHighlight style={style.touchable}
+        underlayColor={Colors.primary}
+        onPress={this.navigateToMap}>
+        <Icon name="map-marker-multiple" size={23} color="#fff"/>
+      </TouchableHighlight>
+    )
   }
 
   navigateToMap = () => {
@@ -67,28 +85,37 @@ export default class Header extends Component {
 
   render() {
     return (
-      <View style={style.wrapper} ref="header">
+      <View style={[style.wrapper, {...(new Elevation(this.props.elevation))}]} ref="header">
         {this.getLeftIcon()}
 
-        <View style={{flex: 1}}>
+        <View style={{height: 56, flex: 1, alignItems: this.props.showLeftIcon ? 'flex-start' : 'center'}}>
           <Text style={[style.text, style.title]}>{this.props.title}</Text>
         </View>
 
-        <TouchableHighlight style={style.touchable}
-          underlayColor={Colors.primary}
-          onPress={this.navigateToMap}>
-          <Icon name="map-marker-multiple" size={23} color="#fff"/>
-        </TouchableHighlight>
+        {this.getRightIcon()}
       </View>
     )
   }
 }
 
 Header.propTypes = {
-  title      : PropTypes.string.isRequired,
-  navigator  : PropTypes.object.isRequired,
-  initial    : PropTypes.bool,
-  onMenuPress: PropTypes.func
+  title        : PropTypes.string.isRequired,
+  navigator    : PropTypes.object.isRequired,
+  initial      : PropTypes.bool,
+  onMenuPress  : PropTypes.func,
+  elevation    : PropTypes.number,
+  showLeftIcon : PropTypes.bool,
+  showRightIcon: PropTypes.bool
+}
+
+Header.defaultProps = {
+  initial      : false,
+  onMenuPress  : function () {
+
+  },
+  elevation    : 3,
+  showLeftIcon : true,
+  showRightIcon: true
 }
 
 function getVerticalPadding() {
@@ -98,11 +125,8 @@ function getVerticalPadding() {
     return 15;
 }
 
-const elevationStyle = new Elevation(3)
-
 const style = StyleSheet.create({
   wrapper: {
-    ...elevationStyle,
     paddingTop     : getVerticalPadding(),
     flex           : 0,
     flexDirection  : 'row',
@@ -113,7 +137,6 @@ const style = StyleSheet.create({
   },
 
   title: {
-    fontSize       : 16,
     flex           : 1,
     paddingVertical: 17
   },

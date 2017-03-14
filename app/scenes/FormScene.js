@@ -134,6 +134,7 @@ export default class FormScene extends Component {
     }
 
     AsyncStorage.setItem('@WildType:savedForm', JSON.stringify(this.state))
+    AsyncStorage.removeItem('@WildType:formData')
 
     let realm = new Realm({
       schema: [CoordinateSchema, SubmissionSchema]
@@ -160,7 +161,11 @@ export default class FormScene extends Component {
       })
     })
 
-    this.props.navigator.push({label: 'SubmittedScene', plant: this.state})
+    this.props.navigator.push({
+      label   : 'SubmittedScene',
+      plant   : this.state,
+      gestures: {}
+    })
   }
 
   validateState = () => {

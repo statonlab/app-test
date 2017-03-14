@@ -27,11 +27,8 @@ export default class MapScene extends Component {
     let submissions = realm.objects('Submission')
     let markers     = []
 
-    console.log(`Length: ${submissions.length}`)
-
     if (submissions.length < 1) {
-      Alert.alert('No submissions found')
-      return
+      Alert.alert('You have not submitted any entries. Once you do, they will show on this map.')
     }
 
     submissions.map((submission, index) => {
