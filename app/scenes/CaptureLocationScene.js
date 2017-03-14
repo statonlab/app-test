@@ -20,8 +20,8 @@ export default class CaptureLocationScene extends Component {
   }
 
   goToForm = () => {
-    DeviceEventEmitter.emit('LocationCaptured')
-    this.props.navigator.popN(3)
+    DeviceEventEmitter.emit('FormStateChanged')
+    this.props.navigator.popN(1)
   }
 }
 

@@ -6,7 +6,8 @@ import {
   Text,
   Image,
   TouchableHighlight,
-  AsyncStorage
+  AsyncStorage,
+  DeviceEventEmitter
 } from 'react-native'
 import Realm from 'realm'
 import FormSchema from '../db/Schema'
@@ -41,10 +42,8 @@ export default class CapturedScene extends Component {
 
   _use = () => {
     this._setFormImage().then(() => {
-      this.props.navigator.push({
-        image     : this.props.image,
-        label     : 'CaptureLocationScene'
-      })
+      DeviceEventEmitter.emit('FormStateChanged')
+      this.props.navigator.popN(2)
     })
   }
 

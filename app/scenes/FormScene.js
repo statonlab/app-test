@@ -3,6 +3,7 @@ import {
   View,
   Text,
   TouchableHighlight,
+  TouchableOpacity,
   ScrollView,
   Image,
   TextInput,
@@ -104,7 +105,7 @@ export default class FormScene extends Component {
   }
 
   componentDidMount() {
-    this.event = DeviceEventEmitter.addListener('LocationCaptured', this.fetchData)
+    this.event = DeviceEventEmitter.addListener('FormStateChanged', this.fetchData)
   }
 
   fetchData = () => {
@@ -200,6 +201,32 @@ export default class FormScene extends Component {
         <Header title={this.state.title} navigator={this.props.navigator}/>
         <ScrollView>
           <View style={styles.card}>
+            <View style={[styles.formGroup]}>
+              <Text style={styles.label}>Photo</Text>
+              <MKButton style={styles.buttonLink} onPress={() => this.props.navigator.push({
+                label: 'CameraScene',
+                transition: 'VerticalUpSwipeJump'
+              })}>
+                <Text style={[styles.buttonLinkText, {color: this.state.location.latitude === 0 ? '#aaa' : '#444'}]}>
+                  {this.state.image === '' ? 'Add Photo' : this.state.image.substr(-20)}
+                </Text>
+              </MKButton>
+              <Icon name="camera" style={styles.icon}/>
+            </View>
+
+            <View style={styles.formGroup}>
+              <Text style={styles.label}>Location</Text>
+              <MKButton style={styles.buttonLink} onPress={() => this.props.navigator.push({
+                label: 'CaptureLocationScene',
+                transition: 'VerticalUpSwipeJump'
+              })}>
+                <Text style={[styles.buttonLinkText, {color: this.state.location.latitude === 0 ? '#aaa' : '#444'}]}>
+                  {this.state.location.latitude === 0 ? 'Enter location' : `${this.state.location.latitude},${this.state.location.longitude}`}
+                </Text>
+              </MKButton>
+              <Icon name="map" style={styles.icon}/>
+            </View>
+
             {!this.formProps.treeHeightDisplay ? null :
               <View style={styles.formGroup}>
                 <Text style={styles.label}>Tree Height</Text>
@@ -211,12 +238,14 @@ export default class FormScene extends Component {
                     style={styles.textField}
                     editable={false}
                     placeholder="Tree Height"
+                    placeholderTextColor="#aaa"
                     value={this.state.treeHeight}
                   />
                 </ModalPicker>
                 {dropdownIcon}
               </View>
             }
+
             {!this.formProps.numberOfTreesDisplay ? null :
               <View style={styles.formGroup}>
                 <Text style={styles.label}>Trees in Stand</Text>
@@ -225,9 +254,10 @@ export default class FormScene extends Component {
                   data={treeStand.selectChoices}
                   onChange={(option)=>{this.setState({numberOfTrees:option.label})}}>
                   <TextInput
-                    style={styles.textField}
+                    style={[styles.textField]}
                     editable={false}
                     placeholder="Number of Trees in Stand"
+                    placeholderTextColor="#aaa"
                     value={this.state.numberOfTrees}
                     underlineColorAndroid="#fff"
                   />
@@ -235,6 +265,7 @@ export default class FormScene extends Component {
                 {dropdownIcon}
               </View>
             }
+
             {!this.formProps.deadTreeDisplay ? null :
               <View style={styles.formGroup}>
                 <Text style={styles.label}>Dead Trees</Text>
@@ -246,42 +277,25 @@ export default class FormScene extends Component {
                     style={styles.textField}
                     editable={false}
                     placeholder="Number of Dead Trees"
+                    placeholderTextColor="#aaa"
                     value={this.state.deadTrees}
                   />
                 </ModalPicker>
                 {dropdownIcon}
               </View>
             }
-            <View style={[styles.formGroup]}>
-              <Text style={styles.label}>Photo</Text>
-              <MKButton style={styles.buttonLink} onPress={() => this.props.navigator.push({
-                label: 'CameraScene',
-                transition: 'VerticalUpSwipeJump'
-              })}>
-                <Text style={styles.buttonLinkText}>
-                  {this.state.image === '' ? 'Add Photo' : this.state.image.substr(-20)}
-                </Text>
-              </MKButton>
-              <Icon name="camera" style={styles.dropdownIcon}/>
-            </View>
 
-            <View style={[styles.formGroup]}>
+            <View style={[styles.formGroup, {borderBottomWidth: 0, flex: 1, alignItems: 'flex-start'}]}>
+              <Text style={[styles.label, {paddingTop: 5}]}>Comments</Text>
               <TextInput
                 style={[styles.textField, styles.comment]}
-                placeholder="Add additional comments here"
+                placeholder="Additional Comments"
+                placeholderTextColor="#aaa"
                 value={this.state.comment}
                 onChangeText={(comment) => this.setState({comment: comment})}
                 multiline={true}
                 numberOfLines={4}
               />
-            </View>
-
-            <View style={[styles.formGroup, {borderBottomWidth: 0}]}>
-              <Text style={styles.label}>Location</Text>
-              <Text style={[{flex: 1, width: undefined, color: '#444'}]}>
-                {this.state.location.latitude === '' ? 'Will get set after adding a photo' : `${this.state.location.latitude},${this.state.location.longitude}`}
-              </Text>
-              <Icon name="map" style={styles.dropdownIcon}/>
             </View>
           </View>
         </ScrollView>
@@ -310,7 +324,7 @@ FormScene.propTypes = {
   formProps: PropTypes.object
 }
 
-const elevationStyle = new Elevation(1)
+const elevationStyle = new Elevation(2)
 
 const styles = StyleSheet.create({
   container: {
@@ -332,10 +346,10 @@ const styles = StyleSheet.create({
     flex             : 0,
     flexDirection    : 'row',
     alignItems       : 'center',
-    position         : 'relative',
     borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
-    padding          : 10,
+    borderBottomColor: '#dedede',
+    padding          : 5,
+    height           : undefined,
   },
 
   picker: {
@@ -349,10 +363,26 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
 
+  touchable: {
+    flex          : 1,
+    height        : 40,
+    justifyContent: 'center',
+    alignItems    : 'flex-start'
+  },
+
+  touchableText: {
+    flex       : 1,
+    color      : '#444',
+    width      : undefined,
+    marginTop  : 10,
+    textAlign  : 'left',
+    paddingLeft: 15
+  },
+
   textField: {
     height           : 40,
     paddingHorizontal: 15,
-    color            : "#444",
+    color            : '#444',
     fontSize         : 14
   },
 
@@ -362,7 +392,7 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    ...elevationStyle,
+    ...(new Elevation(1)),
     flex           : 1,
     borderRadius   : 2,
     backgroundColor: Colors.primary,
@@ -381,7 +411,7 @@ const styles = StyleSheet.create({
   buttonLink: {
     flex             : 1,
     width            : undefined,
-    backgroundColor  : "transparent",
+    backgroundColor  : 'transparent',
     paddingHorizontal: 15,
     height           : 40,
     justifyContent   : 'center'
@@ -402,13 +432,14 @@ const styles = StyleSheet.create({
   },
 
   comment: {
-    flex  : 1,
-    width : undefined,
-    height: 150
+    flex      : 1,
+    width     : undefined,
+    height    : 130,
+    alignItems: 'flex-start'
   },
 
-  dropdownIcon: {
-    width   : 20,
+  icon: {
+    width   : 30,
     fontSize: 20,
     color   : '#aaa'
   },
@@ -420,11 +451,12 @@ const styles = StyleSheet.create({
   },
 
   footer: {
-    flex          : 0,
-    flexDirection : 'row',
-    justifyContent: 'space-between',
-    padding       : 10
+    flex             : 0,
+    flexDirection    : 'row',
+    justifyContent   : 'space-between',
+    paddingVertical  : 10,
+    paddingHorizontal: 5
   },
 })
 
-const dropdownIcon = (<Icon name="arrow-down-drop-circle-outline" style={styles.dropdownIcon}/>)
+const dropdownIcon = (<Icon name="arrow-down-drop-circle-outline" style={styles.icon}/>)

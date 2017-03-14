@@ -107,60 +107,68 @@ TreeDescriptionScene.propTypes = {
 const elevationStyle = new Elevation(2)
 
 const styles = StyleSheet.create({
-  container : {
+  container: {
     backgroundColor: '#f5f5f5',
     flex           : 1,
     flexDirection  : 'column'
   },
+
   scrollView: {
     flex: 1
   },
-  card      : {
+
+  card: {
     ...theme.cardStyle,
     ...elevationStyle,
-    borderRadius    : 3,
-    flex            : 1,
-    padding         : 10,
-    justifyContent  : 'center',
-    marginVertical  : 5,
-    marginHorizontal: 5,
+    borderRadius   : 0,
+    flex           : 1,
+    paddingVertical: 10,
+    justifyContent : 'center',
+    marginBottom   : 5
   },
-  cardImage : {
+
+  cardImage: {
     ...theme.cardImageStyle,
     height         : 150,
     resizeMode     : 'cover',
     width          : undefined,
     backgroundColor: '#fff',
   },
-  cardTitle : {
+
+  cardTitle: {
     fontSize  : 14,
     flex      : 1,
     fontWeight: 'bold',
     color     : "#222"
   },
-  cardBody  : {
-    paddingVertical  : 10,
+
+  cardBody: {
+    padding          : 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#eee'
+    borderBottomColor: '#dedede'
   },
-  cardText  : {
+
+  cardText: {
     padding: 10,
     color  : '#666'
   },
-  footer    : {
+
+  footer: {
     flex          : 0,
     height        : 60,
     justifyContent: 'center',
     alignItems    : 'center'
   },
-  button    : {
-    ...elevationStyle,
+
+  button: {
+    ...(new Elevation(1)),
     borderRadius   : 2,
     backgroundColor: Colors.primary,
     padding        : 10,
     width          : 300,
     maxWidth       : 300,
   },
+
   buttonText: {
     textAlign: 'center',
     color    : '#fff',
