@@ -58,8 +58,9 @@ const deadTrees = {
 const TreeHeightIndex = t.enums.of(['0-10 feet', '11-50 feet', '51-100 feet', '>100 feet'], "height")
 const TreeStandIndex  = t.enums.of(["1-10", "11-50", "51+"], "stand")
 const DeadTreesIndex  = t.enums.of(['', 'none', '1-50', '51+'], "dead")
-const Location        = t.dict(t.String, t.Num)
-
+const Coordinate =  t.refinement(t.Number, (n) => n != 0, 'Coordinate')
+const ImageString =  t.refinement(t.String, (string) => string != '', 'ImageString')
+const Location        = t.dict(t.String, Coordinate)
 
 export default class FormScene extends Component {
   constructor(props) {
@@ -84,7 +85,7 @@ export default class FormScene extends Component {
     //set rules for base field values
     let formRules = {
       comment : t.String,
-      image   : t.String,
+      image   : ImageString,
       title   : t.String,
       location: Location
     }
