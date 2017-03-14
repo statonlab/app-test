@@ -76,7 +76,8 @@ export default class FormScene extends Component {
       title        : this.props.title,
       location     : {
         latitude : 0,
-        longitude: 0
+        longitude: 0,
+        accuracy : -1
       }
     }
 
