@@ -24,6 +24,7 @@ import Colors from '../helpers/Colors'
 import {CoordinateSchema, SubmissionSchema} from '../db/Schema'
 import t from 'tcomb-validation'
 import ModalPicker from 'react-native-modal-picker'
+import CustomModal from '../components/CustomModal'
 
 const theme = getTheme()
 
@@ -269,18 +270,16 @@ export default class FormScene extends Component {
             {!this.formProps.deadTreeDisplay ? null :
               <View style={styles.formGroup}>
                 <Text style={styles.label}>Dead Trees</Text>
-                <ModalPicker
-                  style={styles.picker}
-                  data={deadTrees.selectChoices}
-                  onChange={(option)=>{this.setState({deadTrees:option.label})}}>
+                <CustomModal>
                   <TextInput
-                    style={styles.textField}
+                    style={[styles.textField]}
                     editable={false}
-                    placeholder="Number of Dead Trees"
+                    placeholder="Number of Dead Trees in Stand"
                     placeholderTextColor="#aaa"
                     value={this.state.deadTrees}
+                    underlineColorAndroid="#fff"
                   />
-                </ModalPicker>
+                </CustomModal>
                 {dropdownIcon}
               </View>
             }
