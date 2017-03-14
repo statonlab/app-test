@@ -58,8 +58,8 @@ const deadTrees = {
 const TreeHeightIndex = t.enums.of(['0-10 feet', '11-50 feet', '51-100 feet', '>100 feet'], "height")
 const TreeStandIndex  = t.enums.of(["1-10", "11-50", "51+"], "stand")
 const DeadTreesIndex  = t.enums.of(['', 'none', '1-50', '51+'], "dead")
-const Coordinate =  t.refinement(t.Number, (n) => n != 0, 'Coordinate')
-const ImageString =  t.refinement(t.String, (string) => string != '', 'ImageString')
+const Coordinate      = t.refinement(t.Number, (n) => n != 0, 'Coordinate')
+const ImageString     = t.refinement(t.String, (string) => string != '', 'ImageString')
 const Location        = t.dict(t.String, Coordinate)
 
 export default class FormScene extends Component {
@@ -135,20 +135,7 @@ export default class FormScene extends Component {
     AsyncStorage.setItem('@WildType:savedForm', JSON.stringify(this.state))
 
     let realm = new Realm({
-      schema       : [CoordinateSchema, SubmissionSchema],
-      schemaVersion: 3,
-      migration    : function (oldRealm, newRealm) {
-        // only apply this change if upgrading to schemaVersion 1
-        if (oldRealm.schemaVersion < 1) {
-          var oldObjects = oldRealm.objects('Submission');
-          var newObjects = newRealm.objects('Submission');
-
-          // loop through all objects and set the name property in the new schema
-          for (var i = 0; i < oldObjects.length; i++) {
-            newObjects[i].date = moment().format();
-          }
-        }
-      }
+      schema: [CoordinateSchema, SubmissionSchema]
     })
 
     realm.write(() => {

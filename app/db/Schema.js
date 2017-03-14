@@ -8,6 +8,7 @@ export const CoordinateSchema = {
   properties: {
     latitude : {type: 'double', default: 0},
     longitude: {type: 'double', default: 0},
+    accuracy : {type: 'int', default: 0}
   }
 }
 
