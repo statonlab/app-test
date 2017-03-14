@@ -270,7 +270,8 @@ export default class FormScene extends Component {
             {!this.formProps.deadTreeDisplay ? null :
               <View style={styles.formGroup}>
                 <Text style={styles.label}>Dead Trees</Text>
-                <CustomModal>
+                <CustomModal
+                style={styles.picker}>
                   <TextInput
                     style={[styles.textField]}
                     editable={false}
