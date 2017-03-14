@@ -7,6 +7,7 @@ import {
   Text,
   AsyncStorage
 } from 'react-native'
+import MapView from 'react-native-maps'
 import {MKSpinner, MKButton, getTheme} from 'react-native-material-kit'
 import Colors from '../helpers/Colors'
 import Elevation from '../helpers/Elevation'
@@ -17,7 +18,10 @@ export default class GetLocation extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      currentPosition: 'unknown'
+      currentPosition   : 'unknown',
+      reachedMaxAccuracy: false,
+      timeConsumed      : 0,
+      done              : false
     }
   }
 
@@ -26,33 +30,61 @@ export default class GetLocation extends Component {
   }
 
   updateLocation() {
-    this.time = setTimeout(() => {
-      let done = false;
+    this.timeoutHolder = setTimeout(() => {
       navigator.geolocation.getCurrentPosition(
-        (position) => {
-          this.setState({currentPosition: position});
-          this.saveLocation(position).then(() => {
-            console.log('Saved location', position)
-          })
-          if (position.coords.accuracy <= 50) {
-            done = true;
-            clearTimeout(this.time)
-          }
-        },
+        this.setLocation.bind(this),
         (error) => console.log(JSON.stringify(error)),
-        {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+        {
+          enableHighAccuracy: true,
+          timeout           : 20000,
+          maximumAge        : 1000
+        }
       )
 
-      if(done) {
-        return
-      }
-
-      this.updateLocation()
+      if (!this.state.done) this.updateLocation()
     }, 500)
   }
 
+  setLocation(position) {
+    this.latitude  = position.coords.latitude
+    this.longitude = position.coords.longitude
+
+    this.setState({
+      currentPosition: position,
+      timeConsumed   : this.state.timeConsumed + 500
+    })
+
+    this.saveLocation(position).then(() => {
+      console.log('Saved location', position)
+    })
+
+    // If accuracy reaches 10 meters, we are done
+    if (position.coords.accuracy <= 10) {
+      this.setState({
+        reachedMaxAccuracy: true,
+        done              : true
+      })
+    }
+
+    // If 1 minute passes, accept location no matter the accuracy
+    if ((this.state.timeConsumed / 1000) >= 60) {
+      this.setState({done: true})
+    }
+  }
+
+
   async saveLocation(position) {
     await AsyncStorage.mergeItem('@WildType:formData', JSON.stringify({location: position.coords}))
+  }
+
+  accept = () => {
+    clearTimeout(this.timeoutHolder)
+    this.props.accept()
+  }
+
+  cancel = () => {
+    clearTimeout(this.timeoutHolder)
+    this.props.cancel()
   }
 
   render() {
@@ -60,27 +92,66 @@ export default class GetLocation extends Component {
       <View {...this.props} style={styles.container}>
         <View style={styles.card}>
           <View style={styles.cardBody}>
-            <View style={{alignItems: 'center', marginTop: 10, marginBottom: 20}}>
+            {!this.state.done &&
+            <View style={[styles.cardMap, {justifyContent: 'center', alignItems: 'center'}]}>
               <MKSpinner prgress={.5} buffer={.5}></MKSpinner>
             </View>
-            <Text style={styles.text}>Attempting to enhance accuracy</Text>
-            <Text style={[styles.text, {fontSize: 14}]}>This may take up to 2 minutes</Text>
-            <Text style={[styles.text, {fontWeight: 'bold'}]}>{typeof this.state.currentPosition == 'object' && this.state.currentPosition.coords.accuracy} meters</Text>
+            }
+
+            {this.state.done &&
+            <MapView
+              style={styles.cardMap}
+              region={{
+               latitude: this.latitude,
+               longitude: this.longitude,
+               latitudeDelta : 0.0222,
+               longitudeDelta: 0.0221
+            }}>
+              <MapView.Marker
+                flat={true}
+                coordinate={{
+                 latitude: this.latitude,
+                 longitude: this.longitude
+              }}/>
+            </MapView>
+            }
+          </View>
+        </View>
+
+
+        <View style={styles.card}>
+          <View style={[styles.cardBody, {paddingVertical: 10}]}>
+            {!this.state.done &&
+            <View>
+              <Text style={styles.text}>Attempting to Enhance Accuracy</Text>
+              <Text style={[styles.text, {fontSize: 14}]}>This may take up to 1 minute</Text>
+              <Text style={[styles.text, {fontWeight: 'bold'}]}>
+                {typeof this.state.currentPosition == 'object' ? this.state.currentPosition.coords.accuracy : '-1'} meters
+              </Text>
+            </View>
+            }
+
+            {this.state.done &&
+            <View>
+              <Text style={[styles.text, {fontWeight: 'bold'}]}>Location Acquired</Text>
+              <Text style={[styles.text, {fontSize: 14}]}>
+                {this.state.currentPosition.coords.latitude},{this.state.currentPosition.coords.longitude}
+              </Text>
+              <Text style={[styles.text, {fontSize: 14, fontWeight: 'bold'}]}>
+                Accuracy of {this.state.currentPosition.coords.accuracy} meters
+              </Text>
+            </View>
+            }
+
             <View style={styles.row}>
               <MKButton
                 style={styles.button}
-                onPress={() => {
-                  clearTimeout(this.time)
-                  this.props.accept()
-                }}>
+                onPress={this.accept}>
                 <Text style={styles.buttonText}>Accept Location</Text>
               </MKButton>
               <MKButton
                 style={[styles.button, {backgroundColor: "#eee"}]}
-                onPress={() => {
-                  clearTimeout(this.time)
-                  this.props.cancel()
-                }}>
+                onPress={this.cancel}>
                 <Text style={[styles.buttonText, {color: "#666"}]}>Cancel</Text>
               </MKButton>
             </View>
@@ -130,6 +201,11 @@ const styles = StyleSheet.create({
     borderRadius   : 3,
     backgroundColor: '#fff',
   },
+  cardMap   : {
+    height         : 200,
+    borderRadius   : 3,
+    backgroundColor: '#fff',
+  },
   cardTitle : {
     ...theme.cardTitleStyle,
     fontSize: 14,
@@ -140,7 +216,7 @@ const styles = StyleSheet.create({
     left    : 0
   },
   cardBody  : {
-    padding: 10
+    padding: 5
   },
   text      : {
     textAlign   : 'center',

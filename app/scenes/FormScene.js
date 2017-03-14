@@ -217,8 +217,7 @@ export default class FormScene extends Component {
             <View style={styles.formGroup}>
               <Text style={styles.label}>Location</Text>
               <MKButton style={styles.buttonLink} onPress={() => this.props.navigator.push({
-                label: 'CaptureLocationScene',
-                transition: 'VerticalUpSwipeJump'
+                label: 'CaptureLocationScene'
               })}>
                 <Text style={[styles.buttonLinkText, {color: this.state.location.latitude === 0 ? '#aaa' : '#444'}]}>
                   {this.state.location.latitude === 0 ? 'Enter location' : `${this.state.location.latitude},${this.state.location.longitude}`}
