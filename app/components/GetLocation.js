@@ -69,7 +69,13 @@ export default class GetLocation extends Component {
   }
 
   async saveLocation(position) {
-    await AsyncStorage.mergeItem('@WildType:formData', JSON.stringify({location: position.coords}))
+    await AsyncStorage.mergeItem('@WildType:formData', JSON.stringify({
+      location: {
+        longitude: position.coords.longitude,
+        latitude : position.coords.latitude,
+        accuracy : position.coords.accuracy
+      }
+    }))
   }
 
   accept = () => {
