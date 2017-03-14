@@ -54,10 +54,6 @@ export default class GetLocation extends Component {
       timeConsumed   : this.state.timeConsumed + 500
     })
 
-    this.saveLocation(position).then(() => {
-      console.log('Saved location', position)
-    })
-
     // If accuracy reaches 10 meters, we are done
     if (position.coords.accuracy <= 10) {
       this.setState({
@@ -79,7 +75,7 @@ export default class GetLocation extends Component {
 
   accept = () => {
     clearTimeout(this.timeoutHolder)
-    this.props.accept()
+    this.saveLocation(this.state.currentPosition).then(this.props.accept)
   }
 
   cancel = () => {
