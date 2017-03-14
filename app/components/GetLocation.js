@@ -68,7 +68,6 @@ export default class GetLocation extends Component {
     }
   }
 
-
   async saveLocation(position) {
     await AsyncStorage.mergeItem('@WildType:formData', JSON.stringify({location: position.coords}))
   }
