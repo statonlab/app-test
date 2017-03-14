@@ -27,27 +27,24 @@ export default class MapScene extends Component {
     let submissions = realm.objects('Submission')
     let markers     = []
 
+    console.log(`Length: ${submissions.length}`)
+
     if (submissions.length < 1) {
       Alert.alert('No submissions found')
       return
     }
 
-    markers.push({
-      title      : submissions[0].name,
-      description: 'Some description that we have to figure out',
-      coord      : submissions[0].location
+    submissions.map((submission, index) => {
+      markers.push({
+        title      : submission.name,
+        image      : submission.image,
+        description: 'What should we put here?',
+        coord      : {
+          longitude: submission.location.longitude,
+          latitude : submission.location.latitude
+        }
+      })
     })
-
-    /*submissions.map((submission, index) => {
-     markers.push({
-     title      : submission.name,
-     description: 'Some description that we have to figure out',
-     coord      : {
-     longitude: submission.location.longitude,
-     latitude : submission.location.latitude
-     }
-     })
-     })*/
 
     return <MarkersMap markers={markers}/>
   }

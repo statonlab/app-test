@@ -55,9 +55,9 @@ const deadTrees = {
   ]
 }
 
-const TreeHeightIndex = t.enums.of(['0-10 feet', '11-50 feet', '51-100 feet', '>100 feet'], "height")
-const TreeStandIndex  = t.enums.of(["1-10", "11-50", "51+"], "stand")
-const DeadTreesIndex  = t.enums.of(['', 'none', '1-50', '51+'], "dead")
+const TreeHeightIndex = t.enums.of(['0-10 feet', '11-50 feet', '51-100 feet', '>100 feet'], 'height')
+const TreeStandIndex  = t.enums.of(['1-10', '11-50', '51+'], 'stand')
+const DeadTreesIndex  = t.enums.of(['', 'none', '1-50', '51+'], 'dead')
 const Coordinate      = t.refinement(t.Number, (n) => n != 0, 'Coordinate')
 const ImageString     = t.refinement(t.String, (string) => string != '', 'ImageString')
 const Location        = t.dict(t.String, Coordinate)
@@ -170,12 +170,13 @@ export default class FormScene extends Component {
   notifyIncomplete = (validationAttempt) => {
     let missingFields = {}
     let message       = "Please supply a value for the following required fields: \n"
-    console.log(validationAttempt)
+
     for (let errorIndex in validationAttempt.errors) {
       let errorPath            = validationAttempt.errors[errorIndex].path[0]
       missingFields[errorPath] = true
       message                  = message + errorPath + " \n"
     }
+
     Alert.alert(message)
   }
 
@@ -195,10 +196,8 @@ export default class FormScene extends Component {
               <Text style={styles.label}>Photo</Text>
               <MKButton
                 style={[styles.buttonLink, {height: this.state.image !== '' ? 60 : 40, justifyContent: 'center'}]}
-                onPress={() => this.props.navigator.push({
-                label: 'CameraScene',
-                transition: 'VerticalUpSwipeJump'
-              })}>
+                onPress={() => this.props.navigator.push({label: 'CameraScene'})}
+              >
                 {this.state.image === '' ?
                   <Text style={[styles.buttonLinkText, {color: '#aaa'}]}>
                     Add Photo
