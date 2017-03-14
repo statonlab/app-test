@@ -202,17 +202,27 @@ export default class FormScene extends Component {
         <Header title={this.state.title} navigator={this.props.navigator}/>
         <ScrollView>
           <View style={styles.card}>
+
             <View style={[styles.formGroup]}>
               <Text style={styles.label}>Photo</Text>
-              <MKButton style={styles.buttonLink} onPress={() => this.props.navigator.push({
+              <MKButton
+                style={[styles.buttonLink, {height: this.state.image !== '' ? 60 : 40, justifyContent: 'center'}]}
+                onPress={() => this.props.navigator.push({
                 label: 'CameraScene',
                 transition: 'VerticalUpSwipeJump'
               })}>
-                <Text style={[styles.buttonLinkText, {color: this.state.location.latitude === 0 ? '#aaa' : '#444'}]}>
-                  {this.state.image === '' ? 'Add Photo' : this.state.image.substr(-20)}
-                </Text>
+                {this.state.image === '' ?
+                  <Text style={[styles.buttonLinkText, {color: '#aaa'}]}>
+                    Add Photo
+                  </Text>
+                  :
+                  <View style={{flex: 1, alignItems: 'center', flexDirection: 'row'}}>
+                    <Text style={[styles.buttonLinkText, {flex: 1, color: '#aaa'}]}>Change Photo</Text>
+                    <Image source={{url: this.state.image}} style={{flex: 0, height: 60, width: 60}}/>
+                  </View>
+                }
               </MKButton>
-              <Icon name="camera" style={styles.icon}/>
+              {this.state.image === '' && <Icon name="camera" style={styles.icon}/>}
             </View>
 
             <View style={styles.formGroup}>
