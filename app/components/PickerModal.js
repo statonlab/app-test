@@ -163,7 +163,6 @@ const styles = StyleSheet.create({
   modalChoices      : {
     backgroundColor: '#dedede',
     ...elevationStyle,
-
     ...theme.cardStyle,
     flex           : 0,
     flexDirection  : 'column',
