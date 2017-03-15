@@ -83,7 +83,7 @@ componentDidMount () {
               </View>
 
 
-              <ScrollView style = {styles.modalChoices}>
+              <ScrollView contentContainerStyle = {styles.modalChoices}>
                 {this.props.choices.map((choice, index) => {
                   return (
                     <TouchableHighlight
