@@ -38,13 +38,24 @@ const plants = [
 
 const sidebarLinks = [
   {
-    title: 'Map',
-    label: 'MapScene'
+    icon : 'account-key',
+    title: 'Login',
+    label: 'AboutScene'
   }, {
-    title: 'Camera',
-    label: 'CameraScene'
+    icon : 'account-card-details',
+    title: 'About Us',
+    label: 'AboutScene'
   }, {
-    title: 'Form',
+    icon : 'sign-caution',
+    title: 'Health and Safety',
+    label: 'HealthSafetyScene'
+  }, {
+    icon : 'lock',
+    title: 'Privacy Policy',
+    label: 'PrivacyPolicyScene'
+  }, {
+    icon : 'logout-variant',
+    title: 'Logout',
     label: 'FormScene'
   }
 ]

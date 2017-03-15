@@ -6,10 +6,10 @@ import {
   Text,
   StyleSheet,
   Platform,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
+  DeviceEventEmitter
 } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
 import {MKRipple} from 'react-native-material-kit'
 
@@ -29,12 +29,12 @@ export default class Sidebar extends Component {
         this.refs['container'].setNativeProps({
           style: {width: 0}
         })
-      }, 500)
+      }, 200)
       Animated.timing(
         this.state.position,
         {
-          toValue: -250,
-          duration: 500
+          toValue : -250,
+          duration: 200
         }
       ).start();
     }
@@ -45,8 +45,8 @@ export default class Sidebar extends Component {
       Animated.timing(
         this.state.position,
         {
-          toValue: 0,
-          duration: 500
+          toValue : 0,
+          duration: 200
         }
       ).start();
     }
@@ -57,23 +57,26 @@ export default class Sidebar extends Component {
   render() {
     return (
       <View ref="container" style={style.container}>
-        <Animated.ScrollView style={[style.sidebar, {left: this.state.position}]} ref="sidebar">
-          {this.props.routes.map((route, index) => {
-            return (
-              <TouchableWithoutFeedback
-                key={index}
-                onPress={() => {this.goTo.call(this, route)}}>
-                <MKRipple
-                  style={style.touchable}
-                  rippleColor={"rgba(0,0,0,0.1)"}>
-                  <Text style={style.text}>
-                    {route.title}
-                  </Text>
-                </MKRipple>
-              </TouchableWithoutFeedback>
-            )
-          })}
-        </Animated.ScrollView>
+        <TouchableWithoutFeedback onPress={this.toggleMenu.bind(this)}>
+          <Animated.ScrollView style={[style.sidebar, {left: this.state.position}]} ref="sidebar">
+            {this.props.routes.map((route, index) => {
+              return (
+                <TouchableWithoutFeedback
+                  key={index}
+                  onPress={() => {this.goTo.call(this, route)}}>
+                  <MKRipple
+                    style={style.touchable}
+                    rippleColor={"rgba(0,0,0,0.1)"}>
+                    <Icon name={route.icon} size={16} style={style.icon}/>
+                    <Text style={style.text}>
+                      {route.title}
+                    </Text>
+                  </MKRipple>
+                </TouchableWithoutFeedback>
+              )
+            })}
+          </Animated.ScrollView>
+        </TouchableWithoutFeedback>
       </View>
     )
   }
@@ -108,7 +111,8 @@ const style = StyleSheet.create({
     zIndex         : 1000,
     backgroundColor: 'rgba(0,0,0,0.3)'
   },
-  sidebar  : {
+
+  sidebar: {
     flex           : 0,
     elevation      : 5,
     backgroundColor: Colors.sidebarBackground,
@@ -118,19 +122,33 @@ const style = StyleSheet.create({
     bottom         : 0,
     width          : 250
   },
-  text     : {
+
+  text: {
     color            : Colors.sidebarText,
-    fontWeight       : "bold",
-    paddingVertical  : 15,
-    paddingHorizontal: 20,
+    fontWeight       : '500',
+    paddingVertical  : 12,
+    paddingHorizontal: 10,
     width            : 250
   },
-  right    : {
+
+  icon: {
+    color          : Colors.sidebarText,
+    paddingVertical: 12,
+    paddingLeft    : 30,
+    color          : Colors.primary
+  },
+
+  right: {
     textAlign: 'right'
   },
+
   touchable: {
+    borderTopWidth   : 1,
+    borderTopColor   : '#f6f6f6',
     borderBottomWidth: 1,
     borderBottomColor: '#d9d9d9',
-    borderStyle      : 'solid'
+    borderStyle      : 'solid',
+    flexDirection    : 'row',
+    justifyContent   : 'center'
   }
 })
