@@ -2,6 +2,10 @@ import {Platform} from 'react-native'
 
 export default class Elevation {
   constructor(level) {
+    if(level === 0) {
+      return {}
+    }
+
     if(level > 5 || level < 1) {
       throw new Error("Elevation level must be between 1 and 5")
     }
