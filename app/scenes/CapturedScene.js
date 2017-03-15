@@ -2,7 +2,6 @@ import React, {Component, PropTypes} from 'react'
 import {
   View,
   StyleSheet,
-  Dimensions,
   Text,
   Image,
   TouchableOpacity,
@@ -41,6 +40,7 @@ export default class CapturedScene extends Component {
   _use = () => {
     this._setFormImage().then(() => {
       DeviceEventEmitter.emit('FormStateChanged')
+      // Go back to the form
       this.props.navigator.popN(2)
     })
   }

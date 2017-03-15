@@ -1,16 +1,13 @@
 import React, {Component, PropTypes} from 'react'
 import {
   View,
-  Navigator,
   Image,
-  Dimensions,
   StyleSheet,
   Text,
   ScrollView
 } from 'react-native'
 import {getTheme} from 'react-native-material-kit'
 import Header from '../components/Header'
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
 import {
@@ -96,7 +93,6 @@ export default class TreeDescriptionScene extends Component {
       </View>
     )
   }
-
 }
 
 TreeDescriptionScene.propTypes = {
