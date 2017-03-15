@@ -31,28 +31,25 @@ const theme = getTheme()
 let index        = 1
 const treeHeight = {
   selectChoices: [
-    {key: index++, label: '0-10 feet'},
-    {key: index++, label: '11-50 feet'},
-    {key: index++, label: '51-100 feet'},
-    {key: index++, label: '>100 feet'}
-  ]
+   '0-10 feet', '11-50 feet', '51-100 feet', '>100 feet'
+  ],
+  description: "Please estimate the height of the tree for this observation.  Some trees are very tall."
 }
 
-index           = 1
 const treeStand = {
   selectChoices: [
-    {key: index++, label: '1-10'},
-    {key: index++, label: '11-50'},
-    {key: index++, label: '51+'}
-  ]
+   '1-10', '11-50', '51+'
+  ],
+  description: "Full description of number of trees question.  Lorem ipsum.Full description of number of trees question.  Lorem ipsum.Full description of number of trees question.  Lorem ipsum.Full description of number of trees question.  Lorem ipsum."
 }
 
 const deadTrees = {
-  selectChoices: [ 'none', '1-50', '51+']
+  selectChoices: [ 'none', '1-50', '51+'],
+  description : "Of the trees of this species in this stand, how many are dead?"
 }
 const DeadTreesIndex  = t.enums.of(deadTrees.selectChoices, "dead")
-const TreeHeightIndex = t.enums.of(['0-10 feet', '11-50 feet', '51-100 feet', '>100 feet'], "height")
-const TreeStandIndex  = t.enums.of(["1-10", "11-50", "51+"], "stand")
+const TreeHeightIndex = t.enums.of(treeHeight.selectChoices, "height")
+const TreeStandIndex  = t.enums.of(treeStand.selectChoices, "stand")
 const Coordinate =  t.refinement(t.Number, (n) => n != 0, 'Coordinate')
 const ImageString =  t.refinement(t.String, (string) => string != '', 'ImageString')
 const Location        = t.dict(t.String, Coordinate)
@@ -64,7 +61,7 @@ export default class FormScene extends Component {
     this.state = {
       treeHeight   : '',
       species      : '',
-      numberOfTrees: '',
+      treeStand: '',
       deadTrees    : '',
       comment      : '',
       image        : '',
@@ -225,10 +222,11 @@ export default class FormScene extends Component {
             {!this.formProps.treeHeightDisplay ? null :
               <View style={styles.formGroup}>
                 <Text style={styles.label}>Tree Height</Text>
-                <ModalPicker
+                <PickerModal
                   style={styles.picker}
-                  data={treeHeight.selectChoices}
-                  onChange={(option)=>{this.setState({treeHeight:option.label})}}>
+                  header={treeHeight.description}
+                  choices={treeHeight.selectChoices}
+                  onSelect={(option)=>{this.setState({treeHeight:option})}}>
                   <TextInput
                     style={styles.textField}
                     editable={false}
@@ -236,7 +234,7 @@ export default class FormScene extends Component {
                     placeholderTextColor="#aaa"
                     value={this.state.treeHeight}
                   />
-                </ModalPicker>
+                </PickerModal>
                 {dropdownIcon}
               </View>
             }
@@ -246,15 +244,15 @@ export default class FormScene extends Component {
                 <Text style={styles.label}>Trees in Stand</Text>
                 <PickerModal
                   style={styles.picker}
-                  header="Full descripton of number of trees question"
-                  data={treeStand.selectChoices}
-                  onSelect={(option)=>{this.setState({numberOfTrees:option})}}>
+                  header={treeStand.description}
+                  choices={treeStand.selectChoices}
+                  onSelect={(option)=>{this.setState({treeStand:option})}}>
                   <TextInput
                     style={[styles.textField]}
                     editable={false}
                     placeholder="Number of Trees in Stand"
                     placeholderTextColor="#aaa"
-                    value={this.state.numberOfTrees}
+                    value={this.state.treeStand}
                     underlineColorAndroid="#fff"
                   />
                 </PickerModal>
@@ -267,10 +265,9 @@ export default class FormScene extends Component {
                 <Text style={styles.label}>Dead Trees</Text>
                 <PickerModal
                   style={styles.picker}
-                  header="Of the trees of this species in this stand, how many are dead?"
+                  header={deadTrees.description}
                   choices={deadTrees.selectChoices}
                   onSelect={(option)=>{this.setState({deadTrees:option})}}
-                  initialSelect={this.state.deadTrees}
                 >
                   <TextInput
                     style={[styles.textField]}

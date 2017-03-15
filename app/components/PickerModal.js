@@ -87,8 +87,7 @@ componentDidMount () {
               </View>
 
 
-            <View style={styles.modalChoices}>
-              <ScrollView>
+              <ScrollView style = {styles.modalChoices}>
                 {this.props.choices.map((choice, index) => {
                   return (
                     <TouchableHighlight
@@ -109,7 +108,6 @@ componentDidMount () {
                   )
                 })}
               </ScrollView>
-            </View>
             <View style={styles.modalFooter}>
               <MKButton style={styles.button} onPress={this.close}>
                 <Text style={styles.buttonText}>
@@ -141,7 +139,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#f5f5f5',
     ...elevationStyle,
-    flex           : 1,
+    flex           : 0,
     flexDirection  : 'column',
     width          : width * .9,
     borderRadius   : 2,
@@ -151,21 +149,23 @@ const styles = StyleSheet.create({
 
   headTextBox       : {
     ...elevationStyle,
-    flex: 1,
+    flex: 0,
     backgroundColor: "#ffffff",
     marginBottom         : 10,
     marginTop         : 10,
     borderRadius   : 2
   },
   headerQuestionText: {
-    flex     : 1,
+    flex     : 0,
     textAlign: 'left',
     padding: 5
   },
   modalChoices      : {
     backgroundColor: '#dedede',
+    ...elevationStyle,
+
     ...theme.cardStyle,
-    flex           : 10,
+    flex           : 0,
     flexDirection  : 'column',
     marginBottom   : 10,
     borderRadius   : 0
@@ -182,12 +182,12 @@ const styles = StyleSheet.create({
   },
 
   choiceItem: {
-    flex         : 1,
+    flex         : 0,
     flexDirection: 'row',
     alignItems : 'center'
   },
   choiceText: {
-    flex       : 1,
+    flex       : 0,
     color      : '#444',
     width      : undefined,
     textAlign  : 'left',
@@ -196,14 +196,14 @@ const styles = StyleSheet.create({
   },
   modalFooter       : {
     backgroundColor: '#dedede',
-    flex           : 1,
+    flex           : 0,
     marginTop         : 10,
     marginBottom : 10
   },
 
   button    : {
     ...(new Elevation(1)),
-    flex           : 1,
+    flex           : 0,
     borderRadius   : 2,
     backgroundColor: '#fff',
     padding        : 10,
