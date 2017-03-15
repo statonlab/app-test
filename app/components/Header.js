@@ -1,10 +1,9 @@
 import React, {Component, PropTypes} from 'react'
 import {
   View,
-  Text, TouchableHighlight,
+  Text,
+  TouchableHighlight,
   StyleSheet,
-  Alert,
-  Navigator,
   Platform
 } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'

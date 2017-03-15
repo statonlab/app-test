@@ -2,17 +2,13 @@ import React, {Component, PropTypes} from 'react'
 import {
   View,
   Text,
-  TouchableHighlight,
-  TouchableOpacity,
   ScrollView,
   Image,
   TextInput,
-  Dimensions,
   StyleSheet,
   AsyncStorage,
   Alert,
-  DeviceEventEmitter,
-  Modal
+  DeviceEventEmitter
 } from 'react-native'
 import moment from 'moment'
 import {getTheme, MKColor, MKButton} from 'react-native-material-kit'

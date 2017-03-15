@@ -3,8 +3,7 @@ import {
   View,
   StyleSheet,
   Text,
-  Image,
-  AsyncStorage
+  Image
 } from 'react-native'
 import Header from '../components/Header'
 import MapView from 'react-native-maps'
