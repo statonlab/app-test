@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#f5f5f5',
     ...elevationStyle,
-    flex           : 0,
+    flex           : 1,
     flexDirection  : 'column',
     width          : width * .9,
     borderRadius   : 2,
