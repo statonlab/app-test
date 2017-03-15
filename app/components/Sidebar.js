@@ -7,11 +7,14 @@ import {
   StyleSheet,
   Platform,
   TouchableWithoutFeedback,
-  DeviceEventEmitter
+  TouchableOpacity,
+  DeviceEventEmitter,
+  PanResponder
 } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import Colors from '../helpers/Colors'
 import {MKRipple} from 'react-native-material-kit'
+import Elevation from '../helpers/Elevation'
 
 export default class Sidebar extends Component {
   constructor(props) {
@@ -36,7 +39,7 @@ export default class Sidebar extends Component {
           toValue : -250,
           duration: 200
         }
-      ).start();
+      ).start()
     }
     else {
       this.refs['container'].setNativeProps({
@@ -48,35 +51,42 @@ export default class Sidebar extends Component {
           toValue : 0,
           duration: 200
         }
-      ).start();
+      ).start()
     }
 
     this.setState({open: !this.state.open})
+
+    this.broadcast()
   }
 
   render() {
     return (
       <View ref="container" style={style.container}>
-        <TouchableWithoutFeedback onPress={this.toggleMenu.bind(this)}>
-          <Animated.ScrollView style={[style.sidebar, {left: this.state.position}]} ref="sidebar">
-            {this.props.routes.map((route, index) => {
-              return (
-                <TouchableWithoutFeedback
-                  key={index}
-                  onPress={() => {this.goTo.call(this, route)}}>
-                  <MKRipple
-                    style={style.touchable}
-                    rippleColor={"rgba(0,0,0,0.1)"}>
-                    <Icon name={route.icon} size={16} style={style.icon}/>
-                    <Text style={style.text}>
-                      {route.title}
-                    </Text>
-                  </MKRipple>
-                </TouchableWithoutFeedback>
-              )
-            })}
-          </Animated.ScrollView>
-        </TouchableWithoutFeedback>
+        <TouchableOpacity onPress={this.toggleMenu.bind(this)} style={{
+             flex: 1,
+             backgroundColor: 'transparent',
+             width: undefined,
+             zIndex: 800
+        }} activeOpacity={1}>
+        </TouchableOpacity>
+        <Animated.ScrollView style={[style.sidebar, {left: this.state.position}]} ref="sidebar">
+          {this.props.routes.map((route, index) => {
+            return (
+              <TouchableWithoutFeedback
+                key={index}
+                onPress={() => {this.goTo.call(this, route)}}>
+                <MKRipple
+                  style={style.touchable}
+                  rippleColor={"rgba(0,0,0,0.1)"}>
+                  <Icon name={route.icon} size={16} style={style.icon}/>
+                  <Text style={style.text}>
+                    {route.title}
+                  </Text>
+                </MKRipple>
+              </TouchableWithoutFeedback>
+            )
+          })}
+        </Animated.ScrollView>
       </View>
     )
   }
@@ -84,6 +94,10 @@ export default class Sidebar extends Component {
   goTo(route) {
     this.toggleMenu()
     this.props.navigator.push(route)
+  }
+
+  broadcast() {
+    DeviceEventEmitter.emit('sidebarToggled')
   }
 }
 
@@ -94,9 +108,9 @@ Sidebar.propTypes = {
 
 function getVerticalMargin() {
   if (Platform.OS == 'android')
-    return 54;
+    return 54
   else
-    return 70.5;
+    return 70.5
 }
 
 const style = StyleSheet.create({
@@ -108,11 +122,12 @@ const style = StyleSheet.create({
     right          : 0,
     top            : getVerticalMargin(),
     bottom         : 0,
-    zIndex         : 1000,
+    zIndex         : 900,
     backgroundColor: 'rgba(0,0,0,0.3)'
   },
 
   sidebar: {
+    ...(new Elevation(5)),
     flex           : 0,
     elevation      : 5,
     backgroundColor: Colors.sidebarBackground,
@@ -128,13 +143,13 @@ const style = StyleSheet.create({
     fontWeight       : '500',
     paddingVertical  : 12,
     paddingHorizontal: 10,
-    width            : 250
+    width            : undefined
   },
 
   icon: {
     color          : Colors.sidebarText,
     paddingVertical: 12,
-    paddingLeft    : 30,
+    paddingLeft    : 10,
     color          : Colors.primary
   },
 
@@ -143,12 +158,13 @@ const style = StyleSheet.create({
   },
 
   touchable: {
+    flex             : 0,
     borderTopWidth   : 1,
     borderTopColor   : '#f6f6f6',
     borderBottomWidth: 1,
     borderBottomColor: '#d9d9d9',
     borderStyle      : 'solid',
     flexDirection    : 'row',
-    justifyContent   : 'center'
+    justifyContent   : 'flex-start'
   }
 })

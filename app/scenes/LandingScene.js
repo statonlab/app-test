@@ -56,7 +56,7 @@ const sidebarLinks = [
   }, {
     icon : 'logout-variant',
     title: 'Logout',
-    label: 'FormScene'
+    label: 'PrivacyPolicyScene'
   }
 ]
 
@@ -69,7 +69,8 @@ export default class LandingScene extends Component {
           title={this.props.title}
           navigator={this.props.navigator}
           initial={true}
-          onMenuPress={this.toggleMenu.bind(this)}/>
+          onMenuPress={this.toggleMenu.bind(this)}
+        sidebar={this.refs.sidebar}/>
         <Sidebar
           ref="sidebar"
           navigator={this.props.navigator}
