@@ -23,7 +23,8 @@ const propTypes = {
   choices   : PropTypes.array,
   header    : PropTypes.string,
   onSelect  : PropTypes.func,
-  style     : View.propTypes.style
+  style     : View.propTypes.style,
+  initialSelect : PropTypes.string
 };
 
 const defaultProps = {
@@ -32,6 +33,7 @@ const defaultProps = {
   onSelect  : () => {
     warning
   },
+  initialSelect : ''
 };
 
 
@@ -42,14 +44,14 @@ export default class PickerModal extends Component {
     this.state = {
       animationType: 'fade',
       modalVisible : false,
-      cancelText: "Back"
+      cancelText: "Back",
+      selected: 'Im not set!'
     };
 
   }
 
-
   onChange = (item) => {
-    this.props.onSelect(item);
+    this.props.onSelect(item); //first call the selection method passed in props
     this.setState({selected: item});
     this.close();
   }
@@ -64,6 +66,9 @@ export default class PickerModal extends Component {
       modalVisible: false
     });
   }
+componentDidMount () {
+    this.setState({selected: this.props.initialSelect})
+}
 
 
   render() {
@@ -93,10 +98,9 @@ export default class PickerModal extends Component {
                       onPress={() => {
                     this.onChange(choice)
                   }}
-                      underlayColor="#fff">
+                     >
                       <View style={styles.choiceItem}>
-                        {/*{this.state.selected == this.choice ?  {checkedBox} : {uncheckedBox}  }*/}
-                        {checkedBox}
+                        {this.state.selected == choice ?  checkedBox : uncheckedBox  }
                         <Text style={styles.choiceText}>
                           {choice}
                         </Text>
@@ -134,7 +138,6 @@ const {height, width} = Dimensions.get('window');
 
 const elevationStyle = new Elevation(2)
 
-
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#f5f5f5',
@@ -146,18 +149,6 @@ const styles = StyleSheet.create({
     padding        : 20,
     margin         : 20,
   },
-
-  modalChoices      : {
-    backgroundColor: '#dedede',
-    ...theme.cardStyle,
-    flex           : 10,
-    flexDirection  : 'column',
-    marginBottom   : 10,
-    borderRadius   : 0
-  },
-  choice            : {
-    flex: 1
-  },
   modalHead         : {
     ...elevationStyle,
     flex           : 3,
@@ -166,10 +157,6 @@ const styles = StyleSheet.create({
     borderRadius   : 2,
     backgroundColor: Colors.primary,
   },
-  headerQuestionText: {
-    flex     : 1,
-    textAlign: 'left'
-  },
   headTextBox       : {
     ...elevationStyle,
     flex           : 1,
@@ -177,10 +164,17 @@ const styles = StyleSheet.create({
     margin         : 10,
     borderRadius   : 1
   },
-  modalFooter       : {
+  headerQuestionText: {
+    flex     : 1,
+    textAlign: 'left'
+  },
+  modalChoices      : {
     backgroundColor: '#dedede',
-    flex           : 1,
-    margin         : 10
+    ...theme.cardStyle,
+    flex           : 10,
+    flexDirection  : 'column',
+    marginBottom   : 10,
+    borderRadius   : 0
   },
 
   choiceContainer: {
@@ -193,24 +187,25 @@ const styles = StyleSheet.create({
     height           : undefined,
   },
 
+  choiceItem: {
+    flex         : 1,
+    flexDirection: 'row',
+    alignItems : 'center'
+  },
   choiceText: {
     flex       : 1,
     color      : '#444',
     width      : undefined,
-    marginTop  : 10,
     textAlign  : 'left',
-    paddingLeft: 15
+    paddingLeft: 15,
+    fontWeight: 'bold'
+  },
+  modalFooter       : {
+    backgroundColor: '#dedede',
+    flex           : 1,
+    margin         : 10
   },
 
-  choiceItem: {
-    flex         : 1,
-    flexDirection: 'row'
-  },
-  icon      : {
-    width   : 20,
-    fontSize: 10,
-    color   : '#aaa'
-  },
   button    : {
     ...(new Elevation(1)),
     flex           : 1,
@@ -221,8 +216,12 @@ const styles = StyleSheet.create({
   buttonText: {
     textAlign: 'center',
     color    : '#666'
-  }
-
+  },
+  icon      : {
+    width   : 20,
+    fontSize: 10,
+    color   : '#aaa'
+  },
 });
 
 const uncheckedBox = (<Icon name="checkbox-blank-outline" style={styles.icon}/>)

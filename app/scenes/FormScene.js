@@ -244,10 +244,11 @@ export default class FormScene extends Component {
             {!this.formProps.numberOfTreesDisplay ? null :
               <View style={styles.formGroup}>
                 <Text style={styles.label}>Trees in Stand</Text>
-                <ModalPicker
+                <PickerModal
                   style={styles.picker}
+                  header="Full descripton of number of trees question"
                   data={treeStand.selectChoices}
-                  onChange={(option)=>{this.setState({numberOfTrees:option.label})}}>
+                  onSelect={(option)=>{this.setState({numberOfTrees:option})}}>
                   <TextInput
                     style={[styles.textField]}
                     editable={false}
@@ -256,7 +257,7 @@ export default class FormScene extends Component {
                     value={this.state.numberOfTrees}
                     underlineColorAndroid="#fff"
                   />
-                </ModalPicker>
+                </PickerModal>
                 {dropdownIcon}
               </View>
             }
@@ -268,7 +269,9 @@ export default class FormScene extends Component {
                   style={styles.picker}
                   header="Of the trees of this species in this stand, how many are dead?"
                   choices={deadTrees.selectChoices}
-                  onSelect={(option)=>{this.setState({deadTrees:option})}}>
+                  onSelect={(option)=>{this.setState({deadTrees:option})}}
+                  initialSelect={this.state.deadTrees}
+                >
                   <TextInput
                     style={[styles.textField]}
                     editable={false}
