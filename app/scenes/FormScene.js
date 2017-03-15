@@ -58,7 +58,7 @@ export default class FormScene extends Component {
     this.state = {
       treeHeight   : '',
       species      : '',
-      treeStand: '',
+      numberOfTrees: '',
       deadTrees    : '',
       comment      : '',
       image        : '',
@@ -245,13 +245,13 @@ export default class FormScene extends Component {
                   style={styles.picker}
                   header={treeStand.description}
                   choices={treeStand.selectChoices}
-                  onSelect={(option)=>{this.setState({treeStand:option})}}>
+                  onSelect={(option)=>{this.setState({numberOfTrees:option})}}>
                   <TextInput
                     style={[styles.textField]}
                     editable={false}
                     placeholder="Number of Trees in Stand"
                     placeholderTextColor="#aaa"
-                    value={this.state.treeStand}
+                    value={this.state.numberOfTrees}
                     underlineColorAndroid="#fff"
                   />
                 </PickerModal>
