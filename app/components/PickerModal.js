@@ -28,7 +28,6 @@ const defaultProps = {
   choices   : ['choice 1', 'choice 2'],
   header    : 'default header',
   onSelect  : () => {
-    warning
   },
   initialSelect : ''
 };
