@@ -69,11 +69,14 @@ componentDidMount () {
 
   render() {
     return (
+
       <View style={this.props.style}>
         <Modal transparent={true}
           visible={this.state.modalVisible}
           onRequestClose={this.close}
           animationType={this.state.animationType}>
+          <View style = {styles.dimBox}>
+
           <View style={styles.container}>
 
               <View style={styles.headTextBox}>
@@ -112,6 +115,7 @@ componentDidMount () {
               </MKButton>
             </View>
           </View>
+          </View>
         </Modal>
 
         <TouchableOpacity onPress={this.open}>
@@ -131,6 +135,11 @@ PickerModal.defaultProps = defaultProps;
 const elevationStyle = new Elevation(2)
 
 const styles = StyleSheet.create({
+
+  dimBox: {
+      backgroundColor: Colors.transparentDark,
+    flex: 1
+  },
   container: {
     backgroundColor: '#f5f5f5',
     ...elevationStyle,
