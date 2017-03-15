@@ -4,10 +4,7 @@ import {
   Text,
   TouchableHighlight,
   StyleSheet,
-  Navigator,
-  Platform,
   Modal,
-  Dimensions,
   ScrollView,
   TouchableOpacity,
   Button
@@ -131,7 +128,6 @@ PickerModal.propTypes    = propTypes;
 PickerModal.defaultProps = defaultProps;
 
 
-const {height, width} = Dimensions.get('window');
 
 const elevationStyle = new Elevation(2)
 
@@ -141,10 +137,10 @@ const styles = StyleSheet.create({
     ...elevationStyle,
     flex           : 1,
     flexDirection  : 'column',
-    width          : width * .9,
     borderRadius   : 2,
     padding        : 20,
-    margin         : 20,
+    margin        : 20,
+
   },
 
   headTextBox       : {
