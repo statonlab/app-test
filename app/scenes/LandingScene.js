@@ -40,7 +40,7 @@ const sidebarLinks = [
   {
     icon : 'account-key',
     title: 'Login',
-    label: 'AboutScene'
+    label: 'LoginScene'
   }, {
     icon : 'account-card-details',
     title: 'About Us',
@@ -115,7 +115,6 @@ LandingScene.propTypes = {
 }
 
 const elevationStyle = new Elevation(2)
-const iconElevation  = new Elevation(2)
 
 const styles = StyleSheet.create({
   container      : {
