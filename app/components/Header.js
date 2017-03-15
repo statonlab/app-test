@@ -4,7 +4,8 @@ import {
   Text,
   TouchableHighlight,
   StyleSheet,
-  Platform
+  Platform,
+  DeviceEventEmitter
 } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import Elevation from '../helpers/Elevation'
@@ -17,6 +18,16 @@ export default class Header extends Component {
     this.state = {
       menuIcon: 'menu'
     }
+  }
+
+  componentWillMount() {
+    this.listener = DeviceEventEmitter.addListener('sidebarToggled', () => {
+      this.setState({menuIcon: this.state.menuIcon == 'menu' ? 'backburger' : 'menu'})
+    })
+  }
+
+  componentWillUnmount() {
+    this.listener.remove()
   }
 
   back = () => {
@@ -70,16 +81,6 @@ export default class Header extends Component {
 
   onMenuPress = () => {
     this.props.onMenuPress()
-
-    let icon
-
-    if (this.state.menuIcon == 'menu') {
-      icon = 'backburger'
-    } else {
-      icon = 'menu'
-    }
-
-    this.setState({menuIcon: icon})
   }
 
   render() {
@@ -104,7 +105,8 @@ Header.propTypes = {
   onMenuPress  : PropTypes.func,
   elevation    : PropTypes.number,
   showLeftIcon : PropTypes.bool,
-  showRightIcon: PropTypes.bool
+  showRightIcon: PropTypes.bool,
+  sidebar      : PropTypes.object
 }
 
 Header.defaultProps = {
