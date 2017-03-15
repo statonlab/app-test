@@ -80,13 +80,12 @@ componentDidMount () {
           animationType={this.state.animationType}>
           <View style={styles.container}>
 
-            <View style={styles.modalHead}>
               <View style={styles.headTextBox}>
                 <Text style={styles.headerQuestionText}>
                   {this.props.header}
                 </Text>
               </View>
-            </View>
+
 
             <View style={styles.modalChoices}>
               <ScrollView>
@@ -145,28 +144,23 @@ const styles = StyleSheet.create({
     flex           : 1,
     flexDirection  : 'column',
     width          : width * .9,
-    borderRadius   : 10,
+    borderRadius   : 2,
     padding        : 20,
     margin         : 20,
   },
-  modalHead         : {
-    ...elevationStyle,
-    flex           : 3,
-    marginBottom        : 10,
-    marginTop : 10,
-    borderRadius   : 2,
-    backgroundColor: Colors.primary,
-  },
+
   headTextBox       : {
     ...elevationStyle,
-    flex           : 1,
+    flex: 1,
     backgroundColor: "#ffffff",
-    margin         : 10,
-    borderRadius   : 1
+    marginBottom         : 10,
+    marginTop         : 10,
+    borderRadius   : 2
   },
   headerQuestionText: {
     flex     : 1,
-    textAlign: 'left'
+    textAlign: 'left',
+    padding: 5
   },
   modalChoices      : {
     backgroundColor: '#dedede',
@@ -203,7 +197,8 @@ const styles = StyleSheet.create({
   modalFooter       : {
     backgroundColor: '#dedede',
     flex           : 1,
-    margin         : 10
+    marginTop         : 10,
+    marginBottom : 10
   },
 
   button    : {
