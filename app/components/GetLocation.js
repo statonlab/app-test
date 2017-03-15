@@ -1,7 +1,6 @@
 import React, {Component, PropTypes} from 'react'
 import {
   StyleSheet,
-  Dimensions,
   View,
   Image,
   Text,
@@ -54,10 +53,6 @@ export default class GetLocation extends Component {
       timeConsumed   : this.state.timeConsumed + 500
     })
 
-    this.saveLocation(position).then(() => {
-      console.log('Saved location', position)
-    })
-
     // If accuracy reaches 10 meters, we are done
     if (position.coords.accuracy <= 10) {
       this.setState({
@@ -72,14 +67,19 @@ export default class GetLocation extends Component {
     }
   }
 
-
   async saveLocation(position) {
-    await AsyncStorage.mergeItem('@WildType:formData', JSON.stringify({location: position.coords}))
+    await AsyncStorage.mergeItem('@WildType:formData', JSON.stringify({
+      location: {
+        longitude: position.coords.longitude,
+        latitude : position.coords.latitude,
+        accuracy : position.coords.accuracy
+      }
+    }))
   }
 
   accept = () => {
     clearTimeout(this.timeoutHolder)
-    this.props.accept()
+    this.saveLocation(this.state.currentPosition).then(this.props.accept)
   }
 
   cancel = () => {

@@ -4,13 +4,7 @@
  */
 
 import React, {Component} from 'react'
-import {
-  AppRegistry,
-  Navigator,
-  StatusBar,
-  View,
-  StyleSheet
-} from 'react-native'
+import {AppRegistry, Navigator, StatusBar, View, StyleSheet} from 'react-native'
 import LandingScene from '../scenes/LandingScene'
 import MapScene from '../scenes/MapScene'
 import FormScene from '../scenes/FormScene'
@@ -19,6 +13,9 @@ import CapturedScene from '../scenes/CapturedScene'
 import CaptureLocationScene from '../scenes/CaptureLocationScene'
 import TreeDescriptionScene from '../scenes/TreeDescriptionScene'
 import SubmittedScene from '../scenes/SubmittedScene'
+import AboutScene from '../scenes/AboutScene'
+import PrivacyPolicyScene from '../scenes/PrivacyPolicyScene'
+import HealthSafetyScene from '../scenes/HealthSafetyScene'
 
 const initialRouteStack = [
   {
@@ -33,7 +30,7 @@ export default class WildType extends Component {
     }
 
     if (route.label == 'MapScene') {
-      return <MapScene title={route.title} navigator={navigator}/>
+      return <MapScene title="Your Entries" navigator={navigator}/>
     }
 
     if (route.label == 'FormScene') {
@@ -59,16 +56,35 @@ export default class WildType extends Component {
     if (route.label == 'SubmittedScene') {
       return <SubmittedScene navigator={navigator} plant={route.plant}/>
     }
+
+    // Static Scenes
+    if (route.label == 'AboutScene') {
+      return <AboutScene navigator={navigator}/>
+    }
+    if (route.label == 'HealthSafetyScene') {
+      return <HealthSafetyScene navigator={navigator}/>
+    }
+    if (route.label == 'PrivacyPolicyScene') {
+      return <PrivacyPolicyScene navigator={navigator}/>
+    }
   }
 
   configureScene(route, routeStack) {
+    let config = Navigator.SceneConfigs.PushFromRight
     if (typeof route.transition !== 'undefined') {
       if (typeof Navigator.SceneConfigs[route.transition] !== 'undefined') {
-        return Navigator.SceneConfigs[route.transition]
+        config = Navigator.SceneConfigs[route.transition]
       }
     }
 
-    return Navigator.SceneConfigs.PushFromRight
+    if (typeof route.gestures !== 'undefined') {
+      config = {
+        ...config,
+        gestures: route.gestures
+      }
+    }
+
+    return config
   }
 
   render() {

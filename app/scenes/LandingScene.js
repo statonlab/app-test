@@ -38,14 +38,25 @@ const plants = [
 
 const sidebarLinks = [
   {
-    title: 'Map',
-    label: 'MapScene'
+    icon : 'account-key',
+    title: 'Login',
+    label: 'AboutScene'
   }, {
-    title: 'Camera',
-    label: 'CameraScene'
+    icon : 'account-card-details',
+    title: 'About Us',
+    label: 'AboutScene'
   }, {
-    title: 'Form',
-    label: 'FormScene'
+    icon : 'sign-caution',
+    title: 'Health and Safety',
+    label: 'HealthSafetyScene'
+  }, {
+    icon : 'lock',
+    title: 'Privacy Policy',
+    label: 'PrivacyPolicyScene'
+  }, {
+    icon : 'logout-variant',
+    title: 'Logout',
+    label: 'PrivacyPolicyScene'
   }
 ]
 
@@ -58,7 +69,8 @@ export default class LandingScene extends Component {
           title={this.props.title}
           navigator={this.props.navigator}
           initial={true}
-          onMenuPress={this.toggleMenu.bind(this)}/>
+          onMenuPress={this.toggleMenu.bind(this)}
+        sidebar={this.refs.sidebar}/>
         <Sidebar
           ref="sidebar"
           navigator={this.props.navigator}

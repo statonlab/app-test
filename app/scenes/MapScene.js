@@ -1,19 +1,49 @@
 import React, {Component, PropTypes} from 'react'
 import {
   View,
-  StyleSheet
+  StyleSheet,
+  Alert
 } from 'react-native'
-import GeoLocation from '../components/GeoLocation'
+import Realm from 'realm'
+import MarkersMap from '../components/MarkersMap'
 import Header from '../components/Header'
+import {SubmissionSchema, CoordinateSchema} from '../db/Schema'
 
 export default class MapScene extends Component {
   render() {
     return (
       <View style={styles.container}>
         <Header title={this.props.title} navigator={this.props.navigator}/>
-        <GeoLocation/>
+        {this.renderMap()}
       </View>
     )
+  }
+
+  renderMap() {
+    const realm = new Realm({
+      schema: [SubmissionSchema, CoordinateSchema]
+    })
+
+    let submissions = realm.objects('Submission')
+    let markers     = []
+
+    if (submissions.length < 1) {
+      Alert.alert('You have not submitted any entries. Once you do, they will show on this map.')
+    }
+
+    submissions.map((submission, index) => {
+      markers.push({
+        title      : submission.name,
+        image      : submission.image,
+        description: 'What should we put here?',
+        coord      : {
+          longitude: submission.location.longitude,
+          latitude : submission.location.latitude
+        }
+      })
+    })
+
+    return <MarkersMap markers={markers}/>
   }
 }
 
@@ -25,7 +55,7 @@ MapScene.propTypes = {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#f5f5f5',
-    flex: 1,
-    flexDirection: 'column'
+    flex           : 1,
+    flexDirection  : 'column'
   },
 });

@@ -2,17 +2,13 @@ import React, {Component, PropTypes} from 'react'
 import {
   View,
   Text,
-  TouchableHighlight,
-  TouchableOpacity,
   ScrollView,
   Image,
   TextInput,
-  Dimensions,
   StyleSheet,
   AsyncStorage,
   Alert,
-  DeviceEventEmitter,
-  Modal
+  DeviceEventEmitter
 } from 'react-native'
 import moment from 'moment'
 import {getTheme, MKColor, MKButton} from 'react-native-material-kit'
@@ -52,6 +48,7 @@ const TreeHeightIndex = t.enums.of(treeHeight.selectChoices, "height")
 const TreeStandIndex  = t.enums.of(treeStand.selectChoices, "stand")
 const Coordinate =  t.refinement(t.Number, (n) => n != 0, 'Coordinate')
 const ImageString =  t.refinement(t.String, (string) => string != '', 'ImageString')
+
 const Location        = t.dict(t.String, Coordinate)
 
 export default class FormScene extends Component {
@@ -68,7 +65,8 @@ export default class FormScene extends Component {
       title        : this.props.title,
       location     : {
         latitude : 0,
-        longitude: 0
+        longitude: 0,
+        accuracy : -1
       }
     }
 
@@ -125,22 +123,10 @@ export default class FormScene extends Component {
     }
 
     AsyncStorage.setItem('@WildType:savedForm', JSON.stringify(this.state))
+    AsyncStorage.removeItem('@WildType:formData')
 
     let realm = new Realm({
-      schema       : [CoordinateSchema, SubmissionSchema],
-      schemaVersion: 3,
-      migration    : function (oldRealm, newRealm) {
-        // only apply this change if upgrading to schemaVersion 1
-        if (oldRealm.schemaVersion < 1) {
-          var oldObjects = oldRealm.objects('Submission');
-          var newObjects = newRealm.objects('Submission');
-
-          // loop through all objects and set the name property in the new schema
-          for (var i = 0; i < oldObjects.length; i++) {
-            newObjects[i].date = moment().format();
-          }
-        }
-      }
+      schema: [CoordinateSchema, SubmissionSchema]
     })
 
     realm.write(() => {
@@ -164,7 +150,11 @@ export default class FormScene extends Component {
       })
     })
 
-    this.props.navigator.push({label: 'SubmittedScene', plant: this.state})
+    this.props.navigator.push({
+      label   : 'SubmittedScene',
+      plant   : this.state,
+      gestures: {}
+    })
   }
 
   validateState = () => {
@@ -174,12 +164,13 @@ export default class FormScene extends Component {
   notifyIncomplete = (validationAttempt) => {
     let missingFields = {}
     let message       = "Please supply a value for the following required fields: \n"
-    console.log(validationAttempt)
+
     for (let errorIndex in validationAttempt.errors) {
       let errorPath            = validationAttempt.errors[errorIndex].path[0]
       missingFields[errorPath] = true
       message                  = message + errorPath + " \n"
     }
+
     Alert.alert(message)
   }
 
@@ -194,17 +185,25 @@ export default class FormScene extends Component {
         <Header title={this.state.title} navigator={this.props.navigator}/>
         <ScrollView>
           <View style={styles.card}>
+
             <View style={[styles.formGroup]}>
               <Text style={styles.label}>Photo</Text>
-              <MKButton style={styles.buttonLink} onPress={() => this.props.navigator.push({
-                label: 'CameraScene',
-                transition: 'VerticalUpSwipeJump'
-              })}>
-                <Text style={[styles.buttonLinkText, {color: this.state.location.latitude === 0 ? '#aaa' : '#444'}]}>
-                  {this.state.image === '' ? 'Add Photo' : this.state.image.substr(-20)}
-                </Text>
+              <MKButton
+                style={[styles.buttonLink, {height: this.state.image !== '' ? 60 : 40, justifyContent: 'center'}]}
+                onPress={() => this.props.navigator.push({label: 'CameraScene'})}
+              >
+                {this.state.image === '' ?
+                  <Text style={[styles.buttonLinkText, {color: '#aaa'}]}>
+                    Add Photo
+                  </Text>
+                  :
+                  <View style={{flex: 1, alignItems: 'center', flexDirection: 'row'}}>
+                    <Text style={[styles.buttonLinkText, {flex: 1, color: '#aaa'}]}>Change Photo</Text>
+                    <Image source={{url: this.state.image}} style={{flex: 0, height: 60, width: 60}}/>
+                  </View>
+                }
               </MKButton>
-              <Icon name="camera" style={styles.icon}/>
+              {this.state.image === '' && <Icon name="camera" style={styles.icon}/>}
             </View>
 
             <View style={styles.formGroup}>

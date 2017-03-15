@@ -1,11 +1,11 @@
 import React, {Component, PropTypes} from 'react'
 import {
   View,
-  Text, TouchableHighlight,
+  Text,
+  TouchableHighlight,
   StyleSheet,
-  Alert,
-  Navigator,
-  Platform
+  Platform,
+  DeviceEventEmitter
 } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import Elevation from '../helpers/Elevation'
@@ -20,6 +20,16 @@ export default class Header extends Component {
     }
   }
 
+  componentWillMount() {
+    this.listener = DeviceEventEmitter.addListener('sidebarToggled', () => {
+      this.setState({menuIcon: this.state.menuIcon == 'menu' ? 'backburger' : 'menu'})
+    })
+  }
+
+  componentWillUnmount() {
+    this.listener.remove()
+  }
+
   back = () => {
     let routes = this.props.navigator.getCurrentRoutes()
     if (routes.length > 1) {
@@ -28,6 +38,10 @@ export default class Header extends Component {
   }
 
   getLeftIcon = () => {
+    if (!this.props.showLeftIcon) {
+      return
+    }
+
     if (this.props.initial) {
       return (
         <TouchableHighlight style={style.touchable} onPress={this.onMenuPress} underlayColor={Colors.primary}>
@@ -43,6 +57,20 @@ export default class Header extends Component {
     }
   }
 
+  getRightIcon = () => {
+    if (!this.props.showRightIcon) {
+      return
+    }
+
+    return (
+      <TouchableHighlight style={style.touchable}
+        underlayColor={Colors.primary}
+        onPress={this.navigateToMap}>
+        <Icon name="map-marker-multiple" size={23} color="#fff"/>
+      </TouchableHighlight>
+    )
+  }
+
   navigateToMap = () => {
     let routes = this.props.navigator.getCurrentRoutes()
     let route  = routes[routes.length - 1]
@@ -53,42 +81,42 @@ export default class Header extends Component {
 
   onMenuPress = () => {
     this.props.onMenuPress()
-
-    let icon
-
-    if (this.state.menuIcon == 'menu') {
-      icon = 'backburger'
-    } else {
-      icon = 'menu'
-    }
-
-    this.setState({menuIcon: icon})
   }
 
   render() {
     return (
-      <View style={style.wrapper} ref="header">
+      <View style={[style.wrapper, {...(new Elevation(this.props.elevation))}]} ref="header">
         {this.getLeftIcon()}
 
-        <View style={{flex: 1}}>
+        <View style={{height: 56, flex: 1, alignItems: this.props.showLeftIcon ? 'flex-start' : 'center'}}>
           <Text style={[style.text, style.title]}>{this.props.title}</Text>
         </View>
 
-        <TouchableHighlight style={style.touchable}
-          underlayColor={Colors.primary}
-          onPress={this.navigateToMap}>
-          <Icon name="map-marker-multiple" size={23} color="#fff"/>
-        </TouchableHighlight>
+        {this.getRightIcon()}
       </View>
     )
   }
 }
 
 Header.propTypes = {
-  title      : PropTypes.string.isRequired,
-  navigator  : PropTypes.object.isRequired,
-  initial    : PropTypes.bool,
-  onMenuPress: PropTypes.func
+  title        : PropTypes.string.isRequired,
+  navigator    : PropTypes.object.isRequired,
+  initial      : PropTypes.bool,
+  onMenuPress  : PropTypes.func,
+  elevation    : PropTypes.number,
+  showLeftIcon : PropTypes.bool,
+  showRightIcon: PropTypes.bool,
+  sidebar      : PropTypes.object
+}
+
+Header.defaultProps = {
+  initial      : false,
+  onMenuPress  : function () {
+
+  },
+  elevation    : 3,
+  showLeftIcon : true,
+  showRightIcon: true
 }
 
 function getVerticalPadding() {
@@ -98,11 +126,8 @@ function getVerticalPadding() {
     return 15;
 }
 
-const elevationStyle = new Elevation(3)
-
 const style = StyleSheet.create({
   wrapper: {
-    ...elevationStyle,
     paddingTop     : getVerticalPadding(),
     flex           : 0,
     flexDirection  : 'row',
@@ -113,7 +138,6 @@ const style = StyleSheet.create({
   },
 
   title: {
-    fontSize       : 16,
     flex           : 1,
     paddingVertical: 17
   },
