@@ -20,42 +20,35 @@ import Colors from '../helpers/Colors'
 import {CoordinateSchema, SubmissionSchema} from '../db/Schema'
 import t from 'tcomb-validation'
 import ModalPicker from 'react-native-modal-picker'
+import PickerModal from '../components/PickerModal'
 
 const theme = getTheme()
 
 let index        = 1
 const treeHeight = {
   selectChoices: [
-    {key: index++, label: '0-10 feet'},
-    {key: index++, label: '11-50 feet'},
-    {key: index++, label: '51-100 feet'},
-    {key: index++, label: '>100 feet'}
-  ]
+   '0-10 feet', '11-50 feet', '51-100 feet', '>100 feet'
+  ],
+  description: "Please estimate the height of the tree for this observation.  Some trees are very tall."
 }
 
-index           = 1
 const treeStand = {
   selectChoices: [
-    {key: index++, label: '1-10'},
-    {key: index++, label: '11-50'},
-    {key: index++, label: '51+'}
-  ]
+   '1-10', '11-50', '51+'
+  ],
+  description: "Full description of number of trees question.  Lorem ipsum.Full description of number of trees question.  Lorem ipsum.Full description of number of trees question.  Lorem ipsum.Full description of number of trees question.  Lorem ipsum."
 }
 
-index           = 1
 const deadTrees = {
-  selectChoices: [
-    {key: index++, label: 'none'},
-    {key: index++, label: '1-50'},
-    {key: index++, label: '51+'}
-  ]
+  selectChoices: [ 'none', '1-50', '51+'],
+  description : "Of the trees of this species in this stand, how many are dead?"
 }
+const DeadTreesIndex  = t.enums.of(deadTrees.selectChoices, "dead")
+const TreeHeightIndex = t.enums.of(treeHeight.selectChoices, "height")
+const TreeStandIndex  = t.enums.of(treeStand.selectChoices, "stand")
+const Coordinate =  t.refinement(t.Number, (n) => n != 0, 'Coordinate')
+const ImageString =  t.refinement(t.String, (string) => string != '', 'ImageString')
 
-const TreeHeightIndex = t.enums.of(['0-10 feet', '11-50 feet', '51-100 feet', '>100 feet'], 'height')
-const TreeStandIndex  = t.enums.of(['1-10', '11-50', '51+'], 'stand')
-const DeadTreesIndex  = t.enums.of(['', 'none', '1-50', '51+'], 'dead')
-const Coordinate      = t.refinement(t.Number, (n) => n != 0, 'Coordinate')
-const ImageString     = t.refinement(t.String, (string) => string != '', 'ImageString')
 const Location        = t.dict(t.String, Coordinate)
 
 export default class FormScene extends Component {
@@ -65,7 +58,7 @@ export default class FormScene extends Component {
     this.state = {
       treeHeight   : '',
       species      : '',
-      numberOfTrees: '',
+      treeStand: '',
       deadTrees    : '',
       comment      : '',
       image        : '',
@@ -228,10 +221,11 @@ export default class FormScene extends Component {
             {!this.formProps.treeHeightDisplay ? null :
               <View style={styles.formGroup}>
                 <Text style={styles.label}>Tree Height</Text>
-                <ModalPicker
+                <PickerModal
                   style={styles.picker}
-                  data={treeHeight.selectChoices}
-                  onChange={(option)=>{this.setState({treeHeight:option.label})}}>
+                  header={treeHeight.description}
+                  choices={treeHeight.selectChoices}
+                  onSelect={(option)=>{this.setState({treeHeight:option})}}>
                   <TextInput
                     style={styles.textField}
                     editable={false}
@@ -239,7 +233,7 @@ export default class FormScene extends Component {
                     placeholderTextColor="#aaa"
                     value={this.state.treeHeight}
                   />
-                </ModalPicker>
+                </PickerModal>
                 {dropdownIcon}
               </View>
             }
@@ -247,19 +241,20 @@ export default class FormScene extends Component {
             {!this.formProps.numberOfTreesDisplay ? null :
               <View style={styles.formGroup}>
                 <Text style={styles.label}>Trees in Stand</Text>
-                <ModalPicker
+                <PickerModal
                   style={styles.picker}
-                  data={treeStand.selectChoices}
-                  onChange={(option)=>{this.setState({numberOfTrees:option.label})}}>
+                  header={treeStand.description}
+                  choices={treeStand.selectChoices}
+                  onSelect={(option)=>{this.setState({treeStand:option})}}>
                   <TextInput
                     style={[styles.textField]}
                     editable={false}
                     placeholder="Number of Trees in Stand"
                     placeholderTextColor="#aaa"
-                    value={this.state.numberOfTrees}
+                    value={this.state.treeStand}
                     underlineColorAndroid="#fff"
                   />
-                </ModalPicker>
+                </PickerModal>
                 {dropdownIcon}
               </View>
             }
@@ -267,18 +262,21 @@ export default class FormScene extends Component {
             {!this.formProps.deadTreeDisplay ? null :
               <View style={styles.formGroup}>
                 <Text style={styles.label}>Dead Trees</Text>
-                <ModalPicker
+                <PickerModal
                   style={styles.picker}
-                  data={deadTrees.selectChoices}
-                  onChange={(option)=>{this.setState({deadTrees:option.label})}}>
+                  header={deadTrees.description}
+                  choices={deadTrees.selectChoices}
+                  onSelect={(option)=>{this.setState({deadTrees:option})}}
+                >
                   <TextInput
-                    style={styles.textField}
+                    style={[styles.textField]}
                     editable={false}
                     placeholder="Number of Dead Trees"
                     placeholderTextColor="#aaa"
                     value={this.state.deadTrees}
+                    underlineColorAndroid="#fff"
                   />
-                </ModalPicker>
+                </PickerModal>
                 {dropdownIcon}
               </View>
             }
