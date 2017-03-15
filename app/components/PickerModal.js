@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#dedede',
     ...elevationStyle,
     ...theme.cardStyle,
-    flex           : 0,
+    flex           : 1,
     flexDirection  : 'column',
     marginBottom   : 10,
     borderRadius   : 0
