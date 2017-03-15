@@ -24,7 +24,7 @@ import Colors from '../helpers/Colors'
 import {CoordinateSchema, SubmissionSchema} from '../db/Schema'
 import t from 'tcomb-validation'
 import ModalPicker from 'react-native-modal-picker'
-import CustomModal from '../components/CustomModal'
+import PickerModal from '../components/PickerModal'
 
 const theme = getTheme()
 
@@ -47,18 +47,12 @@ const treeStand = {
   ]
 }
 
-index           = 1
 const deadTrees = {
-  selectChoices: [
-    {key: index++, label: 'none'},
-    {key: index++, label: '1-50'},
-    {key: index++, label: '51+'}
-  ]
+  selectChoices: [ 'none', '1-50', '51+']
 }
-
+const DeadTreesIndex  = t.enums.of(deadTrees.selectChoices, "dead")
 const TreeHeightIndex = t.enums.of(['0-10 feet', '11-50 feet', '51-100 feet', '>100 feet'], "height")
 const TreeStandIndex  = t.enums.of(["1-10", "11-50", "51+"], "stand")
-const DeadTreesIndex  = t.enums.of(['', 'none', '1-50', '51+'], "dead")
 const Coordinate =  t.refinement(t.Number, (n) => n != 0, 'Coordinate')
 const ImageString =  t.refinement(t.String, (string) => string != '', 'ImageString')
 const Location        = t.dict(t.String, Coordinate)
@@ -270,17 +264,20 @@ export default class FormScene extends Component {
             {!this.formProps.deadTreeDisplay ? null :
               <View style={styles.formGroup}>
                 <Text style={styles.label}>Dead Trees</Text>
-                <CustomModal
-                style={styles.picker}>
+                <PickerModal
+                  style={styles.picker}
+                  header="Of the trees of this species in this stand, how many are dead?"
+                  choices={deadTrees.selectChoices}
+                  onSelect={(option)=>{this.setState({deadTrees:option})}}>
                   <TextInput
                     style={[styles.textField]}
                     editable={false}
-                    placeholder="Number of Dead Trees in Stand"
+                    placeholder="Number of Dead Trees"
                     placeholderTextColor="#aaa"
                     value={this.state.deadTrees}
                     underlineColorAndroid="#fff"
                   />
-                </CustomModal>
+                </PickerModal>
                 {dropdownIcon}
               </View>
             }
