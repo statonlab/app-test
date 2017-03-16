@@ -11,7 +11,7 @@ import {
   DeviceEventEmitter
 } from 'react-native'
 import moment from 'moment'
-import {getTheme, MKColor, MKButton} from 'react-native-material-kit'
+import {getTheme, MKButton} from 'react-native-material-kit'
 import Realm from 'realm'
 import Header from '../components/Header'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
