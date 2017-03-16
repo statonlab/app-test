@@ -160,11 +160,9 @@ export default class FormScene extends Component {
     AsyncStorage.removeItem('@WildType:formData')
   }
 
-    populateFormItem = () => {
-    return(
-      Object.keys(this.props.formProps).forEach( (key) => {
-        console.log(DCP[key].label);
-        <View style={styles.formGroup}>
+    populateFormItem = (key) => {
+        return(
+        <View style={styles.formGroup} key={key}>
           <Text style={styles.label}>{DCP[key].label}</Text>
           <PickerModal
             style={styles.picker}
@@ -181,9 +179,8 @@ export default class FormScene extends Component {
           </PickerModal>
           {dropdownIcon}
         </View>
-      })
-    )
-    }
+        )
+  }
 
 
 
@@ -227,8 +224,7 @@ export default class FormScene extends Component {
               </MKButton>
               <Icon name="map" style={styles.icon}/>
             </View>
-
-            {this.populateFormItem()}
+            {Object.keys(this.props.formProps).map(this.populateFormItem)}
 
             <View style={[styles.formGroup, {borderBottomWidth: 0, flex: 1, alignItems: 'flex-start'}]}>
               <Text style={[styles.label, {paddingTop: 5}]}>Comments</Text>
