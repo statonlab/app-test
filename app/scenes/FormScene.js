@@ -160,27 +160,33 @@ export default class FormScene extends Component {
     AsyncStorage.removeItem('@WildType:formData')
   }
 
-  populateFormItem = () => {
-    this.formProps.map((propItem, id) => {
-      <View style={styles.formGroup}>
-        <Text style={styles.label}>{DCP[propItem.id].label}</Text>
-        <PickerModal
-          style={styles.picker}
-          header={DCP[propItem.id].description}
-          choices={DCP[propItem.id].selectChoices}
-          onSelect={(option)=>{this.setState({[propItem.id]:option})}}>
-          <TextInput
-            style={styles.textField}
-            editable={false}
-            placeholder={DCP[propItem.id].placeHolder}
-            placeholderTextColor="#aaa"
-            value={this.state[propItem.id]}
-          />
-        </PickerModal>
-        {dropdownIcon}
-      </View>
-    })
-  }
+    populateFormItem = () => {
+    return(
+      Object.keys(this.props.formProps).forEach( (key) => {
+        console.log(DCP[key].label);
+        <View style={styles.formGroup}>
+          <Text style={styles.label}>{DCP[key].label}</Text>
+          <PickerModal
+            style={styles.picker}
+            header={DCP[key].description}
+            choices={DCP[key].selectChoices}
+            onSelect={(option)=>{this.setState({[key]:option})}}>
+            <TextInput
+              style={styles.textField}
+              editable={false}
+              placeholder={DCP[key].placeHolder}
+              placeholderTextColor="#aaa"
+              value={this.state[key]}
+            />
+          </PickerModal>
+          {dropdownIcon}
+        </View>
+      })
+    )
+    }
+
+
+
 
 
   render() {
