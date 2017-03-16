@@ -179,6 +179,28 @@ export default class FormScene extends Component {
     AsyncStorage.removeItem('@WildType:formData')
   }
 
+  renderTreeHeight() {
+    if(this.formProps.treeHeightDisplay) {
+      return <View style={styles.formGroup}>
+        <Text style={styles.label}>Tree Height</Text>
+        <PickerModal
+          style={styles.picker}
+          header={treeHeight.description}
+          choices={treeHeight.selectChoices}
+          onSelect={(option)=>{this.setState({treeHeight:option})}}>
+          <TextInput
+            style={styles.textField}
+            editable={false}
+            placeholder="Tree Height"
+            placeholderTextColor="#aaa"
+            value={this.state.treeHeight}
+          />
+        </PickerModal>
+        {dropdownIcon}
+      </View>
+    }
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -218,25 +240,7 @@ export default class FormScene extends Component {
               <Icon name="map" style={styles.icon}/>
             </View>
 
-            {!this.formProps.treeHeightDisplay ? null :
-              <View style={styles.formGroup}>
-                <Text style={styles.label}>Tree Height</Text>
-                <PickerModal
-                  style={styles.picker}
-                  header={treeHeight.description}
-                  choices={treeHeight.selectChoices}
-                  onSelect={(option)=>{this.setState({treeHeight:option})}}>
-                  <TextInput
-                    style={styles.textField}
-                    editable={false}
-                    placeholder="Tree Height"
-                    placeholderTextColor="#aaa"
-                    value={this.state.treeHeight}
-                  />
-                </PickerModal>
-                {dropdownIcon}
-              </View>
-            }
+            {this.renderTreeHeight()}
 
             {!this.formProps.numberOfTreesDisplay ? null :
               <View style={styles.formGroup}>
