@@ -1,11 +1,9 @@
 import React, {Component, PropTypes} from 'react'
 import {View, ScrollView, StyleSheet, TextInput, Text, Platform} from 'react-native'
-import {MKButton, getTheme} from 'react-native-material-kit'
+import {MKButton} from 'react-native-material-kit'
 import Header from '../components/Header'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
-
-const theme = getTheme()
 
 export default class LoginScene extends Component {
 
@@ -74,7 +72,7 @@ LoginScene.PropTypes = {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex           : 1,
     backgroundColor: '#f5f5f5'
   },
 
@@ -83,30 +81,30 @@ const styles = StyleSheet.create({
   },
 
   form: {
-    flex          : 1,
-    marginTop: 20,
+    flex      : 1,
+    marginTop : 20,
     alignItems: 'center'
   },
 
   title: {
-    fontSize: 20,
-    textAlign: 'center',
+    fontSize    : 20,
+    textAlign   : 'center',
     marginBottom: 20,
-    fontWeight: 'bold',
-    color: '#222'
+    fontWeight  : 'bold',
+    color       : '#222'
   },
 
   formGroup: {
     flex  : 0,
     margin: 10,
-    width: 300
+    width : 300
   },
 
   label: {
     fontWeight  : 'bold',
     fontSize    : 14,
     marginBottom: 10,
-    color: '#444'
+    color       : '#444'
   },
 
   textField: {
@@ -115,7 +113,8 @@ const styles = StyleSheet.create({
     borderColor      : '#dedede',
     borderRadius     : 2,
     paddingHorizontal: 10,
-    fontSize         : 14
+    fontSize         : 14,
+    backgroundColor  : '#f9f9f9'
   },
 
   button: {
@@ -127,9 +126,9 @@ const styles = StyleSheet.create({
   },
 
   buttonText: {
-    color: Colors.primaryText,
-    textAlign: 'center',
-    fontSize: 14,
+    color     : Colors.primaryText,
+    textAlign : 'center',
+    fontSize  : 14,
     fontWeight: 'bold'
   },
 

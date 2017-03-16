@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
   textBody: {
     color      : '#444',
     fontSize   : 14,
-    lineHeight: 16,
+    lineHeight: 20,
     marginTop: 10
   }
 })
