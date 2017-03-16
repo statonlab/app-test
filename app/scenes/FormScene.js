@@ -19,36 +19,34 @@ import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
 import {CoordinateSchema, SubmissionSchema} from '../db/Schema'
 import t from 'tcomb-validation'
-import ModalPicker from 'react-native-modal-picker'
 import PickerModal from '../components/PickerModal'
 
 const theme = getTheme()
 
-let index        = 1
 const treeHeight = {
   selectChoices: [
-   '0-10 feet', '11-50 feet', '51-100 feet', '>100 feet'
+    '0-10 feet', '11-50 feet', '51-100 feet', '>100 feet'
   ],
-  description: "Please estimate the height of the tree for this observation.  Some trees are very tall."
+  description  : "Please estimate the height of the tree for this observation.  Some trees are very tall."
 }
 
 const treeStand = {
   selectChoices: [
-   '1-10', '11-50', '51+'
+    '1-10', '11-50', '51+'
   ],
-  description: "Full description of number of trees question.  Lorem ipsum.Full description of number of trees question.  Lorem ipsum.Full description of number of trees question.  Lorem ipsum.Full description of number of trees question.  Lorem ipsum."
+  description  : "Full description of number of trees question.  Lorem ipsum.Full description of number of trees question.  Lorem ipsum.Full description of number of trees question.  Lorem ipsum.Full description of number of trees question.  Lorem ipsum."
 }
 
 const deadTrees = {
-  selectChoices: [ 'none', '1-50', '51+'],
-  description : "Of the trees of this species in this stand, how many are dead?"
+  selectChoices: ['none', '1-50', '51+'],
+  description  : "Of the trees of this species in this stand, how many are dead?"
 }
+
 const DeadTreesIndex  = t.enums.of(deadTrees.selectChoices, "dead")
 const TreeHeightIndex = t.enums.of(treeHeight.selectChoices, "height")
 const TreeStandIndex  = t.enums.of(treeStand.selectChoices, "stand")
-const Coordinate =  t.refinement(t.Number, (n) => n != 0, 'Coordinate')
-const ImageString =  t.refinement(t.String, (string) => string != '', 'ImageString')
-
+const Coordinate      = t.refinement(t.Number, (n) => n != 0, 'Coordinate')
+const ImageString     = t.refinement(t.String, (string) => string != '', 'ImageString')
 const Location        = t.dict(t.String, Coordinate)
 
 export default class FormScene extends Component {
@@ -180,7 +178,7 @@ export default class FormScene extends Component {
   }
 
   renderTreeHeight() {
-    if(this.formProps.treeHeightDisplay) {
+    if (this.formProps.treeHeightDisplay) {
       return <View style={styles.formGroup}>
         <Text style={styles.label}>Tree Height</Text>
         <PickerModal
