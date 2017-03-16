@@ -21,34 +21,15 @@ import {CoordinateSchema, SubmissionSchema} from '../db/Schema'
 import t from 'tcomb-validation'
 import ModalPicker from 'react-native-modal-picker'
 import PickerModal from '../components/PickerModal'
+import DCP from '../resources/config.js'
 
 const theme = getTheme()
 
-let index        = 1
-const treeHeight = {
-  selectChoices: [
-   '0-10 feet', '11-50 feet', '51-100 feet', '>100 feet'
-  ],
-  description: "Please estimate the height of the tree for this observation.  Some trees are very tall."
-}
-
-const treeStand = {
-  selectChoices: [
-   '1-10', '11-50', '51+'
-  ],
-  description: "Full description of number of trees question.  Lorem ipsum.Full description of number of trees question.  Lorem ipsum.Full description of number of trees question.  Lorem ipsum.Full description of number of trees question.  Lorem ipsum."
-}
-
-const deadTrees = {
-  selectChoices: [ 'none', '1-50', '51+'],
-  description : "Of the trees of this species in this stand, how many are dead?"
-}
-const DeadTreesIndex  = t.enums.of(deadTrees.selectChoices, "dead")
-const TreeHeightIndex = t.enums.of(treeHeight.selectChoices, "height")
-const TreeStandIndex  = t.enums.of(treeStand.selectChoices, "stand")
+const DeadTreesIndex  = t.enums.of(DCP.deadTrees.selectChoices, "dead")
+const TreeHeightIndex = t.enums.of(DCP.treeHeight.selectChoices, "height")
+const TreeStandIndex  = t.enums.of(DCP.treeStand.selectChoices, "stand")
 const Coordinate =  t.refinement(t.Number, (n) => n != 0, 'Coordinate')
 const ImageString =  t.refinement(t.String, (string) => string != '', 'ImageString')
-
 const Location        = t.dict(t.String, Coordinate)
 
 export default class FormScene extends Component {
@@ -81,13 +62,13 @@ export default class FormScene extends Component {
     }
 
     //Add in rules for optional field values
-    if (this.formProps.deadTreeDisplay) {
+    if (this.formProps.deadTree) {
       formRules.deadTrees = t.maybe(DeadTreesIndex)//optional
     }
-    if (this.formProps.treeHeightDisplay) {
+    if (this.formProps.treeHeight) {
       formRules.treeHeight = TreeHeightIndex//required
     }
-    if (this.formProps.numberOfTreesDisplay) {
+    if (this.formProps.numberOfTrees) {
       formRules.numberOfTrees = TreeStandIndex
     }
     this.formT = t.struct(formRules, "formT")
@@ -179,6 +160,29 @@ export default class FormScene extends Component {
     AsyncStorage.removeItem('@WildType:formData')
   }
 
+  populateFormItem = () => {
+    this.formProps.map((propItem, id) => {
+      <View style={styles.formGroup}>
+        <Text style={styles.label}>{DCP[propItem.id].label}</Text>
+        <PickerModal
+          style={styles.picker}
+          header={DCP[propItem.id].description}
+          choices={DCP[propItem.id].selectChoices}
+          onSelect={(option)=>{this.setState({[propItem.id]:option})}}>
+          <TextInput
+            style={styles.textField}
+            editable={false}
+            placeholder={DCP[propItem.id].placeHolder}
+            placeholderTextColor="#aaa"
+            value={this.state[propItem.id]}
+          />
+        </PickerModal>
+        {dropdownIcon}
+      </View>
+    })
+  }
+
+
   render() {
     return (
       <View style={styles.container}>
@@ -218,68 +222,7 @@ export default class FormScene extends Component {
               <Icon name="map" style={styles.icon}/>
             </View>
 
-            {!this.formProps.treeHeightDisplay ? null :
-              <View style={styles.formGroup}>
-                <Text style={styles.label}>Tree Height</Text>
-                <PickerModal
-                  style={styles.picker}
-                  header={treeHeight.description}
-                  choices={treeHeight.selectChoices}
-                  onSelect={(option)=>{this.setState({treeHeight:option})}}>
-                  <TextInput
-                    style={styles.textField}
-                    editable={false}
-                    placeholder="Tree Height"
-                    placeholderTextColor="#aaa"
-                    value={this.state.treeHeight}
-                  />
-                </PickerModal>
-                {dropdownIcon}
-              </View>
-            }
-
-            {!this.formProps.numberOfTreesDisplay ? null :
-              <View style={styles.formGroup}>
-                <Text style={styles.label}>Trees in Stand</Text>
-                <PickerModal
-                  style={styles.picker}
-                  header={treeStand.description}
-                  choices={treeStand.selectChoices}
-                  onSelect={(option)=>{this.setState({numberOfTrees:option})}}>
-                  <TextInput
-                    style={[styles.textField]}
-                    editable={false}
-                    placeholder="Number of Trees in Stand"
-                    placeholderTextColor="#aaa"
-                    value={this.state.numberOfTrees}
-                    underlineColorAndroid="#fff"
-                  />
-                </PickerModal>
-                {dropdownIcon}
-              </View>
-            }
-
-            {!this.formProps.deadTreeDisplay ? null :
-              <View style={styles.formGroup}>
-                <Text style={styles.label}>Dead Trees</Text>
-                <PickerModal
-                  style={styles.picker}
-                  header={deadTrees.description}
-                  choices={deadTrees.selectChoices}
-                  onSelect={(option)=>{this.setState({deadTrees:option})}}
-                >
-                  <TextInput
-                    style={[styles.textField]}
-                    editable={false}
-                    placeholder="Number of Dead Trees"
-                    placeholderTextColor="#aaa"
-                    value={this.state.deadTrees}
-                    underlineColorAndroid="#fff"
-                  />
-                </PickerModal>
-                {dropdownIcon}
-              </View>
-            }
+            {this.populateFormItem()}
 
             <View style={[styles.formGroup, {borderBottomWidth: 0, flex: 1, alignItems: 'flex-start'}]}>
               <Text style={[styles.label, {paddingTop: 5}]}>Comments</Text>
