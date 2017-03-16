@@ -11,7 +11,7 @@ import {
   DeviceEventEmitter
 } from 'react-native'
 import moment from 'moment'
-import {getTheme, MKColor, MKButton} from 'react-native-material-kit'
+import {getTheme, MKButton} from 'react-native-material-kit'
 import Realm from 'realm'
 import Header from '../components/Header'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -19,7 +19,6 @@ import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
 import {CoordinateSchema, SubmissionSchema} from '../db/Schema'
 import t from 'tcomb-validation'
-import ModalPicker from 'react-native-modal-picker'
 import PickerModal from '../components/PickerModal'
 import DCP from '../resources/config.js'
 
@@ -30,6 +29,7 @@ const TreeHeightIndex = t.enums.of(DCP.treeHeight.selectChoices, "height")
 const TreeStandIndex  = t.enums.of(DCP.treeStand.selectChoices, "stand")
 const Coordinate =  t.refinement(t.Number, (n) => n != 0, 'Coordinate')
 const ImageString =  t.refinement(t.String, (string) => string != '', 'ImageString')
+
 const Location        = t.dict(t.String, Coordinate)
 
 export default class FormScene extends Component {
@@ -183,7 +183,6 @@ export default class FormScene extends Component {
         </View>
         )
   }
-
 
 
 

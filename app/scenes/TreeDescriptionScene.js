@@ -10,9 +10,7 @@ import {getTheme} from 'react-native-material-kit'
 import Header from '../components/Header'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
-import {
-  MKButton,
-} from 'react-native-material-kit'
+import {MKButton} from 'react-native-material-kit'
 
 const theme  = getTheme()
 const plants = {

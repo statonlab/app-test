@@ -191,6 +191,7 @@ const styles = StyleSheet.create({
   },
   card      : {
     ...theme.cardStyle,
+    ...(new Elevation(2)),
     marginBottom: 15
   },
   cardImage : {
