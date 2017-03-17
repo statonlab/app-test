@@ -28,9 +28,12 @@ export default class LoginScene extends Component {
           <View style={styles.formGroup}>
             <Text style={styles.label}>Username</Text>
             <TextInput
+              autoCapitalize={'none'}
+              autoFocus={true}
               style={styles.textField}
               placeholder={"Username"}
               placeholderTextColor="#aaa"
+              returnKeyType={'next'}
             />
           </View>
 
