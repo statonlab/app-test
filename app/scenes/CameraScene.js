@@ -22,7 +22,8 @@ export default class CameraScene extends Component {
           captureTarget={Camera.constants.CaptureTarget.disk}
           style={styles.preview}
           keepAwake={true}
-          mirrorImage={false}>
+          mirrorImage={false}
+          captureQuality="medium">
           <View style={styles.toolsContainer}>
             <Text style={styles.capture} onPress={this.takePicture.bind(this)}>
               <Icon name="camera" size={36} color={"#fff"}/>
