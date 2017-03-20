@@ -36,8 +36,8 @@ export default class SubmittedScene extends Component {
 
   goToMarker(marker) {
     this.refs.map.animateToRegion({
-      latitude      : parseFloat(marker.latitude),
-      longitude     : parseFloat(marker.longitude),
+      latitude      : marker.latitude,
+      longitude     : marker.longitude,
       latitudeDelta : 0.0922,
       longitudeDelta: 0.0421
     }, 1000);
@@ -92,8 +92,9 @@ const styles = StyleSheet.create({
   },
 
   map: {
+    flex : 1,
     width: undefined,
-    flex : 1
+    height: undefined
   },
 
   calloutText: {
