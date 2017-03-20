@@ -25,23 +25,30 @@ export default class GetLocation extends Component {
   }
 
   componentDidMount() {
+    this.getLocation()
     this.updateLocation()
   }
 
   updateLocation() {
     this.timeoutHolder = setTimeout(() => {
-      navigator.geolocation.getCurrentPosition(
-        this.setLocation.bind(this),
-        (error) => console.log(JSON.stringify(error)),
-        {
-          enableHighAccuracy: true,
-          timeout           : 20000,
-          maximumAge        : 1000
-        }
-      )
+      if (!this.state.done) {
+        this.getLocation()
 
-      if (!this.state.done) this.updateLocation()
+        this.updateLocation()
+      }
     }, 500)
+  }
+
+  getLocation() {
+    navigator.geolocation.getCurrentPosition(
+      this.setLocation.bind(this),
+      (error) => console.log(JSON.stringify(error)),
+      {
+        enableHighAccuracy: true,
+        timeout           : 20000,
+        maximumAge        : 1000
+      }
+    )
   }
 
   setLocation(position) {
@@ -54,7 +61,7 @@ export default class GetLocation extends Component {
     })
 
     // If accuracy reaches 10 meters, we are done
-    if (position.coords.accuracy <= 10) {
+    if (parseInt(position.coords.accuracy) <= 10) {
       this.setState({
         reachedMaxAccuracy: true,
         done              : true
@@ -126,7 +133,7 @@ export default class GetLocation extends Component {
               <Text style={styles.text}>Attempting to Enhance Accuracy</Text>
               <Text style={[styles.text, {fontSize: 14}]}>This may take up to 1 minute</Text>
               <Text style={[styles.text, {fontWeight: 'bold'}]}>
-                {typeof this.state.currentPosition == 'object' ? this.state.currentPosition.coords.accuracy : '-1'} meters
+                {typeof this.state.currentPosition == 'object' ? parseInt(this.state.currentPosition.coords.accuracy) : 'unknown'} meters
               </Text>
             </View>
             }
@@ -138,7 +145,7 @@ export default class GetLocation extends Component {
                 {this.state.currentPosition.coords.latitude},{this.state.currentPosition.coords.longitude}
               </Text>
               <Text style={[styles.text, {fontSize: 14, fontWeight: 'bold'}]}>
-                Accuracy of {this.state.currentPosition.coords.accuracy} meters
+                Accuracy of {parseInt(this.state.currentPosition.coords.accuracy)} meters
               </Text>
             </View>
             }

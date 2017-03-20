@@ -35,12 +35,12 @@ export default class SubmittedScene extends Component {
   }
 
   goToMarker(marker) {
-    this.refs.map.animateToRegion({
+    setTimeout(() => this.refs.map.animateToRegion({
       latitude      : marker.latitude,
       longitude     : marker.longitude,
       latitudeDelta : 0.0922,
       longitudeDelta: 0.0421
-    }, 1000);
+    }, 1000), 500)
   }
 
   render() {
@@ -92,8 +92,8 @@ const styles = StyleSheet.create({
   },
 
   map: {
-    flex : 1,
-    width: undefined,
+    flex  : 1,
+    width : undefined,
     height: undefined
   },
 

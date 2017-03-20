@@ -177,6 +177,7 @@ export default class FormScene extends Component {
               placeholder={DCP[key].placeHolder}
               placeholderTextColor="#aaa"
               value={this.state[key]}
+              underlineColorAndroid="transparent"
             />
           </PickerModal>
           {dropdownIcon}
@@ -225,6 +226,7 @@ export default class FormScene extends Component {
               </MKButton>
               <Icon name="map" style={styles.icon}/>
             </View>
+
             {Object.keys(this.props.formProps).map(this.populateFormItem)}
 
             <View style={[styles.formGroup, {borderBottomWidth: 0, flex: 1, alignItems: 'flex-start'}]}>
@@ -237,6 +239,7 @@ export default class FormScene extends Component {
                 onChangeText={(comment) => this.setState({comment: comment})}
                 multiline={true}
                 numberOfLines={4}
+                underlineColorAndroid="transparent"
               />
             </View>
           </View>
