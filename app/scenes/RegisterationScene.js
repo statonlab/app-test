@@ -1,10 +1,12 @@
 import React, {Component, PropTypes} from 'react'
-import {View, ScrollView, StyleSheet, TextInput, Text, Platform} from 'react-native'
+import {View, ScrollView, StyleSheet, TextInput, Text, Platform, Alert} from 'react-native'
 import {MKButton} from 'react-native-material-kit'
 import Header from '../components/Header'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
 import Checkbox from '../components/Checkbox'
+import t from 'tcomb-validation'
+import Axios from 'axios'
 
 export default class RegistrationScene extends Component {
 
@@ -12,13 +14,65 @@ export default class RegistrationScene extends Component {
     super(props)
 
     this.state = {
-      email          : '',
-      password       : '',
-      confirmPassword: '',
-      isOverThirteen : false,
-      zipCode        : ''
+      name : 'test',
+      email          : 'letsgonowhere@gmail.com',
+      password       : 'dogdog42',
+      confirmPassword: 'dogdog42',
+      isOverThirteen : true,
+      zipCode        : 40508,
+      is_anonymous : true
     }
+
+    // const passwordPair = t.subtype(t.struct({
+    //   password: t.String,
+    //   confirmPassword: t.String
+    // }), passwordPair);
+
+     this.registrationRules = t.struct({
+      email : t.String,
+      password: t.String,
+       confirmPassword: t.String,
+      isOverThirteen : t.refinement(t.Boolean, (val) => val ,  "overThirteen"),
+      // zipCode : t.refinement(t.Number, (n) =>  /^([0-9]{5})(-[0-9]{4})?$/i.test(n), 'zipCode')
+       zipCode : t.Number  // might have to convert to a string!
+       //above regexp is correctly written
+    })
   }
+  submitRegistration = () => {
+    console.log("submitting registration")
+    if (!this.validateState().isValid()) {
+      this.notifyIncomplete(this.validateState())
+      return
+    }
+    console.log("its valid!");
+    this.axiosRequest();
+
+}
+
+  axiosRequest = () => {
+
+    let request = this.state;
+    Axios.get('http://treesource.app/api/v1/users', {data: request})
+      .then(response => {
+        console.log(response);
+      })
+      .catch(error => {
+        console.log("logging error:");
+        console.log(error);
+      });
+
+  }
+
+  validateState = () => {
+    return t.validate(this.state, this.registrationRules)
+  }
+
+
+  notifyIncomplete = (validationAttempt) => {
+    console.log(validationAttempt);
+  }
+
+
 
   render() {
     return (
@@ -80,7 +134,8 @@ export default class RegistrationScene extends Component {
           </View>
 
           <View style={styles.formGroup}>
-            <MKButton style={styles.button}>
+            <MKButton style={styles.button}
+              onPress={() => {this.submitRegistration() }}>
               <Text style={styles.buttonText}>Register</Text>
             </MKButton>
           </View>

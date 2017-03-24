@@ -6,6 +6,7 @@ import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
 import t from 'tcomb-validation'
 import Axios from 'axios'
+import Users from '../API/users.js'
 
 
 export default class LoginScene extends Component {
@@ -59,16 +60,6 @@ export default class LoginScene extends Component {
   //   })
   // }
 
-  tryLogin = () => {
-    console.log("running try Login");
-    this.putRequest();
-    //First validate
-    // if (!this.validateState().isValid()) {
-    //   this.notifyIncomplete(this.validateState())
-    //   return
-    // }
-    //Submit valid form
-  }
 
 
 
