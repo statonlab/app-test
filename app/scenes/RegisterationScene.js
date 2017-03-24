@@ -14,12 +14,12 @@ export default class RegistrationScene extends Component {
     super(props)
 
     this.state = {
-      name           : 'test',
-      email          : 'letsgo@gmail.com',
+      name           : 'default',
+      email          : 'letsgo2@gmail.com',
       password       : 'dogdog42',
       confirmPassword: 'dogdog42',
       is_over_thirteen : true,
-      zipCode        : 40508,
+      zipcode        : 40508,
       is_anonymous : true
     }
 
@@ -44,13 +44,17 @@ export default class RegistrationScene extends Component {
       this.notifyIncomplete(this.validateState())
       return
     }
-    console.log("its valid!");
-    this.axiosRequest();
+   let response =  this.axiosRequest();
+  if (response) {
+    console.log(response);
+    alert("Success!  Registered with {response.email}")
+    this.props.navigator.push({label: 'LoginScene' , email: this.state.email})
+
+  }
+
 
     //transition to confirmation.  I pass email here in the route, need to recieve it in the scene
 
-    alert("Account created");
-    this.props.navigator.push({label: 'LoginScene' , email: this.state.email})
 
 
 }
@@ -68,13 +72,11 @@ export default class RegistrationScene extends Component {
     axios.post('users', request)
       .then(response => {
         console.log('RES', response.data);
-
-        let apiToken = response.data.data.api_token;
-        //store API token in schema
-
+    return(response);
       })
       .catch(error => {
-        console.log('ERR', error);
+        console.log(error);
+        alert(error[0]);
       });
   }
 

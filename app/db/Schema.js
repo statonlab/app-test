@@ -37,3 +37,32 @@ export const SubmissionSchema = {
     date         : {type: 'string', default: ''}
   }
 }
+
+
+/**
+ * User Schema
+ * -------------------------------------------------
+ * Saves user's info locally and permanently.
+ * Keep track of their api token for contacting the website.
+ *
+ * @type object
+ */
+
+export const userSchema = {
+  name      : 'user',
+  primaryKey : 'id',
+  properties: {
+    id : {type: 'int', default: ''},
+    name: {type: 'string', default: 'default'},
+    email: {type: 'string', default: 'default'},
+    anonymous: {type: 'boolean', default: 'false'},
+    api_token: {type: 'string', default: ''},
+    zipcode: {type: 'int', default: ''},
+    is_over_thirteen: {type: 'boolean', default: 'false'}
+    //ignored fields present in DB
+    //password
+    //remember_token
+    //created_at
+    //updated_at
+  }
+}
