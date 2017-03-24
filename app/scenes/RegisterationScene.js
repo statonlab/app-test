@@ -14,9 +14,9 @@ export default class RegistrationScene extends Component {
     super(props)
 
     this.state = {
-      name : 'test',
-      email          : 'letsgonowhere@gmail.com',
-      password       : 'dogdog42',
+      name           : 'test',
+      email          : 'letsgo@gmail.com',
+      password       : 'short',
       confirmPassword: 'dogdog42',
       isOverThirteen : true,
       zipCode        : 40508,
@@ -29,9 +29,9 @@ export default class RegistrationScene extends Component {
     // }), passwordPair);
 
      this.registrationRules = t.struct({
-      email : t.String,
-      password: t.String,
-       confirmPassword: t.String,
+      email : t.String, //no validation
+      password: t.refinement(t.String, (pw) => pw.length >= 6, "pw"),//ensure password is at least 6 characters
+       confirmPassword: t.refinement(t.String, (pw) => pw === this.state.password, "confirmPW"), //ensure matches password
       isOverThirteen : t.refinement(t.Boolean, (val) => val ,  "overThirteen"),
       // zipCode : t.refinement(t.Number, (n) =>  /^([0-9]{5})(-[0-9]{4})?$/i.test(n), 'zipCode')
        zipCode : t.Number  // might have to convert to a string!
@@ -45,9 +45,24 @@ export default class RegistrationScene extends Component {
       return
     }
     console.log("its valid!");
-    this.axiosRequest();
+    //this.axiosRequest();
+    this.fetchRequest();
 
 }
+
+fetchRequest = () => {
+  fetch('http://treesource.app/api/v1/users', {
+    method : 'POST',
+    body   : JSON.stringify(this.state)
+  }).then(response => {
+    console.log(response);
+  })
+    .catch(error => {
+      console.log("logging error:");
+      console.log(error);
+    });
+}
+
 
   axiosRequest = () => {
 
