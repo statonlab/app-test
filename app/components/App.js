@@ -17,6 +17,7 @@ import AboutScene from '../scenes/AboutScene'
 import PrivacyPolicyScene from '../scenes/PrivacyPolicyScene'
 import HealthSafetyScene from '../scenes/HealthSafetyScene'
 import LoginScene from '../scenes/LoginScene'
+import RegistrationScene from '../scenes/RegisterationScene'
 
 const initialRouteStack = [
   {
@@ -60,6 +61,10 @@ export default class WildType extends Component {
 
     if (route.label == 'LoginScene') {
       return <LoginScene navigator={navigator}/>
+    }
+
+    if (route.label == 'RegistrationScene') {
+      return <RegistrationScene navigator={navigator}/>
     }
 
     // Static Scenes
