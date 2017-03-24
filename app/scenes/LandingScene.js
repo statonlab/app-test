@@ -42,6 +42,10 @@ const sidebarLinks = [
     title: 'Login',
     label: 'LoginScene'
   }, {
+    icon : 'account-plus',
+    title: 'Register',
+    label: 'RegistrationScene'
+  }, {
     icon : 'account-card-details',
     title: 'About Us',
     label: 'AboutScene'
@@ -70,7 +74,7 @@ export default class LandingScene extends Component {
           navigator={this.props.navigator}
           initial={true}
           onMenuPress={this.toggleMenu.bind(this)}
-        sidebar={this.refs.sidebar}/>
+          sidebar={this.refs.sidebar}/>
         <Sidebar
           ref="sidebar"
           navigator={this.props.navigator}
