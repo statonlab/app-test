@@ -11,7 +11,7 @@ export default class LoginScene extends Component {
     super(props)
 
     this.state = {
-      username: '',
+      email: '',
       password: ''
     }
   }
@@ -26,12 +26,12 @@ export default class LoginScene extends Component {
           </View>
 
           <View style={styles.formGroup}>
-            <Text style={styles.label}>Username</Text>
+            <Text style={styles.label}>Email</Text>
             <TextInput
               autoCapitalize={'none'}
               autoFocus={true}
               style={styles.textField}
-              placeholder={"Username"}
+              placeholder={"Email"}
               placeholderTextColor="#aaa"
               returnKeyType={'next'}
             />
