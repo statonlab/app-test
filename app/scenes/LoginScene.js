@@ -4,6 +4,9 @@ import {MKButton} from 'react-native-material-kit'
 import Header from '../components/Header'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
+import t from 'tcomb-validation'
+import Axios from 'axios'
+
 
 export default class LoginScene extends Component {
 
@@ -15,6 +18,59 @@ export default class LoginScene extends Component {
       password: ''
     }
   }
+//    Route::get('/user', 'UsersController@show');
+
+  putRequest = () => {
+    console.log("executing put request");
+    Axios.get('http://treesource.app/user', {user: 'bradford.condon@uky.edu'})
+      .then(response => {
+        console.log(response);
+      })
+      .catch(error => {
+        console.log("logging error:");
+        console.log(error);
+      });
+
+  }
+
+
+  // loadObservations() {
+  //   axios.get('/observations').then(response => {
+  //     // Setup the observations to be rendered into markers
+  //     let markers = []
+  //
+  //     response.data.data.map(observation => {
+  //       markers.push({
+  //         title: observation.observation_category,
+  //         images: observation.images,
+  //         position: {
+  //           latitude: observation.location.latitude,
+  //           longitude: observation.location.longitude
+  //         },
+  //         owner: observation.user.name
+  //       })
+  //     })
+  //
+  //     // Add the markers to the state
+  //     this.setState({markers})
+  //
+  //   }).catch(error => {
+  //     console.log(error)
+  //   })
+  // }
+
+  tryLogin = () => {
+    console.log("running try Login");
+    this.putRequest();
+    //First validate
+    // if (!this.validateState().isValid()) {
+    //   this.notifyIncomplete(this.validateState())
+    //   return
+    // }
+    //Submit valid form
+  }
+
+
 
   render() {
     return (
@@ -48,7 +104,9 @@ export default class LoginScene extends Component {
           </View>
 
           <View style={styles.formGroup}>
-            <MKButton style={styles.button}>
+            <MKButton
+              style={styles.button}
+              onPress={() => {this.tryLogin() }}>
               <Text style={styles.buttonText}>Login</Text>
             </MKButton>
           </View>
