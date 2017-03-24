@@ -49,7 +49,7 @@ export const SubmissionSchema = {
  */
 
 export const UserSchema = {
-  name      : 'user',
+  name      : 'User',
   primaryKey : 'id',
   properties: {
     id : {type: 'int', default: ''},

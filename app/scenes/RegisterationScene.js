@@ -29,25 +29,27 @@ export default class RegistrationScene extends Component {
     })
 
     realm.write(() => {
-      let primaryKey = realm.objects('Submission')
-      if (primaryKey.length <= 0) {
-        primaryKey = 1;
-      } else {
-        primaryKey = primaryKey.sorted('id', true)[0].id + 1
-      }
-      realm.create('Submission', {
-        id           : primaryKey,
-        name         : this.state.title.toString(),
-        species      : this.state.species.toString(),
-        numberOfTrees: this.state.numberOfTrees.toString(),
-        treeHeight   : this.state.treeHeight.toString(),
-        deadTrees    : this.state.deadTrees.toString(),
-        image        : this.state.image.toString(),
-        location     : this.state.location,
-        comment      : this.state.comment.toString(),
-        date         : moment().format().toString()
+      realm.create('User', {
+        // id           : primaryKey,
+        // name         : this.state.title.toString(),
+        // species      : this.state.species.toString(),
+        // numberOfTrees: this.state.numberOfTrees.toString(),
+        // treeHeight   : this.state.treeHeight.toString(),
+        // deadTrees    : this.state.deadTrees.toString(),
+        // image        : this.state.image.toString(),
+        // location     : this.state.location,
+        // comment      : this.state.comment.toString(),
+        // date         : moment().format().toString()
       })
     })
+
+    // id : {type: 'int', default: ''},
+    // name: {type: 'string', default: 'default'},
+    // email: {type: 'string', default: 'default'},
+    // anonymous: {type: 'boolean', default: 'false'},
+    // api_token: {type: 'string', default: ''},
+    // zipcode: {type: 'int', default: ''},
+    // is_over_thirteen: {type: 'boolean', default: 'false'}
 
 
     this.registrationRules = t.struct({
