@@ -48,7 +48,7 @@ export const SubmissionSchema = {
  * @type object
  */
 
-export const userSchema = {
+export const UserSchema = {
   name      : 'user',
   primaryKey : 'id',
   properties: {

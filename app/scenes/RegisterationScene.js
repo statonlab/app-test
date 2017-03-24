@@ -7,6 +7,7 @@ import Colors from '../helpers/Colors'
 import Checkbox from '../components/Checkbox'
 import t from 'tcomb-validation'
 import Axios from 'axios'
+import {UserSchema} from '../db/Schema'
 
 export default class RegistrationScene extends Component {
 
@@ -23,12 +24,33 @@ export default class RegistrationScene extends Component {
       is_anonymous : true
     }
 
-    // const passwordPair = t.subtype(t.struct({
-    //   password: t.String,
-    //   confirmPassword: t.String
-    // }), passwordPair);
+    let realm = new Realm({
+      schema: [UserSchema]
+    })
 
-     this.registrationRules = t.struct({
+    realm.write(() => {
+      let primaryKey = realm.objects('Submission')
+      if (primaryKey.length <= 0) {
+        primaryKey = 1;
+      } else {
+        primaryKey = primaryKey.sorted('id', true)[0].id + 1
+      }
+      realm.create('Submission', {
+        id           : primaryKey,
+        name         : this.state.title.toString(),
+        species      : this.state.species.toString(),
+        numberOfTrees: this.state.numberOfTrees.toString(),
+        treeHeight   : this.state.treeHeight.toString(),
+        deadTrees    : this.state.deadTrees.toString(),
+        image        : this.state.image.toString(),
+        location     : this.state.location,
+        comment      : this.state.comment.toString(),
+        date         : moment().format().toString()
+      })
+    })
+
+
+    this.registrationRules = t.struct({
       email : t.String, //no validation
       password: t.refinement(t.String, (pw) => pw.length >= 6, "pw"),//ensure password is at least 6 characters
        confirmPassword: t.refinement(t.String, (pw) => pw === this.state.password, "confirmPW"), //ensure matches password
