@@ -16,9 +16,9 @@ export default class RegistrationScene extends Component {
     this.state = {
       name           : 'test',
       email          : 'letsgo@gmail.com',
-      password       : 'short',
+      password       : 'dogdog42',
       confirmPassword: 'dogdog42',
-      isOverThirteen : true,
+      is_over_thirteen : true,
       zipCode        : 40508,
       is_anonymous : true
     }
@@ -32,7 +32,7 @@ export default class RegistrationScene extends Component {
       email : t.String, //no validation
       password: t.refinement(t.String, (pw) => pw.length >= 6, "pw"),//ensure password is at least 6 characters
        confirmPassword: t.refinement(t.String, (pw) => pw === this.state.password, "confirmPW"), //ensure matches password
-      isOverThirteen : t.refinement(t.Boolean, (val) => val ,  "overThirteen"),
+      is_over_thirteen : t.refinement(t.Boolean, (val) => val ,  "overThirteen"),
       // zipCode : t.refinement(t.Number, (n) =>  /^([0-9]{5})(-[0-9]{4})?$/i.test(n), 'zipCode')
        zipCode : t.Number  // might have to convert to a string!
        //above regexp is correctly written
@@ -45,37 +45,37 @@ export default class RegistrationScene extends Component {
       return
     }
     console.log("its valid!");
-    //this.axiosRequest();
-    this.fetchRequest();
+    this.axiosRequest();
+
+    //transition to confirmation.  I pass email here in the route, need to recieve it in the scene
+
+    alert("Account created");
+    this.props.navigator.push({label: 'LoginScene' , email: this.state.email})
+
 
 }
 
-fetchRequest = () => {
-  fetch('http://treesource.app/api/v1/users', {
-    method : 'POST',
-    body   : JSON.stringify(this.state)
-  }).then(response => {
-    console.log(response);
-  })
-    .catch(error => {
-      console.log("logging error:");
-      console.log(error);
-    });
-}
 
 
   axiosRequest = () => {
 
     let request = this.state;
-    Axios.get('http://treesource.app/api/v1/users', {data: request})
+    let axios = Axios.create({
+      baseURL: 'http://treesource.app/api/v1/',
+      timeout: 10000
+    })
+
+    axios.post('users', request)
       .then(response => {
-        console.log(response);
+        console.log('RES', response.data);
+
+        let apiToken = response.data.data.api_token;
+        //store API token in schema
+
       })
       .catch(error => {
-        console.log("logging error:");
-        console.log(error);
+        console.log('ERR', error);
       });
-
   }
 
   validateState = () => {
@@ -144,7 +144,7 @@ fetchRequest = () => {
           <View style={styles.formGroup}>
             <Checkbox
               label="I am over 13 years old"
-              onChange={(checked) => this.setState({isOverThirteen: checked})}
+              onChange={(checked) => this.setState({is_over_thirteen: checked})}
             />
           </View>
 
