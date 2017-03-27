@@ -202,6 +202,7 @@ export default class FormScene extends Component {
   componentWillUnmount() {
     this.event.remove()
     AsyncStorage.removeItem('@WildType:formData')
+    this.realm.close()
   }
 
     populateFormItem = (key) => {

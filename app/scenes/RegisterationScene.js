@@ -192,6 +192,10 @@ export default class RegistrationScene extends Component {
     )
   }
 
+  componentWillUnmount() {
+    this.realm.close()
+  }
+
 }
 
 RegistrationScene.PropTypes = {
