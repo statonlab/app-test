@@ -8,6 +8,8 @@ import Checkbox from '../components/Checkbox'
 import t from 'tcomb-validation'
 import Axios from 'axios'
 import {UserSchema} from '../db/Schema'
+import Realm from 'realm'
+
 
 export default class RegistrationScene extends Component {
 
@@ -16,7 +18,7 @@ export default class RegistrationScene extends Component {
 
     this.state = {
       name           : 'default',
-      email          : 'letsgo2@gmail.com',
+      email          : 'wiggle@wiggle.com',
       password       : 'dogdog42',
       confirmPassword: 'dogdog42',
       is_over_thirteen : true,
@@ -28,28 +30,6 @@ export default class RegistrationScene extends Component {
       schema: [UserSchema]
     })
 
-    realm.write(() => {
-      realm.create('User', {
-        // id           : primaryKey,
-        // name         : this.state.title.toString(),
-        // species      : this.state.species.toString(),
-        // numberOfTrees: this.state.numberOfTrees.toString(),
-        // treeHeight   : this.state.treeHeight.toString(),
-        // deadTrees    : this.state.deadTrees.toString(),
-        // image        : this.state.image.toString(),
-        // location     : this.state.location,
-        // comment      : this.state.comment.toString(),
-        // date         : moment().format().toString()
-      })
-    })
-
-    // id : {type: 'int', default: ''},
-    // name: {type: 'string', default: 'default'},
-    // email: {type: 'string', default: 'default'},
-    // anonymous: {type: 'boolean', default: 'false'},
-    // api_token: {type: 'string', default: ''},
-    // zipcode: {type: 'int', default: ''},
-    // is_over_thirteen: {type: 'boolean', default: 'false'}
 
 
     this.registrationRules = t.struct({
@@ -58,31 +38,46 @@ export default class RegistrationScene extends Component {
        confirmPassword: t.refinement(t.String, (pw) => pw === this.state.password, "confirmPW"), //ensure matches password
       is_over_thirteen : t.refinement(t.Boolean, (val) => val ,  "overThirteen"),
       // zipCode : t.refinement(t.Number, (n) =>  /^([0-9]{5})(-[0-9]{4})?$/i.test(n), 'zipCode')
-       zipCode : t.Number  // might have to convert to a string!
+       zipcode : t.Number  // might have to convert to a string!
        //above regexp is correctly written
     })
   }
   submitRegistration = () => {
+
     console.log("submitting registration")
+    console.log(this.state)
     if (!this.validateState().isValid()) {
-      this.notifyIncomplete(this.validateState())
+      // this.notifyIncomplete(this.validateState())
+      console.log(this.validateState())
       return
     }
    let response =  this.axiosRequest();
   if (response) {
-    console.log(response);
-    alert("Success!  Registered with {response.email}")
+    alert("Success!  Registered with {response.email}!  Writing local db entry to realm.")
+
+    this.writeToRealm(response);
     this.props.navigator.push({label: 'LoginScene' , email: this.state.email})
 
   }
-
-
-    //transition to confirmation.  I pass email here in the route, need to recieve it in the scene
-
-
-
+    //transition to confirmation.  I pass email here in the route, need to receive it in the scene
 }
 
+writeToRealm = (responseFull) => {
+    console.log("writing to realm");
+
+  realm.write((responseFull) => {
+    let response = responseFull.data.data
+    realm.create('User', {
+      id              : response.id.toString(),
+      name            : response.name.toString(),
+      email           : response.email.toString(),
+      anonymous       : response.is_anonymous,
+      zipcode         : response.zipcode,
+      api_token       : response.api_token,
+      is_over_thirteen: response.is_over_thirteen
+    })
+  })
+}
 
 
   axiosRequest = () => {
@@ -99,7 +94,7 @@ export default class RegistrationScene extends Component {
     return(response);
       })
       .catch(error => {
-        console.log(error);
+        console.log('ERR', error);
         alert(error[0]);
       });
   }
@@ -110,9 +105,11 @@ export default class RegistrationScene extends Component {
 
 
   notifyIncomplete = (validationAttempt) => {
-    console.log(validationAttempt);
   }
 
+  updateText = () => {
+    return
+  }
 
 
   render() {
@@ -133,6 +130,7 @@ export default class RegistrationScene extends Component {
               placeholder={"E.g, example@email.com"}
               placeholderTextColor="#aaa"
               returnKeyType={'next'}
+              onChangeText={(email) =>this.setState({email})}
             />
           </View>
 
@@ -143,6 +141,8 @@ export default class RegistrationScene extends Component {
               placeholder={"Password"}
               secureTextEntry={true}
               placeholderTextColor="#aaa"
+              onChangeText={(password) =>this.setState({password})}
+
             />
           </View>
 
@@ -153,6 +153,7 @@ export default class RegistrationScene extends Component {
               placeholder={"Repeat Password"}
               secureTextEntry={true}
               placeholderTextColor="#aaa"
+              onChangeText={(confirmPassword) =>this.setState({confirmPassword})}
             />
           </View>
 
@@ -164,6 +165,7 @@ export default class RegistrationScene extends Component {
               placeholder={"E.g, 37919"}
               placeholderTextColor="#aaa"
               returnKeyType={'next'}
+              onChangeText={(zipcode) =>this.setState({zipcode})}
             />
           </View>
 

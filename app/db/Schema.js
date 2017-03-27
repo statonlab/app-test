@@ -55,10 +55,10 @@ export const UserSchema = {
     id : {type: 'int', default: ''},
     name: {type: 'string', default: 'default'},
     email: {type: 'string', default: 'default'},
-    anonymous: {type: 'boolean', default: 'false'},
+    anonymous: {type: 'bool', default: false},
     api_token: {type: 'string', default: ''},
     zipcode: {type: 'int', default: ''},
-    is_over_thirteen: {type: 'boolean', default: 'false'}
+    is_over_thirteen: {type: 'bool', default: false}
     //ignored fields present in DB
     //password
     //remember_token
