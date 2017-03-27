@@ -101,11 +101,34 @@ console.log("writing to realm")
     return (
       <View style={styles.container}>
         <Header title="Register" navigator={this.props.navigator} showRightIcon={false}/>
-        <ScrollView contentContainerStyle={styles.form}>
-          <View style={styles.formGroup}>
-            <Text style={styles.title}>TreeSource</Text>
-          </View>
+        <ScrollView>
+          <View style={styles.form}>
+            <View style={styles.formGroup}>
+              <Text style={styles.title}>TreeSource</Text>
+            </View>
 
+            <View style={styles.formGroup}>
+              <Text style={styles.label}>Name</Text>
+              <TextInput
+                autoCapitalize={'words'}
+                autoFocus={true}
+                style={styles.textField}
+                placeholder={"E.g, Jane Doe"}
+                placeholderTextColor="#aaa"
+                returnKeyType={'next'}
+              />
+            </View>
+
+          
+              </MKButton>
+            </View>
+
+            <View style={[styles.formGroup, {flexDirection: 'row', justifyContent: 'space-between'}]}>
+              <MKButton>
+                <Text style={styles.link}>Have an account? Login here</Text>
+              </MKButton>
+            </View>
+          </View>
           <View style={styles.formGroup}>
             <Text style={styles.label}>Email</Text>
             <TextInput
