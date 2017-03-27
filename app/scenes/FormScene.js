@@ -12,12 +12,11 @@ import {
 } from 'react-native'
 import moment from 'moment'
 import {getTheme, MKButton} from 'react-native-material-kit'
-import Realm from 'realm'
 import Header from '../components/Header'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
-import {CoordinateSchema, SubmissionSchema, UserSchema} from '../db/Schema'
+import realm from '../db/Schema'
 import t from 'tcomb-validation'
 import PickerModal from '../components/PickerModal'
 import DCP from '../resources/config.js'
@@ -28,10 +27,10 @@ const theme = getTheme()
 const DeadTreesIndex  = t.enums.of(DCP.deadTrees.selectChoices, "dead")
 const TreeHeightIndex = t.enums.of(DCP.treeHeight.selectChoices, "height")
 const TreeStandIndex  = t.enums.of(DCP.treeStand.selectChoices, "stand")
-const Coordinate =  t.refinement(t.Number, (n) => n != 0, 'Coordinate')
-const ImageString =  t.refinement(t.String, (string) => string != '', 'ImageString')
+const Coordinate      = t.refinement(t.Number, (n) => n != 0, 'Coordinate')
+const ImageString     = t.refinement(t.String, (string) => string != '', 'ImageString')
 
-const Location        = t.dict(t.String, Coordinate)
+const Location = t.dict(t.String, Coordinate)
 
 const userID = "test@etttt.com"//Important:  The logged in User should be stored by the app somewhere.
 
@@ -53,9 +52,8 @@ export default class FormScene extends Component {
         accuracy : -1
       }
     }
-     this.realm = new Realm({
-      schema: [CoordinateSchema, SubmissionSchema, UserSchema]
-    })
+
+    this.realm = realm
 
     this.formProps = this.props.formProps
 
@@ -137,25 +135,25 @@ export default class FormScene extends Component {
       this.realm.create('Submission', observation)
     })
 
-    let obsSubmit = {
+    let obsSubmit       = {
       observation_category: this.props.title,
-      meta_data: JSON.stringify(observation),
-      longitude: observation.location.longitude,
-      latitude: observation.location.latitude,
-      location_accuracy: observation.location.accuracy,
-       date: observation.date,
-      is_private: false
+      meta_data           : JSON.stringify(observation),
+      longitude           : observation.location.longitude,
+      latitude            : observation.location.latitude,
+      location_accuracy   : observation.location.accuracy,
+      date                : observation.date,
+      is_private          : false
     }
     //Now submit to server
     obsSubmit.api_token = this.retrieveAPI()
     this.submitObsToServer(obsSubmit)
 
 
-     this.props.navigator.push({
-       label   : 'SubmittedScene',
-       plant   : this.state,
-       gestures: {}
-     })
+    this.props.navigator.push({
+      label   : 'SubmittedScene',
+      plant   : this.state,
+      gestures: {}
+    })
   }
 
   validateState = () => {
@@ -189,48 +187,45 @@ export default class FormScene extends Component {
       })
       .catch(error => {
         console.log('ERR', error);
-         alert(error[0]);
+        alert(error[0]);
       });
 
   }
 
   retrieveAPI = () => {
-   return this.realm.objects('User').filtered(`email = "${userID}"`)[0].api_token
+    return this.realm.objects('User').filtered(`email = "${userID}"`)[0].api_token
   }
 
 
   componentWillUnmount() {
     this.event.remove()
     AsyncStorage.removeItem('@WildType:formData')
-    this.realm.close()
   }
 
-    populateFormItem = (key) => {
+  populateFormItem = (key) => {
 
-      if(typeof DCP[key] === undefined) return
-        return(
-        <View style={styles.formGroup} key={key}>
-          <Text style={styles.label}>{DCP[key].label}</Text>
-          <PickerModal
-            style={styles.picker}
-            header={DCP[key].description}
-            choices={DCP[key].selectChoices}
-            onSelect={(option)=>{this.setState({[key]:option})}}>
-            <TextInput
-              style={styles.textField}
-              editable={false}
-              placeholder={DCP[key].placeHolder}
-              placeholderTextColor="#aaa"
-              value={this.state[key]}
-              underlineColorAndroid="transparent"
-            />
-          </PickerModal>
-          {dropdownIcon}
-        </View>
-        )
+    if (typeof DCP[key] === undefined) return
+    return (
+      <View style={styles.formGroup} key={key}>
+        <Text style={styles.label}>{DCP[key].label}</Text>
+        <PickerModal
+          style={styles.picker}
+          header={DCP[key].description}
+          choices={DCP[key].selectChoices}
+          onSelect={(option)=>{this.setState({[key]:option})}}>
+          <TextInput
+            style={styles.textField}
+            editable={false}
+            placeholder={DCP[key].placeHolder}
+            placeholderTextColor="#aaa"
+            value={this.state[key]}
+            underlineColorAndroid="transparent"
+          />
+        </PickerModal>
+        {dropdownIcon}
+      </View>
+    )
   }
-
-
 
 
   render() {

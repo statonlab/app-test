@@ -7,8 +7,7 @@ import Colors from '../helpers/Colors'
 import Checkbox from '../components/Checkbox'
 import t from 'tcomb-validation'
 import Axios from 'axios'
-import {UserSchema} from '../db/Schema'
-import Realm from 'realm'
+import realm from '../db/Schema'
 
 export default class RegistrationScene extends Component {
   constructor(props) {
@@ -23,9 +22,7 @@ export default class RegistrationScene extends Component {
       is_anonymous    : true
     }
 
-    this.realm = new Realm({
-      schema: [UserSchema]
-    })
+    this.realm = realm
 
 
     this.registrationRules = t.struct({
@@ -190,10 +187,6 @@ export default class RegistrationScene extends Component {
         </ScrollView>
       </View>
     )
-  }
-
-  componentWillUnmount() {
-    this.realm.close()
   }
 
 }

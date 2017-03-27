@@ -1,9 +1,11 @@
+import Realm from 'realm'
+
 /**
  * Define Coordinate Type
  * -------------------------------------------------
  * @type class
  */
-export const CoordinateSchema = {
+const CoordinateSchema = {
   name      : 'Coordinate',
   properties: {
     latitude : {type: 'double', default: 0},
@@ -19,7 +21,7 @@ export const CoordinateSchema = {
  *
  * @type object
  */
-export const SubmissionSchema = {
+const SubmissionSchema = {
   name      : 'Submission',
   primaryKey: 'id',
   properties: {
@@ -48,7 +50,7 @@ export const SubmissionSchema = {
  * @type object
  */
 
-export const UserSchema = {
+const UserSchema = {
   name      : 'User',
   primaryKey : 'id',
   properties: {
@@ -66,3 +68,9 @@ export const UserSchema = {
     //updated_at
   }
 }
+
+export default new Realm({schema: [
+  UserSchema,
+  CoordinateSchema,
+  SubmissionSchema
+]})
