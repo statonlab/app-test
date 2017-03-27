@@ -195,7 +195,7 @@ export default class FormScene extends Component {
   }
 
   retrieveAPI = () => {
-   return this.realm.objects('User').filtered('email = "test@etttt.com"')[0].api_token
+   return this.realm.objects('User').filtered(`email = "${userID}"`)[0].api_token
   }
 
 
