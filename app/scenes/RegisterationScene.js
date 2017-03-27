@@ -48,6 +48,8 @@ export default class RegistrationScene extends Component {
   writeToRealm       = (responseFull) => {
     console.log("writing to realm")
     this.realm.write(() => {
+      this.realm.deleteAll()//delete existing users first
+      
       let response = responseFull.data.data
       this.realm.create('User', {
         id              : response.user_id,
@@ -60,9 +62,11 @@ export default class RegistrationScene extends Component {
       })
     })
     //transition to Home Scene.
-    this.props.navigator.push({label: 'LandingScene'})
+     this.props.navigator.push({label: 'LandingScene'})
 
   }
+
+
   axiosRequest       = () => {
 
     let request = this.state;
@@ -194,6 +198,7 @@ export default class RegistrationScene extends Component {
 
   componentWillUnmount() {
     this.realm.close()
+    console.log("closed!")
   }
 
 }
