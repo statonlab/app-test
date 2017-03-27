@@ -141,10 +141,10 @@ export default class CameraScene extends Component {
 
         <View style={[styles.container, {width: this.state.pageWidth, backgroundColor: '#000'}]}>
           <View style={styles.header}>
-            <TouchableOpacity style={styles.headerButton} onPress={this._back}>
-              <IonIcon name="ios-arrow-back" style={[styles.headerText, {width: 15, marginTop: 2}]} size={20}/>
+            <TouchableOpacity style={styles.headerButton} onPress={this._delete}>
+              <Icon name="delete" style={[styles.headerText, {width: 20, marginTop: 2}]} size={20}/>
               <Text style={styles.headerText}>
-                Back
+                Delete
               </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.headerButton}>
@@ -152,14 +152,14 @@ export default class CameraScene extends Component {
               <Text style={styles.headerText}>Done</Text>
             </TouchableOpacity>
           </View>
-          {this.state.selectedImage.path === '' ? null :
+          {this.state.selectedImage.path === '' ? <View style={{flex: 1, backgroundColor: '#000'}}></View> :
             <Image source={{uri: this.state.selectedImage.path }} style={styles.preview}/>
           }
           <View style={[styles.toolsContainer, styles.thumbnailsContainer]}>
             <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
               {this.state.images.map(this.renderThumbnail)}
               <TouchableOpacity style={styles.addIcon} onPress={this._back}>
-                <IonIcon name="md-add" size={30} color="#777"/>
+                <IonIcon name="md-add" size={30} color="#666"/>
               </TouchableOpacity>
             </ScrollView>
           </View>
@@ -172,10 +172,7 @@ export default class CameraScene extends Component {
     return (
       <TouchableOpacity
         key={index}
-        onPress={() => this.setState({selectedImage: image})}
-        style={{position: 'relative'}}
-      >
-        <IonIcon name="md-close-circle" style={styles.removeIcon} size={15}/>
+        onPress={() => this.setState({selectedImage: image})}>
         <Image source={{uri: image.path}} style={styles.thumbnail}/>
       </TouchableOpacity>
     )
@@ -189,6 +186,31 @@ export default class CameraScene extends Component {
 
   _back = () => {
     this.refs.page.scrollTo({x: 0, y: 0, animated: true})
+  }
+
+  _delete = () => {
+    let images = []
+    this.state.images.map((image) => {
+      if (image.index !== this.state.selectedImage.index) {
+        images.push(image)
+      }
+    })
+
+    if (images.length === 0) {
+      this.setState({
+        selectedImage: {
+          path: ''
+        },
+        images       : []
+      })
+      this._back()
+      return
+    }
+
+    this.setState({
+      selectedImage: images[0],
+      images
+    })
   }
 
   zoom = (e) => {
@@ -278,28 +300,20 @@ const styles = StyleSheet.create({
     flex           : 0,
     justifyContent : 'space-between',
     flexDirection  : 'row',
-    zIndex: 5,
+    zIndex         : 5,
     ...(new Elevation(4))
   },
 
   headerButton: {
-    padding      : 10,
-    flexDirection: 'row'
+    paddingHorizontal: 10,
+    paddingVertical  : 15,
+    flexDirection    : 'row'
   },
 
   headerText: {
     color     : '#fff',
     fontWeight: '500',
     fontSize  : 16
-  },
-
-  addIcon: {
-    width           : 50,
-    height          : 50,
-    backgroundColor : '#ccc',
-    alignItems      : 'center',
-    justifyContent  : 'center',
-    marginHorizontal: 5
   },
 
   preview: {
@@ -319,16 +333,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#000'
   },
 
-  toolsMini: {
-    height: 40
-  },
-
   capture: {
     flex      : 1,
     width     : undefined,
     height    : undefined,
     alignItems: 'center',
-    marginTop: 5
+    marginTop : 5
   },
 
   toolText: {
@@ -336,18 +346,6 @@ const styles = StyleSheet.create({
     flex   : 0,
     padding: 15,
     width  : 90
-  },
-
-  removeIcon: {
-    position: 'absolute',
-    right: 0,
-    top: 0,
-    paddingVertical: 2,
-    paddingHorizontal: 5,
-    borderWidth: 1,
-    color: '#fff',
-    zIndex: 5,
-    borderRadius: 5
   },
 
   toolTouchable: {
@@ -390,12 +388,31 @@ const styles = StyleSheet.create({
   },
 
   thumbnailsContainer: {
-    backgroundColor: "#ddd"
+    backgroundColor  : "#ddd",
+    height           : 70,
+    paddingHorizontal: 5,
+    zIndex: 5,
+    ...(new Elevation(4)),
+    shadowOffset: {
+      height: -3
+    },
+    shadowColor: '#888'
   },
 
   thumbnail: {
     width           : 50,
     height          : 50,
-    marginHorizontal: 5
-  }
+    marginHorizontal: 5,
+    borderRadius    : 3
+  },
+
+  addIcon: {
+    width           : 50,
+    height          : 50,
+    backgroundColor : '#ccc',
+    alignItems      : 'center',
+    justifyContent  : 'center',
+    marginHorizontal: 5,
+    borderRadius    : 3
+  },
 })
