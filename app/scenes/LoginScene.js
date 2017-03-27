@@ -35,34 +35,6 @@ export default class LoginScene extends Component {
   }
 
 
-  // loadObservations() {
-  //   axios.get('/observations').then(response => {
-  //     // Setup the observations to be rendered into markers
-  //     let markers = []
-  //
-  //     response.data.data.map(observation => {
-  //       markers.push({
-  //         title: observation.observation_category,
-  //         images: observation.images,
-  //         position: {
-  //           latitude: observation.location.latitude,
-  //           longitude: observation.location.longitude
-  //         },
-  //         owner: observation.user.name
-  //       })
-  //     })
-  //
-  //     // Add the markers to the state
-  //     this.setState({markers})
-  //
-  //   }).catch(error => {
-  //     console.log(error)
-  //   })
-  // }
-
-
-
-
   render() {
     return (
       <View style={styles.container}>
