@@ -13,6 +13,7 @@ import Camera from 'react-native-camera'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import Colors from '../helpers/Colors'
+import Elevation from '../helpers/Elevation'
 
 let imageIndex = 0
 
@@ -106,12 +107,13 @@ export default class CameraScene extends Component {
         scrollEnabled={false}
       >
         <View style={[styles.container, {width: this.state.pageWidth}]}>
+          <View style={styles.topToolsContainer}>
+            {flashIcon}
+          </View>
           <Camera
-            ref={(cam) => {
-            this.camera = cam;
-          }}
+            ref={cam => {this.camera = cam}}
             captureTarget={Camera.constants.CaptureTarget.disk}
-            style={styles.preview}
+            style={[styles.preview, {flex: 1}]}
             keepAwake={true}
             mirrorImage={false}
             type={this.state.camera.type}
@@ -121,23 +123,20 @@ export default class CameraScene extends Component {
             onZoomChanged={this.zoom}
             defaultOnFocusComponent={true}
           >
-            <View style={styles.topToolsContainer}>
-              {flashIcon}
-            </View>
-            <View style={styles.toolsContainer}>
-              <TouchableOpacity style={styles.toolTouchable} onPress={this.cancel}>
-                <Text style={[styles.toolText]}>Cancel</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.capture} onPress={this.takePicture}>
-                <Icon name="camera" size={36} color={"#fff"}/>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.toolTouchable, {alignItems: 'flex-end', paddingRight: 15}]}
-                onPress={this.switchType}>
-                <IonIcon name="ios-reverse-camera-outline" size={32} color={"#fff"}/>
-              </TouchableOpacity>
-            </View>
           </Camera>
+          <View style={styles.toolsContainer}>
+            <TouchableOpacity style={styles.toolTouchable} onPress={this.cancel}>
+              <Text style={[styles.toolText]}>Cancel</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.capture} onPress={this.takePicture}>
+              <Icon name="camera" size={36} color={"#fff"}/>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.toolTouchable, {alignItems: 'flex-end', paddingRight: 15}]}
+              onPress={this.switchType}>
+              <IonIcon name="ios-reverse-camera-outline" size={32} color={"#fff"}/>
+            </TouchableOpacity>
+          </View>
         </View>
 
         <View style={[styles.container, {width: this.state.pageWidth, backgroundColor: '#000'}]}>
@@ -171,7 +170,12 @@ export default class CameraScene extends Component {
 
   renderThumbnail = (image, index) => {
     return (
-      <TouchableOpacity key={index} onPress={() => this.setState({selectedImage: image})}>
+      <TouchableOpacity
+        key={index}
+        onPress={() => this.setState({selectedImage: image})}
+        style={{position: 'relative'}}
+      >
+        <IonIcon name="md-close-circle" style={styles.removeIcon} size={15}/>
         <Image source={{uri: image.path}} style={styles.thumbnail}/>
       </TouchableOpacity>
     )
@@ -273,11 +277,13 @@ const styles = StyleSheet.create({
     paddingTop     : getVerticalPadding(),
     flex           : 0,
     justifyContent : 'space-between',
-    flexDirection  : 'row'
+    flexDirection  : 'row',
+    zIndex: 5,
+    ...(new Elevation(4))
   },
 
   headerButton: {
-    padding: 10,
+    padding      : 10,
     flexDirection: 'row'
   },
 
@@ -288,11 +294,11 @@ const styles = StyleSheet.create({
   },
 
   addIcon: {
-    width: 50,
-    height: 50,
-    backgroundColor: '#ccc',
-    alignItems: 'center',
-    justifyContent: 'center',
+    width           : 50,
+    height          : 50,
+    backgroundColor : '#ccc',
+    alignItems      : 'center',
+    justifyContent  : 'center',
     marginHorizontal: 5
   },
 
@@ -307,10 +313,10 @@ const styles = StyleSheet.create({
     flex           : 0,
     flexDirection  : 'row',
     width          : undefined,
-    height         : 70,
+    height         : 60,
     justifyContent : 'space-between',
     alignItems     : 'center',
-    backgroundColor: Colors.transparentDark
+    backgroundColor: '#000'
   },
 
   toolsMini: {
@@ -321,7 +327,8 @@ const styles = StyleSheet.create({
     flex      : 1,
     width     : undefined,
     height    : undefined,
-    alignItems: 'center'
+    alignItems: 'center',
+    marginTop: 5
   },
 
   toolText: {
@@ -329,6 +336,18 @@ const styles = StyleSheet.create({
     flex   : 0,
     padding: 15,
     width  : 90
+  },
+
+  removeIcon: {
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    paddingVertical: 2,
+    paddingHorizontal: 5,
+    borderWidth: 1,
+    color: '#fff',
+    zIndex: 5,
+    borderRadius: 5
   },
 
   toolTouchable: {
