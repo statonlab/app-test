@@ -61,7 +61,6 @@ console.log("writing to realm")
   //transition to Home Scene.
   this.props.navigator.push({label: 'LandingScene'})
 
-
 }
   axiosRequest = () => {
 
