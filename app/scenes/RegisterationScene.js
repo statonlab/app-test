@@ -10,23 +10,20 @@ import Axios from 'axios'
 import {UserSchema} from '../db/Schema'
 import Realm from 'realm'
 
-
 export default class RegistrationScene extends Component {
-
   constructor(props) {
     super(props)
-
     this.state = {
       name           : 'default',
       email          : 'wiggle@wiggle.com',
       password       : 'dogdog42',
       confirmPassword: 'dogdog42',
       is_over_thirteen : true,
-      zipcode        : 40508,
+      zipcode        : '40508',
       is_anonymous : true
     }
 
-    let realm = new Realm({
+    this.realm = new Realm({
       schema: [UserSchema]
     })
 
@@ -38,48 +35,39 @@ export default class RegistrationScene extends Component {
        confirmPassword: t.refinement(t.String, (pw) => pw === this.state.password, "confirmPW"), //ensure matches password
       is_over_thirteen : t.refinement(t.Boolean, (val) => val ,  "overThirteen"),
       // zipCode : t.refinement(t.Number, (n) =>  /^([0-9]{5})(-[0-9]{4})?$/i.test(n), 'zipCode')
-       zipcode : t.Number  // might have to convert to a string!
+       zipcode : t.String
        //above regexp is correctly written
     })
   }
   submitRegistration = () => {
-
-    console.log("submitting registration")
-    console.log(this.state)
     if (!this.validateState().isValid()) {
-      // this.notifyIncomplete(this.validateState())
-      console.log(this.validateState())
+      this.notifyIncomplete(this.validateState())
       return
     }
-   let response =  this.axiosRequest();
-  if (response) {
-    alert("Success!  Registered with {response.email}!  Writing local db entry to realm.")
-
-    this.writeToRealm(response);
-    this.props.navigator.push({label: 'LoginScene' , email: this.state.email})
-
-  }
-    //transition to confirmation.  I pass email here in the route, need to receive it in the scene
+   this.axiosRequest()
+    //previously did stuff here, no longer
 }
-
 writeToRealm = (responseFull) => {
-    console.log("writing to realm");
-
-  realm.write((responseFull) => {
+console.log("writing to realm")
+  this.realm.write(() => {
     let response = responseFull.data.data
-    realm.create('User', {
-      id              : response.id.toString(),
+
+    this.realm.create('User', {
+      id              : response.user_id,
       name            : response.name.toString(),
       email           : response.email.toString(),
       anonymous       : response.is_anonymous,
-      zipcode         : response.zipcode,
+      zipcode         : Number(response.zipcode),
       api_token       : response.api_token,
       is_over_thirteen: response.is_over_thirteen
     })
   })
+  //transition to confirmation.
+  // I pass email here in the route, need to receive it in the scene
+
+
+
 }
-
-
   axiosRequest = () => {
 
     let request = this.state;
@@ -87,11 +75,12 @@ writeToRealm = (responseFull) => {
       baseURL: 'http://treesource.app/api/v1/',
       timeout: 10000
     })
-
     axios.post('users', request)
       .then(response => {
         console.log('RES', response.data);
-    return(response);
+      //write to realm
+        this.writeToRealm(response)
+
       })
       .catch(error => {
         console.log('ERR', error);
@@ -103,12 +92,9 @@ writeToRealm = (responseFull) => {
     return t.validate(this.state, this.registrationRules)
   }
 
-
+//A modal that parses the tcomb error and alerts user which fields are invalid
   notifyIncomplete = (validationAttempt) => {
-  }
-
-  updateText = () => {
-    return
+    console.log(validationAttempt)
   }
 
 
