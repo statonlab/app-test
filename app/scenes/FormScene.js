@@ -32,8 +32,6 @@ const ImageString     = t.refinement(t.String, (string) => string != '', 'ImageS
 
 const Location = t.dict(t.String, Coordinate)
 
-const userID = "test@etttt.com"//Important:  The logged in User should be stored by the app somewhere.
-
 export default class FormScene extends Component {
   constructor(props) {
     super(props)
@@ -193,7 +191,7 @@ export default class FormScene extends Component {
   }
 
   retrieveAPI = () => {
-    return this.realm.objects('User').filtered(`email = "${userID}"`)[0].api_token
+    return this.realm.objects('User')[0].api_token
   }
 
 
