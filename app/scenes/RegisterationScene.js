@@ -14,12 +14,12 @@ export default class RegistrationScene extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      name           : 'default',
-      email          : 'wiggle@wiggle.com',
-      password       : 'dogdog42',
-      confirmPassword: 'dogdog42',
-      is_over_thirteen : true,
-      zipcode        : '40508',
+      name           : 'unknown',
+      email          : '',
+      password       : '',
+      confirmPassword: '',
+      is_over_thirteen : false,
+      zipcode        : null,
       is_anonymous : true
     }
 
@@ -28,15 +28,12 @@ export default class RegistrationScene extends Component {
     })
 
 
-
     this.registrationRules = t.struct({
       email : t.String, //no validation
       password: t.refinement(t.String, (pw) => pw.length >= 6, "pw"),//ensure password is at least 6 characters
        confirmPassword: t.refinement(t.String, (pw) => pw === this.state.password, "confirmPW"), //ensure matches password
       is_over_thirteen : t.refinement(t.Boolean, (val) => val ,  "overThirteen"),
-      // zipCode : t.refinement(t.Number, (n) =>  /^([0-9]{5})(-[0-9]{4})?$/i.test(n), 'zipCode')
-       zipcode : t.String
-       //above regexp is correctly written
+      zipcode : t.refinement(t.String, (n) =>  /^([0-9]{5})(-[0-9]{4})?$/i.test(n), 'zipCode')
     })
   }
   submitRegistration = () => {
@@ -51,21 +48,18 @@ writeToRealm = (responseFull) => {
 console.log("writing to realm")
   this.realm.write(() => {
     let response = responseFull.data.data
-
     this.realm.create('User', {
       id              : response.user_id,
       name            : response.name.toString(),
       email           : response.email.toString(),
       anonymous       : response.is_anonymous,
-      zipcode         : Number(response.zipcode),
+      zipcode         : response.zipcode,
       api_token       : response.api_token,
       is_over_thirteen: response.is_over_thirteen
     })
   })
   //transition to confirmation.
   // I pass email here in the route, need to receive it in the scene
-
-
 
 }
   axiosRequest = () => {
@@ -84,7 +78,7 @@ console.log("writing to realm")
       })
       .catch(error => {
         console.log('ERR', error);
-        alert(error[0]);
+        // alert(error[0]);
       });
   }
 
@@ -94,7 +88,11 @@ console.log("writing to realm")
 
 //A modal that parses the tcomb error and alerts user which fields are invalid
   notifyIncomplete = (validationAttempt) => {
-    console.log(validationAttempt)
+    errors = [];
+    for (errorIndex in validationAttempt.errors){
+      errors.push(validationAttempt.errors[errorIndex].message)
+    }
+    alert(errors)
   }
 
 
