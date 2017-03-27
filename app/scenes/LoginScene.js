@@ -19,7 +19,12 @@ export default class LoginScene extends Component {
       password: ''
     }
   }
-//    Route::get('/user', 'UsersController@show');
+
+  componentDidMount() {
+    if (this.props.email) {
+      this.setState({email: this.props.email})
+    }
+}
 
   putRequest = () => {
     console.log("executing put request");
@@ -53,6 +58,7 @@ export default class LoginScene extends Component {
               placeholder={"Email"}
               placeholderTextColor="#aaa"
               returnKeyType={'next'}
+              onChangeText={(email) =>this.setState({email})}
             />
           </View>
 
@@ -63,6 +69,8 @@ export default class LoginScene extends Component {
               placeholder={"Password"}
               secureTextEntry={true}
               placeholderTextColor="#aaa"
+              onChangeText={(password) =>this.setState({password})}
+
             />
           </View>
 

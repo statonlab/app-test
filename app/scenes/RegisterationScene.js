@@ -58,8 +58,9 @@ console.log("writing to realm")
       is_over_thirteen: response.is_over_thirteen
     })
   })
-  //transition to confirmation.
-  // I pass email here in the route, need to receive it in the scene
+  //transition to Home Scene.
+  this.props.navigator.push({label: 'LandingScene'})
+
 
 }
   axiosRequest = () => {

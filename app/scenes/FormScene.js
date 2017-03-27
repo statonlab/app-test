@@ -155,6 +155,12 @@ export default class FormScene extends Component {
     Alert.alert(message)
   }
 
+
+  submitSceneToSever = () => {
+    
+  }
+
+
   componentWillUnmount() {
     this.event.remove()
     AsyncStorage.removeItem('@WildType:formData')
