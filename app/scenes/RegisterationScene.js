@@ -60,9 +60,16 @@ export default class RegistrationScene extends Component {
       })
     })
     //transition to Home Scene.
-    this.props.navigator.push({label: 'LandingScene'})
+     this.props.navigator.push({label: 'LandingScene'})
 
   }
+
+  deleteExistingUsers = () => {
+    this.realm.write(() => {
+     // this.realm.deleteAll()
+    })
+  }
+
   axiosRequest       = () => {
 
     let request = this.state;
@@ -194,6 +201,7 @@ export default class RegistrationScene extends Component {
 
   componentWillUnmount() {
     this.realm.close()
+    console.log("closed!")
   }
 
 }
