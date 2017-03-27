@@ -100,11 +100,85 @@ console.log("writing to realm")
     return (
       <View style={styles.container}>
         <Header title="Register" navigator={this.props.navigator} showRightIcon={false}/>
-        <ScrollView contentContainerStyle={styles.form}>
-          <View style={styles.formGroup}>
-            <Text style={styles.title}>TreeSource</Text>
-          </View>
+        <ScrollView>
+          <View style={styles.form}>
+            <View style={styles.formGroup}>
+              <Text style={styles.title}>TreeSource</Text>
+            </View>
 
+            <View style={styles.formGroup}>
+              <Text style={styles.label}>Name</Text>
+              <TextInput
+                autoCapitalize={'words'}
+                autoFocus={true}
+                style={styles.textField}
+                placeholder={"E.g, Jane Doe"}
+                placeholderTextColor="#aaa"
+                returnKeyType={'next'}
+              />
+            </View>
+
+            <View style={styles.formGroup}>
+              <Text style={styles.label}>Email</Text>
+              <TextInput
+                autoCapitalize={'none'}
+                style={styles.textField}
+                placeholder={"E.g, example@email.com"}
+                placeholderTextColor="#aaa"
+                returnKeyType={'next'}
+              />
+            </View>
+
+            <View style={styles.formGroup}>
+              <Text style={styles.label}>Password</Text>
+              <TextInput
+                style={styles.textField}
+                placeholder={"Password"}
+                secureTextEntry={true}
+                placeholderTextColor="#aaa"
+              />
+            </View>
+
+            <View style={styles.formGroup}>
+              <Text style={styles.label}>Confirm Password</Text>
+              <TextInput
+                style={styles.textField}
+                placeholder={"Repeat Password"}
+                secureTextEntry={true}
+                placeholderTextColor="#aaa"
+              />
+            </View>
+
+            <View style={styles.formGroup}>
+              <Text style={styles.label}>Zip Code (Optional)</Text>
+              <TextInput
+                autoCapitalize={'none'}
+                style={styles.textField}
+                placeholder={"E.g, 37919"}
+                placeholderTextColor="#aaa"
+                returnKeyType={'next'}
+              />
+            </View>
+
+            <View style={styles.formGroup}>
+              <Checkbox
+                label="I am over 13 years old"
+                onChange={(checked) => this.setState({isOverThirteen: checked})}
+              />
+            </View>
+
+            <View style={styles.formGroup}>
+              <MKButton style={styles.button}>
+                <Text style={styles.buttonText}>Register</Text>
+              </MKButton>
+            </View>
+
+            <View style={[styles.formGroup, {flexDirection: 'row', justifyContent: 'space-between'}]}>
+              <MKButton>
+                <Text style={styles.link}>Have an account? Login here</Text>
+              </MKButton>
+            </View>
+          </View>
           <View style={styles.formGroup}>
             <Text style={styles.label}>Email</Text>
             <TextInput

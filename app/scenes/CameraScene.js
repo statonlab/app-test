@@ -3,7 +3,8 @@ import {
   View,
   StyleSheet,
   Dimensions,
-  Text
+  Text,
+  TouchableOpacity
 } from 'react-native'
 import Camera from 'react-native-camera'
 import Header from '../components/Header'
@@ -25,9 +26,14 @@ export default class CameraScene extends Component {
           mirrorImage={false}
           captureQuality="medium">
           <View style={styles.toolsContainer}>
-            <Text style={styles.capture} onPress={this.takePicture.bind(this)}>
+            <TouchableOpacity style={styles.toolTouchable} onPress={this.cancel.bind(this)}>
+              <Text style={[styles.toolText]}>Cancel</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.capture} onPress={this.takePicture.bind(this)}>
               <Icon name="camera" size={36} color={"#fff"}/>
-            </Text>
+            </TouchableOpacity>
+            { /* Place holder to guarantee center position of the camera icon */ }
+            <Text style={[styles.toolText, {color: 'transparent'}]}>ph</Text>
           </View>
         </Camera>
       </View>
@@ -47,6 +53,10 @@ export default class CameraScene extends Component {
       console.error(err)
     }
   }
+
+  cancel = () => {
+    this.props.navigator.pop()
+  }
 }
 
 CameraScene.PropTypes = {
@@ -54,27 +64,45 @@ CameraScene.PropTypes = {
 }
 
 const styles = StyleSheet.create({
-  container     : {
+  container: {
     flex: 1
   },
-  preview       : {
+
+  preview: {
     flex          : 1,
     justifyContent: 'flex-end',
     alignItems    : 'center',
     height        : undefined,
     width         : undefined
   },
+
   toolsContainer: {
     flex           : 0,
+    flexDirection  : 'row',
     width          : Dimensions.get('window').width,
     height         : 70,
-    justifyContent : 'center',
+    justifyContent : 'space-between',
     alignItems     : 'center',
     backgroundColor: Colors.transparentDark
   },
-  capture       : {
+
+  capture: {
+    flex      : 1,
+    width     : undefined,
+    height    : undefined,
+    alignItems: 'center'
+  },
+
+  toolText: {
+    color  : '#fff',
     flex   : 0,
-    color  : '#000',
-    padding: 10,
+    padding: 15,
+    width  : 90
+  },
+
+  toolTouchable: {
+    flex  : 0,
+    width : 90,
+    height: undefined
   }
 })
