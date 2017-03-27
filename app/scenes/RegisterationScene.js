@@ -1,10 +1,13 @@
 import React, {Component, PropTypes} from 'react'
-import {View, ScrollView, StyleSheet, TextInput, Text, Platform} from 'react-native'
+import {View, ScrollView, StyleSheet, TextInput, Text, Platform, Alert} from 'react-native'
 import {MKButton} from 'react-native-material-kit'
 import Header from '../components/Header'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
 import Checkbox from '../components/Checkbox'
+import t from 'tcomb-validation'
+import Axios from 'axios'
+import {UserSchema} from '../db/Schema'
 
 export default class RegistrationScene extends Component {
 
@@ -12,13 +15,105 @@ export default class RegistrationScene extends Component {
     super(props)
 
     this.state = {
-      email          : '',
-      password       : '',
-      confirmPassword: '',
-      isOverThirteen : false,
-      zipCode        : ''
+      name           : 'default',
+      email          : 'letsgo2@gmail.com',
+      password       : 'dogdog42',
+      confirmPassword: 'dogdog42',
+      is_over_thirteen : true,
+      zipcode        : 40508,
+      is_anonymous : true
     }
+
+    let realm = new Realm({
+      schema: [UserSchema]
+    })
+
+    realm.write(() => {
+      realm.create('User', {
+        // id           : primaryKey,
+        // name         : this.state.title.toString(),
+        // species      : this.state.species.toString(),
+        // numberOfTrees: this.state.numberOfTrees.toString(),
+        // treeHeight   : this.state.treeHeight.toString(),
+        // deadTrees    : this.state.deadTrees.toString(),
+        // image        : this.state.image.toString(),
+        // location     : this.state.location,
+        // comment      : this.state.comment.toString(),
+        // date         : moment().format().toString()
+      })
+    })
+
+    // id : {type: 'int', default: ''},
+    // name: {type: 'string', default: 'default'},
+    // email: {type: 'string', default: 'default'},
+    // anonymous: {type: 'boolean', default: 'false'},
+    // api_token: {type: 'string', default: ''},
+    // zipcode: {type: 'int', default: ''},
+    // is_over_thirteen: {type: 'boolean', default: 'false'}
+
+
+    this.registrationRules = t.struct({
+      email : t.String, //no validation
+      password: t.refinement(t.String, (pw) => pw.length >= 6, "pw"),//ensure password is at least 6 characters
+       confirmPassword: t.refinement(t.String, (pw) => pw === this.state.password, "confirmPW"), //ensure matches password
+      is_over_thirteen : t.refinement(t.Boolean, (val) => val ,  "overThirteen"),
+      // zipCode : t.refinement(t.Number, (n) =>  /^([0-9]{5})(-[0-9]{4})?$/i.test(n), 'zipCode')
+       zipCode : t.Number  // might have to convert to a string!
+       //above regexp is correctly written
+    })
   }
+  submitRegistration = () => {
+    console.log("submitting registration")
+    if (!this.validateState().isValid()) {
+      this.notifyIncomplete(this.validateState())
+      return
+    }
+   let response =  this.axiosRequest();
+  if (response) {
+    console.log(response);
+    alert("Success!  Registered with {response.email}")
+    this.props.navigator.push({label: 'LoginScene' , email: this.state.email})
+
+  }
+
+
+    //transition to confirmation.  I pass email here in the route, need to recieve it in the scene
+
+
+
+}
+
+
+
+  axiosRequest = () => {
+
+    let request = this.state;
+    let axios = Axios.create({
+      baseURL: 'http://treesource.app/api/v1/',
+      timeout: 10000
+    })
+
+    axios.post('users', request)
+      .then(response => {
+        console.log('RES', response.data);
+    return(response);
+      })
+      .catch(error => {
+        console.log(error);
+        alert(error[0]);
+      });
+  }
+
+  validateState = () => {
+    return t.validate(this.state, this.registrationRules)
+  }
+
+
+  notifyIncomplete = (validationAttempt) => {
+    console.log(validationAttempt);
+  }
+
+
 
   render() {
     return (

@@ -60,7 +60,7 @@ export default class WildType extends Component {
     }
 
     if (route.label == 'LoginScene') {
-      return <LoginScene navigator={navigator}/>
+      return <LoginScene navigator={navigator} email={route.email} />
     }
 
     if (route.label == 'RegistrationScene') {
