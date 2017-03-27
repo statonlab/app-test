@@ -14,13 +14,13 @@ export default class RegistrationScene extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      name           : 'unknown',
-      email          : '',
-      password       : '',
-      confirmPassword: '',
-      is_over_thirteen : false,
-      zipcode        : null,
-      is_anonymous : true
+      name            : 'unknown',
+      email           : '',
+      password        : '',
+      confirmPassword : '',
+      is_over_thirteen: false,
+      zipcode         : null,
+      is_anonymous    : true
     }
 
     this.realm = new Realm({
@@ -29,50 +29,51 @@ export default class RegistrationScene extends Component {
 
 
     this.registrationRules = t.struct({
-      email : t.String, //no validation
-      password: t.refinement(t.String, (pw) => pw.length >= 6, "pw"),//ensure password is at least 6 characters
-       confirmPassword: t.refinement(t.String, (pw) => pw === this.state.password, "confirmPW"), //ensure matches password
-      is_over_thirteen : t.refinement(t.Boolean, (val) => val ,  "overThirteen"),
-      zipcode : t.refinement(t.String, (n) =>  /^([0-9]{5})(-[0-9]{4})?$/i.test(n), 'zipCode')
+      email           : t.String, //no validation
+      password        : t.refinement(t.String, (pw) => pw.length >= 6, "pw"),//ensure password is at least 6 characters
+      confirmPassword : t.refinement(t.String, (pw) => pw === this.state.password, "confirmPW"), //ensure matches password
+      is_over_thirteen: t.refinement(t.Boolean, (val) => val, "overThirteen"),
+      zipcode         : t.refinement(t.String, (n) => /^([0-9]{5})(-[0-9]{4})?$/i.test(n), 'zipCode')
     })
   }
+
   submitRegistration = () => {
     if (!this.validateState().isValid()) {
       this.notifyIncomplete(this.validateState())
       return
     }
-   this.axiosRequest()
+    this.axiosRequest()
     //previously did stuff here, no longer
-}
-writeToRealm = (responseFull) => {
-console.log("writing to realm")
-  this.realm.write(() => {
-    let response = responseFull.data.data
-    this.realm.create('User', {
-      id              : response.user_id,
-      name            : response.name.toString(),
-      email           : response.email.toString(),
-      anonymous       : response.is_anonymous,
-      zipcode         : response.zipcode,
-      api_token       : response.api_token,
-      is_over_thirteen: response.is_over_thirteen
+  }
+  writeToRealm       = (responseFull) => {
+    console.log("writing to realm")
+    this.realm.write(() => {
+      let response = responseFull.data.data
+      this.realm.create('User', {
+        id              : response.user_id,
+        name            : response.name.toString(),
+        email           : response.email.toString(),
+        anonymous       : response.is_anonymous,
+        zipcode         : response.zipcode,
+        api_token       : response.api_token,
+        is_over_thirteen: response.is_over_thirteen
+      })
     })
-  })
-  //transition to Home Scene.
-  this.props.navigator.push({label: 'LandingScene'})
+    //transition to Home Scene.
+    this.props.navigator.push({label: 'LandingScene'})
 
-}
-  axiosRequest = () => {
+  }
+  axiosRequest       = () => {
 
     let request = this.state;
-    let axios = Axios.create({
+    let axios   = Axios.create({
       baseURL: 'http://treesource.app/api/v1/',
       timeout: 10000
     })
     axios.post('users', request)
       .then(response => {
         console.log('RES', response.data);
-      //write to realm
+        //write to realm
         this.writeToRealm(response)
 
       })
@@ -89,7 +90,7 @@ console.log("writing to realm")
 //A modal that parses the tcomb error and alerts user which fields are invalid
   notifyIncomplete = (validationAttempt) => {
     errors = [];
-    for (errorIndex in validationAttempt.errors){
+    for (errorIndex in validationAttempt.errors) {
       errors.push(validationAttempt.errors[errorIndex].message)
     }
     alert(errors)
@@ -118,7 +119,65 @@ console.log("writing to realm")
               />
             </View>
 
-          
+            <View style={styles.formGroup}>
+              <Text style={styles.label}>Email</Text>
+              <TextInput
+                autoCapitalize={'none'}
+                autoFocus={true}
+                style={styles.textField}
+                placeholder={"E.g, example@email.com"}
+                placeholderTextColor="#aaa"
+                returnKeyType={'next'}
+                onChangeText={(email) =>this.setState({email})}
+              />
+            </View>
+
+            <View style={styles.formGroup}>
+              <Text style={styles.label}>Password</Text>
+              <TextInput
+                style={styles.textField}
+                placeholder={"Password"}
+                secureTextEntry={true}
+                placeholderTextColor="#aaa"
+                onChangeText={(password) =>this.setState({password})}
+
+              />
+            </View>
+
+            <View style={styles.formGroup}>
+              <Text style={styles.label}>Confirm Password</Text>
+              <TextInput
+                style={styles.textField}
+                placeholder={"Repeat Password"}
+                secureTextEntry={true}
+                placeholderTextColor="#aaa"
+                onChangeText={(confirmPassword) =>this.setState({confirmPassword})}
+              />
+            </View>
+
+            <View style={styles.formGroup}>
+              <Text style={styles.label}>Zip Code (Optional)</Text>
+              <TextInput
+                autoCapitalize={'none'}
+                style={styles.textField}
+                placeholder={"E.g, 37919"}
+                placeholderTextColor="#aaa"
+                returnKeyType={'next'}
+                onChangeText={(zipcode) =>this.setState({zipcode})}
+              />
+            </View>
+
+            <View style={styles.formGroup}>
+              <Checkbox
+                label="I am over 13 years old"
+                onChange={(checked) => this.setState({is_over_thirteen: checked})}
+              />
+            </View>
+
+            <View style={styles.formGroup}>
+              <MKButton style={styles.button}
+                onPress={() => {this.submitRegistration() }}>
+                <Text style={styles.buttonText}>Register</Text>
               </MKButton>
             </View>
 
@@ -128,74 +187,6 @@ console.log("writing to realm")
               </MKButton>
             </View>
           </View>
-          <View style={styles.formGroup}>
-            <Text style={styles.label}>Email</Text>
-            <TextInput
-              autoCapitalize={'none'}
-              autoFocus={true}
-              style={styles.textField}
-              placeholder={"E.g, example@email.com"}
-              placeholderTextColor="#aaa"
-              returnKeyType={'next'}
-              onChangeText={(email) =>this.setState({email})}
-            />
-          </View>
-
-          <View style={styles.formGroup}>
-            <Text style={styles.label}>Password</Text>
-            <TextInput
-              style={styles.textField}
-              placeholder={"Password"}
-              secureTextEntry={true}
-              placeholderTextColor="#aaa"
-              onChangeText={(password) =>this.setState({password})}
-
-            />
-          </View>
-
-          <View style={styles.formGroup}>
-            <Text style={styles.label}>Confirm Password</Text>
-            <TextInput
-              style={styles.textField}
-              placeholder={"Repeat Password"}
-              secureTextEntry={true}
-              placeholderTextColor="#aaa"
-              onChangeText={(confirmPassword) =>this.setState({confirmPassword})}
-            />
-          </View>
-
-          <View style={styles.formGroup}>
-            <Text style={styles.label}>Zip Code (Optional)</Text>
-            <TextInput
-              autoCapitalize={'none'}
-              style={styles.textField}
-              placeholder={"E.g, 37919"}
-              placeholderTextColor="#aaa"
-              returnKeyType={'next'}
-              onChangeText={(zipcode) =>this.setState({zipcode})}
-            />
-          </View>
-
-          <View style={styles.formGroup}>
-            <Checkbox
-              label="I am over 13 years old"
-              onChange={(checked) => this.setState({is_over_thirteen: checked})}
-            />
-          </View>
-
-          <View style={styles.formGroup}>
-            <MKButton style={styles.button}
-              onPress={() => {this.submitRegistration() }}>
-              <Text style={styles.buttonText}>Register</Text>
-            </MKButton>
-          </View>
-
-          <View style={[styles.formGroup, {flexDirection: 'row', justifyContent: 'space-between'}]}>
-            <MKButton>
-              <Text style={styles.link}>Have an account? Login here</Text>
-            </MKButton>
-          </View>
-
         </ScrollView>
       </View>
     )
