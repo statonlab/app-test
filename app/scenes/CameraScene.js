@@ -5,24 +5,38 @@ import {
   Dimensions,
   Text,
   TouchableOpacity,
-  Platform
+  Platform,
+  ScrollView,
+  Image
 } from 'react-native'
 import Camera from 'react-native-camera'
-import Header from '../components/Header'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import Colors from '../helpers/Colors'
+
+let imageIndex = 0
 
 export default class CameraScene extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      camera: {
+      camera       : {
         type : Camera.constants.Type.back,
         flash: Camera.constants.FlashMode.auto
-      }
+      },
+      selectedImage: {
+        path: ''
+      },
+      images       : [],
+      pageWidth    : 0
     }
+  }
+
+  componentDidMount() {
+    this.setState({
+      pageWidth: Dimensions.get('window').width
+    })
   }
 
   render() {
@@ -82,39 +96,99 @@ export default class CameraScene extends Component {
     }
 
     return (
-      <View style={styles.container}>
-        <Camera
-          ref={(cam) => {
+      <ScrollView
+        ref="page"
+        pagingEnabled={true}
+        horizontal={true}
+        directionalLockEnabled={false}
+        onContentSizeChange={this._resetWidth}
+        showsHorizontalScrollIndicator={false}
+        scrollEnabled={false}
+      >
+        <View style={[styles.container, {width: this.state.pageWidth}]}>
+          <Camera
+            ref={(cam) => {
             this.camera = cam;
           }}
-          captureTarget={Camera.constants.CaptureTarget.disk}
-          style={styles.preview}
-          keepAwake={true}
-          mirrorImage={false}
-          type={this.state.camera.type}
-          aspect={Camera.constants.Aspect.fill}
-          captureQuality="high"
-          flashMode={this.state.camera.flash}
+            captureTarget={Camera.constants.CaptureTarget.disk}
+            style={styles.preview}
+            keepAwake={true}
+            mirrorImage={false}
+            type={this.state.camera.type}
+            aspect={Camera.constants.Aspect.fill}
+            captureQuality="high"
+            flashMode={this.state.camera.flash}
+            onZoomChanged={this.zoom}
+            defaultOnFocusComponent={true}
           >
-          <View style={styles.topToolsContainer}>
-            {flashIcon}
+            <View style={styles.topToolsContainer}>
+              {flashIcon}
+            </View>
+            <View style={styles.toolsContainer}>
+              <TouchableOpacity style={styles.toolTouchable} onPress={this.cancel}>
+                <Text style={[styles.toolText]}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.capture} onPress={this.takePicture}>
+                <Icon name="camera" size={36} color={"#fff"}/>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.toolTouchable, {alignItems: 'flex-end', paddingRight: 15}]}
+                onPress={this.switchType}>
+                <IonIcon name="ios-reverse-camera-outline" size={32} color={"#fff"}/>
+              </TouchableOpacity>
+            </View>
+          </Camera>
+        </View>
+
+        <View style={[styles.container, {width: this.state.pageWidth, backgroundColor: '#000'}]}>
+          <View style={styles.header}>
+            <TouchableOpacity style={styles.headerButton} onPress={this._back}>
+              <IonIcon name="ios-arrow-back" style={[styles.headerText, {width: 15, marginTop: 2}]} size={20}/>
+              <Text style={styles.headerText}>
+                Back
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.headerButton}>
+              <IonIcon name="md-checkmark" style={[styles.headerText, {width: 20, marginTop: 2}]} size={20}/>
+              <Text style={styles.headerText}>Done</Text>
+            </TouchableOpacity>
           </View>
-          <View style={styles.toolsContainer}>
-            <TouchableOpacity style={styles.toolTouchable} onPress={this.cancel.bind(this)}>
-              <Text style={[styles.toolText]}>Cancel</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.capture} onPress={this.takePicture.bind(this)}>
-              <Icon name="camera" size={36} color={"#fff"}/>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.toolTouchable, {alignItems: 'flex-end', paddingRight: 15}]}
-              onPress={this.switchType.bind(this)}>
-              <IonIcon name="ios-reverse-camera-outline" size={32} color={"#fff"}/>
-            </TouchableOpacity>
+          {this.state.selectedImage.path === '' ? null :
+            <Image source={{uri: this.state.selectedImage.path }} style={styles.preview}/>
+          }
+          <View style={[styles.toolsContainer, styles.thumbnailsContainer]}>
+            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+              {this.state.images.map(this.renderThumbnail)}
+              <TouchableOpacity style={styles.addIcon} onPress={this._back}>
+                <IonIcon name="md-add" size={30} color="#777"/>
+              </TouchableOpacity>
+            </ScrollView>
           </View>
-        </Camera>
-      </View>
+        </View>
+      </ScrollView>
     )
+  }
+
+  renderThumbnail = (image, index) => {
+    return (
+      <TouchableOpacity key={index} onPress={() => this.setState({selectedImage: image})}>
+        <Image source={{uri: image.path}} style={styles.thumbnail}/>
+      </TouchableOpacity>
+    )
+  }
+
+  _resetWidth = () => {
+    this.setState({
+      pageWidth: Dimensions.get('window').width
+    })
+  }
+
+  _back = () => {
+    this.refs.page.scrollTo({x: 0, y: 0, animated: true})
+  }
+
+  zoom = (e) => {
+    console.log(e)
   }
 
   switchFlash = () => {
@@ -141,10 +215,13 @@ export default class CameraScene extends Component {
     try {
       this.camera.capture()
         .then((data) => {
-          this.props.navigator.push({
-            label: 'CapturedScene',
-            image: data
-          })
+          let image  = {
+            path : data.path,
+            index: imageIndex++
+          }
+          let images = this.state.images.concat(image)
+          this.setState({selectedImage: image, images})
+          this.refs.page.scrollToEnd()
         })
     } catch (err) {
       console.error(err)
@@ -187,7 +264,36 @@ function getVerticalPadding() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex : 1,
+    width: undefined
+  },
+
+  header: {
+    backgroundColor: Colors.primary,
+    paddingTop     : getVerticalPadding(),
+    flex           : 0,
+    justifyContent : 'space-between',
+    flexDirection  : 'row'
+  },
+
+  headerButton: {
+    padding: 10,
+    flexDirection: 'row'
+  },
+
+  headerText: {
+    color     : '#fff',
+    fontWeight: '500',
+    fontSize  : 16
+  },
+
+  addIcon: {
+    width: 50,
+    height: 50,
+    backgroundColor: '#ccc',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginHorizontal: 5
   },
 
   preview: {
@@ -205,6 +311,10 @@ const styles = StyleSheet.create({
     justifyContent : 'space-between',
     alignItems     : 'center',
     backgroundColor: Colors.transparentDark
+  },
+
+  toolsMini: {
+    height: 40
   },
 
   capture: {
@@ -228,13 +338,13 @@ const styles = StyleSheet.create({
   },
 
   topToolsContainer: {
-    flex             : 0,
-    width            : undefined,
-    height           : undefined,
-    justifyContent   : 'center',
-    alignItems       : 'flex-start',
-    backgroundColor  : '#000',
-    paddingTop: getVerticalPadding()
+    flex           : 0,
+    width          : undefined,
+    height         : undefined,
+    justifyContent : 'center',
+    alignItems     : 'flex-start',
+    backgroundColor: '#000',
+    paddingTop     : getVerticalPadding()
   },
 
   iconText: {
@@ -242,9 +352,9 @@ const styles = StyleSheet.create({
     flexDirection : 'row',
     alignItems    : 'center',
     justifyContent: 'center',
-    padding: 0,
-    paddingLeft: 5,
-    marginBottom: 5
+    padding       : 0,
+    paddingLeft   : 5,
+    marginBottom  : 5
   },
 
   flash: {
@@ -253,10 +363,20 @@ const styles = StyleSheet.create({
   },
 
   flashTouchable: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection    : 'row',
+    alignItems       : 'center',
+    justifyContent   : 'center',
     paddingHorizontal: 15,
-    paddingVertical: 5
+    paddingVertical  : 5
+  },
+
+  thumbnailsContainer: {
+    backgroundColor: "#ddd"
+  },
+
+  thumbnail: {
+    width           : 50,
+    height          : 50,
+    marginHorizontal: 5
   }
 })
