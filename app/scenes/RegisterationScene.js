@@ -58,8 +58,8 @@ console.log("writing to realm")
       is_over_thirteen: response.is_over_thirteen
     })
   })
-  //transition to confirmation.
-  // I pass email here in the route, need to receive it in the scene
+  //transition to Home Scene.
+  this.props.navigator.push({label: 'LandingScene'})
 
 }
   axiosRequest = () => {
@@ -118,58 +118,7 @@ console.log("writing to realm")
               />
             </View>
 
-            <View style={styles.formGroup}>
-              <Text style={styles.label}>Email</Text>
-              <TextInput
-                autoCapitalize={'none'}
-                style={styles.textField}
-                placeholder={"E.g, example@email.com"}
-                placeholderTextColor="#aaa"
-                returnKeyType={'next'}
-              />
-            </View>
-
-            <View style={styles.formGroup}>
-              <Text style={styles.label}>Password</Text>
-              <TextInput
-                style={styles.textField}
-                placeholder={"Password"}
-                secureTextEntry={true}
-                placeholderTextColor="#aaa"
-              />
-            </View>
-
-            <View style={styles.formGroup}>
-              <Text style={styles.label}>Confirm Password</Text>
-              <TextInput
-                style={styles.textField}
-                placeholder={"Repeat Password"}
-                secureTextEntry={true}
-                placeholderTextColor="#aaa"
-              />
-            </View>
-
-            <View style={styles.formGroup}>
-              <Text style={styles.label}>Zip Code (Optional)</Text>
-              <TextInput
-                autoCapitalize={'none'}
-                style={styles.textField}
-                placeholder={"E.g, 37919"}
-                placeholderTextColor="#aaa"
-                returnKeyType={'next'}
-              />
-            </View>
-
-            <View style={styles.formGroup}>
-              <Checkbox
-                label="I am over 13 years old"
-                onChange={(checked) => this.setState({isOverThirteen: checked})}
-              />
-            </View>
-
-            <View style={styles.formGroup}>
-              <MKButton style={styles.button}>
-                <Text style={styles.buttonText}>Register</Text>
+          
               </MKButton>
             </View>
 
