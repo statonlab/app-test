@@ -48,6 +48,8 @@ export default class RegistrationScene extends Component {
   writeToRealm       = (responseFull) => {
     console.log("writing to realm")
     this.realm.write(() => {
+      this.realm.deleteAll()//delete existing users first
+      
       let response = responseFull.data.data
       this.realm.create('User', {
         id              : response.user_id,
@@ -64,11 +66,6 @@ export default class RegistrationScene extends Component {
 
   }
 
-  deleteExistingUsers = () => {
-    this.realm.write(() => {
-     // this.realm.deleteAll()
-    })
-  }
 
   axiosRequest       = () => {
 
