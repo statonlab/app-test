@@ -37,7 +37,6 @@ export default class RegistrationScene extends Component {
   }
 
   submitRegistration = () => {
-    console.log("REGISTER BUTTON")
     if (!this.validateState().isValid()) {
       this.notifyIncomplete(this.validateState())
       return
@@ -69,7 +68,6 @@ export default class RegistrationScene extends Component {
   }
 
   axiosRequest = () => {
-    console.log("AXIOS REQUEST")
     let request = this.state;
     let axios   = Axios.create({
       baseURL: 'http://treesource.app/api/v1/',
