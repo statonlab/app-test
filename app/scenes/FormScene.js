@@ -28,7 +28,7 @@ const DeadTreesIndex  = t.enums.of(DCP.deadTrees.selectChoices, "dead")
 const TreeHeightIndex = t.enums.of(DCP.treeHeight.selectChoices, "height")
 const TreeStandIndex  = t.enums.of(DCP.treeStand.selectChoices, "stand")
 const Coordinate      = t.refinement(t.Number, (n) => n != 0, 'Coordinate')
-const Location = t.dict(t.String, Coordinate)
+const Location        = t.dict(t.String, Coordinate)
 
 export default class FormScene extends Component {
   constructor(props) {
@@ -58,7 +58,7 @@ export default class FormScene extends Component {
     //set rules for base field values
     let formRules = {
       comment : t.String,
-      images   : t.list(t.String),
+      images  : t.list(t.String),
       title   : t.String,
       location: Location
     }
@@ -197,8 +197,8 @@ export default class FormScene extends Component {
 
   retrieveAPI = () => {
     let user = this.realm.objects('User')
-    if(user.length > 0) {
-      return [0].api_token
+    if (user.length > 0) {
+      return user[0].api_token
     } else {
       return ''
     }
@@ -214,7 +214,6 @@ export default class FormScene extends Component {
   }
 
   populateFormItem = (key) => {
-
     if (typeof DCP[key] === undefined) return
     return (
       <View style={styles.formGroup} key={key}>
@@ -241,10 +240,12 @@ export default class FormScene extends Component {
   renderPhotosField = () => {
     let length = this.state.images.length
     let text   = length > 1 ? 'photos' : 'photo'
+    let image  = this.state.images[length - 1]
+
     return (
       <View style={{flex: 1, alignItems: 'center', flexDirection: 'row'}}>
         <Text style={[styles.buttonLinkText, {color: '#444'}]}>{length} {text} added</Text>
-        <Image source={{url: this.state.images[length - 1]}} style={{flex: 0, height: 60, width: 60, borderRadius: 3}}/>
+        <Image source={{uri: image}} style={styles.thumbnail}/>
       </View>
     )
   }
@@ -305,13 +306,13 @@ export default class FormScene extends Component {
         </ScrollView>
 
         <View style={[styles.footer, {borderBottomWidth: 0}]}>
-          <MKButton style={[styles.button, styles.flex0]} onPress={this.submit} rippleColor="rgba(0,0,0,0.5)">
+          <MKButton style={[styles.button, styles.flex1]} onPress={this.submit} rippleColor="rgba(0,0,0,0.5)">
             <Text style={styles.buttonText}>
               Submit Entry
             </Text>
           </MKButton>
 
-          <MKButton style={[styles.button, styles.buttonAlt, styles.flex0]} onPress={this.cancel}>
+          <MKButton style={[styles.button, styles.buttonAlt, styles.flex1]} onPress={this.cancel}>
             <Text style={styles.buttonAltText}>
               Cancel
             </Text>
@@ -328,8 +329,9 @@ export default class FormScene extends Component {
    */
   _goToCamera = () => {
     this.props.navigator.push({
-      label : 'CameraScene',
-      images: this.state.images
+      label   : 'CameraScene',
+      images  : this.state.images,
+      gestures: {}
     })
   }
 }
@@ -356,6 +358,14 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     marginBottom : 10,
     borderRadius : 0
+  },
+
+  thumbnail: {
+    height         : 50,
+    width          : 50,
+    borderRadius   : 3,
+    resizeMode     : 'cover',
+    backgroundColor: '#fff'
   },
 
   formGroup: {
@@ -409,13 +419,14 @@ const styles = StyleSheet.create({
 
   button: {
     ...(new Elevation(1)),
-    flex           : 1,
-    borderRadius   : 2,
-    backgroundColor: Colors.primary,
-    padding        : 10
+    flex             : 1,
+    borderRadius     : 2,
+    backgroundColor  : Colors.primary,
+    paddingHorizontal: 10,
+    paddingVertical  : 15
   },
 
-  flex0: {
+  flex1: {
     flex: 1,
   },
 
@@ -434,13 +445,15 @@ const styles = StyleSheet.create({
   },
 
   buttonText: {
-    textAlign: 'center',
-    color    : '#fff',
+    textAlign : 'center',
+    color     : '#fff',
+    fontWeight: 'bold'
   },
 
   buttonAltText: {
-    textAlign: 'center',
-    color    : '#666'
+    textAlign : 'center',
+    color     : '#666',
+    fontWeight: 'bold'
   },
 
   buttonLinkText: {
