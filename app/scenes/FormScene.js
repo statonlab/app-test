@@ -79,6 +79,11 @@ export default class FormScene extends Component {
   }
 
   componentDidMount() {
+    let user = this.realm.objects('User')
+    if(user.length === 0) {
+      alert("Warning: You are not logged in.  Please log in to submit observations to the server.")
+    }
+
     this.events.push(DeviceEventEmitter.addListener('FormStateChanged', this.fetchData))
     this.events.push(DeviceEventEmitter.addListener('cameraCapturedPhotos', this.handleImages))
   }
@@ -130,7 +135,7 @@ export default class FormScene extends Component {
       image        : JSON.stringify(this.state.images),
       location     : this.state.location,
       comment      : this.state.comment.toString(),
-      date         : moment().format('MM-DD-Y H:m:s').toString()
+      date         : moment().format('MM-DD-Y H:mm:ss').toString()
     }
 
     this.realm.write(() => {
@@ -150,7 +155,6 @@ export default class FormScene extends Component {
     //Now submit to server
     obsSubmit.api_token = this.retrieveAPI()
     this.submitObsToServer(obsSubmit)
-
 
     this.props.navigator.push({
       label   : 'SubmittedScene',
@@ -198,7 +202,7 @@ export default class FormScene extends Component {
   retrieveAPI = () => {
     let user = this.realm.objects('User')
     if(user.length > 0) {
-      return [0].api_token
+      return this.realm.objects('User')[0].api_token
     } else {
       return ''
     }
