@@ -26,27 +26,30 @@ export default class RegistrationScene extends Component {
 
 
     this.registrationRules = t.struct({
-      email           : t.String, //no validation
-      password        : t.refinement(t.String, (pw) => pw.length >= 6, "pw"),//ensure password is at least 6 characters
-      confirmPassword : t.refinement(t.String, (pw) => pw === this.state.password, "confirmPW"), //ensure matches password
-      is_over_thirteen: t.refinement(t.Boolean, (val) => val, "overThirteen"),
+      email           : t.String, // No validation
+      password        : t.refinement(t.String, (pw) => pw.length >= 6, "pw"),// Ensure password is at least 6 characters
+      confirmPassword : t.refinement(t.String, (pw) => pw === this.state.password, "confirmPW"), // Ensure matches password
+      is_over_thirteen: t.Boolean, //t.refinement(t.Boolean, (val) => val, "overThirteen"),
       zipcode         : t.refinement(t.String, (n) => /^([0-9]{5})(-[0-9]{4})?$/i.test(n), 'zipCode')
     })
   }
 
   submitRegistration = () => {
+    console.log("REGISTER BUTTON")
     if (!this.validateState().isValid()) {
       this.notifyIncomplete(this.validateState())
       return
     }
     this.axiosRequest()
-    //previously did stuff here, no longer
+    // Previously did stuff here, no longer
   }
-  writeToRealm       = (responseFull) => {
+
+  writeToRealm = (responseFull) => {
     console.log("writing to realm")
     this.realm.write(() => {
-      this.realm.deleteAll()//delete existing users first
-      
+      // Delete existing users first
+      this.realm.deleteAll()
+
       let response = responseFull.data.data
       this.realm.create('User', {
         id              : response.user_id,
@@ -58,14 +61,12 @@ export default class RegistrationScene extends Component {
         is_over_thirteen: response.is_over_thirteen
       })
     })
-    //transition to Home Scene.
-     this.props.navigator.push({label: 'LandingScene'})
 
+    // Transition to Home Scene.
+    this.props.navigator.push({label: 'LandingScene'})
   }
 
-
-  axiosRequest       = () => {
-
+  axiosRequest = () => {
     let request = this.state;
     let axios   = Axios.create({
       baseURL: 'http://treesource.app/api/v1/',
@@ -88,7 +89,7 @@ export default class RegistrationScene extends Component {
     return t.validate(this.state, this.registrationRules)
   }
 
-//A modal that parses the tcomb error and alerts user which fields are invalid
+  // A modal that parses the tcomb error and alerts user which fields are invalid
   notifyIncomplete = (validationAttempt) => {
     errors = [];
     for (errorIndex in validationAttempt.errors) {
@@ -117,6 +118,7 @@ export default class RegistrationScene extends Component {
                 placeholder={"E.g, Jane Doe"}
                 placeholderTextColor="#aaa"
                 returnKeyType={'next'}
+                underlineColorAndroid="transparent"
               />
             </View>
 
@@ -124,12 +126,12 @@ export default class RegistrationScene extends Component {
               <Text style={styles.label}>Email</Text>
               <TextInput
                 autoCapitalize={'none'}
-                autoFocus={true}
                 style={styles.textField}
                 placeholder={"E.g, example@email.com"}
                 placeholderTextColor="#aaa"
                 returnKeyType={'next'}
                 onChangeText={(email) =>this.setState({email})}
+                underlineColorAndroid="transparent"
               />
             </View>
 
@@ -141,7 +143,7 @@ export default class RegistrationScene extends Component {
                 secureTextEntry={true}
                 placeholderTextColor="#aaa"
                 onChangeText={(password) =>this.setState({password})}
-
+                underlineColorAndroid="transparent"
               />
             </View>
 
@@ -153,6 +155,7 @@ export default class RegistrationScene extends Component {
                 secureTextEntry={true}
                 placeholderTextColor="#aaa"
                 onChangeText={(confirmPassword) =>this.setState({confirmPassword})}
+                underlineColorAndroid="transparent"
               />
             </View>
 
@@ -164,25 +167,28 @@ export default class RegistrationScene extends Component {
                 placeholder={"E.g, 37919"}
                 placeholderTextColor="#aaa"
                 returnKeyType={'next'}
-                onChangeText={(zipcode) =>this.setState({zipcode})}
+                onChangeText={(zipcode) => this.setState({zipcode})}
+                underlineColorAndroid="transparent"
               />
             </View>
 
             <View style={styles.formGroup}>
               <Checkbox
                 label="I am over 13 years old"
-                onChange={(checked) => this.setState({is_over_thirteen: checked})}
+                onChange={(checked) => {
+                  alert("Check is " + (checked ? "true" : "false"))
+                  this.setState({is_over_thirteen: checked})}}
               />
             </View>
 
             <View style={styles.formGroup}>
               <MKButton style={styles.button}
-                onPress={() => {this.submitRegistration() }}>
+                onPress={this.submitRegistration}>
                 <Text style={styles.buttonText}>Register</Text>
               </MKButton>
             </View>
 
-            <View style={[styles.formGroup, {flexDirection: 'row', justifyContent: 'space-between'}]}>
+            <View style={[styles.formGroup, {marginBottom: 30}]}>
               <MKButton>
                 <Text style={styles.link}>Have an account? Login here</Text>
               </MKButton>

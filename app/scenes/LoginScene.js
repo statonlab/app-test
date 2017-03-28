@@ -59,6 +59,7 @@ export default class LoginScene extends Component {
               placeholderTextColor="#aaa"
               returnKeyType={'next'}
               onChangeText={(email) =>this.setState({email})}
+              underlineColorAndroid="transparent"
             />
           </View>
 
@@ -70,7 +71,7 @@ export default class LoginScene extends Component {
               secureTextEntry={true}
               placeholderTextColor="#aaa"
               onChangeText={(password) =>this.setState({password})}
-
+              underlineColorAndroid="transparent"
             />
           </View>
 
