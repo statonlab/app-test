@@ -85,8 +85,8 @@ export default class FormScene extends Component {
     this.events.push(DeviceEventEmitter.addListener('cameraCapturedPhotos', this.handleImages))
   }
 
-  handleImages = (data) => {
-    this.setState({images: data.images})
+  handleImages = (images) => {
+    this.setState({images})
   }
 
   fetchData = () => {
@@ -235,6 +235,17 @@ export default class FormScene extends Component {
     )
   }
 
+  renderPhotosField = () => {
+    let length = this.state.images.length
+    let text = length > 1 ? 'photos' : 'photo'
+    return (
+      <View style={{flex: 1, alignItems: 'center', flexDirection: 'row'}}>
+        <Text style={[styles.buttonLinkText, {color: '#444'}]}>{length} {text} added</Text>
+        <Image source={{url: this.state.images[length - 1].path}} style={{flex: 0, height: 60, width: 60, borderRadius: 3}}/>
+      </View>
+    )
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -243,34 +254,33 @@ export default class FormScene extends Component {
           <View style={styles.card}>
 
             <View style={[styles.formGroup]}>
-              <Text style={styles.label}>Photo</Text>
+              <Text style={styles.label}>Photos</Text>
               <MKButton
-                style={[styles.buttonLink, {height: this.state.image !== '' ? 60 : 40, justifyContent: 'center'}]}
+                style={[styles.buttonLink, {height: this.state.images.length > 0 ? 60 : 40, justifyContent: 'center'}]}
                 onPress={this._goToCamera}
               >
-                {this.state.image === '' ?
+                {this.state.images.length === 0 ?
                   <View style={{flex: 1, alignItems: 'center', flexDirection: 'row'}}>
-                    <Text style={[styles.buttonLinkText, {flex: 1, color: '#aaa'}]}>Add Photo</Text>
-                    <Icon name="camera" style={[styles.icon, {width: 30}]}/>
+                    <Text style={[styles.buttonLinkText, {color: '#aaa'}]}>Add Photos</Text>
+                    <Icon name="camera" style={[styles.icon]}/>
                   </View>
                   :
-                  <View style={{flex: 1, alignItems: 'center', flexDirection: 'row'}}>
-                    <Text style={[styles.buttonLinkText, {flex: 1, color: '#aaa'}]}>Change Photo</Text>
-                    <Image source={{url: this.state.image}} style={{flex: 0, height: 60, width: 60}}/>
-                  </View>
+                  this.renderPhotosField()
                 }
               </MKButton>
             </View>
 
             <View style={styles.formGroup}>
               <Text style={styles.label}>Location</Text>
-              <MKButton style={styles.buttonLink}
-                onPress={() => this.props.navigator.push({label: 'CaptureLocationScene'})}>
-                <Text style={[styles.buttonLinkText, {color: this.state.location.latitude === 0 ? '#aaa' : '#444'}]}>
+              <MKButton
+                style={[styles.buttonLink, {flex: 1, alignItems: 'center', flexDirection: 'row'}]}
+                onPress={() => this.props.navigator.push({label: 'CaptureLocationScene'})}
+              >
+                <Text style={[styles.buttonLinkText, {flex: 1, color: this.state.location.latitude === 0 ? '#aaa' : '#444'}]}>
                   {this.state.location.latitude === 0 ? 'Enter location' : `${this.state.location.latitude},${this.state.location.longitude}`}
                 </Text>
+                <Icon name="map" style={styles.icon}/>
               </MKButton>
-              <Icon name="map" style={styles.icon}/>
             </View>
 
             {Object.keys(this.props.formProps).map(this.populateFormItem)}
@@ -431,7 +441,8 @@ const styles = StyleSheet.create({
   },
 
   buttonLinkText: {
-    color: "#666"
+    color: "#666",
+    flex: 1
   },
 
   comment: {

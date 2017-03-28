@@ -31,6 +31,7 @@ export default class CameraScene extends Component {
         flash: Camera.constants.FlashMode.auto
       },
       selectedImage: {
+        index: 0,
         path: ''
       },
       images       : [],
@@ -44,10 +45,15 @@ export default class CameraScene extends Component {
    * Fixes the width of each page
    */
   componentDidMount() {
+    let length = this.props.images.length
     this.setState({
       pageWidth: Dimensions.get('window').width,
-      images: this.props.images
+      images   : this.props.images
     })
+
+    if (length > 0) {
+      this.setState({selectedImage: this.props.images[length - 1]})
+    }
   }
 
   render() {
@@ -119,6 +125,11 @@ export default class CameraScene extends Component {
         <View style={[styles.container, {width: this.state.pageWidth}]}>
           <View style={styles.topToolsContainer}>
             {flashIcon}
+            <TouchableOpacity
+              style={[styles.toolTouchable, {alignItems: 'flex-end', paddingRight: 15}]}
+              onPress={this.switchType}>
+              <IonIcon name="ios-reverse-camera-outline" size={32} color={"#fff"}/>
+            </TouchableOpacity>
           </View>
           <Camera
             ref={cam => {this.camera = cam}}
@@ -135,21 +146,28 @@ export default class CameraScene extends Component {
           >
           </Camera>
           <View style={styles.toolsContainer}>
-            <TouchableOpacity style={styles.toolTouchable} onPress={this._cancel}>
+            <TouchableOpacity style={[styles.toolTouchable, {width: 60}]} onPress={this._cancel}>
               <Text style={[styles.toolText]}>Cancel</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.capture} onPress={this.takePicture}>
               <Icon name="camera" size={36} color={"#fff"}/>
             </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.toolTouchable, {alignItems: 'flex-end', paddingRight: 15}]}
-              onPress={this.switchType}>
-              <IonIcon name="ios-reverse-camera-outline" size={32} color={"#fff"}/>
-            </TouchableOpacity>
+            {this.state.images.length > 0 ?
+              <TouchableOpacity
+                style={[styles.toolTouchable, {alignItems: 'flex-end', width: 60}]}
+                onPress={this._forward}>
+
+                <Image source={{uri: this.state.images[this.state.images.length - 1].path}} style={styles.thumbnail}/>
+              </TouchableOpacity>
+              :
+              <View style={[styles.toolTouchable, {alignItems: 'flex-end', width: 60}]}>
+                <View style={[styles.thumbnail, {backgroundColor: '#222'}]}></View>
+              </View>
+            }
           </View>
         </View>
 
-        <View style={[styles.container, {width: this.state.pageWidth, backgroundColor: '#000'}]}>
+        <View style={[styles.container,{width: this.state.pageWidth, backgroundColor: '#000'}]}>
           <View style={styles.header}>
             <TouchableOpacity style={styles.headerButton} onPress={this._delete}>
               <IonIcon name="md-trash" style={[styles.headerText, {width: 20, marginTop: 2}]} size={20}/>
@@ -160,7 +178,8 @@ export default class CameraScene extends Component {
               <Text style={styles.headerText}>Done</Text>
             </TouchableOpacity>
           </View>
-          {this.state.selectedImage.path === '' ? <View style={{flex: 1, backgroundColor: '#000'}}></View> :
+          {this.state.selectedImage.path === '' ?
+            <View style={{flex: 1, backgroundColor: '#000'}}></View> :
             <Image source={{uri: this.state.selectedImage.path }} style={styles.preview}/>
           }
           <View style={[styles.toolsContainer, styles.thumbnailsContainer]}>
@@ -211,6 +230,15 @@ export default class CameraScene extends Component {
    */
   _back = () => {
     this.refs.page.scrollTo({x: 0, y: 0, animated: true})
+  }
+
+  /**
+   * Scroll to the page forward.
+   *
+   * @private
+   */
+  _forward = () => {
+    this.refs.page.scrollToEnd()
   }
 
   /**
@@ -297,7 +325,7 @@ export default class CameraScene extends Component {
           }
           let images = this.state.images.concat(image)
           this.setState({selectedImage: image, images})
-          this.refs.page.scrollToEnd()
+          this._forward()
         })
     } catch (err) {
       console.error(err)
@@ -434,8 +462,9 @@ const styles = StyleSheet.create({
     flex           : 0,
     width          : undefined,
     height         : undefined,
-    justifyContent : 'center',
-    alignItems     : 'flex-start',
+    flexDirection  : 'row',
+    justifyContent : 'space-between',
+    alignItems     : 'center',
     backgroundColor: '#000',
     paddingTop     : getVerticalPadding()
   },
