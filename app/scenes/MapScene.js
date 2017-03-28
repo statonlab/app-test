@@ -12,7 +12,7 @@ export default class MapScene extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Header title={this.props.title} navigator={this.props.navigator}/>
+        <Header title={this.props.title} navigator={this.props.navigator} showRightIcon={false}/>
         {this.renderMap()}
       </View>
     )

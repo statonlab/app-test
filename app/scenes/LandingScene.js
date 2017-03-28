@@ -133,7 +133,6 @@ const styles = StyleSheet.create({
     borderRadius: 3
   },
   cardImage      : {
-    ...theme.cardImageStyle,
     height              : 150,
     resizeMode          : 'cover',
     width               : undefined,

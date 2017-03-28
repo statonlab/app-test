@@ -20,9 +20,9 @@ const plants = {
     descriptionBody       : 'This is where the body text would go describing the majestic American Chestnut.',
     collectionInstructions: 'This is where the specific collection instructions would go.  Only collect disease trees for this species!',
     formProps             : {
-      treeHeight   : true,
-      treeStand: true,
-      deadTrees     : true
+      treeHeight: true,
+      treeStand : true,
+      deadTrees : true
     }
   },
   'Green Ash'        : {
@@ -156,16 +156,17 @@ const styles = StyleSheet.create({
 
   button: {
     ...(new Elevation(1)),
-    borderRadius   : 2,
-    backgroundColor: Colors.primary,
-    padding        : 10,
-    width          : 300,
-    maxWidth       : 300,
+    borderRadius     : 2,
+    backgroundColor  : Colors.primary,
+    paddingHorizontal: 10,
+    paddingVertical  : 15,
+    width            : 300,
+    maxWidth         : 300,
   },
 
   buttonText: {
-    textAlign: 'center',
-    color    : '#fff',
-    fontSize : 14
+    textAlign : 'center',
+    color     : '#fff',
+    fontWeight: 'bold'
   },
 })

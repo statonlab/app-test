@@ -397,7 +397,6 @@ const styles = StyleSheet.create({
     flex           : 0,
     justifyContent : 'space-between',
     flexDirection  : 'row',
-    zIndex         : 5,
     ...(new Elevation(4))
   },
 
@@ -489,7 +488,6 @@ const styles = StyleSheet.create({
     backgroundColor  : "#ddd",
     height           : 70,
     paddingHorizontal: 5,
-    zIndex           : 5,
     ...(new Elevation(4)),
     shadowOffset     : {
       height: -3
