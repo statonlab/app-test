@@ -26,9 +26,18 @@ export default class Spinner extends Component {
     }
   }
 
+  componentDidMount() {
+    this.setState({show: this.props.show})
+  }
+
   render() {
+    let hiddenStyle = {
+      left : -999999,
+      width: 0
+    }
+
     return (
-      <View style={[styles.container, {left: this.state.show ? 0 : -9999999}]}>
+      <View style={[styles.container, this.state.show ? {} : hiddenStyle]}>
         <View style={styles.spinner}>
           <MKSpinner prgress={.5} buffer={.5}/>
         </View>
