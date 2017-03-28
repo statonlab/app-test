@@ -27,13 +27,13 @@ export default class CapturedScene extends Component {
           </TouchableOpacity>
         </View>
       </View>
-    );
+    )
   }
 
   _back() {
     let routes = this.props.navigator.getCurrentRoutes()
     if (routes.length > 1) {
-      this.props.navigator.pop();
+      this.props.navigator.pop()
     }
   }
 
@@ -88,4 +88,4 @@ const styles = StyleSheet.create({
     flex : 1,
     width: 50
   }
-});
+})
