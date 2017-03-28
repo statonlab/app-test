@@ -249,7 +249,7 @@ export default class CameraScene extends Component {
   _delete = () => {
     let images = []
     this.state.images.map((image) => {
-      if (image.index !== this.state.selectedImage.index) {
+      if (image.path !== this.state.selectedImage.path) {
         images.push(image)
       }
     })
@@ -257,7 +257,8 @@ export default class CameraScene extends Component {
     if (images.length === 0) {
       this.setState({
         selectedImage: {
-          path: ''
+          path: '',
+          index: 0
         },
         images       : []
       })
