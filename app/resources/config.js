@@ -116,7 +116,14 @@ const DCP = {
     ],
     description : "Do you see any of the following potential health problems?  Check all that apply.  If there is a health problem not listed below, please select other and describe in the comments section of the entry.",
     placeHolder : "check all that apply"
+  },
+  diameterNumeric: {
+    label: "Crown health",
+    formType: "numberInput",
+    description: "Approximately how many feet is the diameter of the tree?",
+    placeHolder: "diameter (ft)"
   }
 }
+
 
 export default DCP;

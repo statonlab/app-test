@@ -23,7 +23,8 @@ const plants = {
       seedsBinary: true,
       flowersBinary: true,
       chestnutBlightSigns: true,
-      crownHealth: true
+      crownHealth: true,
+      diameterNumeric: true
     }
   },
   'Green Ash'        : {
