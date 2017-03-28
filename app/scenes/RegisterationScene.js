@@ -32,7 +32,7 @@ export default class RegistrationScene extends Component {
       password        : t.refinement(t.String, (pw) => pw.length >= 6, "pw"),// Ensure password is at least 6 characters
       confirmPassword : t.refinement(t.String, (pw) => pw === this.state.password, "confirmPW"), // Ensure matches password
       is_over_thirteen: t.Boolean, //t.refinement(t.Boolean, (val) => val, "overThirteen"),
-      zipcode         : t.refinement(t.String, (n) => /^([0-9]{5})(-[0-9]{4})?$/i.test(n), 'zipCode')
+      zipcode         : t.maybe(t.refinement(t.String, (n) => /^([0-9]{5})(-[0-9]{4})?$/i.test(n), 'zipCode'))
     })
   }
 
@@ -53,6 +53,10 @@ export default class RegistrationScene extends Component {
       this.realm.deleteAll()
 
       let response = responseFull.data.data
+
+      if (!response.zipcode){
+        response.zipcode = ''
+      }
       this.realm.create('User', {
         id              : response.user_id,
         name            : response.name.toString(),
