@@ -40,7 +40,7 @@ export default class WildType extends Component {
     }
 
     if (route.label == 'CameraScene') {
-      return <CameraScene navigator={navigator}/>
+      return <CameraScene navigator={navigator} images={route.images ? route.images : []}/>
     }
 
     if (route.label == 'CapturedScene') {

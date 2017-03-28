@@ -27,10 +27,10 @@ const theme = getTheme()
 const DeadTreesIndex  = t.enums.of(DCP.deadTrees.selectChoices, "dead")
 const TreeHeightIndex = t.enums.of(DCP.treeHeight.selectChoices, "height")
 const TreeStandIndex  = t.enums.of(DCP.treeStand.selectChoices, "stand")
-const Coordinate =  t.refinement(t.Number, (n) => n != 0, 'Coordinate')
-const ImageString =  t.refinement(t.String, (string) => string != '', 'ImageString')
+const Coordinate      = t.refinement(t.Number, (n) => n != 0, 'Coordinate')
+const ImageString     = t.refinement(t.String, (string) => string != '', 'ImageString')
 
-const Location        = t.dict(t.String, Coordinate)
+const Location = t.dict(t.String, Coordinate)
 
 export default class FormScene extends Component {
   constructor(props) {
@@ -43,6 +43,7 @@ export default class FormScene extends Component {
       deadTrees    : '',
       comment      : '',
       image        : '',
+      images       : [],
       title        : this.props.title,
       location     : {
         latitude : 0,
@@ -51,6 +52,7 @@ export default class FormScene extends Component {
       }
     }
 
+    this.events    = []
     this.formProps = this.props.formProps
 
     //set rules for base field values
@@ -77,7 +79,12 @@ export default class FormScene extends Component {
   }
 
   componentDidMount() {
-    this.event = DeviceEventEmitter.addListener('FormStateChanged', this.fetchData)
+    this.events.push(DeviceEventEmitter.addListener('FormStateChanged', this.fetchData))
+    this.events.push(DeviceEventEmitter.addListener('cameraCapturedPhotos', this.handleImages))
+  }
+
+  handleImages = (data) => {
+    this.setState({images: data.images})
   }
 
   fetchData = () => {
@@ -156,37 +163,37 @@ export default class FormScene extends Component {
   }
 
   componentWillUnmount() {
-    this.event.remove()
+    this.events.map(event => {
+      event.remove()
+    })
+
     AsyncStorage.removeItem('@WildType:formData')
   }
 
-    populateFormItem = (key) => {
+  populateFormItem = (key) => {
 
-      if(typeof DCP[key] === undefined) return
-        return(
-        <View style={styles.formGroup} key={key}>
-          <Text style={styles.label}>{DCP[key].label}</Text>
-          <PickerModal
-            style={styles.picker}
-            header={DCP[key].description}
-            choices={DCP[key].selectChoices}
-            onSelect={(option)=>{this.setState({[key]:option})}}>
-            <TextInput
-              style={styles.textField}
-              editable={false}
-              placeholder={DCP[key].placeHolder}
-              placeholderTextColor="#aaa"
-              value={this.state[key]}
-              underlineColorAndroid="transparent"
-            />
-          </PickerModal>
-          {dropdownIcon}
-        </View>
-        )
+    if (typeof DCP[key] === undefined) return
+    return (
+      <View style={styles.formGroup} key={key}>
+        <Text style={styles.label}>{DCP[key].label}</Text>
+        <PickerModal
+          style={styles.picker}
+          header={DCP[key].description}
+          choices={DCP[key].selectChoices}
+          onSelect={(option)=>{this.setState({[key]:option})}}>
+          <TextInput
+            style={styles.textField}
+            editable={false}
+            placeholder={DCP[key].placeHolder}
+            placeholderTextColor="#aaa"
+            value={this.state[key]}
+            underlineColorAndroid="transparent"
+          />
+        </PickerModal>
+        {dropdownIcon}
+      </View>
+    )
   }
-
-
-
 
   render() {
     return (
@@ -199,12 +206,13 @@ export default class FormScene extends Component {
               <Text style={styles.label}>Photo</Text>
               <MKButton
                 style={[styles.buttonLink, {height: this.state.image !== '' ? 60 : 40, justifyContent: 'center'}]}
-                onPress={() => this.props.navigator.push({label: 'CameraScene'})}
+                onPress={this._goToCamera}
               >
                 {this.state.image === '' ?
-                  <Text style={[styles.buttonLinkText, {color: '#aaa'}]}>
-                    Add Photo
-                  </Text>
+                  <View style={{flex: 1, alignItems: 'center', flexDirection: 'row'}}>
+                    <Text style={[styles.buttonLinkText, {flex: 1, color: '#aaa'}]}>Add Photo</Text>
+                    <Icon name="camera" style={[styles.icon, {width: 30}]}/>
+                  </View>
                   :
                   <View style={{flex: 1, alignItems: 'center', flexDirection: 'row'}}>
                     <Text style={[styles.buttonLinkText, {flex: 1, color: '#aaa'}]}>Change Photo</Text>
@@ -212,14 +220,12 @@ export default class FormScene extends Component {
                   </View>
                 }
               </MKButton>
-              {this.state.image === '' && <Icon name="camera" style={styles.icon}/>}
             </View>
 
             <View style={styles.formGroup}>
               <Text style={styles.label}>Location</Text>
-              <MKButton style={styles.buttonLink} onPress={() => this.props.navigator.push({
-                label: 'CaptureLocationScene'
-              })}>
+              <MKButton style={styles.buttonLink}
+                onPress={() => this.props.navigator.push({label: 'CaptureLocationScene'})}>
                 <Text style={[styles.buttonLinkText, {color: this.state.location.latitude === 0 ? '#aaa' : '#444'}]}>
                   {this.state.location.latitude === 0 ? 'Enter location' : `${this.state.location.latitude},${this.state.location.longitude}`}
                 </Text>
@@ -260,6 +266,18 @@ export default class FormScene extends Component {
         </View>
       </View>
     )
+  }
+
+  /**
+   * Takes the form to a mounted camera scene or mounts a new one.
+   *
+   * @private
+   */
+  _goToCamera = () => {
+    this.props.navigator.push({
+      label: 'CameraScene',
+      images: this.state.images
+    })
   }
 }
 
@@ -354,12 +372,12 @@ const styles = StyleSheet.create({
   },
 
   buttonLink: {
-    flex             : 1,
-    width            : undefined,
-    backgroundColor  : 'transparent',
-    paddingHorizontal: 15,
-    height           : 40,
-    justifyContent   : 'center'
+    flex           : 1,
+    width          : undefined,
+    backgroundColor: 'transparent',
+    paddingLeft    : 15,
+    height         : 40,
+    justifyContent : 'center'
   },
 
   buttonText: {

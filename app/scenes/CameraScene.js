@@ -7,7 +7,8 @@ import {
   TouchableOpacity,
   Platform,
   ScrollView,
-  Image
+  Image,
+  DeviceEventEmitter
 } from 'react-native'
 import Camera from 'react-native-camera'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -15,9 +16,12 @@ import IonIcon from 'react-native-vector-icons/Ionicons'
 import Colors from '../helpers/Colors'
 import Elevation from '../helpers/Elevation'
 
-let imageIndex = 0
-
 export default class CameraScene extends Component {
+  /**
+   * Construct the properties and state.
+   *
+   * @param props
+   */
   constructor(props) {
     super(props)
 
@@ -32,11 +36,17 @@ export default class CameraScene extends Component {
       images       : [],
       pageWidth    : 0
     }
+
+    this.imageIndex = 0
   }
 
+  /**
+   * Fixes the width of each page
+   */
   componentDidMount() {
     this.setState({
-      pageWidth: Dimensions.get('window').width
+      pageWidth: Dimensions.get('window').width,
+      images: this.props.images
     })
   }
 
@@ -125,7 +135,7 @@ export default class CameraScene extends Component {
           >
           </Camera>
           <View style={styles.toolsContainer}>
-            <TouchableOpacity style={styles.toolTouchable} onPress={this.cancel}>
+            <TouchableOpacity style={styles.toolTouchable} onPress={this._cancel}>
               <Text style={[styles.toolText]}>Cancel</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.capture} onPress={this.takePicture}>
@@ -142,12 +152,10 @@ export default class CameraScene extends Component {
         <View style={[styles.container, {width: this.state.pageWidth, backgroundColor: '#000'}]}>
           <View style={styles.header}>
             <TouchableOpacity style={styles.headerButton} onPress={this._delete}>
-              <Icon name="delete" style={[styles.headerText, {width: 20, marginTop: 2}]} size={20}/>
-              <Text style={styles.headerText}>
-                Delete
-              </Text>
+              <IonIcon name="md-trash" style={[styles.headerText, {width: 20, marginTop: 2}]} size={20}/>
+              <Text style={styles.headerText}>Delete</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.headerButton}>
+            <TouchableOpacity style={styles.headerButton} onPress={this._done}>
               <IonIcon name="md-checkmark" style={[styles.headerText, {width: 20, marginTop: 2}]} size={20}/>
               <Text style={styles.headerText}>Done</Text>
             </TouchableOpacity>
@@ -168,6 +176,13 @@ export default class CameraScene extends Component {
     )
   }
 
+  /**
+   * Renders the thumbnail for each image.
+   *
+   * @param image object holding the index and the path of the image.
+   * @param index integer identifying the thumbnail
+   * @returns {JSX}
+   */
   renderThumbnail = (image, index) => {
     return (
       <TouchableOpacity
@@ -178,16 +193,31 @@ export default class CameraScene extends Component {
     )
   }
 
+  /**
+   * Fixes the width of the page in case of device orientation changes.
+   *
+   * @private
+   */
   _resetWidth = () => {
     this.setState({
       pageWidth: Dimensions.get('window').width
     })
   }
 
+  /**
+   * Goes back to the first page (camera).
+   *
+   * @private
+   */
   _back = () => {
     this.refs.page.scrollTo({x: 0, y: 0, animated: true})
   }
 
+  /**
+   * Deletes an image from the array.
+   *
+   * @private
+   */
   _delete = () => {
     let images = []
     this.state.images.map((image) => {
@@ -213,10 +243,27 @@ export default class CameraScene extends Component {
     })
   }
 
+  /**
+   * Sends the list of images to the previous scene.
+   *
+   * @private
+   */
+  _done = () => {
+    DeviceEventEmitter.emit('cameraCapturedPhotos', this.state.images)
+    this.props.navigator.pop()
+  }
+
+  /**
+   *TODO: UNDER DEVELOPMENT
+   * @param e
+   */
   zoom = (e) => {
     console.log(e)
   }
 
+  /**
+   * Switches the flash between auto, on and off in that order.
+   */
   switchFlash = () => {
     let newFlashMode
     const {auto, on, off} = Camera.constants.FlashMode
@@ -237,13 +284,16 @@ export default class CameraScene extends Component {
     })
   }
 
+  /**
+   * Captures the image.
+   */
   takePicture = () => {
     try {
       this.camera.capture()
         .then((data) => {
           let image  = {
             path : data.path,
-            index: imageIndex++
+            index: this.imageIndex++
           }
           let images = this.state.images.concat(image)
           this.setState({selectedImage: image, images})
@@ -254,6 +304,9 @@ export default class CameraScene extends Component {
     }
   }
 
+  /**
+   * Switches the type of camera between back and front.
+   */
   switchType = () => {
     let newType
     const {back, front} = Camera.constants.Type
@@ -272,15 +325,35 @@ export default class CameraScene extends Component {
     })
   }
 
-  cancel = () => {
+  /**
+   * Cancels the camera submissions and goes back.
+   *
+   * @private
+   */
+  _cancel = () => {
     this.props.navigator.pop()
   }
 }
 
+/**
+ * Component Properties
+ *
+ * @type {{navigator: *}}
+ */
 CameraScene.PropTypes = {
-  navigator: PropTypes.object.isRequired
+  navigator: PropTypes.object.isRequired,
+  images   : PropTypes.array
 }
 
+CameraScene.defaultProps = {
+  images: []
+}
+
+/**
+ * Gets the padding of the navbar depending on the platform (android vs ios).
+ *
+ * @returns {number}
+ */
 function getVerticalPadding() {
   if (Platform.OS == 'android')
     return 0;
@@ -288,6 +361,9 @@ function getVerticalPadding() {
     return 15;
 }
 
+/**
+ * Create the scene's stylesheet.
+ */
 const styles = StyleSheet.create({
   container: {
     flex : 1,
@@ -391,12 +467,12 @@ const styles = StyleSheet.create({
     backgroundColor  : "#ddd",
     height           : 70,
     paddingHorizontal: 5,
-    zIndex: 5,
+    zIndex           : 5,
     ...(new Elevation(4)),
-    shadowOffset: {
+    shadowOffset     : {
       height: -3
     },
-    shadowColor: '#888'
+    shadowColor      : '#888'
   },
 
   thumbnail: {
