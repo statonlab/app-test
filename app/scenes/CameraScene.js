@@ -30,15 +30,10 @@ export default class CameraScene extends Component {
         type : Camera.constants.Type.back,
         flash: Camera.constants.FlashMode.auto
       },
-      selectedImage: {
-        index: 0,
-        path: ''
-      },
+      selectedImage: '',
       images       : [],
       pageWidth    : 0
     }
-
-    this.imageIndex = 0
   }
 
   /**
@@ -157,7 +152,7 @@ export default class CameraScene extends Component {
                 style={[styles.toolTouchable, {alignItems: 'flex-end', width: 60}]}
                 onPress={this._forward}>
 
-                <Image source={{uri: this.state.images[this.state.images.length - 1].path}} style={styles.thumbnail}/>
+                <Image source={{uri: this.state.images[this.state.images.length - 1]}} style={styles.thumbnail}/>
               </TouchableOpacity>
               :
               <View style={[styles.toolTouchable, {alignItems: 'flex-end', width: 60}]}>
@@ -178,9 +173,9 @@ export default class CameraScene extends Component {
               <Text style={styles.headerText}>Done</Text>
             </TouchableOpacity>
           </View>
-          {this.state.selectedImage.path === '' ?
+          {this.state.selectedImage === '' ?
             <View style={{flex: 1, backgroundColor: '#000'}}></View> :
-            <Image source={{uri: this.state.selectedImage.path }} style={styles.preview}/>
+            <Image source={{uri: this.state.selectedImage }} style={styles.preview}/>
           }
           <View style={[styles.toolsContainer, styles.thumbnailsContainer]}>
             <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
@@ -207,7 +202,7 @@ export default class CameraScene extends Component {
       <TouchableOpacity
         key={index}
         onPress={() => this.setState({selectedImage: image})}>
-        <Image source={{uri: image.path}} style={styles.thumbnail}/>
+        <Image source={{uri: image}} style={styles.thumbnail}/>
       </TouchableOpacity>
     )
   }
@@ -249,7 +244,7 @@ export default class CameraScene extends Component {
   _delete = () => {
     let images = []
     this.state.images.map((image) => {
-      if (image.path !== this.state.selectedImage.path) {
+      if (image !== this.state.selectedImage) {
         images.push(image)
       }
     })
@@ -320,10 +315,7 @@ export default class CameraScene extends Component {
     try {
       this.camera.capture()
         .then((data) => {
-          let image  = {
-            path : data.path,
-            index: this.imageIndex++
-          }
+          let image  = data.path
           let images = this.state.images.concat(image)
           this.setState({selectedImage: image, images})
           this._forward()
