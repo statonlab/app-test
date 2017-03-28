@@ -20,9 +20,10 @@ const plants = {
     descriptionBody       : 'This is where the body text would go describing the majestic American Chestnut.',
     collectionInstructions: 'This is where the specific collection instructions would go.  Only collect disease trees for this species!',
     formProps             : {
-      treeHeight   : true,
-      treeStand: true,
-      deadTrees     : true
+      seedsBinary: true,
+      flowersBinary: true,
+      chestnutBlightSigns: true,
+      crownHealth: true
     }
   },
   'Green Ash'        : {
@@ -30,21 +31,37 @@ const plants = {
     latinName             : 'G. ashicus',
     descriptionBody       : 'This is where the body text would go describing the gorgeous green ash.',
     collectionInstructions: 'This is where the specific collection instructions would go.  Only collect disease trees for this species!',
-    formProps             : {}
+    formProps             : {
+      ashSpecies: true,
+      seedsBinary: true,
+      flowersBinary: true,
+      emeraldAshBorer: true,
+      crownHealth: true
+    }
   },
   'Hemlock'          : {
     image                 : require('../img/hemlock.jpg'),
     latinName             : 'H. lockicus',
     descriptionBody       : 'This is where the body text would go describing the heroic hemlock.',
     collectionInstructions: 'This is where the specific collection instructions would go.  Only collect disease trees for this species!',
-    formProps             : {}
+    formProps             : {
+      woolyAdes: true,
+      crownHealth: true
+
+    }
   },
   'White Oak'        : {
     image                 : require('../img/white_oak.jpg'),
     latinName             : 'W. oakicus',
     descriptionBody       : 'This is where the body text would go describing the witty white oak.',
     collectionInstructions: 'This is where the specific collection instructions would go.  Only collect disease trees for this species!',
-    formProps             : {}
+    formProps             : {
+      acorns: true,
+      diameterDescriptive: true,
+      crownHealth: true,
+      heightFirstBranch: true,
+      oakHealthProblems: true
+    }
   }
 }
 
