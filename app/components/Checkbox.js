@@ -37,7 +37,7 @@ export default class Checkbox extends Component {
 Checkbox.PropTypes = {
   label   : PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
-  checked : PropTypes.boolean
+  checked : PropTypes.bool
 }
 
 Checkbox.defaultProps = {
