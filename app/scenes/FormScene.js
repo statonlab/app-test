@@ -196,7 +196,12 @@ export default class FormScene extends Component {
   }
 
   retrieveAPI = () => {
-    return this.realm.objects('User')[0].api_token
+    let user = this.realm.objects('User')
+    if(user.length > 0) {
+      return [0].api_token
+    } else {
+      return ''
+    }
   }
 
 
