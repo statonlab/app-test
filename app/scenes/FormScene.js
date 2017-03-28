@@ -190,7 +190,7 @@ export default class FormScene extends Component {
       })
       .catch(error => {
         console.log('ERR', error);
-        alert(error[0]);
+        alert("error submiting to server:", error[0]);
       });
 
   }
