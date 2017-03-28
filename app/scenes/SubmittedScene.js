@@ -28,7 +28,6 @@ export default class SubmittedScene extends Component {
   }
 
   componentDidMount() {
-    console.log(this.marker)
     this.goToMarker({
       latitude : this.marker.coordinates.latitude,
       longitude: this.marker.coordinates.longitude
