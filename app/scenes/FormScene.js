@@ -28,8 +28,6 @@ const DeadTreesIndex  = t.enums.of(DCP.deadTrees.selectChoices, "dead")
 const TreeHeightIndex = t.enums.of(DCP.treeHeight.selectChoices, "height")
 const TreeStandIndex  = t.enums.of(DCP.treeStand.selectChoices, "stand")
 const Coordinate      = t.refinement(t.Number, (n) => n != 0, 'Coordinate')
-const ImageItem = t.struct({'index': t.Integer,
-  'path': t.String}, "ImageItem")
 const Location = t.dict(t.String, Coordinate)
 
 export default class FormScene extends Component {
@@ -60,7 +58,7 @@ export default class FormScene extends Component {
     //set rules for base field values
     let formRules = {
       comment : t.String,
-      images   : t.list(ImageItem),
+      images   : t.list(t.String),
       title   : t.String,
       location: Location
     }
