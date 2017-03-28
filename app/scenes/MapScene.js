@@ -29,7 +29,7 @@ export default class MapScene extends Component {
     submissions.map((submission, index) => {
       markers.push({
         title      : submission.name,
-        image      : submission.image,
+        image      : JSON.parse(submission.image)[0],
         description: 'What should we put here?',
         coord      : {
           longitude: submission.location.longitude,

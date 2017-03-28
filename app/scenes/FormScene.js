@@ -42,7 +42,7 @@ export default class FormScene extends Component {
       numberOfTrees: '',
       deadTrees    : '',
       comment      : '',
-      image        : '',
+      image        : '/fake/path/to/pass/validation', // Remove this and keep images
       images       : [],
       title        : this.props.title,
       location     : {
@@ -52,8 +52,8 @@ export default class FormScene extends Component {
       }
     }
 
-    this.events    = []
-    this.realm = realm
+    this.events = []
+    this.realm  = realm
 
     this.formProps = this.props.formProps
 
@@ -129,7 +129,7 @@ export default class FormScene extends Component {
       numberOfTrees: this.state.numberOfTrees.toString(),
       treeHeight   : this.state.treeHeight.toString(),
       deadTrees    : this.state.deadTrees.toString(),
-      image        : this.state.image.toString(),
+      image        : JSON.stringify(this.state.images),
       location     : this.state.location,
       comment      : this.state.comment.toString(),
       date         : moment().format('MM-DD-Y H:m:s').toString()
@@ -237,11 +237,11 @@ export default class FormScene extends Component {
 
   renderPhotosField = () => {
     let length = this.state.images.length
-    let text = length > 1 ? 'photos' : 'photo'
+    let text   = length > 1 ? 'photos' : 'photo'
     return (
       <View style={{flex: 1, alignItems: 'center', flexDirection: 'row'}}>
         <Text style={[styles.buttonLinkText, {color: '#444'}]}>{length} {text} added</Text>
-        <Image source={{url: this.state.images[length - 1].path}} style={{flex: 0, height: 60, width: 60, borderRadius: 3}}/>
+        <Image source={{url: this.state.images[length - 1]}} style={{flex: 0, height: 60, width: 60, borderRadius: 3}}/>
       </View>
     )
   }
@@ -325,7 +325,7 @@ export default class FormScene extends Component {
    */
   _goToCamera = () => {
     this.props.navigator.push({
-      label: 'CameraScene',
+      label : 'CameraScene',
       images: this.state.images
     })
   }
@@ -442,7 +442,7 @@ const styles = StyleSheet.create({
 
   buttonLinkText: {
     color: "#666",
-    flex: 1
+    flex : 1
   },
 
   comment: {

@@ -18,7 +18,7 @@ export default class SubmittedScene extends Component {
     let data    = this.props.plant
     this.marker = {
       title      : data.title,
-      image      : data.image,
+      image      : data.images[0],
       description: `${data.numberOfTrees} trees`,
       coordinates: {
         latitude : data.location.latitude,
@@ -28,6 +28,7 @@ export default class SubmittedScene extends Component {
   }
 
   componentDidMount() {
+    console.log(this.marker)
     this.goToMarker({
       latitude : this.marker.coordinates.latitude,
       longitude: this.marker.coordinates.longitude
