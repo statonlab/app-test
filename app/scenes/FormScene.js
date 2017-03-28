@@ -12,15 +12,15 @@ import {
 } from 'react-native'
 import moment from 'moment'
 import {getTheme, MKButton} from 'react-native-material-kit'
-import Realm from 'realm'
 import Header from '../components/Header'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
-import {CoordinateSchema, SubmissionSchema} from '../db/Schema'
+import realm from '../db/Schema'
 import t from 'tcomb-validation'
 import PickerModal from '../components/PickerModal'
 import DCP from '../resources/config.js'
+import Axios from 'axios'
 
 const theme = getTheme()
 
@@ -53,6 +53,8 @@ export default class FormScene extends Component {
     }
 
     this.events    = []
+    this.realm = realm
+
     this.formProps = this.props.formProps
 
     //set rules for base field values
@@ -113,30 +115,44 @@ export default class FormScene extends Component {
     AsyncStorage.setItem('@WildType:savedForm', JSON.stringify(this.state))
     AsyncStorage.removeItem('@WildType:formData')
 
-    let realm = new Realm({
-      schema: [CoordinateSchema, SubmissionSchema]
+    let primaryKey = this.realm.objects('Submission')
+    if (primaryKey.length <= 0) {
+      primaryKey = 1;
+    } else {
+      primaryKey = primaryKey.sorted('id', true)[0].id + 1
+    }
+
+    let observation = {
+      id           : primaryKey,
+      name         : this.state.title.toString(),
+      species      : this.state.species.toString(),
+      numberOfTrees: this.state.numberOfTrees.toString(),
+      treeHeight   : this.state.treeHeight.toString(),
+      deadTrees    : this.state.deadTrees.toString(),
+      image        : this.state.image.toString(),
+      location     : this.state.location,
+      comment      : this.state.comment.toString(),
+      date         : moment().format('MM-DD-Y H:m:s').toString()
+    }
+
+    this.realm.write(() => {
+
+      this.realm.create('Submission', observation)
     })
 
-    realm.write(() => {
-      let primaryKey = realm.objects('Submission')
-      if (primaryKey.length <= 0) {
-        primaryKey = 1;
-      } else {
-        primaryKey = primaryKey.sorted('id', true)[0].id + 1
-      }
-      realm.create('Submission', {
-        id           : primaryKey,
-        name         : this.state.title.toString(),
-        species      : this.state.species.toString(),
-        numberOfTrees: this.state.numberOfTrees.toString(),
-        treeHeight   : this.state.treeHeight.toString(),
-        deadTrees    : this.state.deadTrees.toString(),
-        image        : this.state.image.toString(),
-        location     : this.state.location,
-        comment      : this.state.comment.toString(),
-        date         : moment().format().toString()
-      })
-    })
+    let obsSubmit       = {
+      observation_category: this.props.title,
+      meta_data           : JSON.stringify(observation),
+      longitude           : observation.location.longitude,
+      latitude            : observation.location.latitude,
+      location_accuracy   : observation.location.accuracy,
+      date                : observation.date,
+      is_private          : false
+    }
+    //Now submit to server
+    obsSubmit.api_token = this.retrieveAPI()
+    this.submitObsToServer(obsSubmit)
+
 
     this.props.navigator.push({
       label   : 'SubmittedScene',
@@ -161,6 +177,30 @@ export default class FormScene extends Component {
 
     Alert.alert(message)
   }
+
+
+  submitObsToServer = (request) => {
+
+    //Run AXIOS POST request
+    let axios = Axios.create({
+      baseURL: 'http://treesource.app/api/v1/',
+      timeout: 10000
+    })
+    axios.post('observations', request)
+      .then(response => {
+        console.log('RES', response.data);
+      })
+      .catch(error => {
+        console.log('ERR', error);
+        alert(error[0]);
+      });
+
+  }
+
+  retrieveAPI = () => {
+    return this.realm.objects('User')[0].api_token
+  }
+
 
   componentWillUnmount() {
     this.events.map(event => {

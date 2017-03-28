@@ -4,10 +4,9 @@ import {
   StyleSheet,
   Alert
 } from 'react-native'
-import Realm from 'realm'
 import MarkersMap from '../components/MarkersMap'
 import Header from '../components/Header'
-import {SubmissionSchema, CoordinateSchema} from '../db/Schema'
+import realm from '../db/Schema'
 
 export default class MapScene extends Component {
   render() {
@@ -20,10 +19,6 @@ export default class MapScene extends Component {
   }
 
   renderMap() {
-    const realm = new Realm({
-      schema: [SubmissionSchema, CoordinateSchema]
-    })
-
     let submissions = realm.objects('Submission')
     let markers     = []
 

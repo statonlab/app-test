@@ -1,9 +1,11 @@
+import Realm from 'realm'
+
 /**
  * Define Coordinate Type
  * -------------------------------------------------
  * @type class
  */
-export const CoordinateSchema = {
+const CoordinateSchema = {
   name      : 'Coordinate',
   properties: {
     latitude : {type: 'double', default: 0},
@@ -19,7 +21,7 @@ export const CoordinateSchema = {
  *
  * @type object
  */
-export const SubmissionSchema = {
+const SubmissionSchema = {
   name      : 'Submission',
   primaryKey: 'id',
   properties: {
@@ -48,17 +50,17 @@ export const SubmissionSchema = {
  * @type object
  */
 
-export const UserSchema = {
+const UserSchema = {
   name      : 'User',
   primaryKey : 'id',
   properties: {
     id : {type: 'int', default: ''},
     name: {type: 'string', default: 'default'},
     email: {type: 'string', default: 'default'},
-    anonymous: {type: 'boolean', default: 'false'},
+    anonymous: {type: 'bool', default: false},
     api_token: {type: 'string', default: ''},
-    zipcode: {type: 'int', default: ''},
-    is_over_thirteen: {type: 'boolean', default: 'false'}
+    zipcode: {type: 'string', default: ''},
+    is_over_thirteen: {type: 'bool', default: false}
     //ignored fields present in DB
     //password
     //remember_token
@@ -66,3 +68,9 @@ export const UserSchema = {
     //updated_at
   }
 }
+
+export default new Realm({schema: [
+  UserSchema,
+  CoordinateSchema,
+  SubmissionSchema
+]})

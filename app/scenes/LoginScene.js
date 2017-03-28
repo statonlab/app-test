@@ -19,7 +19,12 @@ export default class LoginScene extends Component {
       password: ''
     }
   }
-//    Route::get('/user', 'UsersController@show');
+
+  componentDidMount() {
+    if (this.props.email) {
+      this.setState({email: this.props.email})
+    }
+}
 
   putRequest = () => {
     console.log("executing put request");
@@ -33,34 +38,6 @@ export default class LoginScene extends Component {
       });
 
   }
-
-
-  // loadObservations() {
-  //   axios.get('/observations').then(response => {
-  //     // Setup the observations to be rendered into markers
-  //     let markers = []
-  //
-  //     response.data.data.map(observation => {
-  //       markers.push({
-  //         title: observation.observation_category,
-  //         images: observation.images,
-  //         position: {
-  //           latitude: observation.location.latitude,
-  //           longitude: observation.location.longitude
-  //         },
-  //         owner: observation.user.name
-  //       })
-  //     })
-  //
-  //     // Add the markers to the state
-  //     this.setState({markers})
-  //
-  //   }).catch(error => {
-  //     console.log(error)
-  //   })
-  // }
-
-
 
 
   render() {
@@ -81,6 +58,7 @@ export default class LoginScene extends Component {
               placeholder={"Email"}
               placeholderTextColor="#aaa"
               returnKeyType={'next'}
+              onChangeText={(email) =>this.setState({email})}
             />
           </View>
 
@@ -91,6 +69,8 @@ export default class LoginScene extends Component {
               placeholder={"Password"}
               secureTextEntry={true}
               placeholderTextColor="#aaa"
+              onChangeText={(password) =>this.setState({password})}
+
             />
           </View>
 
