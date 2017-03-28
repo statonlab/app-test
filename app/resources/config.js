@@ -9,7 +9,6 @@ const DCP = {
   },
 
   treeStand: {
-
     label        : "Stand Density",
     selectChoices: [
       '1-10', '11-50', '51+'
@@ -39,7 +38,7 @@ const DCP = {
       "Yes", "No"
     ],
     description  : "Are seeds present?",
-    placeHolder  : "seeds"
+    placeHolder  : "Are seeds present?"
   },
   flowersBinary      : {
     label        : "Flowers?",
@@ -47,7 +46,7 @@ const DCP = {
       "Yes", "No"
     ],
     description  : "Is this tree flowering?",
-    placeHolder  : "flowers"
+    placeHolder  : "Are flowers present?"
   },
   emeraldAshBorer    : {
     label        : "Ash Borer",
@@ -55,7 +54,7 @@ const DCP = {
       "D-shaped adult exit holes", "Bark coming off with tunneling underneath", "Emerald ash borer beetless/larvae", "stump sprouting"
     ],
     description  : "Do you see any of these signs of emerald ash borers?",
-    placeHolder  : 'no signs'
+    placeHolder  : 'Signs of pest'
   },
   crownHealth        : {
     label        : "Crown health",
@@ -65,7 +64,10 @@ const DCP = {
     description  : "What percentage of the tree’s crown is healthy?",
     placeHolder  : "% healthy"
   },
-  woolyAdes          : {
+  WoolyAdesPres: {
+    label :"presence of wooly adelgids"
+  },
+  woolyAdesCoverage          : {
     label        : "Wooly adelgids",
     selectChoices: [
       "0-24%", "25-49%", "50-74%", "75-100%"
@@ -95,7 +97,33 @@ const DCP = {
     selectChoices: [
       "1-15 inches", "16-19 inches", "20-23 inches", "over 24 inches"
     ],
+  },
+  heightFirstBranch: {
+    label : "Height of first branch",
+    selectChoices: [
+      "1-7 feet", "8-13 feet",
+      "14-19 feet",
+	">20 feet"
+    ],
+    description : "Approximately (no need to measure) how high up is the first branch of the tree?",
+    placeHolder : "distance to branch"
+  },
+  oakHealthProblems: {
+    label : "Health problems",
+    selectChoices: [
+      "Dieback in canopy", "Defoliation", "Cankers", "Bark damage", "Signs of rot at base",
+      "Other"
+    ],
+    description : "Do you see any of the following potential health problems?  Check all that apply.  If there is a health problem not listed below, please select other and describe in the comments section of the entry.",
+    placeHolder : "check all that apply"
+  },
+  diameterNumeric: {
+    label: "Crown health",
+    formType: "numberInput",
+    description: "Approximately how many feet is the diameter of the tree?",
+    placeHolder: "diameter (ft)"
   }
 }
+
 
 export default DCP;
