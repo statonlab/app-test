@@ -78,7 +78,7 @@ export default class Sidebar extends Component {
                 <MKRipple
                   style={style.touchable}
                   rippleColor={"rgba(0,0,0,0.1)"}>
-                  <Icon name={route.icon} size={16} style={style.icon}/>
+                  <Icon name={route.icon} size={20} style={style.icon}/>
                   <Text style={style.text}>
                     {route.title}
                   </Text>
@@ -108,9 +108,9 @@ Sidebar.propTypes = {
 
 function getVerticalMargin() {
   if (Platform.OS == 'android')
-    return 54
+    return 60
   else
-    return 70.5
+    return 76
 }
 
 const style = StyleSheet.create({
@@ -139,11 +139,13 @@ const style = StyleSheet.create({
   },
 
   text: {
-    color            : Colors.sidebarText,
-    fontWeight       : '500',
-    paddingVertical  : 12,
-    paddingHorizontal: 10,
-    width            : undefined
+    color          : Colors.sidebarText,
+    fontWeight     : 'bold',
+    paddingVertical: 12,
+    paddingRight   : 10,
+    paddingLeft    : 20,
+    width          : undefined,
+    fontSize       : 16
   },
 
   icon: {
@@ -165,6 +167,7 @@ const style = StyleSheet.create({
     borderBottomColor: '#d9d9d9',
     borderStyle      : 'solid',
     flexDirection    : 'row',
-    justifyContent   : 'flex-start'
+    justifyContent   : 'flex-start',
+    alignItems: 'center'
   }
 })

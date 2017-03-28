@@ -45,13 +45,13 @@ export default class Header extends Component {
     if (this.props.initial) {
       return (
         <TouchableHighlight style={style.touchable} onPress={this.onMenuPress} underlayColor={Colors.primary}>
-          <Icon name={this.state.menuIcon} size={20} color="#fff"/>
+          <Icon name={this.state.menuIcon} style={{fontSize: 25}} color="#fff"/>
         </TouchableHighlight>
       )
     } else {
       return (
         <TouchableHighlight style={style.touchable} onPress={this.back} underlayColor={Colors.primary}>
-          <Icon name="chevron-left" size={20} color="#fff"/>
+          <Icon name="chevron-left" size={25} color="#fff"/>
         </TouchableHighlight>
       )
     }
@@ -88,7 +88,7 @@ export default class Header extends Component {
       <View style={[style.wrapper, {...(new Elevation(this.props.elevation))}]} ref="header">
         {this.getLeftIcon()}
 
-        <View style={{height: 56, flex: 1, alignItems: this.props.showLeftIcon ? 'flex-start' : 'center'}}>
+        <View style={[style.titleContainer, {alignItems: this.props.showLeftIcon ? 'flex-start' : 'center'}]}>
           <Text style={[style.text, style.title]}>{this.props.title}</Text>
         </View>
 
@@ -137,15 +137,19 @@ const style = StyleSheet.create({
     justifyContent : 'center'
   },
 
+  titleContainer: {
+    flex: 1
+  },
+
   title: {
-    flex           : 1,
-    paddingVertical: 17
+    flex      : 0,
+    paddingVertical: 15
   },
 
   text: {
     color     : Colors.primaryText,
-    fontSize  : 16,
-    fontWeight: '500',
+    fontSize  : 18,
+    fontWeight: '600',
   },
 
   right: {
@@ -154,7 +158,8 @@ const style = StyleSheet.create({
 
   touchable: {
     flex             : 0,
-    paddingHorizontal: 15,
-    paddingVertical  : 15
+    paddingHorizontal: 20,
+    paddingVertical  : 15,
+    marginTop: 3
   }
 })
