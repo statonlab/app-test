@@ -8,6 +8,7 @@ import Checkbox from '../components/Checkbox'
 import t from 'tcomb-validation'
 import Axios from 'axios'
 import realm from '../db/Schema'
+import Spinner from '../components/Spinner'
 
 export default class RegistrationScene extends Component {
   constructor(props) {
@@ -19,7 +20,8 @@ export default class RegistrationScene extends Component {
       confirmPassword : '',
       is_over_thirteen: false,
       zipcode         : null,
-      is_anonymous    : true
+      is_anonymous    : true,
+      showSpinner     : false
     }
 
     this.realm = realm
@@ -67,21 +69,26 @@ export default class RegistrationScene extends Component {
   }
 
   axiosRequest = () => {
+    console.log("AXIOS REQUEST")
     let request = this.state;
     let axios   = Axios.create({
       baseURL: 'http://treesource.app/api/v1/',
       timeout: 10000
     })
+
+    this.setState({showSpinner: true})
+
     axios.post('users', request)
       .then(response => {
         console.log('RES', response.data);
         //write to realm
         this.writeToRealm(response)
-
+        this.setState({showSpinner: false})
       })
       .catch(error => {
         console.log('ERR', error);
         // alert(error[0]);
+        this.setState({showSpinner: false})
       });
   }
 
@@ -102,6 +109,7 @@ export default class RegistrationScene extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <Spinner show={this.state.showSpinner} />
         <Header title="Register" navigator={this.props.navigator} showRightIcon={false}/>
         <ScrollView>
           <View style={styles.form}>
