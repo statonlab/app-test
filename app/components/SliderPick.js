@@ -41,14 +41,14 @@ export default class SliderPick extends Component {
         contentContainerStyle={styles.container}>
           <View style={styles.col}>
             <MKSlider
-              min={10}
-              max={100}
-              value={25}
+              min={this.props.minVal}
+              max={this.props.maxVal}
+              value={this.props.startVal}
               style={styles.slider}
               lowerTrackColor = {Colors.primary}
-            onChange={(curValue) => this.refs.valueText.onChange(curValue.toFixed(1))}
+              onChange={(curValue) => this.refs.valueText.onChange(curValue.toFixed(0))}
             />
-            <ValueText ref="valueText" initial="25.0" rangeText="inches" />
+            <ValueText ref="valueText" initial="25" rangeText={this.props.legendText} />
           </View>
         </View>
     );
@@ -56,6 +56,18 @@ export default class SliderPick extends Component {
 }
 
 
+SliderPick.propTypes = {
+  minVal: PropTypes.number,
+  maxVal: PropTypes.number,
+  startVal: PropTypes.number,
+  legendText: PropTypes.string
+}
+SliderPick.defaultProps = {
+  minVal: 1,
+  maxVal: 100,
+  startVal: 25,
+  legendText: "Inches"
+}
 
 const styles =  StyleSheet.create({
   slider: {
