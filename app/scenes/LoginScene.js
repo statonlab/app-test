@@ -7,6 +7,8 @@ import Colors from '../helpers/Colors'
 import t from 'tcomb-validation'
 import Axios from 'axios'
 import realm from '../db/Schema'
+import Spinner from '../components/Spinner'
+
 
 
 
@@ -18,7 +20,8 @@ export default class LoginScene extends Component {
     this.state = {
       email: null,
       password: null,
-      logType: 'Login'
+      showSpinner : false
+
     }
     this.realm = realm
     this.loginRules = t.struct({
@@ -37,6 +40,8 @@ export default class LoginScene extends Component {
   }
 
   loginRequest = () => {
+    this.setState({showSpinner: true})
+
     console.log("executing login request");
 
     let axios = Axios.create({
@@ -48,11 +53,14 @@ export default class LoginScene extends Component {
       .then(response => {
         console.log("SUCCESS:", response.data.data);
         this.storeUser(response)
+        this.setState({showSpinner: false})
+
         this.props.navigator.push({label: 'LandingScene'})
 
       })
       .catch(error => {
         console.log("ERR", error);
+        this.setState({showSpinner: false})
         alert(error)
       });
 
@@ -82,7 +90,8 @@ export default class LoginScene extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Header title={this.state.logType} navigator={this.props.navigator} showRightIcon={false}/>
+        <Spinner show={this.state.showSpinner} />
+        <Header title={'Login'} navigator={this.props.navigator} showRightIcon={false}/>
         <View style={styles.form}>
           <View style={styles.formGroup}>
             <Text style={styles.title}>TreeSource</Text>
