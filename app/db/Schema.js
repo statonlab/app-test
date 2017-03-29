@@ -52,9 +52,7 @@ const SubmissionSchema = {
 
 const UserSchema = {
   name      : 'User',
-  primaryKey : 'id',
   properties: {
-    id : {type: 'int', default: ''},
     name: {type: 'string', default: 'default'},
     email: {type: 'string', default: 'default'},
     anonymous: {type: 'bool', default: false},
@@ -62,6 +60,7 @@ const UserSchema = {
     zipcode: {type: 'string', default: ''},
     is_over_thirteen: {type: 'bool', default: false}
     //ignored fields present in DB
+    //userid
     //password
     //remember_token
     //created_at

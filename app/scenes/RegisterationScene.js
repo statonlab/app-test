@@ -58,7 +58,6 @@ export default class RegistrationScene extends Component {
         response.zipcode = ''
       }
       this.realm.create('User', {
-        id              : response.user_id,
         name            : response.name.toString(),
         email           : response.email.toString(),
         anonymous       : response.is_anonymous,
