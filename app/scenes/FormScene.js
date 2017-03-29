@@ -21,6 +21,7 @@ import t from 'tcomb-validation'
 import PickerModal from '../components/PickerModal'
 import DCP from '../resources/config.js'
 import Axios from 'axios'
+import SliderPick from '../components/SliderPick'
 
 const theme = getTheme()
 
@@ -231,15 +232,8 @@ export default class FormScene extends Component {
       return(
      <View style={styles.formGroup} key={key}>
        <Text style={styles.label}>{DCP[key].label}</Text>
-       <MKSlider style={styles.slider}
-       min={1}
-       max={50}
-         value={20}
-         trackSize= {5}
-         lowerTrackColor= {Colors.primary}
-         // onConfirm = {(value) => {this.setState({sliderValue:  value})}}
-     />
-       <Text>{this.state.sliderValue}</Text>
+       <SliderPick
+       />
      </View>
    )
    }
