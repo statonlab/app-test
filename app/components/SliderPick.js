@@ -32,8 +32,20 @@ class ValueText extends Component {
   }
 }
 
+
 export default class SliderPick extends Component {
 
+
+
+  onChange = (curValue) => {
+    this.refs.valueText.onChange(curValue.toFixed(0))
+
+    if (!this.props.onChange) {
+      return
+    }
+
+    this.props.onChange(curValue)
+}
 
   render() {
     return (
@@ -46,7 +58,7 @@ export default class SliderPick extends Component {
               value={this.props.startVal}
               style={styles.slider}
               lowerTrackColor = {Colors.primary}
-              onChange={(curValue) => this.refs.valueText.onChange(curValue.toFixed(0))}
+              onChange={(curValue) => this.onChange(curValue)}
             />
             <ValueText ref="valueText" initial="25" rangeText={this.props.legendText} />
           </View>
