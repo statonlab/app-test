@@ -10,31 +10,29 @@ import realm from '../db/Schema'
 import Spinner from '../components/Spinner'
 
 
-
-
 export default class LoginScene extends Component {
 
   constructor(props) {
     super(props)
 
-    this.state = {
-      email: null,
-      password: null,
-      showSpinner : false
+    this.state      = {
+      email      : null,
+      password   : null,
+      showSpinner: false
 
     }
-    this.realm = realm
+    this.realm      = realm
     this.loginRules = t.struct({
-      email           : t.String,
-      password        : t.String
+      email   : t.String,
+      password: t.String
     })
   }
 
   logInUser = () => {
-    if (t.validate(this.state, this.loginRules).isValid()){
+    if (t.validate(this.state, this.loginRules).isValid()) {
       //Check email and password against server, store in realm
-     this.loginRequest()
-    }else{
+      this.loginRequest()
+    } else {
       alert("Please enter an email and password")
     }
   }
@@ -69,7 +67,7 @@ export default class LoginScene extends Component {
     this.realm.write(() => {
       // Delete existing users first
       this.realm.deleteAll()
-      if (!response.data.data.zipcode){
+      if (!response.data.data.zipcode) {
         response.data.data.zipcode = ''
       }
       this.realm.create('User', {
@@ -82,14 +80,11 @@ export default class LoginScene extends Component {
       })
     })
   }
-
-
-
-
+  
   render() {
     return (
       <View style={styles.container}>
-        <Spinner show={this.state.showSpinner} />
+        <Spinner show={this.state.showSpinner}/>
         <Header title={'Login'} navigator={this.props.navigator} showRightIcon={false}/>
         <View style={styles.form}>
           <View style={styles.formGroup}>
