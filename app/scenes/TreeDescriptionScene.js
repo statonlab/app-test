@@ -37,7 +37,9 @@ const plants = {
       seedsBinary: true,
       flowersBinary: true,
       emeraldAshBorer: true,
-      crownHealth: true
+      crownHealth: true,
+      diameterNumeric: true
+
     }
   },
   'Hemlock'          : {
@@ -46,8 +48,10 @@ const plants = {
     descriptionBody       : 'This is where the body text would go describing the heroic hemlock.',
     collectionInstructions: 'This is where the specific collection instructions would go.  Only collect disease trees for this species!',
     formProps             : {
-      woolyAdes: true,
-      crownHealth: true
+      woolyAdesCoverage: true,
+      crownHealth: true,
+      diameterNumeric: true
+
 
     }
   },
