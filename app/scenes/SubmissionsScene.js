@@ -12,6 +12,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import realm from '../db/Schema'
 import moment from 'moment'
 import {MKButton} from 'react-native-material-kit'
+import Elevation from '../helpers/Elevation'
 
 export default class SubmissionsScene extends Component {
   constructor(props) {
@@ -74,8 +75,12 @@ export default class SubmissionsScene extends Component {
 
   _renderEmpty = () => {
     return (
-      <View>
-        <Text>No Entries Found</Text>
+      <View style={styles.centerContainer}>
+        <Icon name="ios-albums-outline" size={120} style={styles.emptyListIcon}/>
+        <Text style={styles.emptyListText}>
+          You have not submitted any entries yet. You can
+          start by going back and selecting a plant.
+        </Text>
       </View>
     )
   }
@@ -143,5 +148,26 @@ const styles = StyleSheet.create({
     width         : 50,
     alignItems    : 'center',
     justifyContent: 'center'
+  },
+
+  centerContainer: {
+    ...(new Elevation(1)),
+    flex: 0,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    padding: 10,
+    backgroundColor: '#fff',
+    margin: 10
+  },
+
+  emptyListText: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#222'
+  },
+
+  emptyListIcon: {
+    marginBottom: 20,
+    color: '#444'
   }
 })
