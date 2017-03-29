@@ -11,7 +11,7 @@ import {
   DeviceEventEmitter
 } from 'react-native'
 import moment from 'moment'
-import {getTheme, MKButton} from 'react-native-material-kit'
+import {getTheme, MKButton, MKSlider} from 'react-native-material-kit'
 import Header from '../components/Header'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import Elevation from '../helpers/Elevation'
@@ -35,10 +35,8 @@ export default class FormScene extends Component {
     super(props)
 
     this.state = {
-      treeHeight   : '',
       species      : '',
-      numberOfTrees: '',
-      deadTrees    : '',
+      sliderValue : 25,
       comment      : '',
       chestnutBlightSigns: '',
       image        : '/fake/path/to/pass/validation', // Remove this and keep images
@@ -117,6 +115,7 @@ export default class FormScene extends Component {
   }
 
   submit = () => {
+    console.log(this.state)
     if (!this.validateState().isValid()) {
       this.notifyIncomplete(this.validateState())
       return
@@ -226,12 +225,30 @@ export default class FormScene extends Component {
 
   populateFormItem = (key) => {
     if (typeof DCP[key] === undefined) return
-    return (
+
+   if (DCP[key].itemType === "slider") {
+      console.log(key, " is a slider mate")
+      return(
+     <View style={styles.formGroup} key={key}>
+       <Text style={styles.label}>{DCP[key].label}</Text>
+       <MKSlider style={styles.slider}
+       min={1}
+       max={50}
+         value={20}
+         trackSize= {5}
+         lowerTrackColor= {Colors.primary}
+         // onConfirm = {(value) => {this.setState({sliderValue:  value})}}
+     />
+       <Text>{this.state.sliderValue}</Text>
+     </View>
+   )
+   }
+     return (
       <View style={styles.formGroup} key={key}>
         <Text style={styles.label}>{DCP[key].label}</Text>
         <PickerModal
           style={styles.picker}
-          modalType={DCP[key].modalType}
+          modalType={DCP[key].itemType}
           header={DCP[key].description}
           choices={DCP[key].selectChoices}
           onSelect={(option)=>{this.setState({[key]:option})}}>
@@ -499,6 +516,9 @@ const styles = StyleSheet.create({
     paddingVertical  : 10,
     paddingHorizontal: 5
   },
+  slider: {
+      width: 130,
+  }
 })
 
 const dropdownIcon = (<Icon name="arrow-down-drop-circle-outline" style={styles.icon}/>)

@@ -58,6 +58,10 @@ export default class PickerModal extends Component {
   }
 
   close = () => {
+    if (this.props.modalType == "multiCheck") {
+      this.setState({selected: Object.keys(this.state.selectedMulti)[0]})
+    }
+
     this.setState({modalVisible: false})
   }
 

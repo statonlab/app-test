@@ -14,14 +14,14 @@ const DCP = {
       '1-10', '11-50', '51+'
     ],
 
-    description: "Full description of number of trees question.",
+    description: "Full description of number of trees question.  No longer used.",
     placeHolder: "Number of Trees"
   },
 
   deadTrees          : {
     label        : "Dead Trees",
     selectChoices: ['none', '1-50', '51+'],
-    description  : "Of the trees of this species in this stand, how many are dead?",
+    description  : "Of the trees of this species in this stand, how many are dead?  No longer used.",
     placeHolder  : "Number of Trees"
   },
   ashSpecies         : {
@@ -53,8 +53,9 @@ const DCP = {
     selectChoices: [
       "D-shaped adult exit holes", "Bark coming off with tunneling underneath", "Emerald ash borer beetless/larvae", "stump sprouting"
     ],
-    description  : "Do you see any of these signs of emerald ash borers?",
-    placeHolder  : 'Signs of pest'
+    description  : "Do you see any of these signs of emerald ash borers?  Check all that apply.",
+    placeHolder  : 'Signs of pest',
+    itemType: "multiCheck"
   },
   crownHealth        : {
     label        : "Crown health",
@@ -82,7 +83,7 @@ const DCP = {
     ],
     description  : "Do you see any of these signs of chestnut blight?  Check all that apply.",
     placeHolder  : "symptoms",
-    modalType: "multiCheck"
+    itemType: "multiCheck"
   },
   acorns             : {
     label        : "Acorns",
@@ -117,14 +118,13 @@ const DCP = {
     ],
     description : "Do you see any of the following potential health problems?  Check all that apply.  If there is a health problem not listed below, please select other and describe in the comments section of the entry.",
     placeHolder : "check all that apply",
-    modalType: "multiCheck"
+    itemType: "multiCheck"
 
   },
   diameterNumeric: {
-    label: "Crown health",
-    formType: "numberInput",
+    label: "Tree diameter",
     description: "Approximately how many feet is the diameter of the tree?",
-    placeHolder: "diameter (ft)"
+    itemType: "slider"
   }
 }
 
