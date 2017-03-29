@@ -7,6 +7,8 @@ import Colors from '../helpers/Colors'
 import t from 'tcomb-validation'
 import Axios from 'axios'
 import realm from '../db/Schema'
+import Spinner from '../components/Spinner'
+
 
 
 
@@ -18,7 +20,7 @@ export default class LoginScene extends Component {
     this.state = {
       email: null,
       password: null,
-      logType: 'Login'
+
     }
     this.realm = realm
     this.loginRules = t.struct({
@@ -82,7 +84,7 @@ export default class LoginScene extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Header title={this.state.logType} navigator={this.props.navigator} showRightIcon={false}/>
+        <Header title={'Login'} navigator={this.props.navigator} showRightIcon={false}/>
         <View style={styles.form}>
           <View style={styles.formGroup}>
             <Text style={styles.title}>TreeSource</Text>
