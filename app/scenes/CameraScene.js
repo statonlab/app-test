@@ -251,10 +251,7 @@ export default class CameraScene extends Component {
 
     if (images.length === 0) {
       this.setState({
-        selectedImage: {
-          path: '',
-          index: 0
-        },
+        selectedImage: '',
         images       : []
       })
       this._back()
