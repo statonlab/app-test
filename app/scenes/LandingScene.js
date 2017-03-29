@@ -46,6 +46,11 @@ export default class LandingScene extends Component {
     // Links that always show up
     this.defaultSidebarLinks = [
       {
+        icon: 'map-marker-radius',
+        title: 'My Entries',
+        label: 'SubmissionsScene'
+      },
+      {
         icon : 'account-card-details',
         title: 'About Us',
         label: 'AboutScene'

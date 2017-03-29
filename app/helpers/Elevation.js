@@ -22,65 +22,60 @@ export default class Elevation {
       }
     }
 
-    let iosShadowElevation = {
-      shadowColor: 'black',
-      zIndex: 5
-    }
+    let iosShadowElevation = {}
 
     switch (this.level) {
       case 1:
         iosShadowElevation = {
-          ...iosShadowElevation,
-          shadowOpacity: 0.24,
+          shadowOpacity: 0.12,
           shadowRadius : 0.8,
           shadowOffset : {
             height: 0.8,
           },
-        }
-        break
+        };
+        break;
       case 2:
         iosShadowElevation = {
-          ...iosShadowElevation,
-          shadowOpacity: 0.24,
+          shadowOpacity: 0.18,
           shadowRadius : 0.9,
           shadowOffset : {
             height: 1,
           },
-        }
-        break
+        };
+        break;
       case 3:
         iosShadowElevation = {
-          ...iosShadowElevation,
-          shadowOpacity: 0.24,
+          shadowOpacity: 0.18,
           shadowRadius : 1.4,
           shadowOffset : {
             height: 2,
           },
-        }
-        break
+        };
+        break;
       case 4:
         iosShadowElevation = {
-          ...iosShadowElevation,
-          shadowOpacity: 0.24,
+          shadowOpacity: 0.18,
           shadowRadius : 2.5,
           shadowOffset : {
             height: 2.8,
           },
-        }
-        break
+        };
+        break;
       case 5:
         iosShadowElevation = {
-          ...iosShadowElevation,
           shadowOpacity: 0.24,
           shadowRadius : 3.2,
           shadowOffset : {
             height: 4,
           },
-        }
-        break
+        };
+        break;
       default:
-        break
+        break;
     }
+
+    iosShadowElevation.zIndex = 5
+    iosShadowElevation.shadowColor = '#000'
 
     return iosShadowElevation
   }
