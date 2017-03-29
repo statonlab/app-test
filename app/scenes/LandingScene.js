@@ -95,7 +95,7 @@ export default class LandingScene extends Component {
    */
   componentDidMount() {
     this.setSidebarLinks()
-    this.events.push(DeviceEventEmitter.addListener('userLoggedOut', this.setSidebarLinks))
+    this.events.push(DeviceEventEmitter.addListener('userLoggedOut', this.setSidebarLinks.bind(this)))
   }
 
   /**
