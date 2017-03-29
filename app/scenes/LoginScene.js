@@ -6,7 +6,8 @@ import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
 import t from 'tcomb-validation'
 import Axios from 'axios'
-import Users from '../API/users.js'
+import realm from '../db/Schema'
+
 
 
 export default class LoginScene extends Component {
@@ -15,40 +16,77 @@ export default class LoginScene extends Component {
     super(props)
 
     this.state = {
-      email: '',
-      password: ''
+      email: null,
+      password: null,
+      logType: 'Login'
+    }
+    this.realm = realm
+    this.loginRules = t.struct({
+      email           : t.String,
+      password        : t.String
+    })
+  }
+
+  logInUser = () => {
+    if (t.validate(this.state, this.loginRules).isValid()){
+      //Check email and password against server, store in realm
+     this.loginRequest()
+    }else{
+      alert("Please enter an email and password")
     }
   }
 
-  componentDidMount() {
-    if (this.props.email) {
-      this.setState({email: this.props.email})
-    }
-}
+  loginRequest = () => {
+    console.log("executing login request");
 
-  putRequest = () => {
-    console.log("executing put request");
-    Axios.get('http://treesource.app/user', {user: 'bradford.condon@uky.edu'})
+    let axios = Axios.create({
+      baseURL: 'http://treesource.app/api/v1/',
+      timeout: 10000
+    })
+
+    axios.post('user/login', {email: this.state.email, password: this.state.password})
       .then(response => {
-        console.log(response);
+        console.log("SUCCESS:", response.data.data);
+        this.storeUser(response)
+        this.props.navigator.push({label: 'LandingScene'})
+
       })
       .catch(error => {
-        console.log("logging error:");
-        console.log(error);
+        console.log("ERR", error);
+        alert(error)
       });
 
   }
+
+  storeUser = (response) => {
+    this.realm.write(() => {
+      // Delete existing users first
+      this.realm.deleteAll()
+      if (!response.data.data.zipcode){
+        response.data.data.zipcode = ''
+      }
+      this.realm.create('User', {
+        name            : response.data.data.name.toString(),
+        email           : response.data.data.email.toString(),
+        anonymous       : response.data.data.is_anonymous,
+        zipcode         : response.data.data.zipcode,
+        api_token       : response.data.data.api_token,
+        is_over_thirteen: response.data.data.is_over_thirteen
+      })
+    })
+  }
+
+
 
 
   render() {
     return (
       <View style={styles.container}>
-        <Header title="Login" navigator={this.props.navigator} showRightIcon={false}/>
+        <Header title={this.state.logType} navigator={this.props.navigator} showRightIcon={false}/>
         <View style={styles.form}>
           <View style={styles.formGroup}>
             <Text style={styles.title}>TreeSource</Text>
           </View>
-
           <View style={styles.formGroup}>
             <Text style={styles.label}>Email</Text>
             <TextInput
@@ -78,7 +116,7 @@ export default class LoginScene extends Component {
           <View style={styles.formGroup}>
             <MKButton
               style={styles.button}
-              onPress={() => {this.tryLogin() }}>
+              onPress={() => {this.logInUser() }}>
               <Text style={styles.buttonText}>Login</Text>
             </MKButton>
           </View>
