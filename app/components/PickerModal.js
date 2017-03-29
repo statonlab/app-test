@@ -36,25 +36,22 @@ export default class PickerModal extends Component {
   }
 
   onChange = (item) => {
-    if (this.props.modalType =='multiCheck'){
+    if (this.props.modalType == 'multiCheck') {
       //For multiCheck type, allow for multiple checks, and keep track of them
-    selectedOpts = this.state.selectedMulti
+      selectedOpts = this.state.selectedMulti
       if (selectedOpts[item]) {
-      delete selectedOpts[item]
-      }else{
-      selectedOpts[item] = true
-        this.setState({selectedMulti: selectedOpts})
-        console.log (this.state.selectedMulti)
-        console.log (this.state.selectedMulti[item])
-
+        delete selectedOpts[item]
+        return
       }
-
-    }else{
+        selectedOpts[item] = true
+        this.setState({selectedMulti: selectedOpts})
+        return
+      }
+      //for single select
       this.props.onSelect(item)
       this.setState({selected: item})
       this.close()
     }
-  }
 
   open = () => {
     this.setState({modalVisible: true})
@@ -83,8 +80,8 @@ export default class PickerModal extends Component {
             </Text>
           </View>
         </TouchableOpacity>
-      )
-    }else {
+      )}
+
       return (
         <TouchableOpacity
           style={styles.choiceContainer}
@@ -101,7 +98,6 @@ export default class PickerModal extends Component {
         </TouchableOpacity>
       )
     }
-  }
 
 
   render() {
