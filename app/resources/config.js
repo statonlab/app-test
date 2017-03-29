@@ -55,7 +55,7 @@ const DCP = {
     ],
     description  : "Do you see any of these signs of emerald ash borers?  Check all that apply.",
     placeHolder  : 'Signs of pest',
-    itemType: "multiCheck"
+    multiCheck: true
   },
   crownHealth        : {
     label        : "Crown health",
@@ -83,7 +83,7 @@ const DCP = {
     ],
     description  : "Do you see any of these signs of chestnut blight?  Check all that apply.",
     placeHolder  : "symptoms",
-    itemType: "multiCheck"
+    multiCheck: true
   },
   acorns             : {
     label        : "Acorns",
@@ -118,7 +118,7 @@ const DCP = {
     ],
     description : "Do you see any of the following potential health problems?  Check all that apply.  If there is a health problem not listed below, please select other and describe in the comments section of the entry.",
     placeHolder : "check all that apply",
-    itemType: "multiCheck"
+    multiCheck: true
 
   },
   diameterNumeric: {
