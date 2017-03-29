@@ -43,7 +43,7 @@ export default class LoginScene extends Component {
     console.log("executing login request")
 
     let axios = Axios.create({
-      baseURL: 'http://treesource.app/api/v1/',
+      baseURL: 'https://treesource.almsaeedstudio.com/api/v1/',
       timeout: 10000
     })
 

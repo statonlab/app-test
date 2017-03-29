@@ -73,7 +73,7 @@ export default class RegistrationScene extends Component {
   axiosRequest = () => {
     let request = this.state;
     let axios   = Axios.create({
-      baseURL: 'http://treesource.app/api/v1/',
+      baseURL: 'https://treesource.almsaeedstudio.com/api/v1/',
       timeout: 10000
     })
 
