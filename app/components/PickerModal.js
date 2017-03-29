@@ -24,28 +24,35 @@ export default class PickerModal extends Component {
       modalVisible : false,
       cancelText   : "CANCEL",
       selected     : 'not set',
-      selectedMulti : {}
+      selectedMulti: []
     }
+
   }
 
   componentDidMount() {
     this.setState({selected: this.props.initialSelect})
-    if (this.props.modalType == 'multiCheck'){
+    if (this.props.multiCheck){
       this.setState({cancelText : "CONFIRM"})
     }
   }
 
   onChange = (item) => {
-    if (this.props.modalType == 'multiCheck') {
+    if (this.props.multiCheck) {
       //For multiCheck type, allow for multiple checks, and keep track of them
-      selectedOpts = this.state.selectedMulti
-      if (selectedOpts[item]) {
-        delete selectedOpts[item]
-        return
-      }
-        selectedOpts[item] = true
-        this.setState({selectedMulti: selectedOpts})
-        return
+      let selected = this.state.selectedMulti
+
+      selected.map((value, index) =>  {
+        console.log("value index item", value, index, item)
+       if (item == value) {
+          selected.splice(index, 1)
+         this.setState({selectedMulti: selected})
+         console.log("removing", item)
+         return
+       }})
+      console.log("pushing ", item)
+      selected.push(item)
+      this.setState({selectedMulti: selected})
+      return
       }
       //for single select
       this.props.onSelect(item)
@@ -54,12 +61,14 @@ export default class PickerModal extends Component {
     }
 
   open = () => {
+    console.log(this.props.multiCheck)
+
     this.setState({modalVisible: true})
   }
 
   close = () => {
-    if (this.props.modalType == "multiCheck") {
-      this.setState({selected: Object.keys(this.state.selectedMulti)[0]})
+    if (this.props.multiCheck) {
+      this.setState({selected: this.state.selectedMulti[0]})
     }
 
     this.setState({modalVisible: false})
@@ -69,7 +78,7 @@ export default class PickerModal extends Component {
     const uncheckedBox = (<Icon name="checkbox-blank-outline" style={styles.icon}/>)
     const checkedBox   = (<Icon name="checkbox-marked" style={[styles.icon, {color: Colors.primary}]}/>)
 
-    if (this.props.modalType == "multiCheck") {
+    if (this.props.multiCheck) {
       return (
         <TouchableOpacity
           style={styles.choiceContainer}
@@ -78,7 +87,7 @@ export default class PickerModal extends Component {
             this.onChange(choice)
           }}>
           <View style={styles.choiceItem}>
-            {this.state.selectedMulti[choice] ? checkedBox : uncheckedBox  }
+            {this.state.selectedMulti.indexOf(choice) >= 0 ? checkedBox : uncheckedBox  }
             <Text style={styles.choiceText}>
               {choice}
             </Text>
@@ -147,7 +156,8 @@ PickerModal.propTypes = {
   header       : PropTypes.string,
   onSelect     : PropTypes.func,
   style        : View.propTypes.style,
-  initialSelect: PropTypes.string
+  initialSelect: PropTypes.string,
+  multiCheck : PropTypes.bool
 }
 
 PickerModal.defaultProps = {
@@ -155,7 +165,8 @@ PickerModal.defaultProps = {
   header       : 'default header',
   onSelect     : () => {
   },
-  initialSelect: ''
+  initialSelect: '',
+  multiCheck : false
 }
 
 

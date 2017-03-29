@@ -242,7 +242,7 @@ export default class FormScene extends Component {
         <Text style={styles.label}>{DCP[key].label}</Text>
         <PickerModal
           style={styles.picker}
-          modalType={DCP[key].itemType}
+          multiCheck={DCP[key].multiCheck}
           header={DCP[key].description}
           choices={DCP[key].selectChoices}
           onSelect={(option)=>{this.setState({[key]:option})}}>
