@@ -42,7 +42,7 @@ export default class LoginScene extends Component {
   loginRequest = () => {
     this.setState({showSpinner: true})
 
-    console.log("executing login request");
+    console.log("executing login request")
 
     let axios = Axios.create({
       baseURL: 'http://treesource.app/api/v1/',
@@ -51,18 +51,17 @@ export default class LoginScene extends Component {
 
     axios.post('user/login', {email: this.state.email, password: this.state.password})
       .then(response => {
-        console.log("SUCCESS:", response.data.data);
+        console.log("SUCCESS:", response.data.data)
         this.storeUser(response)
         this.setState({showSpinner: false})
 
-        this.props.navigator.push({label: 'LandingScene'})
-
+        this.props.navigator.pop()
       })
       .catch(error => {
-        console.log("ERR", error);
+        console.log("ERR", error)
         this.setState({showSpinner: false})
         alert(error)
-      });
+      })
 
   }
 

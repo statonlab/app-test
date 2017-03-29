@@ -81,7 +81,13 @@ export default class FormScene extends Component {
   componentDidMount() {
     let user = this.realm.objects('User')
     if(user.length === 0) {
-      alert("Warning: You are not logged in.  Please log in to submit observations to the server.")
+      Alert.alert('You are Not Logged In',
+        'Please log in to submit observations to the server.', [
+          {text: 'Login Now', onPress: () => {
+            this.props.navigator.push({label: 'LoginScene'})
+          }},
+          {text: 'Cancel', onPress: () => {}, style: 'cancel'}
+        ])
     }
 
     this.events.push(DeviceEventEmitter.addListener('FormStateChanged', this.fetchData))
