@@ -22,8 +22,17 @@ export default class Sidebar extends Component {
 
     this.state = {
       open    : false,
-      position: new Animated.Value(-250)
+      position: new Animated.Value(-250),
+      routes  : []
     }
+  }
+
+  componentDidMount() {
+    this.setState({routes: this.props.routes})
+  }
+
+  componentWillReceiveProps(props) {
+    this.setState({routes: props.routes})
   }
 
   toggleMenu() {
@@ -70,7 +79,7 @@ export default class Sidebar extends Component {
         }} activeOpacity={1}>
         </TouchableOpacity>
         <Animated.ScrollView style={[style.sidebar, {left: this.state.position}]} ref="sidebar">
-          {this.props.routes.map((route, index) => {
+          {this.state.routes.map((route, index) => {
             return (
               <TouchableWithoutFeedback
                 key={index}
@@ -93,6 +102,12 @@ export default class Sidebar extends Component {
 
   goTo(route) {
     this.toggleMenu()
+
+    if(typeof route.onPress == 'function') {
+      route.onPress()
+      return
+    }
+
     this.props.navigator.push(route)
   }
 
@@ -168,6 +183,6 @@ const style = StyleSheet.create({
     borderStyle      : 'solid',
     flexDirection    : 'row',
     justifyContent   : 'flex-start',
-    alignItems: 'center'
+    alignItems       : 'center'
   }
 })

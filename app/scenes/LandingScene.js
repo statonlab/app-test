@@ -7,12 +7,15 @@ import {
   Image,
   Navigator,
   Dimensions,
-  StyleSheet
+  StyleSheet,
+  Alert,
+  DeviceEventEmitter
 } from 'react-native'
 import {getTheme} from 'react-native-material-kit'
+import Icon from 'react-native-vector-icons/Ionicons'
+import realm from '../db/Schema'
 import Header from '../components/Header'
 import Sidebar from '../components/Sidebar'
-import Icon from 'react-native-vector-icons/Ionicons'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
 
@@ -36,35 +39,122 @@ const plants = [
   }
 ]
 
-const sidebarLinks = [
-  {
-    icon : 'account-key',
-    title: 'Login',
-    label: 'LoginScene'
-  }, {
-    icon : 'account-plus',
-    title: 'Register',
-    label: 'RegistrationScene'
-  }, {
-    icon : 'account-card-details',
-    title: 'About Us',
-    label: 'AboutScene'
-  }, {
-    icon : 'sign-caution',
-    title: 'Health and Safety',
-    label: 'HealthSafetyScene'
-  }, {
-    icon : 'lock',
-    title: 'Privacy Policy',
-    label: 'PrivacyPolicyScene'
-  }, {
-    icon : 'logout-variant',
-    title: 'Logout',
-    label: 'PrivacyPolicyScene'
-  }
-]
-
 export default class LandingScene extends Component {
+  constructor(props) {
+    super(props)
+
+    // Links that always show up
+    this.defaultSidebarLinks = [
+      {
+        icon : 'account-card-details',
+        title: 'About Us',
+        label: 'AboutScene'
+      }, {
+        icon : 'sign-caution',
+        title: 'Health and Safety',
+        label: 'HealthSafetyScene'
+      }, {
+        icon : 'lock',
+        title: 'Privacy Policy',
+        label: 'PrivacyPolicyScene'
+      }
+    ]
+
+    // Links that show up when the user is logged in
+    this.loggedInLinks = [
+      {
+        icon   : 'logout-variant',
+        title  : 'Logout',
+        onPress: this.logout
+      }
+    ]
+
+    // Links that show up when the user is not logged in
+    this.loggedOutLinks = [
+      {
+        icon : 'account-key',
+        title: 'Login',
+        label: 'LoginScene'
+      }, {
+        icon : 'account-plus',
+        title: 'Register',
+        label: 'RegistrationScene'
+      }
+    ]
+
+    this.state = {
+      sidebar: []
+    }
+
+    // Hold all events so we can remove them later and prevent memory leaks
+    this.events = []
+  }
+
+  /**
+   * Sets the initial sidebar links and listens to events.
+   */
+  componentDidMount() {
+    this.setSidebarLinks()
+    this.events.push(DeviceEventEmitter.addListener('userLoggedOut', this.setSidebarLinks))
+  }
+
+  /**
+   * Resets the sidebar links based on logged in status
+   */
+  setSidebarLinks() {
+    if (this.isLoggedIn()) {
+      this.setState({
+        sidebar: [
+          ...this.defaultSidebarLinks,
+          ...this.loggedInLinks
+        ]
+      })
+
+      return
+    }
+
+    this.setState({
+      sidebar: [
+        ...this.loggedOutLinks,
+        ...this.defaultSidebarLinks
+      ]
+    })
+  }
+
+  /**
+   * Logs the user out after confirming the click.
+   */
+  logout() {
+    Alert.alert(
+      'Logging Out',
+      'Are you sure you want to log out?', [
+        {text: 'Yes', onPress: () => {
+          // Deletes all user records thus logging out
+          realm.write(() => {
+            let users = realm.objects('User')
+            realm.delete(users)
+            DeviceEventEmitter.emit('userLoggedOut')
+          })
+        }},
+        {text: 'Cancel', onPress: () => {}, style: 'cancel'}
+      ])
+  }
+
+  /**
+   * Checks if the user is logged in.
+   *
+   * @returns {boolean}
+   */
+  isLoggedIn() {
+    return (realm.objects('User').length > 0)
+  }
+
+  /**
+   * Toggle sidebar menu (show/hide)
+   */
+  toggleMenu() {
+    this.refs.sidebar.toggleMenu()
+  }
 
   render() {
     return (
@@ -78,7 +168,7 @@ export default class LandingScene extends Component {
         <Sidebar
           ref="sidebar"
           navigator={this.props.navigator}
-          routes={sidebarLinks}/>
+          routes={this.state.sidebar}/>
         <ScrollView style={{flex: 0}}>
           <View style={styles.plantsContainer}>
             {plants.map((plant, index) => {
@@ -106,10 +196,6 @@ export default class LandingScene extends Component {
         </ScrollView>
       </View>
     )
-  }
-
-  toggleMenu() {
-    this.refs.sidebar.toggleMenu()
   }
 }
 
