@@ -31,12 +31,13 @@ const SubmissionSchema = {
     numberOfTrees: {type: 'string', default: '1-10'},
     treeHeight   : {type: 'string', default: '0-10 feet'},
     deadTrees    : {type: 'string', default: 'none'},
-    // Base64 encoded string
+    // JSON String
     image        : {type: 'string', default: ''},
     // Example, {longitude: 'int', latitude: 'int'}
     location     : {type: 'Coordinate'},
     comment      : {type: 'string', default: ''},
-    date         : {type: 'string', default: ''}
+    date         : {type: 'string', default: ''},
+    synced       : {type: 'bool', default: false}
   }
 }
 
@@ -53,11 +54,11 @@ const SubmissionSchema = {
 const UserSchema = {
   name      : 'User',
   properties: {
-    name: {type: 'string', default: 'default'},
-    email: {type: 'string', default: 'default'},
-    anonymous: {type: 'bool', default: false},
-    api_token: {type: 'string', default: ''},
-    zipcode: {type: 'string', default: ''},
+    name            : {type: 'string', default: 'default'},
+    email           : {type: 'string', default: 'default'},
+    anonymous       : {type: 'bool', default: false},
+    api_token       : {type: 'string', default: ''},
+    zipcode         : {type: 'string', default: ''},
     is_over_thirteen: {type: 'bool', default: false}
     //ignored fields present in DB
     //userid
@@ -68,8 +69,10 @@ const UserSchema = {
   }
 }
 
-export default new Realm({schema: [
-  UserSchema,
-  CoordinateSchema,
-  SubmissionSchema
-]})
+export default new Realm({
+  schema: [
+    UserSchema,
+    CoordinateSchema,
+    SubmissionSchema
+  ]
+})
