@@ -23,19 +23,37 @@ export default class PickerModal extends Component {
       animationType: 'fade',
       modalVisible : false,
       cancelText   : "CANCEL",
-      selected     : 'Im not set!'
+      selected     : 'not set',
+      selectedMulti : {}
     }
   }
 
   componentDidMount() {
     this.setState({selected: this.props.initialSelect})
+    if (this.props.modalType == 'multiCheck'){
+      this.setState({cancelText : "CONFIRM"})
+    }
   }
 
   onChange = (item) => {
-    // First call the selection method passed in props
-    this.props.onSelect(item)
-    this.setState({selected: item})
-    this.close()
+    if (this.props.modalType =='multiCheck'){
+      //For multiCheck type, allow for multiple checks, and keep track of them
+    selectedOpts = this.state.selectedMulti
+      if (selectedOpts[item]) {
+      delete selectedOpts[item]
+      }else{
+      selectedOpts[item] = true
+        this.setState({selectedMulti: selectedOpts})
+        console.log (this.state.selectedMulti)
+        console.log (this.state.selectedMulti[item])
+
+      }
+
+    }else{
+      this.props.onSelect(item)
+      this.setState({selected: item})
+      this.close()
+    }
   }
 
   open = () => {
@@ -50,20 +68,41 @@ export default class PickerModal extends Component {
     const uncheckedBox = (<Icon name="checkbox-blank-outline" style={styles.icon}/>)
     const checkedBox   = (<Icon name="checkbox-marked" style={[styles.icon, {color: Colors.primary}]}/>)
 
-    return (
-      <TouchableOpacity
-        style={styles.choiceContainer}
-        key={index}
-        onPress={() => {this.onChange(choice)}}>
-        <View style={styles.choiceItem}>
-          {this.state.selected == choice ? checkedBox : uncheckedBox  }
-          <Text style={styles.choiceText}>
-            {choice}
-          </Text>
-        </View>
-      </TouchableOpacity>
-    )
+    if (this.props.modalType == "multiCheck") {
+      return (
+        <TouchableOpacity
+          style={styles.choiceContainer}
+          key={index}
+          onPress={() => {
+            this.onChange(choice)
+          }}>
+          <View style={styles.choiceItem}>
+            {this.state.selectedMulti[choice] ? checkedBox : uncheckedBox  }
+            <Text style={styles.choiceText}>
+              {choice}
+            </Text>
+          </View>
+        </TouchableOpacity>
+      )
+    }else {
+      return (
+        <TouchableOpacity
+          style={styles.choiceContainer}
+          key={index}
+          onPress={() => {
+            this.onChange(choice)
+          }}>
+          <View style={styles.choiceItem}>
+            {this.state.selected == choice ? checkedBox : uncheckedBox  }
+            <Text style={styles.choiceText}>
+              {choice}
+            </Text>
+          </View>
+        </TouchableOpacity>
+      )
+    }
   }
+
 
   render() {
     return (

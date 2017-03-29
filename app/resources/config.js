@@ -33,7 +33,7 @@ const DCP = {
     placeHolder  : 'Uncertain'
   },
   seedsBinary        : {
-    label        : "Seeds?",
+    label        : "Seeds",
     selectChoices: [
       "Yes", "No"
     ],
@@ -41,7 +41,7 @@ const DCP = {
     placeHolder  : "Are seeds present?"
   },
   flowersBinary      : {
-    label        : "Flowers?",
+    label        : "Flowers",
     selectChoices: [
       "Yes", "No"
     ],
@@ -81,7 +81,8 @@ const DCP = {
       "Cankers and cracked bark", "Tan to orange-colored patches or pustules on bark", "Evidence of old dead trunk", "Stump sprouting"
     ],
     description  : "Do you see any of these signs of chestnut blight?  Check all that apply.",
-    placeHolder  : "symptoms"
+    placeHolder  : "symptoms",
+    modalType: "multiCheck"
   },
   acorns             : {
     label        : "Acorns",
@@ -115,7 +116,9 @@ const DCP = {
       "Other"
     ],
     description : "Do you see any of the following potential health problems?  Check all that apply.  If there is a health problem not listed below, please select other and describe in the comments section of the entry.",
-    placeHolder : "check all that apply"
+    placeHolder : "check all that apply",
+    modalType: "multiCheck"
+
   },
   diameterNumeric: {
     label: "Crown health",

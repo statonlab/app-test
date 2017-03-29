@@ -40,6 +40,7 @@ export default class FormScene extends Component {
       numberOfTrees: '',
       deadTrees    : '',
       comment      : '',
+      chestnutBlightSigns: '',
       image        : '/fake/path/to/pass/validation', // Remove this and keep images
       images       : [],
       title        : this.props.title,
@@ -230,6 +231,7 @@ export default class FormScene extends Component {
         <Text style={styles.label}>{DCP[key].label}</Text>
         <PickerModal
           style={styles.picker}
+          modalType={DCP[key].modalType}
           header={DCP[key].description}
           choices={DCP[key].selectChoices}
           onSelect={(option)=>{this.setState({[key]:option})}}>
