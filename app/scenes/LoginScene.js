@@ -20,6 +20,7 @@ export default class LoginScene extends Component {
     this.state = {
       email: null,
       password: null,
+      showSpinner : false
 
     }
     this.realm = realm
@@ -39,6 +40,8 @@ export default class LoginScene extends Component {
   }
 
   loginRequest = () => {
+    this.setState({showSpinner: true})
+
     console.log("executing login request");
 
     let axios = Axios.create({
@@ -50,11 +53,14 @@ export default class LoginScene extends Component {
       .then(response => {
         console.log("SUCCESS:", response.data.data);
         this.storeUser(response)
+        this.setState({showSpinner: false})
+
         this.props.navigator.push({label: 'LandingScene'})
 
       })
       .catch(error => {
         console.log("ERR", error);
+        this.setState({showSpinner: false})
         alert(error)
       });
 
@@ -84,6 +90,7 @@ export default class LoginScene extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <Spinner show={this.state.showSpinner} />
         <Header title={'Login'} navigator={this.props.navigator} showRightIcon={false}/>
         <View style={styles.form}>
           <View style={styles.formGroup}>
