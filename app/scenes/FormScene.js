@@ -39,12 +39,14 @@ const theme = getTheme()
   crownHealth: t.enums.of(DCP.crownHealth.selectChoices, "crownHealth"),
     woolyAdesPres: t.Boolean,
   woolyAdesCoverage: t.enums.of(DCP.woolyAdesCoverage.selectChoices, "woolyAdesCoverage"),
-  chestnutBlightSigns: t.enums.of(DCP.chestnutBlightSigns.selectChoices, "cbSigns"),
   acorns: t.enums.of(DCP.acorns.selectChoices, "acorns"),
   diameterDescriptive: t.enums.of(DCP.diameterDescriptive.selectChoices, "diameter"),
   heightFirstBranch: t.enums.of(DCP.heightFirstBranch.selectChoices, "heightFirstBranch"),
 oakHealthProblems: t.enums.of(DCP.oakHealthProblems.selectChoices, "oakHealthProblems"),
-  diameterNumeric: t.maybe(t.Number)
+  diameterNumeric: t.maybe(t.Number),
+chestnutBlightSigns: t.list
+    // chestnutBlightSigns: t.enums.of(DCP.chestnutBlightSigns.selectChoices, "cbSigns"),
+
 }
 const Coordinate=  t.refinement(t.Number, (n) => n != 0, 'Coordinate')
 const Location        = t.dict(t.String, Coordinate)
@@ -177,7 +179,7 @@ if (!this.validateMeta().isValid()) {
 
     let obsSubmit       = {
       observation_category: this.props.title,
-      meta_data           : JSON.stringify(metadata),
+      meta_data           : JSON.stringify(this.state.metadata),
       longitude           : observation.location.longitude,
       latitude            : observation.location.latitude,
       location_accuracy   : observation.location.accuracy,
