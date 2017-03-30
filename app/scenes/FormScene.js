@@ -66,7 +66,9 @@ export default class FormScene extends Component {
         longitude: 0,
         accuracy : -1
       },
-      metadata : {}
+      metadata : {
+        diameterNumeric: 20
+      }
     }
 
     this.events = []
@@ -278,8 +280,27 @@ validateMeta = () => {
       return (
         <View style={styles.formGroup} key={key}>
           <Text style={styles.label}>{DCP[key].label}</Text>
-          <SliderPick
+          <View style={styles.row}>
+          <MKSlider
+          onChange={(value) => {this.setState({metadata:
+            {...this.state.metadata,
+              [key] : parseInt(value.toFixed(0))}
+            })}}
+                    style= {styles.slider}
+          lowerTrackColor = {Colors.primary}
+          min={1}
+          max={300}
+          value={this.state.metadata[key]}
           />
+          <TextInput
+          style={styles.textField}
+          editable={false}
+          placeholder="not selected"
+          placeholderTextColor="#aaa"
+          value={this.state.metadata[key].toString()}
+          underlineColorAndroid="transparent"
+          />
+          </View>
         </View>
       )
     }
