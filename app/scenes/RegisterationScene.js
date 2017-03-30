@@ -14,7 +14,7 @@ export default class RegistrationScene extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      name            : 'unknown',
+      name            : '',
       email           : '',
       password        : '',
       confirmPassword : '',
@@ -127,6 +127,7 @@ export default class RegistrationScene extends Component {
                 placeholder={"E.g, Jane Doe"}
                 placeholderTextColor="#aaa"
                 returnKeyType={'next'}
+                onChangeText={(name) =>this.setState({name})}
                 underlineColorAndroid="transparent"
               />
             </View>
