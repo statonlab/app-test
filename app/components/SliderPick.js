@@ -34,18 +34,18 @@ class ValueText extends Component {
 
 
 export default class SliderPick extends Component {
+constructor(props) {
+  super(props);
+    }
 
-
-
-  onChange = (curValue) => {
+onChange = (curValue) => {
     this.refs.valueText.onChange(curValue.toFixed(0))
 
-    if (!this.props.onChange) {
-      return
-    }
+    console.log("suer onChange: ", this.props.onChange)
 
     this.props.onChange(curValue)
 }
+
 
   render() {
     return (
@@ -72,7 +72,8 @@ SliderPick.propTypes = {
   minVal: PropTypes.number,
   maxVal: PropTypes.number,
   startVal: PropTypes.number,
-  legendText: PropTypes.string
+  legendText: PropTypes.string,
+  onChange: PropTypes.func
 }
 SliderPick.defaultProps = {
   minVal: 1,

@@ -25,27 +25,31 @@ import SliderPick from '../components/SliderPick'
 
 const theme = getTheme()
 
-// const   DCPrules  = { 
-//   DeadTreesIndex: DCP.deadTrees.validation,
-//  TreeHeightIndex: DCP.treeHeight.validation,
-//  TreeStandIndex : DCP.treeStand.validation,
-// }
+      // ashSpecies: true,
+      // seedsBinary: true,
+      // flowersBinary: true,
+      // emeraldAshBorer: true,
+      // crownHealth: true,
+      // diameterNumeric: true
 
-
-DCPrules = {
-  seedsBinary        : t.enums.of(DCP.seedsBinary.selectChoices, "seed"),
-  flowersBinary      : t.enums.of(DCP.flowersBinary.selectChoices, "flowers"),
-  emeraldAshBorer    : t.enums.of(DCP.emeraldAshBorer.selectChoices, "EAB"),
-  crownHealth        : t.enums.of(DCP.crownHealth.selectChoices, "crownHealth"),
-  woolyAdesPres      : t.Boolean,
-  woolyAdesCoverage  : t.enums.of(DCP.woolyAdesCoverage.selectChoices, "woolyAdesCoverage"),
-  acorns             : t.enums.of(DCP.acorns.selectChoices, "acorns"),
+ DCPrules = {
+  seedsBinary: t.enums.of(DCP.seedsBinary.selectChoices, "seed"),
+  flowersBinary: t.enums.of(DCP.flowersBinary.selectChoices, "flowers"),
+  crownHealth: t.enums.of(DCP.crownHealth.selectChoices, "crownHealth"),
+  woolyAdesPres: t.Boolean,
+  woolyAdesCoverage: t.enums.of(DCP.woolyAdesCoverage.selectChoices, "woolyAdesCoverage"),
+  acorns: t.enums.of(DCP.acorns.selectChoices, "acorns"),
   diameterDescriptive: t.enums.of(DCP.diameterDescriptive.selectChoices, "diameter"),
-  heightFirstBranch  : t.enums.of(DCP.heightFirstBranch.selectChoices, "heightFirstBranch"),
-  oakHealthProblems  : t.enums.of(DCP.oakHealthProblems.selectChoices, "oakHealthProblems"),
-  diameterNumeric    : t.maybe(t.Number),
-  chestnutBlightSigns: t.String
-  // chestnutBlightSigns: t.enums.of(DCP.chestnutBlightSigns.selectChoices, "cbSigns"),
+  heightFirstBranch: t.enums.of(DCP.heightFirstBranch.selectChoices, "heightFirstBranch"),
+  oakHealthProblems: t.enums.of(DCP.oakHealthProblems.selectChoices, "oakHealthProblems"),
+  diameterNumeric: t.maybe(t.Number),
+  chestnutBlightSigns: t.String,
+  ashSpecies: t.enums.of(DCP.ashSpecies.selectChoices, "ashSpecies"),
+    emeraldAshBorer: t.enums.of(DCP.emeraldAshBorer.selectChoices, "EAB"),
+
+    // chestnutBlightSigns: t.enums.of(DCP.chestnutBlightSigns.selectChoices, "cbSigns"),
+
+
 }
 
 const Coordinate = t.refinement(t.Number, (n) => n != 0, 'Coordinate')
@@ -66,7 +70,10 @@ export default class FormScene extends Component {
         longitude: 0,
         accuracy : -1
       },
-      metadata: {}
+      metadata : {
+        diameterNumeric: 20
+      }
+
     }
 
     this.events = []
@@ -273,8 +280,27 @@ export default class FormScene extends Component {
       return (
         <View style={styles.formGroup} key={key}>
           <Text style={styles.label}>{DCP[key].label}</Text>
-          <SliderPick
+          <View style={styles.sliderPair}>
+          <MKSlider
+          onChange={(value) => {this.setState({metadata:
+            {...this.state.metadata,
+              [key] : parseInt(value.toFixed(0))}
+            })}}
+                    style= {styles.slider}
+          lowerTrackColor = {Colors.primary}
+          min={1}
+          max={300}
+          value={this.state.metadata[key]}
           />
+          <TextInput
+          style={styles.textField}
+          editable={false}
+          placeholder="not selected"
+          placeholderTextColor="#aaa"
+          value={this.state.metadata[key].toString().concat(" inches")}
+          underlineColorAndroid="transparent"
+          />
+          </View>
         </View>
       )
     }
@@ -555,7 +581,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5
   },
   slider: {
-    width: 130,
+    width: 200,
+  },
+  sliderPair: {
+
   }
 })
 
