@@ -283,11 +283,9 @@ export default class FormScene extends Component {
           <SliderPick
             key={key}
             start={25}
-            onChange={(value) => {this.setState({metadata:
-             {...this.state.metadata,
-             [key] : parseInt(value.toFixed(0))}
-             })}}
+            onChange={(value) => {this.setState({metadata:{...this.state.metadata,[key] : value}})}}
           />
+          <Icon name="altimeter" style={styles.icon}/>
         </View>
       )
       /*
@@ -325,10 +323,8 @@ export default class FormScene extends Component {
           multiCheck={DCP[key].multiCheck}
           header={DCP[key].description}
           choices={DCP[key].selectChoices}
-          onSelect={(option)=>{this.setState({metadata: {
-            ...this.state.metadata,
-            [key] : option}
-          })}}>
+          onSelect={(option)=>{this.setState({metadata: {...this.state.metadata, [key] : option}})}}
+        >
           <TextInput
             style={styles.textField}
             editable={false}

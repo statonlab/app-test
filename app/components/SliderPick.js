@@ -68,7 +68,9 @@ const styles = StyleSheet.create({
     width: 200,
   },
 
-  container: {},
+  container: {
+    flex: 1
+  },
 
   label: {
     color      : '#444',
