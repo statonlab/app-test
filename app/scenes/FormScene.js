@@ -70,14 +70,23 @@ export default class FormScene extends Component {
     this.events = []
     this.realm  = realm
 
-    this.formProps = this.props.formProps
+    this.formProps = this.props.formProps //read in form items to display
+    
+    let formRules = {
+      comment : t.String,
+      images  : t.list(t.String),
+      title   : t.String,
+      location: Location,
+    }
 
-    //set rules for base field values
+     this.formRulesMeta = this.compileValRules()//build form rules from passed props
+     console.log("Form rules", this.formRules)
 
-     this.formRules = this.compileValRules()//build form rules from passed props
 
+    this.formT = t.struct(formRules, "formT")//build tcomb validation from rules
 
-    this.formT = t.struct(this.formRules, "formT")
+   this.formTMeta = t.struct(this.formRulesMeta, "formTMeta")//build tcomb validation from rules
+
 
     this.fetchData()
 
@@ -127,11 +136,16 @@ export default class FormScene extends Component {
   }
 
   submit = () => {
-    console.log(this.state)
+    console.log("state upon submission", this.state.metadata)
     if (!this.validateState().isValid()) {
       this.notifyIncomplete(this.validateState())
       return
     }
+if (!this.validateMeta().isValid()) {
+      this.notifyIncomplete(this.validateMeta())
+      return
+    }
+
 
     AsyncStorage.setItem('@WildType:savedForm', JSON.stringify(this.state))
     AsyncStorage.removeItem('@WildType:formData')
@@ -184,8 +198,15 @@ export default class FormScene extends Component {
   validateState = () => {
     return t.validate(this.state, this.formT)
   }
+validateMeta = () => {
+  return t.validate(this.state.metadata, this.formTMeta)
+}
+
 
   notifyIncomplete = (validationAttempt) => {
+
+    console.log(validationAttempt)
+
     let missingFields = {}
     let message       = "Please supply a value for the following required fields: \n"
 
@@ -200,25 +221,15 @@ export default class FormScene extends Component {
 
 
   compileValRules = () => {
-
-    let formBase = {
-      comment : t.String,
-      images  : t.list(t.String),
-      title   : t.String,
-      location: Location
-    }
+    let formBase = {}
 
     Object.keys(this.formProps).map((propItem, index) => {
-    // let itemRule = DCP[propItem].validation
-
-    //Implement below when solved issue defining validation in DCP
-
 
     let itemRule = DCPrules[propItem]
 
     formBase[propItem] = itemRule
+
   })  
-    console.log(formBase)
     return formBase
 }
 
@@ -278,13 +289,16 @@ export default class FormScene extends Component {
           multiCheck={DCP[key].multiCheck}
           header={DCP[key].description}
           choices={DCP[key].selectChoices}
-          onSelect={(option)=>{this.setState({metadata[key] : option})}}>
+          onSelect={(option)=>{this.setState({metadata: {
+            ...this.state.metadata,
+            [key] : option}
+          })}} >
           <TextInput
             style={styles.textField}
             editable={false}
             placeholder={DCP[key].placeHolder}
             placeholderTextColor="#aaa"
-            value={this.state[key]}
+            value={this.state.metadata[key]}
             underlineColorAndroid="transparent"
           />
         </PickerModal>
