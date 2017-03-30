@@ -26,7 +26,6 @@ export default class RegistrationScene extends Component {
 
     this.realm = realm
 
-
     this.registrationRules = t.struct({
       email           : t.String, // No validation
       password        : t.refinement(t.String, (pw) => pw.length >= 6, "pw"),// Ensure password is at least 6 characters

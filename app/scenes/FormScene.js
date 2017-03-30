@@ -49,9 +49,11 @@ const theme = getTheme()
 
     // chestnutBlightSigns: t.enums.of(DCP.chestnutBlightSigns.selectChoices, "cbSigns"),
 
+
 }
-const Coordinate=  t.refinement(t.Number, (n) => n != 0, 'Coordinate')
-const Location        = t.dict(t.String, Coordinate)
+
+const Coordinate = t.refinement(t.Number, (n) => n != 0, 'Coordinate')
+const Location   = t.dict(t.String, Coordinate)
 
 
 export default class FormScene extends Component {
@@ -59,11 +61,11 @@ export default class FormScene extends Component {
     super(props)
 
     this.state = {
-      comment            : '',
-      image              : '/fake/path/to/pass/validation', // Remove this and keep images
-      images             : [],
-      title              : this.props.title,
-      location           : {
+      comment : '',
+      image   : '/fake/path/to/pass/validation', // Remove this and keep images
+      images  : [],
+      title   : this.props.title,
+      location: {
         latitude : 0,
         longitude: 0,
         accuracy : -1
@@ -71,13 +73,14 @@ export default class FormScene extends Component {
       metadata : {
         diameterNumeric: 20
       }
+
     }
 
     this.events = []
     this.realm  = realm
 
     this.formProps = this.props.formProps //read in form items to display
-    
+
     let formRules = {
       comment : t.String,
       images  : t.list(t.String),
@@ -85,13 +88,12 @@ export default class FormScene extends Component {
       location: Location,
     }
 
-     this.formRulesMeta = this.compileValRules()//build form rules from passed props
-     console.log("Form rules", this.formRules)
+    this.formRulesMeta = this.compileValRules()//build form rules from passed props
 
 
     this.formT = t.struct(formRules, "formT")//build tcomb validation from rules
 
-   this.formTMeta = t.struct(this.formRulesMeta, "formTMeta")//build tcomb validation from rules
+    this.formTMeta = t.struct(this.formRulesMeta, "formTMeta")//build tcomb validation from rules
 
 
     this.fetchData()
@@ -142,12 +144,11 @@ export default class FormScene extends Component {
   }
 
   submit = () => {
-    console.log("state upon submission", this.state.metadata)
     if (!this.validateState().isValid()) {
       this.notifyIncomplete(this.validateState())
       return
     }
-if (!this.validateMeta().isValid()) {
+    if (!this.validateMeta().isValid()) {
       this.notifyIncomplete(this.validateMeta())
       return
     }
@@ -164,17 +165,16 @@ if (!this.validateMeta().isValid()) {
     }
 
 
-
     let observation = {
-      id           : primaryKey,
-      name         : this.state.title.toString(),
-      species      : this.props.title.toString(),
-      image        : JSON.stringify(this.state.images),
-      location     : this.state.location,
-      comment      : this.state.comment.toString(),
-      date         : moment().format('MM-DD-Y HH:mm:ss').toString(),
-      synced       : false,
-      meta_data : JSON.stringify(this.state.metadata)
+      id       : primaryKey,
+      name     : this.state.title.toString(),
+      species  : this.state.title.toString(),
+      image    : JSON.stringify(this.state.images),
+      location : this.state.location,
+      comment  : this.state.comment.toString(),
+      date     : moment().format('MM-DD-Y HH:mm:ss').toString(),
+      synced   : false,
+      meta_data: JSON.stringify(this.state.metadata)
     }
 
     this.realm.write(() => {
@@ -204,14 +204,12 @@ if (!this.validateMeta().isValid()) {
   validateState = () => {
     return t.validate(this.state, this.formT)
   }
-validateMeta = () => {
-  return t.validate(this.state.metadata, this.formTMeta)
-}
+  validateMeta  = () => {
+    return t.validate(this.state.metadata, this.formTMeta)
+  }
 
 
   notifyIncomplete = (validationAttempt) => {
-
-    console.log(validationAttempt)
 
     let missingFields = {}
     let message       = "Please supply a value for the following required fields: \n"
@@ -231,13 +229,13 @@ validateMeta = () => {
 
     Object.keys(this.formProps).map((propItem, index) => {
 
-    let itemRule = DCPrules[propItem]
+      let itemRule = DCPrules[propItem]
 
-    formBase[propItem] = itemRule
+      formBase[propItem] = itemRule
 
-  })  
+    })
     return formBase
-}
+  }
 
   submitObsToServer = (request) => {
 
@@ -317,7 +315,7 @@ validateMeta = () => {
           onSelect={(option)=>{this.setState({metadata: {
             ...this.state.metadata,
             [key] : option}
-          })}} >
+          })}}>
           <TextInput
             style={styles.textField}
             editable={false}

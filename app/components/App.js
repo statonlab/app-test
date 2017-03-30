@@ -9,7 +9,6 @@ import LandingScene from '../scenes/LandingScene'
 import MapScene from '../scenes/MapScene'
 import FormScene from '../scenes/FormScene'
 import CameraScene from '../scenes/CameraScene'
-import CapturedScene from '../scenes/CapturedScene'
 import CaptureLocationScene from '../scenes/CaptureLocationScene'
 import TreeDescriptionScene from '../scenes/TreeDescriptionScene'
 import SubmittedScene from '../scenes/SubmittedScene'
@@ -44,9 +43,10 @@ export default class WildType extends Component {
       return <CameraScene navigator={navigator} images={route.images ? route.images : []}/>
     }
 
+    /** DEPRECATED
     if (route.label == 'CapturedScene') {
       return <CapturedScene navigator={navigator} image={route.image}/>
-    }
+    }**/
 
     if (route.label == 'CaptureLocationScene') {
       return <CaptureLocationScene title={route.title} navigator={navigator}/>
