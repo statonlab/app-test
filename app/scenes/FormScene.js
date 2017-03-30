@@ -44,7 +44,7 @@ const theme = getTheme()
   heightFirstBranch: t.enums.of(DCP.heightFirstBranch.selectChoices, "heightFirstBranch"),
 oakHealthProblems: t.enums.of(DCP.oakHealthProblems.selectChoices, "oakHealthProblems"),
   diameterNumeric: t.maybe(t.Number),
-chestnutBlightSigns: t.list
+chestnutBlightSigns: t.String
     // chestnutBlightSigns: t.enums.of(DCP.chestnutBlightSigns.selectChoices, "cbSigns"),
 
 }
