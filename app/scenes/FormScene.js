@@ -25,26 +25,28 @@ import SliderPick from '../components/SliderPick'
 
 const theme = getTheme()
 
-// const   DCPrules  = { 
-//   DeadTreesIndex: DCP.deadTrees.validation,
-//  TreeHeightIndex: DCP.treeHeight.validation,
-//  TreeStandIndex : DCP.treeStand.validation,
-// }
-
+      // ashSpecies: true,
+      // seedsBinary: true,
+      // flowersBinary: true,
+      // emeraldAshBorer: true,
+      // crownHealth: true,
+      // diameterNumeric: true
 
  DCPrules = {
   seedsBinary: t.enums.of(DCP.seedsBinary.selectChoices, "seed"),
   flowersBinary: t.enums.of(DCP.flowersBinary.selectChoices, "flowers"),
-  emeraldAshBorer: t.enums.of(DCP.emeraldAshBorer.selectChoices, "EAB"),
   crownHealth: t.enums.of(DCP.crownHealth.selectChoices, "crownHealth"),
-    woolyAdesPres: t.Boolean,
+  woolyAdesPres: t.Boolean,
   woolyAdesCoverage: t.enums.of(DCP.woolyAdesCoverage.selectChoices, "woolyAdesCoverage"),
   acorns: t.enums.of(DCP.acorns.selectChoices, "acorns"),
   diameterDescriptive: t.enums.of(DCP.diameterDescriptive.selectChoices, "diameter"),
   heightFirstBranch: t.enums.of(DCP.heightFirstBranch.selectChoices, "heightFirstBranch"),
-oakHealthProblems: t.enums.of(DCP.oakHealthProblems.selectChoices, "oakHealthProblems"),
+  oakHealthProblems: t.enums.of(DCP.oakHealthProblems.selectChoices, "oakHealthProblems"),
   diameterNumeric: t.maybe(t.Number),
-chestnutBlightSigns: t.String
+  chestnutBlightSigns: t.String,
+  ashSpecies: t.enums.of(DCP.ashSpecies.selectChoices, "ashSpecies"),
+    emeraldAshBorer: t.enums.of(DCP.emeraldAshBorer.selectChoices, "EAB"),
+
     // chestnutBlightSigns: t.enums.of(DCP.chestnutBlightSigns.selectChoices, "cbSigns"),
 
 }
