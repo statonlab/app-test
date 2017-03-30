@@ -31,7 +31,8 @@ const theme = getTheme()
 //  TreeStandIndex : DCP.treeStand.validation,
 // }
 
-const DCPrules = {
+
+ DCPrules = {
   seedsBinary: t.enums.of(DCP.seedsBinary.selectChoices, "seed"),
   flowersBinary: t.enums.of(DCP.flowersBinary.selectChoices, "flowers"),
   emeraldAshBorer: t.enums.of(DCP.emeraldAshBorer.selectChoices, "EAB"),
@@ -45,7 +46,6 @@ const DCPrules = {
 oakHealthProblems: t.enums.of(DCP.oakHealthProblems.selectChoices, "oakHealthProblems"),
   diameterNumeric: t.Number
 }
-
 const Coordinate=  t.refinement(t.Number, (n) => n != 0, 'Coordinate')
 const Location        = t.dict(t.String, Coordinate)
 
@@ -72,18 +72,15 @@ export default class FormScene extends Component {
     this.formProps = this.props.formProps
 
     //set rules for base field values
-    let formRules = {
-      comment : t.String,
-      images  : t.list(t.String),
-      title   : t.String,
-      location: Location
-    }
 
-    this.compileValRules()//build form rules from passed props
+     this.formRules = this.compileValRules()//build form rules from passed props
 
-    this.formT = t.struct(formRules, "formT")
+
+    this.formT = t.struct(this.formRules, "formT")
 
     this.fetchData()
+
+
   }
 
   componentDidMount() {
@@ -203,18 +200,27 @@ export default class FormScene extends Component {
   }
 
 
-compileValRules = () => {
-  
-  this.formProps.map((propItem, index  ) => {
+  compileValRules = () => {
 
-    //Implement below when solved
+    let formBase = {
+      comment : t.String,
+      images  : t.list(t.String),
+      title   : t.String,
+      location: Location
+    }
 
+    Object.keys(this.formProps).map((propItem, index) => {
     // let itemRule = DCP[propItem].validation
-    let itemRule = this.DCPrules[propItem]
 
-    this.formRules[propItem] = itemRule
+    //Implement below when solved issue defining validation in DCP
+
+
+    let itemRule = DCPrules[propItem]
+
+    formBase[propItem] = itemRule
   })  
-
+    console.log(formBase)
+    return formBase
 }
 
   submitObsToServer = (request) => {
