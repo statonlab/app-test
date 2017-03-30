@@ -44,7 +44,7 @@ const theme = getTheme()
   diameterDescriptive: t.enums.of(DCP.diameterDescriptive.selectChoices, "diameter"),
   heightFirstBranch: t.enums.of(DCP.heightFirstBranch.selectChoices, "heightFirstBranch"),
 oakHealthProblems: t.enums.of(DCP.oakHealthProblems.selectChoices, "oakHealthProblems"),
-  diameterNumeric: t.Number
+  diameterNumeric: t.maybe(t.Number)
 }
 const Coordinate=  t.refinement(t.Number, (n) => n != 0, 'Coordinate')
 const Location        = t.dict(t.String, Coordinate)
@@ -149,7 +149,7 @@ export default class FormScene extends Component {
     let observation = {
       id           : primaryKey,
       name         : this.state.title.toString(),
-      species      : this.state.species.toString(),
+      species      : this.props.title.toString(),
       image        : JSON.stringify(this.state.images),
       location     : this.state.location,
       comment      : this.state.comment.toString(),
