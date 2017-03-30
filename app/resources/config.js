@@ -1,3 +1,5 @@
+import t from 'tcomb-validation'
+
 const DCP = {
   treeHeight: {
     label        : "Tree Height",
@@ -5,7 +7,7 @@ const DCP = {
       '0-10 feet', '11-50 feet', '51-100 feet', '>100 feet'
     ],
     description  : "Please estimate the height of the tree for this observation. Some trees are very tall.",
-    placeHolder  : "Tree Height"
+    placeHolder  : "Tree Height",
   },
 
   treeStand: {
@@ -15,14 +17,16 @@ const DCP = {
     ],
 
     description: "Full description of number of trees question.  No longer used.",
-    placeHolder: "Number of Trees"
+    placeHolder: "Number of Trees",
+    // validation: t.enums.of(DCP.treeStand.selectChoices, "stand")
   },
 
   deadTrees          : {
     label        : "Dead Trees",
     selectChoices: ['none', '1-50', '51+'],
     description  : "Of the trees of this species in this stand, how many are dead?  No longer used.",
-    placeHolder  : "Number of Trees"
+    placeHolder  : "Number of Trees",
+    // validation : t.enums.of(DCP.deadTrees.selectChoices, "dead")
   },
   ashSpecies         : {
     label        : "Species",
