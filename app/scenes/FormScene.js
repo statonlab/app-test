@@ -280,7 +280,7 @@ validateMeta = () => {
       return (
         <View style={styles.formGroup} key={key}>
           <Text style={styles.label}>{DCP[key].label}</Text>
-          <View style={styles.row}>
+          <View style={styles.sliderPair}>
           <MKSlider
           onChange={(value) => {this.setState({metadata:
             {...this.state.metadata,
@@ -297,7 +297,7 @@ validateMeta = () => {
           editable={false}
           placeholder="not selected"
           placeholderTextColor="#aaa"
-          value={this.state.metadata[key].toString()}
+          value={this.state.metadata[key].toString().concat(" inches")}
           underlineColorAndroid="transparent"
           />
           </View>
@@ -581,7 +581,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5
   },
   slider: {
-    width: 130,
+    width: 200,
+  },
+  sliderPair: {
+
   }
 })
 
