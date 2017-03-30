@@ -39,18 +39,14 @@ export default class PickerModal extends Component {
     if (this.props.multiCheck) {
       //For multiCheck type, allow for multiple checks, and keep track of them
       let selected = this.state.selectedMulti
+      let index    = selected.indexOf(item)
 
-      selected.map((value, index) => {
-        console.log("value index item", value, index, item)
-        if (item == value) {
-          selected.splice(index, 1)
-          this.setState({selectedMulti: selected})
-          console.log("removing", item)
-          return
-        }
-      })
-      console.log("pushing ", item)
-      selected.push(item)
+      if (index >= 0) {
+        selected.splice(index, 1)
+      } else {
+        selected.push(item)
+      }
+
       this.setState({selectedMulti: selected})
       return
     }
@@ -61,8 +57,6 @@ export default class PickerModal extends Component {
   }
 
   open = () => {
-    console.log(this.props.multiCheck)
-
     this.setState({modalVisible: true})
   }
 

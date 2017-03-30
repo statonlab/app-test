@@ -273,6 +273,14 @@ export default class FormScene extends Component {
     AsyncStorage.removeItem('@WildType:formData')
   }
 
+  getMultiCheckValue(value, isArray) {
+    if(typeof value === 'string' && isArray) {
+      return JSON.parse(value).toString()
+    }
+
+    return value
+  }
+
   populateFormItem = (key) => {
     if (typeof DCP[key] === undefined) return
 
@@ -288,32 +296,6 @@ export default class FormScene extends Component {
           <Icon name="altimeter" style={styles.icon}/>
         </View>
       )
-      /*
-       <View style={styles.formGroup} key={key}>
-       <Text style={styles.label}>{DCP[key].label}</Text>
-       <View style={styles.sliderPair}>
-       <MKSlider
-       onChange={(value) => {this.setState({metadata:
-       {...this.state.metadata,
-       [key] : parseInt(value.toFixed(0))}
-       })}}
-       style= {styles.slider}
-       lowerTrackColor = {Colors.primary}
-       min={1}
-       max={300}
-       value={this.state.metadata[key]}
-       />
-       <TextInput
-       style={styles.textField}
-       editable={false}
-       placeholder="not selected"
-       placeholderTextColor="#aaa"
-       value={this.state.metadata[key].toString().concat(" inches")}
-       underlineColorAndroid="transparent"
-       />
-       </View>
-       </View>
-       */
     }
     return (
       <View style={styles.formGroup} key={key}>
@@ -322,7 +304,7 @@ export default class FormScene extends Component {
           multiCheck={DCP[key].multiCheck}
           header={DCP[key].description}
           choices={DCP[key].selectChoices}
-          onSelect={(option)=>{this.setState({metadata: {...this.state.metadata, [key] : option}})}}
+          onSelect={(option)=>{this.setState({metadata: {...this.state.metadata, [key]: option}})}}
         >
           <View style={styles.picker}>
             <Text style={styles.label}>{DCP[key].label}</Text>
@@ -331,7 +313,7 @@ export default class FormScene extends Component {
               editable={false}
               placeholder={DCP[key].placeHolder}
               placeholderTextColor="#aaa"
-              value={this.state.metadata[key]}
+              value={this.getMultiCheckValue(this.state.metadata[key], DCP[key].multiCheck)}
               underlineColorAndroid="transparent"
             />
             {dropdownIcon}
