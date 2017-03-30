@@ -64,6 +64,7 @@ export default class FormScene extends Component {
         longitude: 0,
         accuracy : -1
       },
+      metadata : {}
     }
 
     this.events = []
@@ -142,9 +143,7 @@ export default class FormScene extends Component {
       primaryKey = primaryKey.sorted('id', true)[0].id + 1
     }
 
-    let metadata = {
 
-    }
 
     let observation = {
       id           : primaryKey,
@@ -155,7 +154,7 @@ export default class FormScene extends Component {
       comment      : this.state.comment.toString(),
       date         : moment().format('MM-DD-Y HH:mm:ss').toString(),
       synced       : false,
-      meta_data : JSON.stringify(metadata)
+      meta_data : JSON.stringify(this.state.metadata)
     }
 
     this.realm.write(() => {
@@ -279,7 +278,7 @@ export default class FormScene extends Component {
           multiCheck={DCP[key].multiCheck}
           header={DCP[key].description}
           choices={DCP[key].selectChoices}
-          onSelect={(option)=>{this.setState({[key]:option})}}>
+          onSelect={(option)=>{this.setState({metadata[key]:option})}}>
           <TextInput
             style={styles.textField}
             editable={false}
