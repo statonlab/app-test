@@ -317,7 +317,6 @@ export default class FormScene extends Component {
     }
     return (
       <View style={styles.formGroup} key={key}>
-        <Text style={styles.label}>{DCP[key].label}</Text>
         <PickerModal
           style={styles.picker}
           multiCheck={DCP[key].multiCheck}
@@ -325,16 +324,19 @@ export default class FormScene extends Component {
           choices={DCP[key].selectChoices}
           onSelect={(option)=>{this.setState({metadata: {...this.state.metadata, [key] : option}})}}
         >
-          <TextInput
-            style={styles.textField}
-            editable={false}
-            placeholder={DCP[key].placeHolder}
-            placeholderTextColor="#aaa"
-            value={this.state.metadata[key]}
-            underlineColorAndroid="transparent"
-          />
+          <View style={styles.picker}>
+            <Text style={styles.label}>{DCP[key].label}</Text>
+            <TextInput
+              style={styles.textField}
+              editable={false}
+              placeholder={DCP[key].placeHolder}
+              placeholderTextColor="#aaa"
+              value={this.state.metadata[key]}
+              underlineColorAndroid="transparent"
+            />
+            {dropdownIcon}
+          </View>
         </PickerModal>
-        {dropdownIcon}
       </View>
     )
   }
@@ -360,11 +362,11 @@ export default class FormScene extends Component {
           <View style={styles.card}>
 
             <View style={[styles.formGroup]}>
-              <Text style={styles.label}>Photos</Text>
               <MKButton
-                style={[styles.buttonLink, {height: this.state.images.length > 0 ? 60 : 40, justifyContent: 'center'}]}
+                style={[styles.buttonLink, {flex: 1, alignItems: 'center', flexDirection: 'row', height: this.state.images.length > 0 ? 60 : 40}]}
                 onPress={this._goToCamera}
               >
+                <Text style={styles.label}>Photos</Text>
                 {this.state.images.length === 0 ?
                   <View style={{flex: 1, alignItems: 'center', flexDirection: 'row'}}>
                     <Text style={[styles.buttonLinkText, {color: '#aaa'}]}>Add Photos</Text>
@@ -377,11 +379,11 @@ export default class FormScene extends Component {
             </View>
 
             <View style={styles.formGroup}>
-              <Text style={styles.label}>Location</Text>
               <MKButton
                 style={[styles.buttonLink, {flex: 1, alignItems: 'center', flexDirection: 'row'}]}
                 onPress={() => this.props.navigator.push({label: 'CaptureLocationScene'})}
               >
+                <Text style={styles.label}>Location</Text>
                 <Text style={[styles.buttonLinkText, {flex: 1, color: this.state.location.latitude === 0 ? '#aaa' : '#444'}]}>
                   {this.state.location.latitude === 0 ? 'Enter location' : `${this.state.location.latitude},${this.state.location.longitude}`}
                 </Text>
@@ -481,11 +483,14 @@ const styles = StyleSheet.create({
   },
 
   picker: {
-    flex : 1,
-    width: undefined
+    flex         : 0,
+    flexDirection: 'row',
+    alignItems   : 'center',
+    width        : undefined,
   },
 
   label: {
+    flex      : 0,
     width     : 110,
     color     : '#444',
     fontWeight: 'bold'
@@ -511,7 +516,8 @@ const styles = StyleSheet.create({
     height           : 40,
     paddingHorizontal: 15,
     color            : '#444',
-    fontSize         : 14
+    fontSize         : 14,
+    flex             : 1
   },
 
   subHeadText: {
@@ -541,7 +547,7 @@ const styles = StyleSheet.create({
     flex           : 1,
     width          : undefined,
     backgroundColor: 'transparent',
-    paddingLeft    : 15,
+    paddingLeft    : 0,
     height         : 40,
     justifyContent : 'center'
   },
@@ -571,6 +577,7 @@ const styles = StyleSheet.create({
   },
 
   icon: {
+    flex    : 0,
     width   : 30,
     fontSize: 20,
     color   : '#aaa'
