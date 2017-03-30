@@ -25,21 +25,37 @@ import SliderPick from '../components/SliderPick'
 
 const theme = getTheme()
 
-const DeadTreesIndex  = t.enums.of(DCP.deadTrees.selectChoices, "dead")
-const TreeHeightIndex = t.enums.of(DCP.treeHeight.selectChoices, "height")
-const TreeStandIndex  = t.enums.of(DCP.treeStand.selectChoices, "stand")
-const Coordinate      = t.refinement(t.Number, (n) => n != 0, 'Coordinate')
+// const   DCPrules  = { 
+//   DeadTreesIndex: DCP.deadTrees.validation,
+//  TreeHeightIndex: DCP.treeHeight.validation,
+//  TreeStandIndex : DCP.treeStand.validation,
+// }
+
+const DCPrules = {
+  seedsBinary: t.enums.of(DCP.seedsBinary.selectChoices, "seed"),
+  flowersBinary: t.enums.of(DCP.flowersBinary.selectChoices, "flowers"),
+  emeraldAshBorer: t.enums.of(DCP.emeraldAshBorer.selectChoices, "EAB"),
+  crownHealth: t.enums.of(DCP.crownHealth.selectChoices, "crownHealth"),
+    woolyAdesPres: t.Boolean,
+  woolyAdesCoverage: t.enums.of(DCP.woolyAdesCoverage.selectChoices, "woolyAdesCoverage"),
+  chestnutBlightSigns: t.enums.of(DCP.chestnutBlightSigns.selectChoices, "cbSigns"),
+  acorns: t.enums.of(DCP.acorns.selectChoices, "acorns"),
+  diameterDescriptive: t.enums.of(DCP.diameterDescriptive.selectChoices, "diameter"),
+  heightFirstBranch: t.enums.of(DCP.heightFirstBranch.selectChoices, "heightFirstBranch"),
+oakHealthProblems: t.enums.of(DCP.oakHealthProblems.selectChoices, "oakHealthProblems"),
+  diameterNumeric: t.Number
+}
+
+const Coordinate=  t.refinement(t.Number, (n) => n != 0, 'Coordinate')
 const Location        = t.dict(t.String, Coordinate)
+
 
 export default class FormScene extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      species            : '',
-      sliderValue        : 25,
       comment            : '',
-      chestnutBlightSigns: '',
       image              : '/fake/path/to/pass/validation', // Remove this and keep images
       images             : [],
       title              : this.props.title,
@@ -47,7 +63,7 @@ export default class FormScene extends Component {
         latitude : 0,
         longitude: 0,
         accuracy : -1
-      }
+      },
     }
 
     this.events = []
@@ -63,16 +79,8 @@ export default class FormScene extends Component {
       location: Location
     }
 
-    //Add in rules for optional field values
-    if (this.formProps.deadTree) {
-      formRules.deadTrees = t.maybe(DeadTreesIndex)//optional
-    }
-    if (this.formProps.treeHeight) {
-      formRules.treeHeight = TreeHeightIndex//required
-    }
-    if (this.formProps.numberOfTrees) {
-      formRules.numberOfTrees = TreeStandIndex
-    }
+    this.compileValRules()//build form rules from passed props
+
     this.formT = t.struct(formRules, "formT")
 
     this.fetchData()
@@ -137,18 +145,20 @@ export default class FormScene extends Component {
       primaryKey = primaryKey.sorted('id', true)[0].id + 1
     }
 
+    let metadata = {
+
+    }
+
     let observation = {
       id           : primaryKey,
       name         : this.state.title.toString(),
       species      : this.state.species.toString(),
-      numberOfTrees: this.state.numberOfTrees.toString(),
-      treeHeight   : this.state.treeHeight.toString(),
-      deadTrees    : this.state.deadTrees.toString(),
       image        : JSON.stringify(this.state.images),
       location     : this.state.location,
       comment      : this.state.comment.toString(),
       date         : moment().format('MM-DD-Y HH:mm:ss').toString(),
-      synced       : false
+      synced       : false,
+      meta_data : JSON.stringify(metadata)
     }
 
     this.realm.write(() => {
@@ -157,7 +167,7 @@ export default class FormScene extends Component {
 
     let obsSubmit       = {
       observation_category: this.props.title,
-      meta_data           : JSON.stringify(observation),
+      meta_data           : JSON.stringify(metadata),
       longitude           : observation.location.longitude,
       latitude            : observation.location.latitude,
       location_accuracy   : observation.location.accuracy,
@@ -192,6 +202,20 @@ export default class FormScene extends Component {
     Alert.alert(message)
   }
 
+
+compileValRules = () => {
+  
+  this.formProps.map((propItem, index  ) => {
+
+    //Implement below when solved
+
+    // let itemRule = DCP[propItem].validation
+    let itemRule = this.DCPrules[propItem]
+
+    this.formRules[propItem] = itemRule
+  })  
+
+}
 
   submitObsToServer = (request) => {
 
@@ -233,7 +257,6 @@ export default class FormScene extends Component {
     if (typeof DCP[key] === undefined) return
 
     if (DCP[key].itemType === "slider") {
-      console.log(key, " is a slider mate")
       return (
         <View style={styles.formGroup} key={key}>
           <Text style={styles.label}>{DCP[key].label}</Text>

@@ -32,7 +32,7 @@ const SubmissionSchema = {
     // Example, {longitude: 'int', latitude: 'int'}
     location     : {type: 'Coordinate'},
     date         : {type: 'string', default: ''},
-    synced       : {type: 'bool', default: false}
+    synced       : {type: 'bool', default: false},
         // JSON String
         metaData : {type: 'string', default: ''}
   }
