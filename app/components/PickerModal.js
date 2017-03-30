@@ -26,13 +26,12 @@ export default class PickerModal extends Component {
       selected     : 'not set',
       selectedMulti: []
     }
-
   }
 
   componentDidMount() {
     this.setState({selected: this.props.initialSelect})
-    if (this.props.multiCheck){
-      this.setState({cancelText : "CONFIRM"})
+    if (this.props.multiCheck) {
+      this.setState({cancelText: "CONFIRM"})
     }
   }
 
@@ -41,24 +40,25 @@ export default class PickerModal extends Component {
       //For multiCheck type, allow for multiple checks, and keep track of them
       let selected = this.state.selectedMulti
 
-      selected.map((value, index) =>  {
+      selected.map((value, index) => {
         console.log("value index item", value, index, item)
-       if (item == value) {
+        if (item == value) {
           selected.splice(index, 1)
-         this.setState({selectedMulti: selected})
-         console.log("removing", item)
-         return
-       }})
+          this.setState({selectedMulti: selected})
+          console.log("removing", item)
+          return
+        }
+      })
       console.log("pushing ", item)
       selected.push(item)
       this.setState({selectedMulti: selected})
       return
-      }
-      //for single select
-      this.props.onSelect(item)
-      this.setState({selected: item})
-      this.close()
     }
+    //for single select
+    this.props.onSelect(item)
+    this.setState({selected: item})
+    this.close()
+  }
 
   open = () => {
     console.log(this.props.multiCheck)
@@ -69,7 +69,7 @@ export default class PickerModal extends Component {
   close = () => {
     if (this.props.multiCheck) {
 
-            this.props.onSelect(JSON.stringify(this.state.selectedMulti))
+      this.props.onSelect(JSON.stringify(this.state.selectedMulti))
 
     }
 
@@ -95,29 +95,28 @@ export default class PickerModal extends Component {
             </Text>
           </View>
         </TouchableOpacity>
-      )}
-
-      return (
-        <TouchableOpacity
-          style={styles.choiceContainer}
-          key={index}
-          onPress={() => {
-            this.onChange(choice)
-          }}>
-          <View style={styles.choiceItem}>
-            {this.state.selected == choice ? checkedBox : uncheckedBox  }
-            <Text style={styles.choiceText}>
-              {choice}
-            </Text>
-          </View>
-        </TouchableOpacity>
       )
     }
+
+    return (
+      <TouchableOpacity
+        style={styles.choiceContainer}
+        key={index}
+        onPress={() => {this.onChange(choice)}}>
+        <View style={styles.choiceItem}>
+          {this.state.selected == choice ? checkedBox : uncheckedBox  }
+          <Text style={styles.choiceText}>
+            {choice}
+          </Text>
+        </View>
+      </TouchableOpacity>
+    )
+  }
 
 
   render() {
     return (
-      <View style={this.props.style}>
+      <View>
         <Modal transparent={true}
           visible={this.state.modalVisible}
           onRequestClose={this.close}
@@ -140,12 +139,11 @@ export default class PickerModal extends Component {
                   {this.state.cancelText}
                 </Text>
               </MKButton>
-
             </View>
           </View>
         </Modal>
 
-        <TouchableOpacity onPress={this.open}>
+        <TouchableOpacity style={this.props.style} onPress={this.open}>
           {this.props.children}
         </TouchableOpacity>
       </View>
@@ -154,12 +152,13 @@ export default class PickerModal extends Component {
 }
 
 PickerModal.propTypes = {
+  ...View.PropTypes,
   choices      : PropTypes.array,
   header       : PropTypes.string,
   onSelect     : PropTypes.func,
   style        : View.propTypes.style,
   initialSelect: PropTypes.string,
-  multiCheck : PropTypes.bool
+  multiCheck   : PropTypes.bool
 }
 
 PickerModal.defaultProps = {
@@ -168,7 +167,7 @@ PickerModal.defaultProps = {
   onSelect     : () => {
   },
   initialSelect: '',
-  multiCheck : false
+  multiCheck   : false
 }
 
 
