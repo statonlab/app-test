@@ -25,57 +25,73 @@ import SliderPick from '../components/SliderPick'
 
 const theme = getTheme()
 
-const DeadTreesIndex  = t.enums.of(DCP.deadTrees.selectChoices, "dead")
-const TreeHeightIndex = t.enums.of(DCP.treeHeight.selectChoices, "height")
-const TreeStandIndex  = t.enums.of(DCP.treeStand.selectChoices, "stand")
-const Coordinate      = t.refinement(t.Number, (n) => n != 0, 'Coordinate')
-const Location        = t.dict(t.String, Coordinate)
+// const   DCPrules  = { 
+//   DeadTreesIndex: DCP.deadTrees.validation,
+//  TreeHeightIndex: DCP.treeHeight.validation,
+//  TreeStandIndex : DCP.treeStand.validation,
+// }
+
+
+DCPrules = {
+  seedsBinary        : t.enums.of(DCP.seedsBinary.selectChoices, "seed"),
+  flowersBinary      : t.enums.of(DCP.flowersBinary.selectChoices, "flowers"),
+  emeraldAshBorer    : t.enums.of(DCP.emeraldAshBorer.selectChoices, "EAB"),
+  crownHealth        : t.enums.of(DCP.crownHealth.selectChoices, "crownHealth"),
+  woolyAdesPres      : t.Boolean,
+  woolyAdesCoverage  : t.enums.of(DCP.woolyAdesCoverage.selectChoices, "woolyAdesCoverage"),
+  acorns             : t.enums.of(DCP.acorns.selectChoices, "acorns"),
+  diameterDescriptive: t.enums.of(DCP.diameterDescriptive.selectChoices, "diameter"),
+  heightFirstBranch  : t.enums.of(DCP.heightFirstBranch.selectChoices, "heightFirstBranch"),
+  oakHealthProblems  : t.enums.of(DCP.oakHealthProblems.selectChoices, "oakHealthProblems"),
+  diameterNumeric    : t.maybe(t.Number),
+  chestnutBlightSigns: t.String
+  // chestnutBlightSigns: t.enums.of(DCP.chestnutBlightSigns.selectChoices, "cbSigns"),
+}
+
+const Coordinate = t.refinement(t.Number, (n) => n != 0, 'Coordinate')
+const Location   = t.dict(t.String, Coordinate)
+
 
 export default class FormScene extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      species            : '',
-      sliderValue        : 25,
-      comment            : '',
-      chestnutBlightSigns: '',
-      image              : '/fake/path/to/pass/validation', // Remove this and keep images
-      images             : [],
-      title              : this.props.title,
-      location           : {
+      comment : '',
+      image   : '/fake/path/to/pass/validation', // Remove this and keep images
+      images  : [],
+      title   : this.props.title,
+      location: {
         latitude : 0,
         longitude: 0,
         accuracy : -1
-      }
+      },
+      metadata: {}
     }
 
     this.events = []
     this.realm  = realm
 
-    this.formProps = this.props.formProps
+    this.formProps = this.props.formProps //read in form items to display
 
-    //set rules for base field values
     let formRules = {
       comment : t.String,
       images  : t.list(t.String),
       title   : t.String,
-      location: Location
+      location: Location,
     }
 
-    //Add in rules for optional field values
-    if (this.formProps.deadTree) {
-      formRules.deadTrees = t.maybe(DeadTreesIndex)//optional
-    }
-    if (this.formProps.treeHeight) {
-      formRules.treeHeight = TreeHeightIndex//required
-    }
-    if (this.formProps.numberOfTrees) {
-      formRules.numberOfTrees = TreeStandIndex
-    }
-    this.formT = t.struct(formRules, "formT")
+    this.formRulesMeta = this.compileValRules()//build form rules from passed props
+
+
+    this.formT = t.struct(formRules, "formT")//build tcomb validation from rules
+
+    this.formTMeta = t.struct(this.formRulesMeta, "formTMeta")//build tcomb validation from rules
+
 
     this.fetchData()
+
+
   }
 
   componentDidMount() {
@@ -121,11 +137,15 @@ export default class FormScene extends Component {
   }
 
   submit = () => {
-    console.log(this.state)
     if (!this.validateState().isValid()) {
       this.notifyIncomplete(this.validateState())
       return
     }
+    if (!this.validateMeta().isValid()) {
+      this.notifyIncomplete(this.validateMeta())
+      return
+    }
+
 
     AsyncStorage.setItem('@WildType:savedForm', JSON.stringify(this.state))
     AsyncStorage.removeItem('@WildType:formData')
@@ -137,15 +157,17 @@ export default class FormScene extends Component {
       primaryKey = primaryKey.sorted('id', true)[0].id + 1
     }
 
+
     let observation = {
-      id           : primaryKey,
-      name         : this.state.title.toString(),
-      species      : this.state.species.toString(),
-      image        : JSON.stringify(this.state.images),
-      location     : this.state.location,
-      comment      : this.state.comment.toString(),
-      date         : moment().format('MM-DD-Y HH:mm:ss').toString(),
-      synced       : false
+      id       : primaryKey,
+      name     : this.state.title.toString(),
+      species  : this.state.title.toString(),
+      image    : JSON.stringify(this.state.images),
+      location : this.state.location,
+      comment  : this.state.comment.toString(),
+      date     : moment().format('MM-DD-Y HH:mm:ss').toString(),
+      synced   : false,
+      meta_data: JSON.stringify(this.state.metadata)
     }
 
     this.realm.write(() => {
@@ -154,7 +176,7 @@ export default class FormScene extends Component {
 
     let obsSubmit       = {
       observation_category: this.props.title,
-      meta_data           : JSON.stringify(observation),
+      meta_data           : JSON.stringify(this.state.metadata),
       longitude           : observation.location.longitude,
       latitude            : observation.location.latitude,
       location_accuracy   : observation.location.accuracy,
@@ -175,8 +197,13 @@ export default class FormScene extends Component {
   validateState = () => {
     return t.validate(this.state, this.formT)
   }
+  validateMeta  = () => {
+    return t.validate(this.state.metadata, this.formTMeta)
+  }
+
 
   notifyIncomplete = (validationAttempt) => {
+
     let missingFields = {}
     let message       = "Please supply a value for the following required fields: \n"
 
@@ -189,6 +216,19 @@ export default class FormScene extends Component {
     Alert.alert(message)
   }
 
+
+  compileValRules = () => {
+    let formBase = {}
+
+    Object.keys(this.formProps).map((propItem, index) => {
+
+      let itemRule = DCPrules[propItem]
+
+      formBase[propItem] = itemRule
+
+    })
+    return formBase
+  }
 
   submitObsToServer = (request) => {
 
@@ -230,7 +270,6 @@ export default class FormScene extends Component {
     if (typeof DCP[key] === undefined) return
 
     if (DCP[key].itemType === "slider") {
-      console.log(key, " is a slider mate")
       return (
         <View style={styles.formGroup} key={key}>
           <Text style={styles.label}>{DCP[key].label}</Text>
@@ -247,13 +286,16 @@ export default class FormScene extends Component {
           multiCheck={DCP[key].multiCheck}
           header={DCP[key].description}
           choices={DCP[key].selectChoices}
-          onSelect={(option)=>{this.setState({[key]:option})}}>
+          onSelect={(option)=>{this.setState({metadata: {
+            ...this.state.metadata,
+            [key] : option}
+          })}}>
           <TextInput
             style={styles.textField}
             editable={false}
             placeholder={DCP[key].placeHolder}
             placeholderTextColor="#aaa"
-            value={this.state[key]}
+            value={this.state.metadata[key]}
             underlineColorAndroid="transparent"
           />
         </PickerModal>

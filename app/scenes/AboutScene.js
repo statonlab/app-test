@@ -5,6 +5,7 @@ import Elevation from '../helpers/Elevation'
 
 export default class AboutScene extends Component {
 
+
   render() {
     return (
       <View style={styles.container}>

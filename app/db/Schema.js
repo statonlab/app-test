@@ -28,16 +28,13 @@ const SubmissionSchema = {
     id           : {type: 'int', default: 1},
     name         : {type: 'string', default: 'Tree'},
     species      : {type: 'string', default: ''},
-    numberOfTrees: {type: 'string', default: '1-10'},
-    treeHeight   : {type: 'string', default: '0-10 feet'},
-    deadTrees    : {type: 'string', default: 'none'},
-    // JSON String
     image        : {type: 'string', default: ''},
     // Example, {longitude: 'int', latitude: 'int'}
     location     : {type: 'Coordinate'},
-    comment      : {type: 'string', default: ''},
     date         : {type: 'string', default: ''},
-    synced       : {type: 'bool', default: false}
+    synced       : {type: 'bool', default: false},
+        // JSON String
+        metaData : {type: 'string', default: ''}
   }
 }
 
