@@ -82,7 +82,6 @@ export default class FormScene extends Component {
     }
 
      this.formRulesMeta = this.compileValRules()//build form rules from passed props
-     console.log("Form rules", this.formRules)
 
 
     this.formT = t.struct(formRules, "formT")//build tcomb validation from rules
@@ -138,7 +137,6 @@ export default class FormScene extends Component {
   }
 
   submit = () => {
-    console.log("state upon submission", this.state.metadata)
     if (!this.validateState().isValid()) {
       this.notifyIncomplete(this.validateState())
       return
@@ -206,8 +204,6 @@ validateMeta = () => {
 
 
   notifyIncomplete = (validationAttempt) => {
-
-    console.log(validationAttempt)
 
     let missingFields = {}
     let message       = "Please supply a value for the following required fields: \n"
