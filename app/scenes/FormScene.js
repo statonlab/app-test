@@ -278,7 +278,7 @@ export default class FormScene extends Component {
           multiCheck={DCP[key].multiCheck}
           header={DCP[key].description}
           choices={DCP[key].selectChoices}
-          onSelect={(option)=>{this.setState({metadata[key]:option})}}>
+          onSelect={(option)=>{this.setState({metadata[key] : option})}}>
           <TextInput
             style={styles.textField}
             editable={false}
