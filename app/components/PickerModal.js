@@ -68,7 +68,9 @@ export default class PickerModal extends Component {
 
   close = () => {
     if (this.props.multiCheck) {
-      this.setState({selected: this.state.selectedMulti[0]})
+
+            this.props.onSelect(this.state.selectedMulti.join())
+
     }
 
     this.setState({modalVisible: false})
