@@ -363,7 +363,7 @@ export default class FormScene extends Component {
 
             <View style={[styles.formGroup]}>
               <MKButton
-                style={[styles.buttonLink, {flex: 1, alignItems: 'center', flexDirection: 'row', height: this.state.images.length > 0 ? 60 : 40}]}
+                style={[styles.buttonLink, {height: this.state.images.length > 0 ? 60 : 40}]}
                 onPress={this._goToCamera}
               >
                 <Text style={styles.label}>Photos</Text>
@@ -380,7 +380,7 @@ export default class FormScene extends Component {
 
             <View style={styles.formGroup}>
               <MKButton
-                style={[styles.buttonLink, {flex: 1, alignItems: 'center', flexDirection: 'row'}]}
+                style={[styles.buttonLink]}
                 onPress={() => this.props.navigator.push({label: 'CaptureLocationScene'})}
               >
                 <Text style={styles.label}>Location</Text>
@@ -514,10 +514,11 @@ const styles = StyleSheet.create({
 
   textField: {
     height           : 40,
-    paddingHorizontal: 15,
+    paddingHorizontal: 5,
     color            : '#444',
     fontSize         : 14,
-    flex             : 1
+    flex             : 1,
+    width            : undefined
   },
 
   subHeadText: {
@@ -544,12 +545,14 @@ const styles = StyleSheet.create({
   },
 
   buttonLink: {
-    flex           : 1,
     width          : undefined,
     backgroundColor: 'transparent',
     paddingLeft    : 0,
     height         : 40,
-    justifyContent : 'center'
+    justifyContent : 'center',
+    flex           : 1,
+    alignItems     : 'center',
+    flexDirection  : 'row'
   },
 
   buttonText: {
@@ -566,7 +569,8 @@ const styles = StyleSheet.create({
 
   buttonLinkText: {
     color: "#666",
-    flex : 1
+    flex : 1,
+    paddingHorizontal: 5
   },
 
   comment: {
