@@ -36,14 +36,14 @@ export default class FormScene extends Component {
     super(props)
 
     this.state = {
-      species      : '',
-      sliderValue : 25,
-      comment      : '',
+      species            : '',
+      sliderValue        : 25,
+      comment            : '',
       chestnutBlightSigns: '',
-      image        : '/fake/path/to/pass/validation', // Remove this and keep images
-      images       : [],
-      title        : this.props.title,
-      location     : {
+      image              : '/fake/path/to/pass/validation', // Remove this and keep images
+      images             : [],
+      title              : this.props.title,
+      location           : {
         latitude : 0,
         longitude: 0,
         accuracy : -1
@@ -80,13 +80,18 @@ export default class FormScene extends Component {
 
   componentDidMount() {
     let user = this.realm.objects('User')
-    if(user.length === 0) {
+    if (user.length === 0) {
       Alert.alert('You are Not Logged In',
         'Please log in to submit observations to the server.', [
-          {text: 'Login Now', onPress: () => {
+          {
+            text: 'Login Now', onPress: () => {
             this.props.navigator.push({label: 'LoginScene'})
-          }},
-          {text: 'Cancel', onPress: () => {}, style: 'cancel'}
+          }
+          },
+          {
+            text: 'Cancel', onPress: () => {
+          }, style                 : 'cancel'
+          }
         ])
     }
 
@@ -142,11 +147,11 @@ export default class FormScene extends Component {
       image        : JSON.stringify(this.state.images),
       location     : this.state.location,
       comment      : this.state.comment.toString(),
-      date         : moment().format('MM-DD-Y H:mm:ss').toString()
+      date         : moment().format('MM-DD-Y HH:mm:ss').toString(),
+      synced       : false
     }
 
     this.realm.write(() => {
-
       this.realm.create('Submission', observation)
     })
 
@@ -227,22 +232,22 @@ export default class FormScene extends Component {
   populateFormItem = (key) => {
     if (typeof DCP[key] === undefined) return
 
-   if (DCP[key].itemType === "slider") {
+    if (DCP[key].itemType === "slider") {
       console.log(key, " is a slider mate")
-      return(
-     <View style={styles.formGroup} key={key}>
-       <Text style={styles.label}>{DCP[key].label}</Text>
-       <SliderPick
-       />
-     </View>
-   )
-   }
-     return (
+      return (
+        <View style={styles.formGroup} key={key}>
+          <Text style={styles.label}>{DCP[key].label}</Text>
+          <SliderPick
+          />
+        </View>
+      )
+    }
+    return (
       <View style={styles.formGroup} key={key}>
         <Text style={styles.label}>{DCP[key].label}</Text>
         <PickerModal
           style={styles.picker}
-          modalType={DCP[key].itemType}
+          multiCheck={DCP[key].multiCheck}
           header={DCP[key].description}
           choices={DCP[key].selectChoices}
           onSelect={(option)=>{this.setState({[key]:option})}}>
@@ -511,7 +516,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5
   },
   slider: {
-      width: 130,
+    width: 130,
   }
 })
 
