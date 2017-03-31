@@ -166,6 +166,7 @@ export default class LandingScene extends Component {
   }
 
 
+
   /**
    * Toggle sidebar menu (show/hide)
    */

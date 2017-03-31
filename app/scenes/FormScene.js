@@ -259,7 +259,7 @@ export default class FormScene extends Component {
   populateFormItem = (key) => {
     if (typeof DCP[key] === undefined) return
 
-    if (DCP[key].itemType === "slider") {
+    if (DCP[key].slider) {
       return (
         <View style={styles.formGroup} key={key}>
           <Text style={styles.label}>{DCP[key].label}</Text>

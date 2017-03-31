@@ -128,7 +128,7 @@ const DCP = {
   diameterNumeric: {
     label: "Tree diameter",
     description: "Approximately how many feet is the diameter of the tree?",
-    itemType: "slider"
+    slider: true,
   }
 }
 
