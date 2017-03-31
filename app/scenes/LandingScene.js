@@ -108,13 +108,14 @@ export default class LandingScene extends Component {
    */
   setSidebarLinks() {
     if (this.isLoggedIn()) {
+      this.needSyncCheck()
+
       this.setState({
         sidebar: [
           ...this.defaultSidebarLinks,
           ...this.loggedInLinks
         ]
       })
-
       return
     }
 
@@ -153,6 +154,18 @@ export default class LandingScene extends Component {
   isLoggedIn() {
     return (realm.objects('User').length > 0)
   }
+
+  /**
+   * Check for unsynced records
+   **/
+
+  needSyncCheck() {
+    if (realm.objects('Submission').filtered('synced == false ').length > 0){
+      alert("You have " + realm.objects('Submission').filtered('synced == false ').length + " record(s) that are not synced with the server.")
+    }
+  }
+
+
 
   /**
    * Toggle sidebar menu (show/hide)
