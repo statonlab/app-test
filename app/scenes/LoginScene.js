@@ -53,9 +53,6 @@ export default class LoginScene extends Component {
         this.storeUser(response)
         this.setState({showSpinner: false})
 
-        //Before switching scenes, download new observations from server
-        this.pullServerObservations()
-
         this.props.navigator.pop()
       })
       .catch(error => {
@@ -82,6 +79,9 @@ export default class LoginScene extends Component {
         is_over_thirteen: response.data.data.is_over_thirteen
       })
     })
+
+   // this.pullServerObservations()
+    //this.axios.get undefined
   }
 
 
@@ -95,8 +95,8 @@ export default class LoginScene extends Component {
         let data = response.data.data
 
         for (observationID in data){
-          let observation = data[observationID]
 
+          let observation = data[observationID]
           if (realm.objects('Submission').filtered(`id == ${observation.id}`).length === 0){
 
             let obsToStore = {
