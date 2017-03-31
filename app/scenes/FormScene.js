@@ -42,10 +42,10 @@ DCPrules = {
   diameterDescriptive: t.enums.of(DCP.diameterDescriptive.selectChoices, "diameter"),
   heightFirstBranch  : t.enums.of(DCP.heightFirstBranch.selectChoices, "heightFirstBranch"),
   oakHealthProblems  : t.enums.of(DCP.oakHealthProblems.selectChoices, "oakHealthProblems"),
-  diameterNumeric    : t.maybe(t.Number),
-  chestnutBlightSigns: t.String,
+  diameterNumeric    : t.Number,
+  chestnutBlightSigns: t.maybe(t.String),
   ashSpecies         : t.enums.of(DCP.ashSpecies.selectChoices, "ashSpecies"),
-  emeraldAshBorer    : t.String,//t.enums.of(DCP.emeraldAshBorer.selectChoices, "EAB"),
+  emeraldAshBorer    : t.maybe(t.String)   //t.enums.of(DCP.emeraldAshBorer.selectChoices, "EAB"),
   // chestnutBlightSigns: t.enums.of(DCP.chestnutBlightSigns.selectChoices, "cbSigns"),
 }
 
@@ -58,7 +58,6 @@ export default class FormScene extends Component {
     super(props)
 
     this.state = {
-      comment : '',
       images  : [],
       title   : this.props.title,
       location: {
@@ -67,7 +66,8 @@ export default class FormScene extends Component {
         accuracy : -1
       },
       metadata: {
-        diameterNumeric: 20
+        diameterNumeric: 25,
+        comment : '',
       }
 
     }
@@ -78,7 +78,6 @@ export default class FormScene extends Component {
     this.formProps = this.props.formProps //read in form items to display
 
     let formRules = {
-      comment : t.String,
       images  : t.list(t.String),
       title   : t.String,
       location: Location,
@@ -141,14 +140,12 @@ export default class FormScene extends Component {
       primaryKey = primaryKey.sorted('id', true)[0].id + 1
     }
 
-
     let observation = {
       id       : primaryKey,
       name     : this.state.title.toString(),
       species  : this.state.title.toString(),
       images   : JSON.stringify(this.state.images),
       location : this.state.location,
-      comment  : this.state.comment.toString(),
       date     : moment().format('MM-DD-Y HH:mm:ss').toString(),
       synced   : false,
       meta_data: JSON.stringify(this.state.metadata)
@@ -359,8 +356,8 @@ export default class FormScene extends Component {
                 style={[styles.textField, styles.comment]}
                 placeholder="Additional Comments"
                 placeholderTextColor="#aaa"
-                value={this.state.comment}
-                onChangeText={(comment) => this.setState({comment: comment})}
+                value={this.state.metadata.comment}
+                onChangeText={(comment) => this.setState({metadata: {...this.state.metadata, comment: comment}})}
                 multiline={true}
                 numberOfLines={4}
                 underlineColorAndroid="transparent"
