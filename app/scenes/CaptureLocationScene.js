@@ -1,8 +1,7 @@
 import React, {Component, PropTypes} from 'react'
 import {
   View,
-  StyleSheet,
-  DeviceEventEmitter
+  StyleSheet
 } from 'react-native'
 import GetLocation from '../components/GetLocation'
 import Header from '../components/Header'
@@ -20,7 +19,6 @@ export default class CaptureLocationScene extends Component {
   }
 
   goToForm = () => {
-    DeviceEventEmitter.emit('FormStateChanged')
     this.props.navigator.popN(1)
   }
 }
