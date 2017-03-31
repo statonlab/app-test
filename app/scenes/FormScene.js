@@ -151,7 +151,7 @@ export default class FormScene extends Component {
       comment  : this.state.comment.toString(),
       date     : moment().format('MM-DD-Y HH:mm:ss').toString(),
       synced   : false,
-      meta_data: JSON.stringify(this.state.metadata)
+      metaData: JSON.stringify(this.state.metadata)
     }
 
     this.realm.write(() => {
