@@ -29,8 +29,7 @@ export default class SliderPick extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <View style={styles.col}>
+        <View style={styles.container}>
           <MKSlider
             min={this.props.min}
             max={this.props.max}
@@ -41,7 +40,6 @@ export default class SliderPick extends Component {
           />
           <Text style={styles.label}>{this.state.value} {this.props.legendText}</Text>
         </View>
-      </View>
     )
   }
 }
@@ -65,15 +63,21 @@ SliderPick.defaultProps = {
 
 const styles = StyleSheet.create({
   slider: {
-    width: 200,
-  },
-
-  container: {
     flex: 1
   },
 
+  container: {
+    flex         : 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+
   label: {
-    color      : '#444',
-    paddingLeft: 15
+    flex: 0,
+    color      : '#666',
+    paddingRight: 10,
+    fontSize   : 12,
+    width: 74
   }
 })

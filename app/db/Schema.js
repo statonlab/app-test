@@ -25,16 +25,16 @@ const SubmissionSchema = {
   name      : 'Submission',
   primaryKey: 'id',
   properties: {
-    id           : {type: 'int', default: 1},
-    name         : {type: 'string', default: 'Tree'},
-    species      : {type: 'string', default: ''},
-    image        : {type: 'string', default: ''},
+    id      : {type: 'int', default: 1},
+    name    : {type: 'string', default: 'Tree'},
+    species : {type: 'string', default: ''},
+    image   : {type: 'string', default: ''},
     // Example, {longitude: 'int', latitude: 'int'}
-    location     : {type: 'Coordinate'},
-    date         : {type: 'string', default: ''},
-    synced       : {type: 'bool', default: false},
-        // JSON String
-        metaData : {type: 'string', default: ''}
+    location: {type: 'Coordinate'},
+    date    : {type: 'string', default: ''},
+    synced  : {type: 'bool', default: false},
+    // JSON String
+    metaData: {type: 'string', default: ''}
   }
 }
 
