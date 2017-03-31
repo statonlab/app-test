@@ -182,7 +182,7 @@ export default class FormScene extends Component {
     return t.validate(this.state, this.formT)
   }
 
-  validateMeta  = () => {
+  validateMeta = () => {
     return t.validate(this.state.metadata, this.formTMeta)
   }
 
