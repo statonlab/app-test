@@ -53,6 +53,9 @@ export default class LoginScene extends Component {
         this.storeUser(response)
         this.setState({showSpinner: false})
 
+        //Before switching scenes, download new observations from server
+        this.pullServerObservations()
+
         this.props.navigator.pop()
       })
       .catch(error => {
@@ -79,6 +82,43 @@ export default class LoginScene extends Component {
         is_over_thirteen: response.data.data.is_over_thirteen
       })
     })
+  }
+
+
+  pullServerObservations = () => {
+
+    let myToken = realm.objects('User')[0].api_token
+
+    this.axios.get('observations/?api_token='+myToken)
+      .then(response => {
+
+        let data = response.data.data
+
+        for (observationID in data){
+          let observation = data[observationID]
+
+          if (realm.objects('Submission').filtered(`id == ${observation.id}`).length === 0){
+
+            let obsToStore = {
+              id       : observation.id,
+              name     : observation.observation_category,
+              images   : observation.images.toString(),
+              location : observation.location,
+              date     : observation.date.date.toString(),
+              synced   : true,
+              meta_data: JSON.stringify(observation.meta_data)
+            }
+            realm.write(() => {
+              realm.create('Submission', obsToStore)
+            })
+          }
+        }
+
+      })
+      .catch(error => {
+        console.log("Error:", error)
+      })
+
   }
 
   render() {
