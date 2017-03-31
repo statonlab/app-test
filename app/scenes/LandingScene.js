@@ -18,6 +18,7 @@ import Header from '../components/Header'
 import Sidebar from '../components/Sidebar'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
+import Axios from 'axios'
 
 const theme  = getTheme()
 const plants = [
@@ -114,7 +115,7 @@ export default class LandingScene extends Component {
           ...this.loggedInLinks
         ]
       })
-
+     this.pullServerObservations()
       return
     }
 
@@ -153,6 +154,52 @@ export default class LandingScene extends Component {
   isLoggedIn() {
     return (realm.objects('User').length > 0)
   }
+
+  ///
+  //
+  //
+
+  pullServerObservations = () => {
+
+    console.log("querying server to retrieve observations...")
+
+    let axios = Axios.create({
+      baseURL: 'https://treesource.almsaeedstudio.com/api/v1/',
+      timeout: 10000
+    })
+    let myToken = realm.objects('User')[0].api_token
+
+    axios.get('observations/?api_token='+myToken)
+      .then(response => {
+        console.log("SUCCESS:", response)
+      })
+      .catch(error => {
+        console.log("Error:", error)
+      })
+    // this.realm.write(() => {
+    //
+    // })
+  }
+
+  writeObs = (responseObject) => {
+
+    let observation = {
+      id       : primaryKey,
+      name     : this.state.title.toString(),
+      species  : this.state.title.toString(),
+      images   : JSON.stringify(this.state.images),
+      location : this.state.location,
+      date     : moment().format('MM-DD-Y HH:mm:ss').toString(),
+      synced   : false,
+      meta_data: JSON.stringify(this.state.metadata)
+    }
+
+    this.realm.write(() => {
+      this.realm.create('Submission', observation)
+    })
+
+  }
+
 
   /**
    * Toggle sidebar menu (show/hide)
