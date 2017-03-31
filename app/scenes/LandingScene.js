@@ -153,9 +153,11 @@ export default class LandingScene extends Component {
     return (realm.objects('User').length > 0)
   }
 
-  ///
-  //
-  //
+  /**
+   *
+   * Check if the user has local entries that are not synced
+   *
+   */
 
 
   /**
