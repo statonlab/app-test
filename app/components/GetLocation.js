@@ -4,7 +4,7 @@ import {
   View,
   Image,
   Text,
-  AsyncStorage
+  DeviceEventEmitter
 } from 'react-native'
 import MapView from 'react-native-maps'
 import {MKSpinner, MKButton, getTheme} from 'react-native-material-kit'
@@ -75,13 +75,11 @@ export default class GetLocation extends Component {
   }
 
   async saveLocation(position) {
-    await AsyncStorage.mergeItem('@WildType:formData', JSON.stringify({
-      location: {
-        longitude: position.coords.longitude,
-        latitude : position.coords.latitude,
-        accuracy : position.coords.accuracy
-      }
-    }))
+    await DeviceEventEmitter.emit('locationCaptured', {
+      longitude: position.coords.longitude,
+      latitude : position.coords.latitude,
+      accuracy : position.coords.accuracy
+    })
   }
 
   accept = () => {

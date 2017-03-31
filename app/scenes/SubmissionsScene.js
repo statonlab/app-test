@@ -19,8 +19,9 @@ export default class SubmissionsScene extends Component {
     super(props)
 
     let dataSource  = new ListView.DataSource({
-      rowHasChanged: (r1, r2) => r1.id !== r2.id,
-      sectionHeaderHasChanged: () => {}
+      rowHasChanged          : (r1, r2) => r1.id !== r2.id,
+      sectionHeaderHasChanged: () => {
+      }
     })
     let submissions = realm.objects('Submission')
 
@@ -33,6 +34,7 @@ export default class SubmissionsScene extends Component {
   _createMap(submissions) {
     let synced   = []
     let unsynced = []
+    let list     = {}
 
     submissions.map(submission => {
       if (submission.synced) {
@@ -42,14 +44,24 @@ export default class SubmissionsScene extends Component {
       }
     })
 
-    return {
-      'Needs Uploading': unsynced,
-      'Uploaded'       : synced
+    if (unsynced.length > 0) {
+      list = {
+        'Needs Uploading': unsynced
+      }
     }
+
+    if (synced.length > 0) {
+      list = {
+        ...list,
+        'Uploaded': synced
+      }
+    }
+
+    return list
   }
 
   _renderRow = (submission) => {
-    let images = JSON.parse(submission.image)
+    let images = JSON.parse(submission.images)
     return (
       <MKButton style={styles.row} key={submission.id} rippleColor="rgba(10,10,10,.1)">
         <Image source={{uri: images[0]}} style={styles.image}/>
@@ -65,11 +77,22 @@ export default class SubmissionsScene extends Component {
     )
   }
 
+  _renderSectionHeader = (data, id) => {
+    return (
+      <View style={styles.headerContainer}>
+        <Text style={styles.headerText}>{id}</Text>
+      </View>
+    )
+  }
+
   _renderList = () => {
     return (
       <ListView
         dataSource={this.state.submissions}
-        renderRow={this._renderRow}/>
+        renderRow={this._renderRow}
+        renderSectionHeader={this._renderSectionHeader}
+        enableEmptySections={true}
+      />
     )
   }
 
@@ -152,22 +175,34 @@ const styles = StyleSheet.create({
 
   centerContainer: {
     ...(new Elevation(1)),
-    flex: 0,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    padding: 10,
+    flex           : 0,
+    justifyContent : 'flex-start',
+    alignItems     : 'center',
+    padding        : 10,
     backgroundColor: '#fff',
-    margin: 10
+    margin         : 10
   },
 
   emptyListText: {
-    fontSize: 16,
+    fontSize  : 16,
     fontWeight: '500',
-    color: '#222'
+    color     : '#222'
   },
 
   emptyListIcon: {
     marginBottom: 20,
-    color: '#444'
+    color       : '#444'
+  },
+
+  headerContainer: {
+    padding          : 10,
+    backgroundColor  : '#fff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee'
+  },
+
+  headerText: {
+    color     : '#444',
+    fontWeight: '500'
   }
 })

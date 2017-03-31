@@ -59,7 +59,6 @@ export default class FormScene extends Component {
 
     this.state = {
       comment : '',
-      image   : '/fake/path/to/pass/validation', // Remove this and keep images
       images  : [],
       title   : this.props.title,
       location: {
@@ -86,16 +85,8 @@ export default class FormScene extends Component {
     }
 
     this.formRulesMeta = this.compileValRules()//build form rules from passed props
-
-
-    this.formT = t.struct(formRules, "formT")//build tcomb validation from rules
-
-    this.formTMeta = t.struct(this.formRulesMeta, "formTMeta")//build tcomb validation from rules
-
-
-    this.fetchData()
-
-
+    this.formT         = t.struct(formRules, "formT")//build tcomb validation from rules
+    this.formTMeta     = t.struct(this.formRulesMeta, "formTMeta")//build tcomb validation from rules
   }
 
   componentDidMount() {
@@ -115,24 +106,17 @@ export default class FormScene extends Component {
         ])
     }
 
-    this.events.push(DeviceEventEmitter.addListener('FormStateChanged', this.fetchData))
+    this.events.push(DeviceEventEmitter.addListener('locationCaptured', this.updateLocation))
     this.events.push(DeviceEventEmitter.addListener('cameraCapturedPhotos', this.handleImages))
+  }
+
+  updateLocation = (location) => {
+    console.log(location)
+    this.setState({location})
   }
 
   handleImages = (images) => {
     this.setState({images})
-  }
-
-  fetchData = () => {
-    try {
-      let formData = AsyncStorage.getItem('@WildType:formData').then((formData) => {
-        if (formData !== null) {
-          this.setState(JSON.parse(formData))
-        }
-      })
-    } catch (error) {
-      throw new Error('Couldn\'t fetch form data')
-    }
   }
 
   cancel = () => {
@@ -150,13 +134,9 @@ export default class FormScene extends Component {
       return
     }
 
-
-    AsyncStorage.setItem('@WildType:savedForm', JSON.stringify(this.state))
-    AsyncStorage.removeItem('@WildType:formData')
-
     let primaryKey = this.realm.objects('Submission')
     if (primaryKey.length <= 0) {
-      primaryKey = 1;
+      primaryKey = 1
     } else {
       primaryKey = primaryKey.sorted('id', true)[0].id + 1
     }
@@ -166,7 +146,7 @@ export default class FormScene extends Component {
       id       : primaryKey,
       name     : this.state.title.toString(),
       species  : this.state.title.toString(),
-      image    : JSON.stringify(this.state.images),
+      images   : JSON.stringify(this.state.images),
       location : this.state.location,
       comment  : this.state.comment.toString(),
       date     : moment().format('MM-DD-Y HH:mm:ss').toString(),
@@ -201,6 +181,7 @@ export default class FormScene extends Component {
   validateState = () => {
     return t.validate(this.state, this.formT)
   }
+
   validateMeta  = () => {
     return t.validate(this.state.metadata, this.formTMeta)
   }
@@ -243,12 +224,12 @@ export default class FormScene extends Component {
     })
     axios.post('observations', request)
       .then(response => {
-        console.log('RES', response.data);
+        console.log('RES', response.data)
       })
       .catch(error => {
-        console.log('ERR', error);
-        alert("error submiting to server:", error[0]);
-      });
+        console.log('ERR', error)
+        alert("error submiting to server:", error[0])
+      })
 
   }
 
