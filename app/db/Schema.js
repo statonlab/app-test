@@ -27,7 +27,6 @@ const SubmissionSchema = {
   properties: {
     id      : {type: 'int', default: 1},
     name    : {type: 'string', default: 'Tree'},
-    species : {type: 'string', default: ''},
     images  : {type: 'string', default: ''},
     // Example, {longitude: 'int', latitude: 'int'}
     location: {type: 'Coordinate'},
