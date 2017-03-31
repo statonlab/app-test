@@ -45,11 +45,8 @@ DCPrules = {
   diameterNumeric    : t.maybe(t.Number),
   chestnutBlightSigns: t.String,
   ashSpecies         : t.enums.of(DCP.ashSpecies.selectChoices, "ashSpecies"),
-  emeraldAshBorer    : t.enums.of(DCP.emeraldAshBorer.selectChoices, "EAB"),
-
+  emeraldAshBorer    : t.String,//t.enums.of(DCP.emeraldAshBorer.selectChoices, "EAB"),
   // chestnutBlightSigns: t.enums.of(DCP.chestnutBlightSigns.selectChoices, "cbSigns"),
-
-
 }
 
 const Coordinate = t.refinement(t.Number, (n) => n != 0, 'Coordinate')
@@ -274,7 +271,7 @@ export default class FormScene extends Component {
   }
 
   getMultiCheckValue(value, isArray) {
-    if(typeof value === 'string' && isArray) {
+    if (typeof value === 'string' && isArray) {
       return JSON.parse(value).toString()
     }
 
@@ -550,8 +547,8 @@ const styles = StyleSheet.create({
   },
 
   buttonLinkText: {
-    color: "#666",
-    flex : 1,
+    color            : "#666",
+    flex             : 1,
     paddingHorizontal: 5
   },
 

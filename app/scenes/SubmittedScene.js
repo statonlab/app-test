@@ -15,11 +15,11 @@ export default class SubmittedScene extends Component {
   constructor(props) {
     super(props)
 
-    let data    = this.props.plant
-    this.marker = {
+    let data     = this.props.plant
+    this.marker  = {
       title      : data.title,
       image      : data.images[0],
-      description: `${data.numberOfTrees} trees`,
+      description: `${data.location.latitude}, ${data.location.longitude}`,
       coordinates: {
         latitude : data.location.latitude,
         longitude: data.location.longitude
@@ -61,7 +61,7 @@ export default class SubmittedScene extends Component {
                 <Image source={{uri: marker.image}} style={{width: 45, height: 45, resizeMode: 'cover', backgroundColor: '#fff'}}/>
                 <View style={{flex: 1, marginLeft: 5, flexDirection: 'column', justifyContent: 'space-between', alignItems: 'flex-start'}}>
                   <Text style={[styles.calloutText, {flex: 1, fontWeight: '500'}]}>{marker.title}</Text>
-                  <Text style={[styles.calloutText, {color: '#666'}]}>{marker.description} found in this area</Text>
+                  <Text style={[styles.calloutText, {color: '#666'}]}>{marker.description}</Text>
                 </View>
               </View>
             </MapView.Callout>
