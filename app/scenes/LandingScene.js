@@ -108,6 +108,8 @@ export default class LandingScene extends Component {
    */
   setSidebarLinks() {
     if (this.isLoggedIn()) {
+      this.needSyncCheck()
+
       this.setState({
         sidebar: [
           ...this.defaultSidebarLinks,
@@ -154,10 +156,15 @@ export default class LandingScene extends Component {
   }
 
   /**
-   *
-   * Check if the user has local entries that are not synced
-   *
-   */
+   * Check for unsynced records
+   **/
+
+  needSyncCheck() {
+    if (realm.objects('Submission').filtered('synced == false ').length > 0){
+      alert("You have " + realm.objects('Submission').filtered('synced == false ').length + " record(s) that are not synced with the server.")
+    }
+  }
+
 
 
   /**
