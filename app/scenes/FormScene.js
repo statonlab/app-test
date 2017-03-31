@@ -148,7 +148,7 @@ export default class FormScene extends Component {
       location : this.state.location,
       date     : moment().format('MM-DD-Y HH:mm:ss').toString(),
       synced   : false,
-      meta_data: JSON.stringify(this.state.metadata)
+      metaData: JSON.stringify(this.state.metadata)
     }
 
     this.realm.write(() => {

@@ -63,7 +63,7 @@ export default class SubmissionsScene extends Component {
   _renderRow = (submission) => {
     let images = JSON.parse(submission.images)
     return (
-      <MKButton style={styles.row} key={submission.id} rippleColor="rgba(10,10,10,.1)">
+      <MKButton style={styles.row} key={submission.id} rippleColor="rgba(10,10,10,.1)" onPress={() => this._goToEntryScene(submission)}>
         <Image source={{uri: images[0]}} style={styles.image}/>
         <View style={styles.textContainer}>
           <Text style={styles.title}>{submission.name}</Text>
@@ -106,6 +106,13 @@ export default class SubmissionsScene extends Component {
         </Text>
       </View>
     )
+  }
+
+  _goToEntryScene = (plant) => {
+    this.props.navigator.push({
+      label: 'ViewEntryScene',
+      plant
+    })
   }
 
   render() {
