@@ -161,7 +161,6 @@ export default class LandingScene extends Component {
 
   pullServerObservations = () => {
 
-
     let axios = Axios.create({
       baseURL: 'https://treesource.almsaeedstudio.com/api/v1/',
       timeout: 10000
@@ -197,25 +196,6 @@ export default class LandingScene extends Component {
       .catch(error => {
         console.log("Error:", error)
       })
-
-  }
-
-  writeObs = (responseObject) => {
-
-    let observation = {
-      id       : primaryKey,
-      name     : this.state.title.toString(),
-      species  : this.state.title.toString(),
-      images   : JSON.stringify(this.state.images),
-      location : this.state.location,
-      date     : moment().format('MM-DD-Y HH:mm:ss').toString(),
-      synced   : false,
-      meta_data: JSON.stringify(this.state.metadata)
-    }
-
-    this.realm.write(() => {
-      this.realm.create('Submission', observation)
-    })
 
   }
 
