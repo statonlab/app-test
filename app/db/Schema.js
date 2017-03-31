@@ -34,7 +34,7 @@ const SubmissionSchema = {
     date    : {type: 'string', default: ''},
     synced  : {type: 'bool', default: false},
     // JSON String
-    metaData: {type: 'string', default: ''}
+    meta_data: {type: 'string', default: ''}
   }
 }
 
