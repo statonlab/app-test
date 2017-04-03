@@ -138,6 +138,9 @@ export default class CameraScene extends Component {
             flashMode={this.state.camera.flash}
             onZoomChanged={this.zoom}
             defaultOnFocusComponent={true}
+             onFocusChanged={(e) => {
+               return
+             }}
           >
           </Camera>
           <View style={styles.toolsContainer}>
