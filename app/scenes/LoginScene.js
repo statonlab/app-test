@@ -123,7 +123,7 @@ export default class LoginScene extends Component {
       <View style={styles.container}>
         <Spinner show={this.state.showSpinner}/>
         <Header title={'Login'} navigator={this.props.navigator} showRightIcon={false}/>
-        <View style={styles.form}>
+        <ScrollView style={styles.form}>
           <View style={styles.formGroup}>
             <Text style={styles.title}>TreeSource</Text>
           </View>
@@ -172,7 +172,7 @@ export default class LoginScene extends Component {
             </MKButton>
           </View>
 
-        </View>
+        </ScrollView>
       </View>
     )
   }

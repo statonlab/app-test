@@ -315,7 +315,7 @@ export default class FormScene extends Component {
     return (
       <View style={styles.container}>
         <Header title={this.state.title} navigator={this.props.navigator}/>
-        <ScrollView>
+        <ScrollView keyboardDismissMode={"on-drag"}>
           <View style={styles.card}>
 
             <View style={[styles.formGroup]}>
