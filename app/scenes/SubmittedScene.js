@@ -6,10 +6,12 @@ import {
   Image
 } from 'react-native'
 import Header from '../components/Header'
-import MapView from 'react-native-maps'
 import {MKButton} from 'react-native-material-kit'
 import Colors from '../helpers/Colors'
 import Elevation from '../helpers/Elevation'
+import realm from '../db/Schema'
+import MarkersMap from '../components/MarkersMap'
+
 
 export default class SubmittedScene extends Component {
   constructor(props) {
@@ -27,11 +29,38 @@ export default class SubmittedScene extends Component {
     }
   }
 
-  componentDidMount() {
-    this.goToMarker({
-      latitude : this.marker.coordinates.latitude,
-      longitude: this.marker.coordinates.longitude
+
+
+  // componentDidMount() {
+  //   this.goToMarker({
+  //     latitude : this.marker.coordinates.latitude,
+  //     longitude: this.marker.coordinates.longitude
+  //   })
+  //
+  // }
+
+  renderMap() {
+    let submissions = realm.objects('Submission')
+    let markers     = []
+
+    submissions.map((submission, index) => {
+      if (submission.location != this.marker.coordinates) {
+        markers.push({
+          title      : submission.name,
+          image      : JSON.parse(submission.images)[0],
+          description: 'What should we put here?',
+          coord      : {
+            longitude: submission.location.longitude,
+            latitude : submission.location.latitude
+          }
+        })
+      }
+
     })
+
+    return <MarkersMap markers={markers}/>
+
+
   }
 
   goToMarker(marker) {
@@ -44,29 +73,10 @@ export default class SubmittedScene extends Component {
   }
 
   render() {
-    let marker = this.marker
     return (
       <View style={styles.container}>
         <Header title="Submission Aerial View" navigator={this.props.navigator} showLeftIcon={false} showRightIcon={false}/>
-        <MapView
-          style={styles.map}
-          ref="map"
-          onRegionChangeComplete={() => {this.refs.marker.showCallout()}}>
-          <MapView.Marker
-            ref="marker"
-            coordinate={marker.coordinates}
-            pinColor={Colors.primary}>
-            <MapView.Callout style={{width: 165}}>
-              <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-                <Image source={{uri: marker.image}} style={{width: 45, height: 45, resizeMode: 'cover', backgroundColor: '#fff'}}/>
-                <View style={{flex: 1, marginLeft: 5, flexDirection: 'column', justifyContent: 'space-between', alignItems: 'flex-start'}}>
-                  <Text style={[styles.calloutText, {flex: 1, fontWeight: '500'}]}>{marker.title}</Text>
-                  <Text style={[styles.calloutText, {color: '#666'}]}>{marker.description}</Text>
-                </View>
-              </View>
-            </MapView.Callout>
-          </MapView.Marker>
-        </MapView>
+        {this.renderMap()}
 
         <View style={styles.footer}>
           <Text style={styles.text}>Your entry has been saved!</Text>

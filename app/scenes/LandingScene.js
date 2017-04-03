@@ -34,6 +34,10 @@ const plants = [
   {
     title: 'White Oak',
     image: require('../img/white_oak.jpg'),
+  },
+  {
+    title: 'Other tree',
+    image: require('../img/hydrangea.jpg'),
   }
 ]
 
