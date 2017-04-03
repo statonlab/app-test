@@ -55,6 +55,14 @@ const plants = {
 
     }
   },
+  'Other'          : {
+    image                 : require('../img/hydrangea.jpg'),
+    latinName             : 'Misc',
+    descriptionBody       : 'Base tree.',
+    collectionInstructions: '',
+    formProps             : {
+    }
+  },
   'White Oak'        : {
     image                 : require('../img/white_oak.jpg'),
     latinName             : 'W. oakicus',
