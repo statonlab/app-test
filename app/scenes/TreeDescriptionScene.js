@@ -55,7 +55,7 @@ const plants = {
 
     }
   },
-  'Other tree'          : {
+  'Other'          : {
     image                 : require('../img/hydrangea.jpg'),
     latinName             : 'Misc',
     descriptionBody       : 'Base tree.',
