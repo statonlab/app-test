@@ -7,7 +7,7 @@ const DCP = {
       '0-10 feet', '11-50 feet', '51-100 feet', '>100 feet'
     ],
     description  : "Please estimate the height of the tree for this observation. Some trees are very tall.",
-    placeHolder  : "Tree Height",
+    placeHolder  : "tree height",
   },
 
   treeStand: {
@@ -25,7 +25,7 @@ const DCP = {
     label        : "Dead Trees",
     selectChoices: ['none', '1-50', '51+'],
     description  : "Of the trees of this species in this stand, how many are dead?  No longer used.",
-    placeHolder  : "Number of Trees",
+    placeHolder  : "Number of trees",
     // validation : t.enums.of(DCP.deadTrees.selectChoices, "dead")
   },
   ashSpecies         : {
@@ -58,7 +58,7 @@ const DCP = {
       "D-shaped adult exit holes", "Bark coming off with tunneling underneath", "Emerald ash borer beetless/larvae", "stump sprouting"
     ],
     description  : "Do you see any of these signs of emerald ash borers?  Check all that apply.",
-    placeHolder  : 'Signs of pest',
+    placeHolder  : 'No signs of pest',
     multiCheck: true
   },
   crownHealth        : {
@@ -67,7 +67,7 @@ const DCP = {
       "0-24%", "25-49%", "50-74%", "75-100%"
     ],
     description  : "What percentage of the tree’s crown is healthy?",
-    placeHolder  : "% healthy"
+    placeHolder  : "% Healthy"
   },
   WoolyAdesPres: {
     label :"presence of wooly adelgids"
@@ -78,7 +78,7 @@ const DCP = {
       "0-24%", "25-49%", "50-74%", "75-100%"
     ],
     description  : "What percentage of the branches you see have hemlock wooly adelgids?",
-    placeHolder  : "% adelgid coverage"
+    placeHolder  : "% Adelgid coverage"
   },
   chestnutBlightSigns: {
     label        : "Chestnut Blight",
@@ -86,7 +86,7 @@ const DCP = {
       "Cankers and cracked bark", "Tan to orange-colored patches or pustules on bark", "Evidence of old dead trunk", "Stump sprouting"
     ],
     description  : "Do you see any of these signs of chestnut blight?  Check all that apply.",
-    placeHolder  : "symptoms",
+    placeHolder  : "No blight symptoms",
     multiCheck: true
   },
   acorns             : {
@@ -95,7 +95,7 @@ const DCP = {
       "None", "Some", "Lots"
     ],
     description  : "Are there acorns on the tree?  Don't include fallen acorns on the ground in your estimate.",
-    placeHolder  : "number of acorns"
+    placeHolder  : "Number of acorns"
   },
 
   diameterDescriptive: {
@@ -112,7 +112,7 @@ const DCP = {
 	">20 feet"
     ],
     description : "Approximately (no need to measure) how high up is the first branch of the tree?",
-    placeHolder : "distance to branch"
+    placeHolder : "Distance to branch"
   },
   oakHealthProblems: {
     label : "Health problems",
@@ -121,7 +121,7 @@ const DCP = {
       "Other"
     ],
     description : "Do you see any of the following potential health problems?  Check all that apply.  If there is a health problem not listed below, please select other and describe in the comments section of the entry.",
-    placeHolder : "check all that apply",
+    placeHolder : "No health problems",
     multiCheck: true
 
   },
