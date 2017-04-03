@@ -20,6 +20,23 @@ export default class ViewEntryScene extends Component {
     }
   }
 
+  _renderMetaData = (data) => {
+    if (typeof data === 'string' && data !== '') {
+      data = JSON.parse(data)
+    }
+
+    if (data === '') {
+      return null
+    }
+
+    return (
+      <View style={styles.field}>
+        <Text style={styles.label}>{typeof data}</Text>
+        <Text style={styles.dataText}>{data}</Text>
+      </View>
+    )
+  }
+
   render() {
     let entry  = this.props.plant
     let images = JSON.parse(entry.images)
@@ -51,6 +68,8 @@ export default class ViewEntryScene extends Component {
               <Text style={styles.label}>Date Collected</Text>
               <Text style={styles.dataText}>{entry.date}</Text>
             </View>
+
+            {this._renderMetaData(entry.meta_data)}
           </View>
         </ScrollView>
       </View>
@@ -70,7 +89,7 @@ const styles = StyleSheet.create({
   },
 
   contentContainer: {
-    flex: 1,
+    flex: 1
   },
 
   card: {
@@ -107,17 +126,17 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    paddingVertical: 15,
+    paddingVertical  : 15,
     paddingHorizontal: 10,
-    backgroundColor: Colors.warning,
-    borderRadius: 2,
-    marginHorizontal: 10,
-    marginVertical: 5
+    backgroundColor  : Colors.warning,
+    borderRadius     : 2,
+    marginHorizontal : 10,
+    marginVertical   : 5
   },
 
   buttonText: {
-    color: Colors.warningText,
+    color     : Colors.warningText,
     fontWeight: 'bold',
-    textAlign: 'center'
+    textAlign : 'center'
   }
 })
