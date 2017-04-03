@@ -6,7 +6,7 @@ import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
 import Checkbox from '../components/Checkbox'
 import t from 'tcomb-validation'
-import Axios from 'axios'
+import axios from '../helpers/Axios'
 import realm from '../db/Schema'
 import Spinner from '../components/Spinner'
 
@@ -71,10 +71,6 @@ export default class RegistrationScene extends Component {
 
   axiosRequest = () => {
     let request = this.state;
-    let axios   = Axios.create({
-      baseURL: 'https://treesource.almsaeedstudio.com/api/v1/',
-      timeout: 10000
-    })
 
     this.setState({showSpinner: true})
 

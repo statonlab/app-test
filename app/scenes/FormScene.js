@@ -6,7 +6,6 @@ import {
   Image,
   TextInput,
   StyleSheet,
-  AsyncStorage,
   Alert,
   DeviceEventEmitter
 } from 'react-native'
@@ -20,7 +19,7 @@ import realm from '../db/Schema'
 import t from 'tcomb-validation'
 import PickerModal from '../components/PickerModal'
 import DCP from '../resources/config.js'
-import Axios from '../helpers/Axios'
+import Observation from '../helpers/Observation'
 import SliderPick from '../components/SliderPick'
 
 const theme = getTheme()
@@ -37,10 +36,10 @@ DCPrules = {
   flowersBinary      : t.enums.of(DCP.flowersBinary.selectChoices, 'flowers'),
   crownHealth        : t.enums.of(DCP.crownHealth.selectChoices, 'crownHealth'),
   woolyAdesPres      : t.Boolean,
-  woolyAdesCoverage  : t.enums.of(DCP.woolyAdesCoverage.selectChoices, "woolyAdesCoverage"),
-  acorns             : t.enums.of(DCP.acorns.selectChoices, "acorns"),
-  diameterDescriptive: t.enums.of(DCP.diameterDescriptive.selectChoices, "diameter"),
-  heightFirstBranch  : t.enums.of(DCP.heightFirstBranch.selectChoices, "heightFirstBranch"),
+  woolyAdesCoverage  : t.enums.of(DCP.woolyAdesCoverage.selectChoices, 'woolyAdesCoverage'),
+  acorns             : t.enums.of(DCP.acorns.selectChoices, 'acorns'),
+  diameterDescriptive: t.enums.of(DCP.diameterDescriptive.selectChoices, 'diameter'),
+  heightFirstBranch  : t.enums.of(DCP.heightFirstBranch.selectChoices, 'heightFirstBranch'),
   oakHealthProblems  : t.maybe(t.String),
   diameterNumeric    : t.Number,
   chestnutBlightSigns: t.maybe(t.String),
@@ -111,7 +110,6 @@ export default class FormScene extends Component {
   }
 
   updateLocation = (location) => {
-    console.log(location)
     this.setState({location})
   }
 
@@ -120,7 +118,6 @@ export default class FormScene extends Component {
   }
 
   cancel = () => {
-    AsyncStorage.removeItem('@WildType:formData')
     this.props.navigator.popToTop()
   }
 
@@ -141,35 +138,26 @@ export default class FormScene extends Component {
       primaryKey = primaryKey.sorted('id', true)[0].id + 1
     }
 
-    let metaData    = typeof this.state.metadata === 'string' ? this.state.metadata : JSON.stringify(this.state.metadata)
     let observation = {
-      id      : primaryKey,
-      name    : this.state.title.toString(),
-      species : this.state.title.toString(),
-      images  : JSON.stringify(this.state.images),
-      location: this.state.location,
-      date    : moment().format('MM-DD-YYYY HH:mm:ss').toString(),
-      synced  : false,
-      metaData: metaData
+      id       : primaryKey,
+      name     : this.state.title.toString(),
+      species  : this.state.title.toString(),
+      images   : JSON.stringify(this.state.images),
+      location : this.state.location,
+      date     : moment().format('MM-DD-YYYY HH:mm:ss').toString(),
+      synced   : false,
+      meta_data: JSON.stringify(this.state.metadata)
     }
 
     this.realm.write(() => {
-      this.realm.create('Submission', observation)
+      let submission = this.realm.create('Submission', observation)
+
+      // Now submit to server
+      // this.submitObservationToServer(submission)
     })
 
-    let obsSubmit = {
-      observation_category: this.props.title,
-      meta_data           : metaData,
-      longitude           : observation.location.longitude,
-      latitude            : observation.location.latitude,
-      location_accuracy   : observation.location.accuracy,
-      date                : observation.date,
-      is_private          : false,
-      images              : this.state.images
-    }
-
-    // Now submit to server
-    this.submitObsToServer(obsSubmit)
+    // Tell anyone who cares that there is a new submission
+    DeviceEventEmitter.emit('newSubmission')
 
     this.props.navigator.push({
       label   : 'SubmittedScene',
@@ -178,35 +166,13 @@ export default class FormScene extends Component {
     })
   }
 
-  submitObsToServer = (request) => {
-    // Create form data
-    let form = new FormData()
-    form.append('observation_category', request.observation_category)
-    form.append('meta_data', request.meta_data)
-    form.append('longitude', request.longitude)
-    form.append('latitude', request.latitude)
-    form.append('location_accuracy', request.location_accuracy)
-    form.append('date', request.date)
-    form.append('is_private', request.is_private ? '1' : '0')
-    form.append('api_token', this.retrieveAPI())
-
-    request.images.map((image, i) => {
-      let name = image.split('/')
-      name     = name[name.length - 1]
-
-      let extension = name.split('.')
-      extension     = extension[extension.length - 1]
-
-      console.log(name)
-      form.append(`images[${i}]`, {uri: `file:///${image}`, name, type: `image/${extension}`})
-    })
-
-    // Run AXIOS POST request
-    Axios.post('observations', form).then(response => {
-      console.log('RES', response.data)
+  submitObservationToServer = (object) => {
+    Observation.upload(object).then(response => {
+      realm.write(() => {
+        object.synced = true
+      })
     }).catch(error => {
       console.log('ERR', error)
-      alert('error submitting to server:', error[0])
     })
   }
 
@@ -245,22 +211,11 @@ export default class FormScene extends Component {
     return formBase
   }
 
-  retrieveAPI = () => {
-    let user = this.realm.objects('User')
-    if (user.length > 0) {
-      return user[0].api_token
-    } else {
-      return ''
-    }
-  }
-
 
   componentWillUnmount() {
     this.events.map(event => {
       event.remove()
     })
-
-    AsyncStorage.removeItem('@WildType:formData')
   }
 
   getMultiCheckValue(value, isArray) {
@@ -334,7 +289,7 @@ export default class FormScene extends Component {
     return (
       <View style={styles.container}>
         <Header title={this.state.title} navigator={this.props.navigator}/>
-        <ScrollView keyboardDismissMode={"on-drag"}>
+        <ScrollView keyboardDismissMode={'on-drag'}>
           <View style={styles.card}>
 
             <View style={[styles.formGroup]}>

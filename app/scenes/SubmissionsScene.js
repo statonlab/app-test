@@ -78,6 +78,16 @@ export default class SubmissionsScene extends Component {
   }
 
   _renderSectionHeader = (data, id) => {
+    if(id == 'Needs Uploading') {
+      return (
+        <View style={[styles.headerContainer, {flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}]}>
+          <Text style={styles.headerText}>{id}</Text>
+          <MKButton style={{...(new Elevation(2)), backgroundColor: Colors.warning, padding: 5, borderRadius: 2}} onPress={() => {}}>
+            <Text style={[styles.headerText, {color: Colors.warningText}]}>Upload All</Text>
+          </MKButton>
+        </View>
+      )
+    }
     return (
       <View style={styles.headerContainer}>
         <Text style={styles.headerText}>{id}</Text>

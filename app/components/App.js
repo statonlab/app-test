@@ -4,7 +4,7 @@
  */
 
 import React, {Component} from 'react'
-import {AppRegistry, Navigator, StatusBar, View, StyleSheet} from 'react-native'
+import {Navigator, StatusBar, View, StyleSheet} from 'react-native'
 import LandingScene from '../scenes/LandingScene'
 import MapScene from '../scenes/MapScene'
 import FormScene from '../scenes/FormScene'
@@ -135,5 +135,3 @@ const styles = StyleSheet.create({
     flex: 1,
   }
 })
-
-AppRegistry.registerComponent('WildType', () => WildType);
