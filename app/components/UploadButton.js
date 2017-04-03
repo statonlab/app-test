@@ -11,19 +11,29 @@ export default class UploadButton extends Component {
     super(props)
 
     this.state = {
-      show: false
+      show        : false,
+      observations: []
     }
   }
 
+  componentDidMount() {
+    this.getObservations()
+  }
+
   getObservations() {
-    this.observations = realm.objects('Submission').filtered('synced = false')
-    if (this.observations.length > 0) {
-      this.setState({show: true})
+    let observations = realm.objects('Submission').filtered('synced = false')
+    if (observations.length > 0) {
+      this.setState({
+        show: true,
+        observations
+      })
+    } else {
+      this.setState({show: false})
     }
   }
 
   upload() {
-    this.observations.forEach(observation => {
+    this.state.observations.forEach(observation => {
       Observation.upload(observation)
         .then(response => {
           realm.write(() => {
@@ -45,7 +55,7 @@ export default class UploadButton extends Component {
             style={styles.button}
             onPress={this.upload.bind(this)}
           >
-            <Text style={styles.buttonText}>{this.props.label} ({this.observations.length})</Text>
+            <Text style={styles.buttonText}>{this.props.label} ({this.state.observations.length})</Text>
           </MKButton> : null}
       </View>
     )

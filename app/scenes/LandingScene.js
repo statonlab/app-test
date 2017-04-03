@@ -104,6 +104,11 @@ export default class LandingScene extends Component {
       this.setSidebarLinks()
       this.refs.uploadButton.getObservations()
     }))
+
+    this.events.push(DeviceEventEmitter.addListener('newSubmission', () => {
+      this.refs.uploadButton.getObservations()
+    }))
+
     this.events.push(DeviceEventEmitter.addListener('userLoggedIn', this.setSidebarLinks.bind(this)), {})
   }
 
