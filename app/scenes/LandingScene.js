@@ -5,8 +5,6 @@ import {
   TouchableHighlight,
   ScrollView,
   Image,
-  Navigator,
-  Dimensions,
   StyleSheet,
   Alert,
   DeviceEventEmitter
@@ -101,6 +99,7 @@ export default class LandingScene extends Component {
   componentDidMount() {
     this.setSidebarLinks()
     this.events.push(DeviceEventEmitter.addListener('userLoggedOut', this.setSidebarLinks.bind(this)))
+    this.events.push(DeviceEventEmitter.addListener('userLoggedIn', this.setSidebarLinks.bind(this)))
   }
 
   /**

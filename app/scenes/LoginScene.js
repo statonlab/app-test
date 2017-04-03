@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react'
-import {View, ScrollView, StyleSheet, TextInput, Text, Platform} from 'react-native'
+import {View, ScrollView, StyleSheet, TextInput, Text, DeviceEventEmitter} from 'react-native'
 import {MKButton} from 'react-native-material-kit'
 import Header from '../components/Header'
 import Elevation from '../helpers/Elevation'
@@ -8,7 +8,6 @@ import t from 'tcomb-validation'
 import Axios from 'axios'
 import realm from '../db/Schema'
 import Spinner from '../components/Spinner'
-
 
 export default class LoginScene extends Component {
 
@@ -33,14 +32,14 @@ export default class LoginScene extends Component {
       //Check email and password against server, store in realm
       this.loginRequest()
     } else {
-      alert("Please enter an email and password")
+      alert('Please enter an email and password')
     }
   }
 
   loginRequest = () => {
     this.setState({showSpinner: true})
 
-    console.log("executing login request")
+    console.log('executing login request')
 
     let axios = Axios.create({
       baseURL: 'https://treesource.almsaeedstudio.com/api/v1/',
@@ -49,18 +48,17 @@ export default class LoginScene extends Component {
 
     axios.post('user/login', {email: this.state.email, password: this.state.password})
       .then(response => {
-        console.log("SUCCESS:", response.data.data)
+        console.log('SUCCESS:', response.data.data)
         this.storeUser(response)
         this.setState({showSpinner: false})
-
+        DeviceEventEmitter.emit('userLoggedIn')
         this.props.navigator.pop()
       })
       .catch(error => {
-        console.log("ERR", error)
+        console.log('ERR', error)
         this.setState({showSpinner: false})
         alert(error)
       })
-
   }
 
   storeUser = (response) => {
@@ -80,24 +78,23 @@ export default class LoginScene extends Component {
       })
     })
 
-   // this.pullServerObservations()
+    // this.pullServerObservations()
     //this.axios.get undefined
   }
 
 
   pullServerObservations = () => {
-
     let myToken = realm.objects('User')[0].api_token
 
-    this.axios.get('observations/?api_token='+myToken)
+    this.axios.get('observations/?api_token=' + myToken)
       .then(response => {
 
         let data = response.data.data
 
-        for (observationID in data){
+        for (observationID in data) {
 
           let observation = data[observationID]
-          if (realm.objects('Submission').filtered(`id == ${observation.id}`).length === 0){
+          if (realm.objects('Submission').filtered(`id == ${observation.id}`).length === 0) {
 
             let obsToStore = {
               id       : observation.id,
@@ -116,7 +113,7 @@ export default class LoginScene extends Component {
 
       })
       .catch(error => {
-        console.log("Error:", error)
+        console.log('Error:', error)
       })
 
   }
@@ -136,10 +133,10 @@ export default class LoginScene extends Component {
               autoCapitalize={'none'}
               autoFocus={true}
               style={styles.textField}
-              placeholder={"Email"}
+              placeholder={'Email'}
               placeholderTextColor="#aaa"
               returnKeyType={'next'}
-              onChangeText={(email) =>this.setState({email})}
+              onChangeText={(email) => this.setState({email})}
               underlineColorAndroid="transparent"
             />
           </View>
@@ -148,10 +145,10 @@ export default class LoginScene extends Component {
             <Text style={styles.label}>Password</Text>
             <TextInput
               style={styles.textField}
-              placeholder={"Password"}
+              placeholder={'Password'}
               secureTextEntry={true}
               placeholderTextColor="#aaa"
-              onChangeText={(password) =>this.setState({password})}
+              onChangeText={(password) => this.setState({password})}
               underlineColorAndroid="transparent"
             />
           </View>
@@ -159,7 +156,9 @@ export default class LoginScene extends Component {
           <View style={styles.formGroup}>
             <MKButton
               style={styles.button}
-              onPress={() => {this.logInUser() }}>
+              onPress={() => {
+                this.logInUser()
+              }}>
               <Text style={styles.buttonText}>Login</Text>
             </MKButton>
           </View>
@@ -191,7 +190,7 @@ const styles = StyleSheet.create({
   },
 
   scrollView: {
-    flex: 1,
+    flex: 1
   },
 
   form: {
@@ -236,7 +235,7 @@ const styles = StyleSheet.create({
     flex           : 0,
     borderRadius   : 2,
     backgroundColor: Colors.primary,
-    padding        : 10,
+    padding        : 10
   },
 
   buttonText: {
