@@ -16,24 +16,25 @@ import Header from '../components/Header'
 import Sidebar from '../components/Sidebar'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
+import UploadButton from '../components/UploadButton'
 
 const theme  = getTheme()
 const plants = [
   {
     title: 'American Chestnut',
-    image: require('../img/am_chestnut4.jpg'),
+    image: require('../img/am_chestnut4.jpg')
   },
   {
     title: 'Ash',
-    image: require('../img/ash.jpg'),
+    image: require('../img/ash.jpg')
   },
   {
     title: 'Hemlock',
-    image: require('../img/hemlock.jpg'),
+    image: require('../img/hemlock.jpg')
   },
   {
     title: 'White Oak',
-    image: require('../img/white_oak.jpg'),
+    image: require('../img/white_oak.jpg')
   }
 ]
 
@@ -44,7 +45,7 @@ export default class LandingScene extends Component {
     // Links that always show up
     this.defaultSidebarLinks = [
       {
-        icon: 'map-marker-radius',
+        icon : 'map-marker-radius',
         title: 'My Entries',
         label: 'SubmissionsScene'
       },
@@ -132,16 +133,18 @@ export default class LandingScene extends Component {
   logout() {
     Alert.alert(
       'Logging Out',
-      'Are you sure you want to log out?', [
-        {text: 'Yes', onPress: () => {
+      'Are you sure you want to log out? Observations will be lost if you logout before uploading them.', [
+        {
+          text: 'Yes', onPress: () => {
           // Deletes all user records thus logging out
           realm.write(() => {
             let users = realm.objects('User')
             realm.delete(users)
             DeviceEventEmitter.emit('userLoggedOut')
           })
-        }},
-        {text: 'Cancel', onPress: () => {}, style: 'cancel'}
+        }
+        },
+        {text: 'Cancel', style: 'cancel'}
       ])
   }
 
@@ -157,14 +160,11 @@ export default class LandingScene extends Component {
   /**
    * Check for unsynced records
    **/
-
   needSyncCheck() {
-    if (realm.objects('Submission').filtered('synced == false ').length > 0){
-      alert("You have " + realm.objects('Submission').filtered('synced == false ').length + " record(s) that are not synced with the server.")
+    if (realm.objects('Submission').filtered('synced == false ').length > 0) {
+      alert('You have ' + realm.objects('Submission').filtered('synced == false ').length + ' record(s) that are not synced with the server.')
     }
   }
-
-
 
   /**
    * Toggle sidebar menu (show/hide)
@@ -188,6 +188,8 @@ export default class LandingScene extends Component {
           routes={this.state.sidebar}/>
         <ScrollView style={{flex: 0}}>
           <View style={styles.plantsContainer}>
+            <UploadButton/>
+
             {plants.map((plant, index) => {
               return (
                 <TouchableHighlight
@@ -218,7 +220,7 @@ export default class LandingScene extends Component {
 
 LandingScene.propTypes = {
   title    : PropTypes.string.isRequired,
-  navigator: PropTypes.object.isRequired,
+  navigator: PropTypes.object.isRequired
 }
 
 const elevationStyle = new Elevation(2)
@@ -241,7 +243,7 @@ const styles = StyleSheet.create({
     width               : undefined,
     borderTopRightRadius: 3,
     borderTopLeftRadius : 3,
-    backgroundColor     : '#fff',
+    backgroundColor     : '#fff'
   },
   cardTitle      : {
     ...theme.cardTitleStyle,
