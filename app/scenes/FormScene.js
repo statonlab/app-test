@@ -41,7 +41,7 @@ DCPrules = {
   acorns             : t.enums.of(DCP.acorns.selectChoices, "acorns"),
   diameterDescriptive: t.enums.of(DCP.diameterDescriptive.selectChoices, "diameter"),
   heightFirstBranch  : t.enums.of(DCP.heightFirstBranch.selectChoices, "heightFirstBranch"),
-  oakHealthProblems  : t.enums.of(DCP.oakHealthProblems.selectChoices, "oakHealthProblems"),
+  oakHealthProblems  : t.maybe(t.String),
   diameterNumeric    : t.Number,
   chestnutBlightSigns: t.maybe(t.String),
   ashSpecies         : t.enums.of(DCP.ashSpecies.selectChoices, "ashSpecies"),
