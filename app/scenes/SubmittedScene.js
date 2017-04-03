@@ -6,10 +6,12 @@ import {
   Image
 } from 'react-native'
 import Header from '../components/Header'
-import MapView from 'react-native-maps'
 import {MKButton} from 'react-native-material-kit'
 import Colors from '../helpers/Colors'
 import Elevation from '../helpers/Elevation'
+import realm from '../db/Schema'
+import MarkersMap from '../components/MarkersMap'
+
 
 export default class SubmittedScene extends Component {
   constructor(props) {
@@ -17,6 +19,7 @@ export default class SubmittedScene extends Component {
 
     let data     = this.props.plant
     this.marker  = {
+      id : data.id,
       title      : data.title,
       image      : data.images[0],
       description: `${data.location.latitude}, ${data.location.longitude}`,
@@ -27,46 +30,57 @@ export default class SubmittedScene extends Component {
     }
   }
 
+
   componentDidMount() {
-    this.goToMarker({
-      latitude : this.marker.coordinates.latitude,
-      longitude: this.marker.coordinates.longitude
-    })
+    // this.goToMarker({
+    //   latitude : this.marker.coordinates.latitude,
+    //   longitude: this.marker.coordinates.longitude
+    // })
+
   }
 
-  goToMarker(marker) {
-    setTimeout(() => this.refs.map.animateToRegion({
-      latitude      : marker.latitude,
-      longitude     : marker.longitude,
-      latitudeDelta : 0.0922,
-      longitudeDelta: 0.0421
-    }, 1000), 500)
+  // zoomToMarker(location) {
+  //
+  //   console.log("location is : ", location)
+  //   console.log("ref map is", console.log(this.refs.map) )
+  //   this.refs.map.zoomToMarker(location)
+  // }
+
+  renderMap() {
+    let submissions = realm.objects('Submission')
+    let markers     = []
+
+    submissions.map((submission, index) => {
+
+      let marker = {
+        title      : submission.name,
+        image      : JSON.parse(submission.images)[0],
+        description: 'What should we put here?',
+        coord      : {
+          longitude: submission.location.longitude,
+          latitude : submission.location.latitude
+        },
+        pinColor : Colors.primary
+
+      }
+
+      if (submission.id == this.marker.id) {
+        marker.pinColor = Colors.info
+      }
+
+      markers.push(marker)
+
+    })
+
+    return <MarkersMap markers={markers} startingLoc={this.marker.location}
+    />
   }
 
   render() {
-    let marker = this.marker
     return (
       <View style={styles.container}>
         <Header title="Submission Aerial View" navigator={this.props.navigator} showLeftIcon={false} showRightIcon={false}/>
-        <MapView
-          style={styles.map}
-          ref="map"
-          onRegionChangeComplete={() => {this.refs.marker.showCallout()}}>
-          <MapView.Marker
-            ref="marker"
-            coordinate={marker.coordinates}
-            pinColor={Colors.primary}>
-            <MapView.Callout style={{width: 165}}>
-              <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-                <Image source={{uri: marker.image}} style={{width: 45, height: 45, resizeMode: 'cover', backgroundColor: '#fff'}}/>
-                <View style={{flex: 1, marginLeft: 5, flexDirection: 'column', justifyContent: 'space-between', alignItems: 'flex-start'}}>
-                  <Text style={[styles.calloutText, {flex: 1, fontWeight: '500'}]}>{marker.title}</Text>
-                  <Text style={[styles.calloutText, {color: '#666'}]}>{marker.description}</Text>
-                </View>
-              </View>
-            </MapView.Callout>
-          </MapView.Marker>
-        </MapView>
+        {this.renderMap()}
 
         <View style={styles.footer}>
           <Text style={styles.text}>Your entry has been saved!</Text>

@@ -66,8 +66,9 @@ export default class FormScene extends Component {
       },
       metadata: {
         diameterNumeric: 25,
-        comment        : ''
-      }
+        comment : '',
+      },
+      id: ''
 
     }
 
@@ -160,8 +161,8 @@ export default class FormScene extends Component {
 
     this.props.navigator.push({
       label   : 'SubmittedScene',
-      plant   : this.state,
-      gestures: {}
+      plant   : observation,
+      gestures: {},
     })
   }
 
