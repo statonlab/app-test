@@ -5,7 +5,7 @@ import Header from '../components/Header'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
 import t from 'tcomb-validation'
-import Axios from 'axios'
+import axios from '../helpers/Axios'
 import realm from '../db/Schema'
 import Spinner from '../components/Spinner'
 
@@ -14,13 +14,14 @@ export default class LoginScene extends Component {
   constructor(props) {
     super(props)
 
-    this.state      = {
+    this.state = {
       email      : null,
       password   : null,
       showSpinner: false
-
     }
-    this.realm      = realm
+
+    this.realm = realm
+
     this.loginRules = t.struct({
       email   : t.String,
       password: t.String
@@ -39,35 +40,31 @@ export default class LoginScene extends Component {
   loginRequest = () => {
     this.setState({showSpinner: true})
 
-    console.log('executing login request')
+    axios.post('user/login', {
+      email   : this.state.email,
+      password: this.state.password
+    }).then(response => {
+      this.storeUser(response)
+      this.setState({showSpinner: false})
 
-    let axios = Axios.create({
-      baseURL: 'https://treesource.almsaeedstudio.com/api/v1/',
-      timeout: 10000
+      DeviceEventEmitter.emit('userLoggedIn')
+
+      this.props.navigator.pop()
+    }).catch(error => {
+      this.setState({showSpinner: false})
+      alert(error)
     })
-
-    axios.post('user/login', {email: this.state.email, password: this.state.password})
-      .then(response => {
-        console.log('SUCCESS:', response.data.data)
-        this.storeUser(response)
-        this.setState({showSpinner: false})
-        DeviceEventEmitter.emit('userLoggedIn')
-        this.props.navigator.pop()
-      })
-      .catch(error => {
-        console.log('ERR', error)
-        this.setState({showSpinner: false})
-        alert(error)
-      })
   }
 
   storeUser = (response) => {
     this.realm.write(() => {
       // Delete existing users first
       this.realm.deleteAll()
+
       if (!response.data.data.zipcode) {
         response.data.data.zipcode = ''
       }
+
       this.realm.create('User', {
         name            : response.data.data.name.toString(),
         email           : response.data.data.email.toString(),
@@ -79,14 +76,13 @@ export default class LoginScene extends Component {
     })
 
     // this.pullServerObservations()
-    //this.axios.get undefined
   }
 
 
   pullServerObservations = () => {
     let myToken = realm.objects('User')[0].api_token
 
-    this.axios.get('observations/?api_token=' + myToken)
+    axios.get('observations', {api_token: myToken})
       .then(response => {
 
         let data = response.data.data
@@ -115,7 +111,6 @@ export default class LoginScene extends Component {
       .catch(error => {
         console.log('Error:', error)
       })
-
   }
 
   render() {

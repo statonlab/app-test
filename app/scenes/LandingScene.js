@@ -99,8 +99,21 @@ export default class LandingScene extends Component {
    */
   componentDidMount() {
     this.setSidebarLinks()
-    this.events.push(DeviceEventEmitter.addListener('userLoggedOut', this.setSidebarLinks.bind(this)))
-    this.events.push(DeviceEventEmitter.addListener('userLoggedIn', this.setSidebarLinks.bind(this)))
+
+    this.events.push(DeviceEventEmitter.addListener('userLoggedOut', () => {
+      this.setSidebarLinks()
+      this.refs.uploadButton.getObservations()
+    }))
+    this.events.push(DeviceEventEmitter.addListener('userLoggedIn', this.setSidebarLinks.bind(this)), {})
+  }
+
+  /**
+   * Stop listening
+   */
+  componentWillUnmount() {
+    this.events.forEach(event => {
+      event.remove()
+    })
   }
 
   /**
@@ -135,14 +148,15 @@ export default class LandingScene extends Component {
       'Logging Out',
       'Are you sure you want to log out? Observations will be lost if you logout before uploading them.', [
         {
-          text: 'Yes', onPress: () => {
-          // Deletes all user records thus logging out
-          realm.write(() => {
-            let users = realm.objects('User')
-            realm.delete(users)
+          text   : 'Yes',
+          onPress: () => {
+            // Deletes all user records thus logging out
+            realm.write(() => {
+              let users = realm.objects('User')
+              realm.delete(users)
+            })
             DeviceEventEmitter.emit('userLoggedOut')
-          })
-        }
+          }
         },
         {text: 'Cancel', style: 'cancel'}
       ])
@@ -188,7 +202,7 @@ export default class LandingScene extends Component {
           routes={this.state.sidebar}/>
         <ScrollView style={{flex: 0}}>
           <View style={styles.plantsContainer}>
-            <UploadButton/>
+            <UploadButton ref="uploadButton"/>
 
             {plants.map((plant, index) => {
               return (

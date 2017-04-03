@@ -156,7 +156,7 @@ export default class FormScene extends Component {
     })
 
     // Tell anyone who cares that there is a new submission
-    // DeviceEventEmitter.emit('newSubmission')
+    DeviceEventEmitter.emit('newSubmission')
 
     this.props.navigator.push({
       label   : 'SubmittedScene',

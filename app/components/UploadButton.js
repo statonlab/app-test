@@ -14,15 +14,9 @@ export default class UploadButton extends Component {
       show: false
     }
 
-    this.events = []
   }
 
-  componentDidMount() {
-    this.events.push(DeviceEventEmitter.addListener('userLoggedIn'), this._getObservations())
-    this.events.push(DeviceEventEmitter.addListener('newSubmission'), this._getObservations())
-  }
-
-  _getObservations() {
+  getObservations() {
     this.observations = realm.objects('Submission').filtered('synced = false')
     if (this.observations.length > 0) {
       this.setState({show: true})
@@ -59,7 +53,7 @@ export default class UploadButton extends Component {
   }
 
   componentWillUnmount() {
-    this.events.map(event => {
+    this.events.forEach(event => {
       event.remove()
     })
   }
