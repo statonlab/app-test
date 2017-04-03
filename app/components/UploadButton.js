@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react'
-import {View, Text, StyleSheet, DeviceEventEmitter} from 'react-native'
+import {View, Text, StyleSheet} from 'react-native'
 import {MKButton} from 'react-native-material-kit'
 import realm from '../db/Schema'
 import Observation from '../helpers/Observation'
@@ -13,7 +13,6 @@ export default class UploadButton extends Component {
     this.state = {
       show: false
     }
-
   }
 
   getObservations() {
