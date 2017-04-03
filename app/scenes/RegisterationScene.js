@@ -111,7 +111,7 @@ export default class RegistrationScene extends Component {
       <View style={styles.container}>
         <Spinner show={this.state.showSpinner} />
         <Header title="Register" navigator={this.props.navigator} showRightIcon={false}/>
-        <ScrollView>
+        <ScrollView keyboardDismissMode="on-drag">
           <View style={styles.form}>
             <View style={styles.formGroup}>
               <Text style={styles.title}>TreeSource</Text>

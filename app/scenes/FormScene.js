@@ -11,7 +11,7 @@ import {
   DeviceEventEmitter
 } from 'react-native'
 import moment from 'moment'
-import {getTheme, MKButton, MKSlider} from 'react-native-material-kit'
+import {getTheme, MKButton} from 'react-native-material-kit'
 import Header from '../components/Header'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import Elevation from '../helpers/Elevation'
@@ -20,7 +20,7 @@ import realm from '../db/Schema'
 import t from 'tcomb-validation'
 import PickerModal from '../components/PickerModal'
 import DCP from '../resources/config.js'
-import Axios from 'axios'
+import Axios from '../helpers/Axios'
 import SliderPick from '../components/SliderPick'
 
 const theme = getTheme()
@@ -33,18 +33,18 @@ const theme = getTheme()
 // diameterNumeric: true
 
 DCPrules = {
-  seedsBinary        : t.enums.of(DCP.seedsBinary.selectChoices, "seed"),
-  flowersBinary      : t.enums.of(DCP.flowersBinary.selectChoices, "flowers"),
-  crownHealth        : t.enums.of(DCP.crownHealth.selectChoices, "crownHealth"),
+  seedsBinary        : t.enums.of(DCP.seedsBinary.selectChoices, 'seed'),
+  flowersBinary      : t.enums.of(DCP.flowersBinary.selectChoices, 'flowers'),
+  crownHealth        : t.enums.of(DCP.crownHealth.selectChoices, 'crownHealth'),
   woolyAdesPres      : t.Boolean,
-  woolyAdesCoverage  : t.enums.of(DCP.woolyAdesCoverage.selectChoices, "woolyAdesCoverage"),
-  acorns             : t.enums.of(DCP.acorns.selectChoices, "acorns"),
-  diameterDescriptive: t.enums.of(DCP.diameterDescriptive.selectChoices, "diameter"),
-  heightFirstBranch  : t.enums.of(DCP.heightFirstBranch.selectChoices, "heightFirstBranch"),
-  oakHealthProblems  : t.enums.of(DCP.oakHealthProblems.selectChoices, "oakHealthProblems"),
+  woolyAdesCoverage  : t.enums.of(DCP.woolyAdesCoverage.selectChoices, 'woolyAdesCoverage'),
+  acorns             : t.enums.of(DCP.acorns.selectChoices, 'acorns'),
+  diameterDescriptive: t.enums.of(DCP.diameterDescriptive.selectChoices, 'diameter'),
+  heightFirstBranch  : t.enums.of(DCP.heightFirstBranch.selectChoices, 'heightFirstBranch'),
+  oakHealthProblems  : t.enums.of(DCP.oakHealthProblems.selectChoices, 'oakHealthProblems'),
   diameterNumeric    : t.Number,
   chestnutBlightSigns: t.maybe(t.String),
-  ashSpecies         : t.enums.of(DCP.ashSpecies.selectChoices, "ashSpecies"),
+  ashSpecies         : t.enums.of(DCP.ashSpecies.selectChoices, 'ashSpecies'),
   emeraldAshBorer    : t.maybe(t.String)   //t.enums.of(DCP.emeraldAshBorer.selectChoices, "EAB"),
   // chestnutBlightSigns: t.enums.of(DCP.chestnutBlightSigns.selectChoices, "cbSigns"),
 }
@@ -67,7 +67,7 @@ export default class FormScene extends Component {
       },
       metadata: {
         diameterNumeric: 25,
-        comment : '',
+        comment        : ''
       }
 
     }
@@ -80,12 +80,12 @@ export default class FormScene extends Component {
     let formRules = {
       images  : t.list(t.String),
       title   : t.String,
-      location: Location,
+      location: Location
     }
 
     this.formRulesMeta = this.compileValRules()//build form rules from passed props
-    this.formT         = t.struct(formRules, "formT")//build tcomb validation from rules
-    this.formTMeta     = t.struct(this.formRulesMeta, "formTMeta")//build tcomb validation from rules
+    this.formT         = t.struct(formRules, 'formT')//build tcomb validation from rules
+    this.formTMeta     = t.struct(this.formRulesMeta, 'formTMeta')//build tcomb validation from rules
   }
 
   componentDidMount() {
@@ -140,38 +140,72 @@ export default class FormScene extends Component {
       primaryKey = primaryKey.sorted('id', true)[0].id + 1
     }
 
+    let metaData    = typeof this.state.metadata === 'string' ? this.state.metadata : JSON.stringify(this.state.metadata)
     let observation = {
-      id       : primaryKey,
-      name     : this.state.title.toString(),
-      species  : this.state.title.toString(),
-      images   : JSON.stringify(this.state.images),
-      location : this.state.location,
-      date     : moment().format('MM-DD-Y HH:mm:ss').toString(),
-      synced   : false,
-      metaData: JSON.stringify(this.state.metadata)
+      id      : primaryKey,
+      name    : this.state.title.toString(),
+      species : this.state.title.toString(),
+      images  : JSON.stringify(this.state.images),
+      location: this.state.location,
+      date    : moment().format('MM-DD-YYYY HH:mm:ss').toString(),
+      synced  : false,
+      metaData: metaData
     }
 
     this.realm.write(() => {
       this.realm.create('Submission', observation)
     })
 
-    let obsSubmit       = {
+    let obsSubmit = {
       observation_category: this.props.title,
-      meta_data           : JSON.stringify(this.state.metadata),
+      meta_data           : metaData,
       longitude           : observation.location.longitude,
       latitude            : observation.location.latitude,
       location_accuracy   : observation.location.accuracy,
       date                : observation.date,
-      is_private          : false
+      is_private          : false,
+      images              : this.state.images
     }
-    //Now submit to server
-    obsSubmit.api_token = this.retrieveAPI()
+
+    // Now submit to server
     this.submitObsToServer(obsSubmit)
 
     this.props.navigator.push({
       label   : 'SubmittedScene',
       plant   : this.state,
       gestures: {}
+    })
+  }
+
+  submitObsToServer = (request) => {
+    // Create form data
+    let form = new FormData()
+    form.append('observation_category', request.observation_category)
+    form.append('meta_data', request.meta_data)
+    form.append('longitude', request.longitude)
+    form.append('latitude', request.latitude)
+    form.append('location_accuracy', request.location_accuracy)
+    form.append('date', request.date)
+    form.append('is_private', request.is_private ? '1' : '0')
+    form.append('api_token', this.retrieveAPI())
+
+    request.images.map((image, i) => {
+      let name = image.split('/')
+      name     = name[name.length - 1]
+
+      let extension = name.split('.')
+      extension     = extension[extension.length - 1]
+
+      console.log(name)
+      form.append(`images[${i}]`, {uri: `file:///${image}`, name, type: `image/${extension}`})
+    })
+
+    // Run AXIOS POST request
+    Axios.post('observations', form).then(response => {
+      console.log('RES', response.data)
+    }).catch(error => {
+      console.log('ERR', error)
+      alert('error submitting to server:', error[0])
     })
   }
 
@@ -183,21 +217,19 @@ export default class FormScene extends Component {
     return t.validate(this.state.metadata, this.formTMeta)
   }
 
-
   notifyIncomplete = (validationAttempt) => {
 
     let missingFields = {}
-    let message       = "Please supply a value for the following required fields: \n"
+    let message       = 'Please supply a value for the following required fields: \n'
 
     for (let errorIndex in validationAttempt.errors) {
       let errorPath            = validationAttempt.errors[errorIndex].path[0]
       missingFields[errorPath] = true
-      message                  = message + errorPath + " \n"
+      message                  = message + errorPath + ' \n'
     }
 
     Alert.alert(message)
   }
-
 
   compileValRules = () => {
     let formBase = {}
@@ -210,24 +242,6 @@ export default class FormScene extends Component {
 
     })
     return formBase
-  }
-
-  submitObsToServer = (request) => {
-
-    //Run AXIOS POST request
-    let axios = Axios.create({
-      baseURL: 'https://treesource.almsaeedstudio.com/api/v1/',
-      timeout: 10000
-    })
-    axios.post('observations', request)
-      .then(response => {
-        console.log('RES', response.data)
-      })
-      .catch(error => {
-        console.log('ERR', error)
-        alert("error submiting to server:", error[0])
-      })
-
   }
 
   retrieveAPI = () => {
@@ -266,7 +280,9 @@ export default class FormScene extends Component {
           <SliderPick
             key={key}
             start={25}
-            onChange={(value) => {this.setState({metadata:{...this.state.metadata,[key] : value}})}}
+            onChange={(value) => {
+              this.setState({metadata: {...this.state.metadata, [key]: value}})
+            }}
           />
           <Icon name="altimeter" style={styles.icon}/>
         </View>
@@ -279,7 +295,9 @@ export default class FormScene extends Component {
           multiCheck={DCP[key].multiCheck}
           header={DCP[key].description}
           choices={DCP[key].selectChoices}
-          onSelect={(option)=>{this.setState({metadata: {...this.state.metadata, [key]: option}})}}
+          onSelect={(option) => {
+            this.setState({metadata: {...this.state.metadata, [key]: option}})
+          }}
         >
           <View style={styles.picker}>
             <Text style={styles.label}>{DCP[key].label}</Text>
@@ -436,14 +454,14 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#dedede',
     padding          : 5,
-    height           : undefined,
+    height           : undefined
   },
 
   picker: {
     flex         : 0,
     flexDirection: 'row',
     alignItems   : 'center',
-    width        : undefined,
+    width        : undefined
   },
 
   label: {
@@ -493,7 +511,7 @@ const styles = StyleSheet.create({
   },
 
   flex1: {
-    flex: 1,
+    flex: 1
   },
 
   buttonAlt: {
@@ -525,7 +543,7 @@ const styles = StyleSheet.create({
   },
 
   buttonLinkText: {
-    color            : "#666",
+    color            : '#666',
     flex             : 1,
     paddingHorizontal: 5
   },
@@ -558,7 +576,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5
   },
   slider    : {
-    width: 200,
+    width: 200
   },
   sliderPair: {}
 })
