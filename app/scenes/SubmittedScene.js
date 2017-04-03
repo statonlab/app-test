@@ -31,20 +31,6 @@ export default class SubmittedScene extends Component {
   }
 
 
-  componentDidMount() {
-    // this.goToMarker({
-    //   latitude : this.marker.coordinates.latitude,
-    //   longitude: this.marker.coordinates.longitude
-    // })
-
-  }
-
-  // zoomToMarker(location) {
-  //
-  //   console.log("location is : ", location)
-  //   console.log("ref map is", console.log(this.refs.map) )
-  //   this.refs.map.zoomToMarker(location)
-  // }
 
   renderMap() {
     let submissions = realm.objects('Submission')
@@ -52,7 +38,7 @@ export default class SubmittedScene extends Component {
 
     submissions.map((submission, index) => {
 
-      let marker = {
+      let markerDB = {
         title      : submission.name,
         image      : JSON.parse(submission.images)[0],
         description: 'What should we put here?',
@@ -65,14 +51,14 @@ export default class SubmittedScene extends Component {
       }
 
       if (submission.id == this.marker.id) {
-        marker.pinColor = Colors.info
+        markerDB.pinColor = Colors.info
       }
 
-      markers.push(marker)
+      markers.push(markerDB)
 
     })
 
-    return <MarkersMap markers={markers} startingLoc={this.marker.location}
+    return <MarkersMap markers={markers} startingLoc={this.marker.coordinates}
     />
   }
 

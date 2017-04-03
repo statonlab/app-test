@@ -5,11 +5,8 @@ import Colors from '../helpers/Colors'
 
 export default class MarkersMap extends Component {
 
-
-
-
-
   zoomToMarker(location)  {
+    console.log("zooming to : ", location)
     setTimeout(() => this.refs.map.animateToRegion({
       latitude      : location.latitude,
       longitude     : location.longitude,
