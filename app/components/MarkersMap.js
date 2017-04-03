@@ -1,28 +1,34 @@
 import React, {Component, PropTypes} from 'react'
-import {StyleSheet, Dimensions, View, Text, Image} from 'react-native'
+import {StyleSheet, View, Text, Image} from 'react-native'
 import MapView from 'react-native-maps'
 import Colors from '../helpers/Colors'
 
 export default class MarkersMap extends Component {
-
-  zoomToMarker(location)  {
-    console.log("zooming to : ", location)
-    setTimeout(() => this.refs.map.animateToRegion({
-      latitude      : location.latitude,
-      longitude     : location.longitude,
-      latitudeDelta : 0.0922,
-      longitudeDelta: 0.0421
-    }, 1000), 500)
+  componentDidMount() {
+    if (this.props.startingLocation.longitude !== 0) {
+      this.zoomToMarker(this.props.startingLocation)
+    }
   }
 
-
+  zoomToMarker(location) {
+    setTimeout(() => {
+      this.refs.map.animateToRegion({
+        latitude      : location.latitude,
+        longitude     : location.longitude,
+        latitudeDelta : 0.0922,
+        longitudeDelta: 0.0421
+      }, 1000)
+      if (this.marker) {
+        this.marker.showCallout()
+      }
+    }, 500)
+  }
 
   render() {
     return (
       <MapView
         style={styles.map}
         ref="map">
-        {this.props.startingLoc ? this.zoomToMarker(this.props.startingLoc) : null}
         {this.props.markers.map(this.renderMarker)}
       </MapView>
     )
@@ -33,7 +39,7 @@ export default class MarkersMap extends Component {
       <MapView.Marker
         key={index}
         coordinate={marker.coord}
-        pinColor = {marker.pinColor}
+        pinColor={marker.pinColor}
       >
         <MapView.Callout style={{width: 165}}>
           <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
@@ -51,12 +57,16 @@ export default class MarkersMap extends Component {
 
 MarkersMap.propTypes = {
   ...MapView.propTypes,
-  markers: PropTypes.array,
-  startingLoc: PropTypes.object
+  markers         : PropTypes.array,
+  startingLocation: PropTypes.object
 }
 
 MarkersMap.defaultProps = {
-  markers: [],
+  markers         : [],
+  startingLocation: {
+    longitude: 0,
+    latitude : 0
+  }
 }
 
 
@@ -100,5 +110,5 @@ const styles = StyleSheet.create({
   text: {
     color     : '#eee',
     fontWeight: '500'
-  },
+  }
 })

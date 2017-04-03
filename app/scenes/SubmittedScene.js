@@ -2,8 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import {
   View,
   StyleSheet,
-  Text,
-  Image
+  Text
 } from 'react-native'
 import Header from '../components/Header'
 import {MKButton} from 'react-native-material-kit'
@@ -12,14 +11,13 @@ import Elevation from '../helpers/Elevation'
 import realm from '../db/Schema'
 import MarkersMap from '../components/MarkersMap'
 
-
 export default class SubmittedScene extends Component {
   constructor(props) {
     super(props)
 
-    let data     = this.props.plant
-    this.marker  = {
-      id : data.id,
+    let data    = this.props.plant
+    this.marker = {
+      id         : data.id,
       title      : data.title,
       image      : data.images[0],
       description: `${data.location.latitude}, ${data.location.longitude}`,
@@ -30,14 +28,11 @@ export default class SubmittedScene extends Component {
     }
   }
 
-
-
   renderMap() {
     let submissions = realm.objects('Submission')
     let markers     = []
 
     submissions.map((submission, index) => {
-
       let markerDB = {
         title      : submission.name,
         image      : JSON.parse(submission.images)[0],
@@ -46,20 +41,17 @@ export default class SubmittedScene extends Component {
           longitude: submission.location.longitude,
           latitude : submission.location.latitude
         },
-        pinColor : Colors.primary
-
+        pinColor   : Colors.primary
       }
 
-      if (submission.id == this.marker.id) {
+      if (submission.id === this.marker.id) {
         markerDB.pinColor = Colors.info
       }
 
       markers.push(markerDB)
-
     })
 
-    return <MarkersMap markers={markers} startingLoc={this.marker.coordinates}
-    />
+    return (<MarkersMap markers={markers} startingLocation={this.marker.coordinates}/>)
   }
 
   render() {
@@ -128,5 +120,5 @@ const styles = StyleSheet.create({
   text: {
     color     : '#eee',
     fontWeight: '500'
-  },
+  }
 })
