@@ -20,6 +20,7 @@ export default class MarkersMap extends Component {
       <MapView.Marker
         key={index}
         coordinate={marker.coord}
+        pinColor = {marker.pinColor}
       >
         <MapView.Callout style={{width: 165}}>
           <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>

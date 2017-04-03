@@ -19,6 +19,7 @@ export default class SubmittedScene extends Component {
 
     let data     = this.props.plant
     this.marker  = {
+      id : data.id,
       title      : data.title,
       image      : data.images[0],
       description: `${data.location.latitude}, ${data.location.longitude}`,
@@ -31,46 +32,52 @@ export default class SubmittedScene extends Component {
 
 
 
-  // componentDidMount() {
-  //   this.goToMarker({
-  //     latitude : this.marker.coordinates.latitude,
-  //     longitude: this.marker.coordinates.longitude
-  //   })
-  //
-  // }
+  componentDidMount() {
+    // this.goToMarker({
+    //   latitude : this.marker.coordinates.latitude,
+    //   longitude: this.marker.coordinates.longitude
+    // })
+
+  }
 
   renderMap() {
     let submissions = realm.objects('Submission')
     let markers     = []
 
     submissions.map((submission, index) => {
-      if (submission.location != this.marker.coordinates) {
-        markers.push({
-          title      : submission.name,
-          image      : JSON.parse(submission.images)[0],
-          description: 'What should we put here?',
-          coord      : {
-            longitude: submission.location.longitude,
-            latitude : submission.location.latitude
-          }
-        })
+
+      let marker = {
+        title      : submission.name,
+        image      : JSON.parse(submission.images)[0],
+        description: 'What should we put here?',
+        coord      : {
+          longitude: submission.location.longitude,
+          latitude : submission.location.latitude
+        },
+        pinColor : Colors.primary
+
       }
+
+      if (submission.id == this.marker.id) {
+        marker.pinColor = Colors.info
+      }
+
+      markers.push(marker)
 
     })
 
-    return <MarkersMap markers={markers}/>
-
-
+    return <MarkersMap markers={markers}
+    />
   }
 
-  goToMarker(marker) {
-    setTimeout(() => this.refs.map.animateToRegion({
-      latitude      : marker.latitude,
-      longitude     : marker.longitude,
-      latitudeDelta : 0.0922,
-      longitudeDelta: 0.0421
-    }, 1000), 500)
-  }
+zoomToMarker = ()=>  {
+  setTimeout(() => this.refs.map.animateToRegion({
+    latitude      : submission.location.latitude,
+    longitude     : submission.location.longitude,
+    latitudeDelta : 0.0922,
+    longitudeDelta: 0.0421
+  }, 1000), 500)
+}
 
   render() {
     return (
