@@ -5,11 +5,27 @@ import Colors from '../helpers/Colors'
 
 export default class MarkersMap extends Component {
 
+
+
+
+
+  zoomToMarker(location)  {
+    setTimeout(() => this.refs.map.animateToRegion({
+      latitude      : location.latitude,
+      longitude     : location.longitude,
+      latitudeDelta : 0.0922,
+      longitudeDelta: 0.0421
+    }, 1000), 500)
+  }
+
+
+
   render() {
     return (
       <MapView
         style={styles.map}
         ref="map">
+        {this.props.startingLoc ? this.zoomToMarker(this.props.startingLoc) : null}
         {this.props.markers.map(this.renderMarker)}
       </MapView>
     )
@@ -38,11 +54,12 @@ export default class MarkersMap extends Component {
 
 MarkersMap.propTypes = {
   ...MapView.propTypes,
-  markers: PropTypes.array
+  markers: PropTypes.array,
+  startingLoc: PropTypes.object
 }
 
 MarkersMap.defaultProps = {
-  markers: []
+  markers: [],
 }
 
 

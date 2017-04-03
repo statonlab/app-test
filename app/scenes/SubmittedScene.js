@@ -31,7 +31,6 @@ export default class SubmittedScene extends Component {
   }
 
 
-
   componentDidMount() {
     // this.goToMarker({
     //   latitude : this.marker.coordinates.latitude,
@@ -39,6 +38,13 @@ export default class SubmittedScene extends Component {
     // })
 
   }
+
+  // zoomToMarker(location) {
+  //
+  //   console.log("location is : ", location)
+  //   console.log("ref map is", console.log(this.refs.map) )
+  //   this.refs.map.zoomToMarker(location)
+  // }
 
   renderMap() {
     let submissions = realm.objects('Submission')
@@ -66,18 +72,9 @@ export default class SubmittedScene extends Component {
 
     })
 
-    return <MarkersMap markers={markers}
+    return <MarkersMap markers={markers} startingLoc={this.marker.location}
     />
   }
-
-zoomToMarker = ()=>  {
-  setTimeout(() => this.refs.map.animateToRegion({
-    latitude      : submission.location.latitude,
-    longitude     : submission.location.longitude,
-    latitudeDelta : 0.0922,
-    longitudeDelta: 0.0421
-  }, 1000), 500)
-}
 
   render() {
     return (
