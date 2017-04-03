@@ -27,10 +27,10 @@ const plants = {
       diameterNumeric: true
     }
   },
-  'Green Ash'        : {
+  'Ash'        : {
     image                 : require('../img/ash.jpg'),
-    latinName             : 'G. ashicus',
-    descriptionBody       : 'This is where the body text would go describing the gorgeous green ash.',
+    latinName             : 'Ash species',
+    descriptionBody       : 'This is where the body text would go describing the gorgeous ash.',
     collectionInstructions: 'This is where the specific collection instructions would go.  Only collect disease trees for this species!',
     formProps             : {
       ashSpecies: true,

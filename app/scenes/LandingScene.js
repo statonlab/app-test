@@ -24,7 +24,7 @@ const plants = [
     image: require('../img/am_chestnut4.jpg'),
   },
   {
-    title: 'Green Ash',
+    title: 'Ash',
     image: require('../img/ash.jpg'),
   },
   {
