@@ -54,7 +54,7 @@ SliderPick.propTypes = {
 
 SliderPick.defaultProps = {
   min       : 1,
-  max       : 100,
+  max       : 50,
   start     : 25,
   legendText: "Inches",
   onChange  : () => {
