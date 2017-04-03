@@ -326,7 +326,7 @@ export default class FormScene extends Component {
                 <Text style={styles.label}>Photos</Text>
                 {this.state.images.length === 0 ?
                   <View style={{flex: 1, alignItems: 'center', flexDirection: 'row'}}>
-                    <Text style={[styles.buttonLinkText, {color: '#aaa'}]}>Add Photos</Text>
+                    <Text style={[styles.buttonLinkText, {color: '#aaa'}]}>Add photos</Text>
                     <Icon name="camera" style={[styles.icon]}/>
                   </View>
                   :
