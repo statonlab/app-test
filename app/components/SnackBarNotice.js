@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react'
-import {
+import {Animated,
   View,
   Text,
   TouchableHighlight,
@@ -15,7 +15,9 @@ export default class SnackBarNotice extends Component {
 
     this.state = {
       isVisible: false,
-      noticeText : ''
+      noticeText : '',
+      position: new Animated.Value(-250),
+
     }
   }
 
@@ -30,11 +32,29 @@ export default class SnackBarNotice extends Component {
   showBar = () => {
     this.setState({noticeText : this.props.noticeText})
     this.setState({isVisible: true})
-    setTimeout(this.closeBar, 3000)
+
+    Animated.timing(
+      this.state.position,
+      {
+        toValue : 20,
+        duration: 1000
+      }
+    ).start()
+    
+    setTimeout(this.closeBar, 4000)
+
   }
 
   closeBar = () => {
+    Animated.timing(
+      this.state.position,
+      {
+        toValue : -100,
+        duration: 500
+      }
+    ).start()
     this.setState({isVisible: false})
+
   }
 
 //For now will only get message icon.  In the future other icons could be displayed.
@@ -52,10 +72,10 @@ export default class SnackBarNotice extends Component {
       <TouchableHighlight
         underlayColor={Colors.primary}
         onPress={() => {this.closeBar()}}>
-        <View style={styles.container}>
+        <Animated.View style={[styles.container, {bottom: this.state.position}]}>
           <Text style={[styles.text]}>{this.state.noticeText}</Text>
           {this.getIcon()}
-        </View>
+        </Animated.View>
       </TouchableHighlight>
       )
   }
@@ -105,7 +125,7 @@ const styles = StyleSheet.create({
   container: {
     ...(new Elevation(2)),
     position: 'absolute',
-    bottom: 10,
+    bottom: 0,
   left: 20,
   right: 20,
   height: 60,
