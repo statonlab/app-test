@@ -72,21 +72,22 @@ export default class Location extends Component {
     })
   }
 
-  cancel = () => {
-    clearTimeout(this.timeoutHolder)
-  }
-
   render() {
     return (
       <View style={styles.container}>
-        {!this.state.done &&
-        <Text style={[styles.text, {color: '#aaa'}]}>Acquiring location...</Text>
-        }
+        <View style={{flex: 1}}>
+          {!this.state.done &&
+          <Text style={[styles.text, {color: '#aaa'}]}>Acquiring Location... {this.state.currentPosition.accuracy}</Text>
+          }
 
-        {this.state.done &&
-        <Text style={[styles.text]}>{this.state.currentPosition.coords.latitude.toFixed(5)}, {this.state.currentPosition.coords.longitude.toFixed(5)}</Text>
-        }
+          {this.state.done &&
+          <Text style={[styles.text]}>{this.state.currentPosition.coords.latitude.toFixed(5)}, {this.state.currentPosition.coords.longitude.toFixed(5)}</Text>
+          }
 
+          {this.state.currentPosition &&
+          <Text style={[styles.text, {color: '#aaa'}]}>Accuracy {this.state.currentPosition.coords.accuracy} meters</Text>
+          }
+        </View>
         {this.state.done ? <Icon name="check" style={[styles.icon, {color: Color.primary}]}/> : <MKSpinner style={{width: 30, height: 30}}/>}
       </View>
     )

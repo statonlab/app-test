@@ -310,14 +310,9 @@ export default class FormScene extends Component {
               </MKButton>
             </View>
 
-            <View style={styles.formGroup}>
-              <Text style={styles.label}>Location</Text>
-              <Location />
-            </View>
-
             {Object.keys(this.props.formProps).map(this.populateFormItem)}
 
-            <View style={[styles.formGroup, {borderBottomWidth: 0, flex: 1, alignItems: 'flex-start'}]}>
+            <View style={[styles.formGroup, {flex: 1, alignItems: 'flex-start'}]}>
               <Text style={[styles.label, {paddingTop: 5}]}>Comments</Text>
               <TextInput
                 style={[styles.textField, styles.comment]}
@@ -329,6 +324,11 @@ export default class FormScene extends Component {
                 numberOfLines={4}
                 underlineColorAndroid="transparent"
               />
+            </View>
+
+            <View style={[styles.formGroup, {borderBottomWidth: 0, flex: 1}]}>
+              <Text style={styles.label}>Location</Text>
+              <Location />
             </View>
           </View>
         </ScrollView>
