@@ -40,7 +40,7 @@ export default class SnackBarNotice extends Component {
         duration: 1000
       }
     ).start()
-    
+
     setTimeout(this.closeBar, 4000)
 
   }
