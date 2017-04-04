@@ -53,7 +53,6 @@ export default class SnackBarNotice extends Component {
         duration: 500
       }
     ).start()
-    this.setState({isVisible: false})
 
   }
 
