@@ -196,6 +196,11 @@ export default class LandingScene extends Component {
     this.refs.sidebar.toggleMenu()
   }
 
+  /**
+   * Render login button.
+   * 
+   * @returns {XML}
+   */
   loginButton() {
     return (
       <MKButton style={styles.button} onPress={() => this.props.navigator.push({label: 'LoginScene'})}>
