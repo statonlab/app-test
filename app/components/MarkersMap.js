@@ -4,36 +4,79 @@ import MapView from 'react-native-maps'
 import Colors from '../helpers/Colors'
 
 export default class MarkersMap extends Component {
+  /**
+   * Call zoom to marker if a starting marker is specified.
+   */
   componentDidMount() {
-    if (this.props.startingLocation.longitude !== 0) {
-      this.zoomToMarker(this.props.startingLocation)
+    if (this.props.startingMarker !== null) {
+      this.zoomToMarker(this.props.startingMarker)
     }
   }
 
-  zoomToMarker(location) {
+  /**
+   * Zooms to the given marker and shows the callout of the starting marker.
+   *
+   * @param marker
+   */
+  zoomToMarker(marker) {
     setTimeout(() => {
       this.refs.map.animateToRegion({
-        latitude      : location.latitude,
-        longitude     : location.longitude,
-        latitudeDelta : 0.0922,
-        longitudeDelta: 0.0421
+        latitude      : marker.coord.latitude,
+        longitude     : marker.coord.longitude,
+        latitudeDelta : 0.0322,
+        longitudeDelta: 0.0321
       }, 1000)
-      if (this.marker) {
-        this.marker.showCallout()
-      }
     }, 500)
+
+    setTimeout(() => {
+      this.refs.startingMarker.showCallout()
+    }, 1500)
   }
 
+  /**
+   * Render Scene.
+   *
+   * @returns {XML}
+   */
   render() {
     return (
       <MapView
         style={styles.map}
-        ref="map">
+        ref="map"
+      >
         {this.props.markers.map(this.renderMarker)}
+        {this.props.startingMarker !== null ? this.renderStartingMarker(this.props.startingMarker) : null}
       </MapView>
     )
   }
 
+  /**
+   * Render the callout for a marker.
+   *
+   * @param marker
+   * @returns {XML}
+   */
+  renderCallout(marker) {
+    return (
+      <MapView.Callout style={{width: 165}}>
+        <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+          <Image source={{uri: marker.image}} style={{width: 45, height: 45}}/>
+          <View style={{flex: 1, marginLeft: 5, flexDirection: 'column', justifyContent: 'space-between', alignItems: 'flex-start'}}>
+            <Text style={[styles.calloutText, {flex: 1, fontWeight: '500'}]}>{marker.title}</Text>
+            <Text style={[styles.calloutText, {color: '#666'}]}>{marker.description}</Text>
+          </View>
+        </View>
+      </MapView.Callout>
+    )
+  }
+
+  /**
+   * Render the marker on the map.
+   *
+   * @param marker
+   * @param index
+   * @returns {XML}
+   */
   renderMarker(marker, index) {
     return (
       <MapView.Marker
@@ -41,15 +84,27 @@ export default class MarkersMap extends Component {
         coordinate={marker.coord}
         pinColor={marker.pinColor}
       >
-        <MapView.Callout style={{width: 165}}>
-          <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-            <Image source={{uri: marker.image}} style={{width: 45, height: 45}}/>
-            <View style={{flex: 1, marginLeft: 5, flexDirection: 'column', justifyContent: 'space-between', alignItems: 'flex-start'}}>
-              <Text style={[styles.calloutText, {flex: 1, fontWeight: '500'}]}>{marker.title}</Text>
-              <Text style={[styles.calloutText, {color: '#666'}]}>{marker.description}</Text>
-            </View>
-          </View>
-        </MapView.Callout>
+        {this.renderCallout(marker)}
+      </MapView.Marker>
+    )
+  }
+
+  /**
+   * Render the starting marker. This is a separate method because we
+   * need to assign a ref to the marker.
+   *
+   * @param marker
+   * @returns {XML}
+   */
+  renderStartingMarker(marker) {
+    return (
+      <MapView.Marker
+        key="1010"
+        ref="startingMarker"
+        coordinate={marker.coord}
+        pinColor={marker.pinColor}
+      >
+        {this.renderCallout(marker)}
       </MapView.Marker>
     )
   }
@@ -57,16 +112,13 @@ export default class MarkersMap extends Component {
 
 MarkersMap.propTypes = {
   ...MapView.propTypes,
-  markers         : PropTypes.array,
-  startingLocation: PropTypes.object
+  markers       : PropTypes.array,
+  startingMarker: PropTypes.object
 }
 
 MarkersMap.defaultProps = {
-  markers         : [],
-  startingLocation: {
-    longitude: 0,
-    latitude : 0
-  }
+  markers       : [],
+  startingMarker: null
 }
 
 
