@@ -422,10 +422,11 @@ const styles = StyleSheet.create({
     flex           : 0,
     flexDirection  : 'row',
     width          : undefined,
-    height         : 100,
+    height         : 80,
     justifyContent : 'space-between',
     alignItems     : 'center',
-    backgroundColor: '#000'
+    backgroundColor: '#000',
+    paddingHorizontal: 10
   },
 
   capture: {
@@ -439,7 +440,7 @@ const styles = StyleSheet.create({
   toolText: {
     color  : '#fff',
     flex   : 0,
-    padding: 15,
+    padding: 5,
     width  : 90
   },
 
