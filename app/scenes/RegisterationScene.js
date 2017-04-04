@@ -117,7 +117,6 @@ export default class RegistrationScene extends Component {
               <Text style={styles.label}>Name</Text>
               <TextInput
                 autoCapitalize={'words'}
-                autoFocus={true}
                 style={styles.textField}
                 placeholder={"E.g, Jane Doe"}
                 placeholderTextColor="#aaa"
