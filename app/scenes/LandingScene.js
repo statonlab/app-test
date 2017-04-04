@@ -198,7 +198,7 @@ export default class LandingScene extends Component {
 
   /**
    * Render login button.
-   * 
+   *
    * @returns {XML}
    */
   loginButton() {

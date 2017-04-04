@@ -5,6 +5,10 @@ import realm from '../db/Schema'
 class Observation {
   // Public Methods
 
+  constructor() {
+    this.api_token = false
+  }
+
   /**
    * Upload record to API
    *
@@ -14,8 +18,13 @@ class Observation {
   async upload(observation) {
     this._setApiToken()
 
-    if (this.api_token === '') {
+    if (this.api_token === false) {
       throw Error('User not signed in')
+    }
+
+    // Do sync already synced record
+    if (observation.synced) {
+      return
     }
 
     let form = this._setUpForm(observation)
@@ -32,7 +41,7 @@ class Observation {
   async get() {
     this._setApiToken()
 
-    if (this.api_token === '') {
+    if (this.api_token === false) {
       throw Error('User not signed in')
     }
 
@@ -49,10 +58,11 @@ class Observation {
    * @private
    */
   _setApiToken() {
-    let user       = realm.objects('User')
-    this.api_token = ''
+    let user = realm.objects('User')
     if (user.length > 0) {
       this.api_token = user[0].api_token
+    } else {
+      this.api_token = false
     }
   }
 
@@ -82,7 +92,7 @@ class Observation {
 
       let extension = name.split('.')
       extension     = extension[extension.length - 1]
-      let prefix = Platform.OS === 'android' ? '' : 'file:///'
+      let prefix    = Platform.OS === 'android' ? '' : 'file:///'
 
       form.append(`images[${i}]`, {uri: `${prefix}${image}`, name, type: `image/${extension}`})
     })
