@@ -180,7 +180,6 @@ export default class RegistrationScene extends Component {
               <Checkbox
                 label="I am over 13 years old"
                 onChange={(checked) => {
-                  alert("Check is " + (checked ? "true" : "false"))
                   this.setState({is_over_thirteen: checked})}}
               />
             </View>
