@@ -125,7 +125,7 @@ function getVerticalMargin() {
   if (Platform.OS == 'android')
     return 60
   else
-    return 76
+    return 75.5
 }
 
 const style = StyleSheet.create({

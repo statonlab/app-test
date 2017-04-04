@@ -8,8 +8,6 @@ if (__DEV__) {
   url = 'https://treesource.almsaeedstudio.com/api/v1/'
 }
 
-url = 'https://treesource.almsaeedstudio.com/api/v1/'
-
 export default Axios.create({
   baseURL: url,
   timeout: 7000,
