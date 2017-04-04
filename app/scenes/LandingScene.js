@@ -132,8 +132,8 @@ export default class LandingScene extends Component {
     }))
 
     this.events.push(DeviceEventEmitter.addListener('userLoggedIn', () => {
-      this.refs.snackbar.showBar()
       this.setState({noticeText: "Successfully logged in!"})
+      this.refs.snackbar.showBar()
       this.setSidebarLinks.bind(this)
     }))
   }
