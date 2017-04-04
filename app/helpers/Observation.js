@@ -1,3 +1,4 @@
+import {Platform} from 'react-native'
 import Axios from './Axios'
 import realm from '../db/Schema'
 
@@ -81,8 +82,9 @@ class Observation {
 
       let extension = name.split('.')
       extension     = extension[extension.length - 1]
+      let prefix = Platform.OS === 'android' ? '' : 'file:///'
 
-      form.append(`images[${i}]`, {uri: `file:///${image}`, name, type: `image/${extension}`})
+      form.append(`images[${i}]`, {uri: `${prefix}${image}`, name, type: `image/${extension}`})
     })
 
     return form

@@ -16,12 +16,18 @@ export default class UploadButton extends Component {
     }
   }
 
+  /**
+   * Verify the existence of unsynced observations.
+   */
   componentDidMount() {
     this.getObservations()
   }
 
+  /**
+   * Set the unsynced observations in the state.
+   */
   getObservations() {
-    let observations = realm.objects('Submission').filtered('synced = false')
+    let observations = realm.objects('Submission').filtered('synced == false')
     if (observations.length > 0) {
       this.setState({
         show: true,
@@ -32,6 +38,9 @@ export default class UploadButton extends Component {
     }
   }
 
+  /**
+   * Upload observations to the server.
+   */
   upload() {
     this.state.observations.forEach(observation => {
       Observation.upload(observation)
@@ -50,21 +59,16 @@ export default class UploadButton extends Component {
   render() {
     return (
       <View>
-        {this.state.show ?
+        {!this.state.show || this.state.observations.length === 0 ? null :
           <MKButton
             style={styles.button}
             onPress={this.upload.bind(this)}
           >
             <Text style={styles.buttonText}>{this.props.label} ({this.state.observations.length})</Text>
-          </MKButton> : null}
+          </MKButton>
+        }
       </View>
     )
-  }
-
-  componentWillUnmount() {
-    this.events.forEach(event => {
-      event.remove()
-    })
   }
 }
 
