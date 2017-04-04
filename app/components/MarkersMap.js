@@ -60,7 +60,9 @@ export default class MarkersMap extends Component {
     return (
       <MapView.Callout style={{width: 165}}>
         <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-          <Image source={{uri: marker.image}} style={{width: 45, height: 45}}/>
+          {!marker.image ? null :
+            <Image source={{uri: marker.image}} style={{width: 45, height: 45}}/>
+          }
           <View style={{flex: 1, marginLeft: 5, flexDirection: 'column', justifyContent: 'space-between', alignItems: 'flex-start'}}>
             <Text style={[styles.calloutText, {flex: 1, fontWeight: '500'}]}>{marker.title}</Text>
             <Text style={[styles.calloutText, {color: '#666'}]}>{marker.description}</Text>

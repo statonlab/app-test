@@ -234,7 +234,6 @@ export default class LandingScene extends Component {
           routes={this.state.sidebar}/>
         <ScrollView style={{flex: 0}}>
           <View style={styles.plantsContainer}>
-
             {this.state.userLoggedIn ? <UploadButton ref="uploadButton"/> : this.loginButton.call(this)}
 
             {plants.map((plant, index) => {
