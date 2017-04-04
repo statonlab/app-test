@@ -144,7 +144,7 @@ export default class CameraScene extends Component {
           >
           </Camera>
           <View style={styles.toolsContainer}>
-            <TouchableOpacity style={[styles.toolTouchable, {width: 60}]} onPress={this._cancel}>
+            <TouchableOpacity style={[styles.toolTouchable]} onPress={this._cancel}>
               <Text style={[styles.toolText]}>Cancel</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.capture} onPress={this.takePicture}>
@@ -152,13 +152,12 @@ export default class CameraScene extends Component {
             </TouchableOpacity>
             {this.state.images.length > 0 ?
               <TouchableOpacity
-                style={[styles.toolTouchable, {alignItems: 'flex-end', width: 60}]}
+                style={[styles.toolTouchable, {alignItems: 'flex-end'}]}
                 onPress={this._forward}>
-
                 <Image source={{uri: this.state.images[this.state.images.length - 1]}} style={styles.thumbnail}/>
               </TouchableOpacity>
               :
-              <View style={[styles.toolTouchable, {alignItems: 'flex-end', width: 60}]}>
+              <View style={[styles.toolTouchable, {alignItems: 'flex-end'}]}>
                 <View style={[styles.thumbnail, {backgroundColor: '#222'}]}></View>
               </View>
             }
@@ -236,7 +235,7 @@ export default class CameraScene extends Component {
    * @private
    */
   _forward = () => {
-    this.refs.page.scrollToEnd()
+    this.refs.page.scrollTo({x: Dimensions.get('window').width, y: 0, animated: true})
   }
 
   /**
@@ -423,7 +422,7 @@ const styles = StyleSheet.create({
     flex           : 0,
     flexDirection  : 'row',
     width          : undefined,
-    height         : 60,
+    height         : 100,
     justifyContent : 'space-between',
     alignItems     : 'center',
     backgroundColor: '#000'
