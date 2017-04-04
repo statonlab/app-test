@@ -84,7 +84,7 @@ export default class Location extends Component {
           <Text style={[styles.text]}>{this.state.currentPosition.coords.latitude.toFixed(5)}, {this.state.currentPosition.coords.longitude.toFixed(5)}</Text>
           }
 
-          {this.state.currentPosition &&
+          {typeof this.state.currentPosition === 'object' &&
           <Text style={[styles.text, {color: '#aaa'}]}>Accuracy {this.state.currentPosition.coords.accuracy} meters</Text>
           }
         </View>
