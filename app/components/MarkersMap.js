@@ -44,7 +44,7 @@ export default class MarkersMap extends Component {
         style={styles.map}
         ref="map"
       >
-        {this.props.markers.map(this.renderMarker)}
+        {this.props.markers.map(this.renderMarker.bind(this))}
         {this.props.startingMarker !== null ? this.renderStartingMarker(this.props.startingMarker) : null}
       </MapView>
     )
