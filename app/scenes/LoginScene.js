@@ -115,7 +115,7 @@ export default class LoginScene extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <ScrollView contentContainerStyle={styles.container} keyboardDismissMode={'on-drag'}>
         <Spinner show={this.state.showSpinner}/>
         <Header title={'Login'} navigator={this.props.navigator} showRightIcon={false}/>
         <View style={styles.form}>
@@ -126,7 +126,6 @@ export default class LoginScene extends Component {
             <Text style={styles.label}>Email</Text>
             <TextInput
               autoCapitalize={'none'}
-              autoFocus={true}
               style={styles.textField}
               placeholder={'Email'}
               placeholderTextColor="#aaa"
@@ -168,7 +167,7 @@ export default class LoginScene extends Component {
           </View>
 
         </View>
-      </View>
+      </ScrollView>
     )
   }
 

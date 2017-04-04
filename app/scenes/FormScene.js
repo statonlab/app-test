@@ -21,6 +21,7 @@ import PickerModal from '../components/PickerModal'
 import DCP from '../resources/config.js'
 import Observation from '../helpers/Observation'
 import SliderPick from '../components/SliderPick'
+import Location from '../components/Location'
 
 const theme = getTheme()
 
@@ -49,7 +50,7 @@ DCPrules = {
 }
 
 const Coordinate = t.refinement(t.Number, (n) => n != 0, 'Coordinate')
-const Location   = t.dict(t.String, Coordinate)
+const LocationT  = t.dict(t.String, Coordinate)
 
 
 export default class FormScene extends Component {
@@ -66,44 +67,43 @@ export default class FormScene extends Component {
       },
       metadata: {
         diameterNumeric: 25,
-        comment : '',
+        comment        : ''
       },
-      id: ''
-
+      id      : ''
     }
 
     this.events = []
     this.realm  = realm
 
-    this.formProps = this.props.formProps //read in form items to display
+    this.formProps = this.props.formProps // read in form items to display
 
     let formRules = {
       images  : t.list(t.String),
       title   : t.String,
-      location: Location
+      location: LocationT
     }
 
-    this.formRulesMeta = this.compileValRules()//build form rules from passed props
-    this.formT         = t.struct(formRules, 'formT')//build tcomb validation from rules
-    this.formTMeta     = t.struct(this.formRulesMeta, 'formTMeta')//build tcomb validation from rules
+    this.formRulesMeta = this.compileValRules() // build form rules from passed props
+    this.formT         = t.struct(formRules, 'formT') // build tcomb validation from rules
+    this.formTMeta     = t.struct(this.formRulesMeta, 'formTMeta') // build tcomb validation from rules
   }
 
   componentDidMount() {
-    let user = this.realm.objects('User')
-    if (user.length === 0) {
-      Alert.alert('You are Not Logged In',
-        'Please log in to submit observations to the server.', [
-          {
-            text: 'Login Now', onPress: () => {
-            this.props.navigator.push({label: 'LoginScene'})
-          }
-          },
-          {
-            text: 'Cancel', onPress: () => {
-          }, style                 : 'cancel'
-          }
-        ])
-    }
+    /* let user = this.realm.objects('User')
+     if (user.length === 0) {
+     Alert.alert('You are Not Logged In',
+     'Please log in to submit observations to the server.', [
+     {
+     text: 'Login Now', onPress: () => {
+     this.props.navigator.push({label: 'LoginScene'})
+     }
+     },
+     {
+     text: 'Cancel', onPress: () => {
+     }, style                 : 'cancel'
+     }
+     ])
+     }*/
 
     this.events.push(DeviceEventEmitter.addListener('locationCaptured', this.updateLocation))
     this.events.push(DeviceEventEmitter.addListener('cameraCapturedPhotos', this.handleImages))
@@ -162,7 +162,7 @@ export default class FormScene extends Component {
     this.props.navigator.push({
       label   : 'SubmittedScene',
       plant   : observation,
-      gestures: {},
+      gestures: {}
     })
   }
 
@@ -244,6 +244,7 @@ export default class FormScene extends Component {
         </View>
       )
     }
+
     return (
       <View style={styles.formGroup} key={key}>
         <PickerModal
@@ -310,16 +311,8 @@ export default class FormScene extends Component {
             </View>
 
             <View style={styles.formGroup}>
-              <MKButton
-                style={[styles.buttonLink]}
-                onPress={() => this.props.navigator.push({label: 'CaptureLocationScene'})}
-              >
-                <Text style={styles.label}>Location</Text>
-                <Text style={[styles.buttonLinkText, {flex: 1, color: this.state.location.latitude === 0 ? '#aaa' : '#444'}]}>
-                  {this.state.location.latitude === 0 ? 'Enter location' : `${this.state.location.latitude},${this.state.location.longitude}`}
-                </Text>
-                <Icon name="map" style={styles.icon}/>
-              </MKButton>
+              <Text style={styles.label}>Location</Text>
+              <Location />
             </View>
 
             {Object.keys(this.props.formProps).map(this.populateFormItem)}
@@ -524,16 +517,18 @@ const styles = StyleSheet.create({
     resizeMode: 'cover'
   },
 
-  footer    : {
+  footer: {
     flex             : 0,
     flexDirection    : 'row',
     justifyContent   : 'space-between',
     paddingVertical  : 10,
     paddingHorizontal: 5
   },
-  slider    : {
+
+  slider: {
     width: 200
   },
+
   sliderPair: {}
 })
 
