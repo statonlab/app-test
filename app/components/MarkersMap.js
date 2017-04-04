@@ -4,12 +4,20 @@ import MapView from 'react-native-maps'
 import Colors from '../helpers/Colors'
 
 export default class MarkersMap extends Component {
+  /**
+   * Call zoom to marker if a starting marker is specified.
+   */
   componentDidMount() {
     if (this.props.startingMarker !== null) {
       this.zoomToMarker(this.props.startingMarker)
     }
   }
 
+  /**
+   * Zooms to the given marker and shows the callout of the starting marker.
+   *
+   * @param marker
+   */
   zoomToMarker(marker) {
     setTimeout(() => {
       this.refs.map.animateToRegion({
@@ -25,6 +33,11 @@ export default class MarkersMap extends Component {
     }, 1500)
   }
 
+  /**
+   * Render Scene.
+   *
+   * @returns {XML}
+   */
   render() {
     return (
       <MapView
@@ -37,6 +50,12 @@ export default class MarkersMap extends Component {
     )
   }
 
+  /**
+   * Render the callout for a marker.
+   *
+   * @param marker
+   * @returns {XML}
+   */
   renderCallout(marker) {
     return (
       <MapView.Callout style={{width: 165}}>
@@ -51,6 +70,13 @@ export default class MarkersMap extends Component {
     )
   }
 
+  /**
+   * Render the marker on the map.
+   *
+   * @param marker
+   * @param index
+   * @returns {XML}
+   */
   renderMarker(marker, index) {
     return (
       <MapView.Marker
@@ -63,6 +89,13 @@ export default class MarkersMap extends Component {
     )
   }
 
+  /**
+   * Render the starting marker. This is a separate method because we
+   * need to assign a ref to the marker.
+   *
+   * @param marker
+   * @returns {XML}
+   */
   renderStartingMarker(marker) {
     return (
       <MapView.Marker
