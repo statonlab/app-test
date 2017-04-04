@@ -95,7 +95,7 @@ export default class LandingScene extends Component {
     this.state = {
       sidebar     : [],
       userLoggedIn: false,
-      noticeText  : "default message"
+      noticeText  : 'default message'
     }
 
     // Hold all events so we can remove them later and prevent memory leaks
@@ -112,12 +112,12 @@ export default class LandingScene extends Component {
     })
 
     this.events.push(DeviceEventEmitter.addListener('userLoggedOut', () => {
-      this.setSidebarLinks()
       if (this.refs.uploadButton) {
         this.refs.uploadButton.getObservations()
       }
+      this.setSidebarLinks()
       this.setState({userLoggedIn: false})
-      this.setState({noticeText: "Successfully logged out!"})
+      this.setState({noticeText: 'Successfully logged out!'})
       this.refs.snackbar.showBar()
     }))
 
@@ -126,14 +126,13 @@ export default class LandingScene extends Component {
         this.refs.uploadButton.getObservations()
       }
       this.setState({userLoggedIn: true})
-      this.setState({noticeText: "New submission created!"})
+      this.setState({noticeText: 'New submission created!'})
       this.refs.snackbar.showBar()
-
     }))
 
     this.events.push(DeviceEventEmitter.addListener('userLoggedIn', () => {
-      this.setState({noticeText: "Successfully logged in!"})
-      this.setSidebarLinks.bind(this)
+      this.setState({noticeText: 'Successfully logged in!'})
+      this.setSidebarLinks()
       this.refs.snackbar.showBar()
     }))
   }

@@ -1,9 +1,10 @@
 import React, {Component, PropTypes} from 'react'
-import {Animated,
+import {
+  Animated,
   View,
   Text,
   TouchableHighlight,
-  StyleSheet,
+  StyleSheet
 } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import Elevation from '../helpers/Elevation'
@@ -14,10 +15,9 @@ export default class SnackBarNotice extends Component {
     super(props)
 
     this.state = {
-      isVisible: false,
-      noticeText : '',
-      position: new Animated.Value(-250),
-
+      isVisible : false,
+      noticeText: '',
+      position  : new Animated.Value(-250)
     }
   }
 
@@ -30,7 +30,7 @@ export default class SnackBarNotice extends Component {
   }
 
   showBar = () => {
-    this.setState({noticeText : this.props.noticeText})
+    this.setState({noticeText: this.props.noticeText})
     this.setState({isVisible: true})
 
     Animated.timing(
@@ -42,7 +42,6 @@ export default class SnackBarNotice extends Component {
     ).start()
 
     setTimeout(this.closeBar, 4000)
-
   }
 
   closeBar = () => {
@@ -53,58 +52,61 @@ export default class SnackBarNotice extends Component {
         duration: 500
       }
     ).start()
-    this.setState({isVisible: false})
 
+    setTimeout(() => {
+      this.setState({isVisible: false})
+    }, 1000)
   }
 
 //For now will only get message icon.  In the future other icons could be displayed.
 
   getIcon = () => {
     return (
-        <Icon name="message" size={23} color="#fff"/>
+      <Icon name="message" size={23} color="#fff"/>
     )
   }
 
 
   renderBar = () => {
     if (this.state.isVisible)
-    return(
-      <TouchableHighlight
-        underlayColor={Colors.primary}
-        onPress={() => {this.closeBar()}}>
-        <Animated.View style={[styles.container, {bottom: this.state.position}]}>
-          <Text style={[styles.text]}>{this.state.noticeText}</Text>
-          {this.getIcon()}
-        </Animated.View>
-      </TouchableHighlight>
+      return (
+        <TouchableHighlight
+          underlayColor={Colors.primary}
+          onPress={() => {
+            this.closeBar()
+          }}>
+          <Animated.View style={[styles.container, {bottom: this.state.position}]}>
+            <Text style={[styles.text]}>{this.state.noticeText}</Text>
+            {this.getIcon()}
+          </Animated.View>
+        </TouchableHighlight>
       )
   }
-
 
 
   render() {
     return (
       <View>
-          {this.renderBar()}
+        {this.renderBar()}
       </View>
     )
   }
 }
 
 SnackBarNotice.propTypes = {
-  initial      : PropTypes.bool,
-  elevation    : PropTypes.number,
-  noticeText : PropTypes.string,
-  timeout : PropTypes.number,
-  icon : PropTypes.string
+  initial   : PropTypes.bool,
+  elevation : PropTypes.number,
+  noticeText: PropTypes.string,
+  timeout   : PropTypes.number,
+  icon      : PropTypes.string
 }
 
 SnackBarNotice.defaultProps = {
-  initial      : false,
-  elevation    : 3,
-  noticeText : "SnackBar notice text!",
-  timeout : 3000,
-  icon : "message"
+  initial   : false,
+  elevation : 3,
+  noticeText: 'SnackBar notice text!',
+  timeout   : 3000,
+  icon      : 'message'
 
 }
 
@@ -115,7 +117,7 @@ const styles = StyleSheet.create({
   text: {
     color     : Colors.primaryText,
     fontSize  : 18,
-    fontWeight: '600',
+    fontWeight: '600'
   },
 
   right: {
@@ -124,18 +126,18 @@ const styles = StyleSheet.create({
 
   container: {
     ...(new Elevation(2)),
-    position: 'absolute',
-    bottom: 0,
-  left: 20,
-  right: 20,
-  height: 60,
-  flex: 1,
-  flexDirection: 'row',
-  padding: 10,
-  justifyContent: 'space-between',
-  backgroundColor :  Colors.black,
-  alignItems: 'center'
-  // add bg color
-}
+    position       : 'absolute',
+    bottom         : 0,
+    left           : 20,
+    right          : 20,
+    height         : 60,
+    flex           : 1,
+    flexDirection  : 'row',
+    padding        : 10,
+    justifyContent : 'space-between',
+    backgroundColor: Colors.black,
+    alignItems     : 'center'
+    // add bg color
+  }
 
 })
