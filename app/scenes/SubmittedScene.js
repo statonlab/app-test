@@ -15,43 +15,35 @@ export default class SubmittedScene extends Component {
   constructor(props) {
     super(props)
 
-    let data    = this.props.plant
-    this.marker = {
-      id         : data.id,
-      title      : data.title,
-      image      : data.images[0],
-      description: `${data.location.latitude}, ${data.location.longitude}`,
-      coordinates: {
-        latitude : data.location.latitude,
-        longitude: data.location.longitude
-      }
-    }
+    this.id = this.props.plant.id
+    this.marker = {}
   }
 
   renderMap() {
     let submissions = realm.objects('Submission')
     let markers     = []
 
-    submissions.map((submission, index) => {
-      let markerDB = {
+    submissions.map(submission => {
+      let marker = {
         title      : submission.name,
         image      : JSON.parse(submission.images)[0],
-        description: 'What should we put here?',
+        description: `${submission.location.latitude}, ${submission.location.longitude}`,
         coord      : {
-          longitude: submission.location.longitude,
-          latitude : submission.location.latitude
+          latitude : submission.location.latitude,
+          longitude: submission.location.longitude
         },
         pinColor   : Colors.primary
       }
 
-      if (submission.id === this.marker.id) {
-        markerDB.pinColor = Colors.info
+      if (submission.id === this.id) {
+        marker.pinColor = Colors.info
+        this.marker = marker
       }
 
-      markers.push(markerDB)
+      markers.push(marker)
     })
 
-    return (<MarkersMap markers={markers} startingLocation={this.marker.coordinates}/>)
+    return (<MarkersMap markers={markers} startingMarker={this.marker}/>)
   }
 
   render() {

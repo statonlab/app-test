@@ -5,31 +5,34 @@ import Colors from '../helpers/Colors'
 
 export default class MarkersMap extends Component {
   componentDidMount() {
-    if (this.props.startingLocation.longitude !== 0) {
-      this.zoomToMarker(this.props.startingLocation)
+    if (this.props.startingMarker !== null) {
+      this.zoomToMarker(this.props.startingMarker)
     }
   }
 
-  zoomToMarker(location) {
+  zoomToMarker(marker) {
     setTimeout(() => {
       this.refs.map.animateToRegion({
-        latitude      : location.latitude,
-        longitude     : location.longitude,
-        latitudeDelta : 0.0922,
-        longitudeDelta: 0.0421
+        latitude      : marker.coord.latitude,
+        longitude     : marker.coord.longitude,
+        latitudeDelta : 0.0322,
+        longitudeDelta: 0.0321
       }, 1000)
-      if (this.marker) {
-        this.marker.showCallout()
-      }
     }, 500)
+
+    setTimeout(() => {
+      this.refs.startingMarker.showCallout()
+    }, 1500)
   }
 
   render() {
     return (
       <MapView
         style={styles.map}
-        ref="map">
+        ref="map"
+      >
         {this.props.markers.map(this.renderMarker)}
+        {this.props.startingMarker !== null ? this.renderStartingMarker(this.props.startingMarker) : null}
       </MapView>
     )
   }
@@ -53,20 +56,38 @@ export default class MarkersMap extends Component {
       </MapView.Marker>
     )
   }
+
+  renderStartingMarker(marker) {
+    return (
+      <MapView.Marker
+        key="1010"
+        ref="startingMarker"
+        coordinate={marker.coord}
+        pinColor={marker.pinColor}
+      >
+        <MapView.Callout style={{width: 165}}>
+          <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+            <Image source={{uri: marker.image}} style={{width: 45, height: 45}}/>
+            <View style={{flex: 1, marginLeft: 5, flexDirection: 'column', justifyContent: 'space-between', alignItems: 'flex-start'}}>
+              <Text style={[styles.calloutText, {flex: 1, fontWeight: '500'}]}>{marker.title}</Text>
+              <Text style={[styles.calloutText, {color: '#666'}]}>{marker.description}</Text>
+            </View>
+          </View>
+        </MapView.Callout>
+      </MapView.Marker>
+    )
+  }
 }
 
 MarkersMap.propTypes = {
   ...MapView.propTypes,
-  markers         : PropTypes.array,
-  startingLocation: PropTypes.object
+  markers       : PropTypes.array,
+  startingMarker: PropTypes.object
 }
 
 MarkersMap.defaultProps = {
-  markers         : [],
-  startingLocation: {
-    longitude: 0,
-    latitude : 0
-  }
+  markers       : [],
+  startingMarker: null
 }
 
 
