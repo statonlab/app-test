@@ -13,12 +13,13 @@ import realm from '../db/Schema'
 import moment from 'moment'
 import {MKButton} from 'react-native-material-kit'
 import Elevation from '../helpers/Elevation'
+import Observation from '../helpers/Observation'
 
-export default class SubmissionsScene extends Component {
+export default class ObservationsScene extends Component {
   constructor(props) {
     super(props)
 
-    let dataSource  = new ListView.DataSource({
+    this.dataSource  = new ListView.DataSource({
       rowHasChanged          : (r1, r2) => r1.id !== r2.id,
       sectionHeaderHasChanged: () => {
       }
@@ -27,7 +28,7 @@ export default class SubmissionsScene extends Component {
 
     this.state = {
       hasData    : (submissions.length > 0),
-      submissions: dataSource.cloneWithRowsAndSections(this._createMap(submissions))
+      submissions: this.dataSource.cloneWithRowsAndSections(this._createMap(submissions))
     }
   }
 
@@ -67,7 +68,7 @@ export default class SubmissionsScene extends Component {
         <Image source={{uri: images[0]}} style={styles.image}/>
         <View style={styles.textContainer}>
           <Text style={styles.title}>{submission.name}</Text>
-          <Text style={styles.body}>{moment(submission.date, "MM-DD-YYYY HH:mm:ss").format("MMMM Do YYYY")}</Text>
+          <Text style={styles.body}>{moment(submission.date, 'MM-DD-YYYY HH:mm:ss').format('MMMM Do YYYY')}</Text>
           <Text style={styles.body}>Near {submission.location.latitude.toFixed(4)}, {submission.location.longitude.toFixed(4)}</Text>
         </View>
         <MKButton style={[styles.textContainer, styles.rightElement]}>
@@ -78,11 +79,11 @@ export default class SubmissionsScene extends Component {
   }
 
   _renderSectionHeader = (data, id) => {
-    if(id == 'Needs Uploading') {
+    if (id === 'Needs Uploading') {
       return (
         <View style={[styles.headerContainer, {flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}]}>
           <Text style={styles.headerText}>{id}</Text>
-          <MKButton style={{...(new Elevation(2)), backgroundColor: Colors.warning, padding: 5, borderRadius: 2}} onPress={() => {}}>
+          <MKButton style={{...(new Elevation(2)), backgroundColor: Colors.warning, paddingVertical: 10, paddingHorizontal: 15, borderRadius: 2}} onPress={this._uploadAll.bind(this)}>
             <Text style={[styles.headerText, {color: Colors.warningText}]}>Upload All</Text>
           </MKButton>
         </View>
@@ -120,8 +121,27 @@ export default class SubmissionsScene extends Component {
 
   _goToEntryScene = (plant) => {
     this.props.navigator.push({
-      label: 'ViewEntryScene',
+      label: 'ObservationScene',
       plant
+    })
+  }
+
+  _uploadAll() {
+    let observations = realm.objects('Submission').filtered('synced == false')
+    observations.forEach(observation => {
+      Observation.upload(observation).then(response => {
+        // TODO: Add snackbar notification
+        console.log(response)
+        realm.write(() => {
+          observation.synced = true
+          this.setState({
+            submissions: this.dataSource.cloneWithRowsAndSections(this._createMap(realm.objects('Submission')))
+          })
+        })
+      }).catch(error => {
+        // TODO: Handle Error!
+        console.log(error)
+      })
     })
   }
 
@@ -135,7 +155,7 @@ export default class SubmissionsScene extends Component {
   }
 }
 
-SubmissionsScene.PropTypes = {
+ObservationsScene.PropTypes = {
   navigator: PropTypes.object.isRequired
 }
 
@@ -219,7 +239,7 @@ const styles = StyleSheet.create({
   },
 
   headerText: {
-    color     : '#444',
+    color     : '#111',
     fontWeight: '500'
   }
 })

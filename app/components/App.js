@@ -17,8 +17,8 @@ import PrivacyPolicyScene from '../scenes/PrivacyPolicyScene'
 import HealthSafetyScene from '../scenes/HealthSafetyScene'
 import LoginScene from '../scenes/LoginScene'
 import RegistrationScene from '../scenes/RegisterationScene'
-import SubmissionsScene from '../scenes/SubmissionsScene'
-import ViewEntryScene from '../scenes/ViewEntryScene'
+import ObservationsScene from '../scenes/ObservationsScene'
+import ObservationScene from '../scenes/ObservationScene'
 
 const initialRouteStack = [
   {
@@ -28,19 +28,19 @@ const initialRouteStack = [
 
 export default class WildType extends Component {
   renderScene(route, navigator) {
-    if (route.label == 'LandingScene') {
+    if (route.label === 'LandingScene') {
       return <LandingScene title="Overview" navigator={navigator}/>
     }
 
-    if (route.label == 'MapScene') {
+    if (route.label === 'MapScene') {
       return <MapScene title="Your Entries" navigator={navigator}/>
     }
 
-    if (route.label == 'FormScene') {
+    if (route.label === 'FormScene') {
       return <FormScene title={route.title} navigator={navigator} formProps={route.formProps}/>
     }
 
-    if (route.label == 'CameraScene') {
+    if (route.label === 'CameraScene') {
       return <CameraScene navigator={navigator} images={route.images ? route.images : []}/>
     }
 
@@ -49,44 +49,44 @@ export default class WildType extends Component {
       return <CapturedScene navigator={navigator} image={route.image}/>
     }**/
 
-    if (route.label == 'CaptureLocationScene') {
+    if (route.label === 'CaptureLocationScene') {
       return <CaptureLocationScene title={route.title} navigator={navigator}/>
     }
 
-    if (route.label == 'TreeDescriptionScene') {
+    if (route.label === 'TreeDescriptionScene') {
       return <TreeDescriptionScene title={route.title} navigator={navigator} image={route.image}/>
     }
 
-    if (route.label == 'SubmittedScene') {
+    if (route.label === 'SubmittedScene') {
       return <SubmittedScene navigator={navigator} plant={route.plant}/>
     }
 
-    if (route.label == 'LoginScene') {
+    if (route.label === 'LoginScene') {
       return <LoginScene navigator={navigator} email={route.email} />
     }
 
-    if (route.label == 'RegistrationScene') {
+    if (route.label === 'RegistrationScene') {
       return <RegistrationScene navigator={navigator}/>
     }
 
-    if(route.label == 'SubmissionsScene') {
-      return <SubmissionsScene navigator={navigator}/>
+    if(route.label === 'ObservationsScene') {
+      return <ObservationsScene navigator={navigator}/>
     }
 
-    if(route.label == 'ViewEntryScene') {
-      return <ViewEntryScene navigator={navigator} plant={route.plant}/>
+    if(route.label === 'ObservationScene') {
+      return <ObservationScene navigator={navigator} plant={route.plant}/>
     }
 
     // Static Scenes
-    if (route.label == 'AboutScene') {
+    if (route.label === 'AboutScene') {
       return <AboutScene navigator={navigator}/>
     }
 
-    if (route.label == 'HealthSafetyScene') {
+    if (route.label === 'HealthSafetyScene') {
       return <HealthSafetyScene navigator={navigator}/>
     }
 
-    if (route.label == 'PrivacyPolicyScene') {
+    if (route.label === 'PrivacyPolicyScene') {
       return <PrivacyPolicyScene navigator={navigator}/>
     }
   }

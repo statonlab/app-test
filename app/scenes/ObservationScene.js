@@ -10,6 +10,7 @@ import {
 import Header from '../components/Header'
 import Colors from '../helpers/Colors'
 import {MKButton} from 'react-native-material-kit'
+import DCP from '../resources/config.js'
 
 export default class ViewEntryScene extends Component {
   constructor(props) {
@@ -29,18 +30,33 @@ export default class ViewEntryScene extends Component {
       return null
     }
 
-    return (
-      <View style={styles.field}>
-        <Text style={styles.label}>{typeof data}</Text>
-        <Text style={styles.dataText}>{data}</Text>
-      </View>
-    )
+    return Object.keys(data).sort().map((key) => {
+      let text = data[key]
+      let label = DCP[key] ? DCP[key].label : key
+
+      // If it is an array, convert it to text
+      if (/^\[.*\]$/g.test(text)) {
+        let array = JSON.parse(text)
+        text      = array.toString().replace(',', ', ')
+      }
+
+      if (text === '' || text === null) {
+        return null
+      }
+
+      return (
+        <View style={styles.field} key={key}>
+          <Text style={styles.label}>{label}</Text>
+          <Text style={styles.dataText}>{text}</Text>
+        </View>
+      )
+    })
   }
 
   render() {
     let entry  = this.props.plant
     let images = JSON.parse(entry.images)
-    console.log(entry)
+
     return (
       <View style={styles.container}>
         <Header navigator={this.props.navigator} title={entry.name}/>
@@ -56,14 +72,14 @@ export default class ViewEntryScene extends Component {
             })}
           </ScrollView>
           <View style={styles.card}>
-            <View style={styles.field}>
-              {entry.synced ?
-                <Text style={styles.dataText}>Uploaded</Text> :
+            {entry.synced ? null :
+              <View style={styles.field}>
                 <MKButton style={styles.button}>
-                  <Text style={styles.buttonText}>Click to Upload</Text>
+                  <Text style={styles.buttonText}>Upload to Server</Text>
                 </MKButton>
-              }
-            </View>
+              </View>
+            }
+
             <View style={styles.field}>
               <Text style={styles.label}>Date Collected</Text>
               <Text style={styles.dataText}>{entry.date}</Text>

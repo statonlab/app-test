@@ -9,7 +9,7 @@ import {
   Alert,
   DeviceEventEmitter
 } from 'react-native'
-import {getTheme} from 'react-native-material-kit'
+import {getTheme, MKButton} from 'react-native-material-kit'
 import Icon from 'react-native-vector-icons/Ionicons'
 import realm from '../db/Schema'
 import Header from '../components/Header'
@@ -34,11 +34,11 @@ const plants = [
   },
   {
     title: 'White Oak',
-    image: require('../img/white_oak.jpg'),
+    image: require('../img/white_oak.jpg')
   },
   {
     title: 'Other',
-    image: require('../img/hydrangea.jpg'),
+    image: require('../img/hydrangea.jpg')
 
   }
 ]
@@ -52,7 +52,7 @@ export default class LandingScene extends Component {
       {
         icon : 'map-marker-radius',
         title: 'My Entries',
-        label: 'SubmissionsScene'
+        label: 'ObservationsScene'
       },
       {
         icon : 'account-card-details',
@@ -92,7 +92,8 @@ export default class LandingScene extends Component {
     ]
 
     this.state = {
-      sidebar: []
+      sidebar     : [],
+      userLoggedIn: false
     }
 
     // Hold all events so we can remove them later and prevent memory leaks
@@ -104,14 +105,23 @@ export default class LandingScene extends Component {
    */
   componentDidMount() {
     this.setSidebarLinks()
+    this.setState({
+      userLoggedIn: this.isLoggedIn()
+    })
 
     this.events.push(DeviceEventEmitter.addListener('userLoggedOut', () => {
       this.setSidebarLinks()
-      this.refs.uploadButton.getObservations()
+      if (this.refs.uploadButton) {
+        this.refs.uploadButton.getObservations()
+      }
+      this.setState({userLoggedIn: false})
     }))
 
     this.events.push(DeviceEventEmitter.addListener('newSubmission', () => {
-      this.refs.uploadButton.getObservations()
+      if (this.refs.uploadButton) {
+        this.refs.uploadButton.getObservations()
+      }
+      this.setState({userLoggedIn: true})
     }))
 
     this.events.push(DeviceEventEmitter.addListener('userLoggedIn', this.setSidebarLinks.bind(this)), {})
@@ -186,6 +196,14 @@ export default class LandingScene extends Component {
     this.refs.sidebar.toggleMenu()
   }
 
+  loginButton() {
+    return (
+      <MKButton style={styles.button} onPress={() => this.props.navigator.push({label: 'LoginScene'})}>
+        <Text style={styles.buttonText}>Login to upload your entries</Text>
+      </MKButton>
+    )
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -201,7 +219,7 @@ export default class LandingScene extends Component {
           routes={this.state.sidebar}/>
         <ScrollView style={{flex: 0}}>
           <View style={styles.plantsContainer}>
-            <UploadButton ref="uploadButton"/>
+            {this.state.userLoggedIn ? <UploadButton ref="uploadButton"/> : this.loginButton.call(this)}
 
             {plants.map((plant, index) => {
               return (
@@ -239,18 +257,20 @@ LandingScene.propTypes = {
 const elevationStyle = new Elevation(2)
 
 const styles = StyleSheet.create({
-  container      : {
+  container: {
     backgroundColor: '#f5f5f5',
     flex           : 1,
     flexDirection  : 'column'
   },
-  card           : {
+
+  card: {
     ...theme.cardStyle,
     ...elevationStyle,
     marginBottom: 10,
     borderRadius: 3
   },
-  cardImage      : {
+
+  cardImage: {
     height              : 150,
     resizeMode          : 'cover',
     width               : undefined,
@@ -258,7 +278,8 @@ const styles = StyleSheet.create({
     borderTopLeftRadius : 3,
     backgroundColor     : '#fff'
   },
-  cardTitle      : {
+
+  cardTitle: {
     ...theme.cardTitleStyle,
     fontSize: 14,
     flex    : 50,
@@ -267,20 +288,38 @@ const styles = StyleSheet.create({
     top     : 0,
     left    : 0
   },
-  cardBody       : {
+
+  cardBody: {
     flexDirection : 'row',
     flex          : 1,
     padding       : 10,
     alignItems    : 'center',
     justifyContent: 'center'
   },
-  icon           : {
+
+  icon: {
     backgroundColor: 'transparent'
   },
+
   plantsContainer: {
     marginHorizontal: 5,
     flex            : 1,
     flexDirection   : 'column',
     paddingVertical : 10
+  },
+
+  button: {
+    ...(new Elevation(2)),
+    paddingVertical  : 15,
+    paddingHorizontal: 10,
+    marginBottom     : 10,
+    backgroundColor  : Colors.warning,
+    borderRadius     : 2
+  },
+
+  buttonText: {
+    color     : Colors.warningText,
+    fontWeight: '500',
+    textAlign : 'center'
   }
 })
