@@ -17,6 +17,7 @@ import Sidebar from '../components/Sidebar'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
 import UploadButton from '../components/UploadButton'
+import SnackBarNotice from '../components/SnackBarNotice'
 
 const theme  = getTheme()
 const plants = [
@@ -93,7 +94,8 @@ export default class LandingScene extends Component {
 
     this.state = {
       sidebar     : [],
-      userLoggedIn: false
+      userLoggedIn: false,
+      noticeText  : "default message"
     }
 
     // Hold all events so we can remove them later and prevent memory leaks
@@ -115,6 +117,8 @@ export default class LandingScene extends Component {
         this.refs.uploadButton.getObservations()
       }
       this.setState({userLoggedIn: false})
+      this.setState({noticeText: "Successfully logged out!"})
+      this.refs.snackbar.showBar()
     }))
 
     this.events.push(DeviceEventEmitter.addListener('newSubmission', () => {
@@ -122,9 +126,16 @@ export default class LandingScene extends Component {
         this.refs.uploadButton.getObservations()
       }
       this.setState({userLoggedIn: true})
+      this.setState({noticeText: "New submission created!"})
+      this.refs.snackbar.showBar()
+
     }))
 
-    this.events.push(DeviceEventEmitter.addListener('userLoggedIn', this.setSidebarLinks.bind(this)), {})
+    this.events.push(DeviceEventEmitter.addListener('userLoggedIn', () => {
+      this.refs.snackbar.showBar()
+      this.setState({noticeText: "Successfully logged in!"})
+      this.setSidebarLinks.bind(this)
+    }))
   }
 
   /**
@@ -224,6 +235,7 @@ export default class LandingScene extends Component {
           routes={this.state.sidebar}/>
         <ScrollView style={{flex: 0}}>
           <View style={styles.plantsContainer}>
+
             {this.state.userLoggedIn ? <UploadButton ref="uploadButton"/> : this.loginButton.call(this)}
 
             {plants.map((plant, index) => {
@@ -249,6 +261,7 @@ export default class LandingScene extends Component {
             })}
           </View>
         </ScrollView>
+        <SnackBarNotice ref="snackbar" noticeText={this.state.noticeText}/>
       </View>
     )
   }
