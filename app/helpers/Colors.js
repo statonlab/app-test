@@ -10,7 +10,7 @@ const NamedColors = {
   lightRedOchre : "#E76F51",
   sandyBrown    : "#F4A261",
   hansaYellow   : "#E9C46A",
-
+  black : '#212121',
   darkerJungleGreen: "#25897d",
 }
 
@@ -21,6 +21,7 @@ const Colors = {
   danger : NamedColors.lightRedOchre,
   info   : NamedColors.sandyBrown,
   success: NamedColors.jungleGreen,
+  black : NamedColors.black,
 
   primaryText: "#ffffff",
   darkerPrimaryText: "#ffffff",
