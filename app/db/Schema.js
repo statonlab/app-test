@@ -33,7 +33,9 @@ const SubmissionSchema = {
     date    : {type: 'string', default: ''},
     synced  : {type: 'bool', default: false},
     // JSON String
-    meta_data: {type: 'string', default: ''}
+    meta_data: {type: 'string', default: ''},
+    // The observation id returned by the server upon uploading
+    serverID: {type: 'int', default: -1}
   }
 }
 
@@ -56,12 +58,6 @@ const UserSchema = {
     api_token       : {type: 'string', default: ''},
     zipcode         : {type: 'string', default: ''},
     is_over_thirteen: {type: 'bool', default: false}
-    //ignored fields present in DB
-    //userid
-    //password
-    //remember_token
-    //created_at
-    //updated_at
   }
 }
 

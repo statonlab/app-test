@@ -9,6 +9,7 @@ import {
   Alert,
   DeviceEventEmitter
 } from 'react-native'
+import moment from 'moment'
 import {getTheme, MKButton} from 'react-native-material-kit'
 import Icon from 'react-native-vector-icons/Ionicons'
 import realm from '../db/Schema'
@@ -18,6 +19,7 @@ import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
 import UploadButton from '../components/UploadButton'
 import SnackBarNotice from '../components/SnackBarNotice'
+import Observation from '../helpers/Observation'
 
 const theme  = getTheme()
 const plants = [
@@ -58,11 +60,13 @@ export default class LandingScene extends Component {
         icon : 'account-card-details',
         title: 'About Us',
         label: 'AboutScene'
-      }, {
+      }, 
+      {
         icon : 'sign-caution',
         title: 'Health and Safety',
         label: 'HealthSafetyScene'
-      }, {
+      },
+      {
         icon : 'lock',
         title: 'Privacy Policy',
         label: 'PrivacyPolicyScene'
@@ -137,6 +141,7 @@ export default class LandingScene extends Component {
       })
       this.setSidebarLinks()
       this.refs.snackbar.showBar()
+      this.downloadObservations()
     }))
   }
 
@@ -146,6 +151,48 @@ export default class LandingScene extends Component {
   componentWillUnmount() {
     this.events.forEach(event => {
       event.remove()
+    })
+  }
+
+  /**
+   * Download observations from the server and add them to realm
+   * if they don't already exist
+   */
+  downloadObservations() {
+    let emptyDB = (realm.objects('Submission').length <= 0)
+
+    Observation.get().then(response => {
+      let records = response.data.data
+      console.log(records)
+      records.forEach(record => {
+        let exists = (realm.objects('Submission').filtered(`serverID == ${record.observation_id}`).length > 0)
+        if (exists) {
+          return
+        }
+
+        let primaryKey = 1
+
+        if (!emptyDB) {
+          primaryKey = realm.objects('Submission').sorted('id', true)[0].id + 1
+        }
+
+        realm.write(() => {
+          realm.create('Submission', {
+            id       : primaryKey,
+            name     : record.observation_category,
+            images   : JSON.stringify(record.images),
+            location : record.location,
+            date     : moment(record.date.date).toString(),
+            synced   : true,
+            meta_data: JSON.stringify(record.meta_data),
+            serverID : parseInt(record.observation_id)
+          })
+
+          emptyDB = false
+        })
+      })
+    }).catch(error => {
+      console.log('NETWORK ERROR', error)
     })
   }
 
@@ -183,8 +230,8 @@ export default class LandingScene extends Component {
           onPress: () => {
             // Deletes all user records thus logging out
             realm.write(() => {
-              let users = realm.objects('User')
-              realm.delete(users)
+              realm.objects('User').delete()
+              realm.objects('Submission').delete()
             })
             DeviceEventEmitter.emit('userLoggedOut')
           }

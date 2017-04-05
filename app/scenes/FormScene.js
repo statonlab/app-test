@@ -141,7 +141,6 @@ export default class FormScene extends Component {
     let observation = {
       id       : primaryKey,
       name     : this.state.title.toString(),
-      species  : this.state.title.toString(),
       images   : JSON.stringify(this.state.images),
       location : this.state.location,
       date     : moment().format('MM-DD-YYYY HH:mm:ss').toString(),
