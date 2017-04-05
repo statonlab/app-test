@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react'
-import {View, ScrollView, StyleSheet, TextInput, Text, Platform, Alert} from 'react-native'
+import {View, ScrollView, StyleSheet, TextInput, Text, DeviceEventEmitter} from 'react-native'
 import {MKButton} from 'react-native-material-kit'
 import Header from '../components/Header'
 import Elevation from '../helpers/Elevation'
@@ -28,8 +28,8 @@ export default class RegistrationScene extends Component {
 
     this.registrationRules = t.struct({
       email           : t.String, // No validation
-      password        : t.refinement(t.String, (pw) => pw.length >= 6, "pw"),// Ensure password is at least 6 characters
-      confirmPassword : t.refinement(t.String, (pw) => pw === this.state.password, "confirmPW"), // Ensure matches password
+      password        : t.refinement(t.String, (pw) => pw.length >= 6, 'pw'),// Ensure password is at least 6 characters
+      confirmPassword : t.refinement(t.String, (pw) => pw === this.state.password, 'confirmPW'), // Ensure matches password
       is_over_thirteen: t.Boolean, //t.refinement(t.Boolean, (val) => val, "overThirteen"),
       zipcode         : t.maybe(t.refinement(t.String, (n) => /^([0-9]{5})(-[0-9]{4})?$/i.test(n), 'zipCode'))
     })
@@ -45,14 +45,14 @@ export default class RegistrationScene extends Component {
   }
 
   writeToRealm = (responseFull) => {
-    console.log("writing to realm")
+    console.log('writing to realm')
     this.realm.write(() => {
       // Delete existing users first
       this.realm.deleteAll()
 
       let response = responseFull.data.data
 
-      if (!response.zipcode){
+      if (!response.zipcode) {
         response.zipcode = ''
       }
       this.realm.create('User', {
@@ -70,22 +70,23 @@ export default class RegistrationScene extends Component {
   }
 
   axiosRequest = () => {
-    let request = this.state;
+    let request = this.state
 
     this.setState({showSpinner: true})
 
     axios.post('users', request)
       .then(response => {
-        console.log('RES', response.data);
+        console.log('RES', response.data)
         //write to realm
         this.writeToRealm(response)
         this.setState({showSpinner: false})
+        DeviceEventEmitter.emit('userRegistered')
       })
       .catch(error => {
-        console.log('ERR', error);
+        console.log('ERR', error)
         // alert(error[0]);
         this.setState({showSpinner: false})
-      });
+      })
   }
 
   validateState = () => {
@@ -94,7 +95,7 @@ export default class RegistrationScene extends Component {
 
   // A modal that parses the tcomb error and alerts user which fields are invalid
   notifyIncomplete = (validationAttempt) => {
-    errors = [];
+    errors = []
     for (errorIndex in validationAttempt.errors) {
       errors.push(validationAttempt.errors[errorIndex].message)
     }
@@ -105,7 +106,7 @@ export default class RegistrationScene extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Spinner show={this.state.showSpinner} />
+        <Spinner show={this.state.showSpinner}/>
         <Header title="Register" navigator={this.props.navigator} showRightIcon={false}/>
         <ScrollView keyboardDismissMode="on-drag">
           <View style={styles.form}>
@@ -118,10 +119,10 @@ export default class RegistrationScene extends Component {
               <TextInput
                 autoCapitalize={'words'}
                 style={styles.textField}
-                placeholder={"E.g, Jane Doe"}
+                placeholder={'E.g, Jane Doe'}
                 placeholderTextColor="#aaa"
                 returnKeyType={'next'}
-                onChangeText={(name) =>this.setState({name})}
+                onChangeText={(name) => this.setState({name})}
                 underlineColorAndroid="transparent"
               />
             </View>
@@ -131,10 +132,10 @@ export default class RegistrationScene extends Component {
               <TextInput
                 autoCapitalize={'none'}
                 style={styles.textField}
-                placeholder={"E.g, example@email.com"}
+                placeholder={'E.g, example@email.com'}
                 placeholderTextColor="#aaa"
                 returnKeyType={'next'}
-                onChangeText={(email) =>this.setState({email})}
+                onChangeText={(email) => this.setState({email})}
                 underlineColorAndroid="transparent"
               />
             </View>
@@ -143,10 +144,10 @@ export default class RegistrationScene extends Component {
               <Text style={styles.label}>Password</Text>
               <TextInput
                 style={styles.textField}
-                placeholder={"Password"}
+                placeholder={'Password'}
                 secureTextEntry={true}
                 placeholderTextColor="#aaa"
-                onChangeText={(password) =>this.setState({password})}
+                onChangeText={(password) => this.setState({password})}
                 underlineColorAndroid="transparent"
               />
             </View>
@@ -155,10 +156,10 @@ export default class RegistrationScene extends Component {
               <Text style={styles.label}>Confirm Password</Text>
               <TextInput
                 style={styles.textField}
-                placeholder={"Repeat Password"}
+                placeholder={'Repeat Password'}
                 secureTextEntry={true}
                 placeholderTextColor="#aaa"
-                onChangeText={(confirmPassword) =>this.setState({confirmPassword})}
+                onChangeText={(confirmPassword) => this.setState({confirmPassword})}
                 underlineColorAndroid="transparent"
               />
             </View>
@@ -168,7 +169,7 @@ export default class RegistrationScene extends Component {
               <TextInput
                 autoCapitalize={'none'}
                 style={styles.textField}
-                placeholder={"E.g, 37919"}
+                placeholder={'E.g, 37919'}
                 placeholderTextColor="#aaa"
                 returnKeyType={'next'}
                 onChangeText={(zipcode) => this.setState({zipcode})}
@@ -180,7 +181,8 @@ export default class RegistrationScene extends Component {
               <Checkbox
                 label="I am over 13 years old"
                 onChange={(checked) => {
-                  this.setState({is_over_thirteen: checked})}}
+                  this.setState({is_over_thirteen: checked})
+                }}
               />
             </View>
 
@@ -214,7 +216,7 @@ const styles = StyleSheet.create({
   },
 
   scrollView: {
-    flex: 1,
+    flex: 1
   },
 
   form: {
@@ -258,7 +260,7 @@ const styles = StyleSheet.create({
     flex           : 0,
     borderRadius   : 2,
     backgroundColor: Colors.primary,
-    padding        : 10,
+    padding        : 10
   },
 
   buttonText: {

@@ -114,8 +114,8 @@ SnackBarNotice.defaultProps = {
 const styles = StyleSheet.create({
   text: {
     color     : Colors.primaryText,
-    fontSize  : 18,
-    fontWeight: '600'
+    fontSize  : 14,
+    fontWeight: 'bold'
   },
 
   right: {

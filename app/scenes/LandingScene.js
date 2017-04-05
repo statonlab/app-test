@@ -60,7 +60,7 @@ export default class LandingScene extends Component {
         icon : 'account-card-details',
         title: 'About Us',
         label: 'AboutScene'
-      }, 
+      },
       {
         icon : 'sign-caution',
         title: 'Health and Safety',
@@ -142,6 +142,15 @@ export default class LandingScene extends Component {
       this.setSidebarLinks()
       this.refs.snackbar.showBar()
       this.downloadObservations()
+    }))
+
+    this.events.push(DeviceEventEmitter.addListener('userRegistered', () => {
+      this.setState({
+        userLoggedIn: true,
+        noticeText  : 'Successfully registered membership!'
+      })
+      this.setSidebarLinks()
+      this.refs.snackbar.showBar()
     }))
   }
 
@@ -230,8 +239,10 @@ export default class LandingScene extends Component {
           onPress: () => {
             // Deletes all user records thus logging out
             realm.write(() => {
-              realm.objects('User').delete()
-              realm.objects('Submission').delete()
+              let user = realm.objects('User')
+              realm.delete(user)
+              let submissions = realm.objects('Submission')
+              realm.delete(submissions)
             })
             DeviceEventEmitter.emit('userLoggedOut')
           }
