@@ -17,7 +17,9 @@ export default class LoginScene extends Component {
     this.state = {
       email      : null,
       password   : null,
-      showSpinner: false
+      showSpinner: false,
+      emailWarning : false,
+      passwordWarning: false
     }
 
     this.realm = realm
@@ -29,13 +31,19 @@ export default class LoginScene extends Component {
   }
 
   logInUser = () => {
-    if (t.validate(this.state, this.loginRules).isValid()) {
+    this.resetFormWarnings()
+
+    let submission = t.validate(this.state, this.loginRules)
+    if (submission.isValid()) {
       // Check email and password against server, store in realm
       this.loginRequest()
     } else {
-      alert('Please enter an email and password')
+      this.handleError(submission)
     }
   }
+resetFormWarnings = () => {
+    this.setState({emailWarning: false, passwordWarning: false})
+}
 
   loginRequest = () => {
     this.setState({showSpinner: true})
@@ -54,6 +62,27 @@ export default class LoginScene extends Component {
       this.setState({showSpinner: false})
       alert(error)
     })
+  }
+
+  handleError = (submission) =>{
+    let errors = submission.errors
+    let errorList= []
+    errors.map((error) => {
+      switch(error.path[0]){
+        case 'email':
+          this.setState({emailWarning:true})
+          errorList.push("invalid email")
+          break;
+        case 'password':
+          this.setState({passwordWarning:true})
+          errorList.push("invalid password")
+
+          break;
+      }
+    })
+    if (errorList) {
+      alert(errorList.join("\n"))
+    }
   }
 
   storeUser = (response) => {
@@ -113,6 +142,73 @@ export default class LoginScene extends Component {
       })
   }
 
+  renderEmail() {
+
+  if (this.state.emailWarning) {
+    return(
+    <View style={styles.formGroup}>
+      <Text style={styles.labelWarning}>Email</Text>
+      <TextInput
+        autoCapitalize={'none'}
+        style={styles.textFieldWarning}
+        placeholder={'Email'}
+        placeholderTextColor="#aaa"
+        returnKeyType={'next'}
+        onChangeText={(email) => this.setState({email})}
+        underlineColorAndroid="transparent"
+      />
+    </View>
+    )
+  }
+  return (
+    <View style={styles.formGroup}>
+      <Text style={styles.label}>Email</Text>
+      <TextInput
+        autoCapitalize={'none'}
+        style={styles.textField}
+        placeholder={'Email'}
+        placeholderTextColor="#aaa"
+        returnKeyType={'next'}
+        onChangeText={(email) => this.setState({email})}
+        underlineColorAndroid="transparent"
+      />
+    </View>
+  )
+  }
+  renderPassword() {
+    if (this.state.passwordWarning){
+      return(
+        <View style={styles.formGroup}>
+          <Text style={styles.labelWarning}>Password</Text>
+          <TextInput
+            style={styles.textFieldWarning}
+            placeholder={'Password'}
+            secureTextEntry={true}
+            placeholderTextColor="#aaa"
+            onChangeText={(password) => this.setState({password})}
+            underlineColorAndroid="transparent"
+          />
+        </View>
+      )
+    }
+
+    return(
+      <View style={styles.formGroup}>
+        <Text style={styles.label}>Password</Text>
+        <TextInput
+          style={styles.textField}
+          placeholder={'Password'}
+          secureTextEntry={true}
+          placeholderTextColor="#aaa"
+          onChangeText={(password) => this.setState({password})}
+          underlineColorAndroid="transparent"
+        />
+      </View>
+    )
+
+  }
+
+
   render() {
     return (
       <View style={styles.container}>
@@ -123,30 +219,8 @@ export default class LoginScene extends Component {
             <View style={styles.formGroup}>
               <Text style={styles.title}>TreeSource</Text>
             </View>
-            <View style={styles.formGroup}>
-              <Text style={styles.label}>Email</Text>
-              <TextInput
-                autoCapitalize={'none'}
-                style={styles.textField}
-                placeholder={'Email'}
-                placeholderTextColor="#aaa"
-                returnKeyType={'next'}
-                onChangeText={(email) => this.setState({email})}
-                underlineColorAndroid="transparent"
-              />
-            </View>
-
-            <View style={styles.formGroup}>
-              <Text style={styles.label}>Password</Text>
-              <TextInput
-                style={styles.textField}
-                placeholder={'Password'}
-                secureTextEntry={true}
-                placeholderTextColor="#aaa"
-                onChangeText={(password) => this.setState({password})}
-                underlineColorAndroid="transparent"
-              />
-            </View>
+            {this.renderEmail()}
+            {this.renderPassword()}
 
             <View style={styles.formGroup}>
               <MKButton
@@ -215,7 +289,12 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     color       : '#444'
   },
-
+  labelWarning: {
+    fontWeight  : 'bold',
+    fontSize    : 14,
+    marginBottom: 10,
+    color       : Colors.danger
+  },
   textField: {
     height           : 40,
     borderWidth      : 1,
@@ -225,7 +304,15 @@ const styles = StyleSheet.create({
     fontSize         : 14,
     backgroundColor  : '#f9f9f9'
   },
-
+  textFieldWarning: {
+    borderColor: Colors.danger,
+    height           : 40,
+    borderWidth      : 1,
+    borderRadius     : 2,
+    paddingHorizontal: 10,
+    fontSize         : 14,
+    backgroundColor  : '#f9f9f9'
+  },
   button: {
     ...(new Elevation(1)),
     flex           : 0,

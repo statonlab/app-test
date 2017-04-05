@@ -57,10 +57,10 @@ const plants = {
   },
   'Other'          : {
     image                 : require('../img/hydrangea.jpg'),
-    latinName             : 'Misc',
-    descriptionBody       : 'Base tree.',
+    latinName             : '',
+    descriptionBody       : 'Submissions for all other trees.',
     collectionInstructions: '',
-    formProps             : {
+    formProps             : {diameterNumeric: true
     }
   },
   'White Oak'        : {
