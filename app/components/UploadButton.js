@@ -46,7 +46,8 @@ export default class UploadButton extends Component {
       Observation.upload(observation)
         .then(response => {
           realm.write(() => {
-            observation.synced = true
+            observation.synced   = true
+            observation.serverID = response.data.data.observation_id
           })
           this.done()
         }).catch(error => {

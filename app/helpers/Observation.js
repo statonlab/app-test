@@ -45,9 +45,7 @@ class Observation {
       throw Error('User not signed in')
     }
 
-    return await Axios.get('observations', {
-      api_token: this.api_token
-    })
+    return await Axios.get(`observations/?api_token=${this.api_token}`)
   }
 
   // Private Methods

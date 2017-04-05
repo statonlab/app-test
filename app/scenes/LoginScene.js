@@ -30,7 +30,7 @@ export default class LoginScene extends Component {
 
   logInUser = () => {
     if (t.validate(this.state, this.loginRules).isValid()) {
-      //Check email and password against server, store in realm
+      // Check email and password against server, store in realm
       this.loginRequest()
     } else {
       alert('Please enter an email and password')

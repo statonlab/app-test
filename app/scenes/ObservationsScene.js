@@ -91,7 +91,7 @@ export default class ObservationsScene extends Component {
     }
     return (
       <View style={styles.headerContainer}>
-        <Text style={styles.headerText}>{id}</Text>
+        <Text style={styles.headerText}>{id} ({realm.objects('Submission').filtered('synced == true').length})</Text>
       </View>
     )
   }
