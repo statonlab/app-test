@@ -38,13 +38,23 @@ export default class MapScene extends Component {
       })
     })
 
-    return <MarkersMap markers={markers}/>
+    return (
+      <MarkersMap
+        initialRegion={{
+          latitude      : 40.354388,
+          longitude     : -95.998237,
+          latitudeDelta : 60.0922,
+          longitudeDelta: 60.0922
+        }}
+        markers={markers}
+      />
+    )
   }
 }
 
 MapScene.propTypes = {
   title    : PropTypes.string.isRequired,
-  navigator: PropTypes.object.isRequired,
+  navigator: PropTypes.object.isRequired
 }
 
 const styles = StyleSheet.create({
@@ -52,5 +62,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
     flex           : 1,
     flexDirection  : 'column'
-  },
-});
+  }
+})

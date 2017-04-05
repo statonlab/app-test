@@ -15,7 +15,7 @@ export default class SubmittedScene extends Component {
   constructor(props) {
     super(props)
 
-    this.id = this.props.plant.id
+    this.id     = this.props.plant.id
     this.marker = {}
   }
 
@@ -37,13 +37,23 @@ export default class SubmittedScene extends Component {
 
       if (submission.id === this.id) {
         marker.pinColor = Colors.info
-        this.marker = marker
+        this.marker     = marker
       }
 
       markers.push(marker)
     })
 
-    return (<MarkersMap markers={markers} startingMarker={this.marker}/>)
+    return (
+      <MarkersMap
+        markers={markers}
+        initialRegion={{
+          ...this.marker.coord,
+          latitudeDelta : 0.0322,
+          longitudeDelta: 0.0321
+        }}
+        startingMarker={this.marker}
+      />
+    )
   }
 
   render() {

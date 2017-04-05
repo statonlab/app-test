@@ -9,7 +9,14 @@ export default class MarkersMap extends Component {
    */
   componentDidMount() {
     if (this.props.startingMarker !== null) {
-      this.zoomToMarker(this.props.startingMarker)
+      if (this.props.zoom) {
+        this.zoomToMarker(this.props.startingMarker)
+      } else {
+        setTimeout(() => {
+          this.refs.startingMarker.showCallout()
+
+        }, 500)
+      }
     }
   }
 
@@ -41,6 +48,7 @@ export default class MarkersMap extends Component {
   render() {
     return (
       <MapView
+        {...this.props}
         style={styles.map}
         ref="map"
       >
@@ -115,12 +123,14 @@ export default class MarkersMap extends Component {
 MarkersMap.propTypes = {
   ...MapView.propTypes,
   markers       : PropTypes.array,
-  startingMarker: PropTypes.object
+  startingMarker: PropTypes.object,
+  zoom          : PropTypes.bool
 }
 
 MarkersMap.defaultProps = {
   markers       : [],
-  startingMarker: null
+  startingMarker: null,
+  zoom          : false
 }
 
 
