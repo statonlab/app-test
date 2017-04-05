@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react'
-import {View, Text, StyleSheet} from 'react-native'
+import {View, Text, StyleSheet, ActivityIndicator} from 'react-native'
 import {MKButton} from 'react-native-material-kit'
 import realm from '../db/Schema'
 import Observation from '../helpers/Observation'
@@ -48,12 +48,21 @@ export default class UploadButton extends Component {
           realm.write(() => {
             observation.synced = true
           })
+          this.done()
         }).catch(error => {
         console.log('REQUEST ERROR', error)
       })
     })
 
-    this.setState({show: false})
+    this.setState({
+      show     : false,
+      uploading: true
+    })
+  }
+
+  done() {
+    this.setState({uploading: false})
+    this.props.onUploadDone()
   }
 
   render() {
@@ -67,17 +76,27 @@ export default class UploadButton extends Component {
             <Text style={styles.buttonText}>{this.props.label} ({this.state.observations.length})</Text>
           </MKButton>
         }
+
+        {!this.state.uploading ? null :
+          <ActivityIndicator
+            animating={true}
+            style={[styles.centering, {height: 47}]}
+          />
+        }
       </View>
     )
   }
 }
 
 UploadButton.PropTypes = {
-  label: PropTypes.string
+  label       : PropTypes.string,
+  onUploadDone: PropTypes.func
 }
 
 UploadButton.defaultProps = {
-  label: 'Upload Your Observations'
+  label       : 'Upload Your Observations',
+  onUploadDone: () => {
+  }
 }
 
 const styles = new StyleSheet.create({
