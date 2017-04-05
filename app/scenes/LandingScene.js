@@ -126,8 +126,8 @@ export default class LandingScene extends Component {
       if (this.refs.uploadButton) {
         this.refs.uploadButton.getObservations()
       }
-      this.setState({noticeText: 'New submission created!'})
-      this.refs.snackbar.showBar()
+      // this.setState({noticeText: 'New submission created!'})
+      // this.refs.snackbar.showBar()
     }))
 
     this.events.push(DeviceEventEmitter.addListener('userLoggedIn', () => {
@@ -222,6 +222,14 @@ export default class LandingScene extends Component {
     )
   }
 
+  /**
+   * Notify user of updated observation.
+   */
+  uploadCompleted() {
+    this.setState({noticeText: 'Observations Uploaded'})
+    this.refs.snackbar.showBar()
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -237,7 +245,7 @@ export default class LandingScene extends Component {
           routes={this.state.sidebar}/>
         <ScrollView style={{flex: 0}}>
           <View style={styles.plantsContainer}>
-            {this.state.userLoggedIn ? <UploadButton ref="uploadButton"/> : this.loginButton.call(this)}
+            {this.state.userLoggedIn ? <UploadButton ref="uploadButton" onUploadDone={this.uploadCompleted.bind(this)}/> : this.loginButton.call(this)}
 
             {plants.map((plant, index) => {
               return (

@@ -112,8 +112,6 @@ SnackBarNotice.defaultProps = {
 
 
 const styles = StyleSheet.create({
-
-
   text: {
     color     : Colors.primaryText,
     fontSize  : 18,
@@ -136,8 +134,7 @@ const styles = StyleSheet.create({
     padding        : 10,
     justifyContent : 'space-between',
     backgroundColor: Colors.black,
-    alignItems     : 'center'
-    // add bg color
+    alignItems     : 'center',
+    zIndex         : 900000
   }
-
 })
