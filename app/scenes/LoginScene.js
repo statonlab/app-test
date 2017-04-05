@@ -115,59 +115,61 @@ export default class LoginScene extends Component {
 
   render() {
     return (
-      <ScrollView contentContainerStyle={styles.container} keyboardDismissMode={'on-drag'}>
+      <View style={styles.container}>
         <Spinner show={this.state.showSpinner}/>
         <Header title={'Login'} navigator={this.props.navigator} showRightIcon={false}/>
-        <View style={styles.form}>
-          <View style={styles.formGroup}>
-            <Text style={styles.title}>TreeSource</Text>
-          </View>
-          <View style={styles.formGroup}>
-            <Text style={styles.label}>Email</Text>
-            <TextInput
-              autoCapitalize={'none'}
-              style={styles.textField}
-              placeholder={'Email'}
-              placeholderTextColor="#aaa"
-              returnKeyType={'next'}
-              onChangeText={(email) => this.setState({email})}
-              underlineColorAndroid="transparent"
-            />
-          </View>
+        <ScrollView keyboardDismissMode={'on-drag'}>
+          <View style={styles.form}>
+            <View style={styles.formGroup}>
+              <Text style={styles.title}>TreeSource</Text>
+            </View>
+            <View style={styles.formGroup}>
+              <Text style={styles.label}>Email</Text>
+              <TextInput
+                autoCapitalize={'none'}
+                style={styles.textField}
+                placeholder={'Email'}
+                placeholderTextColor="#aaa"
+                returnKeyType={'next'}
+                onChangeText={(email) => this.setState({email})}
+                underlineColorAndroid="transparent"
+              />
+            </View>
 
-          <View style={styles.formGroup}>
-            <Text style={styles.label}>Password</Text>
-            <TextInput
-              style={styles.textField}
-              placeholder={'Password'}
-              secureTextEntry={true}
-              placeholderTextColor="#aaa"
-              onChangeText={(password) => this.setState({password})}
-              underlineColorAndroid="transparent"
-            />
-          </View>
+            <View style={styles.formGroup}>
+              <Text style={styles.label}>Password</Text>
+              <TextInput
+                style={styles.textField}
+                placeholder={'Password'}
+                secureTextEntry={true}
+                placeholderTextColor="#aaa"
+                onChangeText={(password) => this.setState({password})}
+                underlineColorAndroid="transparent"
+              />
+            </View>
 
-          <View style={styles.formGroup}>
-            <MKButton
-              style={styles.button}
-              onPress={() => {
-                this.logInUser()
-              }}>
-              <Text style={styles.buttonText}>Login</Text>
-            </MKButton>
-          </View>
+            <View style={styles.formGroup}>
+              <MKButton
+                style={styles.button}
+                onPress={() => {
+                  this.logInUser()
+                }}>
+                <Text style={styles.buttonText}>Login</Text>
+              </MKButton>
+            </View>
 
-          <View style={[styles.formGroup, {flexDirection: 'row', justifyContent: 'space-between'}]}>
-            <MKButton>
-              <Text style={styles.link}>Forgot your password?</Text>
-            </MKButton>
-            <MKButton>
-              <Text style={[styles.link]}>Register</Text>
-            </MKButton>
-          </View>
+            <View style={[styles.formGroup, {flexDirection: 'row', justifyContent: 'space-between'}]}>
+              <MKButton>
+                <Text style={styles.link}>Forgot your password?</Text>
+              </MKButton>
+              <MKButton>
+                <Text style={[styles.link]}>Register</Text>
+              </MKButton>
+            </View>
 
-        </View>
-      </ScrollView>
+          </View>
+        </ScrollView>
+      </View>
     )
   }
 

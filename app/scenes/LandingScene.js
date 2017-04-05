@@ -40,7 +40,6 @@ const plants = [
   {
     title: 'Other',
     image: require('../img/hydrangea.jpg')
-
   }
 ]
 
@@ -116,8 +115,10 @@ export default class LandingScene extends Component {
         this.refs.uploadButton.getObservations()
       }
       this.setSidebarLinks()
-      this.setState({userLoggedIn: false})
-      this.setState({noticeText: 'Successfully logged out!'})
+      this.setState({
+        userLoggedIn: false,
+        noticeText  : 'Successfully logged out!'
+      })
       this.refs.snackbar.showBar()
     }))
 
@@ -125,13 +126,15 @@ export default class LandingScene extends Component {
       if (this.refs.uploadButton) {
         this.refs.uploadButton.getObservations()
       }
-      this.setState({userLoggedIn: true})
       this.setState({noticeText: 'New submission created!'})
       this.refs.snackbar.showBar()
     }))
 
     this.events.push(DeviceEventEmitter.addListener('userLoggedIn', () => {
-      this.setState({noticeText: 'Successfully logged in!'})
+      this.setState({
+        userLoggedIn: true,
+        noticeText  : 'Successfully logged in!'
+      })
       this.setSidebarLinks()
       this.refs.snackbar.showBar()
     }))
