@@ -301,7 +301,7 @@ export default class LandingScene extends Component {
           ref="sidebar"
           navigator={this.props.navigator}
           routes={this.state.sidebar}/>
-        <ScrollView style={{flex: 0}}>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.plantsContainer}>
             {this.state.userLoggedIn ? <UploadButton ref="uploadButton" onUploadDone={this.uploadCompleted.bind(this)}/> : this.loginButton.call(this)}
 
