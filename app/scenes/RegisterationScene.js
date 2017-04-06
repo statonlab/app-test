@@ -22,7 +22,7 @@ export default class RegistrationScene extends Component {
       zipcode         : null,
       is_anonymous    : true,
       showSpinner     : false,
-      warnings : {}
+      warnings        : {}
     }
 
     this.realm = realm
@@ -115,27 +115,25 @@ export default class RegistrationScene extends Component {
    */
   notifyIncomplete = (validationAttempt) => {
     console.log(validationAttempt)
-   let errors = validationAttempt.errors
+    let errors    = validationAttempt.errors
     let errorList = []
-    let warnings = {
-
-    }
+    let warnings  = {}
     errors.map((error) => {
-     switch(error.path[0]){
-       case 'password':
-         warnings.password = true
-         errorList.push('Passwords must be 6 characters long')
-         break
-       case 'confirmPassword':
-         warnings.password = true
-         warnings.confirmPassword = true
-         errorList.push('Passwords must match')
-         break
-       case 'email':
-         warnings.email = true
-         errorList.push('Please enter a valid email address')
-         break
-     }
+      switch (error.path[0]) {
+        case 'password':
+          warnings.password = true
+          errorList.push('Passwords must be 6 characters long')
+          break
+        case 'confirmPassword':
+          warnings.password        = true
+          warnings.confirmPassword = true
+          errorList.push('Passwords must match')
+          break
+        case 'email':
+          warnings.email = true
+          errorList.push('Please enter a valid email address')
+          break
+      }
     })
     this.setState({warnings})
     if (errorList) {
@@ -172,7 +170,7 @@ export default class RegistrationScene extends Component {
               <Text style={this.state.warnings.email ? [styles.label, styles.labelWarning] : styles.label}>Email</Text>
               <TextInput
                 autoCapitalize={'none'}
-                style={this.state.warnings.email ?[styles.textField, styles.textFieldWarning] : styles.textField}
+                style={this.state.warnings.email ? [styles.textField, styles.textFieldWarning] : styles.textField}
                 placeholder={'E.g, example@email.com'}
                 placeholderTextColor="#aaa"
                 returnKeyType={'next'}
@@ -281,16 +279,16 @@ const styles = StyleSheet.create({
     width : 300
   },
 
-  label: {
+  label           : {
     fontWeight  : 'bold',
     fontSize    : 14,
     marginBottom: 10,
     color       : '#444'
   },
-  labelWarning: {
-    color : Colors.danger
+  labelWarning    : {
+    color: Colors.danger
   },
-  textField: {
+  textField       : {
     height           : 40,
     borderWidth      : 1,
     borderColor      : '#dedede',
@@ -300,9 +298,9 @@ const styles = StyleSheet.create({
     backgroundColor  : '#f9f9f9'
   },
   textFieldWarning: {
-    borderColor : Colors.danger
+    borderColor: Colors.danger
   },
-  button: {
+  button          : {
     ...(new Elevation(1)),
     flex           : 0,
     borderRadius   : 2,

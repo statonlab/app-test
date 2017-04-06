@@ -17,9 +17,7 @@ export default class LoginScene extends Component {
       email      : null,
       password   : null,
       showSpinner: false,
-      warnings   : {
-
-      },
+      warnings   : {},
     }
 
     this.realm = realm
@@ -49,7 +47,7 @@ export default class LoginScene extends Component {
    * Clean up previous errors
    */
   resetFormWarnings = () => {
-     this.setState({warnings: {}})
+    this.setState({warnings: {}})
   }
 
   /**
@@ -70,8 +68,7 @@ export default class LoginScene extends Component {
       this.props.navigator.pop()
     }).catch(error => {
       this.setState({showSpinner: false})
-      alert(error)
-      //this.handleErrorAxios(error)
+      this.handleErrorAxios(error)
     })
   }
 
@@ -105,6 +102,21 @@ export default class LoginScene extends Component {
     }
   }
 
+  handleErrorAxios = (error) => {
+    let code = error.response.status
+
+    switch (code) {
+      case 400:
+        alert("Invalid credentials")
+        this.setState({warnings: {emailWarning: true, passwordWarning: true}})
+        break
+      case 500:
+        alert("Unable to connect to server.  Please verify your internet connection and try again.")
+        break
+    }
+
+  }
+
 
   /**
    * Stores the user in Realm.
@@ -132,7 +144,6 @@ export default class LoginScene extends Component {
   }
 
 
-
   render() {
     return (
       <View style={styles.container}>
@@ -158,15 +169,15 @@ export default class LoginScene extends Component {
             </View>
 
             <View style={styles.formGroup}>
-            <Text style={this.state.warnings.passwordWarning ? [styles.label, styles.labelWarning] : styles.label}>Password</Text>
-            <TextInput
-            style={this.state.warnings.passwordWarning ? [styles.textField, styles.textFieldWarning] : styles.textField}
-            placeholder={'Password'}
-            secureTextEntry={true}
-            placeholderTextColor="#aaa"
-            onChangeText={(password) => this.setState({password})}
-            underlineColorAndroid="transparent"
-            />
+              <Text style={this.state.warnings.passwordWarning ? [styles.label, styles.labelWarning] : styles.label}>Password</Text>
+              <TextInput
+                style={this.state.warnings.passwordWarning ? [styles.textField, styles.textFieldWarning] : styles.textField}
+                placeholder={'Password'}
+                secureTextEntry={true}
+                placeholderTextColor="#aaa"
+                onChangeText={(password) => this.setState({password})}
+                underlineColorAndroid="transparent"
+              />
             </View>
 
             <View style={styles.formGroup}>
@@ -239,7 +250,7 @@ const styles = StyleSheet.create({
   },
 
   labelWarning: {
-    color       : Colors.danger
+    color: Colors.danger
   },
 
   textField: {
@@ -253,7 +264,7 @@ const styles = StyleSheet.create({
   },
 
   textFieldWarning: {
-    borderColor      : Colors.danger,
+    borderColor: Colors.danger,
   },
 
   button: {
