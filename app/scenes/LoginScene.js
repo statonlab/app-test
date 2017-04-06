@@ -14,18 +14,19 @@ export default class LoginScene extends Component {
     super(props)
 
     this.state = {
-      email          : null,
-      password       : null,
-      showSpinner    : false,
-      emailWarning   : false,
-      passwordWarning: false
+      email      : null,
+      password   : null,
+      showSpinner: false,
+      warnings   : {
+
+      },
     }
 
     this.realm = realm
 
     this.loginRules = t.struct({
       email   : t.String,
-      password: t.String
+      password: t.refinement(t.String, (pw) => pw.length >= 6, 'pw')
     })
   }
 
@@ -48,7 +49,7 @@ export default class LoginScene extends Component {
    * Clean up previous errors
    */
   resetFormWarnings = () => {
-    this.setState({emailWarning: false, passwordWarning: false})
+     this.setState({warnings: {}})
   }
 
   /**
@@ -70,6 +71,7 @@ export default class LoginScene extends Component {
     }).catch(error => {
       this.setState({showSpinner: false})
       alert(error)
+      //this.handleErrorAxios(error)
     })
   }
 
@@ -81,22 +83,28 @@ export default class LoginScene extends Component {
   handleError = (submission) => {
     let errors    = submission.errors
     let errorList = []
+    let warnings  = {
+      emailWarning   : false,
+      passwordWarning: false
+    }
     errors.map((error) => {
       switch (error.path[0]) {
         case 'email':
-          this.setState({emailWarning: true})
+          warnings.emailWarning = true
           errorList.push('invalid email')
           break
         case 'password':
-          this.setState({passwordWarning: true})
+          warnings.passwordWarning = true
           errorList.push('invalid password')
           break
       }
     })
+    this.setState({warnings})
     if (errorList) {
       alert(errorList.join('\n'))
     }
   }
+
 
   /**
    * Stores the user in Realm.
@@ -123,48 +131,6 @@ export default class LoginScene extends Component {
     })
   }
 
-  /**
-   * Render email field.
-   *
-   * @returns {XML}
-   */
-  renderEmail() {
-    return (
-      <View style={styles.formGroup}>
-        <Text style={this.state.emailWarning ? styles.labelWarning : styles.label}>Email</Text>
-        <TextInput
-          autoCapitalize={'none'}
-          style={this.state.emailWarning ? styles.textFieldWarning : styles.textField}
-          placeholder={'Email'}
-          placeholderTextColor="#aaa"
-          returnKeyType={'next'}
-          onChangeText={(email) => this.setState({email})}
-          underlineColorAndroid="transparent"
-        />
-      </View>
-    )
-  }
-
-  /**
-   * Render password field.
-   *
-   * @returns {XML}
-   */
-  renderPassword() {
-    return (
-      <View style={styles.formGroup}>
-        <Text style={this.state.passwordWarning ? styles.labelWarning : styles.label}>Password</Text>
-        <TextInput
-          style={this.state.passwordWarning ? styles.textFieldWarning : styles.textField}
-          placeholder={'Password'}
-          secureTextEntry={true}
-          placeholderTextColor="#aaa"
-          onChangeText={(password) => this.setState({password})}
-          underlineColorAndroid="transparent"
-        />
-      </View>
-    )
-  }
 
 
   render() {
@@ -178,9 +144,30 @@ export default class LoginScene extends Component {
               <Text style={styles.title}>TreeSource</Text>
             </View>
 
-            {this.renderEmail()}
+            <View style={styles.formGroup}>
+              <Text style={this.state.warnings.emailWarning ? [styles.label, styles.labelWarning] : styles.label}>Email</Text>
+              <TextInput
+                autoCapitalize={'none'}
+                style={this.state.warnings.emailWarning ? [styles.textField, styles.textFieldWarning] : styles.textField}
+                placeholder={'Email'}
+                placeholderTextColor="#aaa"
+                returnKeyType={'next'}
+                onChangeText={(email) => this.setState({email})}
+                underlineColorAndroid="transparent"
+              />
+            </View>
 
-            {this.renderPassword()}
+            <View style={styles.formGroup}>
+            <Text style={this.state.warnings.passwordWarning ? [styles.label, styles.labelWarning] : styles.label}>Password</Text>
+            <TextInput
+            style={this.state.warnings.passwordWarning ? [styles.textField, styles.textFieldWarning] : styles.textField}
+            placeholder={'Password'}
+            secureTextEntry={true}
+            placeholderTextColor="#aaa"
+            onChangeText={(password) => this.setState({password})}
+            underlineColorAndroid="transparent"
+            />
+            </View>
 
             <View style={styles.formGroup}>
               <MKButton
@@ -252,9 +239,6 @@ const styles = StyleSheet.create({
   },
 
   labelWarning: {
-    fontWeight  : 'bold',
-    fontSize    : 14,
-    marginBottom: 10,
     color       : Colors.danger
   },
 
@@ -270,12 +254,6 @@ const styles = StyleSheet.create({
 
   textFieldWarning: {
     borderColor      : Colors.danger,
-    height           : 40,
-    borderWidth      : 1,
-    borderRadius     : 2,
-    paddingHorizontal: 10,
-    fontSize         : 14,
-    backgroundColor  : '#f9f9f9'
   },
 
   button: {

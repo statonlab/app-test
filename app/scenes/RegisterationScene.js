@@ -15,13 +15,14 @@ export default class RegistrationScene extends Component {
     super(props)
     this.state = {
       name            : '',
-      email           : '',
+      email           : null,
       password        : '',
       confirmPassword : '',
       is_over_thirteen: false,
       zipcode         : null,
       is_anonymous    : true,
-      showSpinner     : false
+      showSpinner     : false,
+      warnings : {}
     }
 
     this.realm = realm
@@ -113,11 +114,33 @@ export default class RegistrationScene extends Component {
    * @param validationAttempt
    */
   notifyIncomplete = (validationAttempt) => {
-    errors = []
-    for (errorIndex in validationAttempt.errors) {
-      errors.push(validationAttempt.errors[errorIndex].message)
+    console.log(validationAttempt)
+   let errors = validationAttempt.errors
+    let errorList = []
+    let warnings = {
+
     }
-    alert(errors)
+    errors.map((error) => {
+     switch(error.path[0]){
+       case 'password':
+         warnings.password = true
+         errorList.push('Passwords must be 6 characters long')
+         break
+       case 'confirmPassword':
+         warnings.password = true
+         warnings.confirmPassword = true
+         errorList.push('Passwords must match')
+         break
+       case 'email':
+         warnings.email = true
+         errorList.push('Please enter a valid email address')
+         break
+     }
+    })
+    this.setState({warnings})
+    if (errorList) {
+      alert(errorList.join('\n'))
+    }
   }
 
 
@@ -133,7 +156,7 @@ export default class RegistrationScene extends Component {
             </View>
 
             <View style={styles.formGroup}>
-              <Text style={styles.label}>Name</Text>
+              <Text style={this.state.warnings.name ? [styles.label, styles.labelWarning] : styles.label}>Name</Text>
               <TextInput
                 autoCapitalize={'words'}
                 style={styles.textField}
@@ -146,10 +169,10 @@ export default class RegistrationScene extends Component {
             </View>
 
             <View style={styles.formGroup}>
-              <Text style={styles.label}>Email</Text>
+              <Text style={this.state.warnings.email ? [styles.label, styles.labelWarning] : styles.label}>Email</Text>
               <TextInput
                 autoCapitalize={'none'}
-                style={styles.textField}
+                style={this.state.warnings.email ?[styles.textField, styles.textFieldWarning] : styles.textField}
                 placeholder={'E.g, example@email.com'}
                 placeholderTextColor="#aaa"
                 returnKeyType={'next'}
@@ -159,9 +182,9 @@ export default class RegistrationScene extends Component {
             </View>
 
             <View style={styles.formGroup}>
-              <Text style={styles.label}>Password</Text>
+              <Text style={this.state.warnings.password ? [styles.label, styles.labelWarning] : styles.label}>Password</Text>
               <TextInput
-                style={styles.textField}
+                style={this.state.warnings.password ? [styles.textField, styles.textFieldWarning] : styles.textField}
                 placeholder={'Password'}
                 secureTextEntry={true}
                 placeholderTextColor="#aaa"
@@ -171,9 +194,9 @@ export default class RegistrationScene extends Component {
             </View>
 
             <View style={styles.formGroup}>
-              <Text style={styles.label}>Confirm Password</Text>
+              <Text style={this.state.warnings.confirmPassword ? [styles.label, styles.labelWarning] : styles.label}>Confirm Password</Text>
               <TextInput
-                style={styles.textField}
+                style={this.state.warnings.confirmPassword ? [styles.textField, styles.textFieldWarning] : styles.textField}
                 placeholder={'Repeat Password'}
                 secureTextEntry={true}
                 placeholderTextColor="#aaa"
@@ -264,7 +287,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     color       : '#444'
   },
-
+  labelWarning: {
+    color : Colors.danger
+  },
   textField: {
     height           : 40,
     borderWidth      : 1,
@@ -274,7 +299,9 @@ const styles = StyleSheet.create({
     fontSize         : 14,
     backgroundColor  : '#f9f9f9'
   },
-
+  textFieldWarning: {
+    borderColor : Colors.danger
+  },
   button: {
     ...(new Elevation(1)),
     flex           : 0,
