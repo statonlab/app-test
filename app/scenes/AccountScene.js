@@ -18,16 +18,17 @@ export default class AccountScene extends Component {
       zipcode       : '',
       isOverThirteen: ''
     }
+
+    this.user = realm.objects('User')[0]
   }
 
   componentDidMount() {
-    let user = realm.objects('User')[0]
     this.setState({
-      name          : user.name,
-      email         : user.email,
-      zipcode       : user.zipcode,
-      anonymous     : user.anonymous ? 'Yes' : 'No',
-      isOverThirteen: user.is_over_thirteen ? 'I am over 13 years old' : 'I am not over than 13 years old'
+      name          : this.user.name,
+      email         : this.user.email,
+      zipcode       : this.user.zipcode,
+      anonymous     : this.user.anonymous ? 'Yes' : 'No',
+      isOverThirteen: this.user.is_over_thirteen ? 'I am over 13 years old' : 'I am not over than 13 years old'
     })
   }
 
@@ -85,6 +86,7 @@ export default class AccountScene extends Component {
               <PickerModal
                 style={[styles.formGroup]}
                 onSelect={(anonymous) => this.setState({anonymous})}
+                initialSelect={this.user.anonymous ? 'Yes' : 'No'}
                 choices={['Yes', 'No']}
                 header="Anonymous users have their information hidden from other users. Would you like to be anonymous?"
               >
@@ -103,6 +105,7 @@ export default class AccountScene extends Component {
               <PickerModal
                 style={[styles.formGroup, styles.noBorder]}
                 onSelect={(isOverThirteen) => this.setState({isOverThirteen})}
+                initialSelect={this.user.is_over_thirteen ? 'I am over 13 years old' : 'I am not over 13 years old'}
                 choices={['I am over 13 years old', 'I am not over 13 years old']}
                 header="Are you over the age of 13?"
               >
