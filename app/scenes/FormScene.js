@@ -212,12 +212,13 @@ export default class FormScene extends Component {
     let errorList = []
     let warnings  = {}
     errors.map((error) =>{
-
-
+      console.log(error.path)
+      warnings[error.path] = true
+      errorList.push("Required field: " + DCP[error.path].label)
     })
     this.setState({warnings})
     if (errorList) {
-      Alert(errorList.join('\n'))
+      alert(errorList.join('\n'))
     }
   }
 
@@ -280,7 +281,7 @@ export default class FormScene extends Component {
           }}
         >
           <View style={styles.picker}>
-            <Text style={styles.label}>{DCP[key].label}</Text>
+            <Text style={this.state.warnings[key] ? [styles.label, styles.labelWarning] :  styles.label}>{DCP[key].label}</Text>
             <TextInput
               style={styles.textField}
               editable={false}
@@ -326,7 +327,7 @@ export default class FormScene extends Component {
                 style={[styles.buttonLink, {height: this.state.images.length > 0 ? 60 : 40}]}
                 onPress={this._goToCamera}
               >
-                <Text style={styles.label}>Photos</Text>
+                <Text style={this.state.warnings.photos ?[styles.label, styles.labelWarning] : styles.label}>Photos</Text>
                 {this.state.images.length === 0 ?
                   <View style={{flex: 1, alignItems: 'center', flexDirection: 'row'}}>
                     <Text style={[styles.buttonLinkText, {color: '#aaa'}]}>Add photos</Text>
@@ -445,6 +446,9 @@ const styles = StyleSheet.create({
     width     : 110,
     color     : '#444',
     fontWeight: 'bold'
+  },
+  labelWarning: {
+    color : Colors.danger
   },
 
   touchable: {
