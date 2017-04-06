@@ -22,7 +22,7 @@ export default class RegistrationScene extends Component {
       zipcode         : null,
       is_anonymous    : true,
       showSpinner     : false,
-      warnings        : {}
+      warnings: {}
     }
 
     this.realm = realm

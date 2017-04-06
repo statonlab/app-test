@@ -12,24 +12,24 @@ export default class AboutScene extends Component {
         <Header title="About Us" navigator={this.props.navigator} elevation={2}/>
         <ScrollView style={styles.scrollView}>
           <View style={styles.card}>
-            <Text style={styles.title}>Organization</Text>
-            <Text style={styles.textBody}>University of Tennessee at Knoxville</Text>
+            <Text style={styles.title}>TreeSource</Text>
+            <Text style={styles.textBody}>App version: 0.1</Text>
           </View>
-
           <View style={styles.card}>
-            <Text style={styles.title}>Card Title</Text>
-            <Text style={styles.textBody}>Paragraph field</Text>
-          </View>
-
-          <View style={styles.card}>
-            <Text style={styles.title}>Card With Two Paragraphs</Text>
+            <Text style={styles.title}>The TreeSource Project</Text>
+            <Text style={styles.textBody}> Help our nation’s trees!</Text>
+            <Text style={styles.textBody}> Invasive diseases and pests threaten the health of America’s forests.
+              Scientists are working to understand what allows some individual trees to survive, but they need to find healthy, resilient trees in the forest to study.
+              That’s where concerned foresters, landowners, and citizens (you!) can help.</Text>
             <Text style={styles.textBody}>
-              Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-            </Text>
-            <Text style={styles.textBody}>
-              Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+              Tag trees you find in your community, on your property, or out in the wild to help us understand Forest health!
             </Text>
           </View>
+          <View style={styles.card}>
+            <Text style={styles.title}>The TreeSource Team</Text>
+            <Text style={styles.textBody}>TreeSource is developed as a collaboration between Scientists at the University of Kentucky, the University of Tennessee Knoxville. </Text>
+          </View>
+
         </ScrollView>
       </View>
     )
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
   },
 
   scrollView: {
-    flex: 1,
+    flex           : 1,
     paddingVertical: 5
   },
 
@@ -61,15 +61,15 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    color       : '#222',
-    fontWeight  : '500',
-    fontSize    : 16
+    color     : '#222',
+    fontWeight: '500',
+    fontSize  : 16
   },
 
   textBody: {
-    color      : '#444',
-    fontSize   : 14,
+    color     : '#444',
+    fontSize  : 14,
     lineHeight: 16,
-    marginTop: 10
+    marginTop : 10
   }
 })
