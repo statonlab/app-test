@@ -10,15 +10,14 @@ import realm from '../db/Schema'
 import Spinner from '../components/Spinner'
 
 export default class LoginScene extends Component {
-
   constructor(props) {
     super(props)
 
     this.state = {
-      email      : null,
-      password   : null,
-      showSpinner: false,
-      emailWarning : false,
+      email          : null,
+      password       : null,
+      showSpinner    : false,
+      emailWarning   : false,
       passwordWarning: false
     }
 
@@ -30,6 +29,9 @@ export default class LoginScene extends Component {
     })
   }
 
+  /**
+   * Handle the login button
+   */
   logInUser = () => {
     this.resetFormWarnings()
 
@@ -41,10 +43,17 @@ export default class LoginScene extends Component {
       this.handleError(submission)
     }
   }
-resetFormWarnings = () => {
-    this.setState({emailWarning: false, passwordWarning: false})
-}
 
+  /**
+   * Clean up previous errors
+   */
+  resetFormWarnings = () => {
+    this.setState({emailWarning: false, passwordWarning: false})
+  }
+
+  /**
+   * Send login request to server
+   */
   loginRequest = () => {
     this.setState({showSpinner: true})
 
@@ -64,27 +73,36 @@ resetFormWarnings = () => {
     })
   }
 
-  handleError = (submission) =>{
-    let errors = submission.errors
-    let errorList= []
+  /**
+   * Sets errors in the state.
+   *
+   * @param submission
+   */
+  handleError = (submission) => {
+    let errors    = submission.errors
+    let errorList = []
     errors.map((error) => {
-      switch(error.path[0]){
+      switch (error.path[0]) {
         case 'email':
-          this.setState({emailWarning:true})
-          errorList.push("invalid email")
-          break;
+          this.setState({emailWarning: true})
+          errorList.push('invalid email')
+          break
         case 'password':
-          this.setState({passwordWarning:true})
-          errorList.push("invalid password")
-
-          break;
+          this.setState({passwordWarning: true})
+          errorList.push('invalid password')
+          break
       }
     })
     if (errorList) {
-      alert(errorList.join("\n"))
+      alert(errorList.join('\n'))
     }
   }
 
+  /**
+   * Stores the user in Realm.
+   *
+   * @param response
+   */
   storeUser = (response) => {
     this.realm.write(() => {
       // Delete existing users first
@@ -103,100 +121,41 @@ resetFormWarnings = () => {
         is_over_thirteen: response.data.data.is_over_thirteen
       })
     })
-
-    // this.pullServerObservations()
   }
 
-
-  pullServerObservations = () => {
-    let myToken = realm.objects('User')[0].api_token
-
-    axios.get('observations', {api_token: myToken})
-      .then(response => {
-
-        let data = response.data.data
-
-        for (observationID in data) {
-
-          let observation = data[observationID]
-          if (realm.objects('Submission').filtered(`id == ${observation.id}`).length === 0) {
-
-            let obsToStore = {
-              id       : observation.id,
-              name     : observation.observation_category,
-              images   : observation.images.toString(),
-              location : observation.location,
-              date     : observation.date.date.toString(),
-              synced   : true,
-              meta_data: JSON.stringify(observation.meta_data)
-            }
-            realm.write(() => {
-              realm.create('Submission', obsToStore)
-            })
-          }
-        }
-
-      })
-      .catch(error => {
-        console.log('Error:', error)
-      })
-  }
-
+  /**
+   * Render email field.
+   *
+   * @returns {XML}
+   */
   renderEmail() {
-
-  if (this.state.emailWarning) {
-    return(
-    <View style={styles.formGroup}>
-      <Text style={styles.labelWarning}>Email</Text>
-      <TextInput
-        autoCapitalize={'none'}
-        style={styles.textFieldWarning}
-        placeholder={'Email'}
-        placeholderTextColor="#aaa"
-        returnKeyType={'next'}
-        onChangeText={(email) => this.setState({email})}
-        underlineColorAndroid="transparent"
-      />
-    </View>
+    return (
+      <View style={styles.formGroup}>
+        <Text style={this.state.emailWarning ? styles.labelWarning : styles.label}>Email</Text>
+        <TextInput
+          autoCapitalize={'none'}
+          style={this.state.emailWarning ? styles.textFieldWarning : styles.textField}
+          placeholder={'Email'}
+          placeholderTextColor="#aaa"
+          returnKeyType={'next'}
+          onChangeText={(email) => this.setState({email})}
+          underlineColorAndroid="transparent"
+        />
+      </View>
     )
   }
-  return (
-    <View style={styles.formGroup}>
-      <Text style={styles.label}>Email</Text>
-      <TextInput
-        autoCapitalize={'none'}
-        style={styles.textField}
-        placeholder={'Email'}
-        placeholderTextColor="#aaa"
-        returnKeyType={'next'}
-        onChangeText={(email) => this.setState({email})}
-        underlineColorAndroid="transparent"
-      />
-    </View>
-  )
-  }
-  renderPassword() {
-    if (this.state.passwordWarning){
-      return(
-        <View style={styles.formGroup}>
-          <Text style={styles.labelWarning}>Password</Text>
-          <TextInput
-            style={styles.textFieldWarning}
-            placeholder={'Password'}
-            secureTextEntry={true}
-            placeholderTextColor="#aaa"
-            onChangeText={(password) => this.setState({password})}
-            underlineColorAndroid="transparent"
-          />
-        </View>
-      )
-    }
 
-    return(
+  /**
+   * Render password field.
+   *
+   * @returns {XML}
+   */
+  renderPassword() {
+    return (
       <View style={styles.formGroup}>
-        <Text style={styles.label}>Password</Text>
+        <Text style={this.state.passwordWarning ? styles.labelWarning : styles.label}>Password</Text>
         <TextInput
-          style={styles.textField}
+          style={this.state.passwordWarning ? styles.textFieldWarning : styles.textField}
           placeholder={'Password'}
           secureTextEntry={true}
           placeholderTextColor="#aaa"
@@ -205,7 +164,6 @@ resetFormWarnings = () => {
         />
       </View>
     )
-
   }
 
 
@@ -214,12 +172,14 @@ resetFormWarnings = () => {
       <View style={styles.container}>
         <Spinner show={this.state.showSpinner}/>
         <Header title={'Login'} navigator={this.props.navigator} showRightIcon={false}/>
-        <ScrollView keyboardDismissMode={'on-drag'}>
+        <ScrollView keyboardDismissMode={'on-drag'} showsVerticalScrollIndicator={false}>
           <View style={styles.form}>
             <View style={styles.formGroup}>
               <Text style={styles.title}>TreeSource</Text>
             </View>
+
             {this.renderEmail()}
+
             {this.renderPassword()}
 
             <View style={styles.formGroup}>
@@ -236,7 +196,9 @@ resetFormWarnings = () => {
               <MKButton>
                 <Text style={styles.link}>Forgot your password?</Text>
               </MKButton>
-              <MKButton>
+              <MKButton onPress={() => {
+                this.props.navigator.replace({label: 'RegistrationScene'})
+              }}>
                 <Text style={[styles.link]}>Register</Text>
               </MKButton>
             </View>
@@ -246,7 +208,6 @@ resetFormWarnings = () => {
       </View>
     )
   }
-
 }
 
 LoginScene.PropTypes = {
@@ -289,12 +250,14 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     color       : '#444'
   },
+
   labelWarning: {
     fontWeight  : 'bold',
     fontSize    : 14,
     marginBottom: 10,
     color       : Colors.danger
   },
+
   textField: {
     height           : 40,
     borderWidth      : 1,
@@ -304,8 +267,9 @@ const styles = StyleSheet.create({
     fontSize         : 14,
     backgroundColor  : '#f9f9f9'
   },
+
   textFieldWarning: {
-    borderColor: Colors.danger,
+    borderColor      : Colors.danger,
     height           : 40,
     borderWidth      : 1,
     borderRadius     : 2,
@@ -313,6 +277,7 @@ const styles = StyleSheet.create({
     fontSize         : 14,
     backgroundColor  : '#f9f9f9'
   },
+
   button: {
     ...(new Elevation(1)),
     flex           : 0,
