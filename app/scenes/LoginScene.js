@@ -14,11 +14,12 @@ export default class LoginScene extends Component {
     super(props)
 
     this.state = {
-      email          : null,
-      password       : null,
-      showSpinner    : false,
-      emailWarning   : false,
-      passwordWarning: false
+      email      : null,
+      password   : null,
+      showSpinner: false,
+      warnings   : {
+
+      },
     }
 
     this.realm = realm
@@ -40,7 +41,7 @@ export default class LoginScene extends Component {
       // Check email and password against server, store in realm
       this.loginRequest()
     } else {
-      this.handleErrortcomb(submission)
+      this.handleError(submission)
     }
   }
 
@@ -48,7 +49,7 @@ export default class LoginScene extends Component {
    * Clean up previous errors
    */
   resetFormWarnings = () => {
-    this.setState({emailWarning: false, passwordWarning: false})
+     this.setState({warnings: {}})
   }
 
   /**
@@ -69,8 +70,8 @@ export default class LoginScene extends Component {
       this.props.navigator.pop()
     }).catch(error => {
       this.setState({showSpinner: false})
-      //alert(error)
-      this.handleErrorAxios(error)
+      alert(error)
+      //this.handleErrorAxios(error)
     })
   }
 
@@ -85,11 +86,11 @@ export default class LoginScene extends Component {
     errors.map((error) => {
       switch (error.path[0]) {
         case 'email':
-          this.setState({emailWarning: true})
+          this.setState({warnings: {...this.state.warnings, emailWarning: true}})
           errorList.push('invalid email')
           break
         case 'password':
-          this.setState({passwordWarning: true})
+          this.setState({warnings: {...this.state.warnings, passwordWarning: true}})
           errorList.push('invalid password')
           break
       }
@@ -139,10 +140,10 @@ export default class LoginScene extends Component {
             </View>
 
             <View style={styles.formGroup}>
-              <Text style={this.state.emailWarning ? styles.labelWarning : styles.label}>Email</Text>
+              <Text style={this.state.warnings.emailWarning ? styles.labelWarning : styles.label}>Email</Text>
               <TextInput
                 autoCapitalize={'none'}
-                style={this.state.emailWarning ? styles.textFieldWarning : styles.textField}
+                style={this.state.warnings.emailWarning ? styles.textFieldWarning : styles.textField}
                 placeholder={'Email'}
                 placeholderTextColor="#aaa"
                 returnKeyType={'next'}
@@ -152,9 +153,9 @@ export default class LoginScene extends Component {
             </View>
 
             <View style={styles.formGroup}>
-            <Text style={this.state.passwordWarning ? styles.labelWarning : styles.label}>Password</Text>
+            <Text style={this.state.warnings.passwordWarning ? styles.labelWarning : styles.label}>Password</Text>
             <TextInput
-            style={this.state.passwordWarning ? styles.textFieldWarning : styles.textField}
+            style={this.state.warnings.passwordWarning ? styles.textFieldWarning : styles.textField}
             placeholder={'Password'}
             secureTextEntry={true}
             placeholderTextColor="#aaa"
