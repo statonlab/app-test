@@ -14,7 +14,7 @@ export default class RegistrationScene extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      name            : '',
+      name            : null,
       email           : null,
       password        : '',
       confirmPassword : '',
@@ -28,6 +28,7 @@ export default class RegistrationScene extends Component {
     this.realm = realm
 
     this.registrationRules = t.struct({
+      name            : t.String,
       email           : t.String, // No validation
       password        : t.refinement(t.String, (pw) => pw.length >= 6, 'pw'),// Ensure password is at least 6 characters
       confirmPassword : t.refinement(t.String, (pw) => pw === this.state.password, 'confirmPW'), // Ensure matches password
@@ -94,7 +95,7 @@ export default class RegistrationScene extends Component {
       })
       .catch(error => {
         console.log('ERR', error)
-        // alert(error[0]);
+        this.handleErrorAxios(error)
         this.setState({showSpinner: false})
       })
   }
@@ -133,6 +134,10 @@ export default class RegistrationScene extends Component {
           warnings.email = true
           errorList.push('Please enter a valid email address')
           break
+        case 'name':
+          warnings.name = true
+          errorList.push('Please enter a username')
+          break
       }
     })
     this.setState({warnings})
@@ -141,6 +146,26 @@ export default class RegistrationScene extends Component {
     }
   }
 
+
+  handleErrorAxios = (error) => {
+    let code = error.response.data.code
+    switch (code) {
+      case 500:
+        alert("Unable to connect to server.  Please verify your internet connection and try again.")
+        break
+      default:
+        let errors    = error.response.data.error
+        let errorList = []
+        let warnings  = {}
+        Object.keys(errors).map((errorField, index) => {
+          errorList.push(errors[errorField])
+          warnings[errorField] = true
+        })
+        this.setState({warnings})
+        alert(errorList.join('\n'))
+        break
+    }
+  }
 
   render() {
     return (
@@ -157,7 +182,7 @@ export default class RegistrationScene extends Component {
               <Text style={this.state.warnings.name ? [styles.label, styles.labelWarning] : styles.label}>Name</Text>
               <TextInput
                 autoCapitalize={'words'}
-                style={styles.textField}
+                style={this.state.warnings.name ? [styles.textField, styles.textFieldWarning] : styles.textField}
                 placeholder={'E.g, Jane Doe'}
                 placeholderTextColor="#aaa"
                 returnKeyType={'next'}
