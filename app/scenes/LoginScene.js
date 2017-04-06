@@ -26,7 +26,7 @@ export default class LoginScene extends Component {
 
     this.loginRules = t.struct({
       email   : t.String,
-      password: t.String
+      password: t.String,
     })
   }
 
@@ -83,18 +83,23 @@ export default class LoginScene extends Component {
   handleError = (submission) => {
     let errors    = submission.errors
     let errorList = []
+    let warnings  = {
+      emailWarning   : false,
+      passwordWarning: false
+    }
     errors.map((error) => {
       switch (error.path[0]) {
         case 'email':
-          this.setState({warnings: {...this.state.warnings, emailWarning: true}})
+          warnings.emailWarning = true
           errorList.push('invalid email')
           break
         case 'password':
-          this.setState({warnings: {...this.state.warnings, passwordWarning: true}})
+          warnings.passwordWarning = true
           errorList.push('invalid password')
           break
       }
     })
+    this.setState({warnings})
     if (errorList) {
       alert(errorList.join('\n'))
     }

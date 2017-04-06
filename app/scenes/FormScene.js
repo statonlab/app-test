@@ -27,13 +27,6 @@ import Location from '../components/Location'
 
 const theme = getTheme()
 
-// ashSpecies: true,
-// seedsBinary: true,
-// flowersBinary: true,
-// emeraldAshBorer: true,
-// crownHealth: true,
-// diameterNumeric: true
-
 DCPrules = {
   seedsBinary        : t.enums.of(DCP.seedsBinary.selectChoices, 'seed'),
   flowersBinary      : t.enums.of(DCP.flowersBinary.selectChoices, 'flowers'),
