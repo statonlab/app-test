@@ -38,7 +38,7 @@ export default class LoginScene extends Component {
       // Check email and password against server, store in realm
       this.loginRequest()
     } else {
-      this.handleError(submission)
+      this.handleErrortcomb(submission)
     }
   }
 resetFormWarnings = () => {
@@ -60,11 +60,12 @@ resetFormWarnings = () => {
       this.props.navigator.pop()
     }).catch(error => {
       this.setState({showSpinner: false})
-      alert(error)
+      //alert(error)
+      this.handleErrorAxios(error)
     })
   }
 
-  handleError = (submission) =>{
+  handleErrortcomb = (submission) =>{
     let errors = submission.errors
     let errorList= []
     errors.map((error) => {
@@ -84,6 +85,10 @@ resetFormWarnings = () => {
       alert(errorList.join("\n"))
     }
   }
+
+handleErrorAxios = (error) => {
+  console.log(error)
+}
 
   storeUser = (response) => {
     this.realm.write(() => {
