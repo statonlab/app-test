@@ -37,7 +37,7 @@ export default class AccountScene extends Component {
         <Header title="Account" navigator={this.props.navigator} elevation={4} showRightIcon={false}/>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.innerContainer}>
-            <Text style={styles.title}>PERSONAL SETTINGS</Text>
+            <Text style={styles.title}>PERSONAL</Text>
             <View style={styles.card}>
               <View style={styles.formGroup}>
                 <Text style={styles.label}>Name</Text>
@@ -80,7 +80,7 @@ export default class AccountScene extends Component {
               </View>
             </View>
 
-            <Text style={styles.title}>PRIVACY SETTINGS</Text>
+            <Text style={styles.title}>PRIVACY</Text>
             <View style={styles.card}>
               <PickerModal
                 style={[styles.formGroup]}
@@ -120,7 +120,7 @@ export default class AccountScene extends Component {
               </PickerModal>
             </View>
 
-            <Text style={styles.title}>PASSWORD SETTINGS</Text>
+            <Text style={styles.title}>PASSWORD</Text>
             <View style={styles.card}>
               <View style={styles.formGroup}>
                 <Text style={[styles.label, styles.labelLg]}>Old Password</Text>
@@ -169,7 +169,7 @@ export default class AccountScene extends Component {
             </MKButton>
           </View>
           <View style={styles.column}>
-            <MKButton style={[styles.button, styles.buttonLink]}>
+            <MKButton style={[styles.button, styles.buttonLink]} rippleColor="rgba(0,0,0,0.1)">
               <Text style={[styles.buttonText, styles.buttonLinkText]}>Cancel</Text>
             </MKButton>
           </View>
