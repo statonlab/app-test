@@ -7,7 +7,9 @@ import {
   TextInput,
   StyleSheet,
   Alert,
-  DeviceEventEmitter
+  DeviceEventEmitter,
+  Keyboard,
+  Animated
 } from 'react-native'
 import moment from 'moment'
 import {getTheme, MKButton} from 'react-native-material-kit'
@@ -58,18 +60,19 @@ export default class FormScene extends Component {
     super(props)
 
     this.state = {
-      images  : [],
-      title   : this.props.title,
-      location: {
+      images      : [],
+      title       : this.props.title,
+      location    : {
         latitude : 0,
         longitude: 0,
         accuracy : -1
       },
-      metadata: {
+      metadata    : {
         diameterNumeric: 25,
         comment        : ''
       },
-      id      : ''
+      id          : '',
+      bottomMargin: new Animated.Value(0)
     }
 
     this.events = []
@@ -107,6 +110,32 @@ export default class FormScene extends Component {
 
     this.events.push(DeviceEventEmitter.addListener('locationCaptured', this.updateLocation))
     this.events.push(DeviceEventEmitter.addListener('cameraCapturedPhotos', this.handleImages))
+  }
+
+  componentWillMount() {
+    this.events.push(Keyboard.addListener('keyboardWillShow', this._keyboardWillShow.bind(this)))
+    this.events.push(Keyboard.addListener('keyboardWillHide', this._keyboardWillHide.bind(this)))
+  }
+
+  _keyboardWillShow() {
+    Animated.timing(       // Uses easing functions
+      this.state.bottomMargin, // The value to drive
+      {
+        toValue : 200,        // Target
+        duration: 10    // Configuration
+      }
+    ).start()
+    setTimeout(() => this.refs.scrollView.scrollToEnd({animated: true}), 50)
+  }
+
+  _keyboardWillHide() {
+    Animated.timing(       // Uses easing functions
+      this.state.bottomMargin, // The value to drive
+      {
+        toValue : 0,        // Target
+        duration: 500    // Configuration
+      }
+    ).start()
   }
 
   updateLocation = (location) => {
@@ -289,8 +318,13 @@ export default class FormScene extends Component {
     return (
       <View style={styles.container}>
         <Header title={this.state.title} navigator={this.props.navigator}/>
-        <ScrollView keyboardDismissMode={'on-drag'}>
-          <View style={styles.card}>
+        <ScrollView
+          ref="scrollView"
+          keyboardDismissMode={'on-drag'}
+          keyboardShouldPersistTaps="always"
+          showsVerticalScrollIndicator={false}
+        >
+          <Animated.View style={[styles.card, {marginBottom: this.state.bottomMargin}]}>
 
             <View style={[styles.formGroup]}>
               <MKButton
@@ -311,7 +345,7 @@ export default class FormScene extends Component {
 
             {Object.keys(this.props.formProps).map(this.populateFormItem)}
 
-            <View style={[styles.formGroup, {flex: 1, alignItems: 'flex-start'}]}>
+            <View style={[styles.formGroup, {flex: 0, alignItems: 'flex-start'}]}>
               <Text style={[styles.label, {paddingTop: 5}]}>Comments</Text>
               <TextInput
                 style={[styles.textField, styles.comment]}
@@ -325,14 +359,14 @@ export default class FormScene extends Component {
               />
             </View>
 
-            <View style={[styles.formGroup, {borderBottomWidth: 0, flex: 1}]}>
+            <View style={[styles.formGroup]}>
               <Text style={styles.label}>Location</Text>
               <Location />
             </View>
-          </View>
+          </Animated.View>
         </ScrollView>
 
-        <View style={[styles.footer, {borderBottomWidth: 0}]}>
+        <View style={styles.footer}>
           <MKButton style={[styles.button, styles.flex1]} onPress={this.submit} rippleColor="rgba(0,0,0,0.5)">
             <Text style={styles.buttonText}>
               Submit Entry
@@ -379,12 +413,11 @@ const styles = StyleSheet.create({
   },
 
   card: {
-    ...theme.cardStyle,
-    ...elevationStyle,
-    flex         : 0,
-    flexDirection: 'column',
-    marginBottom : 10,
-    borderRadius : 0
+    backgroundColor: '#fff',
+    flex           : 0,
+    flexDirection  : 'column',
+    marginBottom   : 10,
+    borderRadius   : 0
   },
 
   thumbnail: {
@@ -464,7 +497,7 @@ const styles = StyleSheet.create({
 
   buttonAlt: {
     backgroundColor: '#fff',
-    marginLeft     : 10
+    marginLeft     : 5
   },
 
   buttonLink: {
@@ -520,8 +553,11 @@ const styles = StyleSheet.create({
     flex             : 0,
     flexDirection    : 'row',
     justifyContent   : 'space-between',
-    paddingVertical  : 10,
-    paddingHorizontal: 5
+    paddingVertical  : 5,
+    paddingHorizontal: 5,
+    borderTopWidth   : 1,
+    borderTopColor   : '#ddd',
+    backgroundColor  : '#f5f5f5'
   },
 
   slider: {

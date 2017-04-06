@@ -76,6 +76,11 @@ export default class LandingScene extends Component {
     // Links that show up when the user is logged in
     this.loggedInLinks = [
       {
+        icon : 'logout-variant',
+        title: 'Account',
+        label: 'user'
+      },
+      {
         icon   : 'logout-variant',
         title  : 'Logout',
         onPress: this.logout
@@ -301,7 +306,7 @@ export default class LandingScene extends Component {
           ref="sidebar"
           navigator={this.props.navigator}
           routes={this.state.sidebar}/>
-        <ScrollView style={{flex: 0}}>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.plantsContainer}>
             {this.state.userLoggedIn ? <UploadButton ref="uploadButton" onUploadDone={this.uploadCompleted.bind(this)}/> : this.loginButton.call(this)}
 

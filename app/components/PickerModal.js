@@ -1,15 +1,5 @@
 import React, {Component, PropTypes} from 'react'
-import {
-  View,
-  Text,
-  TouchableHighlight,
-  StyleSheet,
-  Modal,
-  ScrollView,
-  TouchableOpacity,
-  Button
-} from 'react-native'
-
+import {View, Text, StyleSheet, Modal, TouchableOpacity} from 'react-native'
 import {MKButton} from 'react-native-material-kit'
 import Colors from '../helpers/Colors'
 import Elevation from '../helpers/Elevation'
@@ -22,7 +12,7 @@ export default class PickerModal extends Component {
     this.state = {
       animationType: 'fade',
       modalVisible : false,
-      cancelText   : "CANCEL",
+      cancelText   : 'CANCEL',
       selected     : 'not set',
       selectedMulti: []
     }
@@ -31,7 +21,7 @@ export default class PickerModal extends Component {
   componentDidMount() {
     this.setState({selected: this.props.initialSelect})
     if (this.props.multiCheck) {
-      this.setState({cancelText: "CONFIRM"})
+      this.setState({cancelText: 'CONFIRM'})
     }
   }
 
@@ -96,7 +86,9 @@ export default class PickerModal extends Component {
       <TouchableOpacity
         style={styles.choiceContainer}
         key={index}
-        onPress={() => {this.onChange(choice)}}>
+        onPress={() => {
+          this.onChange(choice)
+        }}>
         <View style={styles.choiceItem}>
           {this.state.selected == choice ? checkedBox : uncheckedBox  }
           <Text style={styles.choiceText}>
@@ -184,19 +176,21 @@ const styles = StyleSheet.create({
     paddingVertical  : 15,
     paddingHorizontal: 15,
     maxHeight        : 500,
+    minWidth         : 300,
     marginHorizontal : 20
   },
 
   headTextBox: {
     flex        : 0,
-    marginBottom: 10,
+    marginBottom: 10
   },
 
   headerQuestionText: {
     flex      : 0,
     textAlign : 'left',
     fontWeight: '500',
-    fontSize  : 16
+    fontSize  : 16,
+    color     : '#222'
   },
 
   modalChoices: {
@@ -229,7 +223,7 @@ const styles = StyleSheet.create({
   button: {
     flex        : 0,
     borderRadius: 2,
-    padding     : 10,
+    padding     : 10
   },
 
   buttonText: {
@@ -242,5 +236,5 @@ const styles = StyleSheet.create({
     fontSize : 20,
     color    : '#aaa',
     marginTop: 5
-  },
+  }
 })
