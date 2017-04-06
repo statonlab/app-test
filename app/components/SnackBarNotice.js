@@ -17,79 +17,119 @@ export default class SnackBarNotice extends Component {
     this.state = {
       isVisible : false,
       noticeText: '',
-      position  : new Animated.Value(-250)
+      position  : new Animated.Value(-60)
     }
+
+    this.closeTimeOut = null
+    this.openTimeOut  = null
   }
 
+  /**
+   * Initialize the message
+   */
   componentDidMount() {
     this.setState({message: this.props.noticeText})
   }
 
+  /**
+   * Watch for message changes
+   *
+   * @param props
+   */
   componentWillReceiveProps(props) {
-    this.setState({message: props.noticeText})
+    if (props.noticeText !== this.state.noticeText) {
+      this.setState({message: props.noticeText})
+    }
   }
 
+  /**
+   * Show the notification bar
+   */
   showBar = () => {
-    this.setState({noticeText: this.props.noticeText})
-    this.setState({isVisible: true})
+    this.setState({
+      noticeText: this.props.noticeText,
+      isVisible : true
+    })
+
+    let move = 20
+    if (this.props.placement === 'top') {
+      move = 50
+    }
 
     Animated.timing(
       this.state.position,
       {
-        toValue : 20,
+        toValue : move,
         duration: 1000
       }
     ).start()
 
-    setTimeout(this.closeBar, 4000)
+    // Prevent overlap of timeouts
+    this.clearTimeouts()
+    this.openTimeOut = setTimeout(this.closeBar, 4000)
   }
 
+  /**
+   * Hide the notification bar
+   */
   closeBar = () => {
     Animated.timing(
       this.state.position,
       {
-        toValue : -100,
+        toValue : -60,
         duration: 500
       }
     ).start()
 
-    setTimeout(() => {
+    // Prevent overlap of timeouts
+    this.clearTimeouts()
+    this.closeTimeOut = setTimeout(() => {
       this.setState({isVisible: false})
     }, 1000)
   }
 
-//For now will only get message icon.  In the future other icons could be displayed.
+  componentWillUnmount() {
+    // This will get rid of the setState on unmounted component warning
+    this.clearTimeouts()
+  }
 
+  clearTimeouts() {
+    clearTimeout(this.closeTimeOut)
+    clearTimeout(this.openTimeOut)
+  }
+
+  /**
+   * For now will only get message icon.  In the future other icons could be displayed.
+   *
+   * @returns {XML}
+   */
   getIcon = () => {
     return (
       <Icon name="message" size={23} color="#fff"/>
     )
   }
 
-
-  renderBar = () => {
-    if (this.state.isVisible)
-      return (
-        <TouchableHighlight
-          underlayColor={Colors.primary}
-          onPress={() => {
-            this.closeBar()
-          }}>
-          <Animated.View style={[styles.container, {bottom: this.state.position}]}>
-            <Text style={[styles.text]}>{this.state.noticeText}</Text>
-            {this.getIcon()}
-          </Animated.View>
-        </TouchableHighlight>
-      )
-  }
-
-
   render() {
-    return (
-      <View>
-        {this.renderBar()}
-      </View>
-    )
+    if (this.state.isVisible) {
+      return (
+        <Animated.View style={[styles.container, this.props.placement === 'bottom' ? {bottom: this.state.position} : {top: this.state.position}]}>
+          <TouchableHighlight
+            underlayColor={Colors.primary}
+            onPress={() => {
+              this.closeBar()
+            }}
+            style={styles.flex1}
+          >
+            <View style={styles.row}>
+              <Text style={[styles.text]}>{this.state.noticeText}</Text>
+              {this.getIcon()}
+            </View>
+          </TouchableHighlight>
+        </Animated.View>
+      )
+    } else {
+      return (null)
+    }
   }
 }
 
@@ -98,7 +138,8 @@ SnackBarNotice.propTypes = {
   elevation : PropTypes.number,
   noticeText: PropTypes.string,
   timeout   : PropTypes.number,
-  icon      : PropTypes.string
+  icon      : PropTypes.string,
+  placement : PropTypes.string
 }
 
 SnackBarNotice.defaultProps = {
@@ -106,8 +147,8 @@ SnackBarNotice.defaultProps = {
   elevation : 3,
   noticeText: 'SnackBar notice text!',
   timeout   : 3000,
-  icon      : 'message'
-
+  icon      : 'message',
+  placement : 'bottom'
 }
 
 
@@ -122,19 +163,25 @@ const styles = StyleSheet.create({
     textAlign: 'right'
   },
 
+  flex1: {
+    flex: 1
+  },
+
+  row: {
+    flexDirection    : 'row',
+    alignItems       : 'center',
+    justifyContent   : 'space-between',
+    height           : 50,
+    paddingHorizontal: 10
+  },
+
   container: {
     ...(new Elevation(2)),
     position       : 'absolute',
-    bottom         : 0,
     left           : 20,
     right          : 20,
-    height         : 60,
-    flex           : 1,
-    flexDirection  : 'row',
-    padding        : 10,
-    justifyContent : 'space-between',
     backgroundColor: Colors.black,
-    alignItems     : 'center',
-    zIndex         : 900000
+    zIndex         : 900000,
+    borderRadius   : 2
   }
 })
