@@ -19,18 +19,32 @@ export default class SnackBarNotice extends Component {
       noticeText: '',
       position  : new Animated.Value(-60)
     }
+
+    this.closeTimeOut = null
+    this.openTimeOut  = null
   }
 
+  /**
+   * Initialize the message
+   */
   componentDidMount() {
     this.setState({message: this.props.noticeText})
   }
 
+  /**
+   * Watch for message changes
+   *
+   * @param props
+   */
   componentWillReceiveProps(props) {
     if (props.noticeText !== this.state.noticeText) {
       this.setState({message: props.noticeText})
     }
   }
 
+  /**
+   * Show the notification bar
+   */
   showBar = () => {
     this.setState({
       noticeText: this.props.noticeText,
@@ -50,9 +64,14 @@ export default class SnackBarNotice extends Component {
       }
     ).start()
 
-    setTimeout(this.closeBar, 4000)
+    // Prevent overlap of timeouts
+    this.clearTimeouts()
+    this.openTimeOut = setTimeout(this.closeBar, 4000)
   }
 
+  /**
+   * Hide the notification bar
+   */
   closeBar = () => {
     Animated.timing(
       this.state.position,
@@ -62,13 +81,28 @@ export default class SnackBarNotice extends Component {
       }
     ).start()
 
-    setTimeout(() => {
+    // Prevent overlap of timeouts
+    this.clearTimeouts()
+    this.closeTimeOut = setTimeout(() => {
       this.setState({isVisible: false})
     }, 1000)
   }
 
-//For now will only get message icon.  In the future other icons could be displayed.
+  componentWillUnmount() {
+    // This will get rid of the setState on unmounted component warning
+    this.clearTimeouts()
+  }
 
+  clearTimeouts() {
+    clearTimeout(this.closeTimeOut)
+    clearTimeout(this.openTimeOut)
+  }
+
+  /**
+   * For now will only get message icon.  In the future other icons could be displayed.
+   *
+   * @returns {XML}
+   */
   getIcon = () => {
     return (
       <Icon name="message" size={23} color="#fff"/>

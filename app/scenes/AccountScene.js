@@ -21,18 +21,27 @@ export default class AccountScene extends Component {
       email         : '',
       zipcode       : '',
       isOverThirteen: '',
+      oldPassword   : '',
+      newPassword   : '',
+      reNewPassword : '',
       errors        : {
         name          : false,
         anonymous     : false,
         email         : false,
         zipcode       : false,
-        isOverThirteen: false
+        isOverThirteen: false,
+        oldPassword   : false,
+        newPassword   : false,
+        reNewPassword : false
       }
     }
 
     this.user = realm.objects('User')[0]
   }
 
+  /**
+   * Populate the user fields.
+   */
   componentDidMount() {
     this.setState({
       name          : this.user.name,
@@ -90,6 +99,9 @@ export default class AccountScene extends Component {
     return !hasErrors
   }
 
+  /**
+   * Handle the submit/update button click
+   */
   submit() {
     if (!this.validate()) {
       return
@@ -121,6 +133,11 @@ export default class AccountScene extends Component {
     })
   }
 
+  /**
+   * Show validation errors to the user
+   *
+   * @param errors
+   */
   handleValidationErrors(errors) {
     let stateErrors = {
       name          : false,
@@ -136,14 +153,19 @@ export default class AccountScene extends Component {
     this.setState({errors: stateErrors})
   }
 
+  /**
+   * Update the local realm user record.
+   *
+   * @param response
+   */
   updateRealmUser(response) {
     try {
       realm.write(() => {
-        this.user.name           = response.name
-        this.user.email          = response.email
-        this.user.anonymous      = response.is_anonymous
-        this.user.isOverThirteen = response.is_over_thirteen
-        this.user.zipcode        = response.zipcode === null ? '' : response.zipcode
+        this.user.name             = response.name
+        this.user.email            = response.email
+        this.user.anonymous        = response.is_anonymous
+        this.user.is_over_thirteen = response.is_over_thirteen
+        this.user.zipcode          = response.zipcode === null ? '' : response.zipcode
       })
     } catch (error) {
       console.warn(error)
