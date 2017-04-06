@@ -26,7 +26,7 @@ export default class LoginScene extends Component {
 
     this.loginRules = t.struct({
       email   : t.String,
-      password: t.String,
+      password: t.refinement(t.String, (pw) => pw.length >= 6, 'pw')
     })
   }
 
@@ -145,10 +145,10 @@ export default class LoginScene extends Component {
             </View>
 
             <View style={styles.formGroup}>
-              <Text style={this.state.warnings.emailWarning ? styles.labelWarning : styles.label}>Email</Text>
+              <Text style={this.state.warnings.emailWarning ? [styles.label, styles.labelWarning] : styles.label}>Email</Text>
               <TextInput
                 autoCapitalize={'none'}
-                style={this.state.warnings.emailWarning ? styles.textFieldWarning : styles.textField}
+                style={this.state.warnings.emailWarning ? [styles.textField, styles.textFieldWarning] : styles.textField}
                 placeholder={'Email'}
                 placeholderTextColor="#aaa"
                 returnKeyType={'next'}
@@ -158,9 +158,9 @@ export default class LoginScene extends Component {
             </View>
 
             <View style={styles.formGroup}>
-            <Text style={this.state.warnings.passwordWarning ? styles.labelWarning : styles.label}>Password</Text>
+            <Text style={this.state.warnings.passwordWarning ? [styles.label, styles.labelWarning] : styles.label}>Password</Text>
             <TextInput
-            style={this.state.warnings.passwordWarning ? styles.textFieldWarning : styles.textField}
+            style={this.state.warnings.passwordWarning ? [styles.textField, styles.textFieldWarning] : styles.textField}
             placeholder={'Password'}
             secureTextEntry={true}
             placeholderTextColor="#aaa"
@@ -239,9 +239,6 @@ const styles = StyleSheet.create({
   },
 
   labelWarning: {
-    fontWeight  : 'bold',
-    fontSize    : 14,
-    marginBottom: 10,
     color       : Colors.danger
   },
 
@@ -257,12 +254,6 @@ const styles = StyleSheet.create({
 
   textFieldWarning: {
     borderColor      : Colors.danger,
-    height           : 40,
-    borderWidth      : 1,
-    borderRadius     : 2,
-    paddingHorizontal: 10,
-    fontSize         : 14,
-    backgroundColor  : '#f9f9f9'
   },
 
   button: {
