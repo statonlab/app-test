@@ -65,6 +65,7 @@ export default class FormScene extends Component {
         comment        : ''
       },
       id          : '',
+      warnings    : {},
       bottomMargin: new Animated.Value(0)
     }
 
@@ -187,6 +188,7 @@ export default class FormScene extends Component {
     })
   }
 
+
   submitObservationToServer = (object) => {
     Observation.upload(object).then(response => {
       realm.write(() => {
@@ -206,17 +208,17 @@ export default class FormScene extends Component {
   }
 
   notifyIncomplete = (validationAttempt) => {
+    let errors    = validationAttempt.errors
+    let errorList = []
+    let warnings  = {}
+    errors.map((error) =>{
 
-    let missingFields = {}
-    let message       = 'Please supply a value for the following required fields: \n'
 
-    for (let errorIndex in validationAttempt.errors) {
-      let errorPath            = validationAttempt.errors[errorIndex].path[0]
-      missingFields[errorPath] = true
-      message                  = message + errorPath + ' \n'
+    })
+    this.setState({warnings})
+    if (errorList) {
+      Alert(errorList.join('\n'))
     }
-
-    Alert.alert(message)
   }
 
   compileValRules = () => {

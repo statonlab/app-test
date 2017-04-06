@@ -115,7 +115,6 @@ export default class RegistrationScene extends Component {
    * @param validationAttempt
    */
   notifyIncomplete = (validationAttempt) => {
-    console.log(validationAttempt)
     let errors    = validationAttempt.errors
     let errorList = []
     let warnings  = {}
