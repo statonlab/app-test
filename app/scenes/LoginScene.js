@@ -125,48 +125,6 @@ export default class LoginScene extends Component {
     })
   }
 
-  /**
-   * Render email field.
-   *
-   * @returns {XML}
-   */
-  renderEmail() {
-    return (
-      <View style={styles.formGroup}>
-        <Text style={this.state.emailWarning ? styles.labelWarning : styles.label}>Email</Text>
-        <TextInput
-          autoCapitalize={'none'}
-          style={this.state.emailWarning ? styles.textFieldWarning : styles.textField}
-          placeholder={'Email'}
-          placeholderTextColor="#aaa"
-          returnKeyType={'next'}
-          onChangeText={(email) => this.setState({email})}
-          underlineColorAndroid="transparent"
-        />
-      </View>
-    )
-  }
-
-  /**
-   * Render password field.
-   *
-   * @returns {XML}
-   */
-  renderPassword() {
-    return (
-      <View style={styles.formGroup}>
-        <Text style={this.state.passwordWarning ? styles.labelWarning : styles.label}>Password</Text>
-        <TextInput
-          style={this.state.passwordWarning ? styles.textFieldWarning : styles.textField}
-          placeholder={'Password'}
-          secureTextEntry={true}
-          placeholderTextColor="#aaa"
-          onChangeText={(password) => this.setState({password})}
-          underlineColorAndroid="transparent"
-        />
-      </View>
-    )
-  }
 
 
   render() {
@@ -180,9 +138,30 @@ export default class LoginScene extends Component {
               <Text style={styles.title}>TreeSource</Text>
             </View>
 
-            {this.renderEmail()}
+            <View style={styles.formGroup}>
+              <Text style={this.state.emailWarning ? styles.labelWarning : styles.label}>Email</Text>
+              <TextInput
+                autoCapitalize={'none'}
+                style={this.state.emailWarning ? styles.textFieldWarning : styles.textField}
+                placeholder={'Email'}
+                placeholderTextColor="#aaa"
+                returnKeyType={'next'}
+                onChangeText={(email) => this.setState({email})}
+                underlineColorAndroid="transparent"
+              />
+            </View>
 
-            {this.renderPassword()}
+            <View style={styles.formGroup}>
+            <Text style={this.state.passwordWarning ? styles.labelWarning : styles.label}>Password</Text>
+            <TextInput
+            style={this.state.passwordWarning ? styles.textFieldWarning : styles.textField}
+            placeholder={'Password'}
+            secureTextEntry={true}
+            placeholderTextColor="#aaa"
+            onChangeText={(password) => this.setState({password})}
+            underlineColorAndroid="transparent"
+            />
+            </View>
 
             <View style={styles.formGroup}>
               <MKButton
