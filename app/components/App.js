@@ -13,6 +13,7 @@ import CaptureLocationScene from '../scenes/CaptureLocationScene'
 import TreeDescriptionScene from '../scenes/TreeDescriptionScene'
 import SubmittedScene from '../scenes/SubmittedScene'
 import AboutScene from '../scenes/AboutScene'
+import AccountScene from '../scenes/AccountScene'
 import PrivacyPolicyScene from '../scenes/PrivacyPolicyScene'
 import HealthSafetyScene from '../scenes/HealthSafetyScene'
 import LoginScene from '../scenes/LoginScene'
@@ -75,6 +76,10 @@ export default class WildType extends Component {
 
     if(route.label === 'ObservationScene') {
       return <ObservationScene navigator={navigator} plant={route.plant}/>
+    }
+
+    if (route.label === 'AccountScene') {
+      return <AccountScene navigator={navigator}/>
     }
 
     // Static Scenes
