@@ -76,9 +76,9 @@ export default class LandingScene extends Component {
     // Links that show up when the user is logged in
     this.loggedInLinks = [
       {
-        icon : 'logout-variant',
+        icon : 'account',
         title: 'Account',
-        label: 'user'
+        label: 'AccountScene'
       },
       {
         icon   : 'logout-variant',
