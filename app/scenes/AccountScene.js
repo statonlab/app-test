@@ -173,7 +173,7 @@ export default class AccountScene extends Component {
               style={[styles.button, styles.buttonLink]}
               rippleColor="rgba(0,0,0,0.1)"
               onPress={() => {
-                this.navigator.pop()
+                this.props.navigator.pop()
               }}
             >
               <Text style={[styles.buttonText, styles.buttonLinkText]}>Cancel</Text>
