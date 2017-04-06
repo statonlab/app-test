@@ -35,15 +35,22 @@ export default class RegistrationScene extends Component {
     })
   }
 
+  /**
+   * Validate request and send it to the server.
+   */
   submitRegistration = () => {
     if (!this.validateState().isValid()) {
       this.notifyIncomplete(this.validateState())
       return
     }
     this.axiosRequest()
-    // Previously did stuff here, no longer
   }
 
+  /**
+   * Save user to realm.
+   *
+   * @param responseFull
+   */
   writeToRealm = (responseFull) => {
     console.log('writing to realm')
     this.realm.write(() => {
@@ -64,11 +71,11 @@ export default class RegistrationScene extends Component {
         is_over_thirteen: response.is_over_thirteen
       })
     })
-
-    // Transition to Home Scene.
-    this.props.navigator.push({label: 'LandingScene'})
   }
 
+  /**
+   * Send request to server.
+   */
   axiosRequest = () => {
     let request = this.state
 
@@ -81,6 +88,8 @@ export default class RegistrationScene extends Component {
         this.writeToRealm(response)
         this.setState({showSpinner: false})
         DeviceEventEmitter.emit('userRegistered')
+        // Transition to Landing Scene.
+        this.props.navigator.popToTop()
       })
       .catch(error => {
         console.log('ERR', error)
@@ -89,11 +98,20 @@ export default class RegistrationScene extends Component {
       })
   }
 
+  /**
+   * Run validation.
+   *
+   * @returns {*}
+   */
   validateState = () => {
     return t.validate(this.state, this.registrationRules)
   }
 
-  // A modal that parses the tcomb error and alerts user which fields are invalid
+  /**
+   * A modal that parses the tcomb error and alerts user which fields are invalid.
+   *
+   * @param validationAttempt
+   */
   notifyIncomplete = (validationAttempt) => {
     errors = []
     for (errorIndex in validationAttempt.errors) {
@@ -108,7 +126,7 @@ export default class RegistrationScene extends Component {
       <View style={styles.container}>
         <Spinner show={this.state.showSpinner}/>
         <Header title="Register" navigator={this.props.navigator} showRightIcon={false}/>
-        <ScrollView keyboardDismissMode="on-drag">
+        <ScrollView keyboardDismissMode="on-drag" showsVerticalScrollIndicator={false}>
           <View style={styles.form}>
             <View style={styles.formGroup}>
               <Text style={styles.title}>TreeSource</Text>
@@ -194,7 +212,9 @@ export default class RegistrationScene extends Component {
             </View>
 
             <View style={[styles.formGroup, {marginBottom: 30}]}>
-              <MKButton>
+              <MKButton onPress={() => {
+                this.props.navigator.replace({label: 'LoginScene'})
+              }}>
                 <Text style={styles.link}>Have an account? Login here</Text>
               </MKButton>
             </View>
