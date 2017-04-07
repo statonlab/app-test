@@ -59,8 +59,6 @@ export default class FormScene extends Component {
         accuracy : -1
       },
       metadata    : {
-        diameterNumeric: 25,
-        comment        : ''
       },
       id          : '',
       warnings    : {},
