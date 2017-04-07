@@ -55,7 +55,7 @@ export default class TreeDescriptionScene extends Component {
             {Plants[this.props.title].descriptionCards.map((card, index) => {
               return (
                 <View key={index} style={[styles.cardBody, {borderBottomWidth: len === index ? 0 : 1}]}>
-                  <Text style={styles.cardTitle}>{card.title.toUpperCase()}</Text>
+                  <Text style={styles.cardTitle}>{card.title}</Text>
                   {card.body.map((body, bodyIndex) => {
                     return (
                       <Text style={styles.cardText} key={bodyIndex}>{body}</Text>
@@ -130,10 +130,10 @@ const styles = StyleSheet.create({
   },
 
   cardTitle: {
-    fontSize  : 12,
+    fontSize  : 14,
     flex      : 1,
     fontWeight: 'bold',
-    color     : '#777'
+    color     : '#333'
   },
 
   cardBody: {
@@ -144,9 +144,12 @@ const styles = StyleSheet.create({
   },
 
   cardText: {
-    fontSize: 14,
-    padding : 10,
-    color   : '#444'
+    fontSize       : 14,
+    paddingVertical: 8,
+    paddingLeft    : 10,
+    paddingRight   : 5,
+    color          : '#333',
+    lineHeight     : 21
   },
 
   buttonContainer: {
