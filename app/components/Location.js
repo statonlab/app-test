@@ -15,11 +15,24 @@ export default class Location extends Component {
     }
   }
 
+  /**
+   * Start getting the location
+   */
   componentDidMount() {
     this.getLocation()
     this.updateLocation()
   }
 
+  /**
+   * Stop any location updates
+   */
+  componentWillUnmount() {
+    clearTimeout(this.timeoutHolder)
+  }
+
+  /**
+   * Set up a timer to update the location every 500 milliseconds
+   */
   updateLocation() {
     this.timeoutHolder = setTimeout(() => {
       if (!this.state.done) {
@@ -30,6 +43,9 @@ export default class Location extends Component {
     }, 500)
   }
 
+  /**
+   * Query the geolocation service for the current position
+   */
   getLocation() {
     navigator.geolocation.getCurrentPosition(
       this.setLocation.bind(this),
@@ -42,6 +58,11 @@ export default class Location extends Component {
     )
   }
 
+  /**
+   * Set the state and notify others of the location.
+   *
+   * @param position
+   */
   setLocation(position) {
     this.latitude  = position.coords.latitude
     this.longitude = position.coords.longitude
@@ -65,7 +86,7 @@ export default class Location extends Component {
     }
 
     // Inform others of location changes
-    DeviceEventEmitter.emit('locationCaptured', {
+    this.props.onChange({
       longitude: position.coords.longitude,
       latitude : position.coords.latitude,
       accuracy : position.coords.accuracy
@@ -94,7 +115,9 @@ export default class Location extends Component {
   }
 }
 
-Location.propTypes = {}
+Location.propTypes = {
+  onChange: PropTypes.func.isRequired
+}
 
 const styles = StyleSheet.create({
   container: {

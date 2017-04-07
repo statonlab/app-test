@@ -11,6 +11,8 @@ import Header from '../components/Header'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
 import {MKButton} from 'react-native-material-kit'
+import ImageModal from '../components/ImageModal'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 const theme  = getTheme()
 const plants = {
@@ -20,24 +22,24 @@ const plants = {
     descriptionBody       : 'This is where the body text would go describing the majestic American Chestnut.',
     collectionInstructions: 'This is where the specific collection instructions would go.  Only collect disease trees for this species!',
     formProps             : {
-      seedsBinary: true,
-      flowersBinary: true,
+      seedsBinary        : true,
+      flowersBinary      : true,
       chestnutBlightSigns: true,
-      crownHealth: true,
-      diameterNumeric: true
+      crownHealth        : true,
+      diameterNumeric    : true
     }
   },
-  'Ash'        : {
+  'Ash'              : {
     image                 : require('../img/ash.jpg'),
     latinName             : 'Ash species',
     descriptionBody       : 'This is where the body text would go describing the gorgeous ash.',
     collectionInstructions: 'This is where the specific collection instructions would go.  Only collect disease trees for this species!',
     formProps             : {
-      ashSpecies: true,
-      seedsBinary: true,
-      flowersBinary: true,
+      ashSpecies     : true,
+      seedsBinary    : true,
+      flowersBinary  : true,
       emeraldAshBorer: true,
-      crownHealth: true,
+      crownHealth    : true,
       diameterNumeric: true
 
     }
@@ -49,18 +51,19 @@ const plants = {
     collectionInstructions: 'This is where the specific collection instructions would go.  Only collect disease trees for this species!',
     formProps             : {
       woolyAdesCoverage: true,
-      crownHealth: true,
-      diameterNumeric: true
+      crownHealth      : true,
+      diameterNumeric  : true
 
 
     }
   },
-  'Other'          : {
+  'Other'            : {
     image                 : require('../img/hydrangea.jpg'),
     latinName             : '',
     descriptionBody       : 'Submissions for all other trees.',
     collectionInstructions: '',
-    formProps             : {diameterNumeric: true
+    formProps             : {
+      diameterNumeric: true
     }
   },
   'White Oak'        : {
@@ -69,11 +72,11 @@ const plants = {
     descriptionBody       : 'This is where the body text would go describing the witty white oak.',
     collectionInstructions: 'This is where the specific collection instructions would go.  Only collect disease trees for this species!',
     formProps             : {
-      acorns: true,
+      acorns             : true,
       diameterDescriptive: true,
-      crownHealth: true,
-      heightFirstBranch: true,
-      oakHealthProblems: true
+      crownHealth        : true,
+      heightFirstBranch  : true,
+      oakHealthProblems  : true
     }
   }
 }
@@ -81,7 +84,7 @@ const plants = {
 export default class TreeDescriptionScene extends Component {
 
   constructor(props) {
-    super(props);
+    super(props)
   }
 
   render() {
@@ -93,6 +96,15 @@ export default class TreeDescriptionScene extends Component {
         />
         <ScrollView style={styles.scrollView}>
           <Image source={plants[this.props.title].image} style={styles.cardImage}/>
+          <View style={styles.iconsContainer}>
+            <ImageModal images={[plants[this.props.title].image, require('../img/ash.jpg')]} style={styles.buttonAlt} containerStyle={{flex: 1, paddingHorizontal: 5}}>
+              <Icon name="camera-burst" size={23} style={styles.icon}/>
+            </ImageModal>
+            <ImageModal images={[plants[this.props.title].image, require('../img/ash.jpg')]} style={styles.buttonAlt} containerStyle={{flex: 1, paddingHorizontal: 5}}>
+              <Icon name="map" size={23} style={styles.icon}/>
+            </ImageModal>
+          </View>
+
           <View style={styles.card}>
             <View style={[styles.cardBody, {paddingTop: 0}]}>
               <Text style={styles.cardTitle}>Latin name</Text>
@@ -111,8 +123,8 @@ export default class TreeDescriptionScene extends Component {
         </ScrollView>
         <View style={styles.footer}>
           <MKButton style={styles.button} onPress={() => {
-                    this.props.navigator.push({label: 'FormScene', title: this.props.title, formProps: plants[this.props.title].formProps})
-                  }}>
+            this.props.navigator.push({label: 'FormScene', title: this.props.title, formProps: plants[this.props.title].formProps})
+          }}>
             <Text style={styles.buttonText}>
               Add New Entry
             </Text>
@@ -125,10 +137,8 @@ export default class TreeDescriptionScene extends Component {
 
 TreeDescriptionScene.propTypes = {
   title    : PropTypes.string.isRequired,
-  navigator: PropTypes.object.isRequired,
+  navigator: PropTypes.object.isRequired
 }
-
-const elevationStyle = new Elevation(2)
 
 const styles = StyleSheet.create({
   container: {
@@ -141,14 +151,40 @@ const styles = StyleSheet.create({
     flex: 1
   },
 
+  iconsContainer: {
+    backgroundColor: '#fff',
+    padding        : 5,
+    alignItems     : 'center',
+    justifyContent : 'space-between',
+    flexDirection  : 'row',
+    borderTopWidth   : 1,
+    borderTopColor   : '#ddd',
+  },
+
+  icon: {
+    color: '#666',
+  },
+
+  buttonAlt: {
+    borderRadius: 2,
+    height: 40,
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff',
+  },
+
   card: {
-    ...theme.cardStyle,
-    ...elevationStyle,
-    borderRadius   : 0,
-    flex           : 1,
-    paddingVertical: 10,
-    justifyContent : 'center',
-    marginBottom   : 5
+    borderTopWidth   : 1,
+    borderTopColor   : '#ddd',
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
+    backgroundColor  : '#fff',
+    borderRadius     : 0,
+    flex             : 1,
+    paddingVertical  : 10,
+    justifyContent   : 'center',
+    marginBottom     : 5
   },
 
   cardImage: {
@@ -156,20 +192,20 @@ const styles = StyleSheet.create({
     height         : 150,
     resizeMode     : 'cover',
     width          : undefined,
-    backgroundColor: '#fff',
+    backgroundColor: '#fff'
   },
 
   cardTitle: {
     fontSize  : 14,
     flex      : 1,
     fontWeight: 'bold',
-    color     : "#222"
+    color     : '#222'
   },
 
   cardBody: {
     padding          : 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#dedede'
+    borderBottomColor: '#ddd'
   },
 
   cardText: {
@@ -191,12 +227,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical  : 15,
     width            : 300,
-    maxWidth         : 300,
+    maxWidth         : 300
   },
 
   buttonText: {
     textAlign : 'center',
     color     : '#fff',
     fontWeight: 'bold'
-  },
+  }
 })
