@@ -16,7 +16,7 @@ const theme = getTheme()
 import ImageModal from '../components/ImageModal'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
-const theme  = getTheme()
+const theme = getTheme()
 
 export default class TreeDescriptionScene extends Component {
 
@@ -32,7 +32,23 @@ export default class TreeDescriptionScene extends Component {
           navigator={this.props.navigator}
         />
         <ScrollView style={styles.scrollView}>
-<<<<<<< HEAD
+          <View style={[styles.card, styles.iconsContainer]}>
+            <ImageModal images={[plants[this.props.title].image, require('../img/ash.jpg')]} style={styles.buttonAlt} containerStyle={{flex: 1, paddingHorizontal: 5}}>
+              <Icon name="camera-burst" size={23} style={styles.icon}/>
+            </ImageModal>
+            <ImageModal images={[plants[this.props.title].image, require('../img/ash.jpg')]} style={styles.buttonAlt} containerStyle={{flex: 1, paddingHorizontal: 5}}>
+              <Icon name="map" size={23} style={styles.icon}/>
+            </ImageModal>
+          </View>
+          <View style={styles.buttonContainer}>
+            <MKButton style={styles.button} onPress={() => {
+              this.props.navigator.push({label: 'FormScene', title: this.props.title, formProps: plants[this.props.title].formProps})
+            }}>
+              <Text style={styles.buttonText}>
+                Add New Entry
+              </Text>
+            </MKButton>
+          </View>
           <Image source={Plants[this.props.title].image} style={styles.cardImage}/>
           {Plants[this.props.title].descriptionCards.map((card, index) => {
             return (
@@ -49,53 +65,6 @@ export default class TreeDescriptionScene extends Component {
             )
           })}
         </ScrollView>
-        <View style={styles.footer}>
-          <MKButton style={styles.button} onPress={() => {
-            this.props.navigator.push({label: 'FormScene', title: this.props.title, formProps: Plants[this.props.title].formProps})
-          }}>
-            <Text style={styles.buttonText}>
-              Add New Entry
-            </Text>
-          </MKButton>
-        </View>
-=======
-          <Image source={plants[this.props.title].image} style={styles.cardImage}/>
-          <View style={[styles.card, styles.iconsContainer]}>
-            <ImageModal images={[plants[this.props.title].image, require('../img/ash.jpg')]} style={styles.buttonAlt} containerStyle={{flex: 1, paddingHorizontal: 5}}>
-              <Icon name="camera-burst" size={23} style={styles.icon}/>
-            </ImageModal>
-            <ImageModal images={[plants[this.props.title].image, require('../img/ash.jpg')]} style={styles.buttonAlt} containerStyle={{flex: 1, paddingHorizontal: 5}}>
-              <Icon name="map" size={23} style={styles.icon}/>
-            </ImageModal>
-          </View>
-
-          <View style={styles.buttonContainer}>
-            <MKButton style={styles.button} onPress={() => {
-              this.props.navigator.push({label: 'FormScene', title: this.props.title, formProps: plants[this.props.title].formProps})
-            }}>
-              <Text style={styles.buttonText}>
-                Add New Entry
-              </Text>
-            </MKButton>
-          </View>
-
-          <View style={styles.card}>
-            <View style={[styles.cardBody, {paddingTop: 0}]}>
-              <Text style={styles.cardTitle}>Latin name</Text>
-              <Text style={styles.cardText}>{plants[this.props.title].latinName}</Text>
-            </View>
-
-            <View style={styles.cardBody}>
-              <Text style={styles.cardTitle}>Tree Description</Text>
-              <Text style={styles.cardText}>{plants[this.props.title].descriptionBody}</Text>
-            </View>
-            <View style={[styles.cardBody, {borderBottomWidth: 0, paddingBottom: 0}]}>
-              <Text style={styles.cardTitle}>Collection Instructions</Text>
-              <Text style={styles.cardText}>{plants[this.props.title].collectionInstructions}</Text>
-            </View>
-          </View>
-        </ScrollView>
->>>>>>> master
       </View>
     )
   }
