@@ -96,13 +96,23 @@ export default class TreeDescriptionScene extends Component {
         />
         <ScrollView style={styles.scrollView}>
           <Image source={plants[this.props.title].image} style={styles.cardImage}/>
-          <View style={styles.iconsContainer}>
+          <View style={[styles.card, styles.iconsContainer]}>
             <ImageModal images={[plants[this.props.title].image, require('../img/ash.jpg')]} style={styles.buttonAlt} containerStyle={{flex: 1, paddingHorizontal: 5}}>
               <Icon name="camera-burst" size={23} style={styles.icon}/>
             </ImageModal>
             <ImageModal images={[plants[this.props.title].image, require('../img/ash.jpg')]} style={styles.buttonAlt} containerStyle={{flex: 1, paddingHorizontal: 5}}>
               <Icon name="map" size={23} style={styles.icon}/>
             </ImageModal>
+          </View>
+
+          <View style={styles.buttonContainer}>
+            <MKButton style={styles.button} onPress={() => {
+              this.props.navigator.push({label: 'FormScene', title: this.props.title, formProps: plants[this.props.title].formProps})
+            }}>
+              <Text style={styles.buttonText}>
+                Add New Entry
+              </Text>
+            </MKButton>
           </View>
 
           <View style={styles.card}>
@@ -121,15 +131,6 @@ export default class TreeDescriptionScene extends Component {
             </View>
           </View>
         </ScrollView>
-        <View style={styles.footer}>
-          <MKButton style={styles.button} onPress={() => {
-            this.props.navigator.push({label: 'FormScene', title: this.props.title, formProps: plants[this.props.title].formProps})
-          }}>
-            <Text style={styles.buttonText}>
-              Add New Entry
-            </Text>
-          </MKButton>
-        </View>
       </View>
     )
   }
@@ -152,26 +153,24 @@ const styles = StyleSheet.create({
   },
 
   iconsContainer: {
-    backgroundColor: '#fff',
-    padding        : 5,
-    alignItems     : 'center',
-    justifyContent : 'space-between',
-    flexDirection  : 'row',
-    borderTopWidth   : 1,
-    borderTopColor   : '#ddd',
+    paddingVertical  : 5,
+    paddingHorizontal: 5,
+    alignItems       : 'center',
+    justifyContent   : 'space-between',
+    flexDirection    : 'row'
   },
 
   icon: {
-    color: '#666',
+    color: '#666'
   },
 
   buttonAlt: {
-    borderRadius: 2,
-    height: 40,
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#fff',
+    borderRadius   : 2,
+    height         : 40,
+    flex           : 1,
+    alignItems     : 'center',
+    justifyContent : 'center',
+    backgroundColor: '#fff'
   },
 
   card: {
@@ -213,11 +212,10 @@ const styles = StyleSheet.create({
     color  : '#666'
   },
 
-  footer: {
-    flex          : 0,
-    height        : 60,
+  buttonContainer: {
     justifyContent: 'center',
-    alignItems    : 'center'
+    alignItems    : 'center',
+    marginBottom  : 5
   },
 
   button: {
