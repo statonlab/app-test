@@ -137,8 +137,7 @@ const styles = StyleSheet.create({
 
   cardBody: {
     padding          : 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ddd'
+    borderBottomWidth: 0,
   },
 
   cardText: {
