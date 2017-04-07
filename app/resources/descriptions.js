@@ -1,3 +1,6 @@
+import React, {Component, PropTypes} from 'react'
+import {View, ScrollView, StyleSheet, TextInput, Text, DeviceEventEmitter} from 'react-native'
+
 export default Plants = {
   'American Chestnut': {
     image           : require('../img/am_chestnut4.jpg'),
@@ -5,23 +8,23 @@ export default Plants = {
     descriptionCards: [
       {
         title : "Species",
-        body  : ["American chestnut: Castanea dentata"],
+        body  : [<Text>American chestnut: <Text style={{fontStyle: "italic"}}>  Castanea dentata </Text></Text>],
         images: {}
       }, {
         title : "Introduction",
-        body  : ["American chestnut was once a dominant tree in eastern North American forests but a deadly fungal disease wiped out most of these trees in the early 1900s.  Help us find resistant trees by tagging healthy chestnut trees."],
+        body  : [<Text>American chestnut was once a dominant tree in eastern North American forests but a deadly fungal disease wiped out most of these trees in the early 1900s.  Help us find resistant trees by tagging healthy chestnut trees.</Text>],
         images: {}
       }, {
         title : "Description",
-        body  : ["The leaves of American chestnut are straight with large, widely spaced, often hooked, serrations on their edges.  Chestnut fruits are large, green and covered with spikes on the outside, bearing three large nuts on the inside.  Chestnut produces long cadkins made up of many small, pale green flowers. American chestnut twigs are hairless, reddish brown and have small white lenticels.  While it is relatively common to find stump-sprouting chestnuts that have been killed by blight, health mature American chestnut trees are very rare unless outside the tree’s native range.", "To learn more about identifying American chestnut and distinguishing it from similar species visit: https://www.acf.org/resources/identification/"],
+        body  : [<Text>The leaves of American chestnut are straight with large, widely spaced, often hooked, serrations on their edges.  Chestnut fruits are large, green and covered with spikes on the outside, bearing three large nuts on the inside.  Chestnut produces long cadkins made up of many small, pale green flowers. American chestnut twigs are hairless, reddish brown and have small white lenticels.  While it is relatively common to find stump-sprouting chestnuts that have been killed by blight, health mature American chestnut trees are very rare unless outside the tree’s native range.</Text>, <Text>To learn more about identifying American chestnut and distinguishing it from similar species visit: https://www.acf.org/resources/identification/</Text>],
         images: {}
       }, {
         images: {},
         title : "Chestnut blight",
-        body  : ["Chestnut blight is caused by the fungus Cryphonectria parasitica. It was introduced to North America in the early 1900s by accidentally importing infected Asian chestnut trees.  Most Asian chestnuts are quite resistant to the fungus but American chestnut proved highly susceptible and by 1940 few mature chestnut trees were left.  ",
-          "The fungus that causes chestnut blight grows in the vascular system of the tree, forming a canker and eventually girdling the tree.  Symptoms of chestnut blight include cracked bark, sunken cankers, and fungal structures. ",
-          "Several breeding programs exist to develop trees that are resistant to chestnut blight.  Many of these rely of hybridizing American chestnuts with resistant Chinese of Japanese chestnuts and then back crossing to American chestnut.  In addition, there has been success in producing transgenic chestnut trees with genes from wheat that provide resistance. ",
-          "Our hope is that this reporting app will let members of the public identify chestnut trees that have some natural resistance to chestnut blight.  We will then collect seeds from these trees and add them to tree breeding programs to try and propagate resistant trees to use in forest restoration."],
+        body  : [<Text>Chestnut blight is caused by the fungus Cryphonectria parasitica. It was introduced to North America in the early 1900s by accidentally importing infected Asian chestnut trees.  Most Asian chestnuts are quite resistant to the fungus but American chestnut proved highly susceptible and by 1940 few mature chestnut trees were left.  ",
+          "The fungus that causes chestnut blight grows in the vascular system of the tree, forming a canker and eventually girdling the tree.  Symptoms of chestnut blight include cracked bark, sunken cankers, and fungal structures. </Text>,
+          <Text>Several breeding programs exist to develop trees that are resistant to chestnut blight.  Many of these rely of hybridizing American chestnuts with resistant Chinese of Japanese chestnuts and then back crossing to American chestnut.  In addition, there has been success in producing transgenic chestnut trees with genes from wheat that provide resistance. ",
+          "Our hope is that this reporting app will let members of the public identify chestnut trees that have some natural resistance to chestnut blight.  We will then collect seeds from these trees and add them to tree breeding programs to try and propagate resistant trees to use in forest restoration.</Text>],
       }
     ],
     formProps       : {
