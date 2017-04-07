@@ -1,16 +1,15 @@
-
 export default Plants = {
   'American Chestnut': {
-    image                 : require('../img/am_chestnut4.jpg'),
-    latinName             : 'Castanea dentata',
-    descriptionCards      : [
+    image           : require('../img/am_chestnut4.jpg'),
+    latinName       : 'Castanea dentata',
+    descriptionCards: [
       {
-        title : "Introduction",
-        body  : ["American chestnut was once a dominant tree in eastern North American forests but a deadly fungal disease wiped out most of these trees in the early 1900s.  Help us find resistant trees by tagging healthy chestnut trees."],
+        title : "Latin name",
+        body  : ["Castanea dentata"],
         images: {}
       }, {
-        title : "American chestnut species:",
-        body  : ["Castanea dentata"],
+        title : "Introduction",
+        body  : ["American chestnut was once a dominant tree in eastern North American forests but a deadly fungal disease wiped out most of these trees in the early 1900s.  Help us find resistant trees by tagging healthy chestnut trees."],
         images: {}
       }, {
         title : "Description:",
@@ -25,7 +24,7 @@ export default Plants = {
           "Our hope is that this reporting app will let members of the public identify chestnut trees that have some natural resistance to chestnut blight.  We will then collect seeds from these trees and add them to tree breeding programs to try and propagate resistant trees to use in forest restoration."],
       }
     ],
-    formProps             : {
+    formProps       : {
       seedsBinary        : true,
       flowersBinary      : true,
       chestnutBlightSigns: true,
@@ -34,31 +33,29 @@ export default Plants = {
     }
   },
   'Ash'              : {
-    image                 : require('../img/ash.jpg'),
-    latinName             : 'Fraxinus sp.',
-    descriptionCards      : [
+    image           : require('../img/ash.jpg'),
+    latinName       : 'Fraxinus sp.',
+    descriptionCards: [
       {
-        title : "﻿Ash:",
-        body  : ["There are several different species of American ash trees, all of which are susceptible to the deadly emerald ash borer.  Help us find resistant trees by tagging healthy ash trees."],
+        title : "Species",
+        body  : ["While there are many different ash species present in North America, the most common include:", "white ash (Fraxinus americana)", "green ash (Fraxinus pennsylvanica)", "black ash (Fraxinus nigra)", "blue ash (Fraxinus quadrangulata)"],
+        images: {}
+      },
+      {title : "Overview",
+        body : ["There are several different species of American ash trees, all of which are susceptible to the deadly emerald ash borer.  Help us find resistant trees by tagging healthy ash trees."],
+        images : {}
+      },
+      {
+        title : "Description",
+        body  : [ "Ash trees share several features that can be used to distinguish them from other tree species.  Ash trees have an opposite branching pattern, where buds are positioned opposite each other on twigs.  Ash trees also have compound leaves.  Compound leaves are made up of many leaflets, each of which looks like a leaf. However leaves and leaflets can be distinguished because buds are only found at the base of the overall leaf, and not each individual leaflet.  Ashes typically have 5-9 leaflets per leaf, although this varies by species.  In addition, mature ash trees have a characteristic diamond pattern to their bark and ash seeds are distinctively shaped. "],
         images: {}
       }, {
-        title : "American ash species:",
-        body  : ["While there are many different ash species present in North America, the most common include white ash, (Fraxinus americana), green ash (Fraxinus pennsylvanica), black ash, (Fraxinus nigra), and blue ash, (Fraxinus quadrangulata)."],
+        title : "Range",
+        body  : ["Ash trees are present throughout Eastern and Midwestern North America.  Different ash species have different distributions within this range."
+        ],
         images: {}
       }, {
-        title : "Description:",
-        body  : ["Ash trees share several features that can be used to distinguish them from other tree species.  Ash trees have an opposite branching pattern, where buds are positioned opposite each other on twigs.  Ash trees also have compound leaves.  Compound leaves are made up of many leaflets, each of which looks like a leaf. However leaves and leaflets can be distinguished because buds are only found at the base of the overall leaf, and not each individual leaflet.  Ashes typically have 5-9 leaflets per leaf, although this varies by species.  In addition, mature ash trees have a characteristic diamond pattern to their bark and ash seeds are distinctively shaped. "],
-        images: {}
-      }, {
-        title : "Range:",
-        body  : ["Ash trees are present throughout Eastern and Midwestern North America.  Different ash species have different distributions within this range.",
-          "* White ash",
-          "* Green ash",
-          "* Black ash",
-          "* Blue ash",],
-        images: {}
-      }, {
-        title : "Distinguishing different ash species:",
+        title : "Distinguishing different ash species",
         body  : ["Leaf scars, twig shape, and species range can be very helpful in distinguishing ash tree species.",
           "Green ash has a leaf scar below the bud while white ash has a leaf scar that wraps around the bud and is more “U”-shaped.  In addition, white ash leaflets are white-colored on the undersides while green ash leaflets are green or rusty on their undersides. Blue ash can be distinguished by its thick square-shaped twigs which are often winged.  Black ash has a leaf scar similar to green ash but leaflets are directly attached to the petiole without stalks to connect them.  In addition, black ash has a more northern range and is typically found in wet sites.",
           "Read more about distinguishing American ash species here. ( https://www.ars.usda.gov/midwest-area/ames/plant-introduction-research/docs/npgs-ash-conservation-project/identifying-ash/)",
@@ -73,7 +70,7 @@ export default Plants = {
         images: {}
       },
     ],
-    formProps             : {
+    formProps       : {
       ashSpecies     : true,
       seedsBinary    : true,
       flowersBinary  : true,
@@ -83,32 +80,33 @@ export default Plants = {
     }
   },
   'Hemlock'          : {
-    image                 : require('../img/hemlock.jpg'),
-    latinName             : 'Tsuga sp.',
-    descriptionCards      : [
+    image           : require('../img/hemlock.jpg'),
+    latinName       : 'Tsuga sp.',
+    descriptionCards: [
       {
-        title : "Introduction",
+        title : "American hemlock species",
+        images: {},
+        body  : ["Tsuga canadensis (Eastern hemlock)", "Tsuga caroliniana (Carolina hemlock)"],
+      },
+      {
+        title : "Overview",
         images: {},
         body  : ["American hemlock trees are being killed by hemlock wooly adelgids.  Help fight these invasive insects by tagging health hemlock trees."],
       }, {
-        title : "American hemlock species:",
-        images: {},
-        body  : ["Tsuga canadensis (Eastern hemlock), Tsuga caroliniana (Carolina hemlock)"],
-      }, {
-        title : "Description:",
+        title : "Description",
         images: {},
         body  : ["Hemlock is an evergreen conifer. Its needles are 1.5-2 cm long, dark green on top and lighter on the underside with two white lines running the length of the needle.  Hemlocks produce small distinctive cones. These trees prefer shade and are often found along creeks and steams in mature forests", "There are two different hemlock species native to North American, Eastern hemlock and Carolina hemlock.  Eastern hemlock is larger and has a much broader distribution than Carolina hemlock, which is endemic to the southern Appalachians."]
       }, {
-        title : "Range:",
+        title : "Range",
         images: {},
-        body  : ["Eastern hemlock, Tsuga canadensis", "* Carolina hemlock, Tsuga caroliniana"]
+        body  : ["Eastern hemlock, Tsuga canadensis", "Carolina hemlock, Tsuga caroliniana"]
       }, {
-        title : "Hemlock wooly adelgid:",
+        title : "Hemlock wooly adelgid",
         body  : ["This insect sucks the sap of hemlock trees, weakening trees, preventing new growth, and eventually killing trees. In addition, hemlock wooly adelgids are thought to inject a toxin when feeding that further damages hemlock trees by drying them out.  Infested trees loose needles and branches and typically die 4-10 years after initial adelgid arrival unless treated.", "The hemlock wooly adelgid’s name comes from the insect’s egg sacs, which hang from the undersides of branches at certain times of year and look like small wooly tufts.  These insects are invasive in North America, introduced from Japan.", "Our hope is that this reporting app will let members of the public identify hemlock trees that have some natural resistance to hemlock wooly adelgid.  We will then collect seeds from these trees and add them to tree breeding programs to try and propagate resistant trees to use in forest restoration."],
         images: {}
       }
     ],
-    formProps             : {
+    formProps       : {
       woolyAdesCoverage: true,
       crownHealth      : true,
       diameterNumeric  : true
@@ -116,34 +114,34 @@ export default Plants = {
   }
   ,
   'Other'            : {
-    image                 : require('../img/hydrangea.jpg'),
-    descriptionBody       : 'Submissions for all other trees.',
-    formProps             : {
+    image          : require('../img/hydrangea.jpg'),
+    descriptionBody: 'Submissions for all other trees.',
+    formProps      : {
       diameterNumeric: true
     }
   }
   ,
   'White Oak'        : {
-    image                 : require('../img/white_oak.jpg'),
-    latinName             : 'Quercus alba',
-    descriptionCards      : [
+    image           : require('../img/white_oak.jpg'),
+    latinName       : 'Quercus alba',
+    descriptionCards: [
       {
-        title : "Introduction:",
-        body  : ["White oak is an extremely important tree species.  It provides wood for lumber, (including bourbon barrels) and is also a key food source for wildlife.  Help us breed better white oak by tagging big, healthy trees."],
-        images: {},
-      },
-      {
-        title : "Species:",
+        title : "Species",
         body  : ["Quercus alba"],
         images: {}
       },
       {
-        title : "Description:",
+        title : "Overview",
+        body  : ["White oak is an extremely important tree species.  It provides wood for lumber, (including bourbon barrels) and is also a key food source for wildlife.  Help us breed better white oak by tagging big, healthy trees."],
+        images: {},
+      },
+      {
+        title : "Description",
         body  : ["American white oak, Quercus alba, is a central component of the central hardwood forests.  Mature white oaks typically grow very large, 80-100 feet high, and have broad, full canopies.  White oaks can live a very long time and some trees have been found that are over 400 years old.  ", "The leaves of white oak have alternate branching and seven to nine rounded lobes.  This is different from red oaks, which typically have pointed lobes with a small hair on each tip.  ", "It is important to note that there are several species in the “white oak” group that share this leaf shape (including swamp white oak and bur oak) and that oaks frequently hybridize, sometimes making it challenging to know which oak species you are looking at."],
         images: {}
       },
       {
-        title : "Range:",
+        title : "Range",
         images: {},
         body  : ["White oak trees are present throughout Eastern and Midwestern North America.  However, this range overlaps with many other oak species."],
       }]

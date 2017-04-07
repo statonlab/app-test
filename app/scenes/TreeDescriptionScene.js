@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
 
   cardText: {
     padding: 10,
-    color  : '#666'
+    color  : '#666',
   },
 
   buttonContainer: {
