@@ -2,16 +2,14 @@ import React, {Component, PropTypes} from 'react'
 import {
   View,
   Text,
-  ScrollView,
   Image,
   TextInput,
   StyleSheet,
-  Alert,
   DeviceEventEmitter,
-  Keyboard,
   Animated
 } from 'react-native'
 import moment from 'moment'
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import {getTheme, MKButton} from 'react-native-material-kit'
 import Header from '../components/Header'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -61,8 +59,6 @@ export default class FormScene extends Component {
         accuracy : -1
       },
       metadata    : {
-        diameterNumeric: 25,
-        comment        : ''
       },
       id          : '',
       warnings    : {},
@@ -75,7 +71,7 @@ export default class FormScene extends Component {
     this.formProps = this.props.formProps // read in form items to display
 
     let formRules = {
-      images: t.list(t.String),
+      images  : t.list(t.String),
       title   : t.String,
       location: LocationT
     }
@@ -102,38 +98,7 @@ export default class FormScene extends Component {
      ])
      }*/
 
-    this.events.push(DeviceEventEmitter.addListener('locationCaptured', this.updateLocation))
     this.events.push(DeviceEventEmitter.addListener('cameraCapturedPhotos', this.handleImages))
-  }
-
-  componentWillMount() {
-    this.events.push(Keyboard.addListener('keyboardWillShow', this._keyboardWillShow.bind(this)))
-    this.events.push(Keyboard.addListener('keyboardWillHide', this._keyboardWillHide.bind(this)))
-  }
-
-  _keyboardWillShow() {
-    Animated.timing(       // Uses easing functions
-      this.state.bottomMargin, // The value to drive
-      {
-        toValue : 200,        // Target
-        duration: 10    // Configuration
-      }
-    ).start()
-    setTimeout(() => this.refs.scrollView.scrollToEnd({animated: true}), 50)
-  }
-
-  _keyboardWillHide() {
-    Animated.timing(       // Uses easing functions
-      this.state.bottomMargin, // The value to drive
-      {
-        toValue : 0,        // Target
-        duration: 500    // Configuration
-      }
-    ).start()
-  }
-
-  updateLocation = (location) => {
-    this.setState({location})
   }
 
   handleImages = (images) => {
@@ -211,10 +176,10 @@ export default class FormScene extends Component {
     let errors    = validationAttempt.errors
     let errorList = []
     let warnings  = {}
-    errors.map((error) =>{
+    errors.map((error) => {
       console.log(error.path)
       warnings[error.path] = true
-      errorList.push("Required field: " + DCP[error.path].label)
+      errorList.push('Required field: ' + DCP[error.path].label)
     })
     this.setState({warnings})
     if (errorList) {
@@ -240,6 +205,7 @@ export default class FormScene extends Component {
     this.events.map(event => {
       event.remove()
     })
+
   }
 
   getMultiCheckValue(value, isArray) {
@@ -281,7 +247,7 @@ export default class FormScene extends Component {
           }}
         >
           <View style={styles.picker}>
-            <Text style={this.state.warnings[key] ? [styles.label, styles.labelWarning] :  styles.label}>{DCP[key].label}</Text>
+            <Text style={this.state.warnings[key] ? [styles.label, styles.labelWarning] : styles.label}>{DCP[key].label}</Text>
             <TextInput
               style={styles.textField}
               editable={false}
@@ -314,11 +280,11 @@ export default class FormScene extends Component {
     return (
       <View style={styles.container}>
         <Header title={this.state.title} navigator={this.props.navigator}/>
-        <ScrollView
-          ref="scrollView"
-          keyboardDismissMode={'on-drag'}
-          keyboardShouldPersistTaps="always"
+        <KeyboardAwareScrollView
+          keyboardDismissMode="on-drag"
           showsVerticalScrollIndicator={false}
+          extraScrollHeight={20}
+          enableResetScrollToCoords={false}
         >
           <Animated.View style={[styles.card, {marginBottom: this.state.bottomMargin}]}>
 
@@ -327,7 +293,7 @@ export default class FormScene extends Component {
                 style={[styles.buttonLink, {height: this.state.images.length > 0 ? 60 : 40}]}
                 onPress={this._goToCamera}
               >
-                <Text style={this.state.warnings.photos ?[styles.label, styles.labelWarning] : styles.label}>Photos</Text>
+                <Text style={this.state.warnings.photos ? [styles.label, styles.labelWarning] : styles.label}>Photos</Text>
                 {this.state.images.length === 0 ?
                   <View style={{flex: 1, alignItems: 'center', flexDirection: 'row'}}>
                     <Text style={[styles.buttonLinkText, {color: '#aaa'}]}>Add photos</Text>
@@ -357,10 +323,10 @@ export default class FormScene extends Component {
 
             <View style={[styles.formGroup]}>
               <Text style={styles.label}>Location</Text>
-              <Location />
+              <Location onChange={(location) => this.setState({location})}/>
             </View>
           </Animated.View>
-        </ScrollView>
+        </KeyboardAwareScrollView>
 
         <View style={styles.footer}>
           <MKButton style={[styles.button, styles.flex1]} onPress={this.submit} rippleColor="rgba(0,0,0,0.5)">
@@ -441,14 +407,14 @@ const styles = StyleSheet.create({
     width        : undefined
   },
 
-  label: {
+  label       : {
     flex      : 0,
     width     : 110,
     color     : '#444',
     fontWeight: 'bold'
   },
   labelWarning: {
-    color : Colors.danger
+    color: Colors.danger
   },
 
   touchable: {

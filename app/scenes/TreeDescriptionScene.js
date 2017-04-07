@@ -13,11 +13,15 @@ import Colors from '../helpers/Colors'
 import {MKButton} from 'react-native-material-kit'
 import Plants from '../resources/descriptions'
 const theme = getTheme()
+import ImageModal from '../components/ImageModal'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+
+const theme  = getTheme()
 
 export default class TreeDescriptionScene extends Component {
 
   constructor(props) {
-    super(props);
+    super(props)
   }
 
   render() {
@@ -28,6 +32,7 @@ export default class TreeDescriptionScene extends Component {
           navigator={this.props.navigator}
         />
         <ScrollView style={styles.scrollView}>
+<<<<<<< HEAD
           <Image source={Plants[this.props.title].image} style={styles.cardImage}/>
           {Plants[this.props.title].descriptionCards.map((card, index) => {
             return (
@@ -53,6 +58,44 @@ export default class TreeDescriptionScene extends Component {
             </Text>
           </MKButton>
         </View>
+=======
+          <Image source={plants[this.props.title].image} style={styles.cardImage}/>
+          <View style={[styles.card, styles.iconsContainer]}>
+            <ImageModal images={[plants[this.props.title].image, require('../img/ash.jpg')]} style={styles.buttonAlt} containerStyle={{flex: 1, paddingHorizontal: 5}}>
+              <Icon name="camera-burst" size={23} style={styles.icon}/>
+            </ImageModal>
+            <ImageModal images={[plants[this.props.title].image, require('../img/ash.jpg')]} style={styles.buttonAlt} containerStyle={{flex: 1, paddingHorizontal: 5}}>
+              <Icon name="map" size={23} style={styles.icon}/>
+            </ImageModal>
+          </View>
+
+          <View style={styles.buttonContainer}>
+            <MKButton style={styles.button} onPress={() => {
+              this.props.navigator.push({label: 'FormScene', title: this.props.title, formProps: plants[this.props.title].formProps})
+            }}>
+              <Text style={styles.buttonText}>
+                Add New Entry
+              </Text>
+            </MKButton>
+          </View>
+
+          <View style={styles.card}>
+            <View style={[styles.cardBody, {paddingTop: 0}]}>
+              <Text style={styles.cardTitle}>Latin name</Text>
+              <Text style={styles.cardText}>{plants[this.props.title].latinName}</Text>
+            </View>
+
+            <View style={styles.cardBody}>
+              <Text style={styles.cardTitle}>Tree Description</Text>
+              <Text style={styles.cardText}>{plants[this.props.title].descriptionBody}</Text>
+            </View>
+            <View style={[styles.cardBody, {borderBottomWidth: 0, paddingBottom: 0}]}>
+              <Text style={styles.cardTitle}>Collection Instructions</Text>
+              <Text style={styles.cardText}>{plants[this.props.title].collectionInstructions}</Text>
+            </View>
+          </View>
+        </ScrollView>
+>>>>>>> master
       </View>
     )
   }
@@ -60,10 +103,8 @@ export default class TreeDescriptionScene extends Component {
 
 TreeDescriptionScene.propTypes = {
   title    : PropTypes.string.isRequired,
-  navigator: PropTypes.object.isRequired,
+  navigator: PropTypes.object.isRequired
 }
-
-const elevationStyle = new Elevation(2)
 
 const styles = StyleSheet.create({
   container: {
@@ -76,14 +117,38 @@ const styles = StyleSheet.create({
     flex: 1
   },
 
-  card: {
-    ...theme.cardStyle,
-    ...elevationStyle,
-    borderRadius   : 0,
+  iconsContainer: {
+    paddingVertical  : 5,
+    paddingHorizontal: 5,
+    alignItems       : 'center',
+    justifyContent   : 'space-between',
+    flexDirection    : 'row'
+  },
+
+  icon: {
+    color: '#666'
+  },
+
+  buttonAlt: {
+    borderRadius   : 2,
+    height         : 40,
     flex           : 1,
-    paddingVertical: 10,
+    alignItems     : 'center',
     justifyContent : 'center',
-    marginBottom   : 5
+    backgroundColor: '#fff'
+  },
+
+  card: {
+    borderTopWidth   : 1,
+    borderTopColor   : '#ddd',
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
+    backgroundColor  : '#fff',
+    borderRadius     : 0,
+    flex             : 1,
+    paddingVertical  : 10,
+    justifyContent   : 'center',
+    marginBottom     : 5
   },
 
   cardImage: {
@@ -91,20 +156,20 @@ const styles = StyleSheet.create({
     height         : 150,
     resizeMode     : 'cover',
     width          : undefined,
-    backgroundColor: '#fff',
+    backgroundColor: '#fff'
   },
 
   cardTitle: {
     fontSize  : 14,
     flex      : 1,
     fontWeight: 'bold',
-    color     : "#222"
+    color     : '#222'
   },
 
   cardBody: {
     padding          : 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#dedede'
+    borderBottomColor: '#ddd'
   },
 
   cardText: {
@@ -112,11 +177,10 @@ const styles = StyleSheet.create({
     color  : '#666'
   },
 
-  footer: {
-    flex          : 0,
-    height        : 60,
+  buttonContainer: {
     justifyContent: 'center',
-    alignItems    : 'center'
+    alignItems    : 'center',
+    marginBottom  : 5
   },
 
   button: {
@@ -126,12 +190,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical  : 15,
     width            : 300,
-    maxWidth         : 300,
+    maxWidth         : 300
   },
 
   buttonText: {
     textAlign : 'center',
     color     : '#fff',
     fontWeight: 'bold'
-  },
+  }
 })
