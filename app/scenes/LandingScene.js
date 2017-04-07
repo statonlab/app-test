@@ -41,7 +41,7 @@ const plants = [
   },
   {
     title: 'Other',
-    image: require('../img/hydrangea.jpg')
+    image: require('../img/forest.jpg')
   }
 ]
 

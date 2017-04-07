@@ -48,7 +48,7 @@ export default class ImageModal extends Component {
 ImageModal.propTypes = {
   ...TouchableOpacity.PropTypes,
   images        : PropTypes.array,
-  containerStyle: PropTypes.style
+  containerStyle: PropTypes.object
 }
 
 ImageModal.defaultProps = {
