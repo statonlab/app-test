@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from 'react'
 import {View, ScrollView, StyleSheet, TextInput, Text, DeviceEventEmitter} from 'react-native'
 import {MKButton} from 'react-native-material-kit'
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import Header from '../components/Header'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
@@ -150,7 +151,7 @@ export default class RegistrationScene extends Component {
     let code = error.response.data.code
     switch (code) {
       case 500:
-        alert("Unable to connect to server.  Please verify your internet connection and try again.")
+        alert('Unable to connect to server.  Please verify your internet connection and try again.')
         break
       default:
         let errors    = error.response.data.error
@@ -171,7 +172,12 @@ export default class RegistrationScene extends Component {
       <View style={styles.container}>
         <Spinner show={this.state.showSpinner}/>
         <Header title="Register" navigator={this.props.navigator} showRightIcon={false}/>
-        <ScrollView keyboardDismissMode="on-drag" showsVerticalScrollIndicator={false}>
+        <KeyboardAwareScrollView
+          keyboardDismissMode="on-drag"
+          showsVerticalScrollIndicator={false}
+          extraScrollHeight={20}
+          enableResetScrollToCoords={false}
+        >
           <View style={styles.form}>
             <View style={styles.formGroup}>
               <Text style={styles.title}>TreeSource</Text>
@@ -264,7 +270,7 @@ export default class RegistrationScene extends Component {
               </MKButton>
             </View>
           </View>
-        </ScrollView>
+        </KeyboardAwareScrollView>
       </View>
     )
   }

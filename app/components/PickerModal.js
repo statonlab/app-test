@@ -103,7 +103,8 @@ export default class PickerModal extends Component {
   render() {
     return (
       <View>
-        <Modal transparent={true}
+        <Modal
+          transparent={true}
           visible={this.state.modalVisible}
           onRequestClose={this.close}
           animationType={this.state.animationType}>
