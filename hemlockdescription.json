@@ -1,21 +1,0 @@
-descriptionCards : [
-{
-title : "﻿Hemlock",
-]
-images : {}
-},{
-title : "Introduction",
-body : ["American hemlock trees are being killed by hemlock wooly adelgids.  Help fight these invasive insects by tagging health hemlock trees."]
-images : {}
-},{
-title : "American hemlock species:",
-body : ["Tsuga canadensis (Eastern hemlock), Tsuga caroliniana (Carolina hemlock)", " ", "Description:", "Hemlock is an evergreen conifer. Its needles are 1.5-2 cm long, dark green on top and lighter on the underside with two white lines running the length of the needle.  Hemlocks produce small distinctive cones. These trees prefer shade and are often found along creeks and steams in mature forests", "There are two different hemlock species native to North American, Eastern hemlock and Carolina hemlock.  Eastern hemlock is larger and has a much broader distribution than Carolina hemlock, which is endemic to the southern Appalachians."]
-images : {}
-},{
-title : "Range:",
-body : ["* Eastern hemlock, Tsuga canadensis", "* Carolina hemlock, Tsuga caroliniana"]
-images : {}
-},{
-title : "Hemlock wooly adelgid:",
-body : ["This insect sucks the sap of hemlock trees, weakening trees, preventing new growth, and eventually killing trees. In addition, hemlock wooly adelgids are thought to inject a toxin when feeding that further damages hemlock trees by drying them out.  Infested trees loose needles and branches and typically die 4-10 years after initial adelgid arrival unless treated.", "The hemlock wooly adelgid’s name comes from the insect’s egg sacs, which hang from the undersides of branches at certain times of year and look like small wooly tufts.  These insects are invasive in North America, introduced from Japan.", "Our hope is that this reporting app will let members of the public identify hemlock trees that have some natural resistance to hemlock wooly adelgid.  We will then collect seeds from these trees and add them to tree breeding programs to try and propagate resistant trees to use in forest restoration."}
-],
