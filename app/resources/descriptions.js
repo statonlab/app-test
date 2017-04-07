@@ -4,20 +4,20 @@ export default Plants = {
     latinName       : 'Castanea dentata',
     descriptionCards: [
       {
-        title : "Latin name",
-        body  : ["Castanea dentata"],
+        title : "Species",
+        body  : ["American chestnut: Castanea dentata"],
         images: {}
       }, {
         title : "Introduction",
         body  : ["American chestnut was once a dominant tree in eastern North American forests but a deadly fungal disease wiped out most of these trees in the early 1900s.  Help us find resistant trees by tagging healthy chestnut trees."],
         images: {}
       }, {
-        title : "Description:",
+        title : "Description",
         body  : ["The leaves of American chestnut are straight with large, widely spaced, often hooked, serrations on their edges.  Chestnut fruits are large, green and covered with spikes on the outside, bearing three large nuts on the inside.  Chestnut produces long cadkins made up of many small, pale green flowers. American chestnut twigs are hairless, reddish brown and have small white lenticels.  While it is relatively common to find stump-sprouting chestnuts that have been killed by blight, health mature American chestnut trees are very rare unless outside the tree’s native range.", "To learn more about identifying American chestnut and distinguishing it from similar species visit: https://www.acf.org/resources/identification/"],
         images: {}
       }, {
         images: {},
-        title : "Chestnut blight:",
+        title : "Chestnut blight",
         body  : ["Chestnut blight is caused by the fungus Cryphonectria parasitica. It was introduced to North America in the early 1900s by accidentally importing infected Asian chestnut trees.  Most Asian chestnuts are quite resistant to the fungus but American chestnut proved highly susceptible and by 1940 few mature chestnut trees were left.  ",
           "The fungus that causes chestnut blight grows in the vascular system of the tree, forming a canker and eventually girdling the tree.  Symptoms of chestnut blight include cracked bark, sunken cankers, and fungal structures. ",
           "Several breeding programs exist to develop trees that are resistant to chestnut blight.  Many of these rely of hybridizing American chestnuts with resistant Chinese of Japanese chestnuts and then back crossing to American chestnut.  In addition, there has been success in producing transgenic chestnut trees with genes from wheat that provide resistance. ",
@@ -84,9 +84,9 @@ export default Plants = {
     latinName       : 'Tsuga sp.',
     descriptionCards: [
       {
-        title : "American hemlock species",
+        title : "Species",
         images: {},
-        body  : ["Tsuga canadensis (Eastern hemlock)", "Tsuga caroliniana (Carolina hemlock)"],
+        body  : ["Eastern hemlock (Tsuga canadensis)", "Carolina hemlock (Tsuga caroliniana)"],
       },
       {
         title : "Overview",
@@ -99,7 +99,7 @@ export default Plants = {
       }, {
         title : "Range",
         images: {},
-        body  : ["Eastern hemlock, Tsuga canadensis", "Carolina hemlock, Tsuga caroliniana"]
+        body  : [""]
       }, {
         title : "Hemlock wooly adelgid",
         body  : ["This insect sucks the sap of hemlock trees, weakening trees, preventing new growth, and eventually killing trees. In addition, hemlock wooly adelgids are thought to inject a toxin when feeding that further damages hemlock trees by drying them out.  Infested trees loose needles and branches and typically die 4-10 years after initial adelgid arrival unless treated.", "The hemlock wooly adelgid’s name comes from the insect’s egg sacs, which hang from the undersides of branches at certain times of year and look like small wooly tufts.  These insects are invasive in North America, introduced from Japan.", "Our hope is that this reporting app will let members of the public identify hemlock trees that have some natural resistance to hemlock wooly adelgid.  We will then collect seeds from these trees and add them to tree breeding programs to try and propagate resistant trees to use in forest restoration."],
@@ -114,8 +114,14 @@ export default Plants = {
   }
   ,
   'Other'            : {
-    image          : require('../img/hydrangea.jpg'),
-    descriptionBody: 'Submissions for all other trees.',
+    image          : require('../img/forest.jpg'),
+    descriptionCards: [
+      {
+      title: "Other",
+      body : ['Submissions for all other trees.'],
+        images : {}
+    }
+      ],
     formProps      : {
       diameterNumeric: true
     }
