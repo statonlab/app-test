@@ -12,7 +12,6 @@ import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
 import {MKButton} from 'react-native-material-kit'
 import Plants from '../resources/descriptions'
-const theme = getTheme()
 import ImageModal from '../components/ImageModal'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
@@ -32,24 +31,25 @@ export default class TreeDescriptionScene extends Component {
           navigator={this.props.navigator}
         />
         <ScrollView style={styles.scrollView}>
+          <Image source={Plants[this.props.title].image} style={styles.cardImage}/>
           <View style={[styles.card, styles.iconsContainer]}>
-            <ImageModal images={[plants[this.props.title].image, require('../img/ash.jpg')]} style={styles.buttonAlt} containerStyle={{flex: 1, paddingHorizontal: 5}}>
+            <ImageModal images={[Plants[this.props.title].image, require('../img/ash.jpg')]} style={styles.buttonAlt} containerStyle={{flex: 1, paddingHorizontal: 5}}>
               <Icon name="camera-burst" size={23} style={styles.icon}/>
             </ImageModal>
-            <ImageModal images={[plants[this.props.title].image, require('../img/ash.jpg')]} style={styles.buttonAlt} containerStyle={{flex: 1, paddingHorizontal: 5}}>
+            <ImageModal images={[Plants[this.props.title].image, require('../img/ash.jpg')]} style={styles.buttonAlt} containerStyle={{flex: 1, paddingHorizontal: 5}}>
               <Icon name="map" size={23} style={styles.icon}/>
             </ImageModal>
           </View>
           <View style={styles.buttonContainer}>
             <MKButton style={styles.button} onPress={() => {
-              this.props.navigator.push({label: 'FormScene', title: this.props.title, formProps: plants[this.props.title].formProps})
+              this.props.navigator.push({label: 'FormScene', title: this.props.title, formProps: Plants[this.props.title].formProps})
             }}>
               <Text style={styles.buttonText}>
                 Add New Entry
               </Text>
             </MKButton>
           </View>
-          <Image source={Plants[this.props.title].image} style={styles.cardImage}/>
+
           {Plants[this.props.title].descriptionCards.map((card, index) => {
             return (
               <View style={styles.card} key={index}>
