@@ -180,10 +180,15 @@ export default class TreeDescriptionScene extends Component {
     super(props);
   }
 
-  renderDescriptionCards = () => {
-    // plants[this.props.title].descriptionCards.map(() )
-    return ( null)
-}
+  ///
+
+
+
+  renderCardBody = (body, bodyIndex) => {
+    console.log("Heres a body: ", body)
+
+
+  }
 
   render() {
     return (
@@ -194,21 +199,20 @@ export default class TreeDescriptionScene extends Component {
         />
         <ScrollView style={styles.scrollView}>
           <Image source={plants[this.props.title].image} style={styles.cardImage}/>
-          <View style={styles.card}>
-            <View style={[styles.cardBody, {paddingTop: 0}]}>
-              <Text style={styles.cardTitle}>Latin name</Text>
-              <Text style={styles.cardText}>{plants[this.props.title].latinName}</Text>
+          {plants[this.props.title].descriptionCards.map((card, index) => {
+            return (
+            <View style={styles.card} key={index}>
+              <View style={[styles.cardBody, {paddingTop: 0}]}>
+                <Text style={styles.cardTitle}> {card.title}</Text>
+                {card.body.map((body, bodyIndex) => {
+                  return (
+                    <Text style={styles.cardText} key = {bodyIndex}> {body}</Text>
+                  )
+                })}
+              </View>
             </View>
-
-            <View style={styles.cardBody}>
-              <Text style={styles.cardTitle}>Tree Description</Text>
-              <Text style={styles.cardText}>{plants[this.props.title].descriptionBody}</Text>
-            </View>
-            <View style={[styles.cardBody, {borderBottomWidth: 0, paddingBottom: 0}]}>
-              <Text style={styles.cardTitle}>Collection Instructions</Text>
-              <Text style={styles.cardText}>{plants[this.props.title].collectionInstructions}</Text>
-            </View>
-          </View>
+            )
+          })}
         </ScrollView>
         <View style={styles.footer}>
           <MKButton style={styles.button} onPress={() => {
