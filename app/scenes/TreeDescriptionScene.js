@@ -11,75 +11,11 @@ import Header from '../components/Header'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
 import {MKButton} from 'react-native-material-kit'
+import Plants from '../resources/descriptions'
 import ImageModal from '../components/ImageModal'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
-const theme  = getTheme()
-const plants = {
-  'American Chestnut': {
-    image                 : require('../img/am_chestnut4.jpg'),
-    latinName             : 'A. chestnuticus',
-    descriptionBody       : 'This is where the body text would go describing the majestic American Chestnut.',
-    collectionInstructions: 'This is where the specific collection instructions would go.  Only collect disease trees for this species!',
-    formProps             : {
-      seedsBinary        : true,
-      flowersBinary      : true,
-      chestnutBlightSigns: true,
-      crownHealth        : true,
-      diameterNumeric    : true
-    }
-  },
-  'Ash'              : {
-    image                 : require('../img/ash.jpg'),
-    latinName             : 'Ash species',
-    descriptionBody       : 'This is where the body text would go describing the gorgeous ash.',
-    collectionInstructions: 'This is where the specific collection instructions would go.  Only collect disease trees for this species!',
-    formProps             : {
-      ashSpecies     : true,
-      seedsBinary    : true,
-      flowersBinary  : true,
-      emeraldAshBorer: true,
-      crownHealth    : true,
-      diameterNumeric: true
-
-    }
-  },
-  'Hemlock'          : {
-    image                 : require('../img/hemlock.jpg'),
-    latinName             : 'H. lockicus',
-    descriptionBody       : 'This is where the body text would go describing the heroic hemlock.',
-    collectionInstructions: 'This is where the specific collection instructions would go.  Only collect disease trees for this species!',
-    formProps             : {
-      woolyAdesCoverage: true,
-      crownHealth      : true,
-      diameterNumeric  : true
-
-
-    }
-  },
-  'Other'            : {
-    image                 : require('../img/hydrangea.jpg'),
-    latinName             : '',
-    descriptionBody       : 'Submissions for all other trees.',
-    collectionInstructions: '',
-    formProps             : {
-      diameterNumeric: true
-    }
-  },
-  'White Oak'        : {
-    image                 : require('../img/white_oak.jpg'),
-    latinName             : 'W. oakicus',
-    descriptionBody       : 'This is where the body text would go describing the witty white oak.',
-    collectionInstructions: 'This is where the specific collection instructions would go.  Only collect disease trees for this species!',
-    formProps             : {
-      acorns             : true,
-      diameterDescriptive: true,
-      crownHealth        : true,
-      heightFirstBranch  : true,
-      oakHealthProblems  : true
-    }
-  }
-}
+const theme = getTheme()
 
 export default class TreeDescriptionScene extends Component {
 
@@ -95,19 +31,18 @@ export default class TreeDescriptionScene extends Component {
           navigator={this.props.navigator}
         />
         <ScrollView style={styles.scrollView}>
-          <Image source={plants[this.props.title].image} style={styles.cardImage}/>
+          <Image source={Plants[this.props.title].image} style={styles.cardImage}/>
           <View style={[styles.card, styles.iconsContainer]}>
-            <ImageModal images={[plants[this.props.title].image, require('../img/ash.jpg')]} style={styles.buttonAlt} containerStyle={{flex: 1, paddingHorizontal: 5}}>
+            <ImageModal images={[Plants[this.props.title].image, require('../img/ash.jpg')]} style={styles.buttonAlt} containerStyle={{flex: 1, paddingHorizontal: 5}}>
               <Icon name="camera-burst" size={23} style={styles.icon}/>
             </ImageModal>
-            <ImageModal images={[plants[this.props.title].image, require('../img/ash.jpg')]} style={styles.buttonAlt} containerStyle={{flex: 1, paddingHorizontal: 5}}>
+            <ImageModal images={[Plants[this.props.title].image, require('../img/ash.jpg')]} style={styles.buttonAlt} containerStyle={{flex: 1, paddingHorizontal: 5}}>
               <Icon name="map" size={23} style={styles.icon}/>
             </ImageModal>
           </View>
-
           <View style={styles.buttonContainer}>
             <MKButton style={styles.button} onPress={() => {
-              this.props.navigator.push({label: 'FormScene', title: this.props.title, formProps: plants[this.props.title].formProps})
+              this.props.navigator.push({label: 'FormScene', title: this.props.title, formProps: Plants[this.props.title].formProps})
             }}>
               <Text style={styles.buttonText}>
                 Add New Entry
@@ -115,21 +50,20 @@ export default class TreeDescriptionScene extends Component {
             </MKButton>
           </View>
 
-          <View style={styles.card}>
-            <View style={[styles.cardBody, {paddingTop: 0}]}>
-              <Text style={styles.cardTitle}>Latin name</Text>
-              <Text style={styles.cardText}>{plants[this.props.title].latinName}</Text>
-            </View>
-
-            <View style={styles.cardBody}>
-              <Text style={styles.cardTitle}>Tree Description</Text>
-              <Text style={styles.cardText}>{plants[this.props.title].descriptionBody}</Text>
-            </View>
-            <View style={[styles.cardBody, {borderBottomWidth: 0, paddingBottom: 0}]}>
-              <Text style={styles.cardTitle}>Collection Instructions</Text>
-              <Text style={styles.cardText}>{plants[this.props.title].collectionInstructions}</Text>
-            </View>
-          </View>
+          {Plants[this.props.title].descriptionCards.map((card, index) => {
+            return (
+              <View style={styles.card} key={index}>
+                <View style={[styles.cardBody, {paddingTop: 0}]}>
+                  <Text style={styles.cardTitle}> {card.title} </Text>
+                  {card.body.map((body, bodyIndex) => {
+                    return (
+                      <Text style={styles.cardText} key={bodyIndex}> {body} </Text>
+                    )
+                  })}
+                </View>
+              </View>
+            )
+          })}
         </ScrollView>
       </View>
     )
@@ -203,13 +137,12 @@ const styles = StyleSheet.create({
 
   cardBody: {
     padding          : 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ddd'
+    borderBottomWidth: 0,
   },
 
   cardText: {
     padding: 10,
-    color  : '#666'
+    color  : '#666',
   },
 
   buttonContainer: {
