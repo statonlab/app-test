@@ -57,7 +57,7 @@ export default class TreeDescriptionScene extends Component {
                   <Text style={styles.cardTitle}> {card.title} </Text>
                   {card.body.map((body, bodyIndex) => {
                     return (
-                      <Text style={styles.cardText} key={bodyIndex}> {body} </Text>
+                      <Text style={styles.cardText} key={bodyIndex}>{body}</Text>
                     )
                   })}
                 </View>
