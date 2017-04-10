@@ -237,27 +237,12 @@ export default class FormScene extends Component {
       )
     }
 
-    if (DCP[key].freeText) {
-      return (
-        <View style={styles.formGroup} key={key}>
-          <Text style={this.state.warnings[key] ? [styles.label, styles.labelWarning]: styles.label}>{DCP[key].label}</Text>
-          <TextInput
-            style={styles.textField}
-            placeholder={DCP[key].placeHolder}
-            placeholderTextColor="#aaa"
-            onChangeText={(entry) => this.setState({metadata: {...this.state.metadata, [key]: entry}})}
-            underlineColorAndroid="transparent"
-          />
-          <Icon name="textbox" style={styles.icon}/>
-        </View>
-      )
-    }
-
     return (
       <View style={styles.formGroup} key={key}>
         <PickerModal
           style={styles.picker}
           multiCheck={DCP[key].multiCheck}
+          freeText={DCP[key].modalFreeText}
           header={DCP[key].description}
           choices={DCP[key].selectChoices}
           onSelect={(option) => {

@@ -129,9 +129,9 @@ const DCP = {
     slider     : true
   },
   otherLabel : {
-    label : 'Entry category',
+    label : 'Tree type',
     description: 'Please create a name to associate this entry with.  (ie Birch)',
-    freeText : true,
+    modalFreeText : true,
     placeHolder : "name (required)"
   }
 

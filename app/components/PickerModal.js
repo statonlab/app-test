@@ -1,9 +1,11 @@
 import React, {Component, PropTypes} from 'react'
-import {View, Text, StyleSheet, Modal, TouchableOpacity} from 'react-native'
+import {View, Text, TextInput, StyleSheet, Modal, TouchableOpacity} from 'react-native'
 import {MKButton} from 'react-native-material-kit'
 import Colors from '../helpers/Colors'
 import Elevation from '../helpers/Elevation'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import DCP from '../resources/config.js'
+import realm from '../db/Schema'
 
 export default class PickerModal extends Component {
 
@@ -14,13 +16,15 @@ export default class PickerModal extends Component {
       modalVisible : false,
       cancelText   : 'CANCEL',
       selected     : 'not set',
-      selectedMulti: []
+      selectedMulti: [],
+      newEntry : null,
+      choices : this.props.choices
     }
   }
 
   componentDidMount() {
     this.setState({selected: this.props.initialSelect})
-    if (this.props.multiCheck) {
+    if (this.props.multiCheck || this.props.freeText) {
       this.setState({cancelText: 'CONFIRM'})
     }
   }
@@ -36,8 +40,13 @@ export default class PickerModal extends Component {
       } else {
         selected.push(item)
       }
-
       this.setState({selectedMulti: selected})
+      return
+    }
+
+    if (this.props.freeText){
+      this.props.onSelect(item)
+      this.setState({newEntry : item})
       return
     }
     //for single select
@@ -50,14 +59,40 @@ export default class PickerModal extends Component {
     this.setState({modalVisible: true})
   }
 
+
+  fetchSelections = () => {
+    let observations = realm.objects('Submission').filtered('name == Other')
+    if (observations){
+      this.setState({choices: ["hey", "listen"]})
+    }
+    this.setState({choices: null})
+
+  }
+
   close = () => {
     if (this.props.multiCheck) {
-
       this.props.onSelect(JSON.stringify(this.state.selectedMulti))
-
     }
 
     this.setState({modalVisible: false})
+  }
+
+  renderTextBox = () => {
+    return (
+      <View style={styles.choiceContainer}>
+      <View style={styles.choiceItem}>
+           <TextInput
+             style={styles.textField}
+             placeholder={"Add new label"}
+             placeholderTextColor="#aaa"
+             onChangeText={(text) =>
+               this.onChange(text) }
+             underlineColorAndroid="transparent"
+           />
+        <Icon name="textbox" style={styles.icon}/>
+        </View>
+      </View>
+       )
   }
 
   renderOptions(choice, index) {
@@ -118,8 +153,10 @@ export default class PickerModal extends Component {
               </View>
 
               <View style={styles.modalChoices}>
-                {this.props.choices.map(this.renderOptions.bind(this))}
+                {this.state.choices.map(this.renderOptions.bind(this))}
               </View>
+
+              {this.props.freeText ? this.renderTextBox() :  null}
 
               <MKButton style={styles.button} onPress={this.close}>
                 <Text style={styles.buttonText}>
@@ -145,16 +182,18 @@ PickerModal.propTypes = {
   onSelect     : PropTypes.func,
   style        : View.propTypes.style,
   initialSelect: PropTypes.string,
-  multiCheck   : PropTypes.bool
+  multiCheck   : PropTypes.bool,
+  freeText: PropTypes.bool
 }
 
 PickerModal.defaultProps = {
-  choices      : ['choice 1', 'choice 2'],
+  choices      : [],
   header       : 'default header',
   onSelect     : () => {
   },
   initialSelect: '',
-  multiCheck   : false
+  multiCheck   : false,
+  freeText : false
 }
 
 
@@ -237,5 +276,15 @@ const styles = StyleSheet.create({
     fontSize : 20,
     color    : '#aaa',
     marginTop: 5
-  }
+  },
+  textField: {
+    height           : 40,
+    width            : 150,
+    borderWidth      : 1,
+    borderColor      : '#dedede',
+    borderRadius     : 2,
+    paddingHorizontal: 10,
+    fontSize         : 14,
+    backgroundColor  : '#f9f9f9'
+  },
 })
