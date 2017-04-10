@@ -24,6 +24,8 @@ export default class TreeDescriptionScene extends Component {
   }
 
   render() {
+    const len = Plants[this.props.title].descriptionCards.length - 1
+
     return (
       <View style={styles.container}>
         <Header
@@ -49,21 +51,20 @@ export default class TreeDescriptionScene extends Component {
               </Text>
             </MKButton>
           </View>
-
-          {Plants[this.props.title].descriptionCards.map((card, index) => {
-            return (
-              <View style={styles.card} key={index}>
-                <View style={[styles.cardBody, {paddingTop: 0}]}>
-                  <Text style={styles.cardTitle}> {card.title} </Text>
+          <View style={styles.card}>
+            {Plants[this.props.title].descriptionCards.map((card, index) => {
+              return (
+                <View key={index} style={[styles.cardBody, {borderBottomWidth: len === index ? 0 : 1}]}>
+                  <Text style={styles.cardTitle}>{card.title}</Text>
                   {card.body.map((body, bodyIndex) => {
                     return (
                       <Text style={styles.cardText} key={bodyIndex}>{body}</Text>
                     )
                   })}
                 </View>
-              </View>
-            )
-          })}
+              )
+            })}
+          </View>
         </ScrollView>
       </View>
     )
@@ -115,7 +116,7 @@ const styles = StyleSheet.create({
     backgroundColor  : '#fff',
     borderRadius     : 0,
     flex             : 1,
-    paddingVertical  : 10,
+    paddingHorizontal: 10,
     justifyContent   : 'center',
     marginBottom     : 5
   },
@@ -132,17 +133,23 @@ const styles = StyleSheet.create({
     fontSize  : 14,
     flex      : 1,
     fontWeight: 'bold',
-    color     : '#222'
+    color     : '#333'
   },
 
   cardBody: {
-    padding          : 10,
-    borderBottomWidth: 0,
+    paddingTop       : 15,
+    paddingBottom    : 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd'
   },
 
   cardText: {
-    padding: 10,
-    color  : '#666',
+    fontSize       : 14,
+    paddingVertical: 8,
+    paddingLeft    : 10,
+    paddingRight   : 5,
+    color          : '#333',
+    lineHeight     : 21
   },
 
   buttonContainer: {
