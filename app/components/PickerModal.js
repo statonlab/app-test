@@ -27,6 +27,7 @@ export default class PickerModal extends Component {
     if (this.props.multiCheck || this.props.freeText) {
       this.setState({cancelText: 'CONFIRM'})
     }
+    this.fetchSelections()
   }
 
   onChange = (item) => {
@@ -43,6 +44,7 @@ export default class PickerModal extends Component {
       this.setState({selectedMulti: selected})
       return
     }
+    //For freeText, don't close every character update, and update the display box within the modal.
 
     if (this.props.freeText){
       this.props.onSelect(item)
@@ -61,12 +63,16 @@ export default class PickerModal extends Component {
 
 
   fetchSelections = () => {
-    let observations = realm.objects('Submission').filtered('name == Other')
-    if (observations){
-      this.setState({choices: ["hey", "listen"]})
-    }
-    this.setState({choices: null})
-
+    let labels = []
+    let observations = realm.objects('Submission').filtered("name == 'Other'")
+    console.log(observations)
+     if (observations){
+      observations.map((observation, index) => {
+        let customLabel = observation.meta_data.otherLabel
+        customLabel ? labels.push(customLabel) : null
+      })
+       this.setState({choices: labels})
+     }:( )
   }
 
   close = () => {
