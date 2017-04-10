@@ -5,6 +5,13 @@ const Plants = {
   'American Chestnut': {
     image           : require('../img/am_chestnut4.jpg'),
     latinName       : 'Castanea dentata',
+    images          : [
+      require('../img/chestnut_id/1.jpg'),
+      require('../img/chestnut_id/2.jpg'),
+      require('../img/chestnut_id/3.jpg'),
+      require('../img/chestnut_id/4.jpg')
+    ],
+    maps            : [require('../img/maps/am_chestnut_map.png')],
     descriptionCards: [
       {
         title : 'Species',
@@ -40,6 +47,25 @@ const Plants = {
   'Ash'              : {
     image           : require('../img/ash.jpg'),
     latinName       : 'Fraxinus sp.',
+    images          : [
+      require('../img/ash_id/1.jpg'),
+      require('../img/ash_id/2.jpg'),
+      require('../img/ash_id/3.jpg'),
+      require('../img/ash_id/4.jpg'),
+      require('../img/ash_id/5.jpg'),
+      require('../img/ash_id/6.jpg'),
+      require('../img/ash_id/7.jpg'),
+      require('../img/ash_id/8.jpg'),
+      require('../img/ash_id/9.jpg'),
+      require('../img/ash_id/10.jpg'),
+      require('../img/ash_id/11.jpg'),
+    ],
+    maps            : [
+      require('../img/maps/ash_fraxamer_range.png'),
+      require('../img/maps/ash_fraxnigr_range.png'),
+      require('../img/maps/ash_fraxpenn_range.png'),
+      require('../img/maps/ash_fraxquad_range.png')
+    ],
     descriptionCards: [
       {
         title : 'Species',
@@ -89,6 +115,15 @@ const Plants = {
   'Hemlock'          : {
     image           : require('../img/hemlock.jpg'),
     latinName       : 'Tsuga sp.',
+    images          : [
+      require('../img/hemlock_id/1.jpg'),
+      require('../img/hemlock_id/2.jpg'),
+      require('../img/hemlock_id/3.jpg')
+    ],
+    maps            : [
+      require('../img/maps/hemlock_tsugcana_range.png'),
+      require('../img/maps/hemlock_tsugcaro_range.png')
+    ],
     descriptionCards: [
       {
         title : 'Species',
@@ -122,6 +157,8 @@ const Plants = {
   ,
   'Other'            : {
     image           : require('../img/forest.jpg'),
+    images          : [],
+    maps            : [],
     descriptionCards: [
       {
         title : 'Other',
@@ -136,7 +173,16 @@ const Plants = {
   ,
   'White Oak'        : {
     image           : require('../img/white_oak.jpg'),
+    images          : [
+      require('../img/white_oak_id/1.jpg'),
+      require('../img/white_oak_id/2.jpg'),
+      require('../img/white_oak_id/3.jpg'),
+      require('../img/white_oak_id/4.jpg'),
+      require('../img/white_oak_id/5.jpg'),
+      require('../img/white_oak_id/6.jpg'),
+    ],
     latinName       : 'Quercus alba',
+    maps            : [require('../img/maps/oak_queralba_range.png')],
     descriptionCards: [
       {
         title : 'Species',

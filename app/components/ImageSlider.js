@@ -47,7 +47,7 @@ export default class ImageSlider extends Component {
 
     this.state = {
       position : 0,
-      height   : Dimensions.get('window').width * (4 / 9),
+      height   : Dimensions.get('window').height - 20,
       width    : Dimensions.get('window').width,
       scrolling: false
     }
@@ -130,21 +130,20 @@ export default class ImageSlider extends Component {
       <View style={{justifyContent: 'center', alignItems: 'center', flex: 1, flexDirection: 'column'}}>
         <ScrollView
           ref={ref => this._onRef(ref)}
-          decelerationRate={0.99}
           horizontal={true}
           showsHorizontalScrollIndicator={false}
           pagingEnabled={true}
           {...this._panResponder.panHandlers}
-          style={{maxHeight: 300}}
+          contentContainerStyle={{justifyContent: 'center', alignItems: 'center'}}
         >
           {this.props.images.map((image, index) => {
             const imageObject = typeof image === 'string' ? {uri: image} : image
             if (this.props.onPress) {
               return (
-                <TouchableOpacity onPress={this.props.onPress} key={index} activeOpacity={.9}>
+                <TouchableOpacity key={index} onPress={this.props.onPress} activeOpacity={.9}>
                   <Image
                     source={imageObject}
-                    style={{width, maxHeight: 300, resizeMode: 'contain'}}
+                    style={{width, resizeMode: 'contain'}}
                   />
                 </TouchableOpacity>
               )

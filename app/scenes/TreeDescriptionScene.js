@@ -23,6 +23,29 @@ export default class TreeDescriptionScene extends Component {
     super(props)
   }
 
+  _renderImageModalIcons() {
+    if (Plants[this.props.title].images.length === 0 && Plants[this.props.title].maps.length === 0) {
+      return (
+        <View style={{marginBottom: 5}}/>
+      )
+    }
+
+    return (
+      <View style={[styles.card, styles.iconsContainer]}>
+        {Plants[this.props.title].images.length > 0 ?
+          <ImageModal images={Plants[this.props.title].images} style={styles.buttonAlt} containerStyle={{flex: 1, paddingHorizontal: 5}}>
+            <Icon name="camera-burst" size={23} style={styles.icon}/>
+          </ImageModal>
+          : null }
+        {Plants[this.props.title].maps.length > 0 ?
+          <ImageModal images={Plants[this.props.title].maps} style={styles.buttonAlt} containerStyle={{flex: 1, paddingHorizontal: 5}}>
+            <Icon name="map" size={23} style={styles.icon}/>
+          </ImageModal>
+          : null }
+      </View>
+    )
+  }
+
   render() {
     const len = Plants[this.props.title].descriptionCards.length - 1
 
@@ -34,14 +57,7 @@ export default class TreeDescriptionScene extends Component {
         />
         <ScrollView style={styles.scrollView}>
           <Image source={Plants[this.props.title].image} style={styles.cardImage}/>
-          <View style={[styles.card, styles.iconsContainer]}>
-            <ImageModal images={[Plants[this.props.title].image, require('../img/ash.jpg')]} style={styles.buttonAlt} containerStyle={{flex: 1, paddingHorizontal: 5}}>
-              <Icon name="camera-burst" size={23} style={styles.icon}/>
-            </ImageModal>
-            <ImageModal images={[Plants[this.props.title].image, require('../img/ash.jpg')]} style={styles.buttonAlt} containerStyle={{flex: 1, paddingHorizontal: 5}}>
-              <Icon name="map" size={23} style={styles.icon}/>
-            </ImageModal>
-          </View>
+          {this._renderImageModalIcons()}
           <View style={styles.buttonContainer}>
             <MKButton style={styles.button} onPress={() => {
               this.props.navigator.push({label: 'FormScene', title: this.props.title, formProps: Plants[this.props.title].formProps})
