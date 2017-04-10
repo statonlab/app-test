@@ -105,6 +105,7 @@ export default class PickerModal extends Component {
     const uncheckedBox = (<Icon name="checkbox-blank-outline" style={styles.icon}/>)
     const checkedBox   = (<Icon name="checkbox-marked" style={[styles.icon, {color: Colors.primary}]}/>)
 
+    console.log("trying to render ", choice)
     if (this.props.multiCheck) {
       return (
         <TouchableOpacity
@@ -159,7 +160,7 @@ export default class PickerModal extends Component {
               </View>
 
               <View style={styles.modalChoices}>
-                {this.state.choices.map(this.renderOptions.bind(this))}
+                {this.props.choices.map(this.renderOptions.bind(this))}
               </View>
 
               {this.props.freeText ? this.renderTextBox() :  null}
