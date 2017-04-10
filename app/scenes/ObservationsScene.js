@@ -19,7 +19,7 @@ export default class ObservationsScene extends Component {
   constructor(props) {
     super(props)
 
-    this.dataSource  = new ListView.DataSource({
+    this.dataSource = new ListView.DataSource({
       rowHasChanged          : (r1, r2) => r1.id !== r2.id,
       sectionHeaderHasChanged: () => {
       }
@@ -65,7 +65,7 @@ export default class ObservationsScene extends Component {
     let images = JSON.parse(submission.images)
     return (
       <MKButton style={styles.row} key={submission.id} rippleColor="rgba(10,10,10,.1)" onPress={() => this._goToEntryScene(submission)}>
-        <Image source={{uri: images[0]}} style={styles.image}/>
+        {images.length > 0 ? <Image source={{uri: images[0]}} style={styles.image}/> : null}
         <View style={styles.textContainer}>
           <Text style={styles.title}>{submission.name}</Text>
           <Text style={styles.body}>{moment(submission.date, 'MM-DD-YYYY HH:mm:ss').format('MMMM Do YYYY')}</Text>
