@@ -95,7 +95,6 @@ const DCP = {
     description  : 'Are there acorns on the tree?  Don\'t include fallen acorns on the ground in your estimate.',
     placeHolder  : 'Number of acorns'
   },
-
   diameterDescriptive: {
     label        : 'Diameter',
     placeHolder  : 'Diameter',
