@@ -18,7 +18,7 @@ export default class SliderPick extends Component {
   }
 
   componentDidMount() {
-    this.setState({value: this.props.start})
+    this.onChange(this.props.start)
   }
 
   onChange = (curValue) => {
