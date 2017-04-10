@@ -27,7 +27,9 @@ export default class PickerModal extends Component {
     if (this.props.multiCheck || this.props.freeText) {
       this.setState({cancelText: 'CONFIRM'})
     }
-    this.fetchSelections()
+    if (this.props.freeText) {
+      this.fetchSelections()
+    }
   }
 
   onChange = (item) => {
@@ -160,7 +162,7 @@ export default class PickerModal extends Component {
               </View>
 
               <View style={styles.modalChoices}>
-                {this.props.choices.map(this.renderOptions.bind(this))}
+                {this.state.choices.map(this.renderOptions.bind(this))}
               </View>
 
               {this.props.freeText ? this.renderTextBox() :  null}
