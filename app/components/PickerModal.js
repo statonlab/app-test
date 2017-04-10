@@ -66,13 +66,13 @@ export default class PickerModal extends Component {
     let labels = []
     let observations = realm.objects('Submission').filtered("name == 'Other'")
     console.log(observations)
-     if (observations){
-      observations.map((observation, index) => {
-        let customLabel = observation.meta_data.otherLabel
-        customLabel ? labels.push(customLabel) : null
-      })
+     if (observations) {
+       observations.map((observation, index) => {
+         let customLabel = observation.meta_data.otherLabel
+         customLabel ? labels.push(customLabel) : null
+       })
        this.setState({choices: labels})
-     }:( )
+     }
   }
 
   close = () => {
