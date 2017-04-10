@@ -67,10 +67,9 @@ export default class PickerModal extends Component {
   fetchSelections = () => {
     let labels = []
     let observations = realm.objects('Submission').filtered("name == 'Other'")
-    console.log(observations)
      if (observations) {
        observations.map((observation, index) => {
-         let customLabel = observation.meta_data.otherLabel
+         let customLabel = JSON.parse(observation.meta_data).otherLabel
          customLabel ? labels.push(customLabel) : null
        })
        this.setState({choices: labels})
@@ -107,7 +106,6 @@ export default class PickerModal extends Component {
     const uncheckedBox = (<Icon name="checkbox-blank-outline" style={styles.icon}/>)
     const checkedBox   = (<Icon name="checkbox-marked" style={[styles.icon, {color: Colors.primary}]}/>)
 
-    console.log("trying to render ", choice)
     if (this.props.multiCheck) {
       return (
         <TouchableOpacity
