@@ -26,7 +26,7 @@ project.xcworkspace
 #
 build/
 .idea
-.gradle
+# .gradle
 local.properties
 *.iml
 
@@ -51,6 +51,3 @@ buck-out/
 fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots
-
-
-Info.plist
