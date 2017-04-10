@@ -97,7 +97,7 @@ export default class PickerModal extends Component {
                this.onChange(text) }
              underlineColorAndroid="transparent"
            />
-        <Icon name="textbox" style={styles.icon}/>
+        <Icon name="textbox" style={styles.iconTI}/>
         </View>
       </View>
        )
@@ -286,9 +286,15 @@ const styles = StyleSheet.create({
     color    : '#aaa',
     marginTop: 5
   },
+  iconTI: {
+    fontSize : 20,
+    color    : '#aaa',
+    marginTop: 5,
+    marginLeft: 15
+  },
   textField: {
     height           : 40,
-    width            : 150,
+    width            : 250,
     borderWidth      : 1,
     borderColor      : '#dedede',
     borderRadius     : 2,
