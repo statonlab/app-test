@@ -127,7 +127,14 @@ const DCP = {
     label      : 'Tree diameter',
     description: 'Approximately how many feet is the diameter of the tree?',
     slider     : true
+  },
+  otherLabel : {
+    label : 'Entry category',
+    description: 'Please create a name to associate this entry with.  (ie Birch)',
+    freeText : true,
+    placeHolder : "name (required)"
   }
+
 }
 
 

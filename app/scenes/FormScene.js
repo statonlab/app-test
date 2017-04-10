@@ -38,8 +38,9 @@ DCPrules = {
   diameterNumeric    : t.Number,
   chestnutBlightSigns: t.maybe(t.String),
   ashSpecies         : t.enums.of(DCP.ashSpecies.selectChoices, 'ashSpecies'),
-  emeraldAshBorer    : t.maybe(t.String)   //t.enums.of(DCP.emeraldAshBorer.selectChoices, "EAB"),
+  emeraldAshBorer    : t.maybe(t.String),   //t.enums.of(DCP.emeraldAshBorer.selectChoices, "EAB"),
   // chestnutBlightSigns: t.enums.of(DCP.chestnutBlightSigns.selectChoices, "cbSigns"),
+  otherLabel : t.String
 }
 
 const Coordinate = t.refinement(t.Number, (n) => n != 0, 'Coordinate')
@@ -232,6 +233,22 @@ export default class FormScene extends Component {
             }}
           />
           <Icon name="altimeter" style={styles.icon}/>
+        </View>
+      )
+    }
+
+    if (DCP[key].freeText) {
+      return (
+        <View style={styles.formGroup} key={key}>
+          <Text style={this.state.warnings[key] ? [styles.label, styles.labelWarning]: styles.label}>{DCP[key].label}</Text>
+          <TextInput
+            style={styles.textField}
+            placeholder={DCP[key].placeHolder}
+            placeholderTextColor="#aaa"
+            onChangeText={(entry) => this.setState({metadata: {...this.state.metadata, [key]: entry}})}
+            underlineColorAndroid="transparent"
+          />
+          <Icon name="textbox" style={styles.icon}/>
         </View>
       )
     }

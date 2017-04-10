@@ -167,7 +167,8 @@ const Plants = {
       }
     ],
     formProps       : {
-      diameterNumeric: true
+      diameterNumeric: true,
+      otherLabel : true
     }
   }
   ,
