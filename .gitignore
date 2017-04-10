@@ -39,7 +39,6 @@ yarn-error.log
 # BUCK
 buck-out/
 \.buckd/
-android/app/libs
 *.keystore
 
 # fastlane
@@ -52,9 +51,3 @@ android/app/libs
 fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots
-
-ios/WildType.xcodeproj/project.pbxproj
-ios/WildType.xcodeproj/xcshareddata/xcschemes/WildType-tvOS.xcscheme
-ios/WildType.xcodeproj/xcshareddata/xcschemes/WildType.xcscheme
-ios/WildType/Info.plist
-ios/WildTypeTests/Info.plist

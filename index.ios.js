@@ -10,7 +10,7 @@ import {
 
 import App from './app/components/App'
 
-export default class WildType extends Component {
+export default class TreeSource extends Component {
 
   render() {
     return (
@@ -19,4 +19,4 @@ export default class WildType extends Component {
   }
 }
 
-AppRegistry.registerComponent('WildType', () => WildType);
+AppRegistry.registerComponent('TreeSource', () => TreeSource);

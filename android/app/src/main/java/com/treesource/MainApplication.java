@@ -1,15 +1,14 @@
-package com.wildtype;
+package com.treesource;
 
 import android.app.Application;
-import android.util.Log;
 
 import com.facebook.react.ReactApplication;
+import com.rnfs.RNFSPackage;
 import io.realm.react.RealmReactPackage;
-import com.lwansbrough.RCTCamera.RCTCameraPackage;
-import com.airbnb.android.react.maps.MapsPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.github.xinthink.rnmk.ReactMaterialKitPackage;
-import com.facebook.react.ReactInstanceManager;
+import com.airbnb.android.react.maps.MapsPackage;
+import com.lwansbrough.RCTCamera.RCTCameraPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -30,11 +29,12 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNFSPackage(),
             new RealmReactPackage(),
-            new RCTCameraPackage(),
-            new MapsPackage(),
             new VectorIconsPackage(),
-            new ReactMaterialKitPackage()
+            new ReactMaterialKitPackage(),
+            new MapsPackage(),
+            new RCTCameraPackage()
       );
     }
   };
