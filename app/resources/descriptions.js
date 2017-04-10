@@ -58,7 +58,7 @@ const Plants = {
       require('../img/ash_id/8.jpg'),
       require('../img/ash_id/9.jpg'),
       require('../img/ash_id/10.jpg'),
-      require('../img/ash_id/11.jpg'),
+      require('../img/ash_id/11.jpg')
     ],
     maps            : [
       require('../img/maps/ash_fraxamer_range.png'),
@@ -180,7 +180,7 @@ const Plants = {
       require('../img/white_oak_id/3.jpg'),
       require('../img/white_oak_id/4.jpg'),
       require('../img/white_oak_id/5.jpg'),
-      require('../img/white_oak_id/6.jpg'),
+      require('../img/white_oak_id/6.jpg')
     ],
     latinName       : 'Quercus alba',
     maps            : [require('../img/maps/oak_queralba_range.png')],
@@ -205,8 +205,17 @@ const Plants = {
         title : 'Range',
         images: {},
         body  : ['White oak trees are present throughout Eastern and Midwestern North America.  However, this range overlaps with many other oak species.']
-      }]
+      }
+    ],
+    formProps       : {
+      heightFirstBranch  : true,
+      acorns             : true,
+      crownHealth        : true,
+      diameterDescriptive: true,
+      oakHealthProblems  : true
+    }
   }
+
 }
 
 export default Plants
