@@ -58,8 +58,7 @@ export default class FormScene extends Component {
         longitude: 0,
         accuracy : -1
       },
-      metadata    : {
-      },
+      metadata    : {},
       id          : '',
       warnings    : {},
       bottomMargin: new Animated.Value(0)
@@ -179,7 +178,9 @@ export default class FormScene extends Component {
     errors.map((error) => {
       console.log(error.path)
       warnings[error.path] = true
-      errorList.push('Required field: ' + DCP[error.path].label)
+      if (typeof DCP[error.path] !== 'undefined') {
+        errorList.push('Required field: ' + DCP[error.path].label)
+      }
     })
     this.setState({warnings})
     if (errorList) {

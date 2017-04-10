@@ -1,5 +1,5 @@
-import React, {Component, PropTypes} from 'react'
-import {View, ScrollView, StyleSheet, TextInput, Text, DeviceEventEmitter} from 'react-native'
+import React from 'react'
+import {Text} from 'react-native'
 
 const Plants = {
   'American Chestnut': {

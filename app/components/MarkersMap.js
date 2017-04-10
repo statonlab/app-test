@@ -12,10 +12,15 @@ export default class MarkersMap extends Component {
       if (this.props.zoom) {
         this.zoomToMarker(this.props.startingMarker)
       } else {
-        setTimeout(() => {
-          this.refs.startingMarker.showCallout()
-
-        }, 500)
+        let time = () => {
+          setTimeout(() => {
+            if (typeof this.refs.startingMarker.showCallout === 'function') {
+              this.refs.startingMarker.showCallout()
+            } else {
+              time()
+            }
+          }, 500)
+        }
       }
     }
   }
@@ -35,9 +40,15 @@ export default class MarkersMap extends Component {
       }, 1000)
     }, 500)
 
-    setTimeout(() => {
-      this.refs.startingMarker.showCallout()
-    }, 1500)
+    let time = () => {
+      setTimeout(() => {
+        if (typeof this.refs.startingMarker.showCallout === 'function') {
+          this.refs.startingMarker.showCallout()
+        } else {
+          time()
+        }
+      }, 1500)
+    }
   }
 
   /**
