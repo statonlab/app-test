@@ -24,7 +24,7 @@ export default class ImageModal extends Component {
         <Modal
           transparent={true}
           visible={this.state.show}
-          onRequestClose={this.close}
+          onRequestClose={() => this.setState({show: false})}
           animationType="fade"
         >
           <View style={{flex: 1, alignItems: 'center', flexDirection: 'row'}}>
