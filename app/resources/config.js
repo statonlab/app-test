@@ -98,6 +98,8 @@ const DCP = {
 
   diameterDescriptive: {
     label        : 'Diameter',
+    placeHolder  : 'Diameter',
+    description  : 'Estimate the tree diameter.',
     selectChoices: [
       '1-15 inches', '16-19 inches', '20-23 inches', 'over 24 inches'
     ]

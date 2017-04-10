@@ -47,8 +47,17 @@ export default class MarkersMap extends Component {
         } else {
           time()
         }
-      }, 1500)
+      }, 100)
     }
+
+      setTimeout(() => {
+        if (typeof this.refs.startingMarker.showCallout === 'function') {
+          this.refs.startingMarker.showCallout()
+        } else {
+          time()
+        }
+      }, 1500)
+
   }
 
   /**
