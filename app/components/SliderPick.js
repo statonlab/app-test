@@ -3,6 +3,7 @@ import {
   StyleSheet,
   Text,
   View,
+  TouchableOpacity
 } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import {MKSlider} from 'react-native-material-kit'
@@ -38,8 +39,10 @@ export default class SliderPick extends Component {
             lowerTrackColor={Colors.primary}
             onChange={(value) => this.onChange(value)}
           />
+          <TouchableOpacity style={styles.container}>
           <Text style={styles.label}>{this.state.value} {this.props.legendText}</Text>
           <Icon name="help-circle" style={styles.icon}/>
+          </TouchableOpacity>
         </View>
     )
   }
@@ -50,7 +53,8 @@ SliderPick.propTypes = {
   max       : PropTypes.number,
   start     : PropTypes.number,
   legendText: PropTypes.string,
-  onChange  : PropTypes.func
+  onChange  : PropTypes.func,
+  description : PropTypes.string
 }
 
 SliderPick.defaultProps = {
