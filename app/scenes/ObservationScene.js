@@ -11,16 +11,68 @@ import Header from '../components/Header'
 import Colors from '../helpers/Colors'
 import {MKButton} from 'react-native-material-kit'
 import DCP from '../resources/config.js'
+import Observation from '../helpers/Observation'
+import Spinner from '../components/Spinner'
+import realm from '../db/Schema'
+import SnackBarNotice from '../components/SnackBarNotice'
 
-export default class ViewEntryScene extends Component {
+export default class ObservationScene extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      imageIndex: 0
+      imageIndex: 0,
+      synced    : false
     }
   }
 
+  /**
+   * Set the synced status.
+   */
+  componentDidMount() {
+    this.setState({synced: this.props.plant.synced})
+  }
+
+  /**
+   * Call onUnmount property.
+   */
+  componentWillUnmount() {
+    this.props.onUnmount()
+  }
+
+  /**
+   * Upload entry to server.
+   *
+   * @param entry
+   */
+  upload(entry) {
+    this.refs.spinner.open()
+    Observation.upload(entry).then(response => {
+      let data   = response.data.data
+      submission = realm.objects('Submission').filtered(`id == ${entry.id}`)
+      if (submission.length > 0) {
+        let observation = submission[0]
+        realm.write(() => {
+          observation.serverID = data.observation_id
+          observation.synced   = true
+        })
+        this.refs.spinner.close()
+        this.setState({synced: true})
+        this.refs.snackbar.showBar()
+      }
+    }).catch(error => {
+      console.log(error)
+      this.refs.spinner.close()
+    })
+  }
+
+  /**
+   * Render meta data as list items.
+   *
+   * @param data
+   * @returns {*}
+   * @private
+   */
   _renderMetaData = (data) => {
     if (typeof data === 'string' && data !== '') {
       data = JSON.parse(data)
@@ -31,7 +83,7 @@ export default class ViewEntryScene extends Component {
     }
 
     return Object.keys(data).sort().map((key) => {
-      let text = data[key]
+      let text  = data[key]
       let label = DCP[key] ? DCP[key].label : key
 
       // If it is an array, convert it to text
@@ -53,12 +105,19 @@ export default class ViewEntryScene extends Component {
     })
   }
 
+  /**
+   * Render Scene.
+   *
+   * @returns {XML}
+   */
   render() {
     let entry  = this.props.plant
     let images = JSON.parse(entry.images)
 
     return (
       <View style={styles.container}>
+        <Spinner ref="spinner"/>
+        <SnackBarNotice ref="snackbar" noticeText="Entry uploaded successfully!"/>
         <Header navigator={this.props.navigator} title={entry.name}/>
         <ScrollView style={styles.contentContainer}>
           <ScrollView
@@ -72,9 +131,9 @@ export default class ViewEntryScene extends Component {
             })}
           </ScrollView>
           <View style={styles.card}>
-            {entry.synced ? null :
+            {this.state.synced ? null :
               <View style={styles.field}>
-                <MKButton style={styles.button}>
+                <MKButton style={styles.button} onPress={() => this.upload.call(this, entry)}>
                   <Text style={styles.buttonText}>Upload to Server</Text>
                 </MKButton>
               </View>
@@ -93,9 +152,15 @@ export default class ViewEntryScene extends Component {
   }
 }
 
-ViewEntryScene.PropTypes = {
+ObservationScene.PropTypes = {
   navigator: PropTypes.object.isRequired,
-  plant    : PropTypes.object.isRequired
+  plant    : PropTypes.object.isRequired,
+  onUnmount: PropTypes.func
+}
+
+ObservationScene.defaultProps = {
+  onUnmount: () => {
+  }
 }
 
 const styles = StyleSheet.create({

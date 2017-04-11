@@ -46,7 +46,7 @@ export default class WildType extends Component {
     }
 
     /** DEPRECATED
-    if (route.label == 'CapturedScene') {
+     if (route.label == 'CapturedScene') {
       return <CapturedScene navigator={navigator} image={route.image}/>
     }**/
 
@@ -63,19 +63,26 @@ export default class WildType extends Component {
     }
 
     if (route.label === 'LoginScene') {
-      return <LoginScene navigator={navigator} email={route.email} />
+      return <LoginScene navigator={navigator} email={route.email}/>
     }
 
     if (route.label === 'RegistrationScene') {
       return <RegistrationScene navigator={navigator}/>
     }
 
-    if(route.label === 'ObservationsScene') {
+    if (route.label === 'ObservationsScene') {
       return <ObservationsScene navigator={navigator}/>
     }
 
-    if(route.label === 'ObservationScene') {
-      return <ObservationScene navigator={navigator} plant={route.plant}/>
+    if (route.label === 'ObservationScene') {
+      return (
+        <ObservationScene
+          navigator={navigator}
+          plant={route.plant}
+          onUnmount={typeof route.onUnmount === 'function' ? route.onUnmount : () => {
+          }}
+        />
+      )
     }
 
     if (route.label === 'AccountScene') {
@@ -134,9 +141,9 @@ export default class WildType extends Component {
 
 const styles = StyleSheet.create({
   navigator: {
-    flex: 1,
+    flex: 1
   },
   container: {
-    flex: 1,
+    flex: 1
   }
 })
