@@ -27,7 +27,9 @@ export default class PickerModal extends Component {
     if (this.props.multiCheck || this.props.freeText) {
       this.setState({cancelText: 'CONFIRM'})
     }
-    this.fetchSelections()
+    if (this.props.freeText) {
+      this.fetchSelections()
+    }
   }
 
   onChange = (item) => {
@@ -48,7 +50,7 @@ export default class PickerModal extends Component {
 
     if (this.props.freeText){
       this.props.onSelect(item)
-      this.setState({newEntry : item})
+      this.setState({newEntry : item, selected: item})
       return
     }
     //for single select
@@ -65,10 +67,9 @@ export default class PickerModal extends Component {
   fetchSelections = () => {
     let labels = []
     let observations = realm.objects('Submission').filtered("name == 'Other'")
-    console.log(observations)
      if (observations) {
        observations.map((observation, index) => {
-         let customLabel = observation.meta_data.otherLabel
+         let customLabel = JSON.parse(observation.meta_data).otherLabel
          customLabel ? labels.push(customLabel) : null
        })
        this.setState({choices: labels})
@@ -95,7 +96,7 @@ export default class PickerModal extends Component {
                this.onChange(text) }
              underlineColorAndroid="transparent"
            />
-        <Icon name="textbox" style={styles.icon}/>
+        <Icon name="textbox" style={styles.iconTI}/>
         </View>
       </View>
        )
@@ -283,9 +284,15 @@ const styles = StyleSheet.create({
     color    : '#aaa',
     marginTop: 5
   },
+  iconTI: {
+    fontSize : 20,
+    color    : '#aaa',
+    marginTop: 5,
+    marginLeft: 15
+  },
   textField: {
     height           : 40,
-    width            : 150,
+    width            : 250,
     borderWidth      : 1,
     borderColor      : '#dedede',
     borderRadius     : 2,
