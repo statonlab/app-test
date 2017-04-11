@@ -211,7 +211,7 @@ const Plants = {
       heightFirstBranch  : true,
       acorns             : true,
       crownHealth        : true,
-      diameterDescriptive: true,
+      diameterNumeric:     true,
       oakHealthProblems  : true
     }
   }
