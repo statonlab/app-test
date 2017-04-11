@@ -18,10 +18,6 @@ export default class InstructionModal extends Component {
   }
 
 
-  close = () => {
-
-    this.setState({modalVisible: false})
-  }
 
   _toggle() {
     this.setState({show: !this.state.show})
@@ -44,7 +40,7 @@ export default class InstructionModal extends Component {
                   {this.props.text}
                 </Text>
               </View>
-              <MKButton style={styles.button} onPress={this.close}>
+              <MKButton style={styles.button} onPress={this._toggle.bind(this)}>
                 <Text style={styles.buttonText}>
                   OK
                 </Text>
@@ -86,7 +82,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,.85)'
 
   },
-  container: {
+ container: {
     backgroundColor  : '#fefefe',
     flex             : 0,
     flexDirection    : 'column',
@@ -102,13 +98,6 @@ const styles = StyleSheet.create({
     flex           : 1,
     alignItems     : 'center',
     justifyContent : 'center'
-  },
-
-  container: {
-    flex          : 1,
-    flexDirection : 'column',
-    alignItems    : 'center',
-    justifyContent: 'center'
   },
 
   image: {

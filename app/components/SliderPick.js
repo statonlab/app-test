@@ -41,7 +41,9 @@ export default class SliderPick extends Component {
             lowerTrackColor={Colors.primary}
             onChange={(value) => this.onChange(value)}
           />
-          <InstructionModal  containerStyle={{flex: 1}}>
+          <InstructionModal style={styles.modalContainer} 
+          text={this.props.description}
+          >
           <Text style={styles.label}>{this.state.value} {this.props.legendText}</Text>
           <Icon name="help-circle" style={styles.icon}/>
           </InstructionModal>
@@ -64,6 +66,7 @@ SliderPick.defaultProps = {
   max       : 50,
   start     : 25,
   legendText: "Inches",
+  description: "please provide a description",
   onChange  : () => {
   }
 }
@@ -78,6 +81,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center'
+  },
+  modalContainer:  {
+    flex         : 0,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+
   },
 
   icon: {
