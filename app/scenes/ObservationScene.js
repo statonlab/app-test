@@ -5,7 +5,8 @@ import {
   StyleSheet,
   Text,
   Image,
-  Dimensions
+  Dimensions,
+  DeviceEventEmitter
 } from 'react-native'
 import Header from '../components/Header'
 import Colors from '../helpers/Colors'
@@ -22,7 +23,8 @@ export default class ObservationScene extends Component {
 
     this.state = {
       imageIndex: 0,
-      synced    : false
+      synced    : false,
+      isLoggedIn: false
     }
   }
 
@@ -30,6 +32,9 @@ export default class ObservationScene extends Component {
    * Set the synced status.
    */
   componentDidMount() {
+    this._isLoggedIn()
+
+    this.loggedEvent = DeviceEventEmitter.addListener('userLoggedIn', this._isLoggedIn.bind(this))
     this.setState({synced: this.props.plant.synced})
   }
 
@@ -37,7 +42,18 @@ export default class ObservationScene extends Component {
    * Call onUnmount property.
    */
   componentWillUnmount() {
+    this.loggedEvent.remove()
     this.props.onUnmount()
+  }
+
+  /**
+   * Check if user is logged in.
+   *
+   * @private
+   */
+  _isLoggedIn() {
+    let isLoggedIn = realm.objects('User').length > 0
+    this.setState({isLoggedIn})
   }
 
   /**
@@ -105,6 +121,28 @@ export default class ObservationScene extends Component {
     })
   }
 
+  _renderButtons(entry) {
+    if (!this.state.synced && !this.state.isLoggedIn) {
+      return (
+        <View style={styles.field}>
+          <MKButton style={styles.button} onPress={() => this.props.navigator.push({label: 'LoginScene'})}>
+            <Text style={styles.buttonText}>Login to Upload</Text>
+          </MKButton>
+        </View>
+      )
+    }
+
+    if (!this.state.synced) {
+      return (
+        <View style={styles.field}>
+          <MKButton style={styles.button} onPress={() => this.upload.call(this, entry)}>
+            <Text style={styles.buttonText}>Upload to Server</Text>
+          </MKButton>
+        </View>
+      )
+    }
+  }
+
   /**
    * Render Scene.
    *
@@ -131,13 +169,7 @@ export default class ObservationScene extends Component {
             })}
           </ScrollView>
           <View style={styles.card}>
-            {this.state.synced ? null :
-              <View style={styles.field}>
-                <MKButton style={styles.button} onPress={() => this.upload.call(this, entry)}>
-                  <Text style={styles.buttonText}>Upload to Server</Text>
-                </MKButton>
-              </View>
-            }
+            {this._renderButtons(entry)}
 
             <View style={styles.field}>
               <Text style={styles.label}>Date Collected</Text>
