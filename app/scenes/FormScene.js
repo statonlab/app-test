@@ -230,15 +230,16 @@ export default class FormScene extends Component {
           <Text style={styles.label}>{DCP[key].label}</Text>
           <SliderPick
             key={key}
-            start={DCP[key].maxValue / 2}
-            max={DCP[key].maxValue}
-            min={DCP[key].minValue}
-            legendText={DCP[key].units}
+            start={DCP[key].maxValue/2}
+            max = {DCP[key].maxValue}
+            min = {DCP[key].minValue}
+            legendText = {DCP[key].units}
+            description = {DCP[key].description}
+
             onChange={(value) => {
               this.setState({metadata: {...this.state.metadata, [key]: value}})
             }}
           />
-          <Icon name="altimeter" style={styles.icon}/>
         </View>
       )
     }
