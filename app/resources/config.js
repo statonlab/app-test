@@ -111,12 +111,18 @@ const DCP = {
   diameterNumeric    : {
     label      : 'Tree diameter',
     description: 'Approximately how many feet is the diameter of the tree?',
-    slider     : true
+    slider     : true,
+    minValue : 1,
+    maxValue : 50,
+    units : "Inches"
   },
   crownHealth    : {
     label      : 'Crown health',
     description: 'How would you rate the health of this tree\'s crown?',
-    slider     : true
+    slider     : true,
+    minValue : 1,
+    maxValue : 100,
+    units : "%"
   },
 
   // crownHealth        : {
