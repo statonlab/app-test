@@ -50,7 +50,7 @@ export default class PickerModal extends Component {
 
     if (this.props.freeText){
       this.props.onSelect(item)
-      this.setState({newEntry : item})
+      this.setState({newEntry : item, selected: item})
       return
     }
     //for single select
