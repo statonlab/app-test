@@ -1,3 +1,10 @@
+import React, {Component, PropTypes} from 'react'
+import {
+  Image
+} from 'react-native'
+
+
+
 const DCP = {
   treeHeight: {
     label        : 'Tree Height',
@@ -114,7 +121,11 @@ const DCP = {
     slider     : true,
     minValue : 1,
     maxValue : 50,
-    units : "Inches"
+    units : "Inches",
+    images : [
+      require('../img/ash_id/1.jpg'),
+      require('../img/ash_id/2.jpg')
+      ],
   },
   crownHealth    : {
     label      : 'Crown health',
@@ -122,7 +133,11 @@ const DCP = {
     slider     : true,
     minValue : 1,
     maxValue : 100,
-    units : "%"
+    units : "%",
+    images : [
+      require('../img/ash_id/1.jpg'),
+      require('../img/ash_id/2.jpg')
+     ],
   },
 
   // crownHealth        : {

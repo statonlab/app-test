@@ -65,7 +65,8 @@ InstructionModal.propTypes = {
   ...TouchableOpacity.PropTypes,
   images        : PropTypes.array,
   containerStyle: PropTypes.object,
-  text : PropTypes.string
+  text : PropTypes.string,
+  images : PropTypes.array
 }
 
 InstructionModal.defaultProps = {

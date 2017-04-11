@@ -235,7 +235,7 @@ export default class FormScene extends Component {
             min = {DCP[key].minValue}
             legendText = {DCP[key].units}
             description = {DCP[key].description}
-
+            images = {DCP[key].images}
             onChange={(value) => {
               this.setState({metadata: {...this.state.metadata, [key]: value}})
             }}
