@@ -3,24 +3,26 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableOpacity
+  TouchableOpacity,
 } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import {MKSlider} from 'react-native-material-kit'
 import Colors from '../helpers/Colors'
+import InstructionModal from '../components/InstructionModal'
 
 export default class SliderPick extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      value: 0
+      value: 0,
     }
   }
 
   componentDidMount() {
     this.onChange(this.props.start)
   }
+
 
   onChange = (curValue) => {
     let value = Math.round(curValue)
@@ -39,10 +41,10 @@ export default class SliderPick extends Component {
             lowerTrackColor={Colors.primary}
             onChange={(value) => this.onChange(value)}
           />
-          <TouchableOpacity style={styles.container}>
+          <InstructionModal  containerStyle={{flex: 1}}>
           <Text style={styles.label}>{this.state.value} {this.props.legendText}</Text>
           <Icon name="help-circle" style={styles.icon}/>
-          </TouchableOpacity>
+          </InstructionModal>
         </View>
     )
   }
@@ -88,8 +90,9 @@ const styles = StyleSheet.create({
   label: {
     flex: 0,
     color      : '#666',
-    paddingRight: 10,
+    paddingLeft: 10,
     fontSize   : 12,
     width: 74
-  }
+  },
+
 })
