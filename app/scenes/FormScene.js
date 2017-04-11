@@ -6,11 +6,12 @@ import {
   TextInput,
   StyleSheet,
   DeviceEventEmitter,
-  Animated
+  Animated,
+  Alert
 } from 'react-native'
 import moment from 'moment'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
-import {getTheme, MKButton} from 'react-native-material-kit'
+import {MKButton} from 'react-native-material-kit'
 import Header from '../components/Header'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import Elevation from '../helpers/Elevation'
@@ -19,11 +20,8 @@ import realm from '../db/Schema'
 import t from 'tcomb-validation'
 import PickerModal from '../components/PickerModal'
 import DCP from '../resources/config.js'
-import Observation from '../helpers/Observation'
 import SliderPick from '../components/SliderPick'
 import Location from '../components/Location'
-
-const theme = getTheme()
 
 DCPrules = {
   seedsBinary        : t.enums.of(DCP.seedsBinary.selectChoices, 'seed'),
@@ -42,7 +40,7 @@ DCPrules = {
   // chestnutBlightSigns: t.enums.of(DCP.chestnutBlightSigns.selectChoices, "cbSigns"),
   // diameterDescriptive: t.enums.of(DCP.diameterDescriptive.selectChoices, 'diameter'),
   // crownHealth        : t.enums.of(DCP.crownHealth.selectChoices, 'crownHealth'),
-  otherLabel : t.String
+  otherLabel         : t.String
 }
 
 const Coordinate = t.refinement(t.Number, (n) => n != 0, 'Coordinate')
@@ -108,7 +106,24 @@ export default class FormScene extends Component {
   }
 
   cancel = () => {
-    this.props.navigator.popToTop()
+    Alert.alert('Cancel Submission',
+      'Data will be permanently lost if you cancel. Are you sure?', [
+        {
+          text   : 'Yes',
+          onPress: () => {
+            this.props.navigator.popToTop()
+          }
+        },
+        {
+          text   : 'Back',
+          onPress: () => {
+            // On cancel do nothing.
+          },
+          style  : 'cancel'
+        }
+      ])
+
+    return false
   }
 
   submit = () => {
@@ -139,10 +154,7 @@ export default class FormScene extends Component {
     }
 
     this.realm.write(() => {
-      let submission = this.realm.create('Submission', observation)
-
-      // Now submit to server
-      // this.submitObservationToServer(submission)
+      this.realm.create('Submission', observation)
     })
 
     // Tell anyone who cares that there is a new submission
@@ -152,17 +164,6 @@ export default class FormScene extends Component {
       label   : 'SubmittedScene',
       plant   : observation,
       gestures: {}
-    })
-  }
-
-
-  submitObservationToServer = (object) => {
-    Observation.upload(object).then(response => {
-      realm.write(() => {
-        object.synced = true
-      })
-    }).catch(error => {
-      console.log('ERR', error)
     })
   }
 
@@ -234,6 +235,7 @@ export default class FormScene extends Component {
             min = {DCP[key].minValue}
             legendText = {DCP[key].units}
             description = {DCP[key].description}
+
             onChange={(value) => {
               this.setState({metadata: {...this.state.metadata, [key]: value}})
             }}
@@ -287,7 +289,7 @@ export default class FormScene extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Header title={this.state.title} navigator={this.props.navigator}/>
+        <Header title={this.state.title} navigator={this.props.navigator} onBackPress={this.cancel}/>
         <KeyboardAwareScrollView
           keyboardDismissMode="on-drag"
           showsVerticalScrollIndicator={false}

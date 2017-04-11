@@ -21,6 +21,7 @@ export default class MarkersMap extends Component {
             }
           }, 500)
         }
+        time()
       }
     }
   }

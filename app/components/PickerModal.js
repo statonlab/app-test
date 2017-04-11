@@ -17,8 +17,7 @@ export default class PickerModal extends Component {
       cancelText   : 'CANCEL',
       selected     : 'not set',
       selectedMulti: [],
-      newEntry : null,
-      choices : this.props.choices
+      choices      : this.props.choices
     }
   }
 
@@ -43,17 +42,21 @@ export default class PickerModal extends Component {
       } else {
         selected.push(item)
       }
-      this.setState({selectedMulti: selected})
-      return
-    }
-    //For freeText, don't close every character update, and update the display box within the modal.
 
-    if (this.props.freeText){
-      this.props.onSelect(item)
-      this.setState({newEntry : item, selected: item})
+      this.setState({selectedMulti: selected})
+
       return
     }
-    //for single select
+
+    // For freeText, don't close every character update, and update the display box within the modal.
+    if (this.props.freeText) {
+      this.props.onSelect(item)
+      this.setState({selected: item})
+
+      return
+    }
+
+    // For single select
     this.props.onSelect(item)
     this.setState({selected: item})
     this.close()
@@ -63,17 +66,18 @@ export default class PickerModal extends Component {
     this.setState({modalVisible: true})
   }
 
-
   fetchSelections = () => {
-    let labels = []
-    let observations = realm.objects('Submission').filtered("name == 'Other'")
-     if (observations) {
-       observations.map((observation, index) => {
-         let customLabel = JSON.parse(observation.meta_data).otherLabel
-         customLabel ? labels.push(customLabel) : null
-       })
-       this.setState({choices: labels})
-     }
+    let labels       = []
+    let observations = realm.objects('Submission').filtered('name == \'Other\'')
+    if (observations) {
+      observations.map(observation => {
+        let customLabel = JSON.parse(observation.meta_data).otherLabel
+        if (labels.indexOf(customLabel) < 0) {
+          labels.push(customLabel)
+        }
+      })
+      this.setState({choices: labels})
+    }
   }
 
   close = () => {
@@ -87,19 +91,19 @@ export default class PickerModal extends Component {
   renderTextBox = () => {
     return (
       <View style={styles.choiceContainer}>
-      <View style={styles.choiceItem}>
-           <TextInput
-             style={styles.textField}
-             placeholder={"Add new label"}
-             placeholderTextColor="#aaa"
-             onChangeText={(text) =>
-               this.onChange(text) }
-             underlineColorAndroid="transparent"
-           />
-        <Icon name="textbox" style={styles.iconTI}/>
+        <View style={[styles.choiceItem]}>
+          <TextInput
+            style={styles.textField}
+            placeholder={'Add new label'}
+            placeholderTextColor="#aaa"
+            onChangeText={(text) =>
+              this.onChange(text)
+            }
+            underlineColorAndroid="transparent"
+          />
         </View>
       </View>
-       )
+    )
   }
 
   renderOptions(choice, index) {
@@ -163,7 +167,7 @@ export default class PickerModal extends Component {
                 {this.state.choices.map(this.renderOptions.bind(this))}
               </View>
 
-              {this.props.freeText ? this.renderTextBox() :  null}
+              {this.props.freeText ? this.renderTextBox() : null}
 
               <MKButton style={styles.button} onPress={this.close}>
                 <Text style={styles.buttonText}>
@@ -190,7 +194,7 @@ PickerModal.propTypes = {
   style        : View.propTypes.style,
   initialSelect: PropTypes.string,
   multiCheck   : PropTypes.bool,
-  freeText: PropTypes.bool
+  freeText     : PropTypes.bool
 }
 
 PickerModal.defaultProps = {
@@ -200,7 +204,7 @@ PickerModal.defaultProps = {
   },
   initialSelect: '',
   multiCheck   : false,
-  freeText : false
+  freeText     : false
 }
 
 
@@ -279,25 +283,25 @@ const styles = StyleSheet.create({
     fontWeight: '500'
   },
 
-  icon: {
+  icon     : {
     fontSize : 20,
     color    : '#aaa',
     marginTop: 5
   },
-  iconTI: {
-    fontSize : 20,
-    color    : '#aaa',
-    marginTop: 5,
+  iconTI   : {
+    fontSize  : 20,
+    color     : '#aaa',
+    marginTop : 5,
     marginLeft: 15
   },
   textField: {
     height           : 40,
-    width            : 250,
+    flex             : 1,
     borderWidth      : 1,
     borderColor      : '#dedede',
     borderRadius     : 2,
     paddingHorizontal: 10,
     fontSize         : 14,
     backgroundColor  : '#f9f9f9'
-  },
+  }
 })
