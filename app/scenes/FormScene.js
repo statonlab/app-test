@@ -42,7 +42,7 @@ DCPrules = {
   // chestnutBlightSigns: t.enums.of(DCP.chestnutBlightSigns.selectChoices, "cbSigns"),
   // diameterDescriptive: t.enums.of(DCP.diameterDescriptive.selectChoices, 'diameter'),
   // crownHealth        : t.enums.of(DCP.crownHealth.selectChoices, 'crownHealth'),
-  otherLabel : t.String
+  otherLabel         : t.String
 }
 
 const Coordinate = t.refinement(t.Number, (n) => n != 0, 'Coordinate')
@@ -139,10 +139,7 @@ export default class FormScene extends Component {
     }
 
     this.realm.write(() => {
-      let submission = this.realm.create('Submission', observation)
-
-      // Now submit to server
-      // this.submitObservationToServer(submission)
+      this.realm.create('Submission', observation)
     })
 
     // Tell anyone who cares that there is a new submission
@@ -152,17 +149,6 @@ export default class FormScene extends Component {
       label   : 'SubmittedScene',
       plant   : observation,
       gestures: {}
-    })
-  }
-
-
-  submitObservationToServer = (object) => {
-    Observation.upload(object).then(response => {
-      realm.write(() => {
-        object.synced = true
-      })
-    }).catch(error => {
-      console.log('ERR', error)
     })
   }
 
@@ -229,10 +215,10 @@ export default class FormScene extends Component {
           <Text style={styles.label}>{DCP[key].label}</Text>
           <SliderPick
             key={key}
-            start={DCP[key].maxValue/2}
-            max = {DCP[key].maxValue}
-            min = {DCP[key].minValue}
-            legendText = {DCP[key].units}
+            start={DCP[key].maxValue / 2}
+            max={DCP[key].maxValue}
+            min={DCP[key].minValue}
+            legendText={DCP[key].units}
             onChange={(value) => {
               this.setState({metadata: {...this.state.metadata, [key]: value}})
             }}
