@@ -28,18 +28,20 @@ const theme = getTheme()
 DCPrules = {
   seedsBinary        : t.enums.of(DCP.seedsBinary.selectChoices, 'seed'),
   flowersBinary      : t.enums.of(DCP.flowersBinary.selectChoices, 'flowers'),
-  crownHealth        : t.enums.of(DCP.crownHealth.selectChoices, 'crownHealth'),
   woolyAdesPres      : t.Boolean,
   woolyAdesCoverage  : t.enums.of(DCP.woolyAdesCoverage.selectChoices, 'woolyAdesCoverage'),
   acorns             : t.enums.of(DCP.acorns.selectChoices, 'acorns'),
-  diameterDescriptive: t.enums.of(DCP.diameterDescriptive.selectChoices, 'diameter'),
   heightFirstBranch  : t.enums.of(DCP.heightFirstBranch.selectChoices, 'heightFirstBranch'),
   oakHealthProblems  : t.maybe(t.String),
   diameterNumeric    : t.Number,
   chestnutBlightSigns: t.maybe(t.String),
   ashSpecies         : t.enums.of(DCP.ashSpecies.selectChoices, 'ashSpecies'),
-  emeraldAshBorer    : t.maybe(t.String),   //t.enums.of(DCP.emeraldAshBorer.selectChoices, "EAB"),
+  emeraldAshBorer    : t.maybe(t.String),
+  crownHealth        : t.Number,
+  //t.enums.of(DCP.emeraldAshBorer.selectChoices, "EAB"),
   // chestnutBlightSigns: t.enums.of(DCP.chestnutBlightSigns.selectChoices, "cbSigns"),
+  // diameterDescriptive: t.enums.of(DCP.diameterDescriptive.selectChoices, 'diameter'),
+  // crownHealth        : t.enums.of(DCP.crownHealth.selectChoices, 'crownHealth'),
   otherLabel : t.String
 }
 
@@ -227,7 +229,10 @@ export default class FormScene extends Component {
           <Text style={styles.label}>{DCP[key].label}</Text>
           <SliderPick
             key={key}
-            start={25}
+            start={DCP[key].maxValue/2}
+            max = {DCP[key].maxValue}
+            min = {DCP[key].minValue}
+            legendText = {DCP[key].units}
             onChange={(value) => {
               this.setState({metadata: {...this.state.metadata, [key]: value}})
             }}

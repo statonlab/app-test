@@ -59,14 +59,6 @@ const DCP = {
     placeHolder  : 'No signs of pest',
     multiCheck   : true
   },
-  crownHealth        : {
-    label        : 'Crown health',
-    selectChoices: [
-      '0-24%', '25-49%', '50-74%', '75-100%'
-    ],
-    description  : 'What percentage of the tree’s crown is healthy?',
-    placeHolder  : '% Healthy'
-  },
   WoolyAdesPres      : {
     label: 'presence of wooly adelgids'
   },
@@ -95,14 +87,6 @@ const DCP = {
     description  : 'Are there acorns on the tree?  Don\'t include fallen acorns on the ground in your estimate.',
     placeHolder  : 'Number of acorns'
   },
-  diameterDescriptive: {
-    label        : 'Diameter',
-    placeHolder  : 'Diameter',
-    description  : 'Estimate the tree diameter.',
-    selectChoices: [
-      '1-15 inches', '16-19 inches', '20-23 inches', 'over 24 inches'
-    ]
-  },
   heightFirstBranch  : {
     label        : 'Height of first branch',
     selectChoices: [
@@ -127,14 +111,42 @@ const DCP = {
   diameterNumeric    : {
     label      : 'Tree diameter',
     description: 'Approximately how many feet is the diameter of the tree?',
-    slider     : true
+    slider     : true,
+    minValue : 1,
+    maxValue : 50,
+    units : "Inches"
   },
+  crownHealth    : {
+    label      : 'Crown health',
+    description: 'How would you rate the health of this tree\'s crown?',
+    slider     : true,
+    minValue : 1,
+    maxValue : 100,
+    units : "%"
+  },
+
+  // crownHealth        : {
+  //   label        : 'Crown health',
+  //   selectChoices: [
+  //     '0-24%', '25-49%', '50-74%', '75-100%'
+  //   ],
+  //   description  : 'What percentage of the tree’s crown is healthy?',
+  //   placeHolder  : '% Healthy'
+  // },
   otherLabel : {
     label : 'Tree type',
     description: 'Please create a name to associate this entry with.  (ie Birch)',
     modalFreeText : true,
     placeHolder : "name (required)"
-  }
+  },
+  // diameterDescriptive: {
+  //   label        : 'Diameter',
+  //   placeHolder  : 'Diameter',
+  //   description  : 'Estimate the tree diameter.',
+  //   selectChoices: [
+  //     '1-15 inches', '16-19 inches', '20-23 inches', 'over 24 inches'
+  //   ]
+  // },
 
 }
 
