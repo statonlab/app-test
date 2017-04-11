@@ -237,7 +237,6 @@ export default class FormScene extends Component {
               this.setState({metadata: {...this.state.metadata, [key]: value}})
             }}
           />
-          <Icon name="altimeter" style={styles.icon}/>
         </View>
       )
     }

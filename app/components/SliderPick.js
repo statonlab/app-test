@@ -4,7 +4,7 @@ import {
   Text,
   View,
 } from 'react-native'
-
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import {MKSlider} from 'react-native-material-kit'
 import Colors from '../helpers/Colors'
 
@@ -39,6 +39,7 @@ export default class SliderPick extends Component {
             onChange={(value) => this.onChange(value)}
           />
           <Text style={styles.label}>{this.state.value} {this.props.legendText}</Text>
+          <Icon name="help-circle" style={styles.icon}/>
         </View>
     )
   }
@@ -71,6 +72,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center'
+  },
+
+  icon: {
+    flex    : 0,
+    width   : 30,
+    fontSize: 20,
+    color   : Colors.info
   },
 
   label: {

@@ -12,6 +12,8 @@ const NamedColors = {
   hansaYellow   : "#E9C46A",
   black : '#212121',
   darkerJungleGreen: "#25897d",
+  blue :  "#66B3FF"
+
 }
 
 const Colors = {
@@ -19,7 +21,7 @@ const Colors = {
   darkerPrimary: NamedColors.darkerJungleGreen,
   warning: NamedColors.hansaYellow,
   danger : NamedColors.lightRedOchre,
-  info   : NamedColors.sandyBrown,
+  info   : NamedColors.blue,
   success: NamedColors.jungleGreen,
   black : NamedColors.black,
 
