@@ -4,7 +4,7 @@ import {
   ListView,
   StyleSheet,
   Text,
-  Image
+  Image,
 } from 'react-native'
 import Header from '../components/Header'
 import Colors from '../helpers/Colors'
@@ -14,6 +14,7 @@ import moment from 'moment'
 import {MKButton} from 'react-native-material-kit'
 import Elevation from '../helpers/Elevation'
 import Observation from '../helpers/Observation'
+import Spinner from '../components/Spinner'
 
 export default class ObservationsScene extends Component {
   constructor(props) {
@@ -24,20 +25,29 @@ export default class ObservationsScene extends Component {
       sectionHeaderHasChanged: () => {
       }
     })
-    let submissions = realm.objects('Submission')
+    this.submissions = realm.objects('Submission')
 
     this.state = {
-      hasData    : (submissions.length > 0),
-      submissions: this.dataSource.cloneWithRowsAndSections(this._createMap(submissions))
+      hasData    : (this.submissions.length > 0),
+      submissions: this.dataSource.cloneWithRowsAndSections(this._createMap(this.submissions))
     }
+
+    this.events = []
   }
 
-  _createMap(submissions) {
+  /**
+   * Create data source map.
+   *
+   * @param submissions
+   * @returns {{}}
+   * @private
+   */
+  _createMap() {
     let synced   = []
     let unsynced = []
     let list     = {}
 
-    submissions.map(submission => {
+    this.submissions.map(submission => {
       if (submission.synced) {
         synced.push(submission)
       } else {
@@ -61,6 +71,13 @@ export default class ObservationsScene extends Component {
     return list
   }
 
+  /**
+   * Render single row.
+   *
+   * @param submission
+   * @returns {XML}
+   * @private
+   */
   _renderRow = (submission) => {
     let images = JSON.parse(submission.images)
     return (
@@ -78,6 +95,14 @@ export default class ObservationsScene extends Component {
     )
   }
 
+  /**
+   * Render section header.
+   *
+   * @param data
+   * @param id
+   * @returns {XML}
+   * @private
+   */
   _renderSectionHeader = (data, id) => {
     if (id === 'Needs Uploading') {
       return (
@@ -96,6 +121,12 @@ export default class ObservationsScene extends Component {
     )
   }
 
+  /**
+   * Render the whole list.
+   *
+   * @returns {XML}
+   * @private
+   */
   _renderList = () => {
     return (
       <ListView
@@ -107,6 +138,12 @@ export default class ObservationsScene extends Component {
     )
   }
 
+  /**
+   * In case the list is empty.
+   *
+   * @returns {XML}
+   * @private
+   */
   _renderEmpty = () => {
     return (
       <View style={styles.centerContainer}>
@@ -119,14 +156,27 @@ export default class ObservationsScene extends Component {
     )
   }
 
+  /**
+   * Navigate to single observation scene.
+   *
+   * @param plant
+   * @private
+   */
   _goToEntryScene = (plant) => {
     this.props.navigator.push({
       label: 'ObservationScene',
+      onUnmount: this._resetDataSource.bind(this),
       plant
     })
   }
 
+  /**
+   * Upload all entries.
+   *
+   * @private
+   */
   _uploadAll() {
+    this.refs.spinner.open()
     let observations = realm.objects('Submission').filtered('synced == false')
     observations.forEach(observation => {
       Observation.upload(observation).then(response => {
@@ -134,10 +184,9 @@ export default class ObservationsScene extends Component {
         console.log(response)
         realm.write(() => {
           observation.synced = true
-          this.setState({
-            submissions: this.dataSource.cloneWithRowsAndSections(this._createMap(realm.objects('Submission')))
-          })
+          this._resetDataSource()
         })
+        this.refs.spinner.close()
       }).catch(error => {
         // TODO: Handle Error!
         console.log(error)
@@ -145,9 +194,20 @@ export default class ObservationsScene extends Component {
     })
   }
 
+  /**
+   * Reset data source with latest data.
+   * @private
+   */
+  _resetDataSource() {
+    this.setState({
+      submissions: this.dataSource.cloneWithRowsAndSections(this._createMap())
+    })
+  }
+
   render() {
     return (
       <View style={styles.container}>
+        <Spinner ref="spinner"/>
         <Header navigator={this.props.navigator} title="Your Entries"/>
         {this.state.hasData ? this._renderList() : this._renderEmpty()}
       </View>
@@ -233,7 +293,7 @@ const styles = StyleSheet.create({
 
   headerContainer: {
     padding          : 10,
-    backgroundColor  : '#fff',
+    backgroundColor  : '#f5f5f5',
     borderBottomWidth: 1,
     borderBottomColor: '#eee'
   },
