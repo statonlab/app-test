@@ -6,11 +6,12 @@ import {
   TextInput,
   StyleSheet,
   DeviceEventEmitter,
-  Animated
+  Animated,
+  Alert
 } from 'react-native'
 import moment from 'moment'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
-import {getTheme, MKButton} from 'react-native-material-kit'
+import {MKButton} from 'react-native-material-kit'
 import Header from '../components/Header'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import Elevation from '../helpers/Elevation'
@@ -19,11 +20,8 @@ import realm from '../db/Schema'
 import t from 'tcomb-validation'
 import PickerModal from '../components/PickerModal'
 import DCP from '../resources/config.js'
-import Observation from '../helpers/Observation'
 import SliderPick from '../components/SliderPick'
 import Location from '../components/Location'
-
-const theme = getTheme()
 
 DCPrules = {
   seedsBinary        : t.enums.of(DCP.seedsBinary.selectChoices, 'seed'),
@@ -108,7 +106,24 @@ export default class FormScene extends Component {
   }
 
   cancel = () => {
-    this.props.navigator.popToTop()
+    Alert.alert('Cancel Submission',
+      'Data will be permanently lost if you cancel. Are you sure?', [
+        {
+          text   : 'Yes',
+          onPress: () => {
+            this.props.navigator.popToTop()
+          }
+        },
+        {
+          text   : 'Back',
+          onPress: () => {
+            // On cancel do nothing.
+          },
+          style  : 'cancel'
+        }
+      ])
+
+    return false
   }
 
   submit = () => {
@@ -273,7 +288,7 @@ export default class FormScene extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Header title={this.state.title} navigator={this.props.navigator}/>
+        <Header title={this.state.title} navigator={this.props.navigator} onBackPress={this.cancel}/>
         <KeyboardAwareScrollView
           keyboardDismissMode="on-drag"
           showsVerticalScrollIndicator={false}
