@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Text,
   Image,
+  DeviceEventEmitter
 } from 'react-native'
 import Header from '../components/Header'
 import Colors from '../helpers/Colors'
@@ -20,7 +21,7 @@ export default class ObservationsScene extends Component {
   constructor(props) {
     super(props)
 
-    this.dataSource = new ListView.DataSource({
+    this.dataSource  = new ListView.DataSource({
       rowHasChanged          : (r1, r2) => r1.id !== r2.id,
       sectionHeaderHasChanged: () => {
       }
@@ -29,10 +30,27 @@ export default class ObservationsScene extends Component {
 
     this.state = {
       hasData    : (this.submissions.length > 0),
-      submissions: this.dataSource.cloneWithRowsAndSections(this._createMap(this.submissions))
+      submissions: this.dataSource.cloneWithRowsAndSections(this._createMap(this.submissions)),
+      isLoggedIn : false
     }
 
     this.events = []
+  }
+
+  /**
+   * Listen to logged in event
+   */
+  componentDidMount() {
+    this._isLoggedIn()
+
+    this.loggedEvent = DeviceEventEmitter.addListener('userLoggedIn', this._isLoggedIn.bind(this))
+  }
+
+  /**
+   * Remove events.
+   */
+  componentWillUnmount() {
+    this.loggedEvent.remove()
   }
 
   /**
@@ -72,6 +90,16 @@ export default class ObservationsScene extends Component {
   }
 
   /**
+   * Check if user is logged in.
+   *
+   * @private
+   */
+  _isLoggedIn() {
+    let isLoggedIn = realm.objects('User').length > 0
+    this.setState({isLoggedIn})
+  }
+
+  /**
    * Render single row.
    *
    * @param submission
@@ -108,9 +136,16 @@ export default class ObservationsScene extends Component {
       return (
         <View style={[styles.headerContainer, {flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}]}>
           <Text style={styles.headerText}>{id}</Text>
-          <MKButton style={{...(new Elevation(2)), backgroundColor: Colors.warning, paddingVertical: 10, paddingHorizontal: 15, borderRadius: 2}} onPress={this._uploadAll.bind(this)}>
-            <Text style={[styles.headerText, {color: Colors.warningText}]}>Upload All</Text>
-          </MKButton>
+          {this.state.isLoggedIn ?
+            <MKButton style={styles.warningButton}
+              onPress={this._uploadAll.bind(this)}>
+              <Text style={[styles.headerText, {color: Colors.warningText}]}>Upload All</Text>
+            </MKButton> :
+            <MKButton style={styles.warningButton}
+              onPress={() => this.props.navigator.push({label: 'LoginScene'})}>
+              <Text style={[styles.headerText, {color: Colors.warningText}]}>Login to Upload</Text>
+            </MKButton>
+          }
         </View>
       )
     }
@@ -164,7 +199,7 @@ export default class ObservationsScene extends Component {
    */
   _goToEntryScene = (plant) => {
     this.props.navigator.push({
-      label: 'ObservationScene',
+      label    : 'ObservationScene',
       onUnmount: this._resetDataSource.bind(this),
       plant
     })
@@ -181,9 +216,10 @@ export default class ObservationsScene extends Component {
     observations.forEach(observation => {
       Observation.upload(observation).then(response => {
         // TODO: Add snackbar notification
-        console.log(response)
+        // console.log(response)
         realm.write(() => {
-          observation.synced = true
+          observation.synced         = true
+          observation.observation_id = response.data.data.observation_id
           this._resetDataSource()
         })
         this.refs.spinner.close()
@@ -301,5 +337,13 @@ const styles = StyleSheet.create({
   headerText: {
     color     : '#111',
     fontWeight: '500'
+  },
+
+  warningButton: {
+    ...(new Elevation(2)),
+    backgroundColor  : Colors.warning,
+    paddingVertical  : 10,
+    paddingHorizontal: 15,
+    borderRadius     : 2
   }
 })

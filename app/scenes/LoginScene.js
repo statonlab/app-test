@@ -17,7 +17,7 @@ export default class LoginScene extends Component {
       email      : null,
       password   : null,
       showSpinner: false,
-      warnings   : {},
+      warnings   : {}
     }
 
     this.realm = realm
@@ -103,14 +103,14 @@ export default class LoginScene extends Component {
   }
 
   handleErrorAxios = (error) => {
+    // console.log(error)
     let code = error.response.data.code
-    console.log(error)
     switch (code) {
       case 500:
-        alert("Unable to connect to server.  Please verify your internet connection and try again.")
+        alert('Unable to connect to server.  Please verify your internet connection and try again.')
         break
       default:
-        alert ("Invalid credentials.")
+        alert('Invalid credentials.')
         this.setState({warnings: {emailWarning: true, passwordWarning: true}})
         break
     }
@@ -263,7 +263,7 @@ const styles = StyleSheet.create({
   },
 
   textFieldWarning: {
-    borderColor: Colors.danger,
+    borderColor: Colors.danger
   },
 
   button: {
