@@ -22,7 +22,7 @@ export default class Header extends Component {
 
   componentWillMount() {
     this.listener = DeviceEventEmitter.addListener('sidebarToggled', () => {
-      this.setState({menuIcon: this.state.menuIcon == 'menu' ? 'backburger' : 'menu'})
+      this.setState({menuIcon: this.state.menuIcon === 'menu' ? 'backburger' : 'menu'})
     })
   }
 
@@ -31,7 +31,12 @@ export default class Header extends Component {
   }
 
   back = () => {
+    if(!this.props.onBackPress()) {
+      return
+    }
+
     let routes = this.props.navigator.getCurrentRoutes()
+
     if (routes.length > 1) {
       this.props.navigator.pop()
     }
@@ -74,7 +79,7 @@ export default class Header extends Component {
   navigateToMap = () => {
     let routes = this.props.navigator.getCurrentRoutes()
     let route  = routes[routes.length - 1]
-    if (route.index != 1) {
+    if (route.index !== 1) {
       this.props.navigator.push({title: 'Map', label: 'MapScene'})
     }
   }
@@ -106,13 +111,17 @@ Header.propTypes = {
   elevation    : PropTypes.number,
   showLeftIcon : PropTypes.bool,
   showRightIcon: PropTypes.bool,
-  sidebar      : PropTypes.object
+  sidebar      : PropTypes.object,
+  onBackPress  : PropTypes.func
 }
 
 Header.defaultProps = {
   initial      : false,
   onMenuPress  : function () {
 
+  },
+  onBackPress  : function () {
+    return true
   },
   elevation    : 3,
   showLeftIcon : true,
@@ -121,9 +130,9 @@ Header.defaultProps = {
 
 function getVerticalPadding() {
   if (Platform.OS == 'android')
-    return 0;
+    return 0
   else
-    return 15;
+    return 15
 }
 
 const style = StyleSheet.create({
@@ -142,14 +151,14 @@ const style = StyleSheet.create({
   },
 
   title: {
-    flex      : 0,
+    flex           : 0,
     paddingVertical: 15
   },
 
   text: {
     color     : Colors.primaryText,
     fontSize  : 18,
-    fontWeight: '600',
+    fontWeight: '600'
   },
 
   right: {
@@ -160,6 +169,6 @@ const style = StyleSheet.create({
     flex             : 0,
     paddingHorizontal: 20,
     paddingVertical  : 15,
-    marginTop: 3
+    marginTop        : 3
   }
 })
