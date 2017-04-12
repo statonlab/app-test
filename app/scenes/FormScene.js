@@ -292,6 +292,7 @@ export default class FormScene extends Component {
       <View style={styles.formGroup} key={key}>
         <PickerModal
           style={styles.picker}
+          images = {DCP[key].images}
           multiCheck={DCP[key].multiCheck}
           freeText={DCP[key].modalFreeText}
           header={DCP[key].description}

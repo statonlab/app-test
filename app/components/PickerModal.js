@@ -6,6 +6,7 @@ import Elevation from '../helpers/Elevation'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import DCP from '../resources/config.js'
 import realm from '../db/Schema'
+import ImageModal from './ImageModal'
 
 export default class PickerModal extends Component {
 
@@ -22,6 +23,8 @@ export default class PickerModal extends Component {
   }
 
   componentDidMount() {
+
+    console.log("images : ", this.props.images)
     this.setState({selected: this.props.initialSelect})
     if (this.props.multiCheck || this.props.freeText) {
       this.setState({cancelText: 'CONFIRM'})
@@ -161,6 +164,13 @@ export default class PickerModal extends Component {
                 <Text style={styles.headerQuestionText}>
                   {this.props.header}
                 </Text>
+                {this.props.images.length == 0 ? null :
+                  <View style={ styles.iconsContainer}>
+                  <ImageModal images={this.props.images} >
+                    <Icon name="camera-burst" size={23} style={styles.icon}/>
+                  </ImageModal>
+                  </View>
+                }
               </View>
 
               <View style={styles.modalChoices}>
@@ -194,7 +204,8 @@ PickerModal.propTypes = {
   style        : View.propTypes.style,
   initialSelect: PropTypes.string,
   multiCheck   : PropTypes.bool,
-  freeText     : PropTypes.bool
+  freeText     : PropTypes.bool,
+  images       : PropTypes.array
 }
 
 PickerModal.defaultProps = {
@@ -204,7 +215,8 @@ PickerModal.defaultProps = {
   },
   initialSelect: '',
   multiCheck   : false,
-  freeText     : false
+  freeText     : false,
+  images   : []
 }
 
 
@@ -288,6 +300,7 @@ const styles = StyleSheet.create({
     color    : '#aaa',
     marginTop: 5
   },
+
   iconTI   : {
     fontSize  : 20,
     color     : '#aaa',
@@ -303,5 +316,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     fontSize         : 14,
     backgroundColor  : '#f9f9f9'
-  }
+  },
+  buttonAlt: {
+    borderRadius   : 2,
+    height         : 40,
+    flex           : 1,
+    alignItems     : 'center',
+    justifyContent : 'center',
+    backgroundColor: '#fff'
+  },
+  iconsContainer: {
+    paddingVertical  : 5,
+    paddingHorizontal : 5,
+    alignItems       : 'center'
+  },
 })
