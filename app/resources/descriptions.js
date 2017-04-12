@@ -62,6 +62,9 @@ const Plants = {
       require('../img/ash_id/10.jpg'),
       require('../img/ash_id/11.jpg')
     ],
+    captions : [
+      "Test caption","Test caption 2", "Test caption3 ", "Test caption 4"
+    ],
     maps            : [
       require('../img/maps/ash_fraxamer_range.png'),
       require('../img/maps/ash_fraxnigr_range.png'),

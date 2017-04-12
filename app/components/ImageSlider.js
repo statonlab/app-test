@@ -10,15 +10,18 @@ import {
   PanResponder,
   TouchableHighlight,
   TouchableOpacity,
-  Dimensions
+  Dimensions,
+  Text
 } from 'react-native'
 import Colors from '../helpers/Colors'
+import Elevation from '../helpers/Elevation'
+
 
 const styles = StyleSheet.create({
   container     : {
     width        : Dimensions.get('window').width,
     flex         : 0,
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   buttons       : {
     height        : 15,
@@ -39,7 +42,28 @@ const styles = StyleSheet.create({
   buttonSelected: {
     opacity        : 1,
     backgroundColor: Colors.primary
-  }
+  },
+  captionBox: {
+    backgroundColor: Colors.primary,
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 10,
+    position: 'absolute',
+    bottom : 200,
+    top: 100,
+    height: 50,
+    width : Dimensions.get('window').width
+  },
+
+
+  captionText: {
+    flex       : 0,
+    color      : Colors.primaryText,
+    textAlign  : 'left',
+    paddingLeft: 15,
+    fontWeight : '500',
+    fontSize   : 16
+  },
 })
 
 export default class ImageSlider extends Component {
@@ -123,12 +147,28 @@ export default class ImageSlider extends Component {
     clearInterval(this._interval)
   }
 
+  renderCaption(index){
+    if (this.props.captions) {
+      return(
+      <View style={[styles.captionBox, {...(new Elevation(3))}]}>
+        <Text style={styles.captionText}>
+          {this.props.captions[index]}
+        </Text>
+      </View>
+      )
+    }
+    return null
+  }
+
+
+
   render() {
     const width    = this.state.width
     const height   = this.props.height || this.state.height
     const position = this._getPosition()
     return (
       <View style={{justifyContent: 'center', alignItems: 'center', flex: 1, flexDirection: 'column'}}>
+
         <ScrollView
           ref={ref => this._onRef(ref)}
           horizontal={true}
@@ -141,15 +181,16 @@ export default class ImageSlider extends Component {
             const imageObject = typeof image === 'string' ? {uri: image} : image
             if (this.props.onPress) {
               return (
+
                 <TouchableOpacity key={index} onPress={this.props.onPress} activeOpacity={.9}>
                   <Image
                     source={imageObject}
                     style={{width, resizeMode: 'contain'}}
                   />
+                  {this.renderCaption(index)}
                 </TouchableOpacity>
               )
             }
-
             return (
               <Image
                 key={index}
@@ -178,5 +219,8 @@ export default class ImageSlider extends Component {
 }
 
 ImageSlider.PropTypes = {
-  onPress: PropTypes.func
+  onPress: PropTypes.func,
+  images: PropTypes.array,
+  captions: PropTypes.array
+
 }
