@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import {View, StyleSheet, Text, Modal, TouchableOpacity, Dimensions} from 'react-native'
 import Colors from '../helpers/Colors'
 import {MKButton} from 'react-native-material-kit'
+import ImageSlider from './ImageSlider'
 
 
 
@@ -40,6 +41,9 @@ export default class InstructionModal extends Component {
                   {this.props.text}
                 </Text>
               </View>
+
+              <ImageSlider style={styles.container} images={this.props.images} onPress={this._toggle.bind(this)}/>
+
               <MKButton style={styles.button} onPress={this._toggle.bind(this)}>
                 <Text style={styles.buttonText}>
                   OK
@@ -65,7 +69,8 @@ InstructionModal.propTypes = {
   ...TouchableOpacity.PropTypes,
   images        : PropTypes.array,
   containerStyle: PropTypes.object,
-  text : PropTypes.string
+  text : PropTypes.string,
+  images : PropTypes.array
 }
 
 InstructionModal.defaultProps = {
@@ -121,5 +126,12 @@ const styles = StyleSheet.create({
     flex        : 0,
     marginBottom: 10
   },
+  headerQuestionText: {
+    flex      : 0,
+    textAlign : 'left',
+    fontWeight: '500',
+    fontSize  : 16,
+    color     : '#222'
+  }
 
 })

@@ -43,6 +43,7 @@ export default class SliderPick extends Component {
           />
           <InstructionModal style={styles.modalContainer} 
           text={this.props.description}
+          images={this.props.images}
           >
           <Text style={styles.label}>{this.state.value} {this.props.legendText}</Text>
           <Icon name="help-circle" style={styles.icon}/>
@@ -58,7 +59,8 @@ SliderPick.propTypes = {
   start     : PropTypes.number,
   legendText: PropTypes.string,
   onChange  : PropTypes.func,
-  description : PropTypes.string
+  description : PropTypes.string,
+  images : PropTypes.array
 }
 
 SliderPick.defaultProps = {

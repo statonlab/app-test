@@ -274,6 +274,7 @@ export default class FormScene extends Component {
           <Text style={styles.label}>{DCP[key].label}</Text>
           <SliderPick
             key={key}
+            images = {DCP[key].images}
             start={DCP[key].startValue}
             max={DCP[key].maxValue}
             min={DCP[key].minValue}
