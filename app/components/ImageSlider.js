@@ -44,9 +44,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primary
   },
   captionBox: {
-    backgroundColor: Colors.primary,
-    paddingTop: 10,
-    paddingBottom: 10,
     paddingLeft: 10,
     position: 'absolute',
     bottom : 200,
@@ -182,7 +179,7 @@ export default class ImageSlider extends Component {
             if (this.props.onPress) {
               return (
 
-                <TouchableOpacity key={index} onPress={this.props.onPress} activeOpacity={.9}>
+                <TouchableOpacity key={index} style={{flex: 1}} onPress={this.props.onPress} activeOpacity={.9}>
                   <Image
                     source={imageObject}
                     style={{width, resizeMode: 'contain'}}
