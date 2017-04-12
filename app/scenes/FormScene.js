@@ -319,10 +319,10 @@ export default class FormScene extends Component {
   setDefaultValues = () => {
     let metadata = {}
     Object.keys(this.props.formProps).map(key => {
-      if (DCP[key].slider) {
+      if (DCP[key].startValue) {
         metadata = {
           ...metadata,
-          [key]: DCP[key].maxValue / 2
+          [key]: DCP[key].startValue
         }
       }
     })
