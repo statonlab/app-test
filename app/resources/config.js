@@ -62,7 +62,11 @@ const DCP = {
     ],
     description  : 'Do you see any of these signs of emerald ash borers?  Check all that apply.',
     placeHolder  : 'No signs of pest',
-    multiCheck   : true
+    multiCheck   : true,
+    images : [
+      require('../img/DCP/EmAshBorer/EAB tunneling.jpg'),
+      require('../img/DCP/EmAshBorer/Emerald ash borer adult.jpg')
+    ]
   },
   WoolyAdesPres      : {
     label: 'presence of wooly adelgids'
@@ -73,7 +77,11 @@ const DCP = {
       '0-24%', '25-49%', '50-74%', '75-100%'
     ],
     description  : 'What percentage of the branches you see have hemlock wooly adelgids?',
-    placeHolder  : '% Adelgid coverage'
+    placeHolder  : '% Adelgid coverage',
+    images : [
+      require('../img/DCP/HemWooly/HWA photo 1.jpg'),
+      require('../img/DCP/HemWooly/HWA photo 2.jpg')
+    ]
   },
   chestnutBlightSigns: {
     label        : 'Chestnut Blight',
@@ -82,7 +90,10 @@ const DCP = {
     ],
     description  : 'Do you see any of these signs of chestnut blight?  Check all that apply.',
     placeHolder  : 'No blight symptoms',
-    multiCheck   : true
+    multiCheck   : true,
+    images       : [
+      require('../img/DCP/ChestnutBlight/Chestnut blight.jpg')
+    ],
   },
   acorns             : {
     label        : 'Acorns',
