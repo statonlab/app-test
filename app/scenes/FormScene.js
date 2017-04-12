@@ -231,7 +231,7 @@ export default class FormScene extends Component {
           <Text style={styles.label}>{DCP[key].label}</Text>
           <SliderPick
             key={key}
-            start={DCP[key].maxValue / 2}
+            start={DCP[key].startValue}
             max={DCP[key].maxValue}
             min={DCP[key].minValue}
             legendText={DCP[key].units}
@@ -276,10 +276,10 @@ export default class FormScene extends Component {
   setDefaultValues = () => {
     let metadata = {}
     Object.keys(this.props.formProps).map(key => {
-      if (DCP[key].slider) {
+      if (DCP[key].startValue) {
         metadata = {
           ...metadata,
-          [key]: DCP[key].maxValue / 2
+          [key]: DCP[key].startValue
         }
       }
     })

@@ -114,6 +114,7 @@ const DCP = {
     slider     : true,
     minValue : 1,
     maxValue : 50,
+    startValue : 25,
     units : "Inches"
   },
   crownHealth    : {
@@ -122,6 +123,7 @@ const DCP = {
     slider     : true,
     minValue : 1,
     maxValue : 100,
+    startValue : 100,
     units : "%"
   },
 
