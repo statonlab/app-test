@@ -316,6 +316,9 @@ export default class FormScene extends Component {
     )
   }
 
+  /**
+   * Form items with starting values need to be set separately here.
+   */
   setDefaultValues = () => {
     let metadata = {}
     Object.keys(this.props.formProps).map(key => {
@@ -330,9 +333,19 @@ export default class FormScene extends Component {
     this.setState({metadata})
   }
 
+  /**
+   * Goes through the formProps and returns an array of JSX for each form item.
+   * @returns {Array}
+   */
+
   renderForm = () => {
     return Object.keys(this.props.formProps).map(this.populateFormItem)
   }
+
+  /**
+   *Returns the form item describing photos added.
+   * @returns {XML}
+   */
 
   renderPhotosField = () => {
     let length = this.state.images.length
