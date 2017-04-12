@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   buttons       : {
-    height        : 15,
+    height        : 100,
     marginTop     : 0,
     flex          : 0,
     justifyContent: 'center',
@@ -44,20 +44,16 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primary
   },
   captionBox: {
-    paddingLeft: 10,
-    position: 'absolute',
-    bottom : 200,
-    top: 100,
     height: 50,
-    width : Dimensions.get('window').width
+    width : Dimensions.get('window').width,
+    zIndex: 999999
   },
 
-
   captionText: {
-    flex       : 0,
+    flex       : 1,
     color      : Colors.primaryText,
     textAlign  : 'left',
-    paddingLeft: 15,
+    paddingHorizontal: 15,
     fontWeight : '500',
     fontSize   : 16
   },
@@ -69,7 +65,7 @@ export default class ImageSlider extends Component {
 
     this.state = {
       position : 0,
-      height   : Dimensions.get('window').height - 20,
+      height   : Dimensions.get('window').height,
       width    : Dimensions.get('window').width,
       scrolling: false
     }
@@ -184,7 +180,6 @@ export default class ImageSlider extends Component {
                     source={imageObject}
                     style={{width, resizeMode: 'contain'}}
                   />
-                  {this.renderCaption(index)}
                 </TouchableOpacity>
               )
             }
@@ -199,6 +194,7 @@ export default class ImageSlider extends Component {
         </ScrollView>
         <View style={styles.buttons}>
           {this.props.images.map((image, index) => {
+            this.renderCaption(index)
             return (<TouchableHighlight
               key={index}
               underlayColor="#ccc"

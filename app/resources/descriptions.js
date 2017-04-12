@@ -63,7 +63,7 @@ const Plants = {
       require('../img/ash_id/11.jpg')
     ],
     captions : [
-      "Test caption","Test caption 2", "Test caption3 ", "Test caption 4"
+      "Ash leaves.  Image copyright: ","Ash buds", "There are several different species of American ash trees, all of which are susceptible to the deadly emerald ash borer. ", "Test caption 4"
     ],
     maps            : [
       require('../img/maps/ash_fraxamer_range.png'),
