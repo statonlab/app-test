@@ -23,7 +23,6 @@ const DCP = {
 
     description: 'Full description of number of trees question.  No longer used.',
     placeHolder: 'Number of Trees'
-    // validation: t.enums.of(DCP.treeStand.selectChoices, "stand")
   },
 
   deadTrees          : {
@@ -31,7 +30,6 @@ const DCP = {
     selectChoices: ['none', '1-50', '51+'],
     description  : 'Of the trees of this species in this stand, how many are dead?  No longer used.',
     placeHolder  : 'Number of trees'
-    // validation : t.enums.of(DCP.deadTrees.selectChoices, "dead")
   },
   ashSpecies         : {
     label        : 'Species',
@@ -126,6 +124,7 @@ const DCP = {
       require('../img/ash_id/1.jpg'),
       require('../img/ash_id/2.jpg')
       ],
+    startValue : 25,
   },
   crownHealth    : {
     label      : 'Crown health',
@@ -138,30 +137,16 @@ const DCP = {
       require('../img/ash_id/1.jpg'),
       require('../img/ash_id/2.jpg')
      ],
+    startValue : 100,
   },
 
-  // crownHealth        : {
-  //   label        : 'Crown health',
-  //   selectChoices: [
-  //     '0-24%', '25-49%', '50-74%', '75-100%'
-  //   ],
-  //   description  : 'What percentage of the tree’s crown is healthy?',
-  //   placeHolder  : '% Healthy'
-  // },
   otherLabel : {
     label : 'Tree type',
     description: 'Please create a name to associate this entry with.  (ie Birch)',
     modalFreeText : true,
     placeHolder : "name (required)"
   },
-  // diameterDescriptive: {
-  //   label        : 'Diameter',
-  //   placeHolder  : 'Diameter',
-  //   description  : 'Estimate the tree diameter.',
-  //   selectChoices: [
-  //     '1-15 inches', '16-19 inches', '20-23 inches', 'over 24 inches'
-  //   ]
-  // },
+
 
 }
 
