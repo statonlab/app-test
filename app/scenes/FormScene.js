@@ -612,8 +612,6 @@ const styles = StyleSheet.create({
   slider: {
     width: 200
   },
-
-  sliderPair: {}
 })
 
 const dropdownIcon = (<Icon name="arrow-down-drop-circle-outline" style={styles.icon}/>)
