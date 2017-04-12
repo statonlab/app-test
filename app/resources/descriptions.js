@@ -29,7 +29,7 @@ const Plants = {
         images: []
       }, {
         images: [
-          require('../img/DCP/ChestnutBlight/Chestnut blight.jpg')
+          require('../img/DCP/ChestnutBlight/Chestnut_blight.jpg')
         ],
         title : 'Chestnut blight',
         body  : [<Text>Chestnut blight is caused by the fungus <Text style={{fontStyle: 'italic'}}>Cryphonectria parasitica</Text>. It was introduced to North America in the early 1900s by accidentally importing infected Asian chestnut trees. Most Asian chestnuts are quite resistant to the fungus but American chestnut proved highly susceptible and by 1940 few mature chestnut trees were left.
@@ -195,7 +195,7 @@ const Plants = {
     descriptionCards: [
       {
         title : 'Species',
-        body  : [<Text style={{fontstyle: 'italic'}}>Quercus alba </Text>],
+        body  : [<Text style={{fontStyle: 'italic'}}>Quercus alba </Text>],
         images: []
       },
       {
@@ -205,7 +205,7 @@ const Plants = {
       },
       {
         title : 'Description',
-        body  : [<Text>American white oak, <Text style={{fontstyle: 'italic'}}>Quercus alba</Text>, is a central component of the central hardwood forests. Mature white oaks typically grow very large, 80-100 feet high, and have broad, full canopies. White oaks can live a very long time and some trees have been found that are over 400 years old.
+        body  : [<Text>American white oak, <Text style={{fontStyle: 'italic'}}>Quercus alba</Text>, is a central component of the central hardwood forests. Mature white oaks typically grow very large, 80-100 feet high, and have broad, full canopies. White oaks can live a very long time and some trees have been found that are over 400 years old.
         </Text>, 'The leaves of white oak have alternate branching and seven to nine rounded lobes.  This is different from red oaks, which typically have pointed lobes with a small hair on each tip.  ', 'It is important to note that there are several species in the “white oak” group that share this leaf shape (including swamp white oak and bur oak) and that oaks frequently hybridize, sometimes making it challenging to know which oak species you are looking at.'],
         images: []
       },

@@ -1,9 +1,3 @@
-import React, {Component, PropTypes} from 'react'
-import {
-  Image
-} from 'react-native'
-
-
 
 const DCP = {
   treeHeight: {
@@ -92,7 +86,7 @@ const DCP = {
     placeHolder  : 'No blight symptoms',
     multiCheck   : true,
     images       : [
-      require('../img/DCP/ChestnutBlight/Chestnut blight.jpg')
+      require('../img/DCP/ChestnutBlight/Chestnut_blight.jpg')
     ],
   },
   acorns             : {
