@@ -5,7 +5,6 @@ import {MKButton} from 'react-native-material-kit'
 import ImageSlider from './ImageSlider'
 
 
-
 export default class InstructionModal extends Component {
 
   constructor(props) {
@@ -17,7 +16,6 @@ export default class InstructionModal extends Component {
 
   componentDidMount() {
   }
-
 
 
   _toggle() {
@@ -53,7 +51,7 @@ export default class InstructionModal extends Component {
                   OK
                 </Text>
               </MKButton>
-          </View>
+            </View>
           </View>
         </Modal>
 
@@ -62,7 +60,7 @@ export default class InstructionModal extends Component {
             onPress={this._toggle.bind(this)}
             style={this.props.style}
           >
-          {this.props.children}
+            {this.props.children}
           </TouchableOpacity>
         </View>
       </View>
@@ -74,8 +72,8 @@ InstructionModal.propTypes = {
   ...TouchableOpacity.PropTypes,
   images        : PropTypes.array,
   containerStyle: PropTypes.object,
-  text : PropTypes.string,
-  images : PropTypes.array
+  text          : PropTypes.string,
+  images        : PropTypes.array
 }
 
 InstructionModal.defaultProps = {
@@ -83,15 +81,15 @@ InstructionModal.defaultProps = {
 }
 
 const styles = StyleSheet.create({
-  overlay: {
-    position       : 'absolute',
-    top            : 0,
-    left           : 0,
-    right          : 0,
-    bottom         : 0,
+  overlay  : {
+    position: 'absolute',
+    top     : 0,
+    left    : 0,
+    right   : 0,
+    bottom  : 0,
 
   },
- container: {
+  container: {
     backgroundColor  : '#fefefe',
     flex             : 0,
     flexDirection    : 'column',
@@ -102,7 +100,7 @@ const styles = StyleSheet.create({
     minWidth         : 300,
     marginHorizontal : 20
   },
-  dimBox: {
+  dimBox   : {
     backgroundColor: Colors.transparentDark,
     flex           : 1,
     alignItems     : 'center',
@@ -121,12 +119,12 @@ const styles = StyleSheet.create({
     padding     : 10
   },
 
-  buttonText: {
+  buttonText        : {
     textAlign : 'right',
     color     : Colors.primary,
     fontWeight: '500'
   },
-  headTextBox: {
+  headTextBox       : {
     flex        : 0,
     marginBottom: 10
   },
