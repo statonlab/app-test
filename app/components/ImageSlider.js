@@ -12,6 +12,7 @@ import {
   TouchableOpacity,
   Dimensions
 } from 'react-native'
+import Colors from '../helpers/Colors'
 
 const styles = StyleSheet.create({
   container     : {
@@ -37,7 +38,7 @@ const styles = StyleSheet.create({
   },
   buttonSelected: {
     opacity        : 1,
-    backgroundColor: '#fff'
+    backgroundColor: Colors.primary
   }
 })
 
