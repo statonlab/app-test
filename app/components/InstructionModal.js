@@ -34,6 +34,10 @@ export default class InstructionModal extends Component {
           animationType="fade"
         >
           <View style={styles.dimBox}>
+            <TouchableOpacity
+              style={styles.overlay}
+              onPress={this._toggle.bind(this)}
+            />
             <View style={styles.container}>
 
               <View style={styles.headTextBox}>
@@ -52,6 +56,7 @@ export default class InstructionModal extends Component {
           </View>
           </View>
         </Modal>
+
         <View style={{flex: 1, alignItems: 'center', flexDirection: 'row'}}>
           <TouchableOpacity
             onPress={this._toggle.bind(this)}
@@ -84,7 +89,6 @@ const styles = StyleSheet.create({
     left           : 0,
     right          : 0,
     bottom         : 0,
-    backgroundColor: 'rgba(0,0,0,.85)'
 
   },
  container: {
