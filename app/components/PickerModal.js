@@ -6,6 +6,7 @@ import Elevation from '../helpers/Elevation'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import DCP from '../resources/config.js'
 import realm from '../db/Schema'
+import ImageSlider from './ImageSlider'
 
 export default class PickerModal extends Component {
 
@@ -161,6 +162,9 @@ export default class PickerModal extends Component {
                 <Text style={styles.headerQuestionText}>
                   {this.props.header}
                 </Text>
+                {this.props.images.length == 0 ? null :
+                  <ImageSlider/>
+                }
               </View>
 
               <View style={styles.modalChoices}>
@@ -194,7 +198,8 @@ PickerModal.propTypes = {
   style        : View.propTypes.style,
   initialSelect: PropTypes.string,
   multiCheck   : PropTypes.bool,
-  freeText     : PropTypes.bool
+  freeText     : PropTypes.bool,
+  images       : PropTypes.array
 }
 
 PickerModal.defaultProps = {
@@ -204,7 +209,8 @@ PickerModal.defaultProps = {
   },
   initialSelect: '',
   multiCheck   : false,
-  freeText     : false
+  freeText     : false,
+  images   : []
 }
 
 
