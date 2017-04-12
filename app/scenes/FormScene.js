@@ -98,6 +98,7 @@ export default class FormScene extends Component {
      ])
      }*/
 
+    this.setDefaultValues()
     this.events.push(DeviceEventEmitter.addListener('cameraCapturedPhotos', this.handleImages))
   }
 
@@ -230,12 +231,11 @@ export default class FormScene extends Component {
           <Text style={styles.label}>{DCP[key].label}</Text>
           <SliderPick
             key={key}
-            start={DCP[key].maxValue/2}
-            max = {DCP[key].maxValue}
-            min = {DCP[key].minValue}
-            legendText = {DCP[key].units}
-            description = {DCP[key].description}
-
+            start={DCP[key].maxValue / 2}
+            max={DCP[key].maxValue}
+            min={DCP[key].minValue}
+            legendText={DCP[key].units}
+            description={DCP[key].description}
             onChange={(value) => {
               this.setState({metadata: {...this.state.metadata, [key]: value}})
             }}
@@ -271,6 +271,24 @@ export default class FormScene extends Component {
         </PickerModal>
       </View>
     )
+  }
+
+  setDefaultValues = () => {
+    let metadata = {}
+    Object.keys(this.props.formProps).map(key => {
+      if (DCP[key].slider) {
+        metadata = {
+          ...metadata,
+          [key]: DCP[key].maxValue / 2
+        }
+      }
+    })
+
+    this.setState({metadata})
+  }
+
+  renderForm = () => {
+    return Object.keys(this.props.formProps).map(this.populateFormItem)
   }
 
   renderPhotosField = () => {
@@ -315,7 +333,7 @@ export default class FormScene extends Component {
               </MKButton>
             </View>
 
-            {Object.keys(this.props.formProps).map(this.populateFormItem)}
+            {this.renderForm()}
 
             <View style={[styles.formGroup, {flex: 0, alignItems: 'flex-start'}]}>
               <Text style={[styles.label, {paddingTop: 5}]}>Comments</Text>
