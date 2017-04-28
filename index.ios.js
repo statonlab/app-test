@@ -10,7 +10,7 @@ import {
 
 import App from './app/components/App'
 
-export default class TreeSource extends Component {
+export default class Treesnap extends Component {
 
   render() {
     return (
@@ -19,4 +19,4 @@ export default class TreeSource extends Component {
   }
 }
 
-AppRegistry.registerComponent('TreeSource', () => TreeSource);
+AppRegistry.registerComponent('Treesnap', () => Treesnap);

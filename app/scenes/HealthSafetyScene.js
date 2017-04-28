@@ -19,10 +19,10 @@ export default class HealthSafetyScene extends Component {
 
           <View style={styles.card}>
             <Text style={styles.title}>Health and Safety Policy</Text>
-            <Text style={styles.textBody}>Navigating any environment, whether hiking through forests or exploring urban areas, involves some level of risk. To minimize this risk, please be careful while using the TreeSource app and ensure your personal safety.
+            <Text style={styles.textBody}>Navigating any environment, whether hiking through forests or exploring urban areas, involves some level of risk. To minimize this risk, please be careful while using the Treesnap app and ensure your personal safety.
             </Text>
             <Text style={styles.textBody}>
-              While we do not anticipate that use of this app will increase your level of risk, be aware of your surroundings while sampling trees and take all necessary steps to ensure your safety. TreeSource is not responsible for any injuries sustained while using the TreeSource app.
+              While we do not anticipate that use of this app will increase your level of risk, be aware of your surroundings while sampling trees and take all necessary steps to ensure your safety. Treesnap is not responsible for any injuries sustained while using the Treesnap app.
             </Text>
           </View>
         </ScrollView>
