@@ -12,11 +12,11 @@ export default class AboutScene extends Component {
         <Header title="About Us" navigator={this.props.navigator} elevation={2}/>
         <ScrollView style={styles.scrollView}>
           <View style={styles.card}>
-            <Text style={styles.title}>TreeSource</Text>
+            <Text style={styles.title}>Treesnap</Text>
             <Text style={styles.textBody}>App version: 0.1</Text>
           </View>
           <View style={styles.card}>
-            <Text style={styles.title}>The TreeSource Project</Text>
+            <Text style={styles.title}>The Treesnap Project</Text>
             <Text style={styles.textBody}> Help our nation’s trees!</Text>
             <Text style={styles.textBody}> Invasive diseases and pests threaten the health of America’s forests.
               Scientists are working to understand what allows some individual trees to survive, but they need to find healthy, resilient trees in the forest to study.
@@ -26,8 +26,8 @@ export default class AboutScene extends Component {
             </Text>
           </View>
           <View style={styles.card}>
-            <Text style={styles.title}>The TreeSource Team</Text>
-            <Text style={styles.textBody}>TreeSource is developed as a collaboration between Scientists at the University of Kentucky, the University of Tennessee Knoxville. </Text>
+            <Text style={styles.title}>The Treesnap Team</Text>
+            <Text style={styles.textBody}>Treesnap is developed as a collaboration between Scientists at the University of Kentucky, the University of Tennessee Knoxville. </Text>
           </View>
 
         </ScrollView>
