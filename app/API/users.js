@@ -4,8 +4,8 @@ import Axios from 'axios'
 
 export default class Users  {
    routes = {
-    login   : 'http://treesource.app/user',
-    register: 'http://treesource.app/user'
+    login   : 'http://treesnap.app/user',
+    register: 'http://treesnap.app/user'
   }
 
   tryLogin = () => {

@@ -46,7 +46,8 @@ const styles = StyleSheet.create({
   captionBox: {
     height: 50,
     width : Dimensions.get('window').width,
-    zIndex: 999999
+    zIndex: 999999,
+    backgroundColor: Colors.primary
   },
 
   captionText: {
@@ -140,17 +141,15 @@ export default class ImageSlider extends Component {
     clearInterval(this._interval)
   }
 
-  renderCaption(index){
-    if (this.props.captions) {
+  renderCaption(caption){
+    console.log("lets write this caption", caption)
       return(
-      <View style={[styles.captionBox, {...(new Elevation(3))}]}>
+        <View style={styles.captionBox}>
         <Text style={styles.captionText}>
-          {this.props.captions[index]}
+          {caption}
         </Text>
-      </View>
+        </View>
       )
-    }
-    return null
   }
 
 
@@ -192,17 +191,29 @@ export default class ImageSlider extends Component {
             )
           })}
         </ScrollView>
+
+        {this.props.captions ?
+          this.props.captions.map((caption, index) => {
+          return(
+            <View key={index}>
+            {this.renderCaption(caption)}
+            </View>
+          )
+          })
+          : null   }
+
         <View style={styles.buttons}>
           {this.props.images.map((image, index) => {
-            this.renderCaption(index)
-            return (<TouchableHighlight
+              return (
+                <TouchableHighlight
               key={index}
               underlayColor="#ccc"
               onPress={() => {
                 return this._move(index)
               }}
               style={[styles.button, position === index && styles.buttonSelected]}>
-              <View></View>
+              <View>
+              </View>
             </TouchableHighlight>)
           })}
         </View>
