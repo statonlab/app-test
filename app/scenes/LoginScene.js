@@ -102,8 +102,12 @@ export default class LoginScene extends Component {
     }
   }
 
+  /**
+   * Handle server errors.
+   *
+   * @param error
+   */
   handleErrorAxios = (error) => {
-    console.log(error)
     if (error.response && error.response.status === 422) {
       alert('Invalid credentials.')
       this.setState({warnings: {emailWarning: true, passwordWarning: true}})
