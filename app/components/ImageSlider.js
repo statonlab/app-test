@@ -47,7 +47,8 @@ const styles = StyleSheet.create({
     height: 50,
     width : Dimensions.get('window').width,
     zIndex: 999999,
-    backgroundColor: Colors.primary
+    backgroundColor: Colors.primary,
+    height : 200
   },
 
   captionText: {
@@ -141,7 +142,8 @@ export default class ImageSlider extends Component {
     clearInterval(this._interval)
   }
 
-  renderCaption(caption){
+  renderCaption(index){
+    let caption = this.props.captions[index]
     console.log("lets write this caption", caption)
       return(
         <View style={styles.captionBox}>
@@ -179,6 +181,9 @@ export default class ImageSlider extends Component {
                     source={imageObject}
                     style={{width, resizeMode: 'contain'}}
                   />
+                  {this.props.captions ?
+                    this.renderCaption(index)
+                    : null   }
                 </TouchableOpacity>
               )
             }
@@ -192,15 +197,6 @@ export default class ImageSlider extends Component {
           })}
         </ScrollView>
 
-        {this.props.captions ?
-          this.props.captions.map((caption, index) => {
-          return(
-            <View key={index}>
-            {this.renderCaption(caption)}
-            </View>
-          )
-          })
-          : null   }
 
         <View style={styles.buttons}>
           {this.props.images.map((image, index) => {
