@@ -179,7 +179,7 @@ export default class ImageSlider extends Component {
                 <TouchableOpacity key={index} style={{flex: 1}} onPress={this.props.onPress} activeOpacity={.9}>
                   <Image
                     source={imageObject}
-                    style={{width, resizeMode: 'contain'}}
+                    style={{width, maxHeight: 500, resizeMode: 'contain'}}
                   />
                   {this.props.captions ?
                     this.renderCaption(index)
