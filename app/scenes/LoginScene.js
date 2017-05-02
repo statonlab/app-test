@@ -103,16 +103,10 @@ export default class LoginScene extends Component {
   }
 
   handleErrorAxios = (error) => {
-    // console.log(error)
-    let code = error.response.data.code
-    switch (code) {
-      case 500:
-        alert('Unable to connect to server.  Please verify your internet connection and try again.')
-        break
-      default:
-        alert('Invalid credentials.')
-        this.setState({warnings: {emailWarning: true, passwordWarning: true}})
-        break
+    console.log(error)
+    if (error.response && error.response.status === 422) {
+      alert('Invalid credentials.')
+      this.setState({warnings: {emailWarning: true, passwordWarning: true}})
     }
   }
 
