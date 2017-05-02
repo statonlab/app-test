@@ -12,18 +12,26 @@ export default class MarkersMap extends Component {
       if (this.props.zoom) {
         this.zoomToMarker(this.props.startingMarker)
       } else {
-        let time = () => {
-          setTimeout(() => {
-            if (typeof this.refs.startingMarker.showCallout === 'function') {
-              this.refs.startingMarker.showCallout()
-            } else {
-              time()
-            }
-          }, 500)
-        }
-        time()
+        this.showStartingMarkerCallout()
       }
     }
+  }
+
+  showStartingMarkerCallout() {
+    let time = () => {
+      setTimeout(() => {
+        if (this.refs.startingMarker) {
+          if (typeof this.refs.startingMarker.showCallout === 'function') {
+            this.refs.startingMarker.showCallout()
+          } else {
+            time()
+          }
+        } else {
+          time()
+        }
+      }, 500)
+    }
+    time()
   }
 
   /**
@@ -41,24 +49,7 @@ export default class MarkersMap extends Component {
       }, 1000)
     }, 500)
 
-    let time = () => {
-      setTimeout(() => {
-        if (typeof this.refs.startingMarker.showCallout === 'function') {
-          this.refs.startingMarker.showCallout()
-        } else {
-          time()
-        }
-      }, 100)
-    }
-
-      setTimeout(() => {
-        if (typeof this.refs.startingMarker.showCallout === 'function') {
-          this.refs.startingMarker.showCallout()
-        } else {
-          time()
-        }
-      }, 1500)
-
+    this.showStartingMarkerCallout()
   }
 
   /**

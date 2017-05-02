@@ -1,6 +1,6 @@
-rootProject.name = 'TreeSource'
-include ':react-native-fs'
-project(':react-native-fs').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-fs/android')
+rootProject.name = 'Treesnap'
+include ':react-native-camera'
+project(':react-native-camera').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-camera/android')
 include ':realm'
 project(':realm').projectDir = new File(rootProject.projectDir, '../node_modules/realm/android')
 include ':react-native-vector-icons'
@@ -9,7 +9,7 @@ include ':react-native-material-kit'
 project(':react-native-material-kit').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-material-kit/android')
 include ':react-native-maps'
 project(':react-native-maps').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-maps/android')
-include ':react-native-camera'
-project(':react-native-camera').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-camera/android')
+include ':react-native-fs'
+project(':react-native-fs').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-fs/android')
 
 include ':app'
