@@ -33,7 +33,7 @@ export default class TreeDescriptionScene extends Component {
     return (
       <View style={[styles.card, styles.iconsContainer]}>
         {Plants[this.props.title].images.length > 0 ?
-          <ImageModal images={Plants[this.props.title].images} style={styles.buttonAlt} containerStyle={{flex: 1, paddingHorizontal: 5}}>
+          <ImageModal images={Plants[this.props.title].images} captions={Plants[this.props.title].captions} style={styles.buttonAlt} containerStyle={{flex: 1, paddingHorizontal: 5}}>
             <Icon name="camera-burst" size={23} style={styles.icon}/>
           </ImageModal>
           : null }

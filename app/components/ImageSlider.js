@@ -10,18 +10,21 @@ import {
   PanResponder,
   TouchableHighlight,
   TouchableOpacity,
-  Dimensions
+  Dimensions,
+  Text
 } from 'react-native'
 import Colors from '../helpers/Colors'
+import Elevation from '../helpers/Elevation'
+
 
 const styles = StyleSheet.create({
   container     : {
     width        : Dimensions.get('window').width,
     flex         : 0,
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   buttons       : {
-    height        : 15,
+    height        : 100,
     marginTop     : 0,
     flex          : 0,
     justifyContent: 'center',
@@ -39,7 +42,23 @@ const styles = StyleSheet.create({
   buttonSelected: {
     opacity        : 1,
     backgroundColor: Colors.primary
-  }
+  },
+  captionBox: {
+    height: 50,
+    width : Dimensions.get('window').width,
+    zIndex: 999999,
+    backgroundColor: Colors.primary,
+    height : 200
+  },
+
+  captionText: {
+    flex       : 1,
+    color      : Colors.primaryText,
+    textAlign  : 'left',
+    paddingHorizontal: 15,
+    fontWeight : '500',
+    fontSize   : 16
+  },
 })
 
 export default class ImageSlider extends Component {
@@ -48,7 +67,7 @@ export default class ImageSlider extends Component {
 
     this.state = {
       position : 0,
-      height   : Dimensions.get('window').height - 20,
+      height   : Dimensions.get('window').height,
       width    : Dimensions.get('window').width,
       scrolling: false
     }
@@ -123,12 +142,27 @@ export default class ImageSlider extends Component {
     clearInterval(this._interval)
   }
 
+  renderCaption(index){
+    let caption = this.props.captions[index]
+    console.log("lets write this caption", caption)
+      return(
+        <View style={styles.captionBox}>
+        <Text style={styles.captionText}>
+          {caption}
+        </Text>
+        </View>
+      )
+  }
+
+
+
   render() {
     const width    = this.state.width
     const height   = this.props.height || this.state.height
     const position = this._getPosition()
     return (
       <View style={{justifyContent: 'center', alignItems: 'center', flex: 1, flexDirection: 'column'}}>
+
         <ScrollView
           ref={ref => this._onRef(ref)}
           horizontal={true}
@@ -141,15 +175,18 @@ export default class ImageSlider extends Component {
             const imageObject = typeof image === 'string' ? {uri: image} : image
             if (this.props.onPress) {
               return (
-                <TouchableOpacity key={index} onPress={this.props.onPress} activeOpacity={.9}>
+
+                <TouchableOpacity key={index} style={{flex: 1}} onPress={this.props.onPress} activeOpacity={.9}>
                   <Image
                     source={imageObject}
-                    style={{width, resizeMode: 'contain'}}
+                    style={{width, maxHeight: 500, resizeMode: 'contain'}}
                   />
+                  {this.props.captions ?
+                    this.renderCaption(index)
+                    : null   }
                 </TouchableOpacity>
               )
             }
-
             return (
               <Image
                 key={index}
@@ -159,16 +196,20 @@ export default class ImageSlider extends Component {
             )
           })}
         </ScrollView>
+
+
         <View style={styles.buttons}>
           {this.props.images.map((image, index) => {
-            return (<TouchableHighlight
+              return (
+                <TouchableHighlight
               key={index}
               underlayColor="#ccc"
               onPress={() => {
                 return this._move(index)
               }}
               style={[styles.button, position === index && styles.buttonSelected]}>
-              <View></View>
+              <View>
+              </View>
             </TouchableHighlight>)
           })}
         </View>
@@ -178,5 +219,8 @@ export default class ImageSlider extends Component {
 }
 
 ImageSlider.PropTypes = {
-  onPress: PropTypes.func
+  onPress: PropTypes.func,
+  images: PropTypes.array,
+  captions: PropTypes.array
+
 }

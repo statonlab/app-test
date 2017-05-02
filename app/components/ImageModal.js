@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react'
 import {View, StyleSheet, Modal, TouchableOpacity, Dimensions} from 'react-native'
 import ImageSlider from './ImageSlider'
-
+import Colors from '../helpers/Colors'
 export default class ImageModal extends Component {
 
   constructor(props) {
@@ -33,8 +33,10 @@ export default class ImageModal extends Component {
               style={styles.overlay}
               onPress={this._toggle.bind(this)}
             />
-            <ImageSlider style={styles.container} images={this.props.images} onPress={this._toggle.bind(this)}/>
+            <ImageSlider style={styles.container} images={this.props.images} captions={this.props.captions} onPress={this._toggle.bind(this)}/>
           </View>
+
+
         </Modal>
 
         <TouchableOpacity onPress={this._toggle.bind(this)} style={this.props.style}>
@@ -48,7 +50,8 @@ export default class ImageModal extends Component {
 ImageModal.propTypes = {
   ...TouchableOpacity.PropTypes,
   images        : PropTypes.array,
-  containerStyle: PropTypes.object
+  containerStyle: PropTypes.object,
+  captions      : PropTypes.array
 }
 
 ImageModal.defaultProps = {
