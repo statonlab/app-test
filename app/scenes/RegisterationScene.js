@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react'
-import {View, ScrollView, StyleSheet, TextInput, Text, DeviceEventEmitter} from 'react-native'
+import {View, ScrollView, StyleSheet, TextInput, Text, DeviceEventEmitter, DatePickerAndroid, DatePickerIOS} from 'react-native'
 import {MKButton} from 'react-native-material-kit'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import Header from '../components/Header'
@@ -10,31 +10,35 @@ import t from 'tcomb-validation'
 import axios from '../helpers/Axios'
 import realm from '../db/Schema'
 import Spinner from '../components/Spinner'
+import DateModal from '../components/DateModal'
 
 export default class RegistrationScene extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      name            : null,
-      email           : null,
-      password        : '',
-      confirmPassword : '',
-      is_over_thirteen: false,
-      zipcode         : null,
-      is_anonymous    : true,
-      showSpinner     : false,
-      warnings: {}
+      name           : null,
+      email          : null,
+      password       : '',
+      confirmPassword: '',
+      birth_year     : 1984,
+      zipcode        : null,
+      is_anonymous   : true,
+      showSpinner    : false,
+      warnings       : {},
+      terms          : null,
+      minorConsent   : null,
+      is_over_thirteen : true
     }
 
     this.realm = realm
 
     this.registrationRules = t.struct({
-      name            : t.String,
-      email           : t.String, // No validation
-      password        : t.refinement(t.String, (pw) => pw.length >= 6, 'pw'),// Ensure password is at least 6 characters
-      confirmPassword : t.refinement(t.String, (pw) => pw === this.state.password, 'confirmPW'), // Ensure matches password
-      is_over_thirteen: t.Boolean, //t.refinement(t.Boolean, (val) => val, "overThirteen"),
-      zipcode         : t.maybe(t.refinement(t.String, (n) => /^([0-9]{5})(-[0-9]{4})?$/i.test(n), 'zipCode'))
+      name           : t.String,
+      email          : t.String, // No validation
+      password       : t.refinement(t.String, (pw) => pw.length >= 6, 'pw'),// Ensure password is at least 6 characters
+      confirmPassword: t.refinement(t.String, (pw) => pw === this.state.password, 'confirmPW'), // Ensure matches password
+      birth_year     : t.Integer,
+      zipcode        : t.maybe(t.refinement(t.String, (n) => /^([0-9]{5})(-[0-9]{4})?$/i.test(n), 'zipCode'))
     })
   }
 
@@ -66,12 +70,12 @@ export default class RegistrationScene extends Component {
         response.zipcode = ''
       }
       this.realm.create('User', {
-        name            : response.name.toString(),
-        email           : response.email.toString(),
-        anonymous       : response.is_anonymous,
-        zipcode         : response.zipcode,
-        api_token       : response.api_token,
-        is_over_thirteen: response.is_over_thirteen
+        name      : response.name.toString(),
+        email     : response.email.toString(),
+        anonymous : response.is_anonymous,
+        zipcode   : response.zipcode,
+        api_token : response.api_token,
+        birth_year: response.birth_year
       })
     })
   }
@@ -167,6 +171,24 @@ export default class RegistrationScene extends Component {
     }
   }
 
+  displayMinorsBox = () => {
+    let currentYear = new Date().getFullYear()
+
+    if (currentYear - this.state.birth_year  <= 13) {
+      return (
+        <View style={styles.formGroup}>
+          <Checkbox
+            label="Minors: I affirm I have permission from a parent or guardian to register"
+            onChange={(checked) => {
+              this.setState({minorConsent: checked})
+            }}
+          />
+        </View>
+      )
+    }
+    return ( null)
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -245,15 +267,38 @@ export default class RegistrationScene extends Component {
                 underlineColorAndroid="transparent"
               />
             </View>
+            <View style={styles.formGroup}>
+              <DateModal
+                style={styles.picker}
+                onSelect={(option) => {
+                  this.setState({birth_year: option})
+                }}
+                selectedYear={this.state.birth_year}
+              >
+                <Text style={styles.label}>Year of Birth</Text>
+                <TextInput
+                  autoCapitalize={'none'}
+                  style={styles.textField}
+                  editable={false}
+                  placeholder={'Enter Year'}
+                  placeholderTextColor="#aaa"
+                  underlineColorAndroid="transparent"
+                />
+              </DateModal>
+
+            </View>
+
 
             <View style={styles.formGroup}>
               <Checkbox
-                label="I am over 13 years old"
+                label="I agree to the terms of use"
                 onChange={(checked) => {
-                  this.setState({is_over_thirteen: checked})
+                  this.setState({terms: checked})
                 }}
               />
             </View>
+
+            {this.displayMinorsBox()}
 
             <View style={styles.formGroup}>
               <MKButton style={styles.button}
