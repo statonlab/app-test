@@ -22,12 +22,12 @@ export default class DateModal extends Component {
   }
 
   componentWillMount() {
-    let choicesArray = []
+    let dateChoices = []
     let currentYear = new Date().getFullYear()
-    for(let i = 0; i < 100; i++) {
-      let newVal =currentYear-i
-      choicesArray.push(newVal)
+    for (let i = 0; i < 100; i++) {
+      dateChoices.push(currentYear - i)
     }
+    this.setState({dateChoices})
   }
 
   open = () => {
@@ -38,13 +38,8 @@ export default class DateModal extends Component {
     this.setState({modalVisible: false})
   }
 
-  renderPickChoices = () => {
-
-    dateChoices.map((value, index) => {
-      return (
-        <Picker.Item label="test" value="test"/>
-      )
-    })
+  renderPickChoices = (item, key) => {
+    return <Picker.Item key={key} label={item.toString()} value={item}/>
   }
 
   render() {
@@ -61,13 +56,13 @@ export default class DateModal extends Component {
             <View style={styles.container}>
               <View style={styles.headTextBox}>
                 <Text style={styles.headerQuestionText}>
-                 In what year were you born?
+                  In what year were you born?
                 </Text>
               </View>
 
               <View style={styles.modalChoices}>
                 <Picker>
-                  {this.renderPickChoices()}
+                  {this.state.dateChoices.map(this.renderPickChoices)}
                 </Picker>
               </View>
 
@@ -90,15 +85,15 @@ export default class DateModal extends Component {
 
 DateModal.propTypes = {
   ...View.PropTypes,
-  onSelect     : PropTypes.func,
-  style        : View.propTypes.style,
-  selectedYear : PropTypes.number
+  onSelect    : PropTypes.func,
+  style       : View.propTypes.style,
+  selectedYear: PropTypes.number
 
 }
 
 DateModal.defaultProps = {
-  onSelect     : () => {
-  },
+  onSelect: () => {
+  }
 }
 
 
@@ -177,19 +172,19 @@ const styles = StyleSheet.create({
     fontWeight: '500'
   },
 
-  icon     : {
+  icon: {
     fontSize : 20,
     color    : '#aaa',
     marginTop: 5
   },
 
-  iconTI   : {
+  iconTI        : {
     fontSize  : 20,
     color     : '#aaa',
     marginTop : 5,
     marginLeft: 15
   },
-  textField: {
+  textField     : {
     height           : 40,
     flex             : 1,
     borderWidth      : 1,
@@ -199,7 +194,7 @@ const styles = StyleSheet.create({
     fontSize         : 14,
     backgroundColor  : '#f9f9f9'
   },
-  buttonAlt: {
+  buttonAlt     : {
     borderRadius   : 2,
     height         : 40,
     flex           : 1,
@@ -209,7 +204,7 @@ const styles = StyleSheet.create({
   },
   iconsContainer: {
     paddingVertical  : 5,
-    paddingHorizontal : 5,
+    paddingHorizontal: 5,
     alignItems       : 'center'
-  },
+  }
 })
