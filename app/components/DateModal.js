@@ -13,15 +13,15 @@ export default class DateModal extends Component {
     this.state = {
       animationType: 'fade',
       modalVisible : false,
-      cancelText   : 'CANCEL',
-      selected     : null,
+      cancelText   : 'OK',
+      selectedYear     : null,
       dateChoices  : [1, 2, 3]
-
-
     }
   }
 
   componentWillMount() {
+    this.setState({selectedYear: this.props.selectedYear})
+
     let dateChoices = []
     let currentYear = new Date().getFullYear()
     for (let i = 0; i < 100; i++) {
@@ -40,6 +40,11 @@ export default class DateModal extends Component {
 
   renderPickChoices = (item, key) => {
     return <Picker.Item key={key} label={item.toString()} value={item}/>
+  }
+
+  onValChange = (year) => {
+          this.props.onSelect(year)
+         this.setState({selectedYear: year})
   }
 
   render() {
@@ -61,7 +66,8 @@ export default class DateModal extends Component {
               </View>
 
               <View style={styles.modalChoices}>
-                <Picker>
+                <Picker selectedValue={this.state.selectedYear}
+                onValueChange={(year) => this.onValChange(year)}>
                   {this.state.dateChoices.map(this.renderPickChoices)}
                 </Picker>
               </View>

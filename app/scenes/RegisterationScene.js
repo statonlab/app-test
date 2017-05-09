@@ -20,14 +20,14 @@ export default class RegistrationScene extends Component {
       email          : null,
       password       : '',
       confirmPassword: '',
-      birth_year     : 1984,
+      birth_year     : '',
       zipcode        : null,
       is_anonymous   : true,
       showSpinner    : false,
       warnings       : {},
       terms          : null,
       minorConsent   : null,
-      is_over_thirteen : true
+      currentYear : null
     }
 
     this.realm = realm
@@ -38,14 +38,24 @@ export default class RegistrationScene extends Component {
       password       : t.refinement(t.String, (pw) => pw.length >= 6, 'pw'),// Ensure password is at least 6 characters
       confirmPassword: t.refinement(t.String, (pw) => pw === this.state.password, 'confirmPW'), // Ensure matches password
       birth_year     : t.Integer,
-      zipcode        : t.maybe(t.refinement(t.String, (n) => /^([0-9]{5})(-[0-9]{4})?$/i.test(n), 'zipCode'))
+      zipcode        : t.maybe(t.refinement(t.String, (n) => /^([0-9]{5})(-[0-9]{4})?$/i.test(n), 'zipCode')),
+      minorConsent   : t.Boolean,
+      //terms : t.refinement(t.Boolean, (bool) => bool === true)
+      terms : t.Boolean
     })
   }
 
+  componentWillMount() {
+    let currentYear = new Date().getFullYear()
+    this.setState({currentYear:currentYear})
+  }
   /**
    * Validate request and send it to the server.
    */
   submitRegistration = () => {
+    // if over 13, set the Consent to true automatically
+    (this.state.currentYear - this.state.birth_year <= 13)  ? null : this.setState({minorConsent: true})
+
     if (!this.validateState().isValid()) {
       this.notifyIncomplete(this.validateState())
       return
@@ -142,6 +152,18 @@ export default class RegistrationScene extends Component {
           warnings.name = true
           errorList.push('Please enter a username')
           break
+        case 'minorConsent':
+          warnings.minorConsent = true
+          errorList.push('If you are under the age of 13, you must register with consent of a parent or guardian')
+          break
+        case 'terms':
+          warnings.terms = true
+          errorList.push('You must agree with the terms of use to register')
+          break
+        case 'birth_year':
+          warnings.birth_year = true
+          errorList.push('Please enter the year you were born')
+          break
       }
     })
     this.setState({warnings})
@@ -172,9 +194,8 @@ export default class RegistrationScene extends Component {
   }
 
   displayMinorsBox = () => {
-    let currentYear = new Date().getFullYear()
 
-    if (currentYear - this.state.birth_year  <= 13) {
+    if (this.state.currentYear - this.state.birth_year <= 13) {
       return (
         <View style={styles.formGroup}>
           <Checkbox
@@ -182,6 +203,8 @@ export default class RegistrationScene extends Component {
             onChange={(checked) => {
               this.setState({minorConsent: checked})
             }}
+            warning =  {this.state.warnings.minorConsent}
+
           />
         </View>
       )
@@ -273,21 +296,23 @@ export default class RegistrationScene extends Component {
                 onSelect={(option) => {
                   this.setState({birth_year: option})
                 }}
-                selectedYear={this.state.birth_year}
+                selectedYear={
+                  (this.state.birth_year > 0) ? this.state.birth_year : null
+                }
               >
-                <Text style={styles.label}>Year of Birth</Text>
+                <Text style={this.state.warnings.birth_year ? [styles.label, styles.labelWarning] : styles.label}>Year of Birth</Text>
                 <TextInput
                   autoCapitalize={'none'}
-                  style={styles.textField}
+                  style={this.state.warnings.birth_year ? [styles.textField, styles.textFieldWarning] : styles.textField}
                   editable={false}
                   placeholder={'Enter Year'}
                   placeholderTextColor="#aaa"
                   underlineColorAndroid="transparent"
+                  value={this.state.birth_year.toString()}
                 />
               </DateModal>
 
             </View>
-
 
             <View style={styles.formGroup}>
               <Checkbox
@@ -295,6 +320,7 @@ export default class RegistrationScene extends Component {
                 onChange={(checked) => {
                   this.setState({terms: checked})
                 }}
+                warning =  {this.state.warnings.terms}
               />
             </View>
 

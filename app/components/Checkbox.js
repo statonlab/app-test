@@ -8,7 +8,7 @@ export default class Checkbox extends Component {
     super(props)
 
     this.state = {
-      checked: false
+      checked: false,
     }
   }
 
@@ -27,21 +27,26 @@ export default class Checkbox extends Component {
     return (
       <TouchableOpacity style={styles.container} onPress={this.changed.bind(this)}>
         <Icon name={this.state.checked ? 'checkbox-marked' : 'checkbox-blank-outline'} style={[styles.checkboxIcon, {color: this.state.checked ? Colors.primary : '#aaa'}]}/>
-        <Text style={styles.label}>{this.props.label}</Text>
+        <Text style={this.props.warning ? [styles.label, styles.labelWarning] : styles.label}>{this.props.label}</Text>
       </TouchableOpacity>
     )
   }
 
 }
 
+//<Text style={this.state.warnings.name ? [styles.label, styles.labelWarning] : styles.label}>Name</Text>
+
+
 Checkbox.PropTypes = {
   label   : PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
-  checked : PropTypes.bool
+  checked : PropTypes.bool,
+  warning : PropTypes.bool
 }
 
 Checkbox.defaultProps = {
-  checked: false
+  checked: false,
+  warning : false
 }
 
 const styles = new StyleSheet.create({
@@ -58,5 +63,8 @@ const styles = new StyleSheet.create({
 
   label: {
     fontWeight: 'bold'
+  },
+  labelWarning    : {
+    color: Colors.danger
   }
-})
+ })
