@@ -9,6 +9,7 @@ import realm from '../db/Schema'
 import axios from '../helpers/Axios'
 import SnackBar from '../components/SnackBarNotice'
 import Spinner from '../components/Spinner'
+import DateModal from '../components/DateModal'
 
 export default class AccountScene extends Component {
   constructor(props) {
@@ -20,7 +21,7 @@ export default class AccountScene extends Component {
       anonymous     : '',
       email         : '',
       zipcode       : '',
-      isOverThirteen: '',
+      birth_year    : '',
       oldPassword   : '',
       newPassword   : '',
       reNewPassword : '',
@@ -29,7 +30,7 @@ export default class AccountScene extends Component {
         anonymous     : false,
         email         : false,
         zipcode       : false,
-        isOverThirteen: false,
+        birth_year    : false,
         oldPassword   : false,
         newPassword   : false,
         reNewPassword : false
@@ -48,7 +49,7 @@ export default class AccountScene extends Component {
       email         : this.user.email,
       zipcode       : this.user.zipcode,
       anonymous     : this.user.anonymous ? 'Yes' : 'No',
-      isOverThirteen: this.user.is_over_thirteen ? 'I am over 13 years old' : 'I am not over than 13 years old'
+      birth_year: this.user.birth_year
     })
   }
 
@@ -63,7 +64,7 @@ export default class AccountScene extends Component {
       anonymous     : false,
       email         : false,
       zipcode       : false,
-      isOverThirteen: false
+      birth_year: false
     }
 
     let hasErrors = false
@@ -88,8 +89,8 @@ export default class AccountScene extends Component {
       hasErrors      = true
     }
 
-    if (this.state.isOverThirteen.trim().length === 0) {
-      errors.isOverThirteen = 'The age field is required'
+    if (this.state.birth_year.length === 0) {
+      errors.birth_year = 'The birth year field is required'
       hasErrors             = true
     }
 
@@ -115,7 +116,7 @@ export default class AccountScene extends Component {
       email           : this.state.email,
       zipcode         : this.state.zipcode,
       is_anonymous    : this.state.anonymous.trim() === 'Yes',
-      is_over_thirteen: this.state.isOverThirteen.trim() === 'I am over 13 years old'
+      birth_year: this.state.birth_year
     }).then(response => {
       this.refs.snackbar.showBar()
       this.setState({showSpinner: false})
@@ -144,7 +145,7 @@ export default class AccountScene extends Component {
       anonymous     : false,
       email         : false,
       zipcode       : false,
-      isOverThirteen: false
+      birth_year: false
     }
     Object.keys(errors).map(key => {
       stateErrors[key] = errors[key]
@@ -164,7 +165,7 @@ export default class AccountScene extends Component {
         this.user.name             = response.name
         this.user.email            = response.email
         this.user.anonymous        = response.is_anonymous
-        this.user.is_over_thirteen = response.is_over_thirteen
+        this.user.birth_year = response.birth_year
         this.user.zipcode          = response.zipcode === null ? '' : response.zipcode
       })
     } catch (error) {
@@ -258,28 +259,27 @@ export default class AccountScene extends Component {
                 </View>
                 {this.state.errors.anonymous ? <Text style={styles.warning}>{this.state.errors.anonymous}</Text> : null}
               </PickerModal>
-              <PickerModal
+
+              <DateModal
                 style={[styles.formGroup, styles.noBorder]}
-                onSelect={(isOverThirteen) => this.setState({isOverThirteen})}
-                initialSelect={this.user.is_over_thirteen ? 'I am over 13 years old' : 'I am not over 13 years old'}
-                choices={['I am over 13 years old', 'I am not over 13 years old']}
-                header="Are you over the age of 13?"
+                onSelect={(year) => this.setState({birth_year: year})}
+                header="In what year were you born?"
               >
                 <View style={styles.row}>
-                  <Text style={styles.label}>Age</Text>
+                  <Text style={styles.label}>Birth year</Text>
                   <TextInput
                     style={styles.textField}
                     autoCapitalize={'words'}
-                    placeholder={'Over Thirteen'}
                     placeholderTextColor="#aaa"
                     returnKeyType={'next'}
                     underlineColorAndroid="transparent"
-                    value={this.state.isOverThirteen}
+                    value={this.state.birth_year.toString()}
                     editable={false}
                   />
                 </View>
-                {this.state.errors.isOverThirteen ? <Text style={styles.warning}>{this.state.errors.isOverThirteen}</Text> : null}
-              </PickerModal>
+                {this.state.errors.birth_year ? <Text style={styles.warning}>{this.state.errors.birth_year}</Text> : null}
+              </DateModal>
+
             </View>
 
             <Text style={styles.title}>PASSWORD</Text>
