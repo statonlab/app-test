@@ -6,7 +6,8 @@ import {
   Text,
   Image,
   Dimensions,
-  DeviceEventEmitter
+  DeviceEventEmitter,
+  Alert
 } from 'react-native'
 import Header from '../components/Header'
 import Colors from '../helpers/Colors'
@@ -16,6 +17,8 @@ import Observation from '../helpers/Observation'
 import Spinner from '../components/Spinner'
 import realm from '../db/Schema'
 import SnackBarNotice from '../components/SnackBarNotice'
+import axios from '../helpers/Axios'
+
 
 export default class ObservationScene extends Component {
   constructor(props) {
@@ -26,6 +29,8 @@ export default class ObservationScene extends Component {
       synced    : false,
       isLoggedIn: false
     }
+    this.user = realm.objects('User')[0]
+
   }
 
   /**
@@ -121,7 +126,7 @@ export default class ObservationScene extends Component {
     })
   }
 
-  _renderButtons(entry) {
+  _renderUploadButton(entry) {
     if (!this.state.synced && !this.state.isLoggedIn) {
       return (
         <View style={styles.field}>
@@ -143,6 +148,90 @@ export default class ObservationScene extends Component {
     }
   }
 
+ deleteEntry(entry){
+    if (this.state.synced && !this.state.isLoggedIn) {
+      alert ("Warning: This observation has already been synced to the server.  Please log in to delete.")
+      return false
+    }
+
+   if (this.state.synced && this.state.isLoggedIn) {
+     console.log("my api token is", this.user.api_token)
+     axios.delete(`observation/${entry.id}?api_token=${this.user.api_token}` , {
+     }).then(response => {
+     console.log("RESPONSE: ", response)
+     }).catch(error => {
+       console.log(error)
+     })
+
+   }
+
+// Delete locally
+   let deleteTarget = realm.objects('Submission').filtered(`id == ${entry.id}`)
+   if (deleteTarget.length > 0) {
+     let observation = deleteTarget[0]
+     realm.write(() => {
+       realm.delete(observation)
+     })
+   }
+   this.refs.deletionSnackbar.showBar()
+   this.props.navigator.pop()
+
+
+ }
+
+ editEntry(entry){
+null
+ }
+
+  /**
+   * deleteAlert
+   * -------------------------------------------------
+   * Method for Delete button.  Change scene, alert user about losing data.
+   * @returns {boolean}
+   */
+  deleteAlert = (entry) => {
+
+    if (this.state.synced && !this.state.isLoggedIn) {
+      Alert.alert('Log In to Delete',
+        'This observation is already uploaded.  Please log in to delete.', [
+          {
+            text   : 'OK',
+            onPress: () => {
+              this.props.navigator.push({label: 'LoginScene'})
+            }
+          },
+          {
+            text   : 'Back',
+            onPress: () => {
+              // On cancel do nothing.
+            },
+            style  : 'cancel'
+          }
+        ])
+      return false
+    }
+
+    Alert.alert('Delete Observation',
+      'Data will be permanently lost if you cancel. Are you sure?', [
+        {
+          text   : 'Yes',
+          onPress: () => {
+            this.deleteEntry(entry)
+          }
+        },
+        {
+          text   : 'Back',
+          onPress: () => {
+            // On cancel do nothing.
+          },
+          style  : 'cancel'
+        }
+      ])
+
+    return false
+  }
+
+
   /**
    * Render Scene.
    *
@@ -156,6 +245,8 @@ export default class ObservationScene extends Component {
       <View style={styles.container}>
         <Spinner ref="spinner"/>
         <SnackBarNotice ref="snackbar" noticeText="Entry uploaded successfully!"/>
+        <SnackBarNotice ref="deletionSnackbar" noticeText="Entry deleted"/>
+
         <Header navigator={this.props.navigator} title={entry.name}/>
         <ScrollView style={styles.contentContainer}>
           <ScrollView
@@ -169,7 +260,7 @@ export default class ObservationScene extends Component {
             })}
           </ScrollView>
           <View style={styles.card}>
-            {this._renderButtons(entry)}
+            {this._renderUploadButton(entry)}
 
             <View style={styles.field}>
               <Text style={styles.label}>Date Collected</Text>
@@ -178,6 +269,15 @@ export default class ObservationScene extends Component {
 
             {this._renderMetaData(entry.meta_data)}
           </View>
+          <View style={styles.multiButtonField}>
+            <MKButton style={styles.button } onPress={() => this.editEntry(entry)}>
+              <Text style={styles.buttonText}>Edit Entry</Text>
+            </MKButton>
+            <MKButton style={[styles.button, styles.deleteButton]} onPress={() => this.deleteAlert(entry)}>
+              <Text style={styles.buttonText}>Delete Entry</Text>
+            </MKButton>
+          </View>
+
         </ScrollView>
       </View>
     )
@@ -216,6 +316,11 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#ddd'
   },
+  multiButtonField: {
+    flex : 1,
+    flexDirection: 'row',
+
+  },
 
   label: {
     fontWeight       : 'bold',
@@ -239,6 +344,7 @@ const styles = StyleSheet.create({
   },
 
   button: {
+    flex: 1,
     paddingVertical  : 15,
     paddingHorizontal: 10,
     backgroundColor  : Colors.warning,
@@ -247,6 +353,9 @@ const styles = StyleSheet.create({
     marginVertical   : 5
   },
 
+  deleteButton: {
+    backgroundColor: Colors.danger
+  },
   buttonText: {
     color     : Colors.warningText,
     fontWeight: 'bold',
