@@ -39,7 +39,7 @@ export default class LoginScene extends Component {
       // Check email and password against server, store in realm
       this.loginRequest()
     } else {
-      this.handleError(submission)
+      this.handleValidationError(submission)
     }
   }
 
@@ -60,6 +60,7 @@ export default class LoginScene extends Component {
       email   : this.state.email,
       password: this.state.password
     }).then(response => {
+
       this.storeUser(response)
       this.setState({showSpinner: false})
 
@@ -73,11 +74,11 @@ export default class LoginScene extends Component {
   }
 
   /**
-   * Sets errors in the state.
+   * Sets errors in the state, based on local validation in tcomb.
    *
    * @param submission
    */
-  handleError = (submission) => {
+  handleValidationError = (submission) => {
     let errors    = submission.errors
     let errorList = []
     let warnings  = {
@@ -108,10 +109,9 @@ export default class LoginScene extends Component {
    * @param error
    */
   handleErrorAxios = (error) => {
-    if (error.response && error.response.status === 422) {
+    //if (error.response && error.response.status === 422) {
       alert('Invalid credentials.')
       this.setState({warnings: {emailWarning: true, passwordWarning: true}})
-    }
   }
 
 
