@@ -27,7 +27,7 @@ export default class RegistrationScene extends Component {
       warnings       : {},
       terms          : null,
       minorConsent   : null,
-      currentYear : null
+      currentYear    : null
     }
 
     this.realm = realm
@@ -40,21 +40,20 @@ export default class RegistrationScene extends Component {
       birth_year     : t.Integer,
       zipcode        : t.maybe(t.refinement(t.String, (n) => /^([0-9]{5})(-[0-9]{4})?$/i.test(n), 'zipCode')),
       minorConsent   : t.Boolean,
-      //terms : t.refinement(t.Boolean, (bool) => bool === true)
-      terms : t.Boolean
+      terms          : t.Boolean
     })
   }
 
   componentWillMount() {
     let currentYear = new Date().getFullYear()
-    this.setState({currentYear:currentYear})
+    this.setState({currentYear: currentYear})
   }
+
   /**
    * Validate request and send it to the server.
    */
   submitRegistration = () => {
     // if over 13, set the Consent to true automatically
-    (this.state.currentYear - this.state.birth_year <= 13)  ? null : this.setState({minorConsent: true})
 
     if (!this.validateState().isValid()) {
       this.notifyIncomplete(this.validateState())
@@ -203,7 +202,7 @@ export default class RegistrationScene extends Component {
             onChange={(checked) => {
               this.setState({minorConsent: checked})
             }}
-            warning =  {this.state.warnings.minorConsent}
+            warning={this.state.warnings.minorConsent}
 
           />
         </View>
@@ -295,6 +294,7 @@ export default class RegistrationScene extends Component {
                 style={styles.picker}
                 onSelect={(option) => {
                   this.setState({birth_year: option})
+                    if  (this.state.currentYear - option >= 13) { this.setState({minorConsent: true})}
                 }}
                 selectedYear={
                   (this.state.birth_year > 0) ? this.state.birth_year : null
@@ -320,7 +320,7 @@ export default class RegistrationScene extends Component {
                 onChange={(checked) => {
                   this.setState({terms: checked})
                 }}
-                warning =  {this.state.warnings.terms}
+                warning={this.state.warnings.terms}
               />
             </View>
 
