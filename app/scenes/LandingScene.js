@@ -149,6 +149,13 @@ export default class LandingScene extends Component {
       this.downloadObservations()
     }))
 
+    this.events.push(DeviceEventEmitter.addListener('ObservationDeleted', () => {
+      this.setState({
+        noticeText  : 'Observation deleted!'
+      })
+      this.refs.snackbar.showBar()
+    }))
+
     this.events.push(DeviceEventEmitter.addListener('userRegistered', () => {
       this.setState({
         userLoggedIn: true,

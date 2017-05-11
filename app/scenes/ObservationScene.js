@@ -154,15 +154,19 @@ export default class ObservationScene extends Component {
       return false
     }
 
-   if (this.state.synced && this.state.isLoggedIn) {
-     console.log("my api token is", this.user.api_token)
-     axios.delete(`observation/${entry.id}?api_token=${this.user.api_token}` , {
-     }).then(response => {
-     console.log("RESPONSE: ", response)
-     }).catch(error => {
-       console.log(error)
-     })
+   this.refs.spinner.open()
 
+
+   if (this.state.synced && this.state.isLoggedIn) {
+     axios.delete(`observation/${entry.serverID}?api_token=${this.user.api_token}` , {
+       params: {api_token: this.user.api_token}
+     }).then(response => {
+     }).catch(error => {
+       console.log("ERR:", error)
+       this.refs.spinner.close()
+       alert ("Unable to delete at this time.  Please check your internet connection and try again.")
+       return false
+     })
    }
 
 // Delete locally
@@ -173,11 +177,13 @@ export default class ObservationScene extends Component {
        realm.delete(observation)
      })
    }
-   this.refs.deletionSnackbar.showBar()
-   this.props.navigator.pop()
+   DeviceEventEmitter.emit('ObservationDeleted')
 
+   this.refs.spinner.close()
 
- }
+     this.props.navigator.popToTop()
+   }
+
 
  editEntry(entry){
 null
@@ -245,7 +251,6 @@ null
       <View style={styles.container}>
         <Spinner ref="spinner"/>
         <SnackBarNotice ref="snackbar" noticeText="Entry uploaded successfully!"/>
-        <SnackBarNotice ref="deletionSnackbar" noticeText="Entry deleted"/>
 
         <Header navigator={this.props.navigator} title={entry.name}/>
         <ScrollView style={styles.contentContainer}>
