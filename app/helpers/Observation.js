@@ -48,6 +48,28 @@ class Observation {
     return await Axios.get(`observations/?api_token=${this.api_token}`)
   }
 
+
+  async update(observation) {
+    this._setApiToken()
+
+    if (this.api_token === false) {
+      throw Error('User not signed in')
+    }
+    if (!observation.needs_update) {
+      return
+    }
+    if (!observation.serverID) {
+      console.log("warning: Updating observation with no server ID.  Local only.")
+      return
+    }
+
+    let form = this._setUpForm(observation)
+
+
+    return await Axios.put(`observation/${observation.serverID}?api_token=${this.api_token}`,  form)
+
+  }
+
   // Private Methods
 
   /**

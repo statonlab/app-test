@@ -18,6 +18,8 @@ import Spinner from '../components/Spinner'
 import realm from '../db/Schema'
 import SnackBarNotice from '../components/SnackBarNotice'
 import axios from '../helpers/Axios'
+import Plants from '../resources/descriptions'
+
 
 
 export default class ObservationScene extends Component {
@@ -154,7 +156,7 @@ export default class ObservationScene extends Component {
       return false
     }
     this.refs.spinner.open()
-    
+
     if (this.state.synced && this.state.isLoggedIn) {
       axios.delete(`observation/${entry.serverID}?api_token=${this.user.api_token}`, {
         params: {api_token: this.user.api_token}
@@ -182,9 +184,18 @@ export default class ObservationScene extends Component {
     this.props.navigator.popToTop()
   }
 
+  /**
+   * Edit this entry in the form Scene, passing along relevant info
+   * @param entry
+   */
 
   editEntry(entry) {
-    null
+    this.props.navigator.push({
+      label: 'FormScene',
+      title: entry.name,
+      formProps: Plants[entry.name].formProps,
+      entryInfo: entry,
+      edit: true})
   }
 
   /**
