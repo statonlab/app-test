@@ -1,6 +1,7 @@
 import {Platform} from 'react-native'
 import Axios from './Axios'
 import realm from '../db/Schema'
+import moment from 'moment'
 
 class Observation {
   // Public Methods
@@ -59,15 +60,13 @@ class Observation {
       return
     }
     if (!observation.serverID) {
-      console.log("warning: Updating observation with no server ID.  Local only.")
+      console.log('warning: Updating observation with no server ID.  Local only.')
       return
     }
 
     let form = this._setUpForm(observation)
 
-
-    return await Axios.put(`observation/${observation.serverID}?api_token=${this.api_token}`,  form)
-
+    return await Axios.post(`observation/${observation.serverID}?api_token=${this.api_token}`, form)
   }
 
   // Private Methods

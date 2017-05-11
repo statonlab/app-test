@@ -83,11 +83,11 @@ export default class FormScene extends Component {
       for (key of Object.keys(this.props.entryInfo)) {
         if (key === 'meta_data') {
           this.setState({key: JSON.parse(this.props.entryInfo[key])})
-          console.log("metadata", JSON.parse(this.props.entryInfo[key]))
-          this.setState({"metadata": JSON.parse(this.props.entryInfo[key])})
+          console.log('metadata', JSON.parse(this.props.entryInfo[key]))
+          this.setState({'metadata': JSON.parse(this.props.entryInfo[key])})
         }
         else {
-          console.log("Setting ", key, this.props.entryInfo[key])
+          console.log('Setting ', key, this.props.entryInfo[key])
           this.setState({key: this.props.entryInfo[key]})
         }
       }
@@ -189,16 +189,16 @@ export default class FormScene extends Component {
       return
     }
 
-  primaryKey = this.props.entryInfo.id
+    primaryKey = this.props.entryInfo.id
 
     let observation = {
-      id       : primaryKey,
-      name     : this.state.title.toString(),
-      images   : JSON.stringify(this.state.images),
-      location : this.props.entryInfo.location,
-      date     : this.props.entryInfo.date,
-      synced   : this.props.entryInfo.synced,
-      meta_data: JSON.stringify(this.state.metadata),
+      id          : primaryKey,
+      name        : this.state.title.toString(),
+      images      : JSON.stringify(this.state.images),
+      location    : this.props.entryInfo.location,
+      date        : this.props.entryInfo.date,
+      synced      : this.props.entryInfo.synced,
+      meta_data   : JSON.stringify(this.state.metadata),
       needs_update: true
     }
 
@@ -207,7 +207,7 @@ export default class FormScene extends Component {
     })
     DeviceEventEmitter.emit('editSubmission')
     this.props.navigator.pop()
-}
+  }
 
   /**
    * execute tcomb validation method on the state, given the expected parameters formT
@@ -394,7 +394,7 @@ export default class FormScene extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Header title={this.props.edit ? "Editing entry" : this.state.title} navigator={this.props.navigator} onBackPress={this.cancel}/>
+        <Header title={this.props.edit ? 'Editing entry' : this.state.title} navigator={this.props.navigator} onBackPress={this.cancel}/>
         <KeyboardAwareScrollView
           keyboardDismissMode="on-drag"
           showsVerticalScrollIndicator={false}
@@ -444,9 +444,9 @@ export default class FormScene extends Component {
         </KeyboardAwareScrollView>
 
         <View style={styles.footer}>
-          <MKButton style={[styles.button, styles.flex1]} onPress={this.props.edit ? this.submitEdit: this.submit} rippleColor="rgba(0,0,0,0.5)">
+          <MKButton style={[styles.button, styles.flex1]} onPress={this.props.edit ? this.submitEdit : this.submit} rippleColor="rgba(0,0,0,0.5)">
             <Text style={styles.buttonText}>
-              {this.props.edit ? "Confirm Edit" : "Submit Entry"}
+              {this.props.edit ? 'Confirm Edit' : 'Submit Entry'}
             </Text>
           </MKButton>
 
@@ -644,7 +644,7 @@ const styles = StyleSheet.create({
 
   slider: {
     width: 200
-  },
+  }
 })
 
 const dropdownIcon = (<Icon name="arrow-down-drop-circle-outline" style={styles.icon}/>)
