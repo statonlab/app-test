@@ -29,7 +29,7 @@ export default class ObservationScene extends Component {
       synced    : false,
       isLoggedIn: false
     }
-    this.user = realm.objects('User')[0]
+    this.user  = realm.objects('User')[0]
 
   }
 
@@ -148,46 +148,44 @@ export default class ObservationScene extends Component {
     }
   }
 
- deleteEntry(entry){
+  deleteEntry(entry) {
     if (this.state.synced && !this.state.isLoggedIn) {
-      alert ("Warning: This observation has already been synced to the server.  Please log in to delete.")
+      alert("Warning: This observation has already been synced to the server.  Please log in to delete.")
       return false
     }
-
-   this.refs.spinner.open()
-
-
-   if (this.state.synced && this.state.isLoggedIn) {
-     axios.delete(`observation/${entry.serverID}?api_token=${this.user.api_token}` , {
-       params: {api_token: this.user.api_token}
-     }).then(response => {
-     }).catch(error => {
-       console.log("ERR:", error)
-       this.refs.spinner.close()
-       alert ("Unable to delete at this time.  Please check your internet connection and try again.")
-       return false
-     })
-   }
+    this.refs.spinner.open()
+    
+    if (this.state.synced && this.state.isLoggedIn) {
+      axios.delete(`observation/${entry.serverID}?api_token=${this.user.api_token}`, {
+        params: {api_token: this.user.api_token}
+      }).then(response => {
+      }).catch(error => {
+        console.log("ERR:", error)
+        this.refs.spinner.close()
+        alert("Unable to delete at this time.  Please check your internet connection and try again.")
+        return false
+      })
+    }
 
 // Delete locally
-   let deleteTarget = realm.objects('Submission').filtered(`id == ${entry.id}`)
-   if (deleteTarget.length > 0) {
-     let observation = deleteTarget[0]
-     realm.write(() => {
-       realm.delete(observation)
-     })
-   }
-   DeviceEventEmitter.emit('ObservationDeleted')
+    let deleteTarget = realm.objects('Submission').filtered(`id == ${entry.id}`)
+    if (deleteTarget.length > 0) {
+      let observation = deleteTarget[0]
+      realm.write(() => {
+        realm.delete(observation)
+      })
+    }
+    // DeviceEventEmitter.emit('ObservationDeleted')
 
-   this.refs.spinner.close()
+    this.refs.spinner.close()
 
-     this.props.navigator.popToTop()
-   }
+    this.props.navigator.popToTop()
+  }
 
 
- editEntry(entry){
-null
- }
+  editEntry(entry) {
+    null
+  }
 
   /**
    * deleteAlert
@@ -315,14 +313,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff'
   },
 
-  field: {
+  field           : {
     flex             : 0,
     flexDirection    : 'column',
     borderBottomWidth: 1,
     borderBottomColor: '#ddd'
   },
   multiButtonField: {
-    flex : 1,
+    flex         : 1,
     flexDirection: 'row',
 
   },
@@ -349,7 +347,7 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    flex: 1,
+    flex             : 1,
     paddingVertical  : 15,
     paddingHorizontal: 10,
     backgroundColor  : Colors.warning,
@@ -361,7 +359,7 @@ const styles = StyleSheet.create({
   deleteButton: {
     backgroundColor: Colors.danger
   },
-  buttonText: {
+  buttonText  : {
     color     : Colors.warningText,
     fontWeight: 'bold',
     textAlign : 'center'
