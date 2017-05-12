@@ -121,6 +121,7 @@ export default class ObservationScene extends Component {
     }
   }
 
+
   /**
    * Render meta data as list items.
    *
@@ -228,7 +229,7 @@ export default class ObservationScene extends Component {
       title    : entry.name,
       formProps: Plants[entry.name].formProps,
       entryInfo: entry,
-      edit     : true
+      edit     : true,
     })
   }
 

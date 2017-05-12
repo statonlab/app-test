@@ -38,7 +38,7 @@ export default class WildType extends Component {
     }
 
     if (route.label === 'FormScene') {
-      return <FormScene title={route.title} navigator={navigator} formProps={route.formProps} entryInfo={route.entryInfo} edit={route.edit}/>
+      return <FormScene title={route.title} navigator={navigator} formProps={route.formProps} entryInfo={route.entryInfo} edit={route.edit} />
     }
 
     if (route.label === 'CameraScene') {
