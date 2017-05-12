@@ -63,10 +63,14 @@ export default class ObservationsScene extends Component {
   _createMap() {
     let synced   = []
     let unsynced = []
+    let toUpdate = []
     let list     = {}
 
     this.submissions.map(submission => {
-      if (submission.synced) {
+      if (submission.needs_update) {
+        toUpdate.push(submission)
+      }
+      else if (submission.synced) {
         synced.push(submission)
       } else {
         unsynced.push(submission)
@@ -83,6 +87,12 @@ export default class ObservationsScene extends Component {
       list = {
         ...list,
         'Uploaded': synced
+      }
+    }
+    if (toUpdate.length > 0) {
+      list = {
+        ...list,
+        'Needs Updating': toUpdate
       }
     }
 
@@ -139,19 +149,38 @@ export default class ObservationsScene extends Component {
           {this.state.isLoggedIn ?
             <MKButton style={styles.warningButton}
               onPress={this._uploadAll.bind(this)}>
-              <Text style={[styles.headerText, {color: Colors.warningText}]}>Upload All</Text>
+              <Text style={[styles.headerText, {color: Colors.warningText}]}>Sync All</Text>
             </MKButton> :
             <MKButton style={styles.warningButton}
               onPress={() => this.props.navigator.push({label: 'LoginScene'})}>
-              <Text style={[styles.headerText, {color: Colors.warningText}]}>Login to Upload</Text>
+              <Text style={[styles.headerText, {color: Colors.warningText}]}>Login to Sync</Text>
             </MKButton>
           }
         </View>
       )
     }
+
+    if (id == 'Needs Updating') {
+      return (
+        <View style={[styles.headerContainer, {flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}]}>
+          <Text style={styles.headerText}>{id}</Text>
+          {this.state.isLoggedIn ?
+            <MKButton style={styles.warningButton}
+              onPress={this._uploadAll.bind(this)}>
+              <Text style={[styles.headerText, {color: Colors.warningText}]}>Sync All</Text>
+            </MKButton> :
+            <MKButton style={styles.warningButton}
+              onPress={() => this.props.navigator.push({label: 'LoginScene'})}>
+              <Text style={[styles.headerText, {color: Colors.warningText}]}>Login to Sync</Text>
+            </MKButton>
+          }
+        </View>
+      )
+
+    }
     return (
       <View style={styles.headerContainer}>
-        <Text style={styles.headerText}>{id} ({realm.objects('Submission').filtered('synced == true').length})</Text>
+        <Text style={styles.headerText}>{id} ({realm.objects('Submission').filtered('synced == true && needs_update == false').length})</Text>
       </View>
     )
   }
@@ -211,23 +240,47 @@ export default class ObservationsScene extends Component {
    * @private
    */
   _uploadAll() {
-    this.refs.spinner.open()
     let observations = realm.objects('Submission').filtered('synced == false')
-    observations.forEach(observation => {
-      Observation.upload(observation).then(response => {
-        // TODO: Add snackbar notification
-        // console.log(response)
-        realm.write(() => {
-          observation.synced         = true
-          observation.observation_id = response.data.data.observation_id
-          this._resetDataSource()
+
+    if (observations.length > 0) {
+      this.refs.spinner.open()
+
+      observations.forEach(observation => {
+        Observation.upload(observation).then(response => {
+          // TODO: Add snackbar notification
+          // console.log(response)
+          realm.write(() => {
+            observation.synced         = true
+            observation.observation_id = response.data.data.observation_id
+            this._resetDataSource()
+            this.refs.spinner.close()
+          })
+        }).catch(error => {
+          // TODO: Handle Error!
+          console.log(error)
         })
-        this.refs.spinner.close()
-      }).catch(error => {
-        // TODO: Handle Error!
-        console.log(error)
       })
-    })
+    }
+
+    let toSync = realm.objects('Submission').filtered('needs_update == true')
+
+    if (toSync.length > 0) {
+      this.refs.spinner.open()
+
+      toSync.forEach(observation => {
+        Observation.update(observation).then(response => {
+          // TODO: Add snackbar notification
+          realm.write(() => {
+            observation.needs_update = false
+            this._resetDataSource()
+            this.refs.spinner.close()
+          })
+        }).catch(error => {
+          // TODO: Handle Error!
+          console.log(error)
+        })
+      })
+    }
   }
 
   /**

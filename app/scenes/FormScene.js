@@ -36,10 +36,6 @@ DCPrules = {
   ashSpecies         : t.enums.of(DCP.ashSpecies.selectChoices, 'ashSpecies'),
   emeraldAshBorer    : t.maybe(t.String),
   crownHealth        : t.Number,
-  //t.enums.of(DCP.emeraldAshBorer.selectChoices, "EAB"),
-  // chestnutBlightSigns: t.enums.of(DCP.chestnutBlightSigns.selectChoices, "cbSigns"),
-  // diameterDescriptive: t.enums.of(DCP.diameterDescriptive.selectChoices, 'diameter'),
-  // crownHealth        : t.enums.of(DCP.crownHealth.selectChoices, 'crownHealth'),
   otherLabel         : t.String
 }
 
@@ -81,24 +77,27 @@ export default class FormScene extends Component {
     this.formTMeta     = t.struct(this.formRulesMeta, 'formTMeta') // build tcomb validation from rules
   }
 
-  componentDidMount() {
-    /* let user = this.realm.objects('User')
-     if (user.length === 0) {
-     Alert.alert('You are Not Logged In',
-     'Please log in to submit observations to the server.', [
-     {
-     text: 'Login Now', onPress: () => {
-     this.props.navigator.push({label: 'LoginScene'})
-     }
-     },
-     {
-     text: 'Cancel', onPress: () => {
-     }, style                 : 'cancel'
-     }
-     ])
-     }*/
+  componentWillMount() {
+    if (this.props.edit) {
+      //For every key, set the state
+      for (key of Object.keys(this.props.entryInfo)) {
+        if (key === 'meta_data') {
+          this.setState({key: JSON.parse(this.props.entryInfo[key])})
+          console.log('metadata', JSON.parse(this.props.entryInfo[key]))
+          this.setState({'metadata': JSON.parse(this.props.entryInfo[key])})
+        }
+        else {
+          console.log('Setting ', key, this.props.entryInfo[key])
+          this.setState({key: this.props.entryInfo[key]})
+        }
+      }
+    }
+  }
 
-    this.setDefaultValues()
+  componentDidMount() {
+    if (!this.props.edit) {
+      this.setDefaultValues()
+    }
     this.events.push(DeviceEventEmitter.addListener('cameraCapturedPhotos', this.handleImages))
   }
 
@@ -178,6 +177,36 @@ export default class FormScene extends Component {
       plant   : observation,
       gestures: {}
     })
+  }
+
+  submitEdit = () => {
+    if (!this.validateState().isValid()) {
+      this.notifyIncomplete(this.validateState())
+      return
+    }
+    if (!this.validateMeta().isValid()) {
+      this.notifyIncomplete(this.validateMeta())
+      return
+    }
+
+    primaryKey = this.props.entryInfo.id
+
+    let observation = {
+      id          : primaryKey,
+      name        : this.state.title.toString(),
+      images      : JSON.stringify(this.state.images),
+      location    : this.props.entryInfo.location,
+      date        : this.props.entryInfo.date,
+      synced      : this.props.entryInfo.synced,
+      meta_data   : JSON.stringify(this.state.metadata),
+      needs_update: true
+    }
+
+    this.realm.write(() => {
+      realm.create('Submission', observation, true)  // true as 3rd argument updates
+    })
+    DeviceEventEmitter.emit('editSubmission')
+    this.props.navigator.pop()
   }
 
   /**
@@ -274,8 +303,8 @@ export default class FormScene extends Component {
           <Text style={styles.label}>{DCP[key].label}</Text>
           <SliderPick
             key={key}
-            images = {DCP[key].images}
-            start={DCP[key].startValue}
+            images={DCP[key].images}
+            start={ this.state.metadata[key] ? this.state.metadata[key] : DCP[key].startValue}
             max={DCP[key].maxValue}
             min={DCP[key].minValue}
             legendText={DCP[key].units}
@@ -292,7 +321,7 @@ export default class FormScene extends Component {
       <View style={styles.formGroup} key={key}>
         <PickerModal
           style={styles.picker}
-          images = {DCP[key].images}
+          images={DCP[key].images}
           multiCheck={DCP[key].multiCheck}
           freeText={DCP[key].modalFreeText}
           header={DCP[key].description}
@@ -365,7 +394,7 @@ export default class FormScene extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Header title={this.state.title} navigator={this.props.navigator} onBackPress={this.cancel}/>
+        <Header title={this.props.edit ? 'Editing entry' : this.state.title} navigator={this.props.navigator} onBackPress={this.cancel}/>
         <KeyboardAwareScrollView
           keyboardDismissMode="on-drag"
           showsVerticalScrollIndicator={false}
@@ -415,9 +444,9 @@ export default class FormScene extends Component {
         </KeyboardAwareScrollView>
 
         <View style={styles.footer}>
-          <MKButton style={[styles.button, styles.flex1]} onPress={this.submit} rippleColor="rgba(0,0,0,0.5)">
+          <MKButton style={[styles.button, styles.flex1]} onPress={this.props.edit ? this.submitEdit : this.submit} rippleColor="rgba(0,0,0,0.5)">
             <Text style={styles.buttonText}>
-              Submit Entry
+              {this.props.edit ? 'Confirm Edit' : 'Submit Entry'}
             </Text>
           </MKButton>
 
@@ -448,7 +477,9 @@ export default class FormScene extends Component {
 FormScene.propTypes = {
   title    : PropTypes.string.isRequired,
   navigator: PropTypes.object.isRequired,
-  formProps: PropTypes.object
+  formProps: PropTypes.object,
+  edit     : PropTypes.bool,
+  entryInfo: PropTypes.object
 }
 
 const elevationStyle = new Elevation(2)
@@ -613,7 +644,7 @@ const styles = StyleSheet.create({
 
   slider: {
     width: 200
-  },
+  }
 })
 
 const dropdownIcon = (<Icon name="arrow-down-drop-circle-outline" style={styles.icon}/>)

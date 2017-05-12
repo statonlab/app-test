@@ -6,7 +6,8 @@ import {
   Text,
   Image,
   Dimensions,
-  DeviceEventEmitter
+  DeviceEventEmitter,
+  Alert
 } from 'react-native'
 import Header from '../components/Header'
 import Colors from '../helpers/Colors'
@@ -16,26 +17,33 @@ import Observation from '../helpers/Observation'
 import Spinner from '../components/Spinner'
 import realm from '../db/Schema'
 import SnackBarNotice from '../components/SnackBarNotice'
+import axios from '../helpers/Axios'
+import Plants from '../resources/descriptions'
+
 
 export default class ObservationScene extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      imageIndex: 0,
-      synced    : false,
-      isLoggedIn: false
+      imageIndex  : 0,
+      synced      : false,
+      isLoggedIn  : false,
+      needs_update: false
     }
+    this.user  = realm.objects('User')[0]
+
   }
 
   /**
-   * Set the synced status.
+   * Set the synced and updated status.
    */
   componentDidMount() {
     this._isLoggedIn()
 
     this.loggedEvent = DeviceEventEmitter.addListener('userLoggedIn', this._isLoggedIn.bind(this))
     this.setState({synced: this.props.plant.synced})
+    this.setState({needs_update: this.props.plant.needs_update})
   }
 
   /**
@@ -83,6 +91,37 @@ export default class ObservationScene extends Component {
   }
 
   /**
+   * Update existing entry with server.
+   *
+   * @param entry
+   */
+
+  update(entry) {
+    if (this.state.synced) {
+      this.refs.spinner.open()
+      Observation.update(entry).then(response => {
+        let data   = response.data.data
+        submission = realm.objects('Submission').filtered(`id == ${entry.id}`)
+        if (submission.length > 0) {
+          let observation = submission[0]
+          console.log("OBS:", observation)
+          realm.write(() => {
+            observation.needs_update = false
+          })
+          this.refs.spinner.close()
+          this.setState({needs_update: false})
+          this.refs.snackbar.showBar()
+          return
+        }
+      }).catch(error => {
+        console.log(error)
+        this.refs.spinner.close()
+        return
+      })
+    }
+  }
+
+  /**
    * Render meta data as list items.
    *
    * @param data
@@ -121,27 +160,125 @@ export default class ObservationScene extends Component {
     })
   }
 
-  _renderButtons(entry) {
-    if (!this.state.synced && !this.state.isLoggedIn) {
+  _renderUploadButton(entry) {
+    if ((!this.state.synced && !this.state.isLoggedIn) || (this.state.needs_update && !this.state.isLoggedIn)) {
       return (
         <View style={styles.field}>
           <MKButton style={styles.button} onPress={() => this.props.navigator.push({label: 'LoginScene'})}>
-            <Text style={styles.buttonText}>Login to Upload</Text>
+            <Text style={styles.buttonText}>Login to Sync</Text>
           </MKButton>
         </View>
       )
     }
 
-    if (!this.state.synced) {
+    if (!this.state.synced || this.state.needs_update) {
       return (
         <View style={styles.field}>
-          <MKButton style={styles.button} onPress={() => this.upload.call(this, entry)}>
-            <Text style={styles.buttonText}>Upload to Server</Text>
+          <MKButton style={styles.button}
+            onPress={this.state.needs_update && this.state.synced ? () => this.update.call(this, entry) : () => this.upload.call(this, entry)}>
+            <Text style={styles.buttonText}>Sync With Server</Text>
           </MKButton>
         </View>
       )
     }
   }
+
+  deleteEntry(entry) {
+    if (this.state.synced && !this.state.isLoggedIn) {
+      alert("Warning: This observation has already been synced to the server.  Please log in to delete.")
+      return false
+    }
+    this.refs.spinner.open()
+
+    if (this.state.synced && this.state.isLoggedIn) {
+      axios.delete(`observation/${entry.serverID}?api_token=${this.user.api_token}`, {
+        params: {api_token: this.user.api_token}
+      }).then(response => {
+      }).catch(error => {
+        console.log("ERR:", error)
+        this.refs.spinner.close()
+        alert("Unable to delete at this time.  Please check your internet connection and try again.")
+        return false
+      })
+    }
+
+// Delete locally
+    let deleteTarget = realm.objects('Submission').filtered(`id == ${entry.id}`)
+    if (deleteTarget.length > 0) {
+      let observation = deleteTarget[0]
+      realm.write(() => {
+        realm.delete(observation)
+      })
+    }
+    // DeviceEventEmitter.emit('ObservationDeleted')
+
+    this.refs.spinner.close()
+
+    this.props.navigator.popToTop()
+  }
+
+  /**
+   * Edit this entry in the form Scene, passing along relevant info
+   * @param entry
+   */
+
+  editEntry(entry) {
+    this.props.navigator.push({
+      label    : 'FormScene',
+      title    : entry.name,
+      formProps: Plants[entry.name].formProps,
+      entryInfo: entry,
+      edit     : true
+    })
+  }
+
+  /**
+   * deleteAlert
+   * -------------------------------------------------
+   * Method for Delete button.  Change scene, alert user about losing data.
+   * @returns {boolean}
+   */
+  deleteAlert = (entry) => {
+
+    if (this.state.synced && !this.state.isLoggedIn) {
+      Alert.alert('Log In to Delete',
+        'This observation is already uploaded.  Please log in to delete.', [
+          {
+            text   : 'OK',
+            onPress: () => {
+              this.props.navigator.push({label: 'LoginScene'})
+            }
+          },
+          {
+            text   : 'Back',
+            onPress: () => {
+              // On cancel do nothing.
+            },
+            style  : 'cancel'
+          }
+        ])
+      return false
+    }
+
+    Alert.alert('Delete Observation',
+      'Data will be permanently lost if you cancel. Are you sure?', [
+        {
+          text   : 'Yes',
+          onPress: () => {
+            this.deleteEntry(entry)
+          }
+        },
+        {
+          text   : 'Back',
+          onPress: () => {
+          },
+          style  : 'cancel'
+        }
+      ])
+
+    return false
+  }
+
 
   /**
    * Render Scene.
@@ -155,7 +292,8 @@ export default class ObservationScene extends Component {
     return (
       <View style={styles.container}>
         <Spinner ref="spinner"/>
-        <SnackBarNotice ref="snackbar" noticeText="Entry uploaded successfully!"/>
+        <SnackBarNotice ref="snackbar" noticeText="Entry synced successfully!"/>
+
         <Header navigator={this.props.navigator} title={entry.name}/>
         <ScrollView style={styles.contentContainer}>
           <ScrollView
@@ -169,7 +307,7 @@ export default class ObservationScene extends Component {
             })}
           </ScrollView>
           <View style={styles.card}>
-            {this._renderButtons(entry)}
+            {this._renderUploadButton(entry)}
 
             <View style={styles.field}>
               <Text style={styles.label}>Date Collected</Text>
@@ -178,6 +316,15 @@ export default class ObservationScene extends Component {
 
             {this._renderMetaData(entry.meta_data)}
           </View>
+          <View style={styles.multiButtonField}>
+            <MKButton style={styles.button } onPress={() => this.editEntry(entry)}>
+              <Text style={styles.buttonText}>Edit Entry</Text>
+            </MKButton>
+            <MKButton style={[styles.button, styles.deleteButton]} onPress={() => this.deleteAlert(entry)}>
+              <Text style={styles.buttonText}>Delete Entry</Text>
+            </MKButton>
+          </View>
+
         </ScrollView>
       </View>
     )
@@ -210,11 +357,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff'
   },
 
-  field: {
+  field           : {
     flex             : 0,
     flexDirection    : 'column',
     borderBottomWidth: 1,
     borderBottomColor: '#ddd'
+  },
+  multiButtonField: {
+    flex         : 1,
+    flexDirection: 'row',
+
   },
 
   label: {
@@ -239,6 +391,7 @@ const styles = StyleSheet.create({
   },
 
   button: {
+    flex             : 1,
     paddingVertical  : 15,
     paddingHorizontal: 10,
     backgroundColor  : Colors.warning,
@@ -247,7 +400,10 @@ const styles = StyleSheet.create({
     marginVertical   : 5
   },
 
-  buttonText: {
+  deleteButton: {
+    backgroundColor: Colors.danger
+  },
+  buttonText  : {
     color     : Colors.warningText,
     fontWeight: 'bold',
     textAlign : 'center'

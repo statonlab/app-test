@@ -1295,6 +1295,7 @@
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.Treesnap;
 				PRODUCT_NAME = Treesnap;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -1323,6 +1324,7 @@
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.Treesnap;
 				PRODUCT_NAME = Treesnap;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

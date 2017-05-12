@@ -35,7 +35,8 @@ const SubmissionSchema = {
     // JSON String
     meta_data: {type: 'string', default: ''},
     // The observation id returned by the server upon uploading
-    serverID : {type: 'int', default: -1}
+    serverID : {type: 'int', default: -1},
+    needs_update : {type: 'bool', default: false}
   }
 }
 
@@ -67,13 +68,19 @@ export default new Realm({
     CoordinateSchema,
     SubmissionSchema
   ],
-  schemaVersion: 2,
+  schemaVersion: 3,
   migration    : function (oldRealm, newRealm) {
     if (oldRealm.schemaVersion < 2) {
       let newUser = newRealm.objects('User')
       if (newUser.length > 0) {
         newUser.birthYear = 1984
       }
+    }
+    if (oldRealm.schemaVersion < 3 ){
+      let observations = newRealm.objects('Submission')
+      observations.forEach(observation => {
+        observation.needs_update = false
+      })
     }
   }
 })
