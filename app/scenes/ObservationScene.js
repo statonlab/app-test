@@ -21,28 +21,29 @@ import axios from '../helpers/Axios'
 import Plants from '../resources/descriptions'
 
 
-
 export default class ObservationScene extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      imageIndex: 0,
-      synced    : false,
-      isLoggedIn: false
+      imageIndex  : 0,
+      synced      : false,
+      isLoggedIn  : false,
+      needs_update: false
     }
     this.user  = realm.objects('User')[0]
 
   }
 
   /**
-   * Set the synced status.
+   * Set the synced and updated status.
    */
   componentDidMount() {
     this._isLoggedIn()
 
     this.loggedEvent = DeviceEventEmitter.addListener('userLoggedIn', this._isLoggedIn.bind(this))
     this.setState({synced: this.props.plant.synced})
+    this.setState({needs_update: this.props.plant.needs_update})
   }
 
   /**
@@ -90,6 +91,37 @@ export default class ObservationScene extends Component {
   }
 
   /**
+   * Update existing entry with server.
+   *
+   * @param entry
+   */
+
+  update(entry) {
+    if (this.state.synced) {
+      this.refs.spinner.open()
+      Observation.update(entry).then(response => {
+        let data   = response.data.data
+        submission = realm.objects('Submission').filtered(`id == ${entry.id}`)
+        if (submission.length > 0) {
+          let observation = submission[0]
+          console.log("OBS:", observation)
+          realm.write(() => {
+            observation.needs_update = false
+          })
+          this.refs.spinner.close()
+          this.setState({needs_update: false})
+          this.refs.snackbar.showBar()
+          return
+        }
+      }).catch(error => {
+        console.log(error)
+        this.refs.spinner.close()
+        return
+      })
+    }
+  }
+
+  /**
    * Render meta data as list items.
    *
    * @param data
@@ -129,21 +161,22 @@ export default class ObservationScene extends Component {
   }
 
   _renderUploadButton(entry) {
-    if (!this.state.synced && !this.state.isLoggedIn) {
+    if ((!this.state.synced && !this.state.isLoggedIn) || (this.state.needs_update && !this.state.isLoggedIn)) {
       return (
         <View style={styles.field}>
           <MKButton style={styles.button} onPress={() => this.props.navigator.push({label: 'LoginScene'})}>
-            <Text style={styles.buttonText}>Login to Upload</Text>
+            <Text style={styles.buttonText}>Login to Sync</Text>
           </MKButton>
         </View>
       )
     }
 
-    if (!this.state.synced) {
+    if (!this.state.synced || this.state.needs_update) {
       return (
         <View style={styles.field}>
-          <MKButton style={styles.button} onPress={() => this.upload.call(this, entry)}>
-            <Text style={styles.buttonText}>Upload to Server</Text>
+          <MKButton style={styles.button}
+            onPress={this.state.needs_update && this.state.synced ? () => this.update.call(this, entry) : () => this.upload.call(this, entry)}>
+            <Text style={styles.buttonText}>Sync With Server</Text>
           </MKButton>
         </View>
       )
@@ -191,11 +224,12 @@ export default class ObservationScene extends Component {
 
   editEntry(entry) {
     this.props.navigator.push({
-      label: 'FormScene',
-      title: entry.name,
+      label    : 'FormScene',
+      title    : entry.name,
       formProps: Plants[entry.name].formProps,
       entryInfo: entry,
-      edit: true})
+      edit     : true
+    })
   }
 
   /**
@@ -237,7 +271,6 @@ export default class ObservationScene extends Component {
         {
           text   : 'Back',
           onPress: () => {
-            // On cancel do nothing.
           },
           style  : 'cancel'
         }
@@ -259,7 +292,7 @@ export default class ObservationScene extends Component {
     return (
       <View style={styles.container}>
         <Spinner ref="spinner"/>
-        <SnackBarNotice ref="snackbar" noticeText="Entry uploaded successfully!"/>
+        <SnackBarNotice ref="snackbar" noticeText="Entry synced successfully!"/>
 
         <Header navigator={this.props.navigator} title={entry.name}/>
         <ScrollView style={styles.contentContainer}>

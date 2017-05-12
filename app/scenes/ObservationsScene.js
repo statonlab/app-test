@@ -269,10 +269,9 @@ export default class ObservationsScene extends Component {
 
       toSync.forEach(observation => {
         Observation.update(observation).then(response => {
-          console.log("RESPONSE:", response.data.data)
           // TODO: Add snackbar notification
           realm.write(() => {
-            observation.needs_update = true
+            observation.needs_update = false
             this._resetDataSource()
             this.refs.spinner.close()
           })
