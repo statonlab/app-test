@@ -208,7 +208,7 @@ export default class RegistrationScene extends Component {
         </View>
       )
     }
-    return ( null)
+    return (null)
   }
 
   render() {
@@ -294,7 +294,9 @@ export default class RegistrationScene extends Component {
                 style={styles.picker}
                 onSelect={(option) => {
                   this.setState({birth_year: option})
-                    if  (this.state.currentYear - option >= 13) { this.setState({minorConsent: true})}
+                  if (this.state.currentYear - option >= 13) {
+                    this.setState({minorConsent: true})
+                  }
                 }}
                 selectedYear={
                   (this.state.birth_year > 0) ? this.state.birth_year : null
