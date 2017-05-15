@@ -110,8 +110,8 @@ export default class LoginScene extends Component {
    */
   handleErrorAxios = (error) => {
     //if (error.response && error.response.status === 422) {
-      alert('Invalid credentials.')
-      this.setState({warnings: {emailWarning: true, passwordWarning: true}})
+    alert('Invalid credentials.')
+    this.setState({warnings: {emailWarning: true, passwordWarning: true}})
   }
 
 
@@ -121,9 +121,13 @@ export default class LoginScene extends Component {
    * @param response
    */
   storeUser = (response) => {
+
     this.realm.write(() => {
-      // Delete existing users first
-      this.realm.deleteAll()
+      let user = realm.objects('User')[0]
+      if (user) {
+        // Delete existing users first
+        this.realm.delete(user)
+      }
 
       if (!response.data.data.zipcode) {
         response.data.data.zipcode = ''
@@ -153,7 +157,8 @@ export default class LoginScene extends Component {
             </View>
 
             <View style={styles.formGroup}>
-              <Text style={this.state.warnings.emailWarning ? [styles.label, styles.labelWarning] : styles.label}>Email</Text>
+              <Text
+                style={this.state.warnings.emailWarning ? [styles.label, styles.labelWarning] : styles.label}>Email</Text>
               <TextInput
                 autoCapitalize={'none'}
                 style={this.state.warnings.emailWarning ? [styles.textField, styles.textFieldWarning] : styles.textField}
@@ -166,7 +171,8 @@ export default class LoginScene extends Component {
             </View>
 
             <View style={styles.formGroup}>
-              <Text style={this.state.warnings.passwordWarning ? [styles.label, styles.labelWarning] : styles.label}>Password</Text>
+              <Text
+                style={this.state.warnings.passwordWarning ? [styles.label, styles.labelWarning] : styles.label}>Password</Text>
               <TextInput
                 style={this.state.warnings.passwordWarning ? [styles.textField, styles.textFieldWarning] : styles.textField}
                 placeholder={'Password'}

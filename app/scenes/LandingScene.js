@@ -151,6 +151,7 @@ export default class LandingScene extends Component {
       })
       this.setSidebarLinks()
       this.refs.snackbar.showBar()
+      console.log("DB: entries", realm.objects('Submission').length)
       this.downloadObservations()
     }))
 
@@ -187,9 +188,11 @@ export default class LandingScene extends Component {
   downloadObservations() {
     let emptyDB = (realm.objects('Submission').length <= 0)
 
+    console.log("DB: entries", realm.objects('Submission').length)
+
+
     Observation.get().then(response => {
       let records = response.data.data
-      console.log(records)
       records.forEach(record => {
         let exists = (realm.objects('Submission').filtered(`serverID == ${record.observation_id}`).length > 0)
         if (exists) {
@@ -320,7 +323,8 @@ export default class LandingScene extends Component {
           routes={this.state.sidebar}/>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.plantsContainer}>
-            {this.state.userLoggedIn ? <UploadButton ref="uploadButton" onUploadDone={this.uploadCompleted.bind(this)}/> : this.loginButton.call(this)}
+            {this.state.userLoggedIn ? <UploadButton ref="uploadButton"
+              onUploadDone={this.uploadCompleted.bind(this)}/> : this.loginButton.call(this)}
 
             {plants.map((plant, index) => {
               return (
