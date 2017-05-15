@@ -88,9 +88,6 @@ export default class FormScene extends Component {
         if (key === 'images'){
           this.setState({images: JSON.parse(this.props.entryInfo[key])})
         }
-        // else {
-        //   this.setState({key: this.props.entryInfo[key]})
-        // }
       }
     }
   }
@@ -117,7 +114,8 @@ export default class FormScene extends Component {
    * @returns {boolean}
    */
   cancel = () => {
-    if (this.state.images[0]) {
+    console.log(Object.keys(this.state.metadata))
+    if (this.state.images[0] || Object.keys(this.state.metadata)[0]) {
         Alert.alert('Cancel Submission',
             'Data will be permanently lost if you cancel. Are you sure?', [
                 {

@@ -129,7 +129,7 @@ const DCP = {
       require('../img/ash_id/1.jpg'),
       require('../img/ash_id/2.jpg')
       ],
-    startValue : 25,
+  //  startValue : 25,
   },
   crownHealth    : {
     label      : 'Crown health',
@@ -142,7 +142,7 @@ const DCP = {
       require('../img/ash_id/1.jpg'),
       require('../img/ash_id/2.jpg')
      ],
-    startValue : 100,
+  //  startValue : 100,
   },
 
   otherLabel : {
