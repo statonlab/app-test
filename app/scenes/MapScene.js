@@ -7,6 +7,7 @@ import {
 import MarkersMap from '../components/MarkersMap'
 import Header from '../components/Header'
 import realm from '../db/Schema'
+import moment from 'moment'
 
 export default class MapScene extends Component {
   render() {
@@ -30,7 +31,7 @@ export default class MapScene extends Component {
       markers.push({
         title      : submission.name,
         image      : JSON.parse(submission.images)[0],
-        description: 'What should we put here?',
+        description: moment(submission.date, 'MM-DD-YYYY HH:mm:ss').fromNow(),
         coord      : {
           longitude: submission.location.longitude,
           latitude : submission.location.latitude
