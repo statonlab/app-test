@@ -66,6 +66,8 @@ class Observation {
 
     let form = this._setUpForm(observation)
 
+      console.log("UPDATE FORM:", form)
+
     return await Axios.post(`observation/${observation.serverID}?api_token=${this.api_token}`, form)
   }
 

@@ -121,9 +121,13 @@ export default class LoginScene extends Component {
    * @param response
    */
   storeUser = (response) => {
+
     this.realm.write(() => {
-      // Delete existing users first
-      this.realm.deleteAll()
+      let user =realm.objects('User')[0]
+        if (user) {
+            // Delete existing users first
+            this.realm.delete(user)
+        }
 
       if (!response.data.data.zipcode) {
         response.data.data.zipcode = ''

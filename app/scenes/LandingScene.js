@@ -146,7 +146,8 @@ export default class LandingScene extends Component {
       })
       this.setSidebarLinks()
       this.refs.snackbar.showBar()
-      this.downloadObservations()
+        console.log("DB: entries", realm.objects('Submission').length)
+        this.downloadObservations()
     }))
 
     this.events.push(DeviceEventEmitter.addListener('ObservationDeleted', () => {
@@ -182,9 +183,11 @@ export default class LandingScene extends Component {
   downloadObservations() {
     let emptyDB = (realm.objects('Submission').length <= 0)
 
-    Observation.get().then(response => {
+      console.log("DB: entries", realm.objects('Submission').length)
+
+
+      Observation.get().then(response => {
       let records = response.data.data
-      console.log(records)
       records.forEach(record => {
         let exists = (realm.objects('Submission').filtered(`serverID == ${record.observation_id}`).length > 0)
         if (exists) {

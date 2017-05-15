@@ -269,6 +269,7 @@ export default class ObservationsScene extends Component {
 
       toSync.forEach(observation => {
         Observation.update(observation).then(response => {
+          console.log("OBS:", response)
           // TODO: Add snackbar notification
           realm.write(() => {
             observation.needs_update = false

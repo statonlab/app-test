@@ -5,6 +5,7 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		00922F65A2F84FF68A17C2EB /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E1577C53B4C84FA89D14C807 /* FontAwesome.ttf */; };
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
@@ -1301,7 +1302,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.Treesnap;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.utk.treesource;
 				PRODUCT_NAME = Treesnap;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -1330,7 +1331,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.Treesnap;
+				PRODUCT_BUNDLE_IDENTIFIER = edu.utk.treesource;
 				PRODUCT_NAME = Treesnap;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
