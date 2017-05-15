@@ -24,29 +24,29 @@ import Observation from '../helpers/Observation'
 const theme  = getTheme()
 const plants = [
   {
-    title: 'American Chestnut',
+    title    : 'American Chestnut',
     latinName: 'Castanea dentata',
-    image: require('../img/am_chestnut4.jpg')
+    image    : require('../img/am_chestnut4.jpg')
   },
   {
-    title: 'Ash',
+    title    : 'Ash',
     latinName: 'Fraxinus sp.',
-    image: require('../img/ash.jpg')
+    image    : require('../img/ash.jpg')
   },
   {
-    title: 'Hemlock',
+    title    : 'Hemlock',
     latinName: 'Tsuga sp.',
-    image: require('../img/hemlock.jpg')
+    image    : require('../img/hemlock.jpg')
   },
   {
-    title: 'White Oak',
+    title    : 'White Oak',
     latinName: 'Quercus alba',
-    image: require('../img/white_oak.jpg')
+    image    : require('../img/white_oak.jpg')
   },
   {
-    title: 'Other',
+    title    : 'Other',
     latinName: 'Other trees that aren\'t listed above',
-    image: require('../img/forest.jpg')
+    image    : require('../img/forest.jpg')
   }
 ]
 
@@ -151,7 +151,7 @@ export default class LandingScene extends Component {
       })
       this.setSidebarLinks()
       this.refs.snackbar.showBar()
-      console.log("DB: entries", realm.objects('Submission').length)
+      console.log('DB: entries', realm.objects('Submission').length)
       this.downloadObservations()
     }))
 
@@ -188,7 +188,7 @@ export default class LandingScene extends Component {
   downloadObservations() {
     let emptyDB = (realm.objects('Submission').length <= 0)
 
-    console.log("DB: entries", realm.objects('Submission').length)
+    console.log('DB: entries', realm.objects('Submission').length)
 
 
     Observation.get().then(response => {
@@ -211,7 +211,7 @@ export default class LandingScene extends Component {
             name     : record.observation_category,
             images   : JSON.stringify(record.images),
             location : record.location,
-            date     : moment(record.date.date).toString(),
+            date     : moment(record.date.date).format('MM-DD-YYYY HH:mm:ss').toString(),
             synced   : true,
             meta_data: JSON.stringify(record.meta_data),
             serverID : parseInt(record.observation_id)
@@ -342,7 +342,7 @@ export default class LandingScene extends Component {
                         {plant.title}
                       </Text>
                       <Text style={plant.title != 'Other' ? [styles.cardBodyText, styles.italics] : styles.cardBodyText}>
-                        
+
                         {plant.latinName}</Text>
                     </View>
                   </View>
@@ -453,7 +453,7 @@ const styles = StyleSheet.create({
   cardButtonText: {
     color: Colors.primaryText
   },
-  italics: {
+  italics       : {
     fontStyle: 'italic'
   },
 
