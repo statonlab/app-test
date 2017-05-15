@@ -85,7 +85,7 @@ export default class FormScene extends Component {
           this.setState({key: JSON.parse(this.props.entryInfo[key])})
           this.setState({'metadata': JSON.parse(this.props.entryInfo[key])})
         }
-        if (key === 'images'){
+        if (key === 'images') {
           this.setState({images: JSON.parse(this.props.entryInfo[key])})
         }
       }
@@ -116,31 +116,31 @@ export default class FormScene extends Component {
   cancel = () => {
     console.log(Object.keys(this.state.metadata))
     if (this.state.images[0] || Object.keys(this.state.metadata)[0]) {
-        Alert.alert('Cancel Submission',
-            'Data will be permanently lost if you cancel. Are you sure?', [
-                {
-                    text: 'Yes',
-                    onPress: () => {
-                        this.props.navigator.popToTop()
-                    }
-                },
-                {
-                    text: 'Back',
-                    onPress: () => {
-                        // On cancel do nothing.
-                    },
-                    style: 'cancel'
-                }
-            ])
-        return false
+      Alert.alert('Cancel Submission',
+        'Data will be permanently lost if you cancel. Are you sure?', [
+          {
+            text   : 'Yes',
+            onPress: () => {
+              this.props.navigator.popToTop()
+            }
+          },
+          {
+            text   : 'Back',
+            onPress: () => {
+              // On cancel do nothing.
+            },
+            style  : 'cancel'
+          }
+        ])
+      return false
     }
-      this.props.navigator.popToTop()
+    this.props.navigator.popToTop()
     return false
   }
 
   /**
 
-  /*
+   /*
    * Submit button method.  Validate the primary and meta data with tcomb.  Write the observation to Realm, leave the scene.
    */
   submit = () => {
@@ -176,7 +176,6 @@ export default class FormScene extends Component {
 
     // Tell anyone who cares that there is a new submission
     DeviceEventEmitter.emit('newSubmission')
-
     this.props.navigator.push({
       label   : 'SubmittedScene',
       plant   : observation,
