@@ -117,25 +117,31 @@ export default class FormScene extends Component {
    * @returns {boolean}
    */
   cancel = () => {
-    Alert.alert('Cancel Submission',
-      'Data will be permanently lost if you cancel. Are you sure?', [
-        {
-          text   : 'Yes',
-          onPress: () => {
-            this.props.navigator.popToTop()
-          }
-        },
-        {
-          text   : 'Back',
-          onPress: () => {
-            // On cancel do nothing.
-          },
-          style  : 'cancel'
-        }
-      ])
-
+    if (this.state.images[0]) {
+        Alert.alert('Cancel Submission',
+            'Data will be permanently lost if you cancel. Are you sure?', [
+                {
+                    text: 'Yes',
+                    onPress: () => {
+                        this.props.navigator.popToTop()
+                    }
+                },
+                {
+                    text: 'Back',
+                    onPress: () => {
+                        // On cancel do nothing.
+                    },
+                    style: 'cancel'
+                }
+            ])
+        return false
+    }
+      this.props.navigator.popToTop()
     return false
   }
+
+  /**
+
   /*
    * Submit button method.  Validate the primary and meta data with tcomb.  Write the observation to Realm, leave the scene.
    */
