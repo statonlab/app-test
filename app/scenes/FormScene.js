@@ -26,8 +26,8 @@ import Location from '../components/Location'
 DCPrules = {
   seedsBinary        : t.enums.of(DCP.seedsBinary.selectChoices, 'seed'),
   flowersBinary      : t.enums.of(DCP.flowersBinary.selectChoices, 'flowers'),
-  woolyAdesPres      : t.Boolean,
-  woolyAdesCoverage  : t.enums.of(DCP.woolyAdesCoverage.selectChoices, 'woolyAdesCoverage'),
+  woollyAdesPres      : t.Boolean,
+  woollylAdesCoverage  : t.enums.of(DCP.woollyAdesCoverage.selectChoices, 'woollyAdesCoverage'),
   acorns             : t.enums.of(DCP.acorns.selectChoices, 'acorns'),
   heightFirstBranch  : t.enums.of(DCP.heightFirstBranch.selectChoices, 'heightFirstBranch'),
   oakHealthProblems  : t.maybe(t.String),
@@ -304,7 +304,7 @@ export default class FormScene extends Component {
     if (DCP[key].slider) {
       return (
         <View style={styles.formGroup} key={key}>
-          <Text style={styles.label}>{DCP[key].label}</Text>
+          <Text style={this.state.warnings[key] ? [styles.label, styles.labelWarning] : styles.label}>{DCP[key].label}</Text>
           <SliderPick
             key={key}
             images={DCP[key].images}

@@ -62,19 +62,19 @@ const DCP = {
       require('../img/DCP/EmAshBorer/Emerald ash borer adult.jpg')
     ]
   },
-  WoolyAdesPres      : {
-    label: 'presence of wooly adelgids'
+  WoollyAdesPres      : {
+    label: 'presence of Woolly adelgids'
   },
-  woolyAdesCoverage  : {
-    label        : 'Wooly adelgids',
+  WoollyAdesCoverage  : {
+    label        : 'Woolly adelgids',
     selectChoices: [
       '0-24%', '25-49%', '50-74%', '75-100%'
     ],
-    description  : 'What percentage of the branches you see have hemlock wooly adelgids?',
+    description  : 'What percentage of the branches you see have hemlock Woolly adelgids?',
     placeHolder  : '% Adelgid coverage',
     images : [
-      require('../img/DCP/HemWooly/HWA photo 1.jpg'),
-      require('../img/DCP/HemWooly/HWA photo 2.jpg')
+      require('../img/DCP/HemWoolly/HWA photo 1.jpg'),
+      require('../img/DCP/HemWoolly/HWA photo 2.jpg')
     ]
   },
   chestnutBlightSigns: {

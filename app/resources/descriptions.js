@@ -141,7 +141,7 @@ const Plants = {
       {
         title : 'Overview',
         images: [],
-        body  : ['American hemlock trees are being killed by hemlock wooly adelgids.  Help fight these invasive insects by tagging health hemlock trees.']
+        body  : ['American hemlock trees are being killed by hemlock woolly adelgids.  Help fight these invasive insects by tagging health hemlock trees.']
       }, {
         title : 'Description',
         images: [],
@@ -151,16 +151,16 @@ const Plants = {
         images: [],
         body  : ['']
       }, {
-        title : 'Hemlock wooly adelgid',
-        body  : ['This insect sucks the sap of hemlock trees, weakening trees, preventing new growth, and eventually killing trees. In addition, hemlock wooly adelgids are thought to inject a toxin when feeding that further damages hemlock trees by drying them out.  Infested trees loose needles and branches and typically die 4-10 years after initial adelgid arrival unless treated.', 'The hemlock wooly adelgid’s name comes from the insect’s egg sacs, which hang from the undersides of branches at certain times of year and look like small wooly tufts.  These insects are invasive in North America, introduced from Japan.', 'Our hope is that this reporting app will let members of the public identify hemlock trees that have some natural resistance to hemlock wooly adelgid.  We will then collect seeds from these trees and add them to tree breeding programs to try and propagate resistant trees to use in forest restoration.'],
+        title : 'Hemlock woolly adelgid',
+        body  : ['This insect sucks the sap of hemlock trees, weakening trees, preventing new growth, and eventually killing trees. In addition, hemlock woolly adelgids are thought to inject a toxin when feeding that further damages hemlock trees by drying them out.  Infested trees loose needles and branches and typically die 4-10 years after initial adelgid arrival unless treated.', 'The hemlock woolly adelgid’s name comes from the insect’s egg sacs, which hang from the undersides of branches at certain times of year and look like small woolly tufts.  These insects are invasive in North America, introduced from Japan.', 'Our hope is that this reporting app will let members of the public identify hemlock trees that have some natural resistance to hemlock woolly adelgid.  We will then collect seeds from these trees and add them to tree breeding programs to try and propagate resistant trees to use in forest restoration.'],
         images: [
-          require('../img/DCP/HemWooly/HWA photo 1.jpg'),
-          require('../img/DCP/HemWooly/HWA photo 2.jpg'),
+          require('../img/DCP/HemWoolly/HWA photo 1.jpg'),
+          require('../img/DCP/HemWoolly/HWA photo 2.jpg'),
         ]
       }
     ],
     formProps       : {
-      woolyAdesCoverage: true,
+      woollyAdesCoverage: true,
       crownHealth      : true,
       diameterNumeric  : true
     }

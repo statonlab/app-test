@@ -31,62 +31,60 @@ export default class SliderPick extends Component {
   }
 
   displayLegend = () => {
-     if (this.state.value) {
-       return(
-       <Text style={styles.label}>{this.state.value} {this.props.legendText}</Text>
-       )
-      }
+    if (this.state.value) {
       return (
-          <Text style={styles.label}>Not set</Text>
-
+        <Text style={styles.label}>{this.state.value} {this.props.legendText}</Text>
       )
+    }
+    return (
+      <Text style={styles.label}>Not set</Text>
+
+    )
   }
 
   render() {
     return (
-        <View style={styles.container}>
-          <MKSlider
-            min={this.props.min}
-            max={this.props.max}
-            value={this.state.value}
-            style={styles.slider}
-            lowerTrackColor={Colors.primary}
-            onChange={(value) => this.onChange(value)}
-            thumbRadius={this.state.value ? 2 : 0}
-          />
-            {this.displayLegend()}
-          <InstructionModal style={styles.modalContainer} 
+      <View style={styles.container}>
+        <MKSlider
+          min={this.props.min}
+          max={this.props.max}
+          value={this.state.value}
+          style={styles.slider}
+          lowerTrackColor={Colors.primary}
+          onChange={(value) => this.onChange(value)}
+          thumbRadius={this.state.value ? 2 : 0}
+        />
+        {this.displayLegend()}
+        <InstructionModal style={styles.modalContainer}
           text={this.props.description}
           images={this.props.images}
-          >
-
-
+        >
 
 
           <Icon name="help-circle" style={styles.icon}/>
-          </InstructionModal>
-        </View>
+        </InstructionModal>
+      </View>
     )
   }
 }
 
 SliderPick.propTypes = {
-  min       : PropTypes.number,
-  max       : PropTypes.number,
-  start     : PropTypes.number,
-  legendText: PropTypes.string,
-  onChange  : PropTypes.func,
-  description : PropTypes.string,
-  images : PropTypes.array
+  min        : PropTypes.number,
+  max        : PropTypes.number,
+  start      : PropTypes.number,
+  legendText : PropTypes.string,
+  onChange   : PropTypes.func,
+  description: PropTypes.string,
+  images     : PropTypes.array,
 }
 
 SliderPick.defaultProps = {
-  min       : 1,
-  max       : 50,
-  start     : 25,
-  legendText: "Inches",
+  min        : 1,
+  max        : 50,
+  start      : 25,
+  legendText : "Inches",
   description: "please provide a description",
-  onChange  : () => {
+  onChange   : () => {
   }
 }
 
@@ -95,17 +93,17 @@ const styles = StyleSheet.create({
     flex: 1
   },
 
-  container: {
-    flex         : 1,
-    flexDirection: 'row',
+  container     : {
+    flex          : 1,
+    flexDirection : 'row',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems    : 'center'
   },
-  modalContainer:  {
-    flex         : 0,
-    flexDirection: 'row',
+  modalContainer: {
+    flex          : 0,
+    flexDirection : 'row',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems    : 'center'
 
   },
 
@@ -117,11 +115,11 @@ const styles = StyleSheet.create({
   },
 
   label: {
-    flex: 0,
+    flex       : 0,
     color      : '#666',
     paddingLeft: 10,
     fontSize   : 12,
-    width: 74
+    width      : 74
   },
 
 })
