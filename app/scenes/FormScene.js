@@ -311,7 +311,7 @@ export default class FormScene extends Component {
           <SliderPick
             key={key}
             images={DCP[key].images}
-            start={ this.state.metadata[key] ? this.state.metadata[key] : DCP[key].startValue}
+            start={ this.state.metadata[key] ? this.state.metadata[key] : null}
             max={DCP[key].maxValue}
             min={DCP[key].minValue}
             legendText={DCP[key].units}

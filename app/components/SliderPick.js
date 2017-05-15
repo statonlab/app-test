@@ -15,7 +15,7 @@ export default class SliderPick extends Component {
     super(props)
 
     this.state = {
-      value: 0,
+      value: null,
     }
   }
 
@@ -30,6 +30,18 @@ export default class SliderPick extends Component {
     this.props.onChange(value)
   }
 
+  displayLegend = () => {
+     if (this.state.value) {
+       return(
+       <Text style={styles.label}>{this.state.value} {this.props.legendText}</Text>
+       )
+      }
+      return (
+          <Text style={styles.label}>Not set</Text>
+
+      )
+  }
+
   render() {
     return (
         <View style={styles.container}>
@@ -40,12 +52,17 @@ export default class SliderPick extends Component {
             style={styles.slider}
             lowerTrackColor={Colors.primary}
             onChange={(value) => this.onChange(value)}
+            thumbRadius={this.state.value ? 2 : 0}
           />
+            {this.displayLegend()}
           <InstructionModal style={styles.modalContainer} 
           text={this.props.description}
           images={this.props.images}
           >
-          <Text style={styles.label}>{this.state.value} {this.props.legendText}</Text>
+
+
+
+
           <Icon name="help-circle" style={styles.icon}/>
           </InstructionModal>
         </View>
