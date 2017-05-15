@@ -341,7 +341,9 @@ export default class LandingScene extends Component {
                       <Text style={styles.cardTitle}>
                         {plant.title}
                       </Text>
-                      <Text style={styles.cardBodyText}>{plant.latinName}</Text>
+                      <Text style={plant.title != 'Other' ? [styles.cardBodyText, styles.italics] : styles.cardBodyText}>
+                        
+                        {plant.latinName}</Text>
                     </View>
                   </View>
                 </MKButton>
@@ -450,6 +452,9 @@ const styles = StyleSheet.create({
 
   cardButtonText: {
     color: Colors.primaryText
+  },
+  italics: {
+    fontStyle: 'italic'
   },
 
   buttonLink: {
