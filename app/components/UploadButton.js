@@ -43,14 +43,13 @@ export default class UploadButton extends Component {
    */
   upload() {
     this.state.observations.forEach(observation => {
-      Observation.upload(observation)
-        .then(response => {
-          realm.write(() => {
-            observation.synced   = true
-            observation.serverID = response.data.data.observation_id
-          })
-          this.done()
-        }).catch(error => {
+      Observation.upload(observation).then(response => {
+        realm.write(() => {
+          observation.synced   = true
+          observation.serverID = response.data.data.observation_id
+        })
+        this.done()
+      }).catch(error => {
         console.log('REQUEST ERROR', error)
       })
     })
