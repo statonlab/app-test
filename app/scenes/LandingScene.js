@@ -25,22 +25,27 @@ const theme  = getTheme()
 const plants = [
   {
     title: 'American Chestnut',
+    latinName: 'Castanea dentata',
     image: require('../img/am_chestnut4.jpg')
   },
   {
     title: 'Ash',
+    latinName: 'Fraxinus sp.',
     image: require('../img/ash.jpg')
   },
   {
     title: 'Hemlock',
+    latinName: 'Tsuga sp.',
     image: require('../img/hemlock.jpg')
   },
   {
     title: 'White Oak',
+    latinName: 'Quercus alba',
     image: require('../img/white_oak.jpg')
   },
   {
     title: 'Other',
+    latinName: 'Other trees that aren\'t listed above',
     image: require('../img/forest.jpg')
   }
 ]
@@ -289,7 +294,7 @@ export default class LandingScene extends Component {
    */
   loginButton() {
     return (
-      <MKButton style={styles.button} onPress={() => this.props.navigator.push({label: 'LoginScene'})}>
+      <MKButton style={[styles.button, {marginHorizontal: 5}]} onPress={() => this.props.navigator.push({label: 'LoginScene'})}>
         <Text style={styles.buttonText}>Login to upload your entries</Text>
       </MKButton>
     )
@@ -323,24 +328,23 @@ export default class LandingScene extends Component {
 
             {plants.map((plant, index) => {
               return (
-                <TouchableHighlight
+                <MKButton
                   style={styles.card}
                   key={index}
+                  rippleColor="rgba(0,0,0,.1)"
                   onPress={() => {
                     this.props.navigator.push({label: 'TreeDescriptionScene', title: plant.title})
-                  }}
-                  underlayColor="#fff">
-                  <View>
+                  }}>
+                  <View style={[styles.flexHorizontal]}>
                     <Image source={plant.image} style={styles.cardImage}/>
                     <View style={styles.cardBody}>
                       <Text style={styles.cardTitle}>
                         {plant.title}
                       </Text>
-                      <Icon name="md-arrow-dropright-circle" size={22} color={Colors.primary}
-                        style={styles.icon}/>
+                      <Text style={styles.cardBodyText}>{plant.latinName}</Text>
                     </View>
                   </View>
-                </TouchableHighlight>
+                </MKButton>
               )
             })}
           </View>
@@ -365,38 +369,49 @@ const styles = StyleSheet.create({
     flexDirection  : 'column'
   },
 
+  flexHorizontal: {
+    flexDirection: 'row'
+  },
+
+  flexSpace: {
+    justifyContent: 'space-between'
+  },
+
   card: {
-    ...theme.cardStyle,
     ...elevationStyle,
-    marginBottom: 10,
-    borderRadius: 3
+    backgroundColor : '#fff',
+    marginBottom    : 10,
+    marginHorizontal: 5,
+    borderRadius    : 3
   },
 
   cardImage: {
-    height              : 150,
-    resizeMode          : 'cover',
-    width               : undefined,
-    borderTopRightRadius: 3,
-    borderTopLeftRadius : 3,
-    backgroundColor     : '#fff'
+    resizeMode: 'cover',
+    flex      : 0,
+    height    : 70,
+    width     : 70
   },
 
   cardTitle: {
-    ...theme.cardTitleStyle,
-    fontSize: 14,
-    flex    : 50,
-    padding : 0,
-    position: undefined,
-    top     : 0,
-    left    : 0
+    backgroundColor: '#fff',
+    fontSize       : 16,
+    flex           : 0,
+    paddingLeft    : 5,
+    fontWeight     : '500',
+    marginBottom   : 5
   },
 
   cardBody: {
-    flexDirection : 'row',
-    flex          : 1,
-    padding       : 10,
-    alignItems    : 'center',
-    justifyContent: 'center'
+    flexDirection: 'column',
+    flex         : 1,
+    padding      : 5
+  },
+
+  cardBodyText: {
+    color        : '#777',
+    paddingBottom: 10,
+    paddingLeft  : 5,
+    fontSize     : 14
   },
 
   icon: {
@@ -404,10 +419,10 @@ const styles = StyleSheet.create({
   },
 
   plantsContainer: {
-    marginHorizontal: 5,
-    flex            : 1,
-    flexDirection   : 'column',
-    paddingVertical : 10
+    //marginHorizontal: 5,
+    flex           : 1,
+    flexDirection  : 'column',
+    paddingVertical: 10
   },
 
   button: {
@@ -419,9 +434,31 @@ const styles = StyleSheet.create({
     borderRadius     : 2
   },
 
+  cardButton: {
+    marginBottom   : 0,
+    flex           : 1,
+    marginLeft     : 5,
+    paddingVertical: 10,
+    backgroundColor: Colors.primary
+  },
+
   buttonText: {
     color     : Colors.warningText,
     fontWeight: '500',
     textAlign : 'center'
+  },
+
+  cardButtonText: {
+    color: Colors.primaryText
+  },
+
+  buttonLink: {
+    backgroundColor: 'transparent',
+    shadowColor    : 'transparent'
+  },
+
+  buttonLinkText: {
+    color          : Colors.primary,
+    textShadowColor: 'transparent'
   }
 })
