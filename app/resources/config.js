@@ -67,7 +67,7 @@ const DCP = {
   woollyAdesCoverage : {
     label        : 'Woolly adelgids',
     selectChoices: [
-      '0-24%', '25-49%', '50-74%', '75-100%'
+      '0%', '1-24%', '25-49%', '50-74%', '75-100%'
     ],
     description  : 'What percentage of the branches you see have hemlock Woolly adelgids?',
     placeHolder  : '% Adelgid coverage',
@@ -96,6 +96,15 @@ const DCP = {
     description  : 'Are there acorns on the tree?  Don\'t include fallen acorns on the ground in your estimate.',
     placeHolder  : 'Number of acorns'
   },
+  cones              : {
+    label        : 'Cones',
+    description  : "Are cones present?  Please take a close-up photo if possible.",
+    selectChoices: [
+      'Yes', 'No'
+    ],
+    placeHolder  : "Please select"
+  },
+
   heightFirstBranch  : {
     label        : 'Height of first branch',
     selectChoices: [
@@ -143,6 +152,17 @@ const DCP = {
     ],
     //  startValue : 100,
   },
+  crownClassification: {
+    label        : 'Crown classification',
+    description  : "What is the height of the crown of this tree relative to others in the stand?",
+    selectChoices: ['Dominant.  This tree\'s crown extends above others in the area.',
+      'Codominant.  This tree\'s crown is at the same level as other nearby trees.',
+      'Intermediate.  This tree\'s crown is below or extending into the nearby trees.',
+      'Overtopped.  This tree\'s crown is entirely below other trees nearby.',
+      'I\'m not sure.'],
+    placeHolder  : "Please select"
+  },
+
 
   otherLabel             : {
     label        : 'Tree type',
@@ -158,24 +178,47 @@ const DCP = {
     ],
     placeHolder  : "Please select"
   },
-
-  nearbyDead : {
+  nearbyDead             : {
     label        : 'Dead trees nearby',
     description  : 'Are there dead or dying trees of this species within one mile of this tree?',
     selectChoices: ["Yes", "No", "Don't know"],
     placeHolder  : "Please select"
   },
-  nearbySmall: {
+  nearbySmall            : {
     label        : 'Healthy nearby',
     description  : 'Are there smaller, healthy trees of this species within one mile of this tree?',
     selectChoices: ["Yes", "No", "Don't know"],
     placeHolder  : "Please select"
   },
-  treated    : {
+  nearByHemlock          : {
+    label        : "Nearby hemlocks",
+    description  : "are there other hemlock trees nearby (within one mile?)",
+    selectChoices: ["Yes, including healthy hemlocks",
+      "Yes, but they are dead or dying",
+      "No"],
+    placeHolder : "Please select"
+  },
+
+  treated      : {
     label        : 'Treated',
-    description  : "Has this tree been treated with Fungicides or pesticides",
+    description  : "Has this tree been treated with Fungicides or pesticides?",
     selectChoices: ["Yes", "No", "Don't know"],
     placeHolder  : "Please select"
+  },
+  partOfStudy  : {
+    label        : 'Study',
+    description  : "Is this tree already part of an existing study that you are aware of?  For example, there may a tag on the tree.",
+    selectChoices: ["Yes", "No", "Don't know"],
+    placeHolder  : "Please select"
+  },
+  accessibility: {
+    label        : 'Accessibility',
+    description  : "Is this tree easy to access?",
+    selectChoices: ["Yes", "No"],
+    placeHolder  : "Please select"
+  },
+  locationComment : {
+    comment : true
   }
 
 

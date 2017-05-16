@@ -163,9 +163,17 @@ const Plants = {
       }
     ],
     formProps       : {
-      woollyAdesCoverage: true,
-      crownHealth       : true,
-      diameterNumeric   : true
+      woollyAdesCoverage     : true,
+      cones                  : true,
+      crownClassification    : true,
+      locationCharacteristics: true,
+      nearByHemlock          : true,
+      treated                : true,
+      partOfStudy            : true,
+      accessibility          : true,
+      crownHealth            : true,
+      diameterNumeric        : true,
+      locationComment        : true
     }
   }
   ,
