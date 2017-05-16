@@ -248,7 +248,7 @@ const Plants = {
         images: []
       }, {
         title : 'Description',
-        body  : [<Text>Photo credits: https://upload.wikimedia.org/wikipedia/commons/e/e9/Ulmus_americana_%285101983801%29.jpg Matt Levin, CCBY-SA 2.0 License. </Text>
+        body  : [<Text>Photo credits: Matt Levin, wikimedia commons, CCBY-SA 2.0 License. </Text>
         ],
         images: []
       }
