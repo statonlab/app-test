@@ -1,4 +1,3 @@
-
 const DCP = {
   treeHeight: {
     label        : 'Tree Height',
@@ -57,22 +56,22 @@ const DCP = {
     description  : 'Do you see any of these signs of emerald ash borers?  Check all that apply.',
     placeHolder  : 'No signs of pest',
     multiCheck   : true,
-    images : [
+    images       : [
       require('../img/DCP/EmAshBorer/EAB tunneling.jpg'),
       require('../img/DCP/EmAshBorer/Emerald ash borer adult.jpg')
     ]
   },
-  woollyAdesPres      : {
+  woollyAdesPres     : {
     label: 'presence of Woolly adelgids'
   },
-  woollyAdesCoverage  : {
+  woollyAdesCoverage : {
     label        : 'Woolly adelgids',
     selectChoices: [
       '0-24%', '25-49%', '50-74%', '75-100%'
     ],
     description  : 'What percentage of the branches you see have hemlock Woolly adelgids?',
     placeHolder  : '% Adelgid coverage',
-    images : [
+    images       : [
       require('../img/DCP/HemWoolly/HWA photo 1.jpg'),
       require('../img/DCP/HemWoolly/HWA photo 2.jpg')
     ]
@@ -122,35 +121,56 @@ const DCP = {
     label      : 'Tree diameter',
     description: 'Approximately how many feet is the diameter of the tree?',
     slider     : true,
-    minValue : 1,
-    maxValue : 50,
-    units : "Inches",
-    images : [
+    minValue   : 1,
+    maxValue   : 50,
+    units      : "Inches",
+    images     : [
       require('../img/ash_id/1.jpg'),
       require('../img/ash_id/2.jpg')
-      ],
-  //  startValue : 25,
+    ],
+    //  startValue : 25,
   },
-  crownHealth    : {
+  crownHealth        : {
     label      : 'Crown health',
     description: 'How would you rate the health of this tree\'s crown?',
     slider     : true,
-    minValue : 1,
-    maxValue : 100,
-    units : "%",
-    images : [
+    minValue   : 1,
+    maxValue   : 100,
+    units      : "%",
+    images     : [
       require('../img/ash_id/1.jpg'),
       require('../img/ash_id/2.jpg')
-     ],
-  //  startValue : 100,
+    ],
+    //  startValue : 100,
   },
 
-  otherLabel : {
-    label : 'Tree type',
-    description: 'Please create a name to associate this entry with.  (ie Birch)',
-    modalFreeText : true,
-    placeHolder : "name (required)"
+  otherLabel             : {
+    label        : 'Tree type',
+    description  : 'Please create a name to associate this entry with.  (ie Birch)',
+    modalFreeText: true,
+    placeHolder  : "name (required)"
   },
+  locationCharacteristics: {
+    label        : 'Habitat',
+    description  : 'How would you characterize the habitat where the tree is located?',
+    selectChoices: [
+      'Floodplain', 'Upland forest', 'Swamp', 'Residence yard', 'Field', 'Roadside', 'Urban'
+    ],
+    placeHolder  : "Please select"
+  },
+
+  nearbyDead : {
+    label        : 'Dead trees nearby',
+    description  : 'Are there dead or dying trees of this species within one mile of this tree?',
+    selectChoices: ["Yes", "No", "Don't know"],
+    placeHolder  : "Please select"
+  },
+  nearbySmall: {
+    label        : 'Healthy nearby',
+    description  : 'Are there smaller, healthy trees of this species within one mile of this tree?',
+    selectChoices: ["Yes", "No", "Don't know"],
+    placeHolder  : "Please select"
+  }
 
 
 }

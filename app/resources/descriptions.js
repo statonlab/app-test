@@ -62,8 +62,8 @@ const Plants = {
       require('../img/ash_id/10.jpg'),
       require('../img/ash_id/11.jpg')
     ],
-    captions : [
-      "Ash leaves.  Image copyright: ","Ash buds", "There are several different species of American ash trees, all of which are susceptible to the deadly emerald ash borer. ", "Test caption 4"
+    captions        : [
+      "Ash leaves.  Image copyright: ", "Ash buds", "There are several different species of American ash trees, all of which are susceptible to the deadly emerald ash borer. ", "Test caption 4"
     ],
     maps            : [
       require('../img/maps/ash_fraxamer_range.png'),
@@ -112,12 +112,15 @@ const Plants = {
       }
     ],
     formProps       : {
-      ashSpecies     : true,
-      seedsBinary    : true,
-      flowersBinary  : true,
-      emeraldAshBorer: true,
-      crownHealth    : true,
-      diameterNumeric: true
+      ashSpecies             : true,
+      locationCharacteristics: true,
+      seedsBinary            : true,
+      flowersBinary          : true,
+      emeraldAshBorer        : true,
+      nearbyDead             : true,
+      nearbySmall            : true,
+      crownHealth            : true,
+      diameterNumeric        : true,
     }
   },
   'Hemlock'          : {
@@ -161,8 +164,8 @@ const Plants = {
     ],
     formProps       : {
       woollyAdesCoverage: true,
-      crownHealth      : true,
-      diameterNumeric  : true
+      crownHealth       : true,
+      diameterNumeric   : true
     }
   }
   ,
@@ -179,7 +182,7 @@ const Plants = {
     ],
     formProps       : {
       diameterNumeric: true,
-      otherLabel : true
+      otherLabel     : true
     }
   }
   ,
@@ -219,13 +222,47 @@ const Plants = {
       }
     ],
     formProps       : {
-      heightFirstBranch  : true,
-      acorns             : true,
-      crownHealth        : true,
-      diameterNumeric:     true,
-      oakHealthProblems  : true
+      heightFirstBranch: true,
+      acorns           : true,
+      crownHealth      : true,
+      diameterNumeric  : true,
+      oakHealthProblems: true
     }
-  }
+  },
+
+  'American Elm': {
+    image           : require('../img/elm.jpg'),
+    latinName       : 'Ulmus americana',
+    images          : [
+      require('../img/elm.jpg')
+    ],
+    maps            : [require('../img/elm.jpg')],
+    descriptionCards: [
+      {
+        title : 'Species',
+        body  : [<Text>American Elm: <Text style={{fontStyle: 'italic'}}>TBD </Text></Text>],
+        images: []
+      }, {
+        title : 'Introduction',
+        body  : [<Text>American Elm...</Text>],
+        images: []
+      }, {
+        title : 'Description',
+        body  : [<Text>Photo credits: https://upload.wikimedia.org/wikipedia/commons/e/e9/Ulmus_americana_%285101983801%29.jpg Matt Levin, CCBY-SA 2.0 License. </Text>
+        ],
+        images: []
+      }
+    ],
+    formProps       : {
+      seedsBinary            : true,
+      flowersBinary          : true,
+      nearbyDead             : true,
+      nearbySmall            : true,
+      locationCharacteristics: true,
+      crownHealth            : true,
+      diameterNumeric        : true
+    }
+  },
 
 }
 

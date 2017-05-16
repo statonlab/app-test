@@ -24,19 +24,22 @@ import SliderPick from '../components/SliderPick'
 import Location from '../components/Location'
 
 DCPrules = {
-  seedsBinary        : t.enums.of(DCP.seedsBinary.selectChoices, 'seed'),
-  flowersBinary      : t.enums.of(DCP.flowersBinary.selectChoices, 'flowers'),
-  woollyAdesPres      : t.Boolean,
-  woollyAdesCoverage  : t.enums.of(DCP.woollyAdesCoverage.selectChoices, 'woollyAdesCoverage'),
-  acorns             : t.enums.of(DCP.acorns.selectChoices, 'acorns'),
-  heightFirstBranch  : t.enums.of(DCP.heightFirstBranch.selectChoices, 'heightFirstBranch'),
-  oakHealthProblems  : t.maybe(t.String),
-  diameterNumeric    : t.Number,
-  chestnutBlightSigns: t.maybe(t.String),
-  ashSpecies         : t.enums.of(DCP.ashSpecies.selectChoices, 'ashSpecies'),
-  emeraldAshBorer    : t.maybe(t.String),
-  crownHealth        : t.Number,
-  otherLabel         : t.String
+  seedsBinary            : t.enums.of(DCP.seedsBinary.selectChoices, 'seed'),
+  flowersBinary          : t.enums.of(DCP.flowersBinary.selectChoices, 'flowers'),
+  woollyAdesPres         : t.Boolean,
+  woollyAdesCoverage     : t.enums.of(DCP.woollyAdesCoverage.selectChoices, 'woollyAdesCoverage'),
+  acorns                 : t.enums.of(DCP.acorns.selectChoices, 'acorns'),
+  heightFirstBranch      : t.enums.of(DCP.heightFirstBranch.selectChoices, 'heightFirstBranch'),
+  oakHealthProblems      : t.maybe(t.String),
+  diameterNumeric        : t.Number,
+  chestnutBlightSigns    : t.maybe(t.String),
+  ashSpecies             : t.enums.of(DCP.ashSpecies.selectChoices, 'ashSpecies'),
+  emeraldAshBorer        : t.maybe(t.String),
+  crownHealth            : t.Number,
+  otherLabel             : t.String,
+  locationCharacteristics: t.enums.of(DCP.locationCharacteristics.selectChoices, 'locations'),
+  nearbySmall            : t.enums.of(DCP.nearbySmall.selectChoices),
+  nearbyDead             : t.enums.of(DCP.nearbyDead.selectChoices)
 }
 
 const Coordinate = t.refinement(t.Number, (n) => n != 0, 'Coordinate')
