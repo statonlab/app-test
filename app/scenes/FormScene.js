@@ -32,6 +32,7 @@ DCPrules = {
   heightFirstBranch      : t.enums.of(DCP.heightFirstBranch.selectChoices, 'heightFirstBranch'),
   oakHealthProblems      : t.maybe(t.String),
   diameterNumeric        : t.Number,
+  heightNumeric          : t.Number,
   chestnutBlightSigns    : t.maybe(t.String),
   ashSpecies             : t.enums.of(DCP.ashSpecies.selectChoices, 'ashSpecies'),
   emeraldAshBorer        : t.maybe(t.String),
@@ -40,7 +41,16 @@ DCPrules = {
   locationCharacteristics: t.enums.of(DCP.locationCharacteristics.selectChoices, 'locations'),
   nearbySmall            : t.enums.of(DCP.nearbySmall.selectChoices),
   nearbyDead             : t.enums.of(DCP.nearbyDead.selectChoices),
-  treated : t.enums.of(DCP.treated.selectChoices)
+  treated                : t.enums.of(DCP.treated.selectChoices),
+  cones                  : t.enums.of(DCP.cones.selectChoices),
+  crownClassification    : t.enums.of(DCP.crownClassification.selectChoices),
+  nearByHemlock          : t.enums.of(DCP.nearByHemlock.selectChoices),
+  partOfStudy            : t.enums.of(DCP.partOfStudy.selectChoices),
+  accessibility          : t.enums.of(DCP.accessibility.selectChoices),
+  locationComment        : t.maybe(t.String),
+  burrs                  : t.enums.of(DCP.burrs.selectChoices),
+  catkins                : t.enums.of(DCP.catkins.selectChoices),
+  surroundings           : t.enums.of(DCP.surroundings.selectChoices),
 }
 
 const Coordinate = t.refinement(t.Number, (n) => n != 0, 'Coordinate')
@@ -305,6 +315,10 @@ export default class FormScene extends Component {
   populateFormItem = (key) => {
     if (typeof DCP[key] === undefined) return
 
+    if (DCP[key].comment) {
+      return
+    }
+
     if (DCP[key].slider) {
       return (
         <View style={styles.formGroup} key={key}>
@@ -381,6 +395,27 @@ export default class FormScene extends Component {
     return Object.keys(this.props.formProps).map(this.populateFormItem)
   }
 
+  renderHiddenComments = () => {
+    if (this.props.formProps.locationComment) {
+      return (
+        <View style={[styles.formGroup, {flex: 0, alignItems: 'flex-start'}]}>
+          <Text style={[styles.label, {paddingTop: 5}]}>Location</Text>
+          <TextInput
+            style={[styles.textField, styles.comment]}
+            placeholder="Comments regarding the location of this tree.  These comments will only be veiwable to Treesnap forestry partners"
+            placeholderTextColor="#aaa"
+            value={this.state.metadata.comment}
+            onChangeText={(comment) => this.setState({metadata: {...this.state.metadata, locationComment: comment}})}
+            multiline={true}
+            numberOfLines={4}
+            underlineColorAndroid="transparent"
+          />
+        </View>
+      )
+    }
+    return null
+  }
+
   /**
    *Returns the form item describing photos added.
    * @returns {XML}
@@ -429,7 +464,7 @@ export default class FormScene extends Component {
             </View>
 
             {this.renderForm()}
-
+            {this.renderHiddenComments()}
             <View style={[styles.formGroup, {flex: 0, alignItems: 'flex-start'}]}>
               <Text style={[styles.label, {paddingTop: 5}]}>Comments</Text>
               <TextInput
@@ -443,7 +478,6 @@ export default class FormScene extends Component {
                 underlineColorAndroid="transparent"
               />
             </View>
-
             <View style={[styles.formGroup]}>
               <Text style={styles.label}>Location</Text>
               <Location onChange={(location) => this.setState({location})}/>

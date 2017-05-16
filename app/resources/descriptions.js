@@ -39,11 +39,14 @@ const Plants = {
       }
     ],
     formProps       : {
-      seedsBinary        : true,
-      flowersBinary      : true,
+      burrs              : true,
+      catkins            : true,
       chestnutBlightSigns: true,
+      surroundings       : true,
+      accessibility      : true,
       crownHealth        : true,
-      diameterNumeric    : true
+      diameterNumeric    : true,
+      heightNumeric      : true
     }
   },
   'Ash'              : {
@@ -163,9 +166,17 @@ const Plants = {
       }
     ],
     formProps       : {
-      woollyAdesCoverage: true,
-      crownHealth       : true,
-      diameterNumeric   : true
+      woollyAdesCoverage     : true,
+      cones                  : true,
+      crownClassification    : true,
+      locationCharacteristics: true,
+      nearByHemlock          : true,
+      treated                : true,
+      partOfStudy            : true,
+      accessibility          : true,
+      crownHealth            : true,
+      diameterNumeric        : true,
+      locationComment        : true
     }
   }
   ,
