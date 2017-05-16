@@ -39,7 +39,8 @@ DCPrules = {
   otherLabel             : t.String,
   locationCharacteristics: t.enums.of(DCP.locationCharacteristics.selectChoices, 'locations'),
   nearbySmall            : t.enums.of(DCP.nearbySmall.selectChoices),
-  nearbyDead             : t.enums.of(DCP.nearbyDead.selectChoices)
+  nearbyDead             : t.enums.of(DCP.nearbyDead.selectChoices),
+  treated : t.enums.of(DCP.treated.selectChoices)
 }
 
 const Coordinate = t.refinement(t.Number, (n) => n != 0, 'Coordinate')

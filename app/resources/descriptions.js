@@ -258,6 +258,7 @@ const Plants = {
       flowersBinary          : true,
       nearbyDead             : true,
       nearbySmall            : true,
+      treated                : true,
       locationCharacteristics: true,
       crownHealth            : true,
       diameterNumeric        : true

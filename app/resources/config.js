@@ -170,6 +170,12 @@ const DCP = {
     description  : 'Are there smaller, healthy trees of this species within one mile of this tree?',
     selectChoices: ["Yes", "No", "Don't know"],
     placeHolder  : "Please select"
+  },
+  treated    : {
+    label        : 'Treated',
+    description  : "Has this tree been treated with Fungicides or pesticides",
+    selectChoices: ["Yes", "No", "Don't know"],
+    placeHolder  : "Please select"
   }
 
 
