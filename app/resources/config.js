@@ -62,10 +62,10 @@ const DCP = {
       require('../img/DCP/EmAshBorer/Emerald ash borer adult.jpg')
     ]
   },
-  WoollyAdesPres      : {
+  woollyAdesPres      : {
     label: 'presence of Woolly adelgids'
   },
-  WoollyAdesCoverage  : {
+  woollyAdesCoverage  : {
     label        : 'Woolly adelgids',
     selectChoices: [
       '0-24%', '25-49%', '50-74%', '75-100%'
