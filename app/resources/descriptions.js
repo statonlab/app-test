@@ -39,11 +39,14 @@ const Plants = {
       }
     ],
     formProps       : {
-      seedsBinary        : true,
-      flowersBinary      : true,
+      burrs              : true,
+      catkins            : true,
       chestnutBlightSigns: true,
+      surroundings       : true,
+      accessibility      : true,
       crownHealth        : true,
-      diameterNumeric    : true
+      diameterNumeric    : true,
+      heightNumeric      : true
     }
   },
   'Ash'              : {

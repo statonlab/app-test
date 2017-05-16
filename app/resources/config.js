@@ -1,23 +1,4 @@
 const DCP = {
-  treeHeight: {
-    label        : 'Tree Height',
-    selectChoices: [
-      '0-10 feet', '11-50 feet', '51-100 feet', '>100 feet'
-    ],
-    description  : 'Please estimate the height of the tree for this observation. Some trees are very tall.',
-    placeHolder  : 'tree height'
-  },
-
-  treeStand: {
-    label        : 'Stand Density',
-    selectChoices: [
-      '1-10', '11-50', '51+'
-    ],
-
-    description: 'Full description of number of trees question.  No longer used.',
-    placeHolder: 'Number of Trees'
-  },
-
   deadTrees          : {
     label        : 'Dead Trees',
     selectChoices: ['none', '1-50', '51+'],
@@ -196,29 +177,60 @@ const DCP = {
     selectChoices: ["Yes, including healthy hemlocks",
       "Yes, but they are dead or dying",
       "No"],
-    placeHolder : "Please select"
+    placeHolder  : "Please select"
   },
 
-  treated      : {
+  treated        : {
     label        : 'Treated',
     description  : "Has this tree been treated with Fungicides or pesticides?",
     selectChoices: ["Yes", "No", "Don't know"],
     placeHolder  : "Please select"
   },
-  partOfStudy  : {
+  partOfStudy    : {
     label        : 'Study',
     description  : "Is this tree already part of an existing study that you are aware of?  For example, there may a tag on the tree.",
     selectChoices: ["Yes", "No", "Don't know"],
     placeHolder  : "Please select"
   },
-  accessibility: {
+  accessibility  : {
     label        : 'Accessibility',
-    description  : "Is this tree easy to access?",
+    description  : "Could we access this tree with a large truck?",
     selectChoices: ["Yes", "No"],
     placeHolder  : "Please select"
   },
-  locationComment : {
-    comment : true
+  locationComment: {
+    comment: true
+  },
+  heightNumeric  : {
+    label      : 'Tree height',
+    description: 'Approximately how many feet tall is the tree?',
+    slider     : true,
+    minValue   : 1,
+    maxValue   : 100,
+    units      : "Feet",
+    images     : [
+      require('../img/ash_id/1.jpg'),
+      require('../img/ash_id/2.jpg')
+    ],
+    //  startValue : 25,
+  },
+  burrs          : {
+    label        : 'Nuts/burrs',
+    description  : 'Approximately how many nuts/burrs are present?',
+    selectChoices: ["None", "Few", "Many", "Unknown"],
+    placeHolder  : "Please select"
+  },
+  catkins        : {
+    label        : 'Catkins',
+    description  : 'Are catkins present?',
+    selectChoices: ["Present", "Absent", "Unknown"],
+    placeHolder  : "Please select"
+  },
+  surroundings   : {
+    label        : "Surroundings",
+    description  : "What is the shade coverage in this area?",
+    selectChoices: ["Full sun", "Partial shade", "Full shade"],
+    placeHolder  : "Please select"
   }
 
 

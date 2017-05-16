@@ -32,6 +32,7 @@ DCPrules = {
   heightFirstBranch      : t.enums.of(DCP.heightFirstBranch.selectChoices, 'heightFirstBranch'),
   oakHealthProblems      : t.maybe(t.String),
   diameterNumeric        : t.Number,
+  heightNumeric          : t.Number,
   chestnutBlightSigns    : t.maybe(t.String),
   ashSpecies             : t.enums.of(DCP.ashSpecies.selectChoices, 'ashSpecies'),
   emeraldAshBorer        : t.maybe(t.String),
@@ -46,7 +47,10 @@ DCPrules = {
   nearByHemlock          : t.enums.of(DCP.nearByHemlock.selectChoices),
   partOfStudy            : t.enums.of(DCP.partOfStudy.selectChoices),
   accessibility          : t.enums.of(DCP.accessibility.selectChoices),
-  locationComment        : t.maybe(t.String)
+  locationComment        : t.maybe(t.String),
+  burrs                  : t.enums.of(DCP.burrs.selectChoices),
+  catkins                : t.enums.of(DCP.catkins.selectChoices),
+  surroundings           : t.enums.of(DCP.surroundings.selectChoices),
 }
 
 const Coordinate = t.refinement(t.Number, (n) => n != 0, 'Coordinate')
@@ -311,7 +315,9 @@ export default class FormScene extends Component {
   populateFormItem = (key) => {
     if (typeof DCP[key] === undefined) return
 
-    if (DCP[key].comment){return}
+    if (DCP[key].comment) {
+      return
+    }
 
     if (DCP[key].slider) {
       return (
