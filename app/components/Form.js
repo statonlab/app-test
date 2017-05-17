@@ -96,12 +96,14 @@ export default class Form extends Component {
       //For every key, set the state
       for (key of Object.keys(this.props.entryInfo)) {
         if (key === 'meta_data') {
-          this.setState({key: JSON.parse(this.props.entryInfo[key])})
           this.setState({'metadata': JSON.parse(this.props.entryInfo[key])})
+          continue
         }
         if (key === 'images') {
           this.setState({images: JSON.parse(this.props.entryInfo[key])})
+          continue
         }
+        this.setState({key: this.props.entryInfo[key]})
       }
     }
   }
@@ -503,7 +505,7 @@ export default class Form extends Component {
             </View>
             <View style={[styles.formGroup]}>
               <Text style={styles.label}>Location</Text>
-              <Location onChange={(location) => this.setState({location})}/>
+              <Location edit={this.props.edit} onChange={(location) => this.setState({location})}/>
             </View>
           </Animated.View>
         </KeyboardAwareScrollView>

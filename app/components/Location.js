@@ -19,8 +19,10 @@ export default class Location extends Component {
    * Start getting the location
    */
   componentDidMount() {
-    this.getLocation()
-    this.updateLocation()
+    if (!this.props.edit) {
+      this.getLocation()
+      this.updateLocation()
+    }
   }
 
   /**
@@ -116,7 +118,8 @@ export default class Location extends Component {
 }
 
 Location.propTypes = {
-  onChange: PropTypes.func.isRequired
+  onChange: PropTypes.func.isRequired,
+  edit    : PropTypes.bool
 }
 
 const styles = StyleSheet.create({
