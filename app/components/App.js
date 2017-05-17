@@ -40,7 +40,7 @@ export default class WildType extends Component {
 
     /** Deprecated
 
-    if (route.label === 'FormScene') {
+     if (route.label === 'FormScene') {
       return <FormScene title={route.title} navigator={navigator} formProps={route.formProps} entryInfo={route.entryInfo} edit={route.edit}/>
     }
      **/

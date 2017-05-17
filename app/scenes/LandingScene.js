@@ -44,9 +44,9 @@ const plants = [
     image    : require('../img/white_oak.jpg')
   },
   {
-    title : 'American Elm',
+    title    : 'American Elm',
     latinName: 'Ulmus americana',
-    image : require('../img/elm.jpg')
+    image    : require('../img/elm.jpg')
   },
   {
     title    : 'Other',
