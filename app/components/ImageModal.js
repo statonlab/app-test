@@ -1,7 +1,6 @@
 import React, {Component, PropTypes} from 'react'
 import {View, StyleSheet, Modal, TouchableOpacity, Dimensions} from 'react-native'
 import ImageSlider from './ImageSlider'
-import Colors from '../helpers/Colors'
 export default class ImageModal extends Component {
 
   constructor(props) {

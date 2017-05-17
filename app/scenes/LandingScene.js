@@ -405,7 +405,8 @@ const styles = StyleSheet.create({
     flex           : 0,
     paddingLeft    : 5,
     fontWeight     : '500',
-    marginBottom   : 5
+    marginBottom   : 5,
+    color          : '#444'
   },
 
   cardBody: {
@@ -458,7 +459,8 @@ const styles = StyleSheet.create({
   cardButtonText: {
     color: Colors.primaryText
   },
-  italics       : {
+
+  italics: {
     fontStyle: 'italic'
   },
 
