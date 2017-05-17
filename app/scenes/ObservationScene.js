@@ -225,9 +225,8 @@ export default class ObservationScene extends Component {
 
   editEntry(entry) {
     this.props.navigator.push({
-      label    : 'FormScene',
+      label    : 'TreeDescriptionScene',
       title    : entry.name,
-      formProps: Plants[entry.name].formProps,
       entryInfo: entry,
       edit     : true,
     })
