@@ -17,15 +17,15 @@ export default class TreeScene extends Component {
       <View style={{flex: 1, backgroundColor: '#f5f5f5'}}>
         <Header title={this.props.title} navigator={this.props.navigator} showRightIcon={false} elevation={0}/>
         <Tabs>
-          <Tab title="DESCRIPTION">
-            <TreeDescription title={this.props.title}/>
-          </Tab>
           <Tab title="ADD ENTRY">
             <Form title={this.props.title}
               formProps={Plants[this.props.title].formProps}
               entryInfo={this.props.entryInfo}
               edit={this.props.edit}
               navigator={this.props.navigator}/>
+          </Tab>
+          <Tab title="INFORMATION">
+            <TreeDescription title={this.props.title}/>
           </Tab>
         </Tabs>
       </View>
