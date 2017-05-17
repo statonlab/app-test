@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     flex           : 0,
     flexDirection  : 'row',
     backgroundColor: '#fff',
-    height         : 40
+    height         : 50
   },
 
   title: {
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     justifyContent   : 'center',
     borderBottomWidth: 2,
     borderBottomColor: 'transparent',
-    height           : 40
+    height           : 50
   },
 
   titleText: {
