@@ -24,19 +24,33 @@ import SliderPick from '../components/SliderPick'
 import Location from '../components/Location'
 
 DCPrules = {
-  seedsBinary        : t.enums.of(DCP.seedsBinary.selectChoices, 'seed'),
-  flowersBinary      : t.enums.of(DCP.flowersBinary.selectChoices, 'flowers'),
-  woollyAdesPres      : t.Boolean,
-  woollyAdesCoverage  : t.enums.of(DCP.woollyAdesCoverage.selectChoices, 'woollyAdesCoverage'),
-  acorns             : t.enums.of(DCP.acorns.selectChoices, 'acorns'),
-  heightFirstBranch  : t.enums.of(DCP.heightFirstBranch.selectChoices, 'heightFirstBranch'),
-  oakHealthProblems  : t.maybe(t.String),
-  diameterNumeric    : t.Number,
-  chestnutBlightSigns: t.maybe(t.String),
-  ashSpecies         : t.enums.of(DCP.ashSpecies.selectChoices, 'ashSpecies'),
-  emeraldAshBorer    : t.maybe(t.String),
-  crownHealth        : t.Number,
-  otherLabel         : t.String
+  seedsBinary            : t.enums.of(DCP.seedsBinary.selectChoices, 'seed'),
+  flowersBinary          : t.enums.of(DCP.flowersBinary.selectChoices, 'flowers'),
+  woollyAdesPres         : t.Boolean,
+  woollyAdesCoverage     : t.enums.of(DCP.woollyAdesCoverage.selectChoices, 'woollyAdesCoverage'),
+  acorns                 : t.enums.of(DCP.acorns.selectChoices, 'acorns'),
+  heightFirstBranch      : t.enums.of(DCP.heightFirstBranch.selectChoices, 'heightFirstBranch'),
+  oakHealthProblems      : t.maybe(t.String),
+  diameterNumeric        : t.Number,
+  heightNumeric          : t.Number,
+  chestnutBlightSigns    : t.maybe(t.String),
+  ashSpecies             : t.enums.of(DCP.ashSpecies.selectChoices, 'ashSpecies'),
+  emeraldAshBorer        : t.maybe(t.String),
+  crownHealth            : t.Number,
+  otherLabel             : t.String,
+  locationCharacteristics: t.enums.of(DCP.locationCharacteristics.selectChoices, 'locations'),
+  nearbySmall            : t.enums.of(DCP.nearbySmall.selectChoices),
+  nearbyDead             : t.enums.of(DCP.nearbyDead.selectChoices),
+  treated                : t.enums.of(DCP.treated.selectChoices),
+  cones                  : t.enums.of(DCP.cones.selectChoices),
+  crownClassification    : t.enums.of(DCP.crownClassification.selectChoices),
+  nearByHemlock          : t.enums.of(DCP.nearByHemlock.selectChoices),
+  partOfStudy            : t.enums.of(DCP.partOfStudy.selectChoices),
+  accessibility          : t.enums.of(DCP.accessibility.selectChoices),
+  locationComment        : t.maybe(t.String),
+  burrs                  : t.enums.of(DCP.burrs.selectChoices),
+  catkins                : t.enums.of(DCP.catkins.selectChoices),
+  surroundings           : t.enums.of(DCP.surroundings.selectChoices),
 }
 
 const Coordinate = t.refinement(t.Number, (n) => n != 0, 'Coordinate')
@@ -301,6 +315,10 @@ export default class FormScene extends Component {
   populateFormItem = (key) => {
     if (typeof DCP[key] === undefined) return
 
+    if (DCP[key].comment) {
+      return
+    }
+
     if (DCP[key].slider) {
       return (
         <View style={styles.formGroup} key={key}>
@@ -378,6 +396,49 @@ export default class FormScene extends Component {
   }
 
   /**
+   * Renders the extra comment field for hidden comments detailing directions to an observation.
+   * @returns {*}
+   */
+  renderHiddenComments = () => {
+    if (this.props.formProps.locationComment) {
+      return (
+        <View style={[styles.formGroup, {flex: 0, alignItems: 'flex-start'}]}>
+          <Text style={[styles.label, {paddingTop: 5}]}>Location</Text>
+          <TextInput
+            style={[styles.textField, styles.comment]}
+            placeholder="Comments regarding the location of this tree.  These comments will only be veiwable to Treesnap forestry partners"
+            placeholderTextColor="#aaa"
+            value={this.state.metadata.comment}
+            onChangeText={(comment) => this.setState({metadata: {...this.state.metadata, locationComment: comment}})}
+            multiline={true}
+            numberOfLines={4}
+            underlineColorAndroid="transparent"
+          />
+        </View>
+      )
+    }
+    return null
+  }
+
+  renderBiominder = () => {
+
+    let primaryKey = this.realm.objects('Submission')
+    if (primaryKey.length <= 0) {
+      primaryKey = 1
+    } else {
+      primaryKey = primaryKey.sorted('id', true)[0].id + 1
+    }
+    return (
+      <View style={[styles.formGroup]}>
+        <Text style={styles.textField}>
+          ID number for submission: {primaryKey} </Text>
+
+      </View>
+    )
+
+  }
+
+  /**
    *Returns the form item describing photos added.
    * @returns {XML}
    */
@@ -425,6 +486,8 @@ export default class FormScene extends Component {
             </View>
 
             {this.renderForm()}
+            {this.renderHiddenComments()}
+            {this.props.title == 'American Chestnut' ? this.renderBiominder() : null}
 
             <View style={[styles.formGroup, {flex: 0, alignItems: 'flex-start'}]}>
               <Text style={[styles.label, {paddingTop: 5}]}>Comments</Text>
@@ -439,15 +502,14 @@ export default class FormScene extends Component {
                 underlineColorAndroid="transparent"
               />
             </View>
-
             <View style={[styles.formGroup]}>
               <Text style={styles.label}>Location</Text>
               <Location onChange={(location) => this.setState({location})}/>
             </View>
           </Animated.View>
         </KeyboardAwareScrollView>
-
         <View style={styles.footer}>
+
           <MKButton style={[styles.button, styles.flex1]} onPress={this.props.edit ? this.submitEdit : this.submit} rippleColor="rgba(0,0,0,0.5)">
             <Text style={styles.buttonText}>
               {this.props.edit ? 'Confirm Edit' : 'Submit Entry'}
@@ -584,6 +646,10 @@ const styles = StyleSheet.create({
   buttonAlt: {
     backgroundColor: '#fff',
     marginLeft     : 5
+  },
+
+  buttonBiominder: {
+    backgroundColor: Colors.info,
   },
 
   buttonLink: {

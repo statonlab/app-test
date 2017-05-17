@@ -21,7 +21,28 @@ const Plants = {
         title : 'Introduction',
         body  : [<Text>American chestnut was once a dominant tree in eastern North American forests but a deadly fungal disease wiped out most of these trees in the early 1900s. Help us find resistant trees by tagging healthy chestnut trees.</Text>],
         images: []
-      }, {
+      },
+      {
+        title : 'Collection Instructions',
+        body  : [
+
+          <Text>In order for the American Chestnut Foundation to confirm your sample, you must mail in a plant sample. When submitting an observation, please collect a leaf and twig sample. The sample should be collected and preserved as described below.
+
+            * A 6-12" twig and attached, mature, green leaves growing in the full sun
+            * Press the sample flat between sheets of cardboard and place in an envelope.
+            * Use a single paper towel between the sample and cardboard to cushion and absorb moisture.
+            * Do not wrap in plastic, as samples will mold in the mail.
+            * Do not ship overnight.  It's not necessary and we won't ID your sample right away.
+            Submission address - please choose the office closest to the tree located.
+            Tom Saielli, The American Chestnut Foundation, 50 N. Merrimon Ave, Suite 115, Asheville, NC 28804
+            Matt Brinckman, VA DOF, 900 Natural Resources Drive, Charlottesville, VA 22903
+            Sara Fitzsimmons, Pennsylvania State University, 206 Forest Resources Lab, University Park, PA 16802
+            Kendra Collins, USFS Northern Research Station, 705 Spear St, South Burlington, VT 05403
+          </Text>
+        ],
+        images: []
+      },
+      {
         title : 'Description',
         body  : [
           <Text>The leaves of American chestnut are straight with large, widely spaced, often hooked, serrations on their edges. Chestnut fruits are large, green and covered with spikes on the outside, bearing three large nuts on the inside. Chestnut produces long cadkins made up of many small, pale green flowers. American chestnut twigs are hairless, reddish brown and have small white lenticels. While it is relatively common to find stump-sprouting chestnuts that have been killed by blight, health mature American chestnut trees are very rare unless outside the tree’s native range.</Text>,
@@ -39,11 +60,14 @@ const Plants = {
       }
     ],
     formProps       : {
-      seedsBinary        : true,
-      flowersBinary      : true,
+      burrs              : true,
+      catkins            : true,
       chestnutBlightSigns: true,
+      surroundings       : true,
+      accessibility      : true,
       crownHealth        : true,
-      diameterNumeric    : true
+      diameterNumeric    : true,
+      heightNumeric      : true
     }
   },
   'Ash'              : {
@@ -62,8 +86,8 @@ const Plants = {
       require('../img/ash_id/10.jpg'),
       require('../img/ash_id/11.jpg')
     ],
-    captions : [
-      "Ash leaves.  Image copyright: ","Ash buds", "There are several different species of American ash trees, all of which are susceptible to the deadly emerald ash borer. ", "Test caption 4"
+    captions        : [
+      "Ash leaves.  Image copyright: ", "Ash buds", "There are several different species of American ash trees, all of which are susceptible to the deadly emerald ash borer. ", "Test caption 4"
     ],
     maps            : [
       require('../img/maps/ash_fraxamer_range.png'),
@@ -112,12 +136,15 @@ const Plants = {
       }
     ],
     formProps       : {
-      ashSpecies     : true,
-      seedsBinary    : true,
-      flowersBinary  : true,
-      emeraldAshBorer: true,
-      crownHealth    : true,
-      diameterNumeric: true
+      ashSpecies             : true,
+      locationCharacteristics: true,
+      seedsBinary            : true,
+      flowersBinary          : true,
+      emeraldAshBorer        : true,
+      nearbyDead             : true,
+      nearbySmall            : true,
+      crownHealth            : true,
+      diameterNumeric        : true,
     }
   },
   'Hemlock'          : {
@@ -160,9 +187,17 @@ const Plants = {
       }
     ],
     formProps       : {
-      woollyAdesCoverage: true,
-      crownHealth      : true,
-      diameterNumeric  : true
+      woollyAdesCoverage     : true,
+      cones                  : true,
+      crownClassification    : true,
+      locationCharacteristics: true,
+      nearByHemlock          : true,
+      treated                : true,
+      partOfStudy            : true,
+      accessibility          : true,
+      crownHealth            : true,
+      diameterNumeric        : true,
+      locationComment        : true
     }
   }
   ,
@@ -179,7 +214,7 @@ const Plants = {
     ],
     formProps       : {
       diameterNumeric: true,
-      otherLabel : true
+      otherLabel     : true
     }
   }
   ,
@@ -219,13 +254,48 @@ const Plants = {
       }
     ],
     formProps       : {
-      heightFirstBranch  : true,
-      acorns             : true,
-      crownHealth        : true,
-      diameterNumeric:     true,
-      oakHealthProblems  : true
+      heightFirstBranch: true,
+      acorns           : true,
+      crownHealth      : true,
+      diameterNumeric  : true,
+      oakHealthProblems: true
     }
-  }
+  },
+
+  'American Elm': {
+    image           : require('../img/elm.jpg'),
+    latinName       : 'Ulmus americana',
+    images          : [
+      require('../img/elm.jpg')
+    ],
+    maps            : [require('../img/elm.jpg')],
+    descriptionCards: [
+      {
+        title : 'Species',
+        body  : [<Text>American Elm: <Text style={{fontStyle: 'italic'}}>TBD </Text></Text>],
+        images: []
+      }, {
+        title : 'Introduction',
+        body  : [<Text>American Elm...</Text>],
+        images: []
+      }, {
+        title : 'Description',
+        body  : [<Text>Photo credits: Matt Levin, wikimedia commons, CCBY-SA 2.0 License. </Text>
+        ],
+        images: []
+      }
+    ],
+    formProps       : {
+      seedsBinary            : true,
+      flowersBinary          : true,
+      nearbyDead             : true,
+      nearbySmall            : true,
+      treated                : true,
+      locationCharacteristics: true,
+      crownHealth            : true,
+      diameterNumeric        : true
+    }
+  },
 
 }
 
