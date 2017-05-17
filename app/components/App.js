@@ -20,7 +20,7 @@ import LoginScene from '../scenes/LoginScene'
 import RegistrationScene from '../scenes/RegisterationScene'
 import ObservationsScene from '../scenes/ObservationsScene'
 import ObservationScene from '../scenes/ObservationScene'
-import DescriptionScene from '../scenes/DescriptionScene'
+import TreeScene from '../scenes/TreeScene'
 
 const initialRouteStack = [
   {
@@ -56,7 +56,7 @@ export default class WildType extends Component {
     }
 
     if (route.label === 'TreeDescriptionScene') {
-      return <DescriptionScene title={route.title} navigator={navigator}/>
+      return <TreeScene title={route.title} navigator={navigator}/>
     }
 
     if (route.label === 'SubmittedScene') {

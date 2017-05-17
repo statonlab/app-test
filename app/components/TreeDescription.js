@@ -1,7 +1,6 @@
 import React, {Component, PropTypes} from 'react'
 import {
   View,
-  Image,
   StyleSheet,
   Text,
   ScrollView
@@ -9,7 +8,6 @@ import {
 import {getTheme} from 'react-native-material-kit'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
-import {MKButton} from 'react-native-material-kit'
 import Plants from '../resources/descriptions'
 import ImageModal from '../components/ImageModal'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -51,8 +49,8 @@ export default class TreeDescription extends Component {
     return (
       <ScrollView style={[styles.scrollView]}>
         {/*this._renderImageModalIcons()*/}
-        <View style={[styles.card, {borderTopWidth: 0}]}>
-          <View style={[styles.cardBody]}>
+        <View style={styles.card}>
+          <View style={[styles.cardBody, {paddingTop: 10}]}>
             <ImageModal
               images={Plants[this.props.title].images}
               captions={Plants[this.props.title].captions}
@@ -116,7 +114,7 @@ const styles = StyleSheet.create({
   },
 
   card: {
-    borderTopWidth   : 1,
+    borderTopWidth   : 0,
     borderTopColor   : '#ddd',
     borderBottomWidth: 1,
     borderBottomColor: '#ddd',

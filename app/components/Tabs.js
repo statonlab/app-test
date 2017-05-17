@@ -21,10 +21,8 @@ class Tabs extends Component {
   componentDidMount() {
     let titles = []
 
-    this.props.children.forEach(child => {
-      if (child.type.displayName === 'Tab') {
-        titles.push(child.props.title)
-      }
+    this.props.children.map(child => {
+      titles.push(child.props.title)
     })
 
     this.setState({titles})
@@ -96,7 +94,8 @@ class Tabs extends Component {
           showsHorizontalScrollIndicator={false}
           onScroll={this._handleScroll.bind(this)}
           scrollEventThrottle={16}
-          scrollEnabled={true}
+          scrollEnabled={this.props.scrollEnabled}
+          directionalLockEnabled={true}
           bounces={false}>
           {this.props.children}
         </ScrollView>
@@ -106,11 +105,13 @@ class Tabs extends Component {
 }
 
 Tabs.PropTypes = {
-  elevation: PropTypes.number
+  elevation    : PropTypes.number,
+  scrollEnabled: PropTypes.bool
 }
 
 Tabs.defaultProps = {
-  elevation: 1
+  elevation    : 1,
+  scrollEnabled: false
 }
 
 const styles = StyleSheet.create({
@@ -119,7 +120,7 @@ const styles = StyleSheet.create({
     flex           : 0,
     flexDirection  : 'row',
     backgroundColor: '#fff',
-    height         : 50
+    height         : 40
   },
 
   title: {
@@ -128,13 +129,13 @@ const styles = StyleSheet.create({
     justifyContent   : 'center',
     borderBottomWidth: 2,
     borderBottomColor: 'transparent',
-    height           : 50
+    height           : 40
   },
 
   titleText: {
-    color            : '#777',
-    paddingVertical  : 15,
-    paddingHorizontal: 10
+    color     : '#777',
+    fontWeight: 'bold',
+    fontSize  : 12
   },
 
   active: {
