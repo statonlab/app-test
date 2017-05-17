@@ -21,7 +21,28 @@ const Plants = {
         title : 'Introduction',
         body  : [<Text>American chestnut was once a dominant tree in eastern North American forests but a deadly fungal disease wiped out most of these trees in the early 1900s. Help us find resistant trees by tagging healthy chestnut trees.</Text>],
         images: []
-      }, {
+      },
+      {
+        title : 'Collection Instructions',
+        body  : [
+
+          <Text>In order for the American Chestnut Foundation to confirm your sample, you must mail in a plant sample. When submitting an observation, please collect a leaf and twig sample. The sample should be collected and preserved as described below.
+
+            * A 6-12" twig and attached, mature, green leaves growing in the full sun
+            * Press the sample flat between sheets of cardboard and place in an envelope.
+            * Use a single paper towel between the sample and cardboard to cushion and absorb moisture.
+            * Do not wrap in plastic, as samples will mold in the mail.
+            * Do not ship overnight.  It's not necessary and we won't ID your sample right away.
+            Submission address - please choose the office closest to the tree located.
+            Tom Saielli, The American Chestnut Foundation, 50 N. Merrimon Ave, Suite 115, Asheville, NC 28804
+            Matt Brinckman, VA DOF, 900 Natural Resources Drive, Charlottesville, VA 22903
+            Sara Fitzsimmons, Pennsylvania State University, 206 Forest Resources Lab, University Park, PA 16802
+            Kendra Collins, USFS Northern Research Station, 705 Spear St, South Burlington, VT 05403
+          </Text>
+        ],
+        images: []
+      },
+      {
         title : 'Description',
         body  : [
           <Text>The leaves of American chestnut are straight with large, widely spaced, often hooked, serrations on their edges. Chestnut fruits are large, green and covered with spikes on the outside, bearing three large nuts on the inside. Chestnut produces long cadkins made up of many small, pale green flowers. American chestnut twigs are hairless, reddish brown and have small white lenticels. While it is relatively common to find stump-sprouting chestnuts that have been killed by blight, health mature American chestnut trees are very rare unless outside the tree’s native range.</Text>,
