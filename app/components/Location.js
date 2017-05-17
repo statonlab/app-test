@@ -1,8 +1,9 @@
 import React, {Component, PropTypes} from 'react'
 import {View, Text, StyleSheet, DeviceEventEmitter} from 'react-native'
-import {MKSpinner} from 'react-native-material-kit'
+import {MKSpinner, MKButton} from 'react-native-material-kit'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import Color from '../helpers/Colors'
+import Colors from '../helpers/Colors'
+import Elevation from '../helpers/Elevation'
 
 export default class Location extends Component {
   constructor(props) {
@@ -16,13 +17,21 @@ export default class Location extends Component {
   }
 
   /**
-   * Start getting the location
+   * Start getting the location.  Use passed coordinates if editing.
    */
   componentDidMount() {
-    if (!this.props.edit) {
-      this.getLocation()
-      this.updateLocation()
+    if (this.props.edit) {
+      console.log("Editing coords to: ", this.props.coordinates)
+      let currentPosition = {"coords": {"latitude": this.props.coordinates.latitude, "longitude": this.props.coordinates.longitude, "accuracy": this.props.coordinates.accuracy}}
+      this.setState({
+        currentPosition   : currentPosition,
+        reachedMaxAccuracy: true,
+        done              : true
+      })
+      return
     }
+    this.getLocation()
+    this.updateLocation()
   }
 
   /**
@@ -39,7 +48,6 @@ export default class Location extends Component {
     this.timeoutHolder = setTimeout(() => {
       if (!this.state.done) {
         this.getLocation()
-
         this.updateLocation()
       }
     }, 500)
@@ -95,10 +103,21 @@ export default class Location extends Component {
     })
   }
 
+  retake =() => {
+    this.setState({
+      reachedMaxAccuracy: false,
+      done              : false,
+      timeConsumed      : 0,
+    } )
+    this.getLocation()
+    this.updateLocation()
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        <View style={{flex: 1}}>
+        <View style={styles.coordsContainer}>
+          <View style={styles.textContainer}>
           {!this.state.done &&
           <Text style={[styles.text, {color: '#aaa'}]}>Acquiring Location... {this.state.currentPosition.accuracy}</Text>
           }
@@ -111,30 +130,48 @@ export default class Location extends Component {
           <Text style={[styles.text, {color: '#aaa'}]}>Accuracy {this.state.currentPosition.coords.accuracy} meters</Text>
           }
         </View>
-        {this.state.done ? <Icon name="check" style={[styles.icon, {color: Color.primary}]}/> : <MKSpinner style={{width: 30, height: 30}}/>}
+          {this.state.done &&
+          <MKButton style={styles.button} onPress ={this.retake}>
+          <Text style={styles.buttonText}>Retake location</Text></MKButton>
+          }
+        </View>
+
+        {this.state.done ? <Icon name="check" style={[styles.icon, {color: Colors.primary}]}/> : <MKSpinner style={{width: 30, height: 30}}/>}
+
       </View>
     )
   }
 }
 
 Location.propTypes = {
-  onChange: PropTypes.func.isRequired,
-  edit    : PropTypes.bool
+  onChange   : PropTypes.func.isRequired,
+  edit       : PropTypes.bool,
+  coordinates: PropTypes.object
 }
 
 const styles = StyleSheet.create({
   container: {
     flex             : 1,
-    paddingHorizontal: 5,
+    paddingHorizontal: 1,
     flexDirection    : 'row',
-    height           : 40,
     alignItems       : 'center'
+  },
+
+  coordsContainer: {
+    flex: 1,
+    flexDirection : 'column',
+    paddingHorizontal : 0,
+    alignItems : 'center'
+  },
+  textContainer: {
+    flex: 0,
+    flexDirection : 'row',
   },
 
   text: {
     flex     : 1,
     textAlign: 'left',
-    fontSize : 14,
+    fontSize : 12,
     color    : '#444'
   },
 
@@ -143,5 +180,17 @@ const styles = StyleSheet.create({
     width   : 30,
     fontSize: 20,
     color   : '#aaa'
+  },
+  button : {
+    ...(new Elevation(1)),
+    flex             : 0,
+    borderRadius     : 2,
+    paddingHorizontal: 5,
+    paddingVertical  : 5
+  },
+  buttonText: {
+    textAlign : 'center',
+    color     : Colors.danger,
+    fontWeight: 'bold'
   }
 })

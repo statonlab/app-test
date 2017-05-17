@@ -503,9 +503,13 @@ export default class Form extends Component {
                 underlineColorAndroid="transparent"
               />
             </View>
-            <View style={[styles.formGroup]}>
+            <View style={[styles.formGroup, {flex: 0}]}>
               <Text style={styles.label}>Location</Text>
-              <Location edit={this.props.edit} onChange={(location) => this.setState({location})}/>
+              {this.props.edit ?
+              <Location edit={this.props.edit} coordinates={this.props.entryInfo.location} onChange={(location) => this.setState({location})}/> :
+                <Location  onChange={(location) => this.setState({location})}/>
+              }
+
             </View>
           </Animated.View>
         </KeyboardAwareScrollView>
