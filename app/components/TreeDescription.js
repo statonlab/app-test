@@ -64,8 +64,9 @@ export default class TreeDescription extends Component {
               <View key={index} style={[styles.cardBody, {borderBottomWidth: len === index ? 0 : 1}]}>
                 <Text style={styles.cardTitle}>{card.title}</Text>
                 {card.body.map((body, bodyIndex) => {
-                  return (
-                    <Text style={styles.cardText} key={bodyIndex}>{body}</Text>
+                  return (<View key={bodyIndex}>
+                    {body}
+                    </View>
                   )
                 })}
               </View>

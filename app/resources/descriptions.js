@@ -1,5 +1,6 @@
 import React from 'react'
-import {Text} from 'react-native'
+import {Text, View} from 'react-native'
+import Atext from '../components/Atext'
 
 const Plants = {
   'American Chestnut': {
@@ -32,7 +33,7 @@ const Plants = {
             * Press the sample flat between sheets of cardboard and place in an envelope.
             * Use a single paper towel between the sample and cardboard to cushion and absorb moisture.
             * Do not wrap in plastic, as samples will mold in the mail.
-            * Do not ship overnight.  It's not necessary and we won't ID your sample right away.
+            * Do not ship overnight. It's not necessary and we won't ID your sample right away.
             Submission address - please choose the office closest to the tree located.
             Tom Saielli, The American Chestnut Foundation, 50 N. Merrimon Ave, Suite 115, Asheville, NC 28804
             Matt Brinckman, VA DOF, 900 Natural Resources Drive, Charlottesville, VA 22903
@@ -46,7 +47,8 @@ const Plants = {
         title : 'Description',
         body  : [
           <Text>The leaves of American chestnut are straight with large, widely spaced, often hooked, serrations on their edges. Chestnut fruits are large, green and covered with spikes on the outside, bearing three large nuts on the inside. Chestnut produces long cadkins made up of many small, pale green flowers. American chestnut twigs are hairless, reddish brown and have small white lenticels. While it is relatively common to find stump-sprouting chestnuts that have been killed by blight, health mature American chestnut trees are very rare unless outside the tree’s native range.</Text>,
-          <Text>To learn more about identifying American chestnut and distinguishing it from similar species visit: https://www.acf.org/resources/identification/</Text>],
+          <View><Text>To learn more about identifying American chestnut and distinguishing it from similar species</Text>
+            <Atext url="https://www.acf.org/resources/identification/">please visit the American Chestnut Foundation website.</Atext></View>],
         images: []
       }, {
         images: [
@@ -98,7 +100,11 @@ const Plants = {
     descriptionCards: [
       {
         title : 'Species',
-        body  : [<Text>While there are many different ash species present in North America, the most common include:</Text>, <Text>white ash (<Text style={{fontStyle: 'italic'}}>Fraxinus americana</Text>)</Text>, <Text>green ash (<Text style={{fontStyle: 'italic'}}>Fraxinus pennsylvanica</Text>)</Text>, <Text>black ash (<Text style={{fontStyle: 'italic'}}>Fraxinus nigra</Text>)</Text>, <Text>blue ash (<Text style={{fontStyle: 'italic'}}>Fraxinus quadrangulata</Text>)</Text>],
+        body  : [<Text>While there are many different ash species present in North America, the most common include:</Text>,
+          <Text>white ash (<Text style={{fontStyle: 'italic'}}>Fraxinus americana</Text>)</Text>,
+          <Text>green ash (<Text style={{fontStyle: 'italic'}}>Fraxinus pennsylvanica</Text>)</Text>,
+          <Text>black ash (<Text style={{fontStyle: 'italic'}}>Fraxinus nigra</Text>)</Text>,
+          <Text>blue ash (<Text style={{fontStyle: 'italic'}}>Fraxinus quadrangulata</Text>)</Text>],
         images: []
       },
       {
@@ -118,16 +124,16 @@ const Plants = {
       },
       {
         title : 'Distinguishing different ash species',
-        body  : ['Leaf scars, twig shape, and species range can be very helpful in distinguishing ash tree species.',
-          'Green ash has a leaf scar below the bud while white ash has a leaf scar that wraps around the bud and is more “U”-shaped.  In addition, white ash leaflets are white-colored on the undersides while green ash leaflets are green or rusty on their undersides. Blue ash can be distinguished by its thick square-shaped twigs which are often winged.  Black ash has a leaf scar similar to green ash but leaflets are directly attached to the petiole without stalks to connect them.  In addition, black ash has a more northern range and is typically found in wet sites.',
-          'Read more about distinguishing American ash species here. ( https://www.ars.usda.gov/midwest-area/ames/plant-introduction-research/docs/npgs-ash-conservation-project/identifying-ash/)'
+        body  : [<Text>Leaf scars, twig shape, and species range can be very helpful in distinguishing ash tree species.</Text>,
+          <Text>Green ash has a leaf scar below the bud while white ash has a leaf scar that wraps around the bud and is more “U”-shaped. In addition, white ash leaflets are white-colored on the undersides while green ash leaflets are green or rusty on their undersides. Blue ash can be distinguished by its thick square-shaped twigs which are often winged. Black ash has a leaf scar similar to green ash but leaflets are directly attached to the petiole without stalks to connect them. In addition, black ash has a more northern range and is typically found in wet sites.</Text>,
+           <Atext url="https://www.ars.usda.gov/midwest-area/ames/plant-introduction-research/docs/npgs-ash-conservation-project/identifying-ash/">Read more here.</Atext>,
         ],
         images: []
       }, {
         title : 'Emerald ash borer',
-        body  : ['The reason we are looking for health ash trees is that an invasive insect, the emerald ash borer, is currently moving through North America and killing ash trees.  The larvae of this beetle feed on the inner bark of ash trees, cutting off the tree’s flow of water and nutrients and eventually killing the tree.  All American ash species are susceptible to the Emerald Ash Borer and so far there is very little natural resistance to the insect in our trees.  ',
-          'Our hope is that this reporting app will let members of the public identify ash trees that are lingering after the emerald ash borer’s arrival and which may have some natural resistance.  We will then collect seeds from these trees and add them to tree breeding programs to try and propagate resistant trees that are not killed by the emerald ash borer to use in forest restoration.',
-          'Read more about the emerald ash borer: http://www.hungrypests.com/the-threat/emerald-ash-borer.php'
+        body  : [<Text>The reason we are looking for health ash trees is that an invasive insect, the emerald ash borer, is currently moving through North America and killing ash trees. The larvae of this beetle feed on the inner bark of ash trees, cutting off the tree’s flow of water and nutrients and eventually killing the tree. All American ash species are susceptible to the Emerald Ash Borer and so far there is very little natural resistance to the insect in our trees. </Text>,
+          <Text>Our hope is that this reporting app will let members of the public identify ash trees that are lingering after the emerald ash borer’s arrival and which may have some natural resistance. We will then collect seeds from these trees and add them to tree breeding programs to try and propagate resistant trees that are not killed by the emerald ash borer to use in forest restoration.</Text>,
+          <Atext url=": http://www.hungrypests.com/the-threat/emerald-ash-borer.php">Read more about the emerald ash borer here</Atext>
         ],
         images: [
           require('../img/DCP/EmAshBorer/EAB tunneling.jpg'),
@@ -163,23 +169,27 @@ const Plants = {
       {
         title : 'Species',
         images: [],
-        body  : [<Text>Eastern hemlock (<Text style={{fontStyle: 'italic'}}>Tsuga canadensis</Text>)</Text>, <Text>Carolina hemlock (<Text style={{fontStyle: 'italic'}}>Tsuga caroliniana</Text>)</Text>]
+        body  : [<Text>Eastern hemlock (<Text style={{fontStyle: 'italic'}}>Tsuga canadensis</Text>)</Text>,
+          <Text>Carolina hemlock (<Text style={{fontStyle: 'italic'}}>Tsuga caroliniana</Text>)</Text>]
       },
       {
         title : 'Overview',
         images: [],
-        body  : ['American hemlock trees are being killed by hemlock woolly adelgids.  Help fight these invasive insects by tagging health hemlock trees.']
+        body  : [<Text>American hemlock trees are being killed by hemlock woolly adelgids. Help fight these invasive insects by tagging health hemlock trees.</Text>]
       }, {
         title : 'Description',
         images: [],
-        body  : ['Hemlock is an evergreen conifer. Its needles are 1.5-2 cm long, dark green on top and lighter on the underside with two white lines running the length of the needle.  Hemlocks produce small distinctive cones. These trees prefer shade and are often found along creeks and steams in mature forests', 'There are two different hemlock species native to North American, Eastern hemlock and Carolina hemlock.  Eastern hemlock is larger and has a much broader distribution than Carolina hemlock, which is endemic to the southern Appalachians.']
+        body  : [<Text>Hemlock is an evergreen conifer. Its needles are 1.5-2 cm long, dark green on top and lighter on the underside with two white lines running the length of the needle. Hemlocks produce small distinctive cones. These trees prefer shade and are often found along creeks and steams in mature forests</Text>,
+          <Text>There are two different hemlock species native to North American, Eastern hemlock and Carolina hemlock. Eastern hemlock is larger and has a much broader distribution than Carolina hemlock, which is endemic to the southern Appalachians.</Text>]
       }, {
         title : 'Range',
         images: [],
-        body  : ['']
+        body  : [<Text></Text>]
       }, {
         title : 'Hemlock woolly adelgid',
-        body  : ['This insect sucks the sap of hemlock trees, weakening trees, preventing new growth, and eventually killing trees. In addition, hemlock woolly adelgids are thought to inject a toxin when feeding that further damages hemlock trees by drying them out.  Infested trees loose needles and branches and typically die 4-10 years after initial adelgid arrival unless treated.', 'The hemlock woolly adelgid’s name comes from the insect’s egg sacs, which hang from the undersides of branches at certain times of year and look like small woolly tufts.  These insects are invasive in North America, introduced from Japan.', 'Our hope is that this reporting app will let members of the public identify hemlock trees that have some natural resistance to hemlock woolly adelgid.  We will then collect seeds from these trees and add them to tree breeding programs to try and propagate resistant trees to use in forest restoration.'],
+        body  : [<Text>This insect sucks the sap of hemlock trees, weakening trees, preventing new growth, and eventually killing trees. In addition, hemlock woolly adelgids are thought to inject a toxin when feeding that further damages hemlock trees by drying them out. Infested trees loose needles and branches and typically die 4-10 years after initial adelgid arrival unless treated.</Text>,
+          <Text>The hemlock woolly adelgid’s name comes from the insect’s egg sacs, which hang from the undersides of branches at certain times of year and look like small woolly tufts. These insects are invasive in North America, introduced from Japan.</Text>,
+          <Text>Our hope is that this reporting app will let members of the public identify hemlock trees that have some natural resistance to hemlock woolly adelgid. We will then collect seeds from these trees and add them to tree breeding programs to try and propagate resistant trees to use in forest restoration.</Text>],
         images: [
           require('../img/DCP/HemWoolly/HWA photo 1.jpg'),
           require('../img/DCP/HemWoolly/HWA photo 2.jpg'),
@@ -208,7 +218,7 @@ const Plants = {
     descriptionCards: [
       {
         title : 'Other',
-        body  : ['Submissions for all other trees.'],
+        body  : [<Text>Submissions for all other trees.</Text>],
         images: []
       }
     ],
@@ -238,19 +248,21 @@ const Plants = {
       },
       {
         title : 'Overview',
-        body  : ['White oak is an extremely important tree species.  It provides wood for lumber, (including bourbon barrels) and is also a key food source for wildlife.  Help us breed better white oak by tagging big, healthy trees.'],
+        body  : [<Text>White oak is an extremely important tree species. It provides wood for lumber, (including bourbon barrels) and is also a key food source for wildlife. Help us breed better white oak by tagging big, healthy trees.</Text>],
         images: []
       },
       {
         title : 'Description',
         body  : [<Text>American white oak, <Text style={{fontStyle: 'italic'}}>Quercus alba</Text>, is a central component of the central hardwood forests. Mature white oaks typically grow very large, 80-100 feet high, and have broad, full canopies. White oaks can live a very long time and some trees have been found that are over 400 years old.
-        </Text>, 'The leaves of white oak have alternate branching and seven to nine rounded lobes.  This is different from red oaks, which typically have pointed lobes with a small hair on each tip.  ', 'It is important to note that there are several species in the “white oak” group that share this leaf shape (including swamp white oak and bur oak) and that oaks frequently hybridize, sometimes making it challenging to know which oak species you are looking at.'],
+        </Text>,
+          <Text>The leaves of white oak have alternate branching and seven to nine rounded lobes. This is different from red oaks, which typically have pointed lobes with a small hair on each tip.</Text>,
+          <Text>It is important to note that there are several species in the “white oak” group that share this leaf shape (including swamp white oak and bur oak) and that oaks frequently hybridize, sometimes making it challenging to know which oak species you are looking at.</Text>],
         images: []
       },
       {
         title : 'Range',
         images: [],
-        body  : ['White oak trees are present throughout Eastern and Midwestern North America.  However, this range overlaps with many other oak species.']
+        body  : [<Text>White oak trees are present throughout Eastern and Midwestern North America. However, this range overlaps with many other oak species.</Text>]
       }
     ],
     formProps       : {
