@@ -30,7 +30,7 @@ const DCP = {
     placeHolder  : 'Are flowers present?'
   },
   emeraldAshBorer    : {
-    label        : 'Ash Borer',
+    label        : 'Ash borer',
     selectChoices: [
       'D-shaped adult exit holes', 'Bark coming off with tunneling underneath', 'Emerald ash borer beetless/larvae', 'stump sprouting'
     ],
@@ -136,10 +136,9 @@ const DCP = {
   crownClassification: {
     label        : 'Crown classification',
     description  : "What is the height of the crown of this tree relative to others in the stand?",
-    selectChoices: ['Dominant.  This tree\'s crown extends above others in the area.',
-      'Codominant.  This tree\'s crown is at the same level as other nearby trees.',
-      'Intermediate.  This tree\'s crown is below or extending into the nearby trees.',
-      'Overtopped.  This tree\'s crown is entirely below other trees nearby.',
+    selectChoices: ['Dominant. This tree\'s crown extends above others in the area.',
+      'Codominant. This tree\'s crown is level with or slightly below other nearby trees.',
+      'Overtopped. This tree\'s crown is entirely below other trees nearby.',
       'I\'m not sure.'],
     placeHolder  : "Please select"
   },

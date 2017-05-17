@@ -395,6 +395,10 @@ export default class FormScene extends Component {
     return Object.keys(this.props.formProps).map(this.populateFormItem)
   }
 
+  /**
+   * Renders the extra comment field for hidden comments detailing directions to an observation.
+   * @returns {*}
+   */
   renderHiddenComments = () => {
     if (this.props.formProps.locationComment) {
       return (
@@ -414,6 +418,24 @@ export default class FormScene extends Component {
       )
     }
     return null
+  }
+
+  renderBiominder = () => {
+
+    let primaryKey = this.realm.objects('Submission')
+    if (primaryKey.length <= 0) {
+      primaryKey = 1
+    } else {
+      primaryKey = primaryKey.sorted('id', true)[0].id + 1
+    }
+    return (
+      <View style={[styles.formGroup]}>
+        <Text style={styles.textField}>
+          ID number for submission: {primaryKey} </Text>
+
+      </View>
+    )
+
   }
 
   /**
@@ -465,6 +487,8 @@ export default class FormScene extends Component {
 
             {this.renderForm()}
             {this.renderHiddenComments()}
+            {this.props.title == 'American Chestnut' ? this.renderBiominder() : null}
+
             <View style={[styles.formGroup, {flex: 0, alignItems: 'flex-start'}]}>
               <Text style={[styles.label, {paddingTop: 5}]}>Comments</Text>
               <TextInput
@@ -484,8 +508,8 @@ export default class FormScene extends Component {
             </View>
           </Animated.View>
         </KeyboardAwareScrollView>
-
         <View style={styles.footer}>
+
           <MKButton style={[styles.button, styles.flex1]} onPress={this.props.edit ? this.submitEdit : this.submit} rippleColor="rgba(0,0,0,0.5)">
             <Text style={styles.buttonText}>
               {this.props.edit ? 'Confirm Edit' : 'Submit Entry'}
@@ -622,6 +646,10 @@ const styles = StyleSheet.create({
   buttonAlt: {
     backgroundColor: '#fff',
     marginLeft     : 5
+  },
+
+  buttonBiominder: {
+    backgroundColor: Colors.info,
   },
 
   buttonLink: {

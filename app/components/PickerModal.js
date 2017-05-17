@@ -271,16 +271,18 @@ const styles = StyleSheet.create({
   choiceItem: {
     flex         : 0,
     flexDirection: 'row',
-    alignItems   : 'center'
+    alignItems   : 'center',
   },
 
   choiceText: {
-    flex       : 0,
+    flex       : 1,
     color      : '#222',
     textAlign  : 'left',
     paddingLeft: 15,
     fontWeight : '500',
-    fontSize   : 16
+    fontSize   : 16,
+    flexWrap:'wrap'
+
   },
 
   button: {
