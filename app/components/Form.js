@@ -57,7 +57,7 @@ const Coordinate = t.refinement(t.Number, (n) => n != 0, 'Coordinate')
 const LocationT  = t.dict(t.String, Coordinate)
 
 
-export default class FormScene extends Component {
+export default class Form extends Component {
   constructor(props) {
     super(props)
 
@@ -539,7 +539,7 @@ export default class FormScene extends Component {
   }
 }
 
-FormScene.propTypes = {
+Form.propTypes = {
   title    : PropTypes.string.isRequired,
   navigator: PropTypes.object.isRequired,
   formProps: PropTypes.object,

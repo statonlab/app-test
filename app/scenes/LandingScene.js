@@ -44,9 +44,9 @@ const plants = [
     image    : require('../img/white_oak.jpg')
   },
   {
-    title : 'American Elm',
+    title    : 'American Elm',
     latinName: 'Ulmus americana',
-    image : require('../img/elm.jpg')
+    image    : require('../img/elm.jpg')
   },
   {
     title    : 'Other',
@@ -338,7 +338,7 @@ export default class LandingScene extends Component {
                   key={index}
                   rippleColor="rgba(0,0,0,.1)"
                   onPress={() => {
-                    this.props.navigator.push({label: 'TreeDescriptionScene', title: plant.title})
+                    this.props.navigator.push({label: 'TreeScene', title: plant.title})
                   }}>
                   <View style={[styles.flexHorizontal]}>
                     <Image source={plant.image} style={styles.cardImage}/>

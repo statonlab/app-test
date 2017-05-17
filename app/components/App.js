@@ -38,9 +38,12 @@ export default class WildType extends Component {
       return <MapScene title="Your Entries" navigator={navigator}/>
     }
 
-    if (route.label === 'FormScene') {
-      return <FormScene title={route.title} navigator={navigator} formProps={route.formProps} entryInfo={route.entryInfo} edit={route.edit} />
+    /** Deprecated
+
+     if (route.label === 'FormScene') {
+      return <FormScene title={route.title} navigator={navigator} formProps={route.formProps} entryInfo={route.entryInfo} edit={route.edit}/>
     }
+     **/
 
     if (route.label === 'CameraScene') {
       return <CameraScene navigator={navigator} images={route.images ? route.images : []}/>
@@ -55,8 +58,9 @@ export default class WildType extends Component {
       return <CaptureLocationScene title={route.title} navigator={navigator}/>
     }
 
-    if (route.label === 'TreeDescriptionScene') {
-      return <TreeScene title={route.title} navigator={navigator}/>
+    if (route.label === 'TreeScene') {
+      return <TreeScene title={route.title} navigator={navigator}
+        entryInfo={route.entryInfo} edit={route.edit}/>
     }
 
     if (route.label === 'SubmittedScene') {

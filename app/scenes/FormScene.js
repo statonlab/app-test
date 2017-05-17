@@ -96,11 +96,12 @@ export default class FormScene extends Component {
       //For every key, set the state
       for (key of Object.keys(this.props.entryInfo)) {
         if (key === 'meta_data') {
-          this.setState({key: JSON.parse(this.props.entryInfo[key])})
           this.setState({'metadata': JSON.parse(this.props.entryInfo[key])})
         }
-        if (key === 'images') {
+        else if (key === 'images') {
           this.setState({images: JSON.parse(this.props.entryInfo[key])})
+        } else {
+          this.setState({key: this.props.entryInfo[key]})
         }
       }
     }
