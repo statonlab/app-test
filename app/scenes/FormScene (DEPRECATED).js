@@ -81,7 +81,7 @@ export default class FormScene extends Component {
     this.formProps = this.props.formProps // read in form items to display
 
     let formRules = {
-      images  : t.list(t.String),
+      images  : t.dict(t.list(t.String)),
       title   : t.String,
       location: LocationT
     }

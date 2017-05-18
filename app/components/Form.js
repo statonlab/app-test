@@ -445,6 +445,31 @@ export default class Form extends Component {
   }
 
   /**
+   *
+   */
+
+  renderCameraItem = (id) => {return(
+    <View style={[styles.formGroup]}>
+      <MKButton
+        style={[styles.buttonLink, {height: this.state.images['images'].length > 0 ? 60 : 40}]}
+        onPress={() => this._goToCamera('images')}
+      >
+        <Text style={this.state.warnings.photos ? [styles.label, styles.labelWarning] : styles.label}>Photos</Text>
+        {!this.state.images['images'] || this.state.images['images'].length === 0 ?
+          <View style={{flex: 1, alignItems: 'center', flexDirection: 'row'}}>
+            <Text style={[styles.buttonLinkText, {color: '#aaa'}]}>Add photos</Text>
+            <Icon name="camera" style={[styles.icon]}/>
+          </View>
+          :
+          this.renderPhotosField('images')
+        }
+      </MKButton>
+    </View>
+  )
+
+  }
+
+  /**
    *Returns the form item describing photos added.
    * @returns {XML}
    */
@@ -477,22 +502,6 @@ export default class Form extends Component {
         >
           <View style={[styles.card]}>
 
-            <View style={[styles.formGroup]}>
-              <MKButton
-                style={[styles.buttonLink, {height: this.state.images['images'].length > 0 ? 60 : 40}]}
-                onPress={() => this._goToCamera('images')}
-              >
-                <Text style={this.state.warnings.photos ? [styles.label, styles.labelWarning] : styles.label}>Photos</Text>
-                {!this.state.images['images'] || this.state.images['images'].length === 0 ?
-                  <View style={{flex: 1, alignItems: 'center', flexDirection: 'row'}}>
-                    <Text style={[styles.buttonLinkText, {color: '#aaa'}]}>Add photos</Text>
-                    <Icon name="camera" style={[styles.icon]}/>
-                  </View>
-                  :
-                  this.renderPhotosField('images')
-                }
-              </MKButton>
-            </View>
 
             {this.renderForm()}
             {this.renderHiddenComments()}

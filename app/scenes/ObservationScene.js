@@ -70,6 +70,7 @@ export default class ObservationScene extends Component {
    * @param entry
    */
   upload(entry) {
+    console.log(this.entry)
     this.refs.spinner.open()
     Observation.upload(entry).then(response => {
       let data   = response.data.data
