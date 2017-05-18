@@ -348,6 +348,7 @@ export default class Form extends Component {
     }
 
     return (
+      <View key={key}>
       <View style={styles.formGroup} key={key}>
         <PickerModal
           style={styles.picker}
@@ -359,7 +360,7 @@ export default class Form extends Component {
           onSelect={(option) => {
             this.setState({metadata: {...this.state.metadata, [key]: option}})
           }}
-        >
+        >        
           <View style={styles.picker}>
             <Text style={this.state.warnings[key] ? [styles.label, styles.labelWarning] : styles.label}>{DCP[key].label}</Text>
             <TextInput
@@ -372,7 +373,10 @@ export default class Form extends Component {
             />
             {dropdownIcon}
           </View>
-        </PickerModal>
+        </PickerModal> 
+      </View>
+      {DCP[key].camera  && this.state.metadata[key] ?  this.renderCameraItem(DCP[key].label, DCP[key].label)
+ : null}
       </View>
     )
   }
@@ -393,6 +397,8 @@ export default class Form extends Component {
 
     this.setState({metadata})
   }
+
+
 
   /**
    * Goes through the formProps and returns an array of JSX for each form item.

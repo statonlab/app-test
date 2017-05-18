@@ -104,7 +104,9 @@ const DCP = {
     ],
     description  : 'Do you see any of the following potential health problems?  Check all that apply.',
     placeHolder  : 'No health problems',
-    multiCheck   : true
+    multiCheck   : true,
+        camera : true
+
 
   },
   diameterNumeric    : {
@@ -217,13 +219,15 @@ const DCP = {
     label        : 'Nuts/burrs',
     description  : 'Approximately how many nuts/burrs are present?',
     selectChoices: ["None", "Few", "Many", "Unknown"],
-    placeHolder  : "Please select"
+    placeHolder  : "Please select",
+    camera : true
   },
   catkins        : {
     label        : 'Catkins',
     description  : 'Are catkins present?',
     selectChoices: ["Present", "Absent", "Unknown"],
-    placeHolder  : "Please select"
+    placeHolder  : "Please select",
+    camera : true
   },
   surroundings   : {
     label        : "Surroundings",
