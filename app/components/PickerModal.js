@@ -23,8 +23,6 @@ export default class PickerModal extends Component {
   }
 
   componentDidMount() {
-
-    console.log("images : ", this.props.images)
     this.setState({selected: this.props.initialSelect})
     if (this.props.multiCheck || this.props.freeText) {
       this.setState({cancelText: 'CONFIRM'})
