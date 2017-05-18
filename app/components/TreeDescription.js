@@ -130,7 +130,6 @@ const styles = StyleSheet.create({
   },
 
   cardImage: {
-    ...theme.cardImageStyle,
     height         : 200,
     resizeMode     : 'cover',
     width          : undefined,
