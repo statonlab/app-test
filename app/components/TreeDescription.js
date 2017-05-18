@@ -50,6 +50,7 @@ export default class TreeDescription extends Component {
       <ScrollView style={[styles.scrollView]}>
         {/*this._renderImageModalIcons()*/}
         <View style={styles.card}>
+          {Plants[this.props.title].images.length > 0 &&
           <View style={[styles.cardBody, {paddingTop: 10}]}>
             <ImageModal
               images={Plants[this.props.title].images}
@@ -59,6 +60,7 @@ export default class TreeDescription extends Component {
               <Icon name="camera-burst" size={23} style={styles.icon}/>
             </ImageModal>
           </View>
+          }
           {Plants[this.props.title].descriptionCards.map((card, index) => {
             return (
               <View key={index} style={[styles.cardBody, {borderBottomWidth: len === index ? 0 : 1}]}>
