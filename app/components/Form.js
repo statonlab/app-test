@@ -501,8 +501,7 @@ export default class Form extends Component {
           enableResetScrollToCoords={true}
         >
           <View style={[styles.card]}>
-
-
+            
             {this.renderForm()}
             {this.renderHiddenComments()}
             {this.props.title == 'American Chestnut' ? this.renderBiominder() : null}
