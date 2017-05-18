@@ -479,7 +479,7 @@ export default class Form extends Component {
 
             <View style={[styles.formGroup]}>
               <MKButton
-                style={[styles.buttonLink, {height: this.state.images.length > 0 ? 60 : 40}]}
+                style={[styles.buttonLink, {height: this.state.images.length > 0 ? 80 : 40}]}
                 onPress={() => this._goToCamera('images')}
               >
                 <Text style={this.state.warnings.photos ? [styles.label, styles.labelWarning] : styles.label}>Photos</Text>
@@ -547,7 +547,7 @@ export default class Form extends Component {
   _goToCamera = (id) => {
     this.props.navigator.push({
       label   : 'CameraScene',
-      images  : this.state.images,
+      images  : this.state.images[id] ? this.state.images[id] : [],
       onDone  : this.handleImages.bind(this),
       id      : id,
       gestures: {}

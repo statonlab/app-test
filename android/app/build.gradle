@@ -136,12 +136,12 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-camera')
     compile project(':react-native-fs')
     compile project(':realm')
     compile project(':react-native-vector-icons')
     compile project(':react-native-material-kit')
     compile project(':react-native-maps')
-    compile project(':react-native-camera')
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:23.0.1'
     compile 'com.facebook.react:react-native:+'
