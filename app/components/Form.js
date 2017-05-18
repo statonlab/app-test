@@ -479,7 +479,7 @@ export default class Form extends Component {
 
             <View style={[styles.formGroup]}>
               <MKButton
-                style={[styles.buttonLink, {height: this.state.images['images'].length > 0 ? 60 : 40}]}
+                style={[styles.buttonLink, {height: this.state.images['images'] && this.state.images['images'].length > 0 ? 60 : 40}]}
                 onPress={() => this._goToCamera('images')}
               >
                 <Text style={this.state.warnings.photos ? [styles.label, styles.labelWarning] : styles.label}>Photos</Text>
