@@ -116,11 +116,17 @@ export default class ObservationsScene extends Component {
    * @returns {XML}
    * @private
    */
+
   _renderRow = (submission) => {
     let images = JSON.parse(submission.images)
+    let key = Object.keys(images)[0]
+    console.log(key)
+
     return (
       <MKButton style={styles.row} key={submission.id} rippleColor="rgba(10,10,10,.1)" onPress={() => this._goToEntryScene(submission)}>
-        {images.length > 0 ? <Image source={{uri: images[0]}} style={styles.image}/> : null}
+        {images[key].length > 0 ?
+         <Image source={{uri: images[key][0]}} style={styles.image}/>
+          : null}
         <View style={styles.textContainer}>
           <Text style={styles.title}>{submission.name}</Text>
           <Text style={styles.body}>{moment(submission.date, 'MM-DD-YYYY HH:mm:ss').format('MMMM Do YYYY')}</Text>
