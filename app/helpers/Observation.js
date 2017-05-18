@@ -104,19 +104,21 @@ class Observation {
     form.append('is_private', observation.is_private ? '1' : '0')
     form.append('api_token', this.api_token)
 
-    // set up images
-    Object.keys(JSON.parse(observation.images).map((key) => {
-      images[key].map((image, i) => {
+    let images = JSON.parse(observation.images)
 
+    // set up images
+    Object.keys(images).map((key) => {
+      images[key].map((image, i) => {
         let name = image.split('/')
         name     = name[name.length - 1]
 
         let extension = name.split('.')
         extension     = extension[extension.length - 1]
-        let prefix    = Platform.OS === 'android' ? '' : 'file:///'
+
+        let prefix = Platform.OS === 'android' ? '' : 'file:///'
         form.append(`images[${key}][${i}]`, {uri: `${prefix}${image}`, name, type: `image/${extension}`})
       })
-    }))
+    })
 
     return form
   }
