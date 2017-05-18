@@ -70,6 +70,7 @@ export default class ObservationScene extends Component {
    * @param entry
    */
   upload(entry) {
+    console.log(this.entry)
     this.refs.spinner.open()
     Observation.upload(entry).then(response => {
       let data   = response.data.data
@@ -288,7 +289,6 @@ export default class ObservationScene extends Component {
   render() {
     let entry  = this.props.plant
     let images = JSON.parse(entry.images)
-
     return (
       <View style={styles.container}>
         <Spinner ref="spinner"/>
@@ -302,9 +302,14 @@ export default class ObservationScene extends Component {
             alwaysBounceHorizontal={true}
             pagingEnabled={true}
           >
-            {images.map((image, index) => {
-              return (<Image key={index} source={{uri: image}} style={styles.image}/>)
-            })}
+            {Object.keys(images).map((key) => {
+              images[key].map((image, index) => {
+                return (
+                  <Image key={index} source={{uri: image}} style={styles.image}/>
+                )
+              })
+            })
+            }
           </ScrollView>
           <View style={styles.card}>
             {this._renderUploadButton(entry)}
@@ -330,6 +335,7 @@ export default class ObservationScene extends Component {
     )
   }
 }
+
 
 ObservationScene.PropTypes = {
   navigator: PropTypes.object.isRequired,

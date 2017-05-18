@@ -64,7 +64,7 @@ export default class Form extends Component {
     super(props)
 
     this.state = {
-      images      : [],
+      images      : {},
       title       : this.props.title,
       location    : {
         latitude : 0,
@@ -83,7 +83,7 @@ export default class Form extends Component {
     this.formProps = this.props.formProps // read in form items to display
 
     let formRules = {
-      images  : t.list(t.String),
+      images  : t.maybe(t.dict(t.String, t.list(t.String))),
       title   : t.String,
       location: LocationT
     }
@@ -165,6 +165,7 @@ export default class Form extends Component {
    * Submit button method.  Validate the primary and meta data with tcomb.  Write the observation to Realm, leave the scene.
    */
   submit = () => {
+    console.log(this.state)
     if (!this.validateState().isValid()) {
       this.notifyIncomplete(this.validateState())
       return
@@ -445,6 +446,31 @@ export default class Form extends Component {
   }
 
   /**
+   *
+   */
+
+  renderCameraItem = (id, label) => {return(
+    <View style={[styles.formGroup]}>
+      <MKButton
+        style={[styles.buttonLink, {height: this.state.images[id] && this.state.images[id].length > 0 ? 60 : 40}]}
+        onPress={() => this._goToCamera(id)}
+      >
+        <Text style={this.state.warnings.photos ? [styles.label, styles.labelWarning] : styles.label}>{label}</Text>
+        {!this.state.images[id] || this.state.images[id].length === 0 ?
+          <View style={{flex: 1, alignItems: 'center', flexDirection: 'row'}}>
+            <Text style={[styles.buttonLinkText, {color: '#aaa'}]}>Add photos</Text>
+            <Icon name="camera" style={[styles.icon]}/>
+          </View>
+          :
+          this.renderPhotosField(id)
+        }
+      </MKButton>
+    </View>
+  )
+
+  }
+
+  /**
    *Returns the form item describing photos added.
    * @returns {XML}
    */
@@ -476,24 +502,7 @@ export default class Form extends Component {
           enableResetScrollToCoords={true}
         >
           <View style={[styles.card]}>
-
-            <View style={[styles.formGroup]}>
-              <MKButton
-                style={[styles.buttonLink, {height: this.state.images['images'] && this.state.images['images'].length > 0 ? 60 : 40}]}
-                onPress={() => this._goToCamera('images')}
-              >
-                <Text style={this.state.warnings.photos ? [styles.label, styles.labelWarning] : styles.label}>Photos</Text>
-                {!this.state.images['images'] || this.state.images['images'].length === 0 ?
-                  <View style={{flex: 1, alignItems: 'center', flexDirection: 'row'}}>
-                    <Text style={[styles.buttonLinkText, {color: '#aaa'}]}>Add photos</Text>
-                    <Icon name="camera" style={[styles.icon]}/>
-                  </View>
-                  :
-                  this.renderPhotosField('images')
-                }
-              </MKButton>
-            </View>
-
+            {this.renderCameraItem("images", "Images")}
             {this.renderForm()}
             {this.renderHiddenComments()}
             {this.props.title == 'American Chestnut' ? this.renderBiominder() : null}
