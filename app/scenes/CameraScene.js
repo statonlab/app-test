@@ -34,6 +34,8 @@ export default class CameraScene extends Component {
       images       : [],
       pageWidth    : 0
     }
+
+    this.isCapturing = false
   }
 
   /**
@@ -88,8 +90,7 @@ export default class CameraScene extends Component {
           </Text>
         </TouchableOpacity>
       )
-    }
-    else if (this.state.camera.flash === auto) {
+    } else if (this.state.camera.flash === auto) {
       flashIcon = (
         <TouchableOpacity
           style={[styles.toolTouchable, styles.flashTouchable]}
@@ -112,7 +113,6 @@ export default class CameraScene extends Component {
         ref="page"
         pagingEnabled={true}
         horizontal={true}
-        directionalLockEnabled={false}
         onContentSizeChange={this._resetWidth}
         showsHorizontalScrollIndicator={false}
         scrollEnabled={false}
@@ -123,11 +123,13 @@ export default class CameraScene extends Component {
             <TouchableOpacity
               style={[styles.toolTouchable, {alignItems: 'flex-end', paddingRight: 15}]}
               onPress={this.switchType}>
-              <IonIcon name="ios-reverse-camera-outline" size={32} color={"#fff"}/>
+              <IonIcon name="ios-reverse-camera-outline" size={32} color={'#fff'}/>
             </TouchableOpacity>
           </View>
           <Camera
-            ref={cam => {this.camera = cam}}
+            ref={cam => {
+              this.camera = cam
+            }}
             captureTarget={Camera.constants.CaptureTarget.disk}
             style={[styles.preview, {flex: 1}]}
             keepAwake={true}
@@ -138,17 +140,16 @@ export default class CameraScene extends Component {
             flashMode={this.state.camera.flash}
             onZoomChanged={this.zoom}
             defaultOnFocusComponent={true}
-             onFocusChanged={(e) => {
-               return
-             }}
-          >
-          </Camera>
+            onFocusChanged={(e) => {
+              return
+            }}
+            orientation="portrait"/>
           <View style={styles.toolsContainer}>
             <TouchableOpacity style={[styles.toolTouchable]} onPress={this._cancel}>
               <Text style={[styles.toolText]}>Cancel</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.capture} onPress={this.takePicture}>
-              <Icon name="camera" size={36} color={"#fff"}/>
+              <Icon name="camera" size={36} color={'#fff'}/>
             </TouchableOpacity>
             {this.state.images.length > 0 ?
               <TouchableOpacity
@@ -164,7 +165,7 @@ export default class CameraScene extends Component {
           </View>
         </View>
 
-        <View style={[styles.container,{width: this.state.pageWidth, backgroundColor: '#000'}]}>
+        <View style={[styles.container, {width: this.state.pageWidth, backgroundColor: '#000'}]}>
           <View style={styles.header}>
             <TouchableOpacity style={styles.headerButton} onPress={this._delete}>
               <IonIcon name="md-trash" style={[styles.headerText, {width: 20, marginTop: 2}]} size={20}/>
@@ -177,7 +178,7 @@ export default class CameraScene extends Component {
           </View>
           {this.state.selectedImage === '' ?
             <View style={{flex: 1, backgroundColor: '#000'}}></View> :
-            <Image source={{uri: this.state.selectedImage }} style={styles.preview}/>
+            <Image source={{uri: this.state.selectedImage}} style={[styles.preview, {resizeMode: 'contain'}]}/>
           }
           <View style={[styles.toolsContainer, styles.thumbnailsContainer]}>
             <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
@@ -227,6 +228,7 @@ export default class CameraScene extends Component {
    */
   _back = () => {
     this.refs.page.scrollTo({x: 0, y: 0, animated: true})
+    this.isCapturing = false
   }
 
   /**
@@ -272,7 +274,7 @@ export default class CameraScene extends Component {
    * @private
    */
   _done = () => {
-    DeviceEventEmitter.emit('cameraCapturedPhotos', this.state.images)
+    this.props.onDone(this.state.images, this.props.id)
     this.props.navigator.pop()
   }
 
@@ -303,7 +305,7 @@ export default class CameraScene extends Component {
       camera: {
         ...this.state.camera,
         flash: newFlashMode
-      },
+      }
     })
   }
 
@@ -311,17 +313,23 @@ export default class CameraScene extends Component {
    * Captures the image.
    */
   takePicture = () => {
-    try {
-      this.camera.capture()
-        .then((data) => {
-          let image  = data.path
-          let images = this.state.images.concat(image)
-          this.setState({selectedImage: image, images})
-          this._forward()
-        })
-    } catch (err) {
-      console.error(err)
+    // Do not allow multiple capture calls before processing
+    if (this.isCapturing) {
+      return
     }
+
+    this.isCapturing = true
+
+    this.camera.capture({
+      jpegQuality: 80
+    }).then(data => {
+      let image  = data.path
+      let images = this.state.images.concat(image)
+      this.setState({selectedImage: image, images})
+      this._forward()
+    }).catch(error => {
+      console.log(error)
+    })
   }
 
   /**
@@ -340,8 +348,8 @@ export default class CameraScene extends Component {
     this.setState({
       camera: {
         ...this.state.camera,
-        type: newType,
-      },
+        type: newType
+      }
     })
   }
 
@@ -362,11 +370,14 @@ export default class CameraScene extends Component {
  */
 CameraScene.PropTypes = {
   navigator: PropTypes.object.isRequired,
-  images   : PropTypes.array
+  onDone   : PropTypes.func.isRequired,
+  images   : PropTypes.array,
+  id       : PropTypes.string
 }
 
 CameraScene.defaultProps = {
-  images: []
+  images: [],
+  id    : 'images'
 }
 
 /**
@@ -376,9 +387,9 @@ CameraScene.defaultProps = {
  */
 function getVerticalPadding() {
   if (Platform.OS == 'android')
-    return 0;
+    return 0
   else
-    return 15;
+    return 15
 }
 
 /**
@@ -419,13 +430,13 @@ const styles = StyleSheet.create({
   },
 
   toolsContainer: {
-    flex           : 0,
-    flexDirection  : 'row',
-    width          : undefined,
-    height         : 80,
-    justifyContent : 'space-between',
-    alignItems     : 'center',
-    backgroundColor: '#000',
+    flex             : 0,
+    flexDirection    : 'row',
+    width            : undefined,
+    height           : 80,
+    justifyContent   : 'space-between',
+    alignItems       : 'center',
+    backgroundColor  : '#000',
     paddingHorizontal: 10
   },
 
@@ -485,7 +496,7 @@ const styles = StyleSheet.create({
   },
 
   thumbnailsContainer: {
-    backgroundColor  : "#ddd",
+    backgroundColor  : '#ddd',
     height           : 70,
     paddingHorizontal: 5,
     ...(new Elevation(4)),
@@ -510,5 +521,5 @@ const styles = StyleSheet.create({
     justifyContent  : 'center',
     marginHorizontal: 5,
     borderRadius    : 3
-  },
+  }
 })

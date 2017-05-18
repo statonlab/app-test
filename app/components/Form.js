@@ -7,12 +7,12 @@ import {
   StyleSheet,
   DeviceEventEmitter,
   Animated,
-  Alert
+  Alert,
+  Platform
 } from 'react-native'
 import moment from 'moment'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import {MKButton} from 'react-native-material-kit'
-import Header from '../components/Header'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
@@ -23,7 +23,9 @@ import DCP from '../resources/config.js'
 import SliderPick from '../components/SliderPick'
 import Location from '../components/Location'
 
-DCPrules = {
+const isAndroid = Platform.OS === 'android'
+
+const DCPrules = {
   seedsBinary            : t.enums.of(DCP.seedsBinary.selectChoices, 'seed'),
   flowersBinary          : t.enums.of(DCP.flowersBinary.selectChoices, 'flowers'),
   woollyAdesPres         : t.Boolean,
@@ -50,10 +52,10 @@ DCPrules = {
   locationComment        : t.maybe(t.String),
   burrs                  : t.enums.of(DCP.burrs.selectChoices),
   catkins                : t.enums.of(DCP.catkins.selectChoices),
-  surroundings           : t.enums.of(DCP.surroundings.selectChoices),
+  surroundings           : t.enums.of(DCP.surroundings.selectChoices)
 }
 
-const Coordinate = t.refinement(t.Number, (n) => n != 0, 'Coordinate')
+const Coordinate = t.refinement(t.Number, (n) => n !== 0, 'Coordinate')
 const LocationT  = t.dict(t.String, Coordinate)
 
 
@@ -112,15 +114,18 @@ export default class Form extends Component {
     if (!this.props.edit) {
       this.setDefaultValues()
     }
-    this.events.push(DeviceEventEmitter.addListener('cameraCapturedPhotos', this.handleImages))
   }
 
   /**
+   * Store images in state.
    *
    * @param images
+   * @param id
    */
-  handleImages = (images) => {
-    this.setState({images})
+  handleImages = (images, id) => {
+    let _images = this.state.images
+    _images[id] = images
+    this.setState({images: _images})
   }
 
   /**
@@ -423,7 +428,6 @@ export default class Form extends Component {
   }
 
   renderBiominder = () => {
-
     let primaryKey = this.realm.objects('Submission')
     if (primaryKey.length <= 0) {
       primaryKey = 1
@@ -445,15 +449,19 @@ export default class Form extends Component {
    * @returns {XML}
    */
 
-  renderPhotosField = () => {
-    let length = this.state.images.length
+  renderPhotosField = (id) => {
+    if (!this.state.images[id]) {
+      return null
+    }
+
+    let length = this.state.images[id].length
     let text   = length > 1 ? 'photos' : 'photo'
-    let image  = this.state.images[length - 1]
+    let image  = this.state.images[id][length - 1]
 
     return (
-      <View style={{flex: 1, alignItems: 'center', flexDirection: 'row'}}>
+      <View style={{flex: 1, alignItems: 'center', flexDirection: 'row', height: 90}}>
         <Text style={[styles.buttonLinkText, {color: '#444'}]}>{length} {text} added</Text>
-        <Image source={{uri: image}} style={styles.thumbnail}/>
+        <Image source={{uri: image}} style={[styles.thumbnail]}/>
       </View>
     )
   }
@@ -462,26 +470,26 @@ export default class Form extends Component {
     return (
       <View style={styles.container}>
         <KeyboardAwareScrollView
-          keyboardDismissMode="on-drag"
+          keyboardDismissMode={isAndroid ? 'none' : 'on-drag'}
           showsVerticalScrollIndicator={false}
-          extraScrollHeight={20}
-          enableResetScrollToCoords={false}
+          extraScrollHeight={60}
+          enableResetScrollToCoords={true}
         >
-          <Animated.View style={[styles.card, {marginBottom: this.state.bottomMargin}]}>
+          <View style={[styles.card]}>
 
             <View style={[styles.formGroup]}>
               <MKButton
                 style={[styles.buttonLink, {height: this.state.images.length > 0 ? 60 : 40}]}
-                onPress={this._goToCamera}
+                onPress={() => this._goToCamera('images')}
               >
                 <Text style={this.state.warnings.photos ? [styles.label, styles.labelWarning] : styles.label}>Photos</Text>
-                {this.state.images.length === 0 ?
+                {!this.state.images['images'] || this.state.images['images'].length === 0 ?
                   <View style={{flex: 1, alignItems: 'center', flexDirection: 'row'}}>
                     <Text style={[styles.buttonLinkText, {color: '#aaa'}]}>Add photos</Text>
                     <Icon name="camera" style={[styles.icon]}/>
                   </View>
                   :
-                  this.renderPhotosField()
+                  this.renderPhotosField('images')
                 }
               </MKButton>
             </View>
@@ -504,17 +512,17 @@ export default class Form extends Component {
               />
             </View>
             <View style={[styles.formGroup, {flex: 0}]}>
-              <Text style={styles.label}>Location</Text>
+              <Text style={[styles.label, {width: 60}]}>Location</Text>
               {this.props.edit ?
-              <Location edit={this.props.edit} coordinates={this.props.entryInfo.location} onChange={(location) => this.setState({location})}/> :
-                <Location  onChange={(location) => this.setState({location})}/>
+                <Location edit={this.props.edit} coordinates={this.props.entryInfo.location} onChange={(location) => this.setState({location})}/> :
+                <Location onChange={(location) => this.setState({location})}/>
               }
 
             </View>
-          </Animated.View>
+          </View>
         </KeyboardAwareScrollView>
-        <View style={styles.footer}>
 
+        <View style={styles.footer}>
           <MKButton style={[styles.button, styles.flex1]} onPress={this.props.edit ? this.submitEdit : this.submit} rippleColor="rgba(0,0,0,0.5)">
             <Text style={styles.buttonText}>
               {this.props.edit ? 'Confirm Edit' : 'Submit Entry'}
@@ -536,10 +544,12 @@ export default class Form extends Component {
    *
    * @private
    */
-  _goToCamera = () => {
+  _goToCamera = (id) => {
     this.props.navigator.push({
       label   : 'CameraScene',
       images  : this.state.images,
+      onDone  : this.handleImages.bind(this),
+      id      : id,
       gestures: {}
     })
   }
@@ -585,7 +595,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#dedede',
     padding          : 5,
-    height           : undefined
+    minHeight        : 50
   },
 
   picker: {
@@ -654,7 +664,7 @@ const styles = StyleSheet.create({
   },
 
   buttonBiominder: {
-    backgroundColor: Colors.info,
+    backgroundColor: Colors.info
   },
 
   buttonLink: {

@@ -21,8 +21,7 @@ export default class Location extends Component {
    */
   componentDidMount() {
     if (this.props.edit) {
-      console.log("Editing coords to: ", this.props.coordinates)
-      let currentPosition = {"coords": {"latitude": this.props.coordinates.latitude, "longitude": this.props.coordinates.longitude, "accuracy": this.props.coordinates.accuracy}}
+      let currentPosition = {'coords': {'latitude': this.props.coordinates.latitude, 'longitude': this.props.coordinates.longitude, 'accuracy': this.props.coordinates.accuracy}}
       this.setState({
         currentPosition   : currentPosition,
         reachedMaxAccuracy: true,
@@ -103,12 +102,15 @@ export default class Location extends Component {
     })
   }
 
-  retake =() => {
+  /**
+   * Restart location acquiring.
+   */
+  retake = () => {
     this.setState({
       reachedMaxAccuracy: false,
       done              : false,
-      timeConsumed      : 0,
-    } )
+      timeConsumed      : 0
+    })
     this.getLocation()
     this.updateLocation()
   }
@@ -117,9 +119,8 @@ export default class Location extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.coordsContainer}>
-          <View style={styles.textContainer}>
           {!this.state.done &&
-          <Text style={[styles.text, {color: '#aaa'}]}>Acquiring Location... {this.state.currentPosition.accuracy}</Text>
+          <Text style={[styles.text, {color: '#aaa'}]}>Acquiring Location...</Text>
           }
 
           {this.state.done &&
@@ -127,12 +128,12 @@ export default class Location extends Component {
           }
 
           {typeof this.state.currentPosition === 'object' &&
-          <Text style={[styles.text, {color: '#aaa'}]}>Accuracy {this.state.currentPosition.coords.accuracy} meters</Text>
+          <Text style={[styles.text, {color: '#aaa'}]}>Accuracy {parseInt(this.state.currentPosition.coords.accuracy)} meters</Text>
           }
-        </View>
+
           {this.state.done &&
-          <MKButton style={styles.button} onPress ={this.retake}>
-          <Text style={styles.buttonText}>Retake location</Text></MKButton>
+          <MKButton style={styles.button} onPress={this.retake}>
+            <Text style={styles.buttonText}>Tap to retake location</Text></MKButton>
           }
         </View>
 
@@ -158,14 +159,15 @@ const styles = StyleSheet.create({
   },
 
   coordsContainer: {
-    flex: 1,
-    flexDirection : 'column',
-    paddingHorizontal : 0,
-    alignItems : 'center'
+    flex             : 1,
+    flexDirection    : 'column',
+    paddingHorizontal: 0,
+    alignItems       : 'center'
   },
+
   textContainer: {
-    flex: 0,
-    flexDirection : 'row',
+    flex         : 0,
+    flexDirection: 'row'
   },
 
   text: {
@@ -181,16 +183,17 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color   : '#aaa'
   },
-  button : {
-    ...(new Elevation(1)),
+
+  button: {
     flex             : 0,
     borderRadius     : 2,
     paddingHorizontal: 5,
     paddingVertical  : 5
   },
+
   buttonText: {
-    textAlign : 'center',
-    color     : Colors.danger,
-    fontWeight: 'bold'
+    textAlign: 'center',
+    color    : Colors.primary,
+    fontSize : 12
   }
 })
