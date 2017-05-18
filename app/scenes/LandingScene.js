@@ -2,7 +2,6 @@ import React, {Component, PropTypes} from 'react'
 import {
   View,
   Text,
-  TouchableHighlight,
   ScrollView,
   Image,
   StyleSheet,
@@ -10,7 +9,7 @@ import {
   DeviceEventEmitter
 } from 'react-native'
 import moment from 'moment'
-import {getTheme, MKButton} from 'react-native-material-kit'
+import {MKButton} from 'react-native-material-kit'
 import Icon from 'react-native-vector-icons/Ionicons'
 import realm from '../db/Schema'
 import Header from '../components/Header'
@@ -21,7 +20,6 @@ import UploadButton from '../components/UploadButton'
 import SnackBarNotice from '../components/SnackBarNotice'
 import Observation from '../helpers/Observation'
 
-const theme  = getTheme()
 const plants = [
   {
     title    : 'American Chestnut',
@@ -342,13 +340,18 @@ export default class LandingScene extends Component {
                   }}>
                   <View style={[styles.flexHorizontal]}>
                     <Image source={plant.image} style={styles.cardImage}/>
-                    <View style={styles.cardBody}>
-                      <Text style={styles.cardTitle}>
-                        {plant.title}
-                      </Text>
-                      <Text style={plant.title != 'Other' ? [styles.cardBodyText, styles.italics] : styles.cardBodyText}>
-
-                        {plant.latinName}</Text>
+                    <View style={[styles.cardBody, styles.flexHorizontal, styles.flexSpace]}>
+                      <View>
+                        <Text style={styles.cardTitle}>
+                          {plant.title}
+                        </Text>
+                        <Text style={plant.title != 'Other' ? [styles.cardBodyText, styles.italics] : styles.cardBodyText}>
+                          {plant.latinName}
+                        </Text>
+                      </View>
+                      <View>
+                        <Icon name="ios-arrow-forward" size={24} style={styles.icon}/>
+                      </View>
                     </View>
                   </View>
                 </MKButton>
@@ -412,7 +415,8 @@ const styles = StyleSheet.create({
   cardBody: {
     flexDirection: 'column',
     flex         : 1,
-    padding      : 5
+    padding      : 5,
+    alignItems   : 'center'
   },
 
   cardBodyText: {
@@ -423,7 +427,8 @@ const styles = StyleSheet.create({
   },
 
   icon: {
-    backgroundColor: 'transparent'
+    color: '#777',
+    width: 20
   },
 
   plantsContainer: {
