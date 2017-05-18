@@ -100,9 +100,9 @@ const DCP = {
     label        : 'Health problems',
     selectChoices: [
       'Dieback in canopy', 'Defoliation', 'Cankers', 'Bark damage', 'Signs of rot at base',
-      'Other'
+      'Other (please describe in comments)'
     ],
-    description  : 'Do you see any of the following potential health problems?  Check all that apply.  If there is a health problem not listed below, please select other and describe in the comments section of the entry.',
+    description  : 'Do you see any of the following potential health problems?  Check all that apply.',
     placeHolder  : 'No health problems',
     multiCheck   : true
 

@@ -289,6 +289,10 @@ export default class ObservationScene extends Component {
   render() {
     let entry  = this.props.plant
     let images = JSON.parse(entry.images)
+
+
+
+
     return (
       <View style={styles.container}>
         <Spinner ref="spinner"/>
@@ -303,7 +307,7 @@ export default class ObservationScene extends Component {
             pagingEnabled={true}
           >
             {Object.keys(images).map((key) => {
-              images[key].map((image, index) => {
+        return images[key].map((image, index) => {
                 return (
                   <Image key={index} source={{uri: image}} style={styles.image}/>
                 )
@@ -313,12 +317,10 @@ export default class ObservationScene extends Component {
           </ScrollView>
           <View style={styles.card}>
             {this._renderUploadButton(entry)}
-
             <View style={styles.field}>
               <Text style={styles.label}>Date Collected</Text>
               <Text style={styles.dataText}>{entry.date}</Text>
             </View>
-
             {this._renderMetaData(entry.meta_data)}
           </View>
           <View style={styles.multiButtonField}>
@@ -326,10 +328,9 @@ export default class ObservationScene extends Component {
               <Text style={styles.buttonText}>Edit Entry</Text>
             </MKButton>
             <MKButton style={[styles.button, styles.deleteButton]} onPress={() => this.deleteAlert(entry)}>
-              <Text style={styles.buttonText}>Delete Entry</Text>
+              <Text style={[styles.buttonText,   {color : '#FFF'}]}>Delete Entry</Text>
             </MKButton>
           </View>
-
         </ScrollView>
       </View>
     )
@@ -388,14 +389,12 @@ const styles = StyleSheet.create({
     paddingRight : 10,
     paddingBottom: 10
   },
-
   image: {
     flex      : 0,
     width     : Dimensions.get('window').width,
     height    : 190,
     resizeMode: 'cover'
   },
-
   button: {
     flex             : 1,
     paddingVertical  : 15,
@@ -413,5 +412,5 @@ const styles = StyleSheet.create({
     color     : Colors.warningText,
     fontWeight: 'bold',
     textAlign : 'center'
-  }
+  },
 })
