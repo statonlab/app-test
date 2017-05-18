@@ -105,16 +105,18 @@ class Observation {
     form.append('api_token', this.api_token)
 
     // set up images
-    JSON.parse(observation.images).map((image, i) => {
-      let name = image.split('/')
-      name     = name[name.length - 1]
+    Object.keys(JSON.parse(observation.images).map((key) => {
+      images[key].map((image, i) => {
 
-      let extension = name.split('.')
-      extension     = extension[extension.length - 1]
-      let prefix    = Platform.OS === 'android' ? '' : 'file:///'
+        let name = image.split('/')
+        name     = name[name.length - 1]
 
-      form.append(`images[${i}]`, {uri: `${prefix}${image}`, name, type: `image/${extension}`})
-    })
+        let extension = name.split('.')
+        extension     = extension[extension.length - 1]
+        let prefix    = Platform.OS === 'android' ? '' : 'file:///'
+        form.append(`images[${key}][${i}]`, {uri: `${prefix}${image}`, name, type: `image/${extension}`})
+      })
+    }))
 
     return form
   }
