@@ -444,12 +444,14 @@ export default class Form extends Component {
     }
     return (
       <View style={[styles.formGroup]}>
-        <Text style={styles.textField}>
-          ID number for submission: {primaryKey} </Text>
+        <Text style={styles.label}>
+          ID number</Text>
+        <Text style={styles.bioMinderText}> {primaryKey}</Text>
       </View>
     )
 
   }
+
 
   /**
    *
@@ -750,6 +752,14 @@ const styles = StyleSheet.create({
 
   slider: {
     width: 200
+  },
+  bioMinderText : {
+    paddingHorizontal: 5,
+    paddingVertical : 10,
+    color            : '#444',
+    fontSize         : 14,
+    flex             : 1,
+    width            : undefined
   }
 })
 
