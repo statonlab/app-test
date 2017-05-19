@@ -27,7 +27,9 @@ const DCP = {
       'Yes', 'No'
     ],
     description  : 'Is this tree flowering?',
-    placeHolder  : 'Are flowers present?'
+    placeHolder  : 'Are flowers present?',
+        camera : ['Yes']
+
   },
   emeraldAshBorer    : {
     label        : 'Ash borer',
@@ -40,7 +42,9 @@ const DCP = {
     images       : [
       require('../img/DCP/EmAshBorer/EAB tunneling.jpg'),
       require('../img/DCP/EmAshBorer/Emerald ash borer adult.jpg')
-    ]
+    ],
+        camera : [ 'D-shaped adult exit holes', 'Bark coming off with tunneling underneath', 'Emerald ash borer beetless/larvae', 'stump sprouting'
+        ]
   },
   woollyAdesPres     : {
     label: 'presence of Woolly adelgids'
@@ -83,7 +87,8 @@ const DCP = {
     selectChoices: [
       'Yes', 'No'
     ],
-    placeHolder  : "Please select"
+    placeHolder  : "Please select",
+        camera : ['yes']
   },
 
   heightFirstBranch  : {
@@ -106,8 +111,6 @@ const DCP = {
     placeHolder  : 'No health problems',
     multiCheck   : true,
         camera : true
-
-
   },
   diameterNumeric    : {
     label      : 'Tree diameter',
@@ -220,14 +223,12 @@ const DCP = {
     description  : 'Approximately how many nuts/burrs are present?',
     selectChoices: ["None", "Few", "Many", "Unknown"],
     placeHolder  : "Please select",
-    camera : true
   },
   catkins        : {
     label        : 'Catkins',
     description  : 'Are catkins present?',
     selectChoices: ["Present", "Absent", "Unknown"],
     placeHolder  : "Please select",
-    camera : true
   },
   surroundings   : {
     label        : "Surroundings",

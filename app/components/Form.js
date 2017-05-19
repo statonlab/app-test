@@ -375,7 +375,7 @@ export default class Form extends Component {
           </View>
         </PickerModal> 
       </View>
-      {DCP[key].camera  && this.state.metadata[key] ?  this.renderCameraItem(DCP[key].label, DCP[key].label)
+      {DCP[key].camera  && DCP[key].camera.includes(this.state.metadata[key]) ?  this.renderCameraItem(DCP[key].label, DCP[key].label)
  : null}
       </View>
     )
