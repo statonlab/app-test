@@ -28,9 +28,6 @@ export default class MapScene extends Component {
     }
 
     submissions.map((submission, index) => {
-      console.log(submission)
-      console.log(JSON.parse(submission.images)["images"][0])
-
       markers.push({
         title      : submission.name,
         image      : JSON.parse(submission.images)["images"][0],

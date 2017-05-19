@@ -77,7 +77,6 @@ export default class MarkersMap extends Component {
    * @returns {XML}
    */
   renderCallout(marker) {
-    console.log(marker)
     return (
       <MapView.Callout style={{width: 165}}>
         <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
