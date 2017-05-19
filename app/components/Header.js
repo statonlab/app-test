@@ -31,7 +31,7 @@ export default class Header extends Component {
   }
 
   back = () => {
-    if(!this.props.onBackPress()) {
+    if (!this.props.onBackPress()) {
       return
     }
 
@@ -67,11 +67,19 @@ export default class Header extends Component {
       return
     }
 
+    let icon = (<Icon name="map-marker-multiple" size={23} color="#fff"/>)
+    let onPress = this.navigateToMap
+
+    if(this.props.rightIcon !== null) {
+      icon = this.props.rightIcon
+      onPress = this.props.onRightPress
+    }
+
     return (
       <TouchableHighlight style={style.touchable}
         underlayColor={Colors.primary}
-        onPress={this.navigateToMap}>
-        <Icon name="map-marker-multiple" size={23} color="#fff"/>
+        onPress={onPress}>
+        {icon}
       </TouchableHighlight>
     )
   }
@@ -112,20 +120,26 @@ Header.propTypes = {
   showLeftIcon : PropTypes.bool,
   showRightIcon: PropTypes.bool,
   sidebar      : PropTypes.object,
-  onBackPress  : PropTypes.func
+  onBackPress  : PropTypes.func,
+  rightIcon    : PropTypes.object,
+  onRightPress : PropTypes.func
 }
 
 Header.defaultProps = {
   initial      : false,
-  onMenuPress  : function () {
+  onMenuPress  : () => {
 
   },
-  onBackPress  : function () {
+  onBackPress  : () => {
     return true
+  },
+  onRightPress : () => {
+
   },
   elevation    : 3,
   showLeftIcon : true,
-  showRightIcon: true
+  showRightIcon: true,
+  rightIcon    : null
 }
 
 function getVerticalPadding() {

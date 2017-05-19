@@ -18,8 +18,9 @@ import Spinner from '../components/Spinner'
 import realm from '../db/Schema'
 import SnackBarNotice from '../components/SnackBarNotice'
 import axios from '../helpers/Axios'
-import Plants from '../resources/descriptions'
+import Icon from 'react-native-vector-icons/Ionicons'
 
+const trash = (<Icon name="ios-trash" size={24} color="#fff"/>)
 
 export default class ObservationScene extends Component {
   constructor(props) {
@@ -105,7 +106,7 @@ export default class ObservationScene extends Component {
         submission = realm.objects('Submission').filtered(`id == ${entry.id}`)
         if (submission.length > 0) {
           let observation = submission[0]
-          console.log("OBS:", observation)
+          console.log('OBS:', observation)
           realm.write(() => {
             observation.needs_update = false
           })
@@ -187,7 +188,7 @@ export default class ObservationScene extends Component {
 
   deleteEntry(entry) {
     if (this.state.synced && !this.state.isLoggedIn) {
-      alert("Warning: This observation has already been synced to the server.  Please log in to delete.")
+      alert('Warning: This observation has already been synced to the server.  Please log in to delete.')
       return false
     }
     this.refs.spinner.open()
@@ -197,9 +198,9 @@ export default class ObservationScene extends Component {
         params: {api_token: this.user.api_token}
       }).then(response => {
       }).catch(error => {
-        console.log("ERR:", error)
+        console.log('ERR:', error)
         this.refs.spinner.close()
-        alert("Unable to delete at this time.  Please check your internet connection and try again.")
+        alert('Unable to delete at this time.  Please check your internet connection and try again.')
         return false
       })
     }
@@ -229,7 +230,7 @@ export default class ObservationScene extends Component {
       label    : 'TreeScene',
       title    : entry.name,
       entryInfo: entry,
-      edit     : true,
+      edit     : true
     })
   }
 
@@ -262,7 +263,7 @@ export default class ObservationScene extends Component {
     }
 
     Alert.alert('Delete Observation',
-      'Data will be permanently lost if you cancel. Are you sure?', [
+      'Data will be permanently lost if you delete. Are you sure?', [
         {
           text   : 'Yes',
           onPress: () => {
@@ -270,7 +271,7 @@ export default class ObservationScene extends Component {
           }
         },
         {
-          text   : 'Back',
+          text   : 'Cancel',
           onPress: () => {
           },
           style  : 'cancel'
@@ -290,15 +291,15 @@ export default class ObservationScene extends Component {
     let entry  = this.props.plant
     let images = JSON.parse(entry.images)
 
-
-
-
     return (
       <View style={styles.container}>
         <Spinner ref="spinner"/>
         <SnackBarNotice ref="snackbar" noticeText="Entry synced successfully!"/>
 
-        <Header navigator={this.props.navigator} title={entry.name}/>
+        <Header navigator={this.props.navigator} title={entry.name} rightIcon={trash} onRightPress={() => {
+          this.deleteAlert.call(this, entry)
+        }}/>
+
         <ScrollView style={styles.contentContainer}>
           <ScrollView
             horizontal={true}
@@ -307,13 +308,10 @@ export default class ObservationScene extends Component {
             pagingEnabled={true}
           >
             {Object.keys(images).map((key) => {
-        return images[key].map((image, index) => {
-                return (
-                  <Image key={index} source={{uri: image}} style={styles.image}/>
-                )
+              return images[key].map((image, index) => {
+                return (<Image key={index} source={{uri: image}} style={styles.image}/>)
               })
-            })
-            }
+            })}
           </ScrollView>
           <View style={styles.card}>
             {this._renderUploadButton(entry)}
@@ -323,15 +321,12 @@ export default class ObservationScene extends Component {
             </View>
             {this._renderMetaData(entry.meta_data)}
           </View>
-          <View style={styles.multiButtonField}>
-            <MKButton style={styles.button } onPress={() => this.editEntry(entry)}>
-              <Text style={styles.buttonText}>Edit Entry</Text>
-            </MKButton>
-            <MKButton style={[styles.button, styles.deleteButton]} onPress={() => this.deleteAlert(entry)}>
-              <Text style={[styles.buttonText,   {color : '#FFF'}]}>Delete Entry</Text>
-            </MKButton>
-          </View>
         </ScrollView>
+        <View style={styles.multiButtonField}>
+          <MKButton style={styles.button } onPress={() => this.editEntry(entry)}>
+            <Text style={styles.buttonText}>Edit Entry</Text>
+          </MKButton>
+        </View>
       </View>
     )
   }
@@ -364,16 +359,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff'
   },
 
-  field           : {
+  field: {
     flex             : 0,
     flexDirection    : 'column',
     borderBottomWidth: 1,
     borderBottomColor: '#ddd'
   },
-  multiButtonField: {
-    flex         : 1,
-    flexDirection: 'row',
 
+  multiButtonField: {
+    flex         : 0,
+    flexDirection: 'row'
   },
 
   label: {
@@ -389,28 +384,31 @@ const styles = StyleSheet.create({
     paddingRight : 10,
     paddingBottom: 10
   },
+
   image: {
     flex      : 0,
     width     : Dimensions.get('window').width,
     height    : 190,
     resizeMode: 'cover'
   },
+
   button: {
     flex             : 1,
     paddingVertical  : 15,
     paddingHorizontal: 10,
     backgroundColor  : Colors.warning,
     borderRadius     : 2,
-    marginHorizontal : 10,
+    marginHorizontal : 5,
     marginVertical   : 5
   },
 
   deleteButton: {
     backgroundColor: Colors.danger
   },
-  buttonText  : {
+
+  buttonText: {
     color     : Colors.warningText,
     fontWeight: 'bold',
     textAlign : 'center'
-  },
+  }
 })

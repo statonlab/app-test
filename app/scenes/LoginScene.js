@@ -123,8 +123,8 @@ export default class LoginScene extends Component {
   storeUser = (response) => {
 
     this.realm.write(() => {
-      let user = realm.objects('User')[0]
-      if (user) {
+      let user = realm.objects('User')
+      if (user.length > 0) {
         // Delete existing users first
         this.realm.delete(user)
       }
