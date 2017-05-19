@@ -290,7 +290,6 @@ export default class ObservationScene extends Component {
   render() {
     let entry  = this.props.plant
     let images = JSON.parse(entry.images)
-
     return (
       <View style={styles.container}>
         <Spinner ref="spinner"/>

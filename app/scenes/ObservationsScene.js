@@ -121,6 +121,8 @@ export default class ObservationsScene extends Component {
     let images = JSON.parse(submission.images)
     let key = Object.keys(images)[0]
     console.log(key)
+    console.log(images)
+    console.log(submission)
 
     return (
       <MKButton style={styles.row} key={submission.id} rippleColor="rgba(10,10,10,.1)" onPress={() => this._goToEntryScene(submission)}>
