@@ -115,7 +115,7 @@ class Observation {
         let extension = name.split('.')
         extension     = extension[extension.length - 1]
 
-        let prefix = Platform.OS === 'android' ? '' : 'file:///'
+        let prefix = Platform.OS === 'android' && image.indexOf('file:') === -1 ? '' : 'file:///'
         form.append(`images[${key}][${i}]`, {uri: `${prefix}${image}`, name, type: `image/${extension}`})
       })
     })

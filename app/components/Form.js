@@ -22,6 +22,8 @@ import PickerModal from '../components/PickerModal'
 import DCP from '../resources/config.js'
 import SliderPick from '../components/SliderPick'
 import Location from '../components/Location'
+import File from '../helpers/File'
+import Spinner from '../components/Spinner'
 
 const isAndroid = Platform.OS === 'android'
 
@@ -108,12 +110,27 @@ export default class Form extends Component {
         this.setState({key: this.props.entryInfo[key]})
       }
     }
+
+    // Add image resize event listener
+    this.events.push(DeviceEventEmitter.addListener('imagesResized', this._handleResizedImages))
   }
 
   componentDidMount() {
     if (!this.props.edit) {
       this.setDefaultValues()
     }
+  }
+
+  /**
+   * Handle resized images.
+   *
+   * @private
+   */
+  _handleResizedImages = (event) => {
+    console.log('EVENT OF KIND !!!', event)
+
+    this.refs.spinner.close()
+    this.save()
   }
 
   /**
@@ -160,24 +177,40 @@ export default class Form extends Component {
   }
 
   /**
+   * Generate resized images and thumbnails.
+   *
+   */
+  generateImages = () => {
+    let file = new File()
+    file.resizeImages(this.state.images)
 
-   /*
-   * Submit button method.  Validate the primary and meta data with tcomb.  Write the observation to Realm, leave the scene.
+    this.refs.spinner.open()
+  }
+
+  /**
+   * Submit button method.  Validate the primary and meta data with tcomb.
    */
   submit = () => {
-    console.log(this.state)
     if (!this.validateState().isValid()) {
       this.notifyIncomplete(this.validateState())
       return
     }
+
     if (!this.validateMeta().isValid()) {
       this.notifyIncomplete(this.validateMeta())
       return
     }
 
+    this.generateImages()
+  }
+
+  /**
+   * Write the observation to Realm, leave the scene.
+   */
+  save = () => {
     let primaryKey = this.realm.objects('Submission')
     if (primaryKey.length <= 0) {
-      primaryKey = 1
+      primaryKey = parseInt(moment('DMMYYH').toString())
     } else {
       primaryKey = primaryKey.sorted('id', true)[0].id + 1
     }
@@ -198,6 +231,7 @@ export default class Form extends Component {
 
     // Tell anyone who cares that there is a new submission
     DeviceEventEmitter.emit('newSubmission')
+
     this.props.navigator.push({
       label   : 'SubmittedScene',
       plant   : observation,
@@ -205,6 +239,9 @@ export default class Form extends Component {
     })
   }
 
+  /**
+   * Update existing observation.
+   */
   submitEdit = () => {
     if (!this.validateState().isValid()) {
       this.notifyIncomplete(this.validateState())
@@ -291,13 +328,12 @@ export default class Form extends Component {
   }
 
   /**
-   *
+   * Remove any registered events
    */
   componentWillUnmount() {
     this.events.map(event => {
       event.remove()
     })
-
   }
 
   /**
@@ -349,34 +385,34 @@ export default class Form extends Component {
 
     return (
       <View key={key}>
-      <View style={styles.formGroup} key={key}>
-        <PickerModal
-          style={styles.picker}
-          images={DCP[key].images}
-          multiCheck={DCP[key].multiCheck}
-          freeText={DCP[key].modalFreeText}
-          header={DCP[key].description}
-          choices={DCP[key].selectChoices}
-          onSelect={(option) => {
-            this.setState({metadata: {...this.state.metadata, [key]: option}})
-          }}
-        >        
-          <View style={styles.picker}>
-            <Text style={this.state.warnings[key] ? [styles.label, styles.labelWarning] : styles.label}>{DCP[key].label}</Text>
-            <TextInput
-              style={styles.textField}
-              editable={false}
-              placeholder={DCP[key].placeHolder}
-              placeholderTextColor="#aaa"
-              value={this.getMultiCheckValue(this.state.metadata[key], DCP[key].multiCheck)}
-              underlineColorAndroid="transparent"
-            />
-            {dropdownIcon}
-          </View>
-        </PickerModal> 
-      </View>
-      {DCP[key].camera  && DCP[key].camera.includes(this.state.metadata[key]) ?  this.renderCameraItem(DCP[key].label, DCP[key].label)
- : null}
+        <View style={styles.formGroup} key={key}>
+          <PickerModal
+            style={styles.picker}
+            images={DCP[key].images}
+            multiCheck={DCP[key].multiCheck}
+            freeText={DCP[key].modalFreeText}
+            header={DCP[key].description}
+            choices={DCP[key].selectChoices}
+            onSelect={(option) => {
+              this.setState({metadata: {...this.state.metadata, [key]: option}})
+            }}
+          >
+            <View style={styles.picker}>
+              <Text style={this.state.warnings[key] ? [styles.label, styles.labelWarning] : styles.label}>{DCP[key].label}</Text>
+              <TextInput
+                style={styles.textField}
+                editable={false}
+                placeholder={DCP[key].placeHolder}
+                placeholderTextColor="#aaa"
+                value={this.getMultiCheckValue(this.state.metadata[key], DCP[key].multiCheck)}
+                underlineColorAndroid="transparent"
+              />
+              {dropdownIcon}
+            </View>
+          </PickerModal>
+        </View>
+        {DCP[key].camera && DCP[key].camera.includes(this.state.metadata[key]) ? this.renderCameraItem(DCP[key].label, DCP[key].label)
+          : null}
       </View>
     )
   }
@@ -399,12 +435,10 @@ export default class Form extends Component {
   }
 
 
-
   /**
    * Goes through the formProps and returns an array of JSX for each form item.
    * @returns {Array}
    */
-
   renderForm = () => {
     return Object.keys(this.props.formProps).map(this.populateFormItem)
   }
@@ -434,6 +468,11 @@ export default class Form extends Component {
     return null
   }
 
+  /**
+   * Render mailable submission id.
+   *
+   * @returns {XML}
+   */
   renderBiominder = () => {
     let primaryKey = this.realm.objects('Submission')
     if (primaryKey.length <= 0) {
@@ -447,37 +486,39 @@ export default class Form extends Component {
           ID number for submission: {primaryKey} </Text>
       </View>
     )
-
   }
 
   /**
+   * Render camera fields.
    *
+   * @param id
+   * @param label
+   * @returns {XML}
    */
-
   renderCameraItem = (id, label) => {
     let description = 'optional'
     if (id === 'images') {
       description = 'Add photos'
     }
 
-    return(
-    <View style={[styles.formGroup]}>
-      <MKButton
-        style={[styles.buttonLink, {height: this.state.images[id] && this.state.images[id].length > 0 ? 60 : 40}]}
-        onPress={() => this._goToCamera(id)}
-      >
-        <Text style={this.state.warnings.photos ? [styles.label, styles.labelWarning] : styles.label}>{label}</Text>
-        {!this.state.images[id] || this.state.images[id].length === 0 ?
-          <View style={{flex: 1, alignItems: 'center', flexDirection: 'row'}}>
-            <Text style={[styles.buttonLinkText, {color: '#aaa'}]}>{description}</Text>
-            <Icon name="camera" style={[styles.icon]}/>
-          </View>
-          :
-          this.renderPhotosField(id)
-        }
-      </MKButton>
-    </View>
-  )
+    return (
+      <View style={[styles.formGroup]}>
+        <MKButton
+          style={[styles.buttonLink, {height: this.state.images[id] && this.state.images[id].length > 0 ? 60 : 40}]}
+          onPress={() => this._goToCamera(id)}
+        >
+          <Text style={this.state.warnings.photos ? [styles.label, styles.labelWarning] : styles.label}>{label}</Text>
+          {!this.state.images[id] || this.state.images[id].length === 0 ?
+            <View style={{flex: 1, alignItems: 'center', flexDirection: 'row'}}>
+              <Text style={[styles.buttonLinkText, {color: '#aaa'}]}>{description}</Text>
+              <Icon name="camera" style={[styles.icon]}/>
+            </View>
+            :
+            this.renderPhotosField(id)
+          }
+        </MKButton>
+      </View>
+    )
 
   }
 
@@ -506,6 +547,7 @@ export default class Form extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <Spinner ref="spinner"/>
         <KeyboardAwareScrollView
           keyboardDismissMode={isAndroid ? 'none' : 'on-drag'}
           showsVerticalScrollIndicator={false}
@@ -513,7 +555,7 @@ export default class Form extends Component {
           enableResetScrollToCoords={true}
         >
           <View style={[styles.card]}>
-            {this.renderCameraItem("images", "Images")}
+            {this.renderCameraItem('images', 'Images')}
             {this.renderForm()}
             {this.renderHiddenComments()}
             {this.props.title == 'American Chestnut' ? this.renderBiominder() : null}
