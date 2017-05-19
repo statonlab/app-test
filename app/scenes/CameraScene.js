@@ -7,14 +7,14 @@ import {
   TouchableOpacity,
   Platform,
   ScrollView,
-  Image,
-  DeviceEventEmitter
+  Image
 } from 'react-native'
 import Camera from 'react-native-camera'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import Colors from '../helpers/Colors'
 import Elevation from '../helpers/Elevation'
+import File from '../helpers/File'
 
 export default class CameraScene extends Component {
   /**
@@ -36,6 +36,8 @@ export default class CameraScene extends Component {
     }
 
     this.isCapturing = false
+
+    this.fs = new File()
   }
 
   /**
@@ -246,12 +248,14 @@ export default class CameraScene extends Component {
    * @private
    */
   _delete = () => {
-    let images = []
+    let images   = []
+    let imageToDelete = this.state.selectedImage
     this.state.images.map((image) => {
       if (image !== this.state.selectedImage) {
         images.push(image)
       }
     })
+
 
     if (images.length === 0) {
       this.setState({
@@ -259,13 +263,14 @@ export default class CameraScene extends Component {
         images       : []
       })
       this._back()
-      return
+    } else {
+      this.setState({
+        selectedImage: images[0],
+        images
+      })
     }
 
-    this.setState({
-      selectedImage: images[0],
-      images
-    })
+    this.fs.delete(imageToDelete)
   }
 
   /**
