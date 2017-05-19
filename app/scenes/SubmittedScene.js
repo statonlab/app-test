@@ -26,7 +26,7 @@ export default class SubmittedScene extends Component {
     submissions.map(submission => {
       let marker = {
         title      : submission.name,
-        image      : JSON.parse(submission.images)[0],
+        image      : JSON.parse(submission.images)["images"][0],
         description: `${submission.location.latitude}, ${submission.location.longitude}`,
         coord      : {
           latitude : submission.location.latitude,
