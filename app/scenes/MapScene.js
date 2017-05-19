@@ -30,7 +30,7 @@ export default class MapScene extends Component {
     submissions.map((submission, index) => {
       markers.push({
         title      : submission.name,
-        image      : JSON.parse(submission.images)[0],
+        image      : JSON.parse(submission.images)["images"][0],
         description: moment(submission.date, 'MM-DD-YYYY HH:mm:ss').fromNow(),
         coord      : {
           longitude: submission.location.longitude,

@@ -219,7 +219,7 @@ export default class LandingScene extends Component {
             meta_data: JSON.stringify(record.meta_data),
             serverID : parseInt(record.observation_id)
           })
-
+        console.log("RECORD: ", record)
           emptyDB = false
         })
       })
