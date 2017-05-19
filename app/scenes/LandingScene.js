@@ -202,15 +202,10 @@ export default class LandingScene extends Component {
           return
         }
 
-        let primaryKey = 1
-
-        if (!emptyDB) {
-          primaryKey = realm.objects('Submission').sorted('id', true)[0].id + 1
-        }
 
         realm.write(() => {
           realm.create('Submission', {
-            id       : primaryKey,
+            id       : record.mobile_id,
             name     : record.observation_category,
             images   : JSON.stringify(record.images),
             location : record.location,

@@ -103,6 +103,7 @@ class Observation {
     form.append('date', observation.date)
     form.append('is_private', observation.is_private ? '1' : '0')
     form.append('api_token', this.api_token)
+    form.append('mobile_id', observation.id )
 
     let images = JSON.parse(observation.images)
 
