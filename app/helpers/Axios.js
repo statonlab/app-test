@@ -4,7 +4,7 @@ import Axios from 'axios'
 // Set url based on environment
 let url
 if (__DEV__) {
-  url = 'http://treesnap.org/api/v1/'
+  url = 'http://treesnap.app/api/v1/'
 } else {
   url = 'https://treesnap.org/api/v1/'
 }
