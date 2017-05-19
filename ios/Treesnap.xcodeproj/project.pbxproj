@@ -524,17 +524,10 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-<<<<<<< HEAD
 		49D085C71ECE07F600B5C86A /* Products */ = {
 			isa = PBXGroup;
 			children = (
 				49D085CF1ECE07F600B5C86A /* libRCTCamera.a */,
-=======
-		49D085931ECE01E400B5C86A /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				49D0859B1ECE01E400B5C86A /* libRCTCamera.a */,
->>>>>>> 6737e5a3b3ed10270ddee64a23df7d86ed2055a9
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -794,11 +787,8 @@
 					ProjectRef = 5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */;
 				},
 				{
-<<<<<<< HEAD
 					ProductGroup = 49D085C71ECE07F600B5C86A /* Products */;
-=======
-					ProductGroup = 49D085931ECE01E400B5C86A /* Products */;
->>>>>>> 6737e5a3b3ed10270ddee64a23df7d86ed2055a9
+
 					ProjectRef = FE2F48DE2E5D4CD9B559A056 /* RCTCamera.xcodeproj */;
 				},
 				{
@@ -1012,19 +1002,11 @@
 			remoteRef = 3DAD3EAE1DF850E9000B6D8A /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-<<<<<<< HEAD
 		49D085CF1ECE07F600B5C86A /* libRCTCamera.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libRCTCamera.a;
 			remoteRef = 49D085CE1ECE07F600B5C86A /* PBXContainerItemProxy */;
-=======
-		49D0859B1ECE01E400B5C86A /* libRCTCamera.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRCTCamera.a;
-			remoteRef = 49D0859A1ECE01E400B5C86A /* PBXContainerItemProxy */;
->>>>>>> 6737e5a3b3ed10270ddee64a23df7d86ed2055a9
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */ = {
