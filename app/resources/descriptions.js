@@ -75,8 +75,8 @@ const Plants = {
       burrs              : true,
       catkins            : true,
       chestnutBlightSigns: true,
-      surroundings       : true,
-      accessibility      : true,
+      // surroundings       : true,
+      // accessibility      : true,
       crownHealth        : true,
       diameterNumeric    : true,
       heightNumeric      : true
@@ -157,8 +157,7 @@ const Plants = {
       seedsBinary            : true,
       flowersBinary          : true,
       emeraldAshBorer        : true,
-      nearbyDead             : true,
-      nearbySmall            : true,
+      nearbyTrees: true,
       crownHealth            : true,
       diameterNumeric        : true
     }
@@ -211,10 +210,10 @@ const Plants = {
       cones                  : true,
       crownClassification    : true,
       locationCharacteristics: true,
-      nearByHemlock          : true,
-      treated                : true,
-      partOfStudy            : true,
-      accessibility          : true,
+      nearbyTrees            : true,
+      // partOfStudy            : true,
+      // treated                : true,
+      // accessibility          : true,
       crownHealth            : true,
       diameterNumeric        : true,
       locationComment        : true
@@ -276,8 +275,8 @@ const Plants = {
       }
     ],
     formProps       : {
-      heightFirstBranch: true,
       acorns           : true,
+      heightFirstBranch: true,
       crownHealth      : true,
       diameterNumeric  : true,
       oakHealthProblems: true
@@ -310,9 +309,8 @@ const Plants = {
     formProps       : {
       seedsBinary            : true,
       flowersBinary          : true,
-      nearbyDead             : true,
-      nearbySmall            : true,
-      treated                : true,
+      nearbyTrees             : true,
+      // treated                : true,
       locationCharacteristics: true,
       crownHealth            : true,
       diameterNumeric        : true

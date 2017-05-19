@@ -33,7 +33,7 @@ const DCPrules = {
   woollyAdesPres         : t.Boolean,
   woollyAdesCoverage     : t.enums.of(DCP.woollyAdesCoverage.selectChoices, 'woollyAdesCoverage'),
   acorns                 : t.enums.of(DCP.acorns.selectChoices, 'acorns'),
-  heightFirstBranch      : t.enums.of(DCP.heightFirstBranch.selectChoices, 'heightFirstBranch'),
+  heightFirstBranch      : t.Number,
   oakHealthProblems      : t.maybe(t.String),
   diameterNumeric        : t.Number,
   heightNumeric          : t.Number,
@@ -43,18 +43,19 @@ const DCPrules = {
   crownHealth            : t.Number,
   otherLabel             : t.String,
   locationCharacteristics: t.enums.of(DCP.locationCharacteristics.selectChoices, 'locations'),
-  nearbySmall            : t.enums.of(DCP.nearbySmall.selectChoices),
-  nearbyDead             : t.enums.of(DCP.nearbyDead.selectChoices),
+  // nearbySmall            : t.enums.of(DCP.nearbySmall.selectChoices),
+  // nearbyDead             : t.enums.of(DCP.nearbyDead.selectChoices),
   treated                : t.enums.of(DCP.treated.selectChoices),
   cones                  : t.enums.of(DCP.cones.selectChoices),
   crownClassification    : t.enums.of(DCP.crownClassification.selectChoices),
-  nearByHemlock          : t.enums.of(DCP.nearByHemlock.selectChoices),
+  // nearByHemlock          : t.enums.of(DCP.nearByHemlock.selectChoices),
   partOfStudy            : t.enums.of(DCP.partOfStudy.selectChoices),
-  accessibility          : t.enums.of(DCP.accessibility.selectChoices),
+  // accessibility          : t.enums.of(DCP.accessibility.selectChoices),
   locationComment        : t.maybe(t.String),
   burrs                  : t.enums.of(DCP.burrs.selectChoices),
   catkins                : t.enums.of(DCP.catkins.selectChoices),
-  surroundings           : t.enums.of(DCP.surroundings.selectChoices)
+  nearbyTrees : t.enums.of(DCP.nearbyTrees.selectChoices)
+  // surroundings           : t.enums.of(DCP.surroundings.selectChoices)
 }
 
 const Coordinate = t.refinement(t.Number, (n) => n !== 0, 'Coordinate')

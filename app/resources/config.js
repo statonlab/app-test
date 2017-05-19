@@ -28,7 +28,8 @@ const DCP = {
   emeraldAshBorer    : {
     label        : 'Ash borer',
     selectChoices: [
-      'D-shaped adult exit holes', 'Bark coming off with tunneling underneath', 'Emerald ash borer beetless/larvae', 'stump sprouting'
+      'D-shaped adult exit holes', 'Bark coming off with tunneling underneath',
+       'Emerald ash borer beetles/larvae', 'Stump sprouting'
     ],
     description  : 'Do you see any of these signs of emerald ash borers?  Check all that apply.',
     placeHolder  : 'No signs of pest',
@@ -37,7 +38,8 @@ const DCP = {
       require('../img/DCP/EmAshBorer/EAB tunneling.jpg'),
       require('../img/DCP/EmAshBorer/Emerald ash borer adult.jpg')
     ],
-        camera : [ 'D-shaped adult exit holes', 'Bark coming off with tunneling underneath', 'Emerald ash borer beetless/larvae', 'stump sprouting'
+        camera : [  'D-shaped adult exit holes', 'Bark coming off with tunneling underneath',
+          'Emerald ash borer beetles/larvae', 'Stump sprouting'
         ]
   },
   woollyAdesCoverage : {
@@ -54,7 +56,7 @@ const DCP = {
     camera : ['1-24%', '25-49%', '50-74%', '75-100%']
   },
   chestnutBlightSigns: {
-    label        : 'Chestnut Blight',
+    label        : 'Chestnut blight',
     selectChoices: [
       'Cankers and cracked bark', 'Tan to orange-colored patches or pustules on bark', 'Evidence of old dead trunk', 'Stump sprouting'
     ],
@@ -84,22 +86,17 @@ const DCP = {
   },
 
   heightFirstBranch  : {
-    label        : 'Height of first branch',
-    selectChoices: [
-      '1-7 feet', '8-13 feet',
-      '14-19 feet',
-      '>20 feet'
-    ],
+    label        : 'Height of first branch',    
     description  : 'Approximately (no need to measure) how high up is the first branch of the tree?',
-    placeHolder  : 'Distance to branch'
+    slider : true
   },
   oakHealthProblems  : {
     label        : 'Health problems',
     selectChoices: [
       'Dieback in canopy', 'Defoliation', 'Cankers', 'Bark damage', 'Signs of rot at base',
-      'Other (please describe in comments)'
+      'Other'
     ],
-    description  : 'Do you see any of the following potential health problems?  Check all that apply.',
+    description  : 'Do you see any of the following potential health problems?  Check all that apply.  If you check Other, please describe in comments.',
     placeHolder  : 'No health problems',
     multiCheck   : true,
   },
@@ -108,7 +105,7 @@ const DCP = {
     description: 'Approximately how many feet is the diameter of the tree?',
     slider     : true,
     minValue   : 1,
-    maxValue   : 50,
+    maxValue   : 40,
     units      : "Inches",
     images     : [
       require('../img/ash_id/1.jpg'),
@@ -138,8 +135,6 @@ const DCP = {
       'I\'m not sure.'],
     placeHolder  : "Please select"
   },
-
-
   otherLabel             : {
     label        : 'Tree type',
     description  : 'Please create a name to associate this entry with.  (ie Birch)',
@@ -150,30 +145,28 @@ const DCP = {
     label        : 'Habitat',
     description  : 'How would you characterize the habitat where the tree is located?',
     selectChoices: [
-      'Floodplain', 'Upland forest', 'Swamp', 'Residence yard', 'Field', 'Roadside', 'Urban'
+      'Forest', 'Wetland', 'Field', 'Roadside, urban, suburban, or park'
     ],
-    placeHolder  : "Please select"
+    placeHolder  : "Please select",
+        multiCheck   : true,
   },
-  nearbyDead             : {
-    label        : 'Dead trees nearby',
-    description  : 'Are there dead or dying trees of this species within one mile of this tree?',
-    selectChoices: ["Yes", "No", "Don't know"],
-    placeHolder  : "Please select"
-  },
-  nearbySmall            : {
-    label        : 'Healthy nearby',
-    description  : 'Are there smaller, healthy trees of this species within one mile of this tree?',
-    selectChoices: ["Yes", "No", "Don't know"],
-    placeHolder  : "Please select"
-  },
-  nearByHemlock          : {
-    label        : "Nearby hemlocks",
-    description  : "are there other hemlock trees nearby (within one mile?)",
-    selectChoices: ["Yes, including healthy hemlocks",
-      "Yes, but they are dead or dying",
-      "No"],
-    placeHolder  : "Please select"
-  },
+  
+nearbyTrees : {
+  label : 'Trees nearby',
+  description : 'If there are trees of the same species nearby, what state are they in?  Check all that apply.',
+  selectChoices : [
+  'Dead and/or dying', 'Healhty and large', 'Healhty and small','No trees of this species nearby', 'Not sure'],
+  placeHolder : "Please select",
+  multiCheck : true
+},
+  // nearByHemlock          : {
+  //   label        : "Nearby hemlocks",
+  //   description  : "are there other hemlock trees nearby (within one mile?)",
+  //   selectChoices: ["Yes, including healthy hemlocks",
+  //     "Yes, but they are dead or dying",
+  //     "No"],
+  //   placeHolder  : "Please select"
+  // },
 
   treated        : {
     label        : 'Treated',
@@ -187,12 +180,7 @@ const DCP = {
     selectChoices: ["Yes", "No", "Don't know"],
     placeHolder  : "Please select"
   },
-  accessibility  : {
-    label        : 'Accessibility',
-    description  : "Could we access this tree with a large truck?",
-    selectChoices: ["Yes", "No"],
-    placeHolder  : "Please select"
-  },
+
   locationComment: {
     comment: true
   },
@@ -201,13 +189,12 @@ const DCP = {
     description: 'Approximately how many feet tall is the tree?',
     slider     : true,
     minValue   : 1,
-    maxValue   : 100,
+    maxValue   : 150,
     units      : "Feet",
     images     : [
       require('../img/ash_id/1.jpg'),
       require('../img/ash_id/2.jpg')
     ],
-    //  startValue : 25,
   },
   burrs          : {
     label        : 'Nuts/burrs',
@@ -221,13 +208,6 @@ const DCP = {
     selectChoices: ["Present", "Absent", "Unknown"],
     placeHolder  : "Please select",
   },
-  surroundings   : {
-    label        : "Surroundings",
-    description  : "What is the shade coverage in this area?",
-    selectChoices: ["Full sun", "Partial shade", "Full shade"],
-    placeHolder  : "Please select"
-  }
-
 
 }
 

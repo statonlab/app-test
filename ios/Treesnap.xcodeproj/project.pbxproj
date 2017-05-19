@@ -1065,6 +1065,7 @@
 		49D085CF1ECE07F600B5C86A /* libRCTCamera.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
+
 			path = libRCTCamera.a;
 			remoteRef = 49D085CE1ECE07F600B5C86A /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
