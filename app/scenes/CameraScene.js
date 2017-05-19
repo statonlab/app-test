@@ -386,7 +386,7 @@ CameraScene.defaultProps = {
  * @returns {number}
  */
 function getVerticalPadding() {
-  if (Platform.OS == 'android')
+  if (Platform.OS === 'android')
     return 0
   else
     return 15
