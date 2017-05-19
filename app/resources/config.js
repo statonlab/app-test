@@ -1,16 +1,10 @@
 const DCP = {
-  deadTrees          : {
-    label        : 'Dead Trees',
-    selectChoices: ['none', '1-50', '51+'],
-    description  : 'Of the trees of this species in this stand, how many are dead?  No longer used.',
-    placeHolder  : 'Number of trees'
-  },
   ashSpecies         : {
     label        : 'Species',
     selectChoices: [
       'White ash', 'Green ash', 'Blue ash', 'Black ash', 'Uncertain'
     ],
-    description  : 'Which species of Ash tree is this?  If you aren\'t sure, select Uncertain',
+    description  : 'Which species of ash tree is this?  If you aren\'t sure, select "Uncertain"',
     placeHolder  : 'Uncertain'
   },
   seedsBinary        : {
@@ -27,7 +21,9 @@ const DCP = {
       'Yes', 'No'
     ],
     description  : 'Is this tree flowering?',
-    placeHolder  : 'Are flowers present?'
+    placeHolder  : 'Are flowers present?',
+        camera : ['Yes']
+
   },
   emeraldAshBorer    : {
     label        : 'Ash borer',
@@ -40,10 +36,9 @@ const DCP = {
     images       : [
       require('../img/DCP/EmAshBorer/EAB tunneling.jpg'),
       require('../img/DCP/EmAshBorer/Emerald ash borer adult.jpg')
-    ]
-  },
-  woollyAdesPres     : {
-    label: 'presence of Woolly adelgids'
+    ],
+        camera : [ 'D-shaped adult exit holes', 'Bark coming off with tunneling underneath', 'Emerald ash borer beetless/larvae', 'stump sprouting'
+        ]
   },
   woollyAdesCoverage : {
     label        : 'Woolly adelgids',
@@ -55,7 +50,8 @@ const DCP = {
     images       : [
       require('../img/DCP/HemWoolly/HWA photo 1.jpg'),
       require('../img/DCP/HemWoolly/HWA photo 2.jpg')
-    ]
+    ],
+    camera : ['1-24%', '25-49%', '50-74%', '75-100%']
   },
   chestnutBlightSigns: {
     label        : 'Chestnut Blight',
@@ -83,7 +79,8 @@ const DCP = {
     selectChoices: [
       'Yes', 'No'
     ],
-    placeHolder  : "Please select"
+    placeHolder  : "Please select",
+        camera : ['yes']
   },
 
   heightFirstBranch  : {
@@ -104,8 +101,7 @@ const DCP = {
     ],
     description  : 'Do you see any of the following potential health problems?  Check all that apply.',
     placeHolder  : 'No health problems',
-    multiCheck   : true
-
+    multiCheck   : true,
   },
   diameterNumeric    : {
     label      : 'Tree diameter',
@@ -217,13 +213,13 @@ const DCP = {
     label        : 'Nuts/burrs',
     description  : 'Approximately how many nuts/burrs are present?',
     selectChoices: ["None", "Few", "Many", "Unknown"],
-    placeHolder  : "Please select"
+    placeHolder  : "Please select",
   },
   catkins        : {
     label        : 'Catkins',
     description  : 'Are catkins present?',
     selectChoices: ["Present", "Absent", "Unknown"],
-    placeHolder  : "Please select"
+    placeHolder  : "Please select",
   },
   surroundings   : {
     label        : "Surroundings",
