@@ -125,12 +125,12 @@ export default class Form extends Component {
   /**
    * Handle resized images.
    *
+   * @param images
    * @private
    */
-  _handleResizedImages = (event) => {
-    console.log('EVENT OF KIND !!!', event)
-
+  _handleResizedImages = (images) => {
     this.refs.spinner.close()
+    this.setState({images})
     this.save()
   }
 
@@ -211,7 +211,7 @@ export default class Form extends Component {
   save = () => {
     let primaryKey = this.realm.objects('Submission')
     if (primaryKey.length <= 0) {
-      primaryKey = parseInt(moment('DMMYYH').toString())
+      primaryKey = parseInt(moment().format('DMMYYH').toString())
     } else {
       primaryKey = primaryKey.sorted('id', true)[0].id + 1
     }
