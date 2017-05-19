@@ -1,16 +1,10 @@
 const DCP = {
-  deadTrees          : {
-    label        : 'Dead Trees',
-    selectChoices: ['none', '1-50', '51+'],
-    description  : 'Of the trees of this species in this stand, how many are dead?  No longer used.',
-    placeHolder  : 'Number of trees'
-  },
   ashSpecies         : {
     label        : 'Species',
     selectChoices: [
       'White ash', 'Green ash', 'Blue ash', 'Black ash', 'Uncertain'
     ],
-    description  : 'Which species of Ash tree is this?  If you aren\'t sure, select Uncertain',
+    description  : 'Which species of ash tree is this?  If you aren\'t sure, select "Uncertain"',
     placeHolder  : 'Uncertain'
   },
   seedsBinary        : {
@@ -46,9 +40,6 @@ const DCP = {
         camera : [ 'D-shaped adult exit holes', 'Bark coming off with tunneling underneath', 'Emerald ash borer beetless/larvae', 'stump sprouting'
         ]
   },
-  woollyAdesPres     : {
-    label: 'presence of Woolly adelgids'
-  },
   woollyAdesCoverage : {
     label        : 'Woolly adelgids',
     selectChoices: [
@@ -59,7 +50,8 @@ const DCP = {
     images       : [
       require('../img/DCP/HemWoolly/HWA photo 1.jpg'),
       require('../img/DCP/HemWoolly/HWA photo 2.jpg')
-    ]
+    ],
+    camera : ['1-24%', '25-49%', '50-74%', '75-100%']
   },
   chestnutBlightSigns: {
     label        : 'Chestnut Blight',
@@ -110,7 +102,6 @@ const DCP = {
     description  : 'Do you see any of the following potential health problems?  Check all that apply.',
     placeHolder  : 'No health problems',
     multiCheck   : true,
-        camera : true
   },
   diameterNumeric    : {
     label      : 'Tree diameter',

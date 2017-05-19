@@ -445,7 +445,6 @@ export default class Form extends Component {
       <View style={[styles.formGroup]}>
         <Text style={styles.textField}>
           ID number for submission: {primaryKey} </Text>
-
       </View>
     )
 
@@ -455,7 +454,13 @@ export default class Form extends Component {
    *
    */
 
-  renderCameraItem = (id, label) => {return(
+  renderCameraItem = (id, label) => {
+    let description = 'optional'
+    if (id === 'images') {
+      description = 'Add photos'
+    }
+
+    return(
     <View style={[styles.formGroup]}>
       <MKButton
         style={[styles.buttonLink, {height: this.state.images[id] && this.state.images[id].length > 0 ? 60 : 40}]}
@@ -464,7 +469,7 @@ export default class Form extends Component {
         <Text style={this.state.warnings.photos ? [styles.label, styles.labelWarning] : styles.label}>{label}</Text>
         {!this.state.images[id] || this.state.images[id].length === 0 ?
           <View style={{flex: 1, alignItems: 'center', flexDirection: 'row'}}>
-            <Text style={[styles.buttonLinkText, {color: '#aaa'}]}>Add photos</Text>
+            <Text style={[styles.buttonLinkText, {color: '#aaa'}]}>{description}</Text>
             <Icon name="camera" style={[styles.icon]}/>
           </View>
           :
