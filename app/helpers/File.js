@@ -5,11 +5,11 @@ import FS from 'react-native-fetch-blob'
 
 export default class File {
   constructor() {
-    this._system     = FS.fs
+    this._system        = FS.fs
     this._imagesDir     = `${this._system.dirs.DocumentDir}/images`
     this._thumbnailsDir = `${this._system.dirs.DocumentDir}/thumbnails`
-    this._processed  = 0
-    this._images     = {}
+    this._processed     = 0
+    this._images        = {}
 
     this._setup()
   }
@@ -137,6 +137,7 @@ export default class File {
           this._processed++
           if (this._processed === total) {
             DeviceEventEmitter.emit('imagesResized', this._images)
+            console.log(this._images)
           }
         })
       })
@@ -183,8 +184,17 @@ export default class File {
    * @private
    */
   _setupThumbnail(image) {
+    // Get image name
+    let name = image.split('/')
+    name     = name[name.length - 1]
+
     ImageResizer.createResizedImage(image, 100, 100, 'JPEG', 100, 0, this._thumbnailsDir).then(thumbnail => {
-      // Done
+      // Let it have the same name of the original image
+      this.move(thumbnail.replace('file:', ''), `${this._thumbnailsDir}/${name}`).then(() => {
+        // Done
+      }).catch(error => {
+        console.log(error)
+      })
     }).catch((error) => {
       console.log(error)
     })
