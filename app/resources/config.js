@@ -38,7 +38,8 @@ const DCP = {
       require('../img/DCP/EmAshBorer/EAB tunneling.jpg'),
       require('../img/DCP/EmAshBorer/Emerald ash borer adult.jpg')
     ],
-        camera : [ 'D-shaped adult exit holes', 'Bark coming off with tunneling underneath', 'Emerald ash borer beetless/larvae', 'stump sprouting'
+        camera : [  'D-shaped adult exit holes', 'Bark coming off with tunneling underneath',
+          'Emerald ash borer beetles/larvae', 'Stump sprouting'
         ]
   },
   woollyAdesCoverage : {
@@ -154,11 +155,10 @@ nearbyTrees : {
   label : 'Trees nearby',
   description : 'If there are trees of the same species nearby, what state are they in?  Check all that apply.',
   selectChoices : [
-  'Dead and/or dying', 'Healhty and large', 'Healhty and small','No trees of this species nearby', 'Not sure']
+  'Dead and/or dying', 'Healhty and large', 'Healhty and small','No trees of this species nearby', 'Not sure'],
   placeHolder : "Please select",
   multiCheck : true
-}
-
+},
   // nearByHemlock          : {
   //   label        : "Nearby hemlocks",
   //   description  : "are there other hemlock trees nearby (within one mile?)",
