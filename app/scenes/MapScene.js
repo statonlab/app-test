@@ -8,8 +8,15 @@ import MarkersMap from '../components/MarkersMap'
 import Header from '../components/Header'
 import realm from '../db/Schema'
 import moment from 'moment'
+import File from '../helpers/File'
 
 export default class MapScene extends Component {
+  constructor(props) {
+    super(props)
+
+    this.fs = new File()
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -28,9 +35,11 @@ export default class MapScene extends Component {
     }
 
     submissions.map((submission, index) => {
+      let image = JSON.parse(submission.images)['images'][0]
+
       markers.push({
         title      : submission.name,
-        image      : JSON.parse(submission.images)["images"][0],
+        image      : this.fs.thumbnail(image),
         description: moment(submission.date, 'MM-DD-YYYY HH:mm:ss').fromNow(),
         coord      : {
           longitude: submission.location.longitude,

@@ -16,6 +16,7 @@ import {MKButton} from 'react-native-material-kit'
 import Elevation from '../helpers/Elevation'
 import Observation from '../helpers/Observation'
 import Spinner from '../components/Spinner'
+import File from '../helpers/File'
 
 export default class ObservationsScene extends Component {
   constructor(props) {
@@ -35,6 +36,8 @@ export default class ObservationsScene extends Component {
     }
 
     this.events = []
+
+    this.fs = new File()
   }
 
   /**
@@ -118,16 +121,13 @@ export default class ObservationsScene extends Component {
    */
 
   _renderRow = (submission) => {
-    let images = JSON.parse(submission.images)
-    let key = Object.keys(images)[0]
-    console.log(key)
-    console.log(images)
-    console.log(submission)
-
+    let images    = JSON.parse(submission.images)
+    let key       = Object.keys(images)[0]
+    let thumbnail = this.fs.thumbnail(images[key][0])
     return (
       <MKButton style={styles.row} key={submission.id} rippleColor="rgba(10,10,10,.1)" onPress={() => this._goToEntryScene(submission)}>
         {images[key].length > 0 ?
-         <Image source={{uri: images[key][0]}} style={styles.image}/>
+          <Image source={{uri: thumbnail}} style={styles.image}/>
           : null}
         <View style={styles.textContainer}>
           <Text style={styles.title}>{submission.name}</Text>
@@ -277,7 +277,7 @@ export default class ObservationsScene extends Component {
 
       toSync.forEach(observation => {
         Observation.update(observation).then(response => {
-          console.log("OBS:", response)
+          console.log('OBS:', response)
           // TODO: Add snackbar notification
           realm.write(() => {
             observation.needs_update = false

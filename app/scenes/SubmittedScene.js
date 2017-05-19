@@ -10,6 +10,7 @@ import Colors from '../helpers/Colors'
 import Elevation from '../helpers/Elevation'
 import realm from '../db/Schema'
 import MarkersMap from '../components/MarkersMap'
+import File from '../helpers/File'
 
 export default class SubmittedScene extends Component {
   constructor(props) {
@@ -17,6 +18,7 @@ export default class SubmittedScene extends Component {
 
     this.id     = this.props.plant.id
     this.marker = {}
+    this.fs = new File();
   }
 
   renderMap() {
@@ -24,9 +26,11 @@ export default class SubmittedScene extends Component {
     let markers     = []
 
     submissions.map(submission => {
+      let image = JSON.parse(submission.images)['images'][0]
+
       let marker = {
         title      : submission.name,
-        image      : JSON.parse(submission.images)["images"][0],
+        image      : this.fs.thumbnail(image),
         description: `${submission.location.latitude}, ${submission.location.longitude}`,
         coord      : {
           latitude : submission.location.latitude,
