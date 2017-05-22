@@ -44,8 +44,12 @@ export default class ObservationScene extends Component {
     this._isLoggedIn()
 
     this.loggedEvent = DeviceEventEmitter.addListener('userLoggedIn', this._isLoggedIn.bind(this))
-    this.setState({synced: this.props.plant.synced})
-    this.setState({needs_update: this.props.plant.needs_update})
+    this.setState({
+      synced: this.props.plant.synced,
+      needs_update: this.props.plant.needs_update
+    })
+
+    console.log(this.fs.thumbnail(JSON.parse(this.props.plant.images)['images'][0]))
   }
 
   /**
