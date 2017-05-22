@@ -16,9 +16,24 @@ export default class SubmittedScene extends Component {
   constructor(props) {
     super(props)
 
+    this.state = {
+      shouldNavigate : true
+    }
     this.id     = this.props.plant.id
     this.marker = {}
     this.fs     = new File()
+  }
+
+
+  navigateCallout = (marker) => {
+    if (this.state.shouldNavigate){
+      let plant = realm.objects('Submission').filtered(`id == ${marker.plant.id}`)
+      this.props.navigator.push({
+        label    : 'ObservationScene',
+        plant :marker.plant
+      })
+    }
+    this.setState({shouldNavigate : false})
   }
 
   renderMap() {
@@ -59,6 +74,8 @@ export default class SubmittedScene extends Component {
           longitudeDelta: 0.0321
         }}
         startingMarker={this.marker}
+        onCalloutPress={this.navigateCallout}
+
       />
     )
   }
