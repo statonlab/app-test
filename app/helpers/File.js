@@ -151,6 +151,10 @@ export default class File {
    * @returns {string}
    */
   thumbnail(image) {
+    if (typeof image !== 'string') {
+      return
+    }
+
     // Get image name
     let name = image.split('/')
     name     = name[name.length - 1]
@@ -190,7 +194,7 @@ export default class File {
 
     ImageResizer.createResizedImage(image, 100, 100, 'JPEG', 100, 0, this._thumbnailsDir).then(thumbnail => {
       // Let it have the same name of the original image
-      this.move(thumbnail.replace('file:', ''), `${this._thumbnailsDir}/${name}`).then(() => {
+      this.move(thumbnail, `${this._thumbnailsDir}/${name}`).then(() => {
         // Done
       }).catch(error => {
         console.log(error)

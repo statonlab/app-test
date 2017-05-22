@@ -18,7 +18,7 @@ export default class SubmittedScene extends Component {
 
     this.id     = this.props.plant.id
     this.marker = {}
-    this.fs = new File();
+    this.fs     = new File()
   }
 
   renderMap() {
@@ -26,7 +26,10 @@ export default class SubmittedScene extends Component {
     let markers     = []
 
     submissions.map(submission => {
-      let image = JSON.parse(submission.images)['images'][0]
+      let image = JSON.parse(submission.images)
+      if (Array.isArray(image['images'])) {
+        image = image[0]
+      }
 
       let marker = {
         title      : submission.name,
