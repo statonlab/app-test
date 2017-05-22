@@ -15,7 +15,13 @@ export default class MapScene extends Component {
     super(props)
 
     this.fs = new File()
+
+    this.state = {
+      shouldNavigate : true
+    }
   }
+
+
 
   render() {
     return (
@@ -26,7 +32,25 @@ export default class MapScene extends Component {
     )
   }
 
-  renderMap() {
+  /**
+   * The navigation function to be passed to the Marker callout.  TO prevent against bubble effects, we use shouldNavigate in the state.
+   *
+   * @param marker
+   */
+
+  navigateCallout = (marker) => {
+    if (this.state.shouldNavigate){
+      let plant = realm.objects('Submission').filtered(`id == ${marker.plant.id}`)
+      this.props.navigator.push({
+        label    : 'ObservationScene',
+        plant :marker.plant
+      })
+    }
+    this.setState({shouldNavigate : false})
+}
+
+
+renderMap() {
     let submissions = realm.objects('Submission')
     let markers     = []
 
@@ -47,7 +71,8 @@ export default class MapScene extends Component {
         coord      : {
           longitude: submission.location.longitude,
           latitude : submission.location.latitude
-        }
+        },
+        plant : submission
       })
     })
 
@@ -60,6 +85,7 @@ export default class MapScene extends Component {
           longitudeDelta: 60.0922
         }}
         markers={markers}
+        onCalloutPress={this.navigateCallout}
       />
     )
   }
