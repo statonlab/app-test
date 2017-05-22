@@ -1,7 +1,6 @@
 import React, {Component, PropTypes} from 'react'
 import {
   View,
-  ListView,
   StyleSheet,
   Text,
   Image,
@@ -11,6 +10,7 @@ import Header from '../components/Header'
 import Colors from '../helpers/Colors'
 import Icon from 'react-native-vector-icons/Ionicons'
 import realm from '../db/Schema'
+import {ListView} from 'realm/react-native'
 import moment from 'moment'
 import {MKButton} from 'react-native-material-kit'
 import Elevation from '../helpers/Elevation'
@@ -94,8 +94,8 @@ export default class ObservationsScene extends Component {
 
     if (toUpdate.length > 0) {
       list = {
-        ...list,
-        'Needs Updating': toUpdate
+        'Needs Updating': toUpdate,
+        ...list
       }
     }
 

@@ -2,6 +2,7 @@ import React from 'react'
 import {DeviceEventEmitter, Platform} from 'react-native'
 import ImageResizer from 'react-native-image-resizer'
 import FS from 'react-native-fetch-blob'
+import realm from '../db/Schema'
 
 export default class File {
   constructor() {
@@ -156,6 +157,37 @@ export default class File {
       }
     }).catch(error => {
       console.log('Could not move file from ' + from + ' to ' + to + ': ', error)
+    })
+  }
+
+  /**
+   * Download all images for an observation. This function will only download images
+   * that haven't been downloaded previously.
+   *
+   * @param observation
+   */
+  download(observation) {
+    let images    = JSON.parse(observation.images)
+    let keys      = Object.keys(images)
+    let count     = 0
+    let processed = 0
+
+    keys.map(key => {
+      count += images[key].length
+    })
+
+    keys.map(key => {
+      images[key].map((link, index) => {
+        this._setupImage(link, (image) => {
+          processed++
+          images[key][index] = image
+          if (processed === count) {
+            realm.write(() => {
+              observation.images = JSON.stringify(images)
+            })
+          }
+        })
+      })
     })
   }
 
