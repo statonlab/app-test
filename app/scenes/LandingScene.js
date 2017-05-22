@@ -154,7 +154,6 @@ export default class LandingScene extends Component {
       })
       this.setSidebarLinks()
       this.refs.snackbar.showBar()
-      console.log('DB: entries', realm.objects('Submission').length)
       this.downloadObservations()
     }))
 
@@ -191,9 +190,6 @@ export default class LandingScene extends Component {
   downloadObservations() {
     let emptyDB = (realm.objects('Submission').length <= 0)
 
-    console.log('DB: entries', realm.objects('Submission').length)
-
-
     Observation.get().then(response => {
       let records = response.data.data
       records.forEach(record => {
@@ -219,12 +215,11 @@ export default class LandingScene extends Component {
             meta_data: JSON.stringify(record.meta_data),
             serverID : parseInt(record.observation_id)
           })
-        console.log("RECORD: ", record)
           emptyDB = false
         })
       })
     }).catch(error => {
-      console.log('NETWORK ERROR', error)
+      console.log(error)
     })
   }
 

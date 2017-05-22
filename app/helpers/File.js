@@ -1,5 +1,5 @@
 import React from 'react'
-import {DeviceEventEmitter} from 'react-native'
+import {DeviceEventEmitter, Platform} from 'react-native'
 import ImageResizer from 'react-native-image-resizer'
 import FS from 'react-native-fetch-blob'
 
@@ -10,6 +10,7 @@ export default class File {
     this._thumbnailsDir = `${this._system.dirs.DocumentDir}/thumbnails`
     this._processed     = 0
     this._images        = {}
+    this._android       = Platform.OS === 'android'
 
     this._setup()
   }
@@ -137,7 +138,7 @@ export default class File {
 
     Object.keys(images).map(key => {
       images[key].map((image, index) => {
-        this._setupImage(image, (new_image) => {
+        this._setupImage(image, new_image => {
           this._images[key][index] = new_image
           this.delete(image)
           this._processed++
@@ -165,7 +166,9 @@ export default class File {
     let name = image.split('/')
     name     = name[name.length - 1]
 
-    return `${this._thumbnailsDir}/${name}`
+    let prefix = this._android ? 'file:' : ''
+
+    return `${prefix}${this._thumbnailsDir}/${name}`
   }
 
   /**
@@ -200,7 +203,7 @@ export default class File {
 
     ImageResizer.createResizedImage(image, 100, 100, 'JPEG', 100, 0, this._thumbnailsDir).then(thumbnail => {
       // Let it have the same name of the original image
-      this.move(thumbnail, `${this._thumbnailsDir}/${name}`)
+      this.move(thumbnail.replace('file:', ''), `${this._thumbnailsDir}/${name}`)
     }).catch((error) => {
       console.log(error)
     })

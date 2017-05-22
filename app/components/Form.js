@@ -153,7 +153,6 @@ export default class Form extends Component {
    * @returns {boolean}
    */
   cancel = () => {
-    console.log(Object.keys(this.state.metadata))
     if (this.state.images[0] || Object.keys(this.state.metadata)[0]) {
       Alert.alert('Cancel Submission',
         'Data will be permanently lost if you cancel. Are you sure?', [
@@ -299,7 +298,6 @@ export default class Form extends Component {
     let errorList = []
     let warnings  = {}
     errors.map((error) => {
-      console.log(error.path)
       warnings[error.path] = true
       if (typeof DCP[error.path] !== 'undefined') {
         errorList.push('Required field: ' + DCP[error.path].label)
