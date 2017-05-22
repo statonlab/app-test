@@ -26,6 +26,7 @@ export default class SubmittedScene extends Component {
 
 
   navigateCallout = (marker) => {
+    console.log(marker)
     if (this.state.shouldNavigate){
       let plant = realm.objects('Submission').filtered(`id == ${marker.plant.id}`)
       this.props.navigator.push({
@@ -54,7 +55,8 @@ export default class SubmittedScene extends Component {
           latitude : submission.location.latitude,
           longitude: submission.location.longitude
         },
-        pinColor   : Colors.primary
+        pinColor   : Colors.primary,
+        plant : submission
       }
 
       if (submission.id === this.id) {
