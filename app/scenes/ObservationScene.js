@@ -71,7 +71,6 @@ export default class ObservationScene extends Component {
    * @param entry
    */
   upload(entry) {
-    console.log(this.entry)
     this.refs.spinner.open()
     Observation.upload(entry).then(response => {
       let data   = response.data.data
@@ -102,23 +101,19 @@ export default class ObservationScene extends Component {
     if (this.state.synced) {
       this.refs.spinner.open()
       Observation.update(entry).then(response => {
-        let data   = response.data.data
         submission = realm.objects('Submission').filtered(`id == ${entry.id}`)
         if (submission.length > 0) {
           let observation = submission[0]
-          console.log('OBS:', observation)
           realm.write(() => {
             observation.needs_update = false
           })
           this.refs.spinner.close()
           this.setState({needs_update: false})
           this.refs.snackbar.showBar()
-          return
         }
       }).catch(error => {
         console.log(error)
         this.refs.spinner.close()
-        return
       })
     }
   }
@@ -198,7 +193,6 @@ export default class ObservationScene extends Component {
         params: {api_token: this.user.api_token}
       }).then(response => {
       }).catch(error => {
-        console.log('ERR:', error)
         this.refs.spinner.close()
         alert('Unable to delete at this time.  Please check your internet connection and try again.')
         return false
@@ -307,6 +301,10 @@ export default class ObservationScene extends Component {
             pagingEnabled={true}
           >
             {Object.keys(images).map((key) => {
+              if (!Array.isArray(images[key])) {
+                return
+              }
+
               return images[key].map((image, index) => {
                 return (<Image key={index} source={{uri: image}} style={styles.image}/>)
               })

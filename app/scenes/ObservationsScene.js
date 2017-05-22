@@ -168,7 +168,7 @@ export default class ObservationsScene extends Component {
       )
     }
 
-    if (id == 'Needs Updating') {
+    if (id === 'Needs Updating') {
       return (
         <View style={[styles.headerContainer, {flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}]}>
           <Text style={styles.headerText}>{id}</Text>
@@ -184,8 +184,8 @@ export default class ObservationsScene extends Component {
           }
         </View>
       )
-
     }
+
     return (
       <View style={styles.headerContainer}>
         <Text style={styles.headerText}>{id} ({realm.objects('Submission').filtered('synced == true && needs_update == false').length})</Text>
@@ -277,7 +277,6 @@ export default class ObservationsScene extends Component {
 
       toSync.forEach(observation => {
         Observation.update(observation).then(response => {
-          console.log('OBS:', response)
           // TODO: Add snackbar notification
           realm.write(() => {
             observation.needs_update = false

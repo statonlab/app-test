@@ -56,9 +56,11 @@ class Observation {
     if (this.api_token === false) {
       throw Error('User not signed in')
     }
+
     if (!observation.needs_update) {
       return
     }
+
     if (!observation.serverID) {
       console.log('warning: Updating observation with no server ID.  Local only.')
       return
