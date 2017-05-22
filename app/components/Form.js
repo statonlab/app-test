@@ -42,7 +42,7 @@ const DCPrules = {
   emeraldAshBorer        : t.maybe(t.String),
   crownHealth            : t.Number,
   otherLabel             : t.String,
-  locationCharacteristics: t.enums.of(DCP.locationCharacteristics.selectChoices, 'locations'),
+  locationCharacteristics: t.maybe(t.enums.of(DCP.locationCharacteristics.selectChoices, 'locations')),
   // nearbySmall            : t.enums.of(DCP.nearbySmall.selectChoices),
   // nearbyDead             : t.enums.of(DCP.nearbyDead.selectChoices),
   treated                : t.enums.of(DCP.treated.selectChoices),
@@ -54,7 +54,7 @@ const DCPrules = {
   locationComment        : t.maybe(t.String),
   burrs                  : t.enums.of(DCP.burrs.selectChoices),
   catkins                : t.enums.of(DCP.catkins.selectChoices),
-  nearbyTrees : t.enums.of(DCP.nearbyTrees.selectChoices)
+  nearbyTrees : t.maybe(t.enums.of(DCP.nearbyTrees.selectChoices))
   // surroundings           : t.enums.of(DCP.surroundings.selectChoices)
 }
 
