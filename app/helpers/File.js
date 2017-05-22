@@ -30,8 +30,14 @@ export default class File {
       }).catch(error => {
         console.log(error)
       })
+    })
 
-      this._system.mkdir(this._thumbnails).then(() => {
+    this.isDirectory(this._thumbnailsDir).then(exists => {
+      if (exists) {
+        return
+      }
+
+      this._system.mkdir(this._thumbnailsDir).then(() => {
         // Done
       }).catch(error => {
         console.log(error)
