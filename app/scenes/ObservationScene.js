@@ -48,8 +48,6 @@ export default class ObservationScene extends Component {
       synced: this.props.plant.synced,
       needs_update: this.props.plant.needs_update
     })
-
-    console.log(this.fs.thumbnail(JSON.parse(this.props.plant.images)['images'][0]))
   }
 
   /**

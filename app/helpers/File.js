@@ -178,33 +178,16 @@ export default class File {
 
     keys.map(key => {
       images[key].map((link, index) => {
-        let name = link.split('/')
-        name     = name[name.length - 1]
-
-        try {
-          FS.config({
-            fileCache: true,
-            path     : `${this._imagesDir}/${name}`
-          }).fetch('GET', link).then((res) => {
-            let path = res.path()
-            this._setupThumbnail(path, () => {
-              processed++
-              images[key][index] = this._android ? `file:${path}` : path
-              if (processed === count) {
-                realm.write(() => {
-                  observation.images = JSON.stringify(images)
-                })
-              }
+        this._setupImage(link, (image) => {
+          processed++
+          images[key][index] = image
+          if (processed === count) {
+            realm.write(() => {
+              observation.images = JSON.stringify(images)
             })
-          }).catch(error => {
-            console.log('NO IDEA WHAT THE ERROR IS', error)
-          })
-
-        } catch (e) {
-          console.log(e)
-        }
+          }
+        })
       })
-
     })
   }
 
