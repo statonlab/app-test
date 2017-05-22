@@ -47,7 +47,7 @@ class Tabs extends Component {
   _renderTitle(title, index) {
     return (
       <MKButton
-        style={styles.title}
+        style={[styles.title, this.state.active === index ? styles.activeContainer : {}]}
         key={index}
         rippleColor="rgba(0,0,0,.1)"
         onPress={() => this.switchTab(index)}>
@@ -140,6 +140,10 @@ const styles = StyleSheet.create({
 
   active: {
     color: '#222'
+  },
+
+  activeContainer: {
+    backgroundColor: '#fff'
   },
 
   indicator: {

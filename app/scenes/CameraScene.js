@@ -32,7 +32,8 @@ export default class CameraScene extends Component {
       },
       selectedImage: '',
       images       : [],
-      pageWidth    : 0
+      pageWidth    : 0,
+      newImages    : []
     }
 
     this.isCapturing = false
@@ -248,11 +249,18 @@ export default class CameraScene extends Component {
    * @private
    */
   _delete = () => {
-    let images   = []
+    let images        = []
     let imageToDelete = this.state.selectedImage
-    this.state.images.map((image) => {
-      if (image !== this.state.selectedImage) {
+    this.state.images.map(image => {
+      if (image !== imageToDelete) {
         images.push(image)
+      }
+    })
+
+    let newImages = []
+    this.state.newImages.map(image => {
+      if (image !== imageToDelete) {
+        newImages.push(image)
       }
     })
 
@@ -260,13 +268,15 @@ export default class CameraScene extends Component {
     if (images.length === 0) {
       this.setState({
         selectedImage: '',
-        images       : []
+        images       : [],
+        newImages    : []
       })
       this._back()
     } else {
       this.setState({
         selectedImage: images[0],
-        images
+        images,
+        newImages
       })
     }
 
@@ -330,7 +340,11 @@ export default class CameraScene extends Component {
     }).then(data => {
       let image  = data.path
       let images = this.state.images.concat(image)
-      this.setState({selectedImage: image, images})
+      this.setState({
+        selectedImage: image,
+        images       : images,
+        newImages    : this.state.newImages.concat(image)
+      })
       this._forward()
     }).catch(error => {
       console.log(error)
@@ -364,7 +378,9 @@ export default class CameraScene extends Component {
    * @private
    */
   _cancel = () => {
-    this.props.navigator.pop()
+    this.fs.delete({images: this.state.newImages}, () => {
+      this.props.navigator.pop()
+    })
   }
 }
 

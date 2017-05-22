@@ -19,6 +19,7 @@ import realm from '../db/Schema'
 import SnackBarNotice from '../components/SnackBarNotice'
 import axios from '../helpers/Axios'
 import Icon from 'react-native-vector-icons/Ionicons'
+import File from '../helpers/File'
 
 const trash = (<Icon name="ios-trash" size={24} color="#fff"/>)
 
@@ -33,7 +34,7 @@ export default class ObservationScene extends Component {
       needs_update: false
     }
     this.user  = realm.objects('User')[0]
-
+    this.fs    = new File()
   }
 
   /**
@@ -96,7 +97,6 @@ export default class ObservationScene extends Component {
    *
    * @param entry
    */
-
   update(entry) {
     if (this.state.synced) {
       this.refs.spinner.open()
@@ -158,6 +158,13 @@ export default class ObservationScene extends Component {
     })
   }
 
+  /**
+   * Render the sync button or login button if user is not logged in.
+   *
+   * @param entry
+   * @returns {XML}
+   * @private
+   */
   _renderUploadButton(entry) {
     if ((!this.state.synced && !this.state.isLoggedIn) || (this.state.needs_update && !this.state.isLoggedIn)) {
       return (
@@ -181,44 +188,70 @@ export default class ObservationScene extends Component {
     }
   }
 
+  /**
+   * Delete this entry.
+   *
+   * @param entry
+   */
   deleteEntry(entry) {
     if (this.state.synced && !this.state.isLoggedIn) {
       alert('Warning: This observation has already been synced to the server.  Please log in to delete.')
-      return false
+      return
     }
+
     this.refs.spinner.open()
 
-    if (this.state.synced && this.state.isLoggedIn) {
-      axios.delete(`observation/${entry.serverID}?api_token=${this.user.api_token}`, {
-        params: {api_token: this.user.api_token}
-      }).then(response => {
+    if (this.state.synced) {
+      axios.delete(`observation/${entry.serverID}?api_token=${this.user.api_token}`).then(response => {
+        // Delete locally
+        this.deleteLocally()
       }).catch(error => {
         this.refs.spinner.close()
-        alert('Unable to delete at this time.  Please check your internet connection and try again.')
-        return false
-      })
-    }
+        if (error.response && error.response.status === 404) {
+          // Observation does not exist on the server so delete locally
+          this.deleteLocally()
+          return
+        }
 
-// Delete locally
+        alert('Unable to delete at this time.  Please check your internet connection and try again.')
+      }).then(() => {
+        this.refs.spinner.close()
+      })
+    } else {
+      this.deleteLocally()
+      this.refs.spinner.close()
+    }
+  }
+
+  /**
+   * Delete entry from realm.
+   */
+  deleteLocally() {
+    let entry = this.props.plant
+
+    // Delete locally
     let deleteTarget = realm.objects('Submission').filtered(`id == ${entry.id}`)
     if (deleteTarget.length > 0) {
       let observation = deleteTarget[0]
+
+      // === Delete images ===
+      // Deep clone the images object so that we don't create a state conflict
+      // after deleting the realm entry
+      let images = JSON.parse(JSON.stringify(observation.images))
+      this.fs.delete(images)
+
       realm.write(() => {
         realm.delete(observation)
       })
     }
-    // DeviceEventEmitter.emit('ObservationDeleted')
 
-    this.refs.spinner.close()
-
-    this.props.navigator.popToTop()
+    this.props.navigator.pop()
   }
 
   /**
    * Edit this entry in the form Scene, passing along relevant info
    * @param entry
    */
-
   editEntry(entry) {
     this.props.navigator.push({
       label    : 'TreeScene',
@@ -229,13 +262,9 @@ export default class ObservationScene extends Component {
   }
 
   /**
-   * deleteAlert
-   * -------------------------------------------------
-   * Method for Delete button.  Change scene, alert user about losing data.
-   * @returns {boolean}
+   * Method for Delete button. Change scene, alert user about losing data.
    */
-  deleteAlert = (entry) => {
-
+  deleteAlert(entry) {
     if (this.state.synced && !this.state.isLoggedIn) {
       Alert.alert('Log In to Delete',
         'This observation is already uploaded.  Please log in to delete.', [
@@ -253,7 +282,7 @@ export default class ObservationScene extends Component {
             style  : 'cancel'
           }
         ])
-      return false
+      return
     }
 
     Alert.alert('Delete Observation',
@@ -271,8 +300,6 @@ export default class ObservationScene extends Component {
           style  : 'cancel'
         }
       ])
-
-    return false
   }
 
 
