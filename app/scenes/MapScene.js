@@ -37,7 +37,7 @@ export default class MapScene extends Component {
     submissions.map((submission, index) => {
       let image = JSON.parse(submission.images)
       if (Array.isArray(image['images'])) {
-        image = image[0]
+        image = image['images'][0]
       }
 
       markers.push({

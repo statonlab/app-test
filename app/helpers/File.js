@@ -194,11 +194,7 @@ export default class File {
 
     ImageResizer.createResizedImage(image, 100, 100, 'JPEG', 100, 0, this._thumbnailsDir).then(thumbnail => {
       // Let it have the same name of the original image
-      this.move(thumbnail, `${this._thumbnailsDir}/${name}`).then(() => {
-        // Done
-      }).catch(error => {
-        console.log(error)
-      })
+      this.move(thumbnail, `${this._thumbnailsDir}/${name}`)
     }).catch((error) => {
       console.log(error)
     })
