@@ -106,7 +106,8 @@ const styles = new StyleSheet.create({
     paddingHorizontal: 10,
     marginBottom     : 10,
     backgroundColor  : Colors.warning,
-    borderRadius     : 2
+    borderRadius     : 2,
+    marginHorizontal : 5
   },
 
   buttonText: {

@@ -1,5 +1,12 @@
 import React, {Component, PropTypes} from 'react'
-import {View, ScrollView, StyleSheet, TextInput, Text, DeviceEventEmitter, DatePickerAndroid, DatePickerIOS} from 'react-native'
+import {
+  View,
+  StyleSheet,
+  TextInput,
+  Text,
+  DeviceEventEmitter,
+  Platform
+} from 'react-native'
 import {MKButton} from 'react-native-material-kit'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import Header from '../components/Header'
@@ -11,6 +18,8 @@ import axios from '../helpers/Axios'
 import realm from '../db/Schema'
 import Spinner from '../components/Spinner'
 import DateModal from '../components/DateModal'
+
+const isAndroid = Platform.OS === 'android'
 
 export default class RegistrationScene extends Component {
   constructor(props) {
@@ -29,6 +38,8 @@ export default class RegistrationScene extends Component {
       minorConsent   : null,
       currentYear    : null
     }
+
+    console.log(Platform.OS)
 
     this.realm = realm
 
@@ -217,7 +228,7 @@ export default class RegistrationScene extends Component {
         <Spinner show={this.state.showSpinner}/>
         <Header title="Register" navigator={this.props.navigator} showRightIcon={false}/>
         <KeyboardAwareScrollView
-          keyboardDismissMode="on-drag"
+          keyboardDismissMode={isAndroid ? 'none' : 'on-drag'}
           showsVerticalScrollIndicator={false}
           extraScrollHeight={20}
           enableResetScrollToCoords={false}

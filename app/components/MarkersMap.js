@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react'
-import {StyleSheet, View, Text, Image} from 'react-native'
+import {StyleSheet, View, Text, Image, TouchableHighlight} from 'react-native'
 import MapView from 'react-native-maps'
 import Colors from '../helpers/Colors'
 
@@ -70,6 +70,10 @@ export default class MarkersMap extends Component {
     )
   }
 
+  pressEvent =  (marker) => {
+    this.props.onCalloutPress(marker)
+  }
+
   /**
    * Render the callout for a marker.
    *
@@ -79,15 +83,19 @@ export default class MarkersMap extends Component {
   renderCallout(marker) {
     return (
       <MapView.Callout style={{width: 165}}>
-        <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+        <TouchableHighlight onPress = {()=>{this.pressEvent(marker)}}>
+        <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
           {!marker.image ? null :
             <Image source={{uri: marker.image}} style={{width: 45, height: 45}}/>
           }
-          <View style={{flex: 1, marginLeft: 5, flexDirection: 'column', justifyContent: 'space-between', alignItems: 'flex-start'}}>
-            <Text style={[styles.calloutText, {flex: 1, fontWeight: '500'}]}>{marker.title}</Text>
+          <View style={{flex: 1, marginLeft: 5, flexDirection: 'column', alignItems: 'flex-start'}}>
+            <Text style={[styles.calloutText, {flex: 0, fontWeight: '500'}]}>{marker.title}</Text>
             <Text style={[styles.calloutText, {color: '#666'}]}>{marker.description}</Text>
+            <Text style={[styles.calloutText, {color: '#666'}]}>Tap to view</Text>
+
           </View>
         </View>
+        </TouchableHighlight>
       </MapView.Callout>
     )
   }
@@ -136,13 +144,15 @@ MarkersMap.propTypes = {
   ...MapView.propTypes,
   markers       : PropTypes.array,
   startingMarker: PropTypes.object,
-  zoom          : PropTypes.bool
+  zoom          : PropTypes.bool,
+  onCalloutPress : PropTypes.func
 }
 
 MarkersMap.defaultProps = {
   markers       : [],
   startingMarker: null,
-  zoom          : false
+  zoom          : false,
+  onCalloutPress : () => {return}
 }
 
 

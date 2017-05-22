@@ -10,13 +10,30 @@ import Colors from '../helpers/Colors'
 import Elevation from '../helpers/Elevation'
 import realm from '../db/Schema'
 import MarkersMap from '../components/MarkersMap'
+import File from '../helpers/File'
 
 export default class SubmittedScene extends Component {
   constructor(props) {
     super(props)
 
+    this.state = {
+      shouldNavigate : true
+    }
     this.id     = this.props.plant.id
     this.marker = {}
+    this.fs     = new File()
+  }
+
+
+  navigateCallout = (marker) => {
+    if (this.state.shouldNavigate){
+      let plant = realm.objects('Submission').filtered(`id == ${marker.plant.id}`)
+      this.props.navigator.push({
+        label    : 'ObservationScene',
+        plant :marker.plant
+      })
+    }
+    this.setState({shouldNavigate : false})
   }
 
   renderMap() {
@@ -24,10 +41,15 @@ export default class SubmittedScene extends Component {
     let markers     = []
 
     submissions.map(submission => {
+      let image = JSON.parse(submission.images)
+      if (Array.isArray(image['images'])) {
+        image = image['images'][0]
+      }
+
       let marker = {
         title      : submission.name,
-        image      : JSON.parse(submission.images)[0],
-        description: `${submission.location.latitude}, ${submission.location.longitude}`,
+        image      : this.fs.thumbnail(image),
+        description: `${submission.location.latitude.toFixed(4)}, ${submission.location.longitude.toFixed(4)}`,
         coord      : {
           latitude : submission.location.latitude,
           longitude: submission.location.longitude
@@ -52,6 +74,8 @@ export default class SubmittedScene extends Component {
           longitudeDelta: 0.0321
         }}
         startingMarker={this.marker}
+        onCalloutPress={this.navigateCallout}
+
       />
     )
   }

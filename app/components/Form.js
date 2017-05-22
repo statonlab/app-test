@@ -7,12 +7,12 @@ import {
   StyleSheet,
   DeviceEventEmitter,
   Animated,
-  Alert
+  Alert,
+  Platform
 } from 'react-native'
 import moment from 'moment'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import {MKButton} from 'react-native-material-kit'
-import Header from '../components/Header'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
@@ -22,14 +22,18 @@ import PickerModal from '../components/PickerModal'
 import DCP from '../resources/config.js'
 import SliderPick from '../components/SliderPick'
 import Location from '../components/Location'
+import File from '../helpers/File'
+import Spinner from '../components/Spinner'
 
-DCPrules = {
+const isAndroid = Platform.OS === 'android'
+
+const DCPrules = {
   seedsBinary            : t.enums.of(DCP.seedsBinary.selectChoices, 'seed'),
   flowersBinary          : t.enums.of(DCP.flowersBinary.selectChoices, 'flowers'),
   woollyAdesPres         : t.Boolean,
   woollyAdesCoverage     : t.enums.of(DCP.woollyAdesCoverage.selectChoices, 'woollyAdesCoverage'),
   acorns                 : t.enums.of(DCP.acorns.selectChoices, 'acorns'),
-  heightFirstBranch      : t.enums.of(DCP.heightFirstBranch.selectChoices, 'heightFirstBranch'),
+  heightFirstBranch      : t.Number,
   oakHealthProblems      : t.maybe(t.String),
   diameterNumeric        : t.Number,
   heightNumeric          : t.Number,
@@ -38,31 +42,32 @@ DCPrules = {
   emeraldAshBorer        : t.maybe(t.String),
   crownHealth            : t.Number,
   otherLabel             : t.String,
-  locationCharacteristics: t.enums.of(DCP.locationCharacteristics.selectChoices, 'locations'),
-  nearbySmall            : t.enums.of(DCP.nearbySmall.selectChoices),
-  nearbyDead             : t.enums.of(DCP.nearbyDead.selectChoices),
+  locationCharacteristics: t.maybe(t.enums.of(DCP.locationCharacteristics.selectChoices, 'locations')),
+  // nearbySmall            : t.enums.of(DCP.nearbySmall.selectChoices),
+  // nearbyDead             : t.enums.of(DCP.nearbyDead.selectChoices),
   treated                : t.enums.of(DCP.treated.selectChoices),
   cones                  : t.enums.of(DCP.cones.selectChoices),
   crownClassification    : t.enums.of(DCP.crownClassification.selectChoices),
-  nearByHemlock          : t.enums.of(DCP.nearByHemlock.selectChoices),
+  // nearByHemlock          : t.enums.of(DCP.nearByHemlock.selectChoices),
   partOfStudy            : t.enums.of(DCP.partOfStudy.selectChoices),
-  accessibility          : t.enums.of(DCP.accessibility.selectChoices),
+  // accessibility          : t.enums.of(DCP.accessibility.selectChoices),
   locationComment        : t.maybe(t.String),
   burrs                  : t.enums.of(DCP.burrs.selectChoices),
   catkins                : t.enums.of(DCP.catkins.selectChoices),
-  surroundings           : t.enums.of(DCP.surroundings.selectChoices),
+  nearbyTrees            : t.maybe(t.enums.of(DCP.nearbyTrees.selectChoices))
+  // surroundings           : t.enums.of(DCP.surroundings.selectChoices)
 }
 
-const Coordinate = t.refinement(t.Number, (n) => n != 0, 'Coordinate')
+const Coordinate = t.refinement(t.Number, (n) => n !== 0, 'Coordinate')
 const LocationT  = t.dict(t.String, Coordinate)
 
 
-export default class FormScene extends Component {
+export default class Form extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      images      : [],
+      images      : {},
       title       : this.props.title,
       location    : {
         latitude : 0,
@@ -75,13 +80,14 @@ export default class FormScene extends Component {
       bottomMargin: new Animated.Value(0)
     }
 
-    this.events = []
-    this.realm  = realm
-
-    this.formProps = this.props.formProps // read in form items to display
+    this.events     = []
+    this.realm      = realm
+    this.fs         = new File()
+    this.primaryKey = 0
+    this.formProps  = this.props.formProps // read in form items to display
 
     let formRules = {
-      images  : t.list(t.String),
+      images  : t.maybe(t.dict(t.String, t.list(t.String))),
       title   : t.String,
       location: LocationT
     }
@@ -93,32 +99,63 @@ export default class FormScene extends Component {
 
   componentWillMount() {
     if (this.props.edit) {
-      //For every key, set the state
-      for (key of Object.keys(this.props.entryInfo)) {
+      // For every key, set the state
+      Object.keys(this.props.entryInfo).map(key => {
         if (key === 'meta_data') {
-          this.setState({key: JSON.parse(this.props.entryInfo[key])})
           this.setState({'metadata': JSON.parse(this.props.entryInfo[key])})
+          return
         }
+
         if (key === 'images') {
           this.setState({images: JSON.parse(this.props.entryInfo[key])})
+          return
         }
+
+        this.setState({[key]: this.props.entryInfo[key]})
+      })
+      this.primaryKey = this.props.entryInfo.id
+    } else {
+      // Generate a primary key
+      this.primaryKey = this.realm.objects('Submission')
+      if (this.primaryKey.length <= 0) {
+        this.primaryKey = parseInt(moment().format('DMMYYH').toString())
+      } else {
+        this.primaryKey = this.primaryKey.sorted('id', true)[0].id + 1
       }
     }
+
+    // Add image resize event listener
+    this.events.push(DeviceEventEmitter.addListener('imagesResized', this._handleResizedImages))
   }
 
   componentDidMount() {
     if (!this.props.edit) {
       this.setDefaultValues()
     }
-    this.events.push(DeviceEventEmitter.addListener('cameraCapturedPhotos', this.handleImages))
   }
 
   /**
+   * Handle resized images.
    *
    * @param images
+   * @private
    */
-  handleImages = (images) => {
+  _handleResizedImages = (images) => {
+    this.refs.spinner.close()
     this.setState({images})
+    this.save()
+  }
+
+  /**
+   * Store images in state.
+   *
+   * @param images
+   * @param id
+   */
+  handleImages = (images, id) => {
+    let _images = this.state.images
+    _images[id] = images
+    this.setState({images: _images})
   }
 
   /**
@@ -128,15 +165,12 @@ export default class FormScene extends Component {
    * @returns {boolean}
    */
   cancel = () => {
-    console.log(Object.keys(this.state.metadata))
-    if (this.state.images[0] || Object.keys(this.state.metadata)[0]) {
+    if (this.state.images['images'] || Object.keys(this.state.metadata)[0]) {
       Alert.alert('Cancel Submission',
         'Data will be permanently lost if you cancel. Are you sure?', [
           {
             text   : 'Yes',
-            onPress: () => {
-              this.props.navigator.popToTop()
-            }
+            onPress: this.doCancel
           },
           {
             text   : 'Back',
@@ -148,34 +182,54 @@ export default class FormScene extends Component {
         ])
       return false
     }
-    this.props.navigator.popToTop()
+
+    this.doCancel()
     return false
   }
 
-  /**
+  // Do the actual cancellation
+  doCancel = () => {
+    this.refs.spinner.open()
+    // Delete all images
+    this.fs.delete(this.state.images, () => {
+      this.refs.spinner.close()
+      this.props.navigator.popToTop()
+    })
+  }
 
-   /*
-   * Submit button method.  Validate the primary and meta data with tcomb.  Write the observation to Realm, leave the scene.
+  /**
+   * Generate resized images and thumbnails.
+   *
+   */
+  generateImages = () => {
+    this.fs.resizeImages(this.state.images)
+
+    this.refs.spinner.open()
+  }
+
+  /**
+   * Submit button method.  Validate the primary and meta data with tcomb.
    */
   submit = () => {
     if (!this.validateState().isValid()) {
       this.notifyIncomplete(this.validateState())
       return
     }
+
     if (!this.validateMeta().isValid()) {
       this.notifyIncomplete(this.validateMeta())
       return
     }
 
-    let primaryKey = this.realm.objects('Submission')
-    if (primaryKey.length <= 0) {
-      primaryKey = 1
-    } else {
-      primaryKey = primaryKey.sorted('id', true)[0].id + 1
-    }
+    this.generateImages()
+  }
 
+  /**
+   * Write the observation to Realm, leave the scene.
+   */
+  save = () => {
     let observation = {
-      id       : primaryKey,
+      id       : this.primaryKey,
       name     : this.state.title.toString(),
       images   : JSON.stringify(this.state.images),
       location : this.state.location,
@@ -190,6 +244,7 @@ export default class FormScene extends Component {
 
     // Tell anyone who cares that there is a new submission
     DeviceEventEmitter.emit('newSubmission')
+
     this.props.navigator.push({
       label   : 'SubmittedScene',
       plant   : observation,
@@ -197,6 +252,9 @@ export default class FormScene extends Component {
     })
   }
 
+  /**
+   * Update existing observation.
+   */
   submitEdit = () => {
     if (!this.validateState().isValid()) {
       this.notifyIncomplete(this.validateState())
@@ -207,7 +265,7 @@ export default class FormScene extends Component {
       return
     }
 
-    primaryKey = this.props.entryInfo.id
+    let primaryKey = this.props.entryInfo.id
 
     let observation = {
       id          : primaryKey,
@@ -236,7 +294,8 @@ export default class FormScene extends Component {
   }
 
   /**
-   * execute tcomb validation method on the metadata, given the expected parameters formT
+   * Execute tcomb validation method on the metadata, given the expected parameters formT
+   *
    * @returns {*}
    */
 
@@ -245,21 +304,24 @@ export default class FormScene extends Component {
   }
 
   /**
-   *Handle errors generated by tcomb.  Update the warnings in the state for changing text formatting.
+   * Handle errors generated by tcomb.  Update the warnings in the state for changing text formatting.
+   *
    * @param validationAttempt
    */
   notifyIncomplete = (validationAttempt) => {
     let errors    = validationAttempt.errors
     let errorList = []
     let warnings  = {}
+
     errors.map((error) => {
-      console.log(error.path)
       warnings[error.path] = true
       if (typeof DCP[error.path] !== 'undefined') {
         errorList.push('Required field: ' + DCP[error.path].label)
       }
     })
+
     this.setState({warnings})
+
     if (errorList) {
       alert(errorList.join('\n'))
     }
@@ -272,24 +334,19 @@ export default class FormScene extends Component {
   compileValRules = () => {
     let formBase = {}
 
-    Object.keys(this.formProps).map((propItem, index) => {
-
-      let itemRule = DCPrules[propItem]
-
-      formBase[propItem] = itemRule
-
+    Object.keys(this.formProps).map(propItem => {
+      formBase[propItem] = DCPrules[propItem]
     })
     return formBase
   }
 
   /**
-   *
+   * Remove any registered events
    */
   componentWillUnmount() {
     this.events.map(event => {
       event.remove()
     })
-
   }
 
   /**
@@ -340,31 +397,35 @@ export default class FormScene extends Component {
     }
 
     return (
-      <View style={styles.formGroup} key={key}>
-        <PickerModal
-          style={styles.picker}
-          images={DCP[key].images}
-          multiCheck={DCP[key].multiCheck}
-          freeText={DCP[key].modalFreeText}
-          header={DCP[key].description}
-          choices={DCP[key].selectChoices}
-          onSelect={(option) => {
-            this.setState({metadata: {...this.state.metadata, [key]: option}})
-          }}
-        >
-          <View style={styles.picker}>
-            <Text style={this.state.warnings[key] ? [styles.label, styles.labelWarning] : styles.label}>{DCP[key].label}</Text>
-            <TextInput
-              style={styles.textField}
-              editable={false}
-              placeholder={DCP[key].placeHolder}
-              placeholderTextColor="#aaa"
-              value={this.getMultiCheckValue(this.state.metadata[key], DCP[key].multiCheck)}
-              underlineColorAndroid="transparent"
-            />
-            {dropdownIcon}
-          </View>
-        </PickerModal>
+      <View key={key}>
+        <View style={styles.formGroup} key={key}>
+          <PickerModal
+            style={styles.picker}
+            images={DCP[key].images}
+            multiCheck={DCP[key].multiCheck}
+            freeText={DCP[key].modalFreeText}
+            header={DCP[key].description}
+            choices={DCP[key].selectChoices}
+            onSelect={(option) => {
+              this.setState({metadata: {...this.state.metadata, [key]: option}})
+            }}
+          >
+            <View style={styles.picker}>
+              <Text style={this.state.warnings[key] ? [styles.label, styles.labelWarning] : styles.label}>{DCP[key].label}</Text>
+              <TextInput
+                style={styles.textField}
+                editable={false}
+                placeholder={DCP[key].placeHolder}
+                placeholderTextColor="#aaa"
+                value={this.getMultiCheckValue(this.state.metadata[key], DCP[key].multiCheck)}
+                underlineColorAndroid="transparent"
+              />
+              {dropdownIcon}
+            </View>
+          </PickerModal>
+        </View>
+        {DCP[key].camera && DCP[key].camera.includes(this.state.metadata[key]) ? this.renderCameraItem(DCP[key].label, DCP[key].label)
+          : null}
       </View>
     )
   }
@@ -386,11 +447,11 @@ export default class FormScene extends Component {
     this.setState({metadata})
   }
 
+
   /**
    * Goes through the formProps and returns an array of JSX for each form item.
    * @returns {Array}
    */
-
   renderForm = () => {
     return Object.keys(this.props.formProps).map(this.populateFormItem)
   }
@@ -420,19 +481,50 @@ export default class FormScene extends Component {
     return null
   }
 
+  /**
+   * Render mailable submission id.
+   *
+   * @returns {XML}
+   */
   renderBiominder = () => {
+    return (
+      <View style={[styles.formGroup, {justifyContent: 'center'}]}>
+        <Text style={[{color: '#444', flex: 1, fontWeight: 'bold', justifyContent: 'center'}]}>
+          ID number for submission: {this.primaryKey}
+        </Text>
+      </View>
+    )
+  }
 
-    let primaryKey = this.realm.objects('Submission')
-    if (primaryKey.length <= 0) {
-      primaryKey = 1
-    } else {
-      primaryKey = primaryKey.sorted('id', true)[0].id + 1
+  /**
+   * Render camera fields.
+   *
+   * @param id
+   * @param label
+   * @returns {XML}
+   */
+  renderCameraItem = (id, label) => {
+    let description = 'optional'
+    if (id === 'images') {
+      description = 'Add photos'
     }
+
     return (
       <View style={[styles.formGroup]}>
-        <Text style={styles.textField}>
-          ID number for submission: {primaryKey} </Text>
-
+        <MKButton
+          style={[styles.buttonLink, {height: this.state.images[id] && this.state.images[id].length > 0 ? 60 : 40}]}
+          onPress={() => this._goToCamera(id)}
+        >
+          <Text style={this.state.warnings.photos ? [styles.label, styles.labelWarning] : styles.label}>{label}</Text>
+          {!this.state.images[id] || this.state.images[id].length === 0 ?
+            <View style={{flex: 1, alignItems: 'center', flexDirection: 'row'}}>
+              <Text style={[styles.buttonLinkText, {color: '#aaa'}]}>{description}</Text>
+              <Icon name="camera" style={[styles.icon]}/>
+            </View>
+            :
+            this.renderPhotosField(id)
+          }
+        </MKButton>
       </View>
     )
 
@@ -443,15 +535,19 @@ export default class FormScene extends Component {
    * @returns {XML}
    */
 
-  renderPhotosField = () => {
-    let length = this.state.images.length
+  renderPhotosField = (id) => {
+    if (!this.state.images[id]) {
+      return null
+    }
+
+    let length = this.state.images[id].length
     let text   = length > 1 ? 'photos' : 'photo'
-    let image  = this.state.images[length - 1]
+    let image  = this.state.images[id][length - 1]
 
     return (
-      <View style={{flex: 1, alignItems: 'center', flexDirection: 'row'}}>
+      <View style={{flex: 1, alignItems: 'center', flexDirection: 'row', height: 90}}>
         <Text style={[styles.buttonLinkText, {color: '#444'}]}>{length} {text} added</Text>
-        <Image source={{uri: image}} style={styles.thumbnail}/>
+        <Image source={{uri: image}} style={[styles.thumbnail]}/>
       </View>
     )
   }
@@ -459,35 +555,18 @@ export default class FormScene extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Header title={this.props.edit ? 'Editing entry' : this.state.title} navigator={this.props.navigator} onBackPress={this.cancel}/>
+        <Spinner ref="spinner"/>
         <KeyboardAwareScrollView
-          keyboardDismissMode="on-drag"
+          keyboardDismissMode={isAndroid ? 'none' : 'on-drag'}
           showsVerticalScrollIndicator={false}
-          extraScrollHeight={20}
-          enableResetScrollToCoords={false}
+          extraScrollHeight={60}
+          enableResetScrollToCoords={true}
         >
-          <Animated.View style={[styles.card, {marginBottom: this.state.bottomMargin}]}>
-
-            <View style={[styles.formGroup]}>
-              <MKButton
-                style={[styles.buttonLink, {height: this.state.images.length > 0 ? 60 : 40}]}
-                onPress={this._goToCamera}
-              >
-                <Text style={this.state.warnings.photos ? [styles.label, styles.labelWarning] : styles.label}>Photos</Text>
-                {this.state.images.length === 0 ?
-                  <View style={{flex: 1, alignItems: 'center', flexDirection: 'row'}}>
-                    <Text style={[styles.buttonLinkText, {color: '#aaa'}]}>Add photos</Text>
-                    <Icon name="camera" style={[styles.icon]}/>
-                  </View>
-                  :
-                  this.renderPhotosField()
-                }
-              </MKButton>
-            </View>
-
+          <View style={[styles.card]}>
+            {this.renderCameraItem('images', 'Images')}
             {this.renderForm()}
             {this.renderHiddenComments()}
-            {this.props.title == 'American Chestnut' ? this.renderBiominder() : null}
+            {this.props.title === 'American Chestnut' ? this.renderBiominder() : null}
 
             <View style={[styles.formGroup, {flex: 0, alignItems: 'flex-start'}]}>
               <Text style={[styles.label, {paddingTop: 5}]}>Comments</Text>
@@ -502,14 +581,18 @@ export default class FormScene extends Component {
                 underlineColorAndroid="transparent"
               />
             </View>
-            <View style={[styles.formGroup]}>
-              <Text style={styles.label}>Location</Text>
-              <Location onChange={(location) => this.setState({location})}/>
-            </View>
-          </Animated.View>
-        </KeyboardAwareScrollView>
-        <View style={styles.footer}>
+            <View style={[styles.formGroup, {flex: 0}]}>
+              <Text style={[styles.label, {width: 60}]}>Location</Text>
+              {this.props.edit ?
+                <Location edit={this.props.edit} coordinates={this.props.entryInfo.location} onChange={(location) => this.setState({location})}/> :
+                <Location onChange={(location) => this.setState({location})}/>
+              }
 
+            </View>
+          </View>
+        </KeyboardAwareScrollView>
+
+        <View style={styles.footer}>
           <MKButton style={[styles.button, styles.flex1]} onPress={this.props.edit ? this.submitEdit : this.submit} rippleColor="rgba(0,0,0,0.5)">
             <Text style={styles.buttonText}>
               {this.props.edit ? 'Confirm Edit' : 'Submit Entry'}
@@ -531,24 +614,24 @@ export default class FormScene extends Component {
    *
    * @private
    */
-  _goToCamera = () => {
+  _goToCamera = (id) => {
     this.props.navigator.push({
       label   : 'CameraScene',
-      images  : this.state.images,
+      images  : this.state.images[id] ? this.state.images[id] : [],
+      onDone  : this.handleImages.bind(this),
+      id      : id,
       gestures: {}
     })
   }
 }
 
-FormScene.propTypes = {
+Form.propTypes = {
   title    : PropTypes.string.isRequired,
   navigator: PropTypes.object.isRequired,
   formProps: PropTypes.object,
   edit     : PropTypes.bool,
   entryInfo: PropTypes.object
 }
-
-const elevationStyle = new Elevation(2)
 
 const styles = StyleSheet.create({
   container: {
@@ -580,7 +663,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#dedede',
     padding          : 5,
-    height           : undefined
+    minHeight        : 50
   },
 
   picker: {
@@ -590,12 +673,13 @@ const styles = StyleSheet.create({
     width        : undefined
   },
 
-  label       : {
+  label: {
     flex      : 0,
     width     : 110,
     color     : '#444',
     fontWeight: 'bold'
   },
+
   labelWarning: {
     color: Colors.danger
   },
@@ -649,7 +733,7 @@ const styles = StyleSheet.create({
   },
 
   buttonBiominder: {
-    backgroundColor: Colors.info,
+    backgroundColor: Colors.info
   },
 
   buttonLink: {

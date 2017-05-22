@@ -17,12 +17,11 @@ export default class AboutScene extends Component {
           </View>
           <View style={styles.card}>
             <Text style={styles.title}>The Treesnap Project</Text>
-            <Text style={styles.textBody}> Help our nation’s trees!</Text>
-            <Text style={styles.textBody}> Invasive diseases and pests threaten the health of America’s forests.
+            <Text style={styles.textBody}>Help our nation’s trees!</Text>
+            <Text style={styles.textBody}>Invasive diseases and pests threaten the health of America’s forests.
               Scientists are working to understand what allows some individual trees to survive, but they need to find healthy, resilient trees in the forest to study.
               That’s where concerned foresters, landowners, and citizens (you!) can help.</Text>
-            <Text style={styles.textBody}>
-              Tag trees you find in your community, on your property, or out in the wild to help us understand Forest health!
+            <Text style={styles.textBody}>Tag trees you find in your community, on your property, or out in the wild to help us understand Forest health!
             </Text>
           </View>
           <View style={styles.card}>

@@ -7,10 +7,8 @@ import React, {Component} from 'react'
 import {Navigator, StatusBar, View, StyleSheet} from 'react-native'
 import LandingScene from '../scenes/LandingScene'
 import MapScene from '../scenes/MapScene'
-import FormScene from '../scenes/FormScene'
 import CameraScene from '../scenes/CameraScene'
 import CaptureLocationScene from '../scenes/CaptureLocationScene'
-import TreeDescriptionScene from '../scenes/TreeDescriptionScene'
 import SubmittedScene from '../scenes/SubmittedScene'
 import AboutScene from '../scenes/AboutScene'
 import AccountScene from '../scenes/AccountScene'
@@ -20,6 +18,7 @@ import LoginScene from '../scenes/LoginScene'
 import RegistrationScene from '../scenes/RegisterationScene'
 import ObservationsScene from '../scenes/ObservationsScene'
 import ObservationScene from '../scenes/ObservationScene'
+import TreeScene from '../scenes/TreeScene'
 
 const initialRouteStack = [
   {
@@ -37,12 +36,15 @@ export default class WildType extends Component {
       return <MapScene title="Your Entries" navigator={navigator}/>
     }
 
-    if (route.label === 'FormScene') {
-      return <FormScene title={route.title} navigator={navigator} formProps={route.formProps} entryInfo={route.entryInfo} edit={route.edit} />
+    /** Deprecated
+
+     if (route.label === 'FormScene') {
+      return <FormScene title={route.title} navigator={navigator} formProps={route.formProps} entryInfo={route.entryInfo} edit={route.edit}/>
     }
+     **/
 
     if (route.label === 'CameraScene') {
-      return <CameraScene navigator={navigator} images={route.images ? route.images : []}/>
+      return <CameraScene navigator={navigator} images={route.images ? route.images : []} onDone={route.onDone} id={route.id}/>
     }
 
     /** DEPRECATED
@@ -54,8 +56,9 @@ export default class WildType extends Component {
       return <CaptureLocationScene title={route.title} navigator={navigator}/>
     }
 
-    if (route.label === 'TreeDescriptionScene') {
-      return <TreeDescriptionScene title={route.title} navigator={navigator} image={route.image}/>
+    if (route.label === 'TreeScene') {
+      return <TreeScene title={route.title} navigator={navigator}
+        entryInfo={route.entryInfo} edit={route.edit}/>
     }
 
     if (route.label === 'SubmittedScene') {

@@ -13,18 +13,18 @@ const NamedColors = {
   hansaYellow      : '#E9C46A',
   black            : '#212121',
   darkerJungleGreen: '#25897d',
-  blue             : "#66B3FF"
+  blue             : '#66B3FF'
 
 }
 
 const Colors = {
   primary      : NamedColors.jungleGreen,
   darkerPrimary: NamedColors.darkerJungleGreen,
-  warning: NamedColors.hansaYellow,
-  danger : NamedColors.lightRedOchre,
-  info   : NamedColors.blue,
-  success: NamedColors.jungleGreen,
-  black : NamedColors.black,
+  warning      : '#EFCC3E', //NamedColors.hansaYellow,
+  danger       : '#E15554',//NamedColors.lightRedOchre,
+  info         : '#2B9EB3',//NamedColors.blue,
+  success      : '#44AF69', //NamedColors.jungleGreen,
+  black        : NamedColors.black,
 
 
   primaryText      : '#ffffff',

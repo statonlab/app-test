@@ -1,7 +1,6 @@
 import React, {Component, PropTypes} from 'react'
 import {
   View,
-  ListView,
   StyleSheet,
   Text,
   Image,
@@ -11,11 +10,13 @@ import Header from '../components/Header'
 import Colors from '../helpers/Colors'
 import Icon from 'react-native-vector-icons/Ionicons'
 import realm from '../db/Schema'
+import {ListView} from 'realm/react-native'
 import moment from 'moment'
 import {MKButton} from 'react-native-material-kit'
 import Elevation from '../helpers/Elevation'
 import Observation from '../helpers/Observation'
 import Spinner from '../components/Spinner'
+import File from '../helpers/File'
 
 export default class ObservationsScene extends Component {
   constructor(props) {
@@ -35,6 +36,8 @@ export default class ObservationsScene extends Component {
     }
 
     this.events = []
+
+    this.fs = new File()
   }
 
   /**
@@ -56,7 +59,6 @@ export default class ObservationsScene extends Component {
   /**
    * Create data source map.
    *
-   * @param submissions
    * @returns {{}}
    * @private
    */
@@ -89,14 +91,15 @@ export default class ObservationsScene extends Component {
         'Uploaded': synced
       }
     }
+
     if (toUpdate.length > 0) {
       list = {
-        ...list,
-        'Needs Updating': toUpdate
+        'Needs Updating': toUpdate,
+        ...list
       }
     }
 
-    return list
+    return JSON.parse(JSON.stringify(list))
   }
 
   /**
@@ -116,11 +119,21 @@ export default class ObservationsScene extends Component {
    * @returns {XML}
    * @private
    */
+
   _renderRow = (submission) => {
-    let images = JSON.parse(submission.images)
+    let images    = JSON.parse(submission.images)
+    let key       = Object.keys(images)[0]
+    let thumbnail = null
+
+    if (key) {
+      thumbnail = this.fs.thumbnail(images[key][0])
+    }
+
     return (
       <MKButton style={styles.row} key={submission.id} rippleColor="rgba(10,10,10,.1)" onPress={() => this._goToEntryScene(submission)}>
-        {images.length > 0 ? <Image source={{uri: images[0]}} style={styles.image}/> : null}
+        {thumbnail ?
+          <Image source={{uri: thumbnail}} style={styles.image}/>
+          : null}
         <View style={styles.textContainer}>
           <Text style={styles.title}>{submission.name}</Text>
           <Text style={styles.body}>{moment(submission.date, 'MM-DD-YYYY HH:mm:ss').format('MMMM Do YYYY')}</Text>
@@ -160,7 +173,7 @@ export default class ObservationsScene extends Component {
       )
     }
 
-    if (id == 'Needs Updating') {
+    if (id === 'Needs Updating') {
       return (
         <View style={[styles.headerContainer, {flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}]}>
           <Text style={styles.headerText}>{id}</Text>
@@ -176,8 +189,8 @@ export default class ObservationsScene extends Component {
           }
         </View>
       )
-
     }
+
     return (
       <View style={styles.headerContainer}>
         <Text style={styles.headerText}>{id} ({realm.objects('Submission').filtered('synced == true && needs_update == false').length})</Text>
@@ -269,7 +282,6 @@ export default class ObservationsScene extends Component {
 
       toSync.forEach(observation => {
         Observation.update(observation).then(response => {
-          console.log("OBS:", response)
           // TODO: Add snackbar notification
           realm.write(() => {
             observation.needs_update = false

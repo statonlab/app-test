@@ -2,7 +2,6 @@ import React, {Component, PropTypes} from 'react'
 import {
   View,
   Text,
-  TouchableHighlight,
   ScrollView,
   Image,
   StyleSheet,
@@ -10,7 +9,7 @@ import {
   DeviceEventEmitter
 } from 'react-native'
 import moment from 'moment'
-import {getTheme, MKButton} from 'react-native-material-kit'
+import {MKButton} from 'react-native-material-kit'
 import Icon from 'react-native-vector-icons/Ionicons'
 import realm from '../db/Schema'
 import Header from '../components/Header'
@@ -20,8 +19,8 @@ import Colors from '../helpers/Colors'
 import UploadButton from '../components/UploadButton'
 import SnackBarNotice from '../components/SnackBarNotice'
 import Observation from '../helpers/Observation'
+import File from '../helpers/File'
 
-const theme  = getTheme()
 const plants = [
   {
     title    : 'American Chestnut',
@@ -44,9 +43,9 @@ const plants = [
     image    : require('../img/white_oak.jpg')
   },
   {
-    title : 'American Elm',
+    title    : 'American Elm',
     latinName: 'Ulmus americana',
-    image : require('../img/elm.jpg')
+    image    : require('../img/elm.jpg')
   },
   {
     title    : 'Other',
@@ -118,6 +117,7 @@ export default class LandingScene extends Component {
 
     // Hold all events so we can remove them later and prevent memory leaks
     this.events = []
+    this.fs     = new File()
   }
 
   /**
@@ -156,7 +156,6 @@ export default class LandingScene extends Component {
       })
       this.setSidebarLinks()
       this.refs.snackbar.showBar()
-      console.log('DB: entries', realm.objects('Submission').length)
       this.downloadObservations()
     }))
 
@@ -193,12 +192,9 @@ export default class LandingScene extends Component {
   downloadObservations() {
     let emptyDB = (realm.objects('Submission').length <= 0)
 
-    console.log('DB: entries', realm.objects('Submission').length)
-
-
     Observation.get().then(response => {
       let records = response.data.data
-      records.forEach(record => {
+      records.map(record => {
         let exists = (realm.objects('Submission').filtered(`serverID == ${record.observation_id}`).length > 0)
         if (exists) {
           return
@@ -206,7 +202,9 @@ export default class LandingScene extends Component {
 
         let primaryKey = 1
 
-        if (!emptyDB) {
+        if (record.mobile_id) {
+          primaryKey = record.mobile_id
+        } else if (!emptyDB) {
           primaryKey = realm.objects('Submission').sorted('id', true)[0].id + 1
         }
 
@@ -221,12 +219,22 @@ export default class LandingScene extends Component {
             meta_data: JSON.stringify(record.meta_data),
             serverID : parseInt(record.observation_id)
           })
-
           emptyDB = false
         })
       })
+
+      this.downloadImages()
     }).catch(error => {
-      console.log('NETWORK ERROR', error)
+      console.log(error)
+    })
+  }
+
+  // Download images
+  downloadImages() {
+    let observations = realm.objects('Submission')
+
+    observations.map(observation => {
+      this.fs.download(observation)
     })
   }
 
@@ -338,17 +346,22 @@ export default class LandingScene extends Component {
                   key={index}
                   rippleColor="rgba(0,0,0,.1)"
                   onPress={() => {
-                    this.props.navigator.push({label: 'TreeDescriptionScene', title: plant.title})
+                    this.props.navigator.push({label: 'TreeScene', title: plant.title})
                   }}>
                   <View style={[styles.flexHorizontal]}>
                     <Image source={plant.image} style={styles.cardImage}/>
-                    <View style={styles.cardBody}>
-                      <Text style={styles.cardTitle}>
-                        {plant.title}
-                      </Text>
-                      <Text style={plant.title != 'Other' ? [styles.cardBodyText, styles.italics] : styles.cardBodyText}>
-
-                        {plant.latinName}</Text>
+                    <View style={[styles.cardBody, styles.flexHorizontal, styles.flexSpace]}>
+                      <View>
+                        <Text style={styles.cardTitle}>
+                          {plant.title}
+                        </Text>
+                        <Text style={plant.title != 'Other' ? [styles.cardBodyText, styles.italics] : styles.cardBodyText}>
+                          {plant.latinName}
+                        </Text>
+                      </View>
+                      <View>
+                        <Icon name="ios-arrow-forward" size={24} style={styles.icon}/>
+                      </View>
                     </View>
                   </View>
                 </MKButton>
@@ -405,13 +418,15 @@ const styles = StyleSheet.create({
     flex           : 0,
     paddingLeft    : 5,
     fontWeight     : '500',
-    marginBottom   : 5
+    marginBottom   : 5,
+    color          : '#444'
   },
 
   cardBody: {
     flexDirection: 'column',
     flex         : 1,
-    padding      : 5
+    padding      : 5,
+    alignItems   : 'center'
   },
 
   cardBodyText: {
@@ -422,7 +437,8 @@ const styles = StyleSheet.create({
   },
 
   icon: {
-    backgroundColor: 'transparent'
+    color: '#777',
+    width: 20
   },
 
   plantsContainer: {
@@ -458,7 +474,8 @@ const styles = StyleSheet.create({
   cardButtonText: {
     color: Colors.primaryText
   },
-  italics       : {
+
+  italics: {
     fontStyle: 'italic'
   },
 

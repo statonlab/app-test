@@ -68,7 +68,7 @@ export default new Realm({
     CoordinateSchema,
     SubmissionSchema
   ],
-  schemaVersion: 3,
+  schemaVersion: 4,
   migration    : function (oldRealm, newRealm) {
     if (oldRealm.schemaVersion < 2) {
       let newUser = newRealm.objects('User')
@@ -80,6 +80,15 @@ export default new Realm({
       let observations = newRealm.objects('Submission')
       observations.forEach(observation => {
         observation.needs_update = false
+      })
+    }
+    if (oldRealm.schemaVersion < 4){
+      let observations = newRealm.objects('Submission')
+      observations.forEach(observation => {
+        let oldImages = JSON.parse(observation.images)
+        if (Array.isArray(oldImages)) {
+          observation.image = JSON.stringify({"images": oldImages})
+        }
       })
     }
   }
