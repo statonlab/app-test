@@ -28,7 +28,7 @@ export default class SubmittedScene extends Component {
     submissions.map(submission => {
       let image = JSON.parse(submission.images)
       if (Array.isArray(image['images'])) {
-        image = image[0]
+        image = image['images'][0]
       }
 
       let marker = {
