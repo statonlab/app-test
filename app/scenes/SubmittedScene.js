@@ -16,8 +16,8 @@ export default class SubmittedScene extends Component {
   constructor(props) {
     super(props)
 
-    this.state = {
-      shouldNavigate : true
+    this.state  = {
+      shouldNavigate: true
     }
     this.id     = this.props.plant.id
     this.marker = {}
@@ -27,14 +27,14 @@ export default class SubmittedScene extends Component {
 
   navigateCallout = (marker) => {
     console.log(marker)
-    if (this.state.shouldNavigate){
+    if (this.state.shouldNavigate) {
       let plant = realm.objects('Submission').filtered(`id == ${marker.plant.id}`)
       this.props.navigator.push({
-        label    : 'ObservationScene',
-        plant :marker.plant
+        label: 'ObservationScene',
+        plant: marker.plant
       })
     }
-    this.setState({shouldNavigate : false})
+    this.setState({shouldNavigate: false})
   }
 
   renderMap() {
@@ -56,7 +56,7 @@ export default class SubmittedScene extends Component {
           longitude: submission.location.longitude
         },
         pinColor   : Colors.primary,
-        plant : submission
+        plant      : submission
       }
 
       if (submission.id === this.id) {
