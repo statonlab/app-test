@@ -37,13 +37,20 @@ const Plants = {
       {
         title : 'Collection Instructions',
         body  : [
-          <Text style={styles.paragraph}>
-            In order for the American Chestnut Foundation to confirm your sample, you must mail in a plant sample. When submitting an observation, please collect a leaf and twig sample. The sample should be collected and preserved as described below.
-            * A 6-12" twig and attached, mature, green leaves growing in the full sun
-            * Press the sample flat between sheets of cardboard and place in an envelope.
-            * Use a single paper towel between the sample and cardboard to cushion and absorb moisture.
-            * Do not wrap in plastic, as samples will mold in the mail.
-            * Do not ship overnight. It's not necessary and we won't ID your sample right away.
+          <Text>In order for the American Chestnut Foundation to confirm your sample, you must mail in a plant sample. When submitting an observation, please collect a leaf and twig sample. The sample should be collected and preserved as described below.</Text>,
+
+          <Text> {'\u2022'} A 6-12" twig and attached, mature, green leaves growing in the full sun. </Text>,
+          <Text>  {'\u2022'} Press the sample flat between sheets of cardboard and place in an envelope.</Text>,
+          <Text>
+            {'\u2022'} Use a single paper towel between the sample and cardboard to cushion and absorb moisture.
+          </Text>,
+          <Text>
+            {'\u2022'} Do not wrap in plastic, as samples will mold in the mail.
+            </Text>,
+          <Text>
+            {'\u2022'} Do not ship overnight.  It's not necessary and we won't ID your sample right away.
+          </Text>,
+          <Text>
             Submission address - please choose the office closest to the tree located.
             Tom Saielli, The American Chestnut Foundation, 50 N. Merrimon Ave, Suite 115, Asheville, NC 28804
             Matt Brinckman, VA DOF, 900 Natural Resources Drive, Charlottesville, VA 22903

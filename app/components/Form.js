@@ -124,6 +124,7 @@ export default class Form extends Component {
       }
     }
 
+
     // Add image resize event listener
     this.events.push(DeviceEventEmitter.addListener('imagesResized', this._handleResizedImages))
   }
