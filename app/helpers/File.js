@@ -178,6 +178,11 @@ export default class File {
 
     keys.map(key => {
       images[key].map((link, index) => {
+        if (link.indexOf('http') === -1) {
+          processed++
+          return
+        }
+
         this._setupImage(link, (image) => {
           processed++
           images[key][index] = image

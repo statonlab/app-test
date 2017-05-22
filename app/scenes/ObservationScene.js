@@ -20,6 +20,7 @@ import SnackBarNotice from '../components/SnackBarNotice'
 import axios from '../helpers/Axios'
 import Icon from 'react-native-vector-icons/Ionicons'
 import File from '../helpers/File'
+import Elevation from '../helpers/Elevation'
 
 const trash = (<Icon name="ios-trash" size={24} color="#fff"/>)
 
@@ -28,10 +29,12 @@ export default class ObservationScene extends Component {
     super(props)
 
     this.state = {
-      imageIndex  : 0,
-      synced      : false,
-      isLoggedIn  : false,
-      needs_update: false
+      imageIndex    : 0,
+      synced        : false,
+      isLoggedIn    : false,
+      needs_update  : false,
+      selectedCircle: 0,
+      pages         : 0
     }
     this.user  = realm.objects('User')[0]
     this.fs    = new File()
@@ -44,9 +47,20 @@ export default class ObservationScene extends Component {
     this._isLoggedIn()
 
     this.loggedEvent = DeviceEventEmitter.addListener('userLoggedIn', this._isLoggedIn.bind(this))
+
+    let pages  = 0
+    let images = JSON.parse(this.props.plant.images)
+    Object.keys(images).map((key) => {
+      if (Array.isArray(images[key]))
+        images[key].map(() => {
+          pages++
+        })
+    })
+
     this.setState({
-      synced: this.props.plant.synced,
-      needs_update: this.props.plant.needs_update
+      synced      : this.props.plant.synced,
+      needs_update: this.props.plant.needs_update,
+      pages       : pages
     })
   }
 
@@ -304,6 +318,41 @@ export default class ObservationScene extends Component {
       ])
   }
 
+  _renderCircles() {
+    if (this.state.pages <= 1) {
+      return
+    }
+
+    // Flatten images
+    let all = []
+    for (let i = 0; i < this.state.pages; i++) {
+      all.push(i)
+    }
+
+    return (
+      <View style={styles.circlesContainer}>
+        {all.map((image, index) => {
+          return <MKButton key={index} style={[styles.circle, this.state.selectedCircle === index ? styles.selectedCircle : {}]}/>
+        })}
+      </View>
+    )
+  }
+
+  _handleScroll(event) {
+    let width = Dimensions.get('window').width
+    let x     = event.nativeEvent.contentOffset.x
+    let pages = []
+
+    for (let i = 0; i < this.state.pages; i++) {
+      pages.push(i)
+    }
+
+    let page = pages.indexOf(x / width)
+
+    this.setState({
+      selectedCircle: page > -1 ? page : this.state.selectedCircle
+    })
+  }
 
   /**
    * Render Scene.
@@ -323,22 +372,27 @@ export default class ObservationScene extends Component {
         }}/>
 
         <ScrollView style={styles.contentContainer}>
-          <ScrollView
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            alwaysBounceHorizontal={true}
-            pagingEnabled={true}
-          >
-            {Object.keys(images).map((key) => {
-              if (!Array.isArray(images[key])) {
-                return
-              }
+          <View style={{position: 'relative'}}>
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              alwaysBounceHorizontal={true}
+              pagingEnabled={true}
+              onScroll={this._handleScroll.bind(this)}
+              scrollEventThrottle={16}
+            >
+              {Object.keys(images).map((key) => {
+                if (!Array.isArray(images[key])) {
+                  return
+                }
 
-              return images[key].map((image, index) => {
-                return (<Image key={index} source={{uri: image}} style={styles.image}/>)
-              })
-            })}
-          </ScrollView>
+                return images[key].map((image, index) => {
+                  return (<Image key={index} source={{uri: image}} style={styles.image}/>)
+                })
+              })}
+            </ScrollView>
+            {this._renderCircles()}
+          </View>
           <View style={styles.card}>
             {this._renderUploadButton(entry)}
             <View style={styles.field}>
@@ -436,5 +490,29 @@ const styles = StyleSheet.create({
     color     : Colors.warningText,
     fontWeight: 'bold',
     textAlign : 'center'
+  },
+
+  circlesContainer: {
+    height        : 8,
+    position      : 'absolute',
+    bottom        : 5,
+    flexDirection : 'row',
+    justifyContent: 'center',
+    alignItems    : 'center',
+    width         : Dimensions.get('window').width
+  },
+
+  selectedCircle: {
+    backgroundColor: Colors.warning
+  },
+
+  circle: {
+    margin         : 3,
+    width          : 8,
+    height         : 8,
+    borderRadius   : 8 / 2,
+    backgroundColor: '#eee',
+    opacity        : 0.9,
+    ...(new Elevation(1))
   }
 })
