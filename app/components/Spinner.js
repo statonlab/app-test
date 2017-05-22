@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react'
-import {View, Text, StyleSheet} from 'react-native'
+import {View, StyleSheet} from 'react-native'
 import {MKSpinner} from 'react-native-material-kit'
 import Elevation from  '../helpers/Elevation'
 
@@ -21,7 +21,7 @@ export default class Spinner extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.show != this.state.show) {
+    if (nextProps.show !== this.state.show) {
       this.setState({show: nextProps.show})
     }
   }
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     bottom         : 0,
     justifyContent : 'center',
     alignItems     : 'center',
-    zIndex         : 999999,
+    zIndex         : 999999
   },
 
   spinner: {

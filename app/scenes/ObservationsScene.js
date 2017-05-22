@@ -59,7 +59,6 @@ export default class ObservationsScene extends Component {
   /**
    * Create data source map.
    *
-   * @param submissions
    * @returns {{}}
    * @private
    */
@@ -92,6 +91,7 @@ export default class ObservationsScene extends Component {
         'Uploaded': synced
       }
     }
+
     if (toUpdate.length > 0) {
       list = {
         ...list,
@@ -99,7 +99,7 @@ export default class ObservationsScene extends Component {
       }
     }
 
-    return list
+    return JSON.parse(JSON.stringify(list))
   }
 
   /**
@@ -123,10 +123,15 @@ export default class ObservationsScene extends Component {
   _renderRow = (submission) => {
     let images    = JSON.parse(submission.images)
     let key       = Object.keys(images)[0]
-    let thumbnail = this.fs.thumbnail(images[key][0])
+    let thumbnail = null
+
+    if (key) {
+      thumbnail = this.fs.thumbnail(images[key][0])
+    }
+
     return (
       <MKButton style={styles.row} key={submission.id} rippleColor="rgba(10,10,10,.1)" onPress={() => this._goToEntryScene(submission)}>
-        {images[key].length > 0 ?
+        {thumbnail ?
           <Image source={{uri: thumbnail}} style={styles.image}/>
           : null}
         <View style={styles.textContainer}>

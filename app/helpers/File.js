@@ -90,13 +90,56 @@ export default class File {
    * @param callback Function to call on success
    */
   delete(file, callback) {
-    this._system.unlink(file).then(() => {
-      if (typeof  callback !== 'undefined') {
-        callback()
+    let count     = 0
+    let processed = 0
+
+    if (typeof file === 'string') {
+      this._system.unlink(file.replace('file:', '')).then(() => {
+        if (typeof  callback !== 'undefined') {
+          callback()
+        }
+      }).catch(error => {
+        console.log('Could not delete file ' + file + ': ', error)
+      })
+
+      return
+    }
+
+    if (typeof file === 'object') {
+      let keys = Object.keys(file)
+
+      // We need a count to know if there is anything to delete
+      keys.map(key => {
+        count += file[key].length
+      })
+
+      if (count === 0) {
+        typeof callback !== 'undefined' && callback()
       }
-    }).catch(error => {
-      console.log('Could not delete file ' + file + ': ', error)
-    })
+
+      keys.map(key => {
+        if (!Array.isArray(file[key])) {
+          return
+        }
+
+        file[key].map(f => {
+          // Increment the count.
+          this._system.unlink(f.replace('file:', '')).then(() => {
+            // Increment the number of deleted items.
+            processed++
+            // If all files have been deleted, run the callback.
+            if (processed === count && typeof callback !== 'undefined') {
+              callback()
+            }
+          }).catch(error => {
+            // We still want the number of deleted items increased even in failure because
+            // we will never execute the callback if we fail.
+            processed++
+            console.log(error)
+          })
+        })
+      })
+    }
   }
 
   /**
@@ -201,7 +244,7 @@ export default class File {
     let name = image.split('/')
     name     = name[name.length - 1]
 
-    ImageResizer.createResizedImage(image, 100, 100, 'JPEG', 100, 0, this._thumbnailsDir).then(thumbnail => {
+    ImageResizer.createResizedImage(image, 160, 160, 'JPEG', 100, 0, this._thumbnailsDir).then(thumbnail => {
       // Let it have the same name of the original image
       this.move(thumbnail.replace('file:', ''), `${this._thumbnailsDir}/${name}`)
     }).catch((error) => {
