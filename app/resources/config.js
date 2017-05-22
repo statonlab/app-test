@@ -155,7 +155,7 @@ nearbyTrees : {
   label : 'Trees nearby',
   description : 'If there are trees of the same species nearby, what state are they in?  Check all that apply.',
   selectChoices : [
-  'Dead and/or dying', 'Healhty and large', 'Healhty and small','No trees of this species nearby', 'Not sure'],
+  'Dead and/or dying', 'Healthy and large', 'Healthy and small','No trees of this species nearby', 'Not sure'],
   placeHolder : "Please select",
   multiCheck : true
 },
