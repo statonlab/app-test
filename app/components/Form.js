@@ -114,7 +114,7 @@ export default class Form extends Component {
         this.setState({[key]: this.props.entryInfo[key]})
       })
       this.primaryKey = this.props.entryInfo.id
-    } else{
+    } else {
       // Generate a primary key
       this.primaryKey = this.realm.objects('Submission')
       if (this.primaryKey.length <= 0) {

@@ -194,16 +194,12 @@ export default class LandingScene extends Component {
 
     Observation.get().then(response => {
       let records = response.data.data
-      console.log(records)
       records.map(record => {
         let exists = (realm.objects('Submission').filtered(`serverID == ${record.observation_id}`).length > 0)
         if (exists) {
           return
         }
-
-          console.log("RECORD: ", record)
         let primaryKey = 1
-
         if (record.mobile_id) {
           primaryKey = record.mobile_id
         } else if (!emptyDB) {
