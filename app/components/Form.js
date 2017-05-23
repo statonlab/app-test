@@ -489,6 +489,7 @@ export default class Form extends Component {
    */
   renderBiominder = () => {
     return (
+
       <View style={[styles.formGroup, {justifyContent: 'center'}]}>
         <Text style={[{color: '#444', flex: 1, fontWeight: 'bold', justifyContent: 'center'}]}>
           ID number for submission: {this.primaryKey}
@@ -496,6 +497,7 @@ export default class Form extends Component {
       </View>
     )
   }
+
 
   /**
    * Render camera fields.
@@ -799,6 +801,14 @@ const styles = StyleSheet.create({
 
   slider: {
     width: 200
+  },
+  bioMinderText : {
+    paddingHorizontal: 5,
+    paddingVertical : 10,
+    color            : '#444',
+    fontSize         : 14,
+    flex             : 1,
+    width            : undefined
   }
 })
 

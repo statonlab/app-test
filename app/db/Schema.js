@@ -56,6 +56,7 @@ const UserSchema = {
     name            : {type: 'string', default: 'default'},
     email           : {type: 'string', default: 'default'},
     anonymous       : {type: 'bool', default: false},
+    is_private       : {type: 'bool', default: false},
     api_token       : {type: 'string', default: ''},
     zipcode         : {type: 'string', default: ''},
     birth_year      : {type: 'int', default: 1980}
@@ -68,7 +69,7 @@ export default new Realm({
     CoordinateSchema,
     SubmissionSchema
   ],
-  schemaVersion: 4,
+  schemaVersion: 5,
   migration    : function (oldRealm, newRealm) {
     if (oldRealm.schemaVersion < 2) {
       let newUser = newRealm.objects('User')
@@ -90,6 +91,12 @@ export default new Realm({
           observation.image = JSON.stringify({"images": oldImages})
         }
       })
+    }
+    if (oldRealm.schemaVersion < 5 ){
+      let user = newRealm.objects('User')
+      if (user.length > 0) {
+        user.is_private = false
+      }
     }
   }
 })

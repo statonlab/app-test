@@ -199,6 +199,7 @@ export default class LandingScene extends Component {
         if (exists) {
           return
         }
+
         let primaryKey = 1
         if (record.mobile_id) {
           primaryKey = record.mobile_id
@@ -208,7 +209,7 @@ export default class LandingScene extends Component {
 
         realm.write(() => {
           realm.create('Submission', {
-            id       : primaryKey,
+            id       : record.mobile_id,
             name     : record.observation_category,
             images   : JSON.stringify(record.images),
             location : record.location,
