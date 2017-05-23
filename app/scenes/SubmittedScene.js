@@ -35,6 +35,12 @@ export default class SubmittedScene extends Component {
       })
     }
     this.setState({shouldNavigate: false})
+
+    setTimeout(() => {
+      this.setState({shouldNavigate: true})
+    }, 200)
+
+
   }
 
   renderMap() {
