@@ -489,17 +489,11 @@ export default class Form extends Component {
    */
   renderBiominder = () => {
     return (
-<<<<<<< HEAD
-      <View style={[styles.formGroup]}>
-        <Text style={styles.label}>
-          ID number</Text>
-        <Text style={styles.bioMinderText}> {primaryKey}</Text>
-=======
+
       <View style={[styles.formGroup, {justifyContent: 'center'}]}>
         <Text style={[{color: '#444', flex: 1, fontWeight: 'bold', justifyContent: 'center'}]}>
           ID number for submission: {this.primaryKey}
         </Text>
->>>>>>> master
       </View>
     )
   }
