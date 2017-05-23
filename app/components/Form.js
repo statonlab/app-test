@@ -42,7 +42,7 @@ const DCPrules = {
   emeraldAshBorer        : t.maybe(t.String),
   crownHealth            : t.Number,
   otherLabel             : t.String,
-  locationCharacteristics: t.enums.of(DCP.locationCharacteristics.selectChoices, 'locations'),
+  locationCharacteristics: t.maybe(t.enums.of(DCP.locationCharacteristics.selectChoices, 'locations')),
   // nearbySmall            : t.enums.of(DCP.nearbySmall.selectChoices),
   // nearbyDead             : t.enums.of(DCP.nearbyDead.selectChoices),
   treated                : t.enums.of(DCP.treated.selectChoices),
@@ -54,7 +54,7 @@ const DCPrules = {
   locationComment        : t.maybe(t.String),
   burrs                  : t.enums.of(DCP.burrs.selectChoices),
   catkins                : t.enums.of(DCP.catkins.selectChoices),
-  nearbyTrees : t.enums.of(DCP.nearbyTrees.selectChoices)
+  nearbyTrees            : t.maybe(t.enums.of(DCP.nearbyTrees.selectChoices))
   // surroundings           : t.enums.of(DCP.surroundings.selectChoices)
 }
 
@@ -80,10 +80,11 @@ export default class Form extends Component {
       bottomMargin: new Animated.Value(0)
     }
 
-    this.events = []
-    this.realm  = realm
-
-    this.formProps = this.props.formProps // read in form items to display
+    this.events     = []
+    this.realm      = realm
+    this.fs         = new File()
+    this.primaryKey = 0
+    this.formProps  = this.props.formProps // read in form items to display
 
     let formRules = {
       images  : t.maybe(t.dict(t.String, t.list(t.String))),
@@ -98,19 +99,31 @@ export default class Form extends Component {
 
   componentWillMount() {
     if (this.props.edit) {
-      //For every key, set the state
-      for (key of Object.keys(this.props.entryInfo)) {
+      // For every key, set the state
+      Object.keys(this.props.entryInfo).map(key => {
         if (key === 'meta_data') {
           this.setState({'metadata': JSON.parse(this.props.entryInfo[key])})
-          continue
+          return
         }
+
         if (key === 'images') {
           this.setState({images: JSON.parse(this.props.entryInfo[key])})
-          continue
+          return
         }
-        this.setState({key: this.props.entryInfo[key]})
+
+        this.setState({[key]: this.props.entryInfo[key]})
+      })
+      this.primaryKey = this.props.entryInfo.id
+    } else {
+      // Generate a primary key
+      this.primaryKey = this.realm.objects('Submission')
+      if (this.primaryKey.length <= 0) {
+        this.primaryKey = parseInt(moment().format('DMMYYH').toString())
+      } else {
+        this.primaryKey = this.primaryKey.sorted('id', true)[0].id + 1
       }
     }
+
 
     // Add image resize event listener
     this.events.push(DeviceEventEmitter.addListener('imagesResized', this._handleResizedImages))
@@ -153,15 +166,12 @@ export default class Form extends Component {
    * @returns {boolean}
    */
   cancel = () => {
-    console.log(Object.keys(this.state.metadata))
-    if (this.state.images[0] || Object.keys(this.state.metadata)[0]) {
+    if (this.state.images['images'] || Object.keys(this.state.metadata)[0]) {
       Alert.alert('Cancel Submission',
         'Data will be permanently lost if you cancel. Are you sure?', [
           {
             text   : 'Yes',
-            onPress: () => {
-              this.props.navigator.popToTop()
-            }
+            onPress: this.doCancel
           },
           {
             text   : 'Back',
@@ -173,8 +183,19 @@ export default class Form extends Component {
         ])
       return false
     }
-    this.props.navigator.popToTop()
+
+    this.doCancel()
     return false
+  }
+
+  // Do the actual cancellation
+  doCancel = () => {
+    this.refs.spinner.open()
+    // Delete all images
+    this.fs.delete(this.state.images, () => {
+      this.refs.spinner.close()
+      this.props.navigator.popToTop()
+    })
   }
 
   /**
@@ -182,8 +203,7 @@ export default class Form extends Component {
    *
    */
   generateImages = () => {
-    let file = new File()
-    file.resizeImages(this.state.images)
+    this.fs.resizeImages(this.state.images)
 
     this.refs.spinner.open()
   }
@@ -209,15 +229,8 @@ export default class Form extends Component {
    * Write the observation to Realm, leave the scene.
    */
   save = () => {
-    let primaryKey = this.realm.objects('Submission')
-    if (primaryKey.length <= 0) {
-      primaryKey = parseInt(moment().format('DMMYYH').toString())
-    } else {
-      primaryKey = primaryKey.sorted('id', true)[0].id + 1
-    }
-
     let observation = {
-      id       : primaryKey,
+      id       : this.primaryKey,
       name     : this.state.title.toString(),
       images   : JSON.stringify(this.state.images),
       location : this.state.location,
@@ -233,7 +246,7 @@ export default class Form extends Component {
     // Tell anyone who cares that there is a new submission
     DeviceEventEmitter.emit('newSubmission')
 
-    this.props.navigator.push({
+    this.props.navigator.replace({
       label   : 'SubmittedScene',
       plant   : observation,
       gestures: {}
@@ -253,7 +266,7 @@ export default class Form extends Component {
       return
     }
 
-    primaryKey = this.props.entryInfo.id
+    let primaryKey = this.props.entryInfo.id
 
     let observation = {
       id          : primaryKey,
@@ -282,7 +295,8 @@ export default class Form extends Component {
   }
 
   /**
-   * execute tcomb validation method on the metadata, given the expected parameters formT
+   * Execute tcomb validation method on the metadata, given the expected parameters formT
+   *
    * @returns {*}
    */
 
@@ -291,21 +305,24 @@ export default class Form extends Component {
   }
 
   /**
-   *Handle errors generated by tcomb.  Update the warnings in the state for changing text formatting.
+   * Handle errors generated by tcomb.  Update the warnings in the state for changing text formatting.
+   *
    * @param validationAttempt
    */
   notifyIncomplete = (validationAttempt) => {
     let errors    = validationAttempt.errors
     let errorList = []
     let warnings  = {}
+
     errors.map((error) => {
-      console.log(error.path)
       warnings[error.path] = true
       if (typeof DCP[error.path] !== 'undefined') {
         errorList.push('Required field: ' + DCP[error.path].label)
       }
     })
+
     this.setState({warnings})
+
     if (errorList) {
       alert(errorList.join('\n'))
     }
@@ -318,12 +335,8 @@ export default class Form extends Component {
   compileValRules = () => {
     let formBase = {}
 
-    Object.keys(this.formProps).map((propItem, index) => {
-
-      let itemRule = DCPrules[propItem]
-
-      formBase[propItem] = itemRule
-
+    Object.keys(this.formProps).map(propItem => {
+      formBase[propItem] = DCPrules[propItem]
     })
     return formBase
   }
@@ -475,17 +488,18 @@ export default class Form extends Component {
    * @returns {XML}
    */
   renderBiominder = () => {
-    let primaryKey = this.realm.objects('Submission')
-    if (primaryKey.length <= 0) {
-      primaryKey = 1
-    } else {
-      primaryKey = primaryKey.sorted('id', true)[0].id + 1
-    }
     return (
+<<<<<<< HEAD
       <View style={[styles.formGroup]}>
         <Text style={styles.label}>
           ID number</Text>
         <Text style={styles.bioMinderText}> {primaryKey}</Text>
+=======
+      <View style={[styles.formGroup, {justifyContent: 'center'}]}>
+        <Text style={[{color: '#444', flex: 1, fontWeight: 'bold', justifyContent: 'center'}]}>
+          ID number for submission: {this.primaryKey}
+        </Text>
+>>>>>>> master
       </View>
     )
   }
@@ -561,7 +575,7 @@ export default class Form extends Component {
             {this.renderCameraItem('images', 'Images')}
             {this.renderForm()}
             {this.renderHiddenComments()}
-            {this.props.title == 'American Chestnut' ? this.renderBiominder() : null}
+            {this.props.title === 'American Chestnut' ? this.renderBiominder() : null}
 
             <View style={[styles.formGroup, {flex: 0, alignItems: 'flex-start'}]}>
               <Text style={[styles.label, {paddingTop: 5}]}>Comments</Text>
@@ -628,8 +642,6 @@ Form.propTypes = {
   entryInfo: PropTypes.object
 }
 
-const elevationStyle = new Elevation(2)
-
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#f5f5f5',
@@ -670,12 +682,13 @@ const styles = StyleSheet.create({
     width        : undefined
   },
 
-  label       : {
+  label: {
     flex      : 0,
     width     : 110,
     color     : '#444',
     fontWeight: 'bold'
   },
+
   labelWarning: {
     color: Colors.danger
   },

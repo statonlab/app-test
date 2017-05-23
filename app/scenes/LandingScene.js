@@ -19,6 +19,7 @@ import Colors from '../helpers/Colors'
 import UploadButton from '../components/UploadButton'
 import SnackBarNotice from '../components/SnackBarNotice'
 import Observation from '../helpers/Observation'
+import File from '../helpers/File'
 
 const plants = [
   {
@@ -116,6 +117,7 @@ export default class LandingScene extends Component {
 
     // Hold all events so we can remove them later and prevent memory leaks
     this.events = []
+    this.fs     = new File()
   }
 
   /**
@@ -154,7 +156,6 @@ export default class LandingScene extends Component {
       })
       this.setSidebarLinks()
       this.refs.snackbar.showBar()
-      console.log('DB: entries', realm.objects('Submission').length)
       this.downloadObservations()
     }))
 
@@ -191,17 +192,20 @@ export default class LandingScene extends Component {
   downloadObservations() {
     let emptyDB = (realm.objects('Submission').length <= 0)
 
-    console.log('DB: entries', realm.objects('Submission').length)
-
-
     Observation.get().then(response => {
       let records = response.data.data
-      records.forEach(record => {
+      records.map(record => {
         let exists = (realm.objects('Submission').filtered(`serverID == ${record.observation_id}`).length > 0)
         if (exists) {
           return
         }
 
+        let primaryKey = 1
+        if (record.mobile_id) {
+          primaryKey = record.mobile_id
+        } else if (!emptyDB) {
+          primaryKey = realm.objects('Submission').sorted('id', true)[0].id + 1
+        }
 
         realm.write(() => {
           realm.create('Submission', {
@@ -214,12 +218,22 @@ export default class LandingScene extends Component {
             meta_data: JSON.stringify(record.meta_data),
             serverID : parseInt(record.observation_id)
           })
-        console.log("RECORD: ", record)
           emptyDB = false
         })
       })
+
+      this.downloadImages()
     }).catch(error => {
-      console.log('NETWORK ERROR', error)
+      console.log(error)
+    })
+  }
+
+  // Download images
+  downloadImages() {
+    let observations = realm.objects('Submission')
+
+    observations.map(observation => {
+      this.fs.download(observation)
     })
   }
 

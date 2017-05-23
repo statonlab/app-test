@@ -12,7 +12,6 @@ export default class TreeScene extends Component {
   }
 
   render() {
-    console.log("Props: ", this.props.entryInfo, this.props.title, this.props.edit)
     return (
       <View style={{flex: 1, backgroundColor: '#f5f5f5'}}>
         <Header title={this.props.title} navigator={this.props.navigator} showRightIcon={false} elevation={0}/>

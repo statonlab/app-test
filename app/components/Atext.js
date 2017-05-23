@@ -1,12 +1,11 @@
 import React, {Component, PropTypes} from 'react'
-import {View, Text, StyleSheet, Linking, TouchableOpacity} from 'react-native'
+import {Text, StyleSheet, Linking} from 'react-native'
 import Colors from '../helpers/Colors'
 
 export default class Atext extends Component {
   constructor(props) {
     super(props)
   }
-
 
   handleClick = () => {
     Linking.canOpenURL(this.props.url).then(supported => {
@@ -18,12 +17,11 @@ export default class Atext extends Component {
     })
   }
 
-
   render() {
     return (
       <Text
         onPress={this.handleClick}
-        style={styles.linkText}>
+        style={[this.props.style, styles.linkText]}>
         {this.props.children}
       </Text>
     )
@@ -31,13 +29,17 @@ export default class Atext extends Component {
 }
 
 Atext.PropTypes = {
-  url: PropTypes.string.isRequired
+  url  : PropTypes.string.isRequired,
+  style: PropTypes.object
 }
 
+Atext.defaultProps = {
+  style: {}
+}
 
 const styles = StyleSheet.create({
   linkText: {
     textDecorationLine: 'underline',
-    color             : Colors.info
+    color             : Colors.primary
   }
 })

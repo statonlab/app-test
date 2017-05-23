@@ -36,7 +36,16 @@ const DCP = {
     multiCheck   : true,
     images       : [
       require('../img/DCP/EmAshBorer/EAB tunneling.jpg'),
-      require('../img/DCP/EmAshBorer/Emerald ash borer adult.jpg')
+      require('../img/DCP/EmAshBorer/Emerald ash borer adult.jpg'),
+      require('../img/DCP/EmAshBorer/D-shaped_holes.jpg'),
+      require('../img/DCP/EmAshBorer/epicormic_ash.jpg'),
+
+    ],
+    captions : [
+      "Tunneling under bark by EAB larvae. Photo credit: Eric R. Day, Virginia Polytechnic Institute and State University, Bugwood.org",
+      "Adult EAB. Photo credit: David Cappaert, Bugwood.org",
+      "D-shaped exit holes of adult EAB.  Photo credit: David R. McKay, USDA APHIS PPQ, Bugwood.org",
+      "Stump sprouting or epicormic growth, where new sprouts emerge from the stump of a tree or the trunk, are a common sign of tree distress. Photo credit: Joseph OBrien, USDA Forest Service, Bugwood.org"
     ],
         camera : [  'D-shaped adult exit holes', 'Bark coming off with tunneling underneath',
           'Emerald ash borer beetles/larvae', 'Stump sprouting'
@@ -64,8 +73,16 @@ const DCP = {
     placeHolder  : 'No blight symptoms',
     multiCheck   : true,
     images       : [
-      require('../img/DCP/ChestnutBlight/Chestnut_blight.jpg')
+      require('../img/DCP/ChestnutBlight/Chestnut_blight.jpg'),
+      require('../img/DCP/ChestnutBlight/cankers.jpg'),
+      require('../img/DCP/ChestnutBlight/stumpsprouting.jpg'),
+
     ],
+    captions : ["The chestnut blight fungus can produce orange pustules on bark.  Photo credit: USDA Forest Service - Region 8 - Southern, USDA Forest Service, Bugwood.org",
+    "An old dead trunk, previously killed by chestnut blight. Photo credit: Joseph OBrien, USDA Forest Service, Bugwood.org",
+    "Stump sprouting, where new sprouts emerge from the stump of a tree, whether this tree is living or dead, are a common sign of tree distress.  Photo credit: Norbert Frank, University of West Hungary, Bugwood.org",
+    "",
+    ]
   },
   acorns             : {
     label        : 'Acorns',
@@ -107,10 +124,8 @@ const DCP = {
     minValue   : 1,
     maxValue   : 40,
     units      : "Inches",
-    images     : [
-      require('../img/ash_id/1.jpg'),
-      require('../img/ash_id/2.jpg')
-    ],
+    images : [require("../img/DCP/diameter_photo_1.jpg")]
+
     //  startValue : 25,
   },
   crownHealth        : {
@@ -120,10 +135,7 @@ const DCP = {
     minValue   : 1,
     maxValue   : 100,
     units      : "%",
-    images     : [
-      require('../img/ash_id/1.jpg'),
-      require('../img/ash_id/2.jpg')
-    ],
+
     //  startValue : 100,
   },
   crownClassification: {
@@ -155,7 +167,7 @@ nearbyTrees : {
   label : 'Trees nearby',
   description : 'If there are trees of the same species nearby, what state are they in?  Check all that apply.',
   selectChoices : [
-  'Dead and/or dying', 'Healhty and large', 'Healhty and small','No trees of this species nearby', 'Not sure'],
+  'Dead and/or dying', 'Healthy and large', 'Healthy and small','No trees of this species nearby', 'Not sure'],
   placeHolder : "Please select",
   multiCheck : true
 },
@@ -191,10 +203,6 @@ nearbyTrees : {
     minValue   : 1,
     maxValue   : 150,
     units      : "Feet",
-    images     : [
-      require('../img/ash_id/1.jpg'),
-      require('../img/ash_id/2.jpg')
-    ],
   },
   burrs          : {
     label        : 'Nuts/burrs',

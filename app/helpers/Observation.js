@@ -18,7 +18,6 @@ class Observation {
    */
   async upload(observation) {
     this._setApiToken()
-
     if (this.api_token === false) {
       throw Error('User not signed in')
     }
@@ -56,9 +55,11 @@ class Observation {
     if (this.api_token === false) {
       throw Error('User not signed in')
     }
+
     if (!observation.needs_update) {
       return
     }
+
     if (!observation.serverID) {
       console.log('warning: Updating observation with no server ID.  Local only.')
       return
@@ -103,7 +104,7 @@ class Observation {
     form.append('date', observation.date)
     form.append('is_private', observation.is_private ? '1' : '0')
     form.append('api_token', this.api_token)
-    form.append('mobile_id', observation.id )
+    form.append('mobile_id', observation.id)
 
     let images = JSON.parse(observation.images)
 
@@ -116,7 +117,7 @@ class Observation {
         let extension = name.split('.')
         extension     = extension[extension.length - 1]
 
-        let prefix = Platform.OS === 'android' && image.indexOf('file:') === -1 ? '' : 'file:///'
+        let prefix = Platform.OS === 'android' && image.indexOf('file:') === -1 ? 'file://' : 'file://'
         form.append(`images[${key}][${i}]`, {uri: `${prefix}${image}`, name, type: `image/${extension}`})
       })
     })

@@ -164,9 +164,9 @@ export default class PickerModal extends Component {
                 </Text>
                 {this.props.images.length == 0 ? null :
                   <View style={ styles.iconsContainer}>
-                  <ImageModal images={this.props.images} >
-                    <Icon name="camera-burst" size={23} style={styles.icon}/>
-                  </ImageModal>
+                    <ImageModal images={this.props.images}>
+                      <Icon name="camera-burst" size={23} style={styles.icon}/>
+                    </ImageModal>
                   </View>
                 }
               </View>
@@ -214,7 +214,7 @@ PickerModal.defaultProps = {
   initialSelect: '',
   multiCheck   : false,
   freeText     : false,
-  images   : []
+  images       : []
 }
 
 
@@ -279,7 +279,7 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     fontWeight : '500',
     fontSize   : 16,
-    flexWrap:'wrap'
+    flexWrap   : 'wrap'
 
   },
 
@@ -295,19 +295,19 @@ const styles = StyleSheet.create({
     fontWeight: '500'
   },
 
-  icon     : {
+  icon: {
     fontSize : 20,
     color    : '#aaa',
     marginTop: 5
   },
 
-  iconTI   : {
+  iconTI        : {
     fontSize  : 20,
     color     : '#aaa',
     marginTop : 5,
     marginLeft: 15
   },
-  textField: {
+  textField     : {
     height           : 40,
     flex             : 1,
     borderWidth      : 1,
@@ -317,7 +317,7 @@ const styles = StyleSheet.create({
     fontSize         : 14,
     backgroundColor  : '#f9f9f9'
   },
-  buttonAlt: {
+  buttonAlt     : {
     borderRadius   : 2,
     height         : 40,
     flex           : 1,
@@ -327,7 +327,7 @@ const styles = StyleSheet.create({
   },
   iconsContainer: {
     paddingVertical  : 5,
-    paddingHorizontal : 5,
+    paddingHorizontal: 5,
     alignItems       : 'center'
   },
 })

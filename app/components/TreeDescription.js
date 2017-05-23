@@ -3,16 +3,14 @@ import {
   View,
   StyleSheet,
   Text,
-  ScrollView
+  ScrollView,
+  Image
 } from 'react-native'
-import {getTheme} from 'react-native-material-kit'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
 import Plants from '../resources/descriptions'
 import ImageModal from '../components/ImageModal'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-
-const theme = getTheme()
 
 export default class TreeDescription extends Component {
 
@@ -43,12 +41,22 @@ export default class TreeDescription extends Component {
     )
   }
 
+  _renderTopImage(images) {
+    if (images.length === 0) {
+      return null
+    }
+
+    return (
+      <Image source={images[0]} style={styles.cardImage}/>
+    )
+  }
+
   render() {
     const len = Plants[this.props.title].descriptionCards.length - 1
 
     return (
       <ScrollView style={[styles.scrollView]}>
-        {/*this._renderImageModalIcons()*/}
+        {this._renderTopImage(Plants[this.props.title].images)}
         <View style={styles.card}>
           {Plants[this.props.title].images.length > 0 &&
           <View style={[styles.cardBody, {paddingTop: 10}]}>
@@ -67,7 +75,7 @@ export default class TreeDescription extends Component {
                 <Text style={styles.cardTitle}>{card.title}</Text>
                 {card.body.map((body, bodyIndex) => {
                   return (<View key={bodyIndex}>
-                    {body}
+                      {body}
                     </View>
                   )
                 })}
