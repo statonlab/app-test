@@ -226,7 +226,7 @@ const Plants = {
       // accessibility          : true,
       crownHealth            : true,
       diameterNumeric        : true,
-      locationComment        : true
+      //locationComment        : true
     }
   }
   ,
