@@ -24,23 +24,21 @@ export default class SubmittedScene extends Component {
     this.fs     = new File()
   }
 
+  /**
+   * Given a marker, navigate to that marker at the Observation Scene.
+   * @param marker
+   */
 
   navigateCallout = (marker) => {
     console.log(marker)
     if (this.state.shouldNavigate) {
       let plant = realm.objects('Submission').filtered(`id == ${marker.plant.id}`)
-      this.props.navigator.push({
+      this.props.navigator.replace({
         label: 'ObservationScene',
         plant: marker.plant
       })
     }
     this.setState({shouldNavigate: false})
-
-    setTimeout(() => {
-      this.setState({shouldNavigate: true})
-    }, 200)
-
-
   }
 
   renderMap() {
