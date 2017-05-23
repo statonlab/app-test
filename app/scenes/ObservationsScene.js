@@ -17,6 +17,8 @@ import Elevation from '../helpers/Elevation'
 import Observation from '../helpers/Observation'
 import Spinner from '../components/Spinner'
 import File from '../helpers/File'
+import SnackBarNotice from '../components/SnackBarNotice'
+
 
 export default class ObservationsScene extends Component {
   constructor(props) {
@@ -32,7 +34,8 @@ export default class ObservationsScene extends Component {
     this.state = {
       hasData    : (this.submissions.length > 0),
       submissions: this.dataSource.cloneWithRowsAndSections(this._createMap(this.submissions)),
-      isLoggedIn : false
+      isLoggedIn : false,
+      noticeText : ''
     }
 
     this.events = []
@@ -47,6 +50,19 @@ export default class ObservationsScene extends Component {
     this._isLoggedIn()
 
     this.loggedEvent = DeviceEventEmitter.addListener('userLoggedIn', this._isLoggedIn.bind(this))
+    this.loggedEvent = DeviceEventEmitter.addListener('observationDeleted', () => {
+      this.setState({
+        noticeText  : 'Entry deleted'
+      })
+      this.refs.snackbar.showBar()
+    })
+
+    this.loggedEvent = DeviceEventEmitter.addListener('observationSync', () => {
+      this.setState({
+        noticeText  : 'Sync successful'
+      })
+      this.refs.snackbar.showBar()
+    })
   }
 
   /**
@@ -111,6 +127,7 @@ export default class ObservationsScene extends Component {
     let isLoggedIn = realm.objects('User').length > 0
     this.setState({isLoggedIn})
   }
+
 
   /**
    * Render single row.
@@ -260,13 +277,13 @@ export default class ObservationsScene extends Component {
 
       observations.forEach(observation => {
         Observation.upload(observation).then(response => {
-          // TODO: Add snackbar notification
-          // console.log(response)
           realm.write(() => {
             observation.synced         = true
             observation.observation_id = response.data.data.observation_id
             this._resetDataSource()
             this.refs.spinner.close()
+            DeviceEventEmitter.emit('observationSync')
+
           })
         }).catch(error => {
           // TODO: Handle Error!
@@ -282,11 +299,12 @@ export default class ObservationsScene extends Component {
 
       toSync.forEach(observation => {
         Observation.update(observation).then(response => {
-          // TODO: Add snackbar notification
           realm.write(() => {
             observation.needs_update = false
             this._resetDataSource()
             this.refs.spinner.close()
+            DeviceEventEmitter.emit('observationSync')
+
           })
         }).catch(error => {
           // TODO: Handle Error!
@@ -312,6 +330,7 @@ export default class ObservationsScene extends Component {
         <Spinner ref="spinner"/>
         <Header navigator={this.props.navigator} title="Your Entries"/>
         {this.state.hasData ? this._renderList() : this._renderEmpty()}
+        <SnackBarNotice ref="snackbar" noticeText={this.state.noticeText}/>
       </View>
     )
   }
