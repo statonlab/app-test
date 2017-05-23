@@ -15,14 +15,23 @@ const styles = StyleSheet.create({
 
 const Plants = {
   'American Chestnut': {
-    image           : require('../img/am_chestnut4.jpg'),
-    latinName       : 'Castanea dentata',
-    images          : [
+    image    : require('../img/am_chestnut4.jpg'),
+    latinName: 'Castanea dentata',
+    images   : [
+      require('../img/chestnut_id/4.jpg'),
       require('../img/chestnut_id/1.jpg'),
       require('../img/chestnut_id/2.jpg'),
-      require('../img/chestnut_id/3.jpg'),
-      require('../img/chestnut_id/4.jpg')
+      require('../img/chestnut_id/3.jpg')
     ],
+    captions : [
+      "Chestnut leaves are straight with large, widely spaced and often hooked serrations on their margins. Photo credit: Linda Haugen, USDA Forest Service, Bugwood.org",
+      "Chestnut flowers, called catkins are abundant and white. Photo credit: USDA Forest Service Southern Research Station , USDA Forest Service, SRS, Bugwood.org",
+      "Chestnut fruits (called burs) are covered with spikes. Photo credit: Paul Wray, Iowa State University, Bugwood.org",
+      "The insides of burs have large brown nuts. Photo credit: USDA Forest Service Southern Research Station, Bugwood.org"
+
+
+    ],
+
     maps            : [require('../img/maps/am_chestnut_map.png')],
     descriptionCards: [
       {
@@ -46,9 +55,9 @@ const Plants = {
           </Text>,
           <Text>
             {'\u2022'} Do not wrap in plastic, as samples will mold in the mail.
-            </Text>,
+          </Text>,
           <Text>
-            {'\u2022'} Do not ship overnight.  It's not necessary and we won't ID your sample right away.
+            {'\u2022'} Do not ship overnight. It's not necessary and we won't ID your sample right away.
           </Text>,
           <Text>
             Submission address - please choose the office closest to the tree located.
@@ -63,7 +72,8 @@ const Plants = {
       {
         title : 'Description',
         body  : [
-          <Text style={styles.paragraph}>The leaves of American chestnut are straight with large, widely spaced, often hooked, serrations on their edges. Chestnut fruits are large, green and covered with spikes on the outside, bearing three large nuts on the inside. Chestnut produces long cadkins made up of many small, pale green flowers. American chestnut twigs are hairless, reddish brown and have small white lenticels. While it is relatively common to find stump-sprouting chestnuts that have been killed by blight, health mature American chestnut trees are very rare unless outside the tree’s native range.</Text>,
+          <Text
+            style={styles.paragraph}>The leaves of American chestnut are straight with large, widely spaced, often hooked, serrations on their edges. Chestnut fruits are large, green and covered with spikes on the outside, bearing three large nuts on the inside. Chestnut produces long cadkins made up of many small, pale green flowers. American chestnut twigs are hairless, reddish brown and have small white lenticels. While it is relatively common to find stump-sprouting chestnuts that have been killed by blight, health mature American chestnut trees are very rare unless outside the tree’s native range.</Text>,
           <Text style={styles.paragraph}>To learn more about identifying American chestnut and distinguishing it from similar species <Atext url="https://www.acf.org/resources/identification/">please visit the American Chestnut Foundation website.</Atext></Text>
         ],
         images: []
@@ -93,20 +103,10 @@ const Plants = {
     image           : require('../img/ash.jpg'),
     latinName       : 'Fraxinus sp.',
     images          : [
-      require('../img/ash_id/1.jpg'),
-      require('../img/ash_id/2.jpg'),
-      require('../img/ash_id/3.jpg'),
-      require('../img/ash_id/4.jpg'),
-      require('../img/ash_id/5.jpg'),
-      require('../img/ash_id/6.jpg'),
-      require('../img/ash_id/7.jpg'),
-      require('../img/ash_id/8.jpg'),
-      require('../img/ash_id/9.jpg'),
-      require('../img/ash_id/10.jpg'),
-      require('../img/ash_id/11.jpg')
-    ],
-    captions        : [
-      'Ash leaves.  Image copyright: ', 'Ash buds', 'There are several different species of American ash trees, all of which are susceptible to the deadly emerald ash borer. ', 'Test caption 4'
+      require('../img/ash_id/ash_bark.jpg'),
+      require('../img/ash_id/ash_buds.jpg'),
+      require('../img/ash_id/ash_leaves.jpg'),
+      require('../img/ash_id/ash_seeds.jpg'),
     ],
     maps            : [
       require('../img/maps/ash_fraxamer_range.png'),
@@ -132,7 +132,8 @@ const Plants = {
       {
         title : 'Description',
         body  : [
-          <Text style={styles.paragraph}>Ash trees share several features that can be used to distinguish them from other tree species. Ash trees have an opposite branching pattern, where buds are positioned opposite each other on twigs. Ash trees also have compound leaves. Compound leaves are made up of many leaflets, each of which looks like a leaf. However leaves and leaflets can be distinguished because buds are only found at the base of the overall leaf, and not each individual leaflet. Ashes typically have 5-9 leaflets per leaf, although this varies by species. In addition, mature ash trees have a characteristic diamond pattern to their bark and ash seeds are distinctively shaped.</Text>],
+          <Text
+            style={styles.paragraph}>Ash trees share several features that can be used to distinguish them from other tree species. Ash trees have an opposite branching pattern, where buds are positioned opposite each other on twigs. Ash trees also have compound leaves. Compound leaves are made up of many leaflets, each of which looks like a leaf. However leaves and leaflets can be distinguished because buds are only found at the base of the overall leaf, and not each individual leaflet. Ashes typically have 5-9 leaflets per leaf, although this varies by species. In addition, mature ash trees have a characteristic diamond pattern to their bark and ash seeds are distinctively shaped.</Text>],
         images: []
       }, {
         title : 'Range',
@@ -142,7 +143,8 @@ const Plants = {
       {
         title : 'Distinguishing different ash species',
         body  : [<Text style={styles.paragraph}>Leaf scars, twig shape, and species range can be very helpful in distinguishing ash tree species.</Text>,
-          <Text style={styles.paragraph}>Green ash has a leaf scar below the bud while white ash has a leaf scar that wraps around the bud and is more “U”-shaped. In addition, white ash leaflets are white-colored on the undersides while green ash leaflets are green or rusty on their undersides. Blue ash can be distinguished by its thick square-shaped twigs which are often winged. Black ash has a leaf scar similar to green ash but leaflets are directly attached to the petiole without stalks to connect them. In addition, black ash has a more northern range and is typically found in wet sites.</Text>,
+          <Text
+            style={styles.paragraph}>Green ash has a leaf scar below the bud while white ash has a leaf scar that wraps around the bud and is more “U”-shaped. In addition, white ash leaflets are white-colored on the undersides while green ash leaflets are green or rusty on their undersides. Blue ash can be distinguished by its thick square-shaped twigs which are often winged. Black ash has a leaf scar similar to green ash but leaflets are directly attached to the petiole without stalks to connect them. In addition, black ash has a more northern range and is typically found in wet sites.</Text>,
           <Atext style={styles.paragraph} url="https://www.ars.usda.gov/midwest-area/ames/plant-introduction-research/docs/npgs-ash-conservation-project/identifying-ash/">Read more here.</Atext>
         ],
         images: []
@@ -164,7 +166,7 @@ const Plants = {
       seedsBinary            : true,
       flowersBinary          : true,
       emeraldAshBorer        : true,
-      nearbyTrees: true,
+      nearbyTrees            : true,
       crownHealth            : true,
       diameterNumeric        : true
     }
@@ -173,10 +175,11 @@ const Plants = {
     image           : require('../img/hemlock.jpg'),
     latinName       : 'Tsuga sp.',
     images          : [
-      require('../img/hemlock_id/1.jpg'),
-      require('../img/hemlock_id/2.jpg'),
-      require('../img/hemlock_id/3.jpg')
+      require('../img/hemlock_id/3.jpg'),
+      require('../img/hemlock_id/hemlock_cones.jpg'),
+      require('../img/hemlock_id/hemlock_species.jpg'),
     ],
+    captions: ['Hemlock needles are flattened, 1.5-2cm long, dark green on top and lighter on the underside with two white lines running the length of the needles.', '', ''],
     maps            : [
       require('../img/maps/hemlock_tsugcana_range.png'),
       require('../img/maps/hemlock_tsugcaro_range.png')
@@ -251,8 +254,14 @@ const Plants = {
       require('../img/white_oak_id/2.jpg'),
       require('../img/white_oak_id/3.jpg'),
       require('../img/white_oak_id/4.jpg'),
-      require('../img/white_oak_id/5.jpg'),
+      // require('../img/white_oak_id/5.jpg'),
       require('../img/white_oak_id/6.jpg')
+    ],
+    captions : ["White oaks take many years to reach sexual maturity, and large crops of acorns are not produced until trees are 50 years old.  Photo credit: Paul Wray, Iowa State University, Bugwood.org",
+    "White oak bark on mature trees is light gray in color with rectangular furrows. Photo credit: Paul Wray, Iowa State University, Bugwood.org",
+      "White oak leaves have rounded lobes and are 5-8.5 inches in length.  Photo credit: Chris Evans, University of Illinois, Bugwood.org",
+      "When they first emerge, white oak leaves are covered with hairs and pinkish in color.  Photo credit: Paul Bolstad, University of Minnesota, Bugwood.org",
+      "White oak typically grow 80-100 feet although much taller individuals have also been recorded.  Photo credit: David Stephens, Bugwood.org"
     ],
     latinName       : 'Quercus alba',
     maps            : [require('../img/maps/oak_queralba_range.png')],
@@ -291,11 +300,28 @@ const Plants = {
   },
 
   'American Elm': {
-    image           : require('../img/elm.jpg'),
-    latinName       : 'Ulmus americana',
-    images          : [
-      require('../img/elm.jpg')
+    image    : require('../img/elm.jpg'),
+    latinName: 'Ulmus americana',
+    maps            : [require('../img/maps/elm_map.png')],
+    images   : [
+      require('../img/elm_id/Elm_bark.jpg'),
+      require('../img/elm_id/Elm_leaf.jpg'),
+      require('../img/elm_id/Elm_seeds.jpg'),
+      require('../img/elm_id/Elm_flowers.jpg'),
+      require('../img/elm_id/Elm_vase_shape.jpg'),
+      require('../img/elm_id/Dutch_elm_diseases.jpg'),
+
     ],
+    captions : [
+      "The bark on large elm trees is rough with flattened ridges and crisscrossing furrows. Photo credit: Kathy Smith, Ohio State University Extension, Bugwood.org",
+      "Elm leaves are alternating, have asymmetrical bases, and have doublely serrated margins. Photo credit: Paul Wray, Iowa State University, Bugwood.org",
+
+      "Elms produce seeds that are small, oval, papery samaras. Paul Wray, Iowa State University, Bugwood.org",
+      "Elms are one of first to bloom in spring.  These flowers are not very showy (they have no petals) but are on long pedicels. Rob Routledge, Sault College, Bugwood.org",
+      "Large elm trees tend to have a vase shape.  Photo credit: Joseph OBrien, USDA Forest Service, Bugwood.org",
+      "Symptoms of Dutch elm disease include wilted or yellowing leaves and brown streaking in sapwood. Photo credit: George Hudler, Cornell University, Bugwood.org."
+    ],
+
     maps            : [require('../img/elm.jpg')],
     descriptionCards: [
       {
@@ -316,7 +342,7 @@ const Plants = {
     formProps       : {
       seedsBinary            : true,
       flowersBinary          : true,
-      nearbyTrees             : true,
+      nearbyTrees            : true,
       // treated                : true,
       locationCharacteristics: true,
       crownHealth            : true,
