@@ -16,24 +16,29 @@ export default class SubmittedScene extends Component {
   constructor(props) {
     super(props)
 
-    this.state = {
-      shouldNavigate : true
+    this.state  = {
+      shouldNavigate: true
     }
     this.id     = this.props.plant.id
     this.marker = {}
     this.fs     = new File()
   }
 
+  /**
+   * Given a marker, navigate to that marker at the Observation Scene.
+   * @param marker
+   */
 
   navigateCallout = (marker) => {
-    if (this.state.shouldNavigate){
+    console.log(marker)
+    if (this.state.shouldNavigate) {
       let plant = realm.objects('Submission').filtered(`id == ${marker.plant.id}`)
-      this.props.navigator.push({
-        label    : 'ObservationScene',
-        plant :marker.plant
+      this.props.navigator.replace({
+        label: 'ObservationScene',
+        plant: marker.plant
       })
     }
-    this.setState({shouldNavigate : false})
+    this.setState({shouldNavigate: false})
   }
 
   renderMap() {
@@ -54,7 +59,8 @@ export default class SubmittedScene extends Component {
           latitude : submission.location.latitude,
           longitude: submission.location.longitude
         },
-        pinColor   : Colors.primary
+        pinColor   : Colors.primary,
+        plant      : submission
       }
 
       if (submission.id === this.id) {

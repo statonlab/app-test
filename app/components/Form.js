@@ -124,6 +124,7 @@ export default class Form extends Component {
       }
     }
 
+
     // Add image resize event listener
     this.events.push(DeviceEventEmitter.addListener('imagesResized', this._handleResizedImages))
   }
@@ -245,7 +246,7 @@ export default class Form extends Component {
     // Tell anyone who cares that there is a new submission
     DeviceEventEmitter.emit('newSubmission')
 
-    this.props.navigator.push({
+    this.props.navigator.replace({
       label   : 'SubmittedScene',
       plant   : observation,
       gestures: {}

@@ -199,9 +199,7 @@ export default class LandingScene extends Component {
         if (exists) {
           return
         }
-
         let primaryKey = 1
-
         if (record.mobile_id) {
           primaryKey = record.mobile_id
         } else if (!emptyDB) {
