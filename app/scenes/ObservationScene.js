@@ -503,7 +503,7 @@ const styles = StyleSheet.create({
   },
 
   selectedCircle: {
-    backgroundColor: Colors.warning
+    backgroundColor: '#444'
   },
 
   circle: {
@@ -513,6 +513,7 @@ const styles = StyleSheet.create({
     borderRadius   : 8 / 2,
     backgroundColor: '#eee',
     opacity        : 0.9,
-    ...(new Elevation(1))
+    ...(new Elevation(1)),
+    shadowColor: 'rgba(255, 255, 255, .8)'
   }
 })

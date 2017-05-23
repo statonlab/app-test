@@ -34,8 +34,6 @@ export default class ImageModal extends Component {
             />
             <ImageSlider style={styles.container} images={this.props.images} captions={this.props.captions} onPress={this._toggle.bind(this)}/>
           </View>
-
-
         </Modal>
 
         <TouchableOpacity onPress={this._toggle.bind(this)} style={this.props.style}>
