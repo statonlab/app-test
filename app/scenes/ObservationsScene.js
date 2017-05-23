@@ -52,14 +52,14 @@ export default class ObservationsScene extends Component {
     this.loggedEvent = DeviceEventEmitter.addListener('userLoggedIn', this._isLoggedIn.bind(this))
     this.loggedEvent = DeviceEventEmitter.addListener('observationDeleted', () => {
       this.setState({
-        noticeText  : 'Entry deleted'
+        noticeText: 'Entry deleted'
       })
       this.refs.snackbar.showBar()
     })
 
     this.loggedEvent = DeviceEventEmitter.addListener('observationSync', () => {
       this.setState({
-        noticeText  : 'Sync successful'
+        noticeText: 'Sync successful'
       })
       this.refs.snackbar.showBar()
     })
