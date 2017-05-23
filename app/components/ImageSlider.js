@@ -14,6 +14,7 @@ import {
   Text
 } from 'react-native'
 import Colors from '../helpers/Colors'
+import ImageZoom from 'react-native-image-pan-zoom'
 
 const styles = StyleSheet.create({
   container: {
@@ -46,7 +47,7 @@ const styles = StyleSheet.create({
   },
 
   captionBox: {
-    backgroundColor: 'transparent',
+    backgroundColor: 'rgba(0,0,0,.1)',
     flex           : 0,
     height         : 10,
     marginVertical : 10
@@ -157,7 +158,7 @@ export default class ImageSlider extends Component {
 
   render() {
     const width    = this.state.width
-    const height   = this.props.height || this.state.height
+    const height   = Dimensions.get('window').height
     const position = this._getPosition()
 
     return (
@@ -169,24 +170,36 @@ export default class ImageSlider extends Component {
           pagingEnabled={true}
           {...this._panResponder.panHandlers}
           contentContainerStyle={{justifyContent: 'center', alignItems: 'center', marginTop: 20}}
+          style={{flex: 1}}
         >
           {this.props.images.map((image, index) => {
             const imageObject = typeof image === 'string' ? {uri: image} : image
+            if (this.props.onPress) {
+              return (
+                <View key={index} style={{flex: 1, width: width}}>
+                  {this.props.captions ? this.renderCaption(index) : null}
+                  <ImageZoom cropWidth={width}
+                    cropHeight={height - 100}
+                    imageWidth={width}
+                    imageHeight={height - 100}>
+                    <Image
+                      source={imageObject}
+                      style={{width, resizeMode: 'contain', flex: 1}}
+                    />
+                  </ImageZoom>
+                </View>
+              )
+            }
+
             return (
-              <View key={index} style={{flex: 1, width: width}}>
-                {this.props.captions ? this.renderCaption(index) : null}
-                <TouchableOpacity style={{flex: 1}} onPress={this.props.onPress} activeOpacity={.9}>
-                  <Image
-                    source={imageObject}
-                    style={{width, maxHeight: Dimensions.get('window').height, resizeMode: 'contain', flex: 1}}
-                  />
-                </TouchableOpacity>
-              </View>
+                <Image
+                  key={index}
+                  source={imageObject}
+                  style={{width, maxHeight: 300, resizeMode: 'contain'}}
+                />
             )
           })}
         </ScrollView>
-
-
         <View style={styles.buttons}>
           {this.props.images.map((image, index) => {
             return (
@@ -197,9 +210,9 @@ export default class ImageSlider extends Component {
                   return this._move(index)
                 }}
                 style={[styles.button, position === index && styles.buttonSelected]}>
-                <View>
-                </View>
-              </TouchableHighlight>)
+                <View></View>
+              </TouchableHighlight>
+            )
           })}
         </View>
       </View>

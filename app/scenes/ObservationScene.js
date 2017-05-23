@@ -466,7 +466,7 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    flex      : 0,
+    flex      : 1,
     width     : Dimensions.get('window').width,
     height    : 190,
     resizeMode: 'cover'
