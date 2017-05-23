@@ -8,7 +8,7 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import {MKSlider} from 'react-native-material-kit'
 import Colors from '../helpers/Colors'
-import InstructionModal from '../components/InstructionModal'
+import ImageModal from '../components/ImageModal'
 
 export default class SliderPick extends Component {
   constructor(props) {
@@ -55,14 +55,11 @@ export default class SliderPick extends Component {
           thumbRadius={this.state.value ? 2 : 0}
         />
         {this.displayLegend()}
-        <InstructionModal style={styles.modalContainer}
-          text={this.props.description}
-          images={this.props.images}
-        >
-
-
-          <Icon name="help-circle" style={styles.icon}/>
-        </InstructionModal>
+        {!this.props.images ? null :
+          <ImageModal images={this.props.images}>
+            <Icon name="help-circle" style={styles.icon}/>
+          </ImageModal>
+        }
       </View>
     )
   }
