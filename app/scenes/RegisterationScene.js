@@ -39,8 +39,6 @@ export default class RegistrationScene extends Component {
       currentYear    : null
     }
 
-    console.log(Platform.OS)
-
     this.realm = realm
 
     this.registrationRules = t.struct({
@@ -79,7 +77,6 @@ export default class RegistrationScene extends Component {
    * @param responseFull
    */
   writeToRealm = (responseFull) => {
-    console.log('writing to realm')
     this.realm.write(() => {
       // Delete existing users first
       this.realm.deleteAll()
@@ -110,7 +107,6 @@ export default class RegistrationScene extends Component {
 
     axios.post('users', request)
       .then(response => {
-        console.log('RES', response.data)
         //write to realm
         this.writeToRealm(response)
         this.setState({showSpinner: false})
@@ -119,7 +115,6 @@ export default class RegistrationScene extends Component {
         this.props.navigator.popToTop()
       })
       .catch(error => {
-        console.log('ERR', error)
         this.handleErrorAxios(error)
         this.setState({showSpinner: false})
       })
@@ -184,19 +179,25 @@ export default class RegistrationScene extends Component {
 
 
   handleErrorAxios = (error) => {
-    let code = error.response.data.code
-    switch (code) {
+    if (!error.response) {
+      alert('Unable to connect to server.  Please verify your internet connection and try again.')
+      return
+    }
+
+    switch (error.response.status) {
       case 500:
-        alert('Unable to connect to server.  Please verify your internet connection and try again.')
+        alert('Server error. Please contact us to assist you.')
         break
       default:
-        let errors    = error.response.data.error
+        let errors    = error.response.data
         let errorList = []
         let warnings  = {}
-        Object.keys(errors).map((errorField, index) => {
+
+        Object.keys(errors).map(errorField => {
           errorList.push(errors[errorField])
           warnings[errorField] = true
         })
+
         this.setState({warnings})
         alert(errorList.join('\n'))
         break
@@ -204,7 +205,6 @@ export default class RegistrationScene extends Component {
   }
 
   displayMinorsBox = () => {
-
     if (this.state.currentYear - this.state.birth_year <= 13) {
       return (
         <View style={styles.formGroup}>
