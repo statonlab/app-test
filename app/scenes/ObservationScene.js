@@ -7,7 +7,8 @@ import {
   Image,
   Dimensions,
   DeviceEventEmitter,
-  Alert
+  Alert,
+  Platform
 } from 'react-native'
 import Header from '../components/Header'
 import Colors from '../helpers/Colors'
@@ -24,6 +25,7 @@ import Elevation from '../helpers/Elevation'
 import ImageZoom from 'react-native-image-pan-zoom'
 
 const trash = (<Icon name="ios-trash" size={24} color="#fff"/>)
+const android = Platform.OS === 'android'
 
 export default class ObservationScene extends Component {
   constructor(props) {
@@ -339,6 +341,12 @@ export default class ObservationScene extends Component {
     )
   }
 
+  /**
+   * Scroll handler.
+   *
+   * @param event
+   * @private
+   */
   _handleScroll(event) {
     let width = Dimensions.get('window').width
     let x     = event.nativeEvent.contentOffset.x
@@ -389,14 +397,23 @@ export default class ObservationScene extends Component {
                 }
 
                 return images[key].map((image, index) => {
+                  if(android) {
+                    return (
+                      <View style={{flex: 0, height: 250, width}} key={index}>
+                        <Image  source={{uri: this.fs.image(image)}} style={styles.image}/>
+                      </View>
+                    )
+                  }
+
                   return (
                     <ImageZoom
                       cropHeight={250}
                       cropWidth={width}
                       imageHeight={250}
                       imageWidth={width}
+                      key={index}
                     >
-                      <Image key={index} source={{uri: this.fs.image(image)}} style={styles.image}/>
+                      <Image source={{uri: this.fs.image(image)}} style={styles.image}/>
                     </ImageZoom>
                   )
                 })

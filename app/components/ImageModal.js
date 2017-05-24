@@ -48,6 +48,7 @@ export default class ImageModal extends Component {
             onScroll={this._handleScroll.bind(this)}
             scrollEventThrottle={16}
             showsVerticalScrollIndicator={false}
+            overScrollMode={'always'}
           >
             <View style={{flex: 1, alignItems: 'center'}}>
               <View style={styles.overlay}/>
@@ -62,7 +63,6 @@ export default class ImageModal extends Component {
             </View>
           </ScrollView>
         </Modal>
-
         <TouchableOpacity onPress={this._toggle.bind(this)} style={this.props.style}>
           {this.props.children}
         </TouchableOpacity>
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
 
   circle: {
     position       : 'absolute',
-    top            : Platform.OS === 'android' ? 0 : 25,
+    top            : Platform.OS === 'android' ? 5 : 25,
     right          : 5,
     width          : 40,
     height         : 40,
