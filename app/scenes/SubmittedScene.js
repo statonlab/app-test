@@ -24,24 +24,7 @@ export default class SubmittedScene extends Component {
     this.fs     = new File()
   }
 
-  /**
-   * Given a marker, navigate to that marker at the Observation Scene.
-   * @param marker
-   */
-
-  navigateCallout = (marker) => {
-    console.log(marker)
-    if (this.state.shouldNavigate) {
-      let plant = realm.objects('Submission').filtered(`id == ${marker.plant.id}`)
-      this.props.navigator.replace({
-        label: 'ObservationScene',
-        plant: marker.plant
-      })
-    }
-    this.setState({shouldNavigate: false})
-  }
-
-  renderMap() {
+  componentWillMount() {
     let submissions = realm.objects('Submission')
     let markers     = []
 
@@ -52,6 +35,7 @@ export default class SubmittedScene extends Component {
       }
 
       let marker = {
+        id         : submission.id,
         title      : submission.name,
         image      : this.fs.thumbnail(image),
         description: `${submission.location.latitude.toFixed(4)}, ${submission.location.longitude.toFixed(4)}`,
@@ -59,8 +43,7 @@ export default class SubmittedScene extends Component {
           latitude : submission.location.latitude,
           longitude: submission.location.longitude
         },
-        pinColor   : Colors.primary,
-        plant      : submission
+        pinColor   : Colors.primary
       }
 
       if (submission.id === this.id) {
@@ -71,17 +54,43 @@ export default class SubmittedScene extends Component {
       markers.push(marker)
     })
 
+    this.markers = markers
+  }
+
+  /**
+   * The navigation function to be passed to the Marker callout. To prevent against bubble effect, we use shouldNavigate in the state.
+   *
+   * @param marker
+   */
+  navigateCallout(marker) {
+    if (this.state.shouldNavigate) {
+      if (marker.id === undefined) {
+        return
+      }
+      let plant = realm.objects('Submission').filtered(`id == "${marker.id}"`)[0]
+      this.props.navigator.push({
+        label    : 'ObservationScene',
+        plant    : JSON.parse(JSON.stringify(plant)),
+        onUnmount: () => {
+          this.setState({shouldNavigate: true})
+        }
+      })
+
+      this.setState({shouldNavigate: false})
+    }
+  }
+
+  renderMap() {
     return (
       <MarkersMap
-        markers={markers}
+        markers={this.markers}
         initialRegion={{
           ...this.marker.coord,
           latitudeDelta : 0.0322,
           longitudeDelta: 0.0321
         }}
         startingMarker={this.marker}
-        onCalloutPress={this.navigateCallout}
-
+        onCalloutPress={this.navigateCallout.bind(this)}
       />
     )
   }
