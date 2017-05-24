@@ -22,14 +22,14 @@ const DCP = {
     ],
     description  : 'Is this tree flowering?',
     placeHolder  : 'Are flowers present?',
-        camera : ['Yes']
+    camera       : ['Yes']
 
   },
   emeraldAshBorer    : {
     label        : 'Ash borer',
     selectChoices: [
       'D-shaped adult exit holes', 'Bark coming off with tunneling underneath',
-       'Emerald ash borer beetles/larvae', 'Stump sprouting'
+      'Emerald ash borer beetles/larvae', 'Stump sprouting'
     ],
     description  : 'Do you see any of these signs of emerald ash borers?  Check all that apply.',
     placeHolder  : 'No signs of pest',
@@ -41,15 +41,12 @@ const DCP = {
       require('../img/DCP/EmAshBorer/epicormic_ash.jpg'),
 
     ],
-    captions : [
+    captions     : [
       "Tunneling under bark by EAB larvae. Photo credit: Eric R. Day, Virginia Polytechnic Institute and State University, Bugwood.org",
       "Adult EAB. Photo credit: David Cappaert, Bugwood.org",
       "D-shaped exit holes of adult EAB.  Photo credit: David R. McKay, USDA APHIS PPQ, Bugwood.org",
       "Stump sprouting or epicormic growth, where new sprouts emerge from the stump of a tree or the trunk, are a common sign of tree distress. Photo credit: Joseph OBrien, USDA Forest Service, Bugwood.org"
     ],
-        camera : [  'D-shaped adult exit holes', 'Bark coming off with tunneling underneath',
-          'Emerald ash borer beetles/larvae', 'Stump sprouting'
-        ]
   },
   woollyAdesCoverage : {
     label        : 'Woolly adelgids',
@@ -62,7 +59,7 @@ const DCP = {
       require('../img/DCP/HemWoolly/HWA photo 1.jpg'),
       require('../img/DCP/HemWoolly/HWA photo 2.jpg')
     ],
-    camera : ['1-24%', '25-49%', '50-74%', '75-100%']
+    camera       : ['1-24%', '25-49%', '50-74%', '75-100%']
   },
   chestnutBlightSigns: {
     label        : 'Chestnut blight',
@@ -78,10 +75,10 @@ const DCP = {
       require('../img/DCP/ChestnutBlight/stumpsprouting.jpg'),
 
     ],
-    captions : ["The chestnut blight fungus can produce orange pustules on bark.  Photo credit: USDA Forest Service - Region 8 - Southern, USDA Forest Service, Bugwood.org",
-    "An old dead trunk, previously killed by chestnut blight. Photo credit: Joseph OBrien, USDA Forest Service, Bugwood.org",
-    "Stump sprouting, where new sprouts emerge from the stump of a tree, whether this tree is living or dead, are a common sign of tree distress.  Photo credit: Norbert Frank, University of West Hungary, Bugwood.org",
-    "",
+    captions     : ["The chestnut blight fungus can produce orange pustules on bark.  Photo credit: USDA Forest Service - Region 8 - Southern, USDA Forest Service, Bugwood.org",
+      "An old dead trunk, previously killed by chestnut blight. Photo credit: Joseph OBrien, USDA Forest Service, Bugwood.org",
+      "Stump sprouting, where new sprouts emerge from the stump of a tree, whether this tree is living or dead, are a common sign of tree distress.  Photo credit: Norbert Frank, University of West Hungary, Bugwood.org",
+      "",
     ]
   },
   acorns             : {
@@ -99,15 +96,15 @@ const DCP = {
       'Yes', 'No'
     ],
     placeHolder  : "Please select",
-        camera : ['yes']
+    camera       : ['yes']
   },
 
-  heightFirstBranch  : {
-    label        : 'Height of first branch',    
-    description  : 'Approximately (no need to measure) how high up is the first branch of the tree?',
-    slider : true
+  heightFirstBranch      : {
+    label      : 'Height of first branch',
+    description: 'Approximately (no need to measure) how high up is the first branch of the tree?',
+    slider     : true
   },
-  oakHealthProblems  : {
+  oakHealthProblems      : {
     label        : 'Health problems',
     selectChoices: [
       'Dieback in canopy', 'Defoliation', 'Cankers', 'Bark damage', 'Signs of rot at base',
@@ -117,18 +114,18 @@ const DCP = {
     placeHolder  : 'No health problems',
     multiCheck   : true,
   },
-  diameterNumeric    : {
+  diameterNumeric        : {
     label      : 'Tree diameter',
     description: 'Approximately how many feet is the diameter of the tree?',
     slider     : true,
     minValue   : 1,
     maxValue   : 40,
     units      : "Inches",
-    images : [require("../img/DCP/diameter_photo_1.jpg")]
+    images     : [require("../img/DCP/diameter_photo_1.jpg")]
 
     //  startValue : 25,
   },
-  crownHealth        : {
+  crownHealth            : {
     label      : 'Crown health',
     description: 'How would you rate the health of this tree\'s crown?',
     slider     : true,
@@ -138,7 +135,7 @@ const DCP = {
 
     //  startValue : 100,
   },
-  crownClassification: {
+  crownClassification    : {
     label        : 'Crown classification',
     description  : "What is the height of the crown of this tree relative to others in the stand?",
     selectChoices: ['Dominant. This tree\'s crown extends above others in the area.',
@@ -160,17 +157,17 @@ const DCP = {
       'Forest', 'Wetland', 'Field', 'Roadside, urban, suburban, or park'
     ],
     placeHolder  : "Please select",
-        multiCheck   : true,
+    multiCheck   : true,
   },
-  
-nearbyTrees : {
-  label : 'Trees nearby',
-  description : 'If there are trees of the same species nearby, what state are they in?  Check all that apply.',
-  selectChoices : [
-  'Dead and/or dying', 'Healthy and large', 'Healthy and small','No trees of this species nearby', 'Not sure'],
-  placeHolder : "Please select",
-  multiCheck : true
-},
+
+  nearbyTrees: {
+    label        : 'Trees nearby',
+    description  : 'If there are trees of the same species nearby, what state are they in?  Check all that apply.',
+    selectChoices: [
+      'Dead and/or dying', 'Healthy and large', 'Healthy and small', 'No trees of this species nearby', 'Not sure'],
+    placeHolder  : "Please select",
+    multiCheck   : true
+  },
   // nearByHemlock          : {
   //   label        : "Nearby hemlocks",
   //   description  : "are there other hemlock trees nearby (within one mile?)",
@@ -180,13 +177,13 @@ nearbyTrees : {
   //   placeHolder  : "Please select"
   // },
 
-  treated        : {
+  treated    : {
     label        : 'Treated',
     description  : "Has this tree been treated with Fungicides or pesticides?",
     selectChoices: ["Yes", "No", "Don't know"],
     placeHolder  : "Please select"
   },
-  partOfStudy    : {
+  partOfStudy: {
     label        : 'Study',
     description  : "Is this tree already part of an existing study that you are aware of?  For example, there may a tag on the tree.",
     selectChoices: ["Yes", "No", "Don't know"],
