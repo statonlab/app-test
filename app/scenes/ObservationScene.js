@@ -221,11 +221,13 @@ export default class ObservationScene extends Component {
       axios.delete(`observation/${entry.serverID}?api_token=${this.user.api_token}`).then(response => {
         // Delete locally
         this.deleteLocally()
+
       }).catch(error => {
         this.refs.spinner.close()
         if (error.response && error.response.status === 404) {
           // Observation does not exist on the server so delete locally
           this.deleteLocally()
+
           return
         }
 
@@ -235,6 +237,7 @@ export default class ObservationScene extends Component {
       })
     } else {
       this.deleteLocally()
+
       this.refs.spinner.close()
     }
   }
@@ -260,6 +263,7 @@ export default class ObservationScene extends Component {
         realm.delete(observation)
       })
     }
+    DeviceEventEmitter.emit('observationDeleted')
 
     this.props.navigator.pop()
   }
