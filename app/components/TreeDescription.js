@@ -46,7 +46,6 @@ export default class TreeDescription extends Component {
           <View style={[styles.cardBody, {paddingTop: 10}]}>
             <ImageModal
               images={Plants[this.props.title].maps}
-              captions={Plants[this.props.title].captions}
               style={[styles.buttonAlt, {flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}]}>
               <Text style={styles.cardTitle}>Distribution Maps</Text>
               <Icon name="map" size={23} style={styles.icon}/>
