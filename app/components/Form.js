@@ -160,8 +160,9 @@ export default class Form extends Component {
   }
 
   /**
+   * cancel
+   * -------------------------------------------------
    * Method for Cancel button.  Change scene, alert user about losing data.
-   *
    * @returns {boolean}
    */
   cancel = () => {
@@ -184,7 +185,7 @@ export default class Form extends Component {
     }
 
     this.doCancel()
-    return true
+    return false
   }
 
   // Do the actual cancellation

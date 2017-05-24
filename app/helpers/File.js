@@ -232,29 +232,9 @@ export default class File {
   }
 
   /**
-   * Get the real path to the image.
-   *
-   * @param image Path to the image
-   * @returns {string}
-   */
-  image(image) {
-    if (typeof image !== 'string') {
-      return
-    }
-
-    // Get image name
-    let name = image.split('/')
-    name     = name[name.length - 1]
-
-    let prefix = this._android ? 'file:' : ''
-
-    return `${prefix}${this._imagesDir}/${name}`
-  }
-
-  /**
    * Get the thumbnail path.
    *
-   * @param image Path to the image
+   * @param image
    * @returns {string}
    */
   thumbnail(image) {
@@ -279,22 +259,12 @@ export default class File {
    * @private
    */
   _setupImage(image, callback) {
-    ImageResizer.createResizedImage(image, 1000, 1000, 'JPEG', 100).then(full_image => {
-      // Get image name
-      let name = full_image.split('/')
-      name     = name[name.length - 1]
+    ImageResizer.createResizedImage(image, 1000, 1000, 'JPEG', 100, 0, this._imagesDir).then(full_image => {
+      this._setupThumbnail(full_image)
 
-      let path = `${this._imagesDir}/${name}`
-
-      this.move(full_image.replace('file:', ''), path, () => {
-        this._setupThumbnail(path)
-
-        if (typeof  callback !== 'undefined') {
-          callback(path)
-        }
-      })
-
-
+      if (typeof  callback !== 'undefined') {
+        callback(full_image)
+      }
     }).catch((error) => {
       console.log(error)
     })

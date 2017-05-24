@@ -15,7 +15,6 @@ import IonIcon from 'react-native-vector-icons/Ionicons'
 import Colors from '../helpers/Colors'
 import Elevation from '../helpers/Elevation'
 import File from '../helpers/File'
-import ImageZoom from 'react-native-image-pan-zoom'
 
 export default class CameraScene extends Component {
   /**
@@ -60,8 +59,6 @@ export default class CameraScene extends Component {
   render() {
     let flashIcon
     const {auto, on, off} = Camera.constants.FlashMode
-    let height            = Dimensions.get('window').height
-    let width             = Dimensions.get('window').width
 
     if (this.state.camera.flash === on) {
       flashIcon = (
@@ -184,13 +181,7 @@ export default class CameraScene extends Component {
           </View>
           {this.state.selectedImage === '' ?
             <View style={{flex: 1, backgroundColor: '#000'}}></View> :
-            <ImageZoom
-              cropHeight={height - 134}
-              cropWidth={width}
-              imageHeight={height - 134}
-              imageWidth={width}>
-              <Image source={{uri: this.state.selectedImage}} style={[styles.preview, {resizeMode: 'contain'}]}/>
-            </ImageZoom>
+            <Image source={{uri: this.state.selectedImage}} style={[styles.preview, {resizeMode: 'contain'}]}/>
           }
           <View style={[styles.toolsContainer, styles.thumbnailsContainer]}>
             <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
@@ -347,8 +338,7 @@ export default class CameraScene extends Component {
     this.camera.capture({
       jpegQuality: 80
     }).then(data => {
-      let image = data.path
-      console.log(image)
+      let image  = data.path
       let images = this.state.images.concat(image)
       this.setState({
         selectedImage: image,

@@ -21,7 +21,6 @@ import axios from '../helpers/Axios'
 import Icon from 'react-native-vector-icons/Ionicons'
 import File from '../helpers/File'
 import Elevation from '../helpers/Elevation'
-import ImageZoom from 'react-native-image-pan-zoom'
 
 const trash = (<Icon name="ios-trash" size={24} color="#fff"/>)
 
@@ -363,7 +362,6 @@ export default class ObservationScene extends Component {
   render() {
     let entry  = this.props.plant
     let images = JSON.parse(entry.images)
-    let width  = Dimensions.get('window').width
     return (
       <View style={styles.container}>
         <Spinner ref="spinner"/>
@@ -373,7 +371,7 @@ export default class ObservationScene extends Component {
           this.deleteAlert.call(this, entry)
         }}/>
 
-        <ScrollView style={styles.contentContainer} bounces={false}>
+        <ScrollView style={styles.contentContainer}>
           <View style={{position: 'relative'}}>
             <ScrollView
               horizontal={true}
@@ -389,16 +387,7 @@ export default class ObservationScene extends Component {
                 }
 
                 return images[key].map((image, index) => {
-                  return (
-                    <ImageZoom
-                      cropHeight={250}
-                      cropWidth={width}
-                      imageHeight={250}
-                      imageWidth={width}
-                    >
-                      <Image key={index} source={{uri: this.fs.image(image)}} style={styles.image}/>
-                    </ImageZoom>
-                  )
+                  return (<Image key={index} source={{uri: image}} style={styles.image}/>)
                 })
               })}
             </ScrollView>
@@ -479,7 +468,7 @@ const styles = StyleSheet.create({
   image: {
     flex      : 1,
     width     : Dimensions.get('window').width,
-    height    : 250,
+    height    : 190,
     resizeMode: 'cover'
   },
 
@@ -525,6 +514,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#eee',
     opacity        : 0.9,
     ...(new Elevation(1)),
-    shadowColor    : 'rgba(255, 255, 255, .8)'
+    shadowColor: 'rgba(255, 255, 255, .8)'
   }
 })

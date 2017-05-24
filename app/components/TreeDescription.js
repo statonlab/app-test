@@ -18,9 +18,36 @@ export default class TreeDescription extends Component {
     super(props)
   }
 
-  _renderTopImage(image) {
+  _renderImageModalIcons() {
+    if (Plants[this.props.title].images.length === 0 && Plants[this.props.title].maps.length === 0) {
+      return (
+        <View style={{marginBottom: 5}}/>
+      )
+    }
+
     return (
-      <Image source={image} style={styles.cardImage}/>
+      <View style={[styles.card, styles.iconsContainer]}>
+        {Plants[this.props.title].images.length > 0 ?
+          <ImageModal images={Plants[this.props.title].images} captions={Plants[this.props.title].captions} style={styles.buttonAlt} containerStyle={{flex: 1, paddingHorizontal: 5}}>
+            <Icon name="camera-burst" size={23} style={styles.icon}/>
+          </ImageModal>
+          : null }
+        {Plants[this.props.title].maps.length > 0 ?
+          <ImageModal images={Plants[this.props.title].maps} style={styles.buttonAlt} containerStyle={{flex: 1, paddingHorizontal: 5}}>
+            <Icon name="map" size={23} style={styles.icon}/>
+          </ImageModal>
+          : null }
+      </View>
+    )
+  }
+
+  _renderTopImage(images) {
+    if (images.length === 0) {
+      return null
+    }
+
+    return (
+      <Image source={images[0]} style={styles.cardImage}/>
     )
   }
 
@@ -29,7 +56,7 @@ export default class TreeDescription extends Component {
 
     return (
       <ScrollView style={[styles.scrollView]}>
-        {this._renderTopImage(Plants[this.props.title].image)}
+        {this._renderTopImage(Plants[this.props.title].images)}
         <View style={styles.card}>
           {Plants[this.props.title].images.length > 0 &&
           <View style={[styles.cardBody, {paddingTop: 10}]}>
@@ -39,17 +66,6 @@ export default class TreeDescription extends Component {
               style={[styles.buttonAlt, {flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}]}>
               <Text style={styles.cardTitle}>ID Photos</Text>
               <Icon name="camera-burst" size={23} style={styles.icon}/>
-            </ImageModal>
-          </View>
-          }
-          {Plants[this.props.title].maps.length > 0 &&
-          <View style={[styles.cardBody, {paddingTop: 10}]}>
-            <ImageModal
-              images={Plants[this.props.title].maps}
-              captions={Plants[this.props.title].captions}
-              style={[styles.buttonAlt, {flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}]}>
-              <Text style={styles.cardTitle}>Distribution Maps</Text>
-              <Icon name="map" size={23} style={styles.icon}/>
             </ImageModal>
           </View>
           }
