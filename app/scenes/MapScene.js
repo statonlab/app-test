@@ -17,40 +17,11 @@ export default class MapScene extends Component {
     this.fs = new File()
 
     this.state = {
-      shouldNavigate : true
+      shouldNavigate: true
     }
   }
 
-
-
-  render() {
-    return (
-      <View style={styles.container}>
-        <Header title={this.props.title} navigator={this.props.navigator} showRightIcon={false}/>
-        {this.renderMap()}
-      </View>
-    )
-  }
-
-  /**
-   * The navigation function to be passed to the Marker callout.  TO prevent against bubble effects, we use shouldNavigate in the state.
-   *
-   * @param marker
-   */
-
-  navigateCallout = (marker) => {
-    if (this.state.shouldNavigate){
-      let plant = realm.objects('Submission').filtered(`id == ${marker.plant.id}`)
-      this.props.navigator.push({
-        label    : 'ObservationScene',
-        plant :marker.plant
-      })
-    }
-    this.setState({shouldNavigate : false})
-}
-
-
-renderMap() {
+  componentWillMount() {
     let submissions = realm.objects('Submission')
     let markers     = []
 
@@ -65,17 +36,57 @@ renderMap() {
       }
 
       markers.push({
+        id         : submission.id,
         title      : submission.name,
         image      : this.fs.thumbnail(image),
         description: moment(submission.date, 'MM-DD-YYYY HH:mm:ss').fromNow(),
         coord      : {
           longitude: submission.location.longitude,
           latitude : submission.location.latitude
-        },
-        plant : submission
+        }
       })
     })
 
+    this.markers = markers
+  }
+
+
+  render() {
+    return (
+      <View style={styles.container}>
+        <Header title={this.props.title} navigator={this.props.navigator} showRightIcon={false}/>
+        {this.renderMap()}
+      </View>
+    )
+  }
+
+  /**
+   * The navigation function to be passed to the Marker callout. To prevent against bubble effect, we use shouldNavigate in the state.
+   *
+   * @param marker
+   */
+  navigateCallout(marker) {
+    if (this.state.shouldNavigate) {
+      if (marker.id === undefined) {
+        return
+      }
+      let plant = realm.objects('Submission').filtered(`id == "${marker.id}"`)[0]
+      this.props.navigator.push({
+        label: 'ObservationScene',
+        plant: JSON.parse(JSON.stringify(plant)),
+        onUnmount: () => {
+          this.setState({shouldNavigate: true})
+        }
+      })
+
+      this.setState({shouldNavigate: false})
+    } else {
+      console.log('Prevented from reverting')
+    }
+  }
+
+
+  renderMap() {
     return (
       <MarkersMap
         initialRegion={{
@@ -84,8 +95,8 @@ renderMap() {
           latitudeDelta : 60.0922,
           longitudeDelta: 60.0922
         }}
-        markers={markers}
-        onCalloutPress={this.navigateCallout}
+        markers={this.markers}
+        onCalloutPress={this.navigateCallout.bind(this)}
       />
     )
   }

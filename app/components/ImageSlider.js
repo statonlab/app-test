@@ -7,10 +7,13 @@ import {
   TouchableOpacity,
   Dimensions,
   Text,
-  Image
+  Image,
+  Platform
 } from 'react-native'
 import Colors from '../helpers/Colors'
 import ImageZoom from 'react-native-image-pan-zoom'
+
+const android = Platform.OS === 'android'
 
 const styles = StyleSheet.create({
   container: {
@@ -166,8 +169,19 @@ export default class ImageSlider extends Component {
           {this.props.images.map((image, index) => {
             const imageObject = typeof image === 'string' ? {uri: image} : image
             if (this.props.enableZoom === true) {
+              if(android) {
+                return (
+                  <View key={index} style={{flex: 1, width: width}}>
+                      <Image
+                        source={imageObject}
+                        style={{width, flex: 1, resizeMode: 'contain'}}
+                      />
+                    {this.props.captions ? this.renderCaption(index) : null}
+                  </View>
+                )
+              }
               return (
-                <View key={index} style={{flex: 1, width: width}} removeClippedSubviews={true}>
+                <View key={index} style={{flex: 1, width: width}}>
                   <ImageZoom
                     cropWidth={width}
                     cropHeight={height - 100}

@@ -10,7 +10,6 @@ import io.realm.react.RealmReactPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.github.xinthink.rnmk.ReactMaterialKitPackage;
 import com.airbnb.android.react.maps.MapsPackage;
-import com.rnfs.RNFSPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -37,8 +36,7 @@ public class MainApplication extends Application implements ReactApplication {
             new RealmReactPackage(),
             new VectorIconsPackage(),
             new ReactMaterialKitPackage(),
-            new MapsPackage(),
-            new RNFSPackage()
+            new MapsPackage()
       );
     }
   };

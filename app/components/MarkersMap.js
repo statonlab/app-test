@@ -70,7 +70,7 @@ export default class MarkersMap extends Component {
     )
   }
 
-  pressEvent =  (marker) => {
+  pressEvent(marker) {
     this.props.onCalloutPress(marker)
   }
 
@@ -82,8 +82,7 @@ export default class MarkersMap extends Component {
    */
   renderCallout(marker) {
     return (
-      <MapView.Callout style={{width: 165}}>
-        <TouchableHighlight onPress = {()=>{this.pressEvent(marker)}}>
+      <MapView.Callout style={{width: 165}} onPress={() => this.pressEvent.call(this, marker)}>
         <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
           {!marker.image ? null :
             <Image source={{uri: marker.image}} style={{width: 45, height: 45}}/>
@@ -92,10 +91,8 @@ export default class MarkersMap extends Component {
             <Text style={[styles.calloutText, {flex: 0, fontWeight: '500'}]}>{marker.title}</Text>
             <Text style={[styles.calloutText, {color: '#666'}]}>{marker.description}</Text>
             <Text style={[styles.calloutText, {color: '#666'}]}>Tap to view</Text>
-
           </View>
         </View>
-        </TouchableHighlight>
       </MapView.Callout>
     )
   }
@@ -138,6 +135,10 @@ export default class MarkersMap extends Component {
       </MapView.Marker>
     )
   }
+
+  componentWillUnmount() {
+    this.props.onUnmount()
+  }
 }
 
 MarkersMap.propTypes = {
@@ -145,14 +146,18 @@ MarkersMap.propTypes = {
   markers       : PropTypes.array,
   startingMarker: PropTypes.object,
   zoom          : PropTypes.bool,
-  onCalloutPress : PropTypes.func
+  onCalloutPress: PropTypes.func,
+  onUnmount     : PropTypes.func
 }
 
 MarkersMap.defaultProps = {
   markers       : [],
   startingMarker: null,
   zoom          : false,
-  onCalloutPress : () => {return}
+  onCalloutPress: () => {
+  },
+  onUnmount     : () => {
+  }
 }
 
 
