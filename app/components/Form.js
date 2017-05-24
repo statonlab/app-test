@@ -402,6 +402,7 @@ export default class Form extends Component {
           <PickerModal
             style={styles.picker}
             images={DCP[key].images}
+            captions={DCP[key].captions}
             multiCheck={DCP[key].multiCheck}
             freeText={DCP[key].modalFreeText}
             header={DCP[key].description}
@@ -458,6 +459,7 @@ export default class Form extends Component {
 
   /**
    * Renders the extra comment field for hidden comments detailing directions to an observation.
+   * Not currently implemented
    * @returns {*}
    */
   renderHiddenComments = () => {
