@@ -146,6 +146,7 @@ export default class PickerModal extends Component {
 
 
   render() {
+    console.log(this.props.captions)
     return (
       <View>
         <Modal
@@ -166,10 +167,17 @@ export default class PickerModal extends Component {
                 </Text>
                 {this.props.images.length === 0 ? null :
                   <View style={styles.iconsContainer}>
-                    <ImageModal images={this.props.images}>
+                    <ImageModal images={this.props.images}
+                      captions={this.props.captions ? this.props.captions : null}>
                       <View style={{flexDirection: 'row', alignItems: 'center'}}>
                         <Icon name="camera-burst" size={18} color={Colors.primary}/>
-                        <Text style={{color: Colors.primary, fontWeight: 'bold', fontSize: 12, marginLeft: 5, height: 16}}>
+                        <Text style={{
+                          color     : Colors.primary,
+                          fontWeight: 'bold',
+                          fontSize  : 12,
+                          marginLeft: 5,
+                          height    : 16
+                        }}>
                           SHOW EXAMPLES
                         </Text>
                       </View>
@@ -210,7 +218,8 @@ PickerModal.propTypes = {
   initialSelect: PropTypes.string,
   multiCheck   : PropTypes.bool,
   freeText     : PropTypes.bool,
-  images       : PropTypes.array
+  images       : PropTypes.array,
+  captions     : PropTypes.array
 }
 
 PickerModal.defaultProps = {
@@ -226,18 +235,18 @@ PickerModal.defaultProps = {
 
 const styles = StyleSheet.create({
   overlay: {
-    position: 'absolute',
-    top     : 0,
-    left    : 0,
-    right   : 0,
-    bottom  : 0,
+    position       : 'absolute',
+    top            : 0,
+    left           : 0,
+    right          : 0,
+    bottom         : 0,
     backgroundColor: Colors.transparentDark
   },
 
   dimBox: {
-    flex           : 1,
-    alignItems     : 'center',
-    justifyContent : 'center'
+    flex          : 1,
+    alignItems    : 'center',
+    justifyContent: 'center'
   },
 
   container: {
@@ -340,7 +349,7 @@ const styles = StyleSheet.create({
   },
 
   iconsContainer: {
-    paddingTop  : 10,
+    paddingTop       : 10,
     paddingHorizontal: 5
   }
 })
