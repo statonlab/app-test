@@ -16,25 +16,28 @@ export default class AccountScene extends Component {
     super(props)
 
     this.state = {
-      showSpinner   : false,
-      name          : '',
-      anonymous     : '',
-      email         : '',
-      zipcode       : '',
-      birth_year    : '',
-      oldPassword   : '',
-      newPassword   : '',
-      reNewPassword : '',
-      errors        : {
-        name          : false,
-        anonymous     : false,
-        email         : false,
-        zipcode       : false,
-        birth_year    : false,
-        oldPassword   : false,
-        newPassword   : false,
-        reNewPassword : false
-      }
+      showSpinner              : false,
+      name                     : '',
+      anonymous                : '',
+      email                    : '',
+      zipcode                  : '',
+      birth_year               : '',
+      old_password             : '',
+      new_password             : '',
+      new_password_confirmation: '',
+      errors                   : {
+        name                     : false,
+        anonymous                : false,
+        email                    : false,
+        zipcode                  : false,
+        birth_year               : false,
+        old_password             : false,
+        new_password             : false,
+        new_password_confirmation: false
+      },
+      passwordChanges          : false,
+      userChanges              : false,
+      snackMessage             : 'Account updated successfully'
     }
 
     this.user = realm.objects('User')[0]
@@ -45,10 +48,10 @@ export default class AccountScene extends Component {
    */
   componentDidMount() {
     this.setState({
-      name          : this.user.name,
-      email         : this.user.email,
-      zipcode       : this.user.zipcode,
-      anonymous     : this.user.anonymous ? 'Yes' : 'No',
+      name      : this.user.name,
+      email     : this.user.email,
+      zipcode   : this.user.zipcode,
+      anonymous : this.user.anonymous ? 'Yes' : 'No',
       birth_year: this.user.birth_year
     })
   }
@@ -60,10 +63,10 @@ export default class AccountScene extends Component {
    */
   validate() {
     let errors = {
-      name          : false,
-      anonymous     : false,
-      email         : false,
-      zipcode       : false,
+      name      : false,
+      anonymous : false,
+      email     : false,
+      zipcode   : false,
       birth_year: false
     }
 
@@ -91,7 +94,42 @@ export default class AccountScene extends Component {
 
     if (this.state.birth_year.length === 0) {
       errors.birth_year = 'The birth year field is required'
-      hasErrors             = true
+      hasErrors         = true
+    }
+
+    this.setState({errors})
+
+    // True if valid and false otherwise
+    return !hasErrors
+  }
+
+  /**
+   * Validate password fields.
+   *
+   * @returns {boolean}
+   */
+  validatePassword() {
+    let errors    = {
+      old_password             : false,
+      new_password             : false,
+      new_password_confirmation: false
+    }
+    let hasErrors = false
+
+
+    if (this.state.old_password.trim().length === 0) {
+      errors.old_password = 'The old password field is required'
+      hasErrors           = true
+    }
+
+    if (this.state.new_password.trim().length === 0) {
+      errors.new_password = 'The new password field is required'
+      hasErrors           = true
+    }
+
+    if (this.state.new_password_confirmation.trim().length === 0) {
+      errors.new_password_confirmation = 'The repeat new password field is required'
+      hasErrors                        = true
     }
 
     this.setState({errors})
@@ -104,6 +142,19 @@ export default class AccountScene extends Component {
    * Handle the submit/update button click
    */
   submit() {
+    if (this.state.userChanges) {
+      this.updateUserProfile()
+    }
+
+    if (this.state.passwordChanges) {
+      this.updatePassword()
+    }
+  }
+
+  /**
+   * Update user profile.
+   */
+  updateUserProfile() {
     if (!this.validate()) {
       return
     }
@@ -111,25 +162,76 @@ export default class AccountScene extends Component {
     this.setState({showSpinner: true})
 
     axios.put('user', {
-      api_token       : this.user.api_token,
-      name            : this.state.name,
-      email           : this.state.email,
-      zipcode         : this.state.zipcode,
-      is_anonymous    : this.state.anonymous.trim() === 'Yes',
-      birth_year: this.state.birth_year
+      api_token   : this.user.api_token,
+      name        : this.state.name,
+      email       : this.state.email,
+      zipcode     : this.state.zipcode,
+      is_anonymous: this.state.anonymous.trim() === 'Yes',
+      birth_year  : this.state.birth_year,
+      snackMessage: 'Profile updated successfully'
     }).then(response => {
       this.refs.snackbar.showBar()
-      this.setState({showSpinner: false})
+      this.setState({userChanges: false})
       this.updateRealmUser(response.data.data)
     }).catch(error => {
-      switch (error.status) {
-        case 500:
-          alert('Could not reach server. Make sure you have internet connection.')
-          break
-        default:
-          this.handleValidationErrors(error.response.data.error)
-          break
+      if (error.response) {
+        switch (error.response.status) {
+          case 500:
+            alert('Could not reach server. Make sure you have internet connection.')
+            break
+          default:
+            this.handleValidationErrors(error.response.data.error)
+            break
+        }
+      } else {
+        alert('Could not reach server. Make sure you have internet connection.')
       }
+    }).then(() => {
+      this.setState({showSpinner: false})
+    })
+  }
+
+  /**
+   * Update user password and regenerate token
+   */
+  updatePassword() {
+    if (!this.validatePassword()) {
+      return
+    }
+
+    this.setState({showSpinner: true})
+
+    axios.patch('user/password', {
+      old_password             : this.state.old_password,
+      new_password             : this.state.new_password,
+      new_password_confirmation: this.state.new_password_confirmation,
+      api_token                : this.user.api_token
+    }).then(response => {
+      let token = response.data.data.api_token
+      this.setState({
+        old_password             : '',
+        new_password             : '',
+        new_password_confirmation: '',
+        snackMessage             : 'Password updated successfully'
+      })
+
+      try {
+        realm.write(() => {
+          this.user.api_token = token
+        })
+      } catch (e) {
+        console.log(e)
+      }
+
+      this.refs.snackbar.showBar()
+    }).catch(error => {
+      console.log(error)
+      if (error.response && error.response.status === 422) {
+        this.handleValidationErrors(error.response.data)
+      } else {
+        alert('Could not connect to server. Please try again later.')
+      }
+    }).then(() => {
       this.setState({showSpinner: false})
     })
   }
@@ -141,12 +243,16 @@ export default class AccountScene extends Component {
    */
   handleValidationErrors(errors) {
     let stateErrors = {
-      name          : false,
-      anonymous     : false,
-      email         : false,
-      zipcode       : false,
-      birth_year: false
+      name                     : false,
+      anonymous                : false,
+      email                    : false,
+      zipcode                  : false,
+      birth_year               : false,
+      old_password             : false,
+      new_password             : false,
+      new_password_confirmation: false
     }
+
     Object.keys(errors).map(key => {
       stateErrors[key] = errors[key]
     })
@@ -162,11 +268,11 @@ export default class AccountScene extends Component {
   updateRealmUser(response) {
     try {
       realm.write(() => {
-        this.user.name             = response.name
-        this.user.email            = response.email
-        this.user.anonymous        = response.is_anonymous
+        this.user.name       = response.name
+        this.user.email      = response.email
+        this.user.anonymous  = response.is_anonymous
         this.user.birth_year = response.birth_year
-        this.user.zipcode          = response.zipcode === null ? '' : response.zipcode
+        this.user.zipcode    = response.zipcode === null ? '' : response.zipcode
       })
     } catch (error) {
       console.warn(error)
@@ -191,7 +297,7 @@ export default class AccountScene extends Component {
                     placeholder={'E.g, Jane Doe'}
                     placeholderTextColor="#aaa"
                     returnKeyType={'next'}
-                    onChangeText={(name) => this.setState({name})}
+                    onChangeText={(name) => this.setState({name, userChanges: true})}
                     defaultValue={this.state.name}
                     underlineColorAndroid="transparent"
                     onBlur={this.validate.bind(this)}
@@ -208,7 +314,7 @@ export default class AccountScene extends Component {
                     placeholder={'E.g, jane@example.com'}
                     placeholderTextColor="#aaa"
                     returnKeyType={'next'}
-                    onChangeText={(email) => this.setState({email})}
+                    onChangeText={(email) => this.setState({email, userChanges: true})}
                     defaultValue={this.state.email}
                     underlineColorAndroid="transparent"
                     onBlur={this.validate.bind(this)}
@@ -225,7 +331,7 @@ export default class AccountScene extends Component {
                     placeholder={'E.g, 37919'}
                     placeholderTextColor="#aaa"
                     returnKeyType={'next'}
-                    onChangeText={(zipcode) => this.setState({zipcode})}
+                    onChangeText={(zipcode) => this.setState({zipcode, userChanges: true})}
                     defaultValue={this.state.zipcode}
                     underlineColorAndroid="transparent"
                     onBlur={this.validate.bind(this)}
@@ -239,7 +345,7 @@ export default class AccountScene extends Component {
             <View style={styles.card}>
               <PickerModal
                 style={[styles.formGroup]}
-                onSelect={(anonymous) => this.setState({anonymous})}
+                onSelect={(anonymous) => this.setState({anonymous, userChanges: true})}
                 initialSelect={this.user.anonymous ? 'Yes' : 'No'}
                 choices={['Yes', 'No']}
                 header="Anonymous users have their information hidden from other users. Would you like to be anonymous?"
@@ -262,7 +368,7 @@ export default class AccountScene extends Component {
 
               <DateModal
                 style={[styles.formGroup, styles.noBorder]}
-                onSelect={(year) => this.setState({birth_year: year})}
+                onSelect={(year) => this.setState({birth_year: year, userChanges: true})}
                 header="In what year were you born?"
               >
                 <View style={styles.row}>
@@ -292,12 +398,12 @@ export default class AccountScene extends Component {
                     style={styles.textField}
                     autoCapitalize={'words'}
                     placeholderTextColor="#aaa"
-                    onChangeText={(oldPassword) => this.setState({oldPassword})}
+                    onChangeText={(old_password) => this.setState({old_password, passwordChanges: true})}
                     placeholder={'Old Password'}
                     underlineColorAndroid="transparent"
                   />
                 </View>
-                {this.state.errors.oldPassword ? <Text style={styles.warning}>{this.state.errors.oldPassword}</Text> : null}
+                {this.state.errors.old_password ? <Text style={styles.warning}>{this.state.errors.old_password}</Text> : null}
               </View>
               <View style={styles.formGroup}>
                 <View style={styles.row}>
@@ -308,11 +414,11 @@ export default class AccountScene extends Component {
                     autoCapitalize={'words'}
                     placeholderTextColor="#aaa"
                     placeholder={'New Password'}
-                    onChangeText={(newPassword) => this.setState({newPassword})}
+                    onChangeText={(new_password) => this.setState({new_password, passwordChanges: true})}
                     underlineColorAndroid="transparent"
                   />
                 </View>
-                {this.state.errors.newPassword ? <Text style={styles.warning}>{this.state.errors.newPassword}</Text> : null}
+                {this.state.errors.new_password ? <Text style={styles.warning}>{this.state.errors.new_password}</Text> : null}
               </View>
               <View style={[styles.formGroup, styles.noBorder]}>
                 <View style={styles.row}>
@@ -323,11 +429,11 @@ export default class AccountScene extends Component {
                     autoCapitalize={'words'}
                     placeholderTextColor="#aaa"
                     placeholder={'Repeat New Password'}
-                    onChangeText={(reNewPassword) => this.setState({reNewPassword})}
+                    onChangeText={(new_password_confirmation) => this.setState({new_password_confirmation, passwordChanges: true})}
                     underlineColorAndroid="transparent"
                   />
                 </View>
-                {this.state.errors.reNewPassword ? <Text style={styles.warning}>{this.state.errors.reNewPassword}</Text> : null}
+                {this.state.errors.new_password_confirmation ? <Text style={styles.warning}>{this.state.errors.new_password_confirmation}</Text> : null}
               </View>
             </View>
           </View>
@@ -351,7 +457,8 @@ export default class AccountScene extends Component {
             </MKButton>
           </View>
         </View>
-        <SnackBar ref="snackbar" noticeText={'Account updated successfully!'} placement="top"/>
+
+        <SnackBar ref="snackbar" noticeText={this.state.snackMessage}/>
       </View>
     )
   }
