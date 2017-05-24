@@ -206,12 +206,14 @@ export default class ObservationsScene extends Component {
    */
   _renderList = () => {
     return (
+      <View style={{flex: 1}}>
       <ListView
         dataSource={this.state.submissions}
         renderRow={this._renderRow}
         renderSectionHeader={this._renderSectionHeader}
         enableEmptySections={true}
       />
+      </View>
     )
   }
 

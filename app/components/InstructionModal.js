@@ -37,14 +37,13 @@ export default class InstructionModal extends Component {
               onPress={this._toggle.bind(this)}
             />
             <View style={styles.container}>
-
               <View style={styles.headTextBox}>
                 <Text style={styles.headerQuestionText}>
                   {this.props.text}
                 </Text>
               </View>
 
-              <ImageSlider style={styles.container} images={this.props.images} onPress={this._toggle.bind(this)}/>
+              <ImageSlider style={styles.container} images={this.props.images} onPress={this._toggle.bind(this)} enableZoom={false}/>
 
               <MKButton style={styles.button} onPress={this._toggle.bind(this)}>
                 <Text style={styles.buttonText}>
@@ -70,7 +69,6 @@ export default class InstructionModal extends Component {
 
 InstructionModal.propTypes = {
   ...TouchableOpacity.PropTypes,
-  images        : PropTypes.array,
   containerStyle: PropTypes.object,
   text          : PropTypes.string,
   images        : PropTypes.array
@@ -81,14 +79,14 @@ InstructionModal.defaultProps = {
 }
 
 const styles = StyleSheet.create({
-  overlay  : {
+  overlay: {
     position: 'absolute',
     top     : 0,
     left    : 0,
     right   : 0,
-    bottom  : 0,
-
+    bottom  : 0
   },
+
   container: {
     backgroundColor  : '#fefefe',
     flex             : 0,
@@ -100,7 +98,8 @@ const styles = StyleSheet.create({
     minWidth         : 300,
     marginHorizontal : 20
   },
-  dimBox   : {
+
+  dimBox: {
     backgroundColor: Colors.transparentDark,
     flex           : 1,
     alignItems     : 'center',
@@ -119,15 +118,17 @@ const styles = StyleSheet.create({
     padding     : 10
   },
 
-  buttonText        : {
+  buttonText: {
     textAlign : 'right',
     color     : Colors.primary,
     fontWeight: '500'
   },
-  headTextBox       : {
+
+  headTextBox: {
     flex        : 0,
     marginBottom: 10
   },
+
   headerQuestionText: {
     flex      : 0,
     textAlign : 'left',

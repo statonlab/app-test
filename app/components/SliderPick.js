@@ -59,8 +59,6 @@ export default class SliderPick extends Component {
           text={this.props.description}
           images={this.props.images}
         >
-
-
           <Icon name="help-circle" style={styles.icon}/>
         </InstructionModal>
       </View>

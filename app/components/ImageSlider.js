@@ -1,17 +1,13 @@
-/**
- * Modified copy of https://github.com/PaulBGD/react-native-image-slider
- */
 import React, {Component, PropTypes} from 'react'
 import {
-  Image,
   View,
   ScrollView,
   StyleSheet,
-  PanResponder,
   TouchableHighlight,
   TouchableOpacity,
   Dimensions,
-  Text
+  Text,
+  Image
 } from 'react-native'
 import Colors from '../helpers/Colors'
 import ImageZoom from 'react-native-image-pan-zoom'
@@ -47,18 +43,20 @@ const styles = StyleSheet.create({
   },
 
   captionBox: {
-    backgroundColor: 'rgba(0,0,0,.1)',
     flex           : 0,
-    height         : 10,
-    marginVertical : 10
+    position       : 'absolute',
+    bottom         : 0,
+    backgroundColor: 'rgba(0,0,0,.5)',
+    left           : 0,
+    right          : 0
   },
 
   captionText: {
-    color            : '#ffffff',
-    textAlign        : 'left',
-    paddingHorizontal: 15,
-    fontWeight       : '500',
-    fontSize         : 16
+    color     : '#ffffff',
+    textAlign : 'left',
+    padding   : 15,
+    fontWeight: '500',
+    fontSize  : 16
   }
 })
 
@@ -67,22 +65,25 @@ export default class ImageSlider extends Component {
     super(props)
 
     this.state = {
-      position : 0,
-      height   : Dimensions.get('window').height,
-      width    : Dimensions.get('window').width,
-      scrolling: false
+      position  : 0,
+      height    : Dimensions.get('window').height,
+      width     : Dimensions.get('window').width,
+      scrolling : false,
+      transform : [{rotateX: '0deg'}, {rotateY: '0deg'}],
+      pages     : 0,
+      imageWidth: Dimensions.get('window').width
     }
   }
 
   _onRef(ref) {
     this._ref = ref
-    if (ref && this.state.position !== this._getPosition()) {
-      this._move(this._getPosition())
+    if (ref && this.state.position !== this.state.position) {
+      this._move(this.state.position)
     }
   }
 
   _move(index) {
-    const isUpdating = index !== this._getPosition()
+    const isUpdating = index !== this.state.position
 
     this._ref.scrollTo({x: this.state.width * index, y: 0, animated: true})
 
@@ -92,13 +93,6 @@ export default class ImageSlider extends Component {
     }
   }
 
-  _getPosition() {
-    if (typeof this.props.position === 'number') {
-      return this.props.position
-    }
-    return this.state.position
-  }
-
   componentDidUpdate(prevProps) {
     if (prevProps.position !== this.props.position) {
       this._move(this.props.position)
@@ -106,37 +100,12 @@ export default class ImageSlider extends Component {
   }
 
   componentWillMount() {
-    let release = (e, gestureState) => {
-      const width            = this.state.width
-      const relativeDistance = gestureState.dx / width
-      const vx               = gestureState.vx
-      let change             = 0
+    this.setState({pages: this.props.images.length})
 
-      if (relativeDistance < -0.5 || (relativeDistance < 0 && vx <= 0.5)) {
-        change = 1
-      } else if (relativeDistance > 0.5 || (relativeDistance > 0 && vx >= 0.5)) {
-        change = -1
-      }
-      const position = this._getPosition()
-      if (position === 0 && change === -1) {
-        change = 0
-      } else if (position + change >= this.props.images.length) {
-        change = (this.props.images.length) - (position + change)
-      }
-      this._move(position + change)
-      return true
+    const newWidth = Dimensions.get('window').width
+    if (newWidth !== this.state.width) {
+      this.setState({width: newWidth})
     }
-
-    this._panResponder = PanResponder.create({
-      onPanResponderRelease: release
-    })
-
-    this._interval = setInterval(() => {
-      const newWidth = Dimensions.get('window').width
-      if (newWidth !== this.state.width) {
-        this.setState({width: newWidth})
-      }
-    }, 16)
   }
 
   componentWillUnmount() {
@@ -145,6 +114,10 @@ export default class ImageSlider extends Component {
 
   renderCaption(index) {
     let caption = this.props.captions[index]
+
+    if (!caption) {
+      return null
+    }
 
     return (
       <View style={styles.captionBox}>
@@ -155,11 +128,28 @@ export default class ImageSlider extends Component {
     )
   }
 
+  _handleScroll(event) {
+    let width = Dimensions.get('window').width
+    let x     = event.nativeEvent.contentOffset.x
+    let pages = []
+
+    for (let i = 0; i < this.state.pages; i++) {
+      pages.push(i)
+    }
+
+    let page = pages.indexOf(x / width)
+
+    this.setState({
+      position: page > -1 ? page : this.state.position
+    })
+  }
 
   render() {
-    const width    = this.state.width
-    const height   = Dimensions.get('window').height
-    const position = this._getPosition()
+    const width  = this.state.width
+    const height = Dimensions.get('window').height
+    if (this.props.images.length === 0) {
+      return null
+    }
 
     return (
       <View style={{justifyContent: 'center', alignItems: 'center', flex: 1, flexDirection: 'column'}}>
@@ -168,35 +158,43 @@ export default class ImageSlider extends Component {
           horizontal={true}
           showsHorizontalScrollIndicator={false}
           pagingEnabled={true}
-          {...this._panResponder.panHandlers}
+          onScroll={this._handleScroll.bind(this)}
+          scrollEventThrottle={16}
           contentContainerStyle={{justifyContent: 'center', alignItems: 'center', marginTop: 20}}
           style={{flex: 1}}
         >
           {this.props.images.map((image, index) => {
             const imageObject = typeof image === 'string' ? {uri: image} : image
-            if (this.props.onPress) {
+            if (this.props.enableZoom === true) {
               return (
-                <View key={index} style={{flex: 1, width: width}}>
-                  {this.props.captions ? this.renderCaption(index) : null}
-                  <ImageZoom cropWidth={width}
+                <View key={index} style={{flex: 1, width: width}} removeClippedSubviews={true}>
+                  <ImageZoom
+                    cropWidth={width}
                     cropHeight={height - 100}
                     imageWidth={width}
                     imageHeight={height - 100}>
                     <Image
                       source={imageObject}
-                      style={{width, resizeMode: 'contain', flex: 1}}
+                      style={{width, flex: 1, resizeMode: 'contain'}}
                     />
                   </ImageZoom>
+                  {this.props.captions ? this.renderCaption(index) : null}
                 </View>
               )
             }
 
             return (
+              <TouchableOpacity
+                key={index}
+                onPress={this.props.onPress}
+                activeOpacity={.8}
+                style={{flex: 1}}
+              >
                 <Image
-                  key={index}
                   source={imageObject}
-                  style={{width, maxHeight: 300, resizeMode: 'contain'}}
+                  style={{width: width - 120, resizeMode: 'contain'}}
                 />
+              </TouchableOpacity>
             )
           })}
         </ScrollView>
@@ -209,7 +207,7 @@ export default class ImageSlider extends Component {
                 onPress={() => {
                   return this._move(index)
                 }}
-                style={[styles.button, position === index && styles.buttonSelected]}>
+                style={[styles.button, this.state.position === index && styles.buttonSelected]}>
                 <View></View>
               </TouchableHighlight>
             )
@@ -221,7 +219,15 @@ export default class ImageSlider extends Component {
 }
 
 ImageSlider.PropTypes = {
-  onPress : PropTypes.func,
-  images  : PropTypes.array,
-  captions: PropTypes.array
+  onPress   : PropTypes.func,
+  images    : PropTypes.array,
+  captions  : PropTypes.array,
+  enableZoom: PropTypes.bool
+}
+
+ImageSlider.defaultProps = {
+  onPress   : null,
+  images    : [],
+  captions  : [],
+  enableZoom: true
 }
