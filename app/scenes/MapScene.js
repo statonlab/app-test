@@ -72,16 +72,14 @@ export default class MapScene extends Component {
       }
       let plant = realm.objects('Submission').filtered(`id == "${marker.id}"`)[0]
       this.props.navigator.push({
-        label: 'ObservationScene',
-        plant: JSON.parse(JSON.stringify(plant)),
+        label    : 'ObservationScene',
+        plant    : JSON.parse(JSON.stringify(plant)),
         onUnmount: () => {
           this.setState({shouldNavigate: true})
         }
       })
 
       this.setState({shouldNavigate: false})
-    } else {
-      console.log('Prevented from reverting')
     }
   }
 
