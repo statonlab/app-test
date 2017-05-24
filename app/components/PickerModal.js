@@ -2,9 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import {View, Text, TextInput, StyleSheet, Modal, TouchableOpacity} from 'react-native'
 import {MKButton} from 'react-native-material-kit'
 import Colors from '../helpers/Colors'
-import Elevation from '../helpers/Elevation'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import DCP from '../resources/config.js'
 import realm from '../db/Schema'
 import ImageModal from './ImageModal'
 
@@ -156,16 +154,25 @@ export default class PickerModal extends Component {
           onRequestClose={this.close}
           animationType={this.state.animationType}>
           <View style={styles.dimBox}>
+            <TouchableOpacity
+              style={styles.overlay}
+              onPress={this.close.bind(this)}
+              activeOpacity={.9}
+            />
             <View style={styles.container}>
-
               <View style={styles.headTextBox}>
                 <Text style={styles.headerQuestionText}>
                   {this.props.header}
                 </Text>
-                {this.props.images.length == 0 ? null :
-                  <View style={ styles.iconsContainer}>
+                {this.props.images.length === 0 ? null :
+                  <View style={styles.iconsContainer}>
                     <ImageModal images={this.props.images}>
-                      <Icon name="camera-burst" size={23} style={styles.icon}/>
+                      <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                        <Icon name="camera-burst" size={18} color={Colors.primary}/>
+                        <Text style={{color: Colors.primary, fontWeight: 'bold', fontSize: 12, marginLeft: 5, height: 16}}>
+                          SHOW EXAMPLES
+                        </Text>
+                      </View>
                     </ImageModal>
                   </View>
                 }
@@ -217,13 +224,17 @@ PickerModal.defaultProps = {
   images       : []
 }
 
-
-const elevationStyle = new Elevation(2)
-
 const styles = StyleSheet.create({
+  overlay: {
+    position: 'absolute',
+    top     : 0,
+    left    : 0,
+    right   : 0,
+    bottom  : 0,
+    backgroundColor: Colors.transparentDark
+  },
 
   dimBox: {
-    backgroundColor: Colors.transparentDark,
     flex           : 1,
     alignItems     : 'center',
     justifyContent : 'center'
@@ -234,7 +245,7 @@ const styles = StyleSheet.create({
     flex             : 0,
     flexDirection    : 'column',
     borderRadius     : 2,
-    paddingVertical  : 15,
+    paddingVertical  : 10,
     paddingHorizontal: 15,
     maxHeight        : 500,
     minWidth         : 300,
@@ -269,7 +280,7 @@ const styles = StyleSheet.create({
   choiceItem: {
     flex         : 0,
     flexDirection: 'row',
-    alignItems   : 'center',
+    alignItems   : 'center'
   },
 
   choiceText: {
@@ -301,13 +312,14 @@ const styles = StyleSheet.create({
     marginTop: 5
   },
 
-  iconTI        : {
+  iconTI: {
     fontSize  : 20,
     color     : '#aaa',
     marginTop : 5,
     marginLeft: 15
   },
-  textField     : {
+
+  textField: {
     height           : 40,
     flex             : 1,
     borderWidth      : 1,
@@ -317,7 +329,8 @@ const styles = StyleSheet.create({
     fontSize         : 14,
     backgroundColor  : '#f9f9f9'
   },
-  buttonAlt     : {
+
+  buttonAlt: {
     borderRadius   : 2,
     height         : 40,
     flex           : 1,
@@ -325,9 +338,9 @@ const styles = StyleSheet.create({
     justifyContent : 'center',
     backgroundColor: '#fff'
   },
+
   iconsContainer: {
-    paddingVertical  : 5,
-    paddingHorizontal: 5,
-    alignItems       : 'center'
-  },
+    paddingTop  : 10,
+    paddingHorizontal: 5
+  }
 })

@@ -1,8 +1,17 @@
 import React, {Component, PropTypes} from 'react'
-import {View, StyleSheet, Modal, TouchableOpacity, Dimensions} from 'react-native'
+import {
+  View,
+  StyleSheet,
+  Modal,
+  TouchableOpacity,
+  Dimensions,
+  Platform,
+  ScrollView
+} from 'react-native'
 import ImageSlider from './ImageSlider'
-export default class ImageModal extends Component {
+import Icon from 'react-native-vector-icons/Ionicons'
 
+export default class ImageModal extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -10,11 +19,19 @@ export default class ImageModal extends Component {
     }
   }
 
-  componentDidMount() {
+  componentWillMount() {
+
   }
 
   _toggle() {
     this.setState({show: !this.state.show})
+  }
+
+  _handleScroll(event) {
+    let y = event.nativeEvent.contentOffset.y
+    if (y < -100) {
+      this.setState({show: false})
+    }
   }
 
   render() {
@@ -24,16 +41,26 @@ export default class ImageModal extends Component {
           transparent={true}
           visible={this.state.show}
           onRequestClose={() => this.setState({show: false})}
-          animationType="fade"
+          animationType="slide"
         >
-          <View style={{flex: 1, alignItems: 'center', flexDirection: 'row'}}>
-            <TouchableOpacity
-              activeOpacity={.9}
-              style={styles.overlay}
-              onPress={this._toggle.bind(this)}
-            />
-            <ImageSlider style={styles.container} images={this.props.images} captions={this.props.captions} onPress={this._toggle.bind(this)}/>
-          </View>
+          <ScrollView
+            contentContainerStyle={{flex: 1, backgroundColor: '#000'}}
+            onScroll={this._handleScroll.bind(this)}
+            scrollEventThrottle={16}
+            showsVerticalScrollIndicator={false}
+          >
+            <View style={{flex: 1, alignItems: 'center'}}>
+              <View style={styles.overlay}/>
+              <TouchableOpacity
+                activeOpacity={.9}
+                style={styles.circle}
+                onPress={this._toggle.bind(this)}
+              >
+                <Icon name="md-close" size={24} color="#444" style={{marginTop: 3}}/>
+              </TouchableOpacity>
+              <ImageSlider style={styles.container} images={this.props.images} captions={this.props.captions} onPress={this._toggle.bind(this)}/>
+            </View>
+          </ScrollView>
         </Modal>
 
         <TouchableOpacity onPress={this._toggle.bind(this)} style={this.props.style}>
@@ -62,7 +89,7 @@ const styles = StyleSheet.create({
     left           : 0,
     right          : 0,
     bottom         : 0,
-    backgroundColor: 'rgba(0,0,0,.85)'
+    backgroundColor: 'rgba(0,0,0,1)'
   },
 
   container: {
@@ -70,6 +97,19 @@ const styles = StyleSheet.create({
     flexDirection : 'column',
     alignItems    : 'center',
     justifyContent: 'center'
+  },
+
+  circle: {
+    position       : 'absolute',
+    top            : Platform.OS === 'android' ? 0 : 25,
+    right          : 5,
+    width          : 40,
+    height         : 40,
+    borderRadius   : 40 / 2,
+    zIndex         : 9999,
+    alignItems     : 'center',
+    justifyContent : 'center',
+    backgroundColor: 'rgba(255,255,255,1)'
   },
 
   image: {

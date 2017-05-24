@@ -7,17 +7,15 @@ import Form from '../components/Form'
 import Plants from '../resources/descriptions'
 
 export default class TreeScene extends Component {
-  constructor(props) {
-    super(props)
-  }
-
   render() {
     return (
       <View style={{flex: 1, backgroundColor: '#f5f5f5'}}>
-        <Header title={this.props.title} navigator={this.props.navigator} showRightIcon={false} elevation={0}/>
+        <Header title={this.props.title} navigator={this.props.navigator} showRightIcon={false} elevation={0} onBackPress={() => {return this.refs.form.cancel()}}/>
         <Tabs>
           <Tab title="ADD ENTRY">
-            <Form title={this.props.title}
+            <Form
+              ref="form"
+              title={this.props.title}
               formProps={Plants[this.props.title].formProps}
               entryInfo={this.props.entryInfo}
               edit={this.props.edit}

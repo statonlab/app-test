@@ -16,26 +16,24 @@ export default class AccountScene extends Component {
     super(props)
 
     this.state = {
-      showSpinner  : false,
-      name         : '',
-      anonymous    : '',
-      is_private   : '',
-      email        : '',
-      zipcode      : '',
-      birth_year   : '',
-      oldPassword  : '',
-      newPassword  : '',
-      reNewPassword: '',
-      errors       : {
-        name         : false,
-        anonymous    : false,
-        email        : false,
-        zipcode      : false,
-        is_private   : false,
-        birth_year   : false,
-        oldPassword  : false,
-        newPassword  : false,
-        reNewPassword: false
+      showSpinner   : false,
+      name          : '',
+      anonymous     : '',
+      email         : '',
+      zipcode       : '',
+      birth_year    : '',
+      oldPassword   : '',
+      newPassword   : '',
+      reNewPassword : '',
+      errors        : {
+        name          : false,
+        anonymous     : false,
+        email         : false,
+        zipcode       : false,
+        birth_year    : false,
+        oldPassword   : false,
+        newPassword   : false,
+        reNewPassword : false
       }
     }
 
@@ -47,11 +45,10 @@ export default class AccountScene extends Component {
    */
   componentDidMount() {
     this.setState({
-      name      : this.user.name,
-      email     : this.user.email,
-      zipcode   : this.user.zipcode,
-      anonymous : this.user.anonymous ? 'Yes' : 'No',
-      is_private: this.user.is_private ? 'Yes' : 'No',
+      name          : this.user.name,
+      email         : this.user.email,
+      zipcode       : this.user.zipcode,
+      anonymous     : this.user.anonymous ? 'Yes' : 'No',
       birth_year: this.user.birth_year
     })
   }
@@ -63,11 +60,10 @@ export default class AccountScene extends Component {
    */
   validate() {
     let errors = {
-      name      : false,
-      anonymous : false,
-      private   : false,
-      email     : false,
-      zipcode   : false,
+      name          : false,
+      anonymous     : false,
+      email         : false,
+      zipcode       : false,
       birth_year: false
     }
 
@@ -87,10 +83,6 @@ export default class AccountScene extends Component {
       errors.anonymous = 'The anonymous field is required'
       hasErrors        = true
     }
-    if (this.state.is_private.trim().length === 0) {
-      errors.is_private = 'The private field is required'
-      hasErrors         = true
-    }
 
     if (this.state.zipcode.trim().length > 0 && !/^([0-9]{5})(-[0-9]{4})?$/i.test(this.state.zipcode)) {
       errors.zipcode = 'The zip code field must be a valid zip code'
@@ -99,7 +91,7 @@ export default class AccountScene extends Component {
 
     if (this.state.birth_year.length === 0) {
       errors.birth_year = 'The birth year field is required'
-      hasErrors         = true
+      hasErrors             = true
     }
 
     this.setState({errors})
@@ -119,13 +111,11 @@ export default class AccountScene extends Component {
     this.setState({showSpinner: true})
 
     axios.put('user', {
-      api_token   : this.user.api_token,
-      name        : this.state.name,
-      email       : this.state.email,
-      zipcode     : this.state.zipcode,
-      is_anonymous: this.state.anonymous.trim() === 'Yes',
-      is_private  : this.state.is_private.trim() === 'Yes',
-
+      api_token       : this.user.api_token,
+      name            : this.state.name,
+      email           : this.state.email,
+      zipcode         : this.state.zipcode,
+      is_anonymous    : this.state.anonymous.trim() === 'Yes',
       birth_year: this.state.birth_year
     }).then(response => {
       this.refs.snackbar.showBar()
@@ -151,11 +141,10 @@ export default class AccountScene extends Component {
    */
   handleValidationErrors(errors) {
     let stateErrors = {
-      name      : false,
-      anonymous : false,
-      is_private: false,
-      email     : false,
-      zipcode   : false,
+      name          : false,
+      anonymous     : false,
+      email         : false,
+      zipcode       : false,
       birth_year: false
     }
     Object.keys(errors).map(key => {
@@ -173,12 +162,11 @@ export default class AccountScene extends Component {
   updateRealmUser(response) {
     try {
       realm.write(() => {
-        this.user.name       = response.name
-        this.user.email      = response.email
-        this.user.anonymous  = response.is_anonymous
-        this.user.is_private = response.is_private
+        this.user.name             = response.name
+        this.user.email            = response.email
+        this.user.anonymous        = response.is_anonymous
         this.user.birth_year = response.birth_year
-        this.user.zipcode    = response.zipcode === null ? '' : response.zipcode
+        this.user.zipcode          = response.zipcode === null ? '' : response.zipcode
       })
     } catch (error) {
       console.warn(error)
@@ -254,7 +242,7 @@ export default class AccountScene extends Component {
                 onSelect={(anonymous) => this.setState({anonymous})}
                 initialSelect={this.user.anonymous ? 'Yes' : 'No'}
                 choices={['Yes', 'No']}
-                header="Anonymous users have their information hidden from other users.  Scientific partners will still be able to contact you with questions regarding submitted trees. Would you like to be anonymous?"
+                header="Anonymous users have their information hidden from other users. Would you like to be anonymous?"
               >
                 <View style={styles.row}>
                   <Text style={styles.label}>Anonymous</Text>
@@ -271,29 +259,6 @@ export default class AccountScene extends Component {
                 </View>
                 {this.state.errors.anonymous ? <Text style={styles.warning}>{this.state.errors.anonymous}</Text> : null}
               </PickerModal>
-              <PickerModal
-                style={[styles.formGroup]}
-                choices={['Yes', 'No']}
-                onSelect={(is_private) => this.setState({is_private})}
-                initialSelect={this.user.is_private ? 'Yes' : 'No'}
-                header="We take timber theft and the privacy of your submissions seriously.  Trees displayed on our public map are randomly shifted within a 100 mile radius, and positions are shown as inexact circles.
-                  Would you like your observations to be private?"
-              >
-                <View style={styles.row}>
-                  <Text style={styles.label}>Private</Text>
-                  <TextInput
-                    style={styles.textField}
-                    autoCapitalize={'words'}
-                    placeholderTextColor="#aaa"
-                    placeholder={'No'}
-                    returnKeyType={'next'}
-                    value={this.state.is_private}
-                    underlineColorAndroid="transparent"
-                    editable={false}
-                  />
-                </View>
-              </PickerModal>
-
 
               <DateModal
                 style={[styles.formGroup, styles.noBorder]}

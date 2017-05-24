@@ -139,8 +139,7 @@ export default class LoginScene extends Component {
         anonymous       : response.data.data.is_anonymous,
         zipcode         : response.data.data.zipcode,
         api_token       : response.data.data.api_token,
-        is_over_thirteen: response.data.data.is_over_thirteen,
-        is_private : response.data.data.is_private
+        is_over_thirteen: response.data.data.is_over_thirteen
       })
     })
   }

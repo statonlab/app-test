@@ -25,18 +25,18 @@ const SubmissionSchema = {
   name      : 'Submission',
   primaryKey: 'id',
   properties: {
-    id       : {type: 'int', default: 1},
-    name     : {type: 'string', default: 'Tree'},
-    images   : {type: 'string', default: ''},
+    id          : {type: 'int', default: 1},
+    name        : {type: 'string', default: 'Tree'},
+    images      : {type: 'string', default: ''},
     // Example, {longitude: 'int', latitude: 'int'}
-    location : {type: 'Coordinate'},
-    date     : {type: 'string', default: ''},
-    synced   : {type: 'bool', default: false},
+    location    : {type: 'Coordinate'},
+    date        : {type: 'string', default: ''},
+    synced      : {type: 'bool', default: false},
     // JSON String
-    meta_data: {type: 'string', default: ''},
+    meta_data   : {type: 'string', default: ''},
     // The observation id returned by the server upon uploading
-    serverID : {type: 'int', default: -1},
-    needs_update : {type: 'bool', default: false}
+    serverID    : {type: 'int', default: -1},
+    needs_update: {type: 'bool', default: false}
   }
 }
 
@@ -53,13 +53,13 @@ const SubmissionSchema = {
 const UserSchema = {
   name      : 'User',
   properties: {
-    name            : {type: 'string', default: 'default'},
-    email           : {type: 'string', default: 'default'},
-    anonymous       : {type: 'bool', default: false},
-    is_private       : {type: 'bool', default: false},
-    api_token       : {type: 'string', default: ''},
-    zipcode         : {type: 'string', default: ''},
-    birth_year      : {type: 'int', default: 1980}
+    name      : {type: 'string', default: 'default'},
+    email     : {type: 'string', default: 'default'},
+    anonymous : {type: 'bool', default: false},
+    is_private: {type: 'bool', default: false},
+    api_token : {type: 'string', default: ''},
+    zipcode   : {type: 'string', default: ''},
+    birth_year: {type: 'int', default: 1980}
   }
 }
 
@@ -77,22 +77,22 @@ export default new Realm({
         newUser.birthYear = 1984
       }
     }
-    if (oldRealm.schemaVersion < 3 ){
+    if (oldRealm.schemaVersion < 3) {
       let observations = newRealm.objects('Submission')
       observations.forEach(observation => {
         observation.needs_update = false
       })
     }
-    if (oldRealm.schemaVersion < 4){
+    if (oldRealm.schemaVersion < 4) {
       let observations = newRealm.objects('Submission')
       observations.forEach(observation => {
         let oldImages = JSON.parse(observation.images)
         if (Array.isArray(oldImages)) {
-          observation.image = JSON.stringify({"images": oldImages})
+          observation.image = JSON.stringify({'images': oldImages})
         }
       })
     }
-    if (oldRealm.schemaVersion < 5 ){
+    if (oldRealm.schemaVersion < 5) {
       let user = newRealm.objects('User')
       if (user.length > 0) {
         user.is_private = false
