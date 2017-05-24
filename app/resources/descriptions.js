@@ -15,23 +15,20 @@ const styles = StyleSheet.create({
 
 const Plants = {
   'American Chestnut': {
-    image    : require('../img/am_chestnut4.jpg'),
-    latinName: 'Castanea dentata',
-    images   : [
+    image           : require('../img/am_chestnut4.jpg'),
+    latinName       : 'Castanea dentata',
+    images          : [
       require('../img/chestnut_id/4.jpg'),
       require('../img/chestnut_id/1.jpg'),
       require('../img/chestnut_id/2.jpg'),
       require('../img/chestnut_id/3.jpg')
     ],
-    captions : [
+    captions        : [
       "Chestnut leaves are straight with large, widely spaced and often hooked serrations on their margins. Photo credit: Linda Haugen, USDA Forest Service, Bugwood.org",
       "Chestnut flowers, called catkins are abundant and white. Photo credit: USDA Forest Service Southern Research Station , USDA Forest Service, SRS, Bugwood.org",
       "Chestnut fruits (called burs) are covered with spikes. Photo credit: Paul Wray, Iowa State University, Bugwood.org",
       "The insides of burs have large brown nuts. Photo credit: USDA Forest Service Southern Research Station, Bugwood.org"
-
-
     ],
-
     maps            : [require('../img/maps/am_chestnut_map.png')],
     descriptionCards: [
       {
@@ -40,33 +37,7 @@ const Plants = {
         images: []
       }, {
         title : 'Introduction',
-        body  : [<Text style={styles.paragraph}>American chestnut was once a dominant tree in eastern North American forests but a deadly fungal disease wiped out most of these trees in the early 1900s. Help us find resistant trees by tagging healthy chestnut trees.</Text>],
-        images: []
-      },
-      {
-        title : 'Collection Instructions',
-        body  : [
-          <Text>In order for the American Chestnut Foundation to confirm your sample, you must mail in a plant sample. When submitting an observation, please collect a leaf and twig sample. The sample should be collected and preserved as described below.</Text>,
-
-          <Text> {'\u2022'} A 6-12" twig and attached, mature, green leaves growing in the full sun. </Text>,
-          <Text>  {'\u2022'} Press the sample flat between sheets of cardboard and place in an envelope.</Text>,
-          <Text>
-            {'\u2022'} Use a single paper towel between the sample and cardboard to cushion and absorb moisture.
-          </Text>,
-          <Text>
-            {'\u2022'} Do not wrap in plastic, as samples will mold in the mail.
-          </Text>,
-          <Text>
-            {'\u2022'} Do not ship overnight. It's not necessary and we won't ID your sample right away.
-          </Text>,
-          <Text>
-            Submission address - please choose the office closest to the tree located.
-            Tom Saielli, The American Chestnut Foundation, 50 N. Merrimon Ave, Suite 115, Asheville, NC 28804
-            Matt Brinckman, VA DOF, 900 Natural Resources Drive, Charlottesville, VA 22903
-            Sara Fitzsimmons, Pennsylvania State University, 206 Forest Resources Lab, University Park, PA 16802
-            Kendra Collins, USFS Northern Research Station, 705 Spear St, South Burlington, VT 05403
-          </Text>
-        ],
+        body  : [<Text style={styles.paragraph}>American chestnut was once a dominant tree in eastern North American forests but a deadly fungal disease wiped out most of these trees in the early 1900s. Help us find resistant trees by tagging healthy chestnut trees. <Text style={{fontWeight: 'bold'}}>Please note you must mail a twig sample to the American Chestnut Foundation for your tagged trees to be used in their studies. </Text> Please read below for sample collection and shipping instructions.</Text>],
         images: []
       },
       {
@@ -86,7 +57,39 @@ const Plants = {
           The fungus that causes chestnut blight grows in the vascular system of the tree, forming a canker and eventually girdling the tree. Symptoms of chestnut blight include cracked bark, sunken cankers, and fungal structures.</Text>,
           <Text style={styles.paragraph}>Several breeding programs exist to develop trees that are resistant to chestnut blight. Many of these rely of hybridizing American chestnuts with resistant Chinese of Japanese chestnuts and then back crossing to American chestnut. In addition, there has been success in producing transgenic chestnut trees with genes from wheat that provide resistance.
             Our hope is that this reporting app will let members of the public identify chestnut trees that have some natural resistance to chestnut blight. We will then collect seeds from these trees and add them to tree breeding programs to try and propagate resistant trees to use in forest restoration.</Text>]
-      }
+      },
+      {
+        title : 'Collection Instructions',
+        body  : [
+          <Text style={styles.paragraph}>In order for the American Chestnut Foundation to confirm your sample, you must mail in a plant sample. When submitting an observation, please collect a leaf and twig sample. The sample should be collected and preserved as described below.</Text>,
+
+          <Text style={styles.paragraph}> {'\u2022'} A 6-12" twig and attached, mature, green leaves growing in the full sun. </Text>,
+          <Text style={styles.paragraph}>  {'\u2022'} Press the sample flat between sheets of cardboard and place in an envelope.</Text>,
+          <Text style={styles.paragraph}>
+            {'\u2022'} Use a single paper towel between the sample and cardboard to cushion and absorb moisture.
+          </Text>,
+          <Text style={styles.paragraph}>
+            {'\u2022'} Do not wrap in plastic, as samples will mold in the mail.
+          </Text>,
+          <Text style={styles.paragraph}>
+            {'\u2022'} Do not ship overnight. It's not necessary and we won't ID your sample right away.
+          </Text>,
+          <Text style={styles.paragraph}>
+            Submission address - please choose the office closest to the tree located.
+            Tom Saielli, The American Chestnut Foundation, 50 N. Merrimon Ave, Suite 115, Asheville, NC 28804
+          </Text>,
+          <Text style={styles.paragraph}>
+            Matt Brinckman, VA DOF, 900 Natural Resources Drive, Charlottesville, VA 22903
+          </Text>,
+          <Text style={styles.paragraph}>
+            Sara Fitzsimmons, Pennsylvania State University, 206 Forest Resources Lab, University Park, PA 16802
+          </Text>,
+          <Text style={styles.paragraph}>
+            Kendra Collins, USFS Northern Research Station, 705 Spear St, South Burlington, VT 05403
+          </Text>
+        ],
+        images: []
+      },
     ],
     formProps       : {
       burrs              : true,
@@ -179,7 +182,7 @@ const Plants = {
       require('../img/hemlock_id/hemlock_cones.jpg'),
       require('../img/hemlock_id/hemlock_species.jpg'),
     ],
-    captions: ['Hemlock needles are flattened, 1.5-2cm long, dark green on top and lighter on the underside with two white lines running the length of the needles.', '', ''],
+    captions        : ['Hemlock needles are flattened, 1.5-2cm long, dark green on top and lighter on the underside with two white lines running the length of the needles.', '', ''],
     maps            : [
       require('../img/maps/hemlock_tsugcana_range.png'),
       require('../img/maps/hemlock_tsugcaro_range.png')
@@ -200,10 +203,6 @@ const Plants = {
         images: [],
         body  : [<Text style={styles.paragraph}>Hemlock is an evergreen conifer. Its needles are 1.5-2 cm long, dark green on top and lighter on the underside with two white lines running the length of the needle. Hemlocks produce small distinctive cones. These trees prefer shade and are often found along creeks and steams in mature forests</Text>,
           <Text style={styles.paragraph}>There are two different hemlock species native to North American, Eastern hemlock and Carolina hemlock. Eastern hemlock is larger and has a much broader distribution than Carolina hemlock, which is endemic to the southern Appalachians.</Text>]
-      }, {
-        title : 'Range',
-        images: [],
-        body  : [<Text style={styles.paragraph}></Text>]
       }, {
         title : 'Hemlock woolly adelgid',
         body  : [<Text style={styles.paragraph}>This insect sucks the sap of hemlock trees, weakening trees, preventing new growth, and eventually killing trees. In addition, hemlock woolly adelgids are thought to inject a toxin when feeding that further damages hemlock trees by drying them out. Infested trees loose needles and branches and typically die 4-10 years after initial adelgid arrival unless treated.</Text>,
@@ -257,8 +256,8 @@ const Plants = {
       // require('../img/white_oak_id/5.jpg'),
       require('../img/white_oak_id/6.jpg')
     ],
-    captions : ["White oaks take many years to reach sexual maturity, and large crops of acorns are not produced until trees are 50 years old.  Photo credit: Paul Wray, Iowa State University, Bugwood.org",
-    "White oak bark on mature trees is light gray in color with rectangular furrows. Photo credit: Paul Wray, Iowa State University, Bugwood.org",
+    captions        : ["White oaks take many years to reach sexual maturity, and large crops of acorns are not produced until trees are 50 years old.  Photo credit: Paul Wray, Iowa State University, Bugwood.org",
+      "White oak bark on mature trees is light gray in color with rectangular furrows. Photo credit: Paul Wray, Iowa State University, Bugwood.org",
       "White oak leaves have rounded lobes and are 5-8.5 inches in length.  Photo credit: Chris Evans, University of Illinois, Bugwood.org",
       "When they first emerge, white oak leaves are covered with hairs and pinkish in color.  Photo credit: Paul Bolstad, University of Minnesota, Bugwood.org",
       "White oak typically grow 80-100 feet although much taller individuals have also been recorded.  Photo credit: David Stephens, Bugwood.org"
@@ -300,10 +299,10 @@ const Plants = {
   },
 
   'American Elm': {
-    image    : require('../img/elm.jpg'),
-    latinName: 'Ulmus americana',
+    image           : require('../img/elm.jpg'),
+    latinName       : 'Ulmus americana',
     maps            : [require('../img/maps/elm_map.png')],
-    images   : [
+    images          : [
       require('../img/elm_id/Elm_bark.jpg'),
       require('../img/elm_id/Elm_leaf.jpg'),
       require('../img/elm_id/Elm_seeds.jpg'),
@@ -312,7 +311,7 @@ const Plants = {
       require('../img/elm_id/Dutch_elm_diseases.jpg'),
 
     ],
-    captions : [
+    captions        : [
       "The bark on large elm trees is rough with flattened ridges and crisscrossing furrows. Photo credit: Kathy Smith, Ohio State University Extension, Bugwood.org",
       "Elm leaves are alternating, have asymmetrical bases, and have doublely serrated margins. Photo credit: Paul Wray, Iowa State University, Bugwood.org",
 
@@ -321,20 +320,18 @@ const Plants = {
       "Large elm trees tend to have a vase shape.  Photo credit: Joseph OBrien, USDA Forest Service, Bugwood.org",
       "Symptoms of Dutch elm disease include wilted or yellowing leaves and brown streaking in sapwood. Photo credit: George Hudler, Cornell University, Bugwood.org."
     ],
-
-    maps            : [require('../img/elm.jpg')],
     descriptionCards: [
       {
         title : 'Species',
-        body  : [<Text style={styles.paragraph}>American Elm: <Text style={{fontStyle: 'italic'}}>TBD </Text></Text>],
+        body  : [<Text style={styles.paragraph}>American elm: <Text style={{fontStyle: 'italic'}}>Ulmus americana</Text></Text>],
         images: []
       }, {
         title : 'Introduction',
-        body  : [<Text style={styles.paragraph}>American Elm...</Text>],
+        body  : [<Text style={styles.paragraph}>American elm is a native species to North America that was once the dominant tree species along city and suburban streets. The American elm were known for their beautiful canopies and tolerance to poor soil conditions. After the introduction of Dutch elm disease in the 1930's, American elms have disappeared from the American cityscape.</Text>],
         images: []
       }, {
-        title : 'Description',
-        body  : [<Text style={styles.paragraph}>Photo credits: Matt Levin, wikimedia commons, CCBY-SA 2.0 License. </Text>
+        title : 'Photo credits',
+        body  : [<Text style={styles.paragraph}>Photo credits: Matt Levin, Wikimedia commons, CCBY-SA 2.0 License. Distribution maps courtesy of USGS.</Text>
         ],
         images: []
       }
