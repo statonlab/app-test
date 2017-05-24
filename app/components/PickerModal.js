@@ -146,7 +146,6 @@ export default class PickerModal extends Component {
 
 
   render() {
-    console.log(this.props.captions)
     return (
       <View>
         <Modal
