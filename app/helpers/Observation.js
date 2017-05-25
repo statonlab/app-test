@@ -1,13 +1,14 @@
 import {Platform} from 'react-native'
 import Axios from './Axios'
 import realm from '../db/Schema'
-import moment from 'moment'
+import File from './File'
 
 class Observation {
   // Public Methods
 
   constructor() {
     this.api_token = false
+    this.fs = new File()
   }
 
   /**
@@ -117,8 +118,9 @@ class Observation {
         let extension = name.split('.')
         extension     = extension[extension.length - 1]
 
-        let prefix = Platform.OS === 'android' && image.indexOf('file:') === -1 ? 'file://' : 'file://'
-        form.append(`images[${key}][${i}]`, {uri: `${prefix}${image}`, name, type: `image/${extension}`})
+        //let prefix = Platform.OS === 'android' && image.indexOf('file:') === -1 ? 'file://' : 'file://'
+        let file = this.fs.image(image)
+        form.append(`images[${key}][${i}]`, {uri: `${file}`, name, type: `image/${extension}`})
       })
     })
 
