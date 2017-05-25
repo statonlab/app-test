@@ -120,7 +120,7 @@ class Observation {
 
         //let prefix = Platform.OS === 'android' && image.indexOf('file:') === -1 ? 'file://' : 'file://'
         let file = this.fs.image(image)
-        form.append(`images[${key}][${i}]`, {uri: `${file}`, name, type: `image/${extension}`})
+        form.append(`images[${key}][${i}]`, {uri: file, name: name, type: `image/${extension}`})
       })
     })
 

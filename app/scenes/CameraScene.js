@@ -7,7 +7,8 @@ import {
   TouchableOpacity,
   Platform,
   ScrollView,
-  Image
+  Image,
+  Animated
 } from 'react-native'
 import Camera from 'react-native-camera'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -34,7 +35,10 @@ export default class CameraScene extends Component {
       selectedImage: '',
       images       : [],
       pageWidth    : 0,
-      newImages    : []
+      newImages    : [],
+      focus        : new Animated.Value(0),
+      focusLeft    : 0,
+      focusRight   : 0
     }
 
     this.isCapturing = false
@@ -114,6 +118,11 @@ export default class CameraScene extends Component {
       )
     }
 
+    let color = this.state.focus.interpolate({
+      inputRange : [0, 100],
+      outputRange: ['rgba(0,0,0,1)', 'rgba(255, 255, 255,1)']
+    })
+
     return (
       <ScrollView
         ref="page"
@@ -146,10 +155,12 @@ export default class CameraScene extends Component {
             flashMode={this.state.camera.flash}
             onZoomChanged={this.zoom}
             defaultOnFocusComponent={true}
-            onFocusChanged={(e) => {
-              return
-            }}
-            orientation="portrait"/>
+            onFocusChanged={e => {
+              let focusLeft = e.nativeEvent.touchPoint.x - 40
+              let focusTop  = e.nativeEvent.touchPoint.y - 40
+              this.setState({focusLeft, focusTop})
+              console.log({focusLeft, focusTop})
+            }}/>
           <View style={styles.toolsContainer}>
             <TouchableOpacity style={[styles.toolTouchable]} onPress={this._cancel}>
               <Text style={[styles.toolText]}>Cancel</Text>
@@ -165,7 +176,7 @@ export default class CameraScene extends Component {
               </TouchableOpacity>
               :
               <View style={[styles.toolTouchable, {alignItems: 'flex-end'}]}>
-                <View style={[styles.thumbnail, {backgroundColor: '#222'}]}></View>
+                <View style={[styles.thumbnail, {backgroundColor: '#222'}]}/>
               </View>
             }
           </View>
@@ -183,7 +194,7 @@ export default class CameraScene extends Component {
             </TouchableOpacity>
           </View>
           {this.state.selectedImage === '' ?
-            <View style={{flex: 1, backgroundColor: '#000'}}></View> :
+            <View style={{flex: 1, backgroundColor: '#000'}}/> :
             <ImageZoom
               cropHeight={height - 134}
               cropWidth={width}
@@ -345,7 +356,7 @@ export default class CameraScene extends Component {
     this.isCapturing = true
 
     this.camera.capture({
-      jpegQuality: 80
+      jpegQuality: 100
     }).then(data => {
       let image = data.path
       console.log(image)
@@ -552,5 +563,19 @@ const styles = StyleSheet.create({
     justifyContent  : 'center',
     marginHorizontal: 5,
     borderRadius    : 3
+  },
+
+  focusBox: {
+    width          : 80,
+    height         : 80,
+    borderWidth    : 1,
+    borderRadius   : 2,
+    backgroundColor: 'transparent',
+    borderColor    : Colors.warning,
+    borderStyle    : 'solid',
+    position       : 'absolute',
+    top            : 0,
+    left           : 0,
+    zIndex         : 1
   }
 })
