@@ -121,7 +121,6 @@ export default class LoginScene extends Component {
    * @param response
    */
   storeUser = (response) => {
-
     this.realm.write(() => {
       let user = realm.objects('User')
       if (user.length > 0) {
