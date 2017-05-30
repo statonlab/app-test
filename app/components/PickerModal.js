@@ -5,6 +5,7 @@ import Colors from '../helpers/Colors'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import realm from '../db/Schema'
 import ImageModal from './ImageModal'
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 
 export default class PickerModal extends Component {
 
@@ -67,12 +68,14 @@ export default class PickerModal extends Component {
 
   fetchSelections = () => {
     let labels       = []
-    let observations = realm.objects('Submission').filtered('name == \'Other\'')
+    let observations = realm.objects('Submission').filtered('name == \'Other\'').sorted('id', true)
     if (observations) {
       observations.map(observation => {
         let customLabel = JSON.parse(observation.meta_data).otherLabel
         if (labels.indexOf(customLabel) < 0) {
-          labels.push(customLabel)
+          if (labels.length < 5) {
+            labels.push(customLabel)
+          }
         }
       })
       this.setState({choices: labels})
@@ -135,7 +138,7 @@ export default class PickerModal extends Component {
           this.onChange(choice)
         }}>
         <View style={styles.choiceItem}>
-          {this.state.selected == choice ? checkedBox : uncheckedBox  }
+          {this.state.selected === choice ? checkedBox : uncheckedBox  }
           <Text style={styles.choiceText}>
             {choice}
           </Text>
@@ -153,7 +156,7 @@ export default class PickerModal extends Component {
           visible={this.state.modalVisible}
           onRequestClose={this.close}
           animationType={this.state.animationType}>
-          <View style={styles.dimBox}>
+          <KeyboardAwareScrollView contentContainerStyle={styles.mainContainer} bounces={false}>
             <TouchableOpacity
               style={styles.overlay}
               onPress={this.close.bind(this)}
@@ -185,7 +188,7 @@ export default class PickerModal extends Component {
                 }
               </View>
 
-              <View style={styles.modalChoices}>
+              <View style={[styles.modalChoices]}>
                 {this.state.choices.map(this.renderOptions.bind(this))}
               </View>
 
@@ -197,7 +200,7 @@ export default class PickerModal extends Component {
                 </Text>
               </MKButton>
             </View>
-          </View>
+          </KeyboardAwareScrollView>
         </Modal>
 
         <TouchableOpacity style={this.props.style} onPress={this.open}>
@@ -242,7 +245,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.transparentDark
   },
 
-  dimBox: {
+  mainContainer: {
     flex          : 1,
     alignItems    : 'center',
     justifyContent: 'center'
