@@ -79,7 +79,8 @@ export default class RegistrationScene extends Component {
   writeToRealm = (responseFull) => {
     this.realm.write(() => {
       // Delete existing users first
-      this.realm.deleteAll()
+      let old_users = this.realm.objects('User')
+      this.realm.delete(old_users)
 
       let response = responseFull.data.data
 
