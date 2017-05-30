@@ -200,7 +200,7 @@ export default class CameraScene extends Component {
               cropWidth={width}
               imageHeight={height - 134}
               imageWidth={width}>
-              <Image source={{uri: this.state.selectedImage}} style={[styles.preview, {resizeMode: 'contain'}]}/>
+              <Image source={{uri: this.state.selectedImage}} style={[styles.preview, {resizeMode: 'center'}]}/>
             </ImageZoom>
           }
           <View style={[styles.toolsContainer, styles.thumbnailsContainer]}>

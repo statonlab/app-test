@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react'
-import {View, ScrollView, StyleSheet, Text, TextInput} from 'react-native'
+import {View, StyleSheet, Text, TextInput} from 'react-native'
 import Header from '../components/Header'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
@@ -10,6 +10,7 @@ import axios from '../helpers/Axios'
 import SnackBar from '../components/SnackBarNotice'
 import Spinner from '../components/Spinner'
 import DateModal from '../components/DateModal'
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 
 export default class AccountScene extends Component {
   constructor(props) {
@@ -284,7 +285,7 @@ export default class AccountScene extends Component {
       <View style={styles.container}>
         <Spinner show={this.state.showSpinner}/>
         <Header title="Account" navigator={this.props.navigator} elevation={4} showRightIcon={false}/>
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.innerContainer}>
             <Text style={styles.title}>PERSONAL</Text>
             <View style={styles.card}>
@@ -437,7 +438,7 @@ export default class AccountScene extends Component {
               </View>
             </View>
           </View>
-        </ScrollView>
+        </KeyboardAwareScrollView>
 
         <View style={styles.footer}>
           <View style={styles.column}>
@@ -505,8 +506,7 @@ const styles = StyleSheet.create({
     fontSize        : 14,
     color           : '#222',
     fontWeight      : 'bold',
-    width           : 100,
-    borderRightWidth: 1
+    width           : 100
   },
 
   labelLg: {
