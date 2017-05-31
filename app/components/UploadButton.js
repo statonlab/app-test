@@ -42,6 +42,14 @@ export default class UploadButton extends Component {
    * Upload observations to the server.
    */
   upload() {
+    let len      = this.state.observations.length
+    let uploaded = 0
+
+    this.setState({
+      show     : false,
+      uploading: true
+    })
+
     this.state.observations.forEach(observation => {
       Observation.upload(observation).then(response => {
         realm.write(() => {
@@ -49,14 +57,15 @@ export default class UploadButton extends Component {
           observation.serverID = response.data.data.observation_id
         })
         this.done()
+        uploaded++
       }).catch(error => {
         console.log('REQUEST ERROR', error)
+        uploaded++
+        if (uploaded === len) {
+          this.setState({uploading: false, show: true})
+          this.props.onError()
+        }
       })
-    })
-
-    this.setState({
-      show     : false,
-      uploading: true
     })
   }
 
@@ -90,12 +99,15 @@ export default class UploadButton extends Component {
 
 UploadButton.PropTypes = {
   label       : PropTypes.string,
-  onUploadDone: PropTypes.func
+  onUploadDone: PropTypes.func,
+  onError     : PropTypes.func
 }
 
 UploadButton.defaultProps = {
   label       : 'Upload Your Observations',
   onUploadDone: () => {
+  },
+  onError     : () => {
   }
 }
 

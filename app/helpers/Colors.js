@@ -36,7 +36,7 @@ const Colors = {
 
   transparentDark: 'rgba(0,0,0,.5)',
 
-  sidebarBackground: '#eeeeee',
+  sidebarBackground: '#f7f7f7',
   sidebarText      : '#595959'
 }
 

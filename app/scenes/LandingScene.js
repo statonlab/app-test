@@ -145,8 +145,6 @@ export default class LandingScene extends Component {
       if (this.refs.uploadButton) {
         this.refs.uploadButton.getObservations()
       }
-      // this.setState({noticeText: 'New submission created!'})
-      // this.refs.snackbar.showBar()
     }))
 
     this.events.push(DeviceEventEmitter.addListener('userLoggedIn', () => {
@@ -295,7 +293,7 @@ export default class LandingScene extends Component {
    * Toggle sidebar menu (show/hide)
    */
   toggleMenu() {
-    this.refs.sidebar.toggleMenu()
+    this.sidebar.toggleMenu()
   }
 
   /**
@@ -319,23 +317,33 @@ export default class LandingScene extends Component {
     this.refs.snackbar.showBar()
   }
 
+  /**
+   * Show error message if upload is unsuccessful.
+   */
+  uploadError() {
+    this.setState({noticeText: 'Network error. Try again later.'})
+    this.refs.snackbar.showBar()
+  }
+
   render() {
     return (
-      <View style={styles.container}>
+      <View style={styles.container} {...(this.sidebar ? this.sidebar.getPan() : {})}>
         <Header
           title={this.props.title}
           navigator={this.props.navigator}
           initial={true}
           onMenuPress={this.toggleMenu.bind(this)}
-          sidebar={this.refs.sidebar}/>
+          sidebar={this.sidebar}/>
         <Sidebar
-          ref="sidebar"
+          ref={ref => this.sidebar = ref}
           navigator={this.props.navigator}
           routes={this.state.sidebar}/>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.plantsContainer}>
-            {this.state.userLoggedIn ? <UploadButton ref="uploadButton"
-              onUploadDone={this.uploadCompleted.bind(this)}/> : this.loginButton.call(this)}
+            {this.state.userLoggedIn ?
+              <UploadButton ref="uploadButton" onUploadDone={this.uploadCompleted.bind(this)} onError={this.uploadError.bind(this)}/> :
+              this.loginButton.call(this)
+            }
 
             {plants.map((plant, index) => {
               return (

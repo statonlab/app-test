@@ -21,13 +21,17 @@ export default class Header extends Component {
   }
 
   componentWillMount() {
-    this.listener = DeviceEventEmitter.addListener('sidebarToggled', () => {
-      this.setState({menuIcon: this.state.menuIcon === 'menu' ? 'backburger' : 'menu'})
-    })
+    this.listeners = []
+    this.listeners.push(DeviceEventEmitter.addListener('sidebarOpened', () => {
+      this.setState({menuIcon: 'backburger'})
+    }))
+    this.listeners.push(DeviceEventEmitter.addListener('sidebarClosed', () => {
+      this.setState({menuIcon: 'menu'})
+    }))
   }
 
   componentWillUnmount() {
-    this.listener.remove()
+    this.listeners.map((event) => event.remove())
   }
 
   back = () => {

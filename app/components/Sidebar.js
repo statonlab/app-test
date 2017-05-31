@@ -2,19 +2,22 @@ import React, {Component, PropTypes} from 'react'
 import {
   Animated,
   View,
-  ScrollView,
   Text,
   StyleSheet,
   Platform,
   TouchableWithoutFeedback,
   TouchableOpacity,
   DeviceEventEmitter,
-  PanResponder
+  PanResponder,
+  Dimensions
 } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import Colors from '../helpers/Colors'
 import {MKRipple} from 'react-native-material-kit'
 import Elevation from '../helpers/Elevation'
+
+const window       = Dimensions.get('window')
+const sidebarWidth = window.width - 60 > 300 ? window.width - 60 : 300
 
 export default class Sidebar extends Component {
   constructor(props) {
@@ -22,71 +25,150 @@ export default class Sidebar extends Component {
 
     this.state = {
       open    : false,
-      position: new Animated.Value(-250),
-      routes  : []
+      position: null,
+      routes  : [],
+      opacity : new Animated.Value(0),
+      dragging: false
     }
   }
 
+  /**
+   * Setup responder.
+   */
+  componentWillMount() {
+    this.state.position = new Animated.Value(-sidebarWidth)
+    this._value         = -sidebarWidth
+    this.state.position.addListener(e => {
+      this._value = e.value
+
+      let position = this.state.position._value + this.state.position._offset
+      let opacity  = Math.min(1 - Math.abs(position / sidebarWidth), 0.7)
+      this.state.opacity.setValue(opacity < 0 ? 0 : opacity)
+      this.forceUpdate()
+    })
+
+    let grant = (e, gesture) => {
+      // Accept horizontal movements only
+      let position = this.state.position._value + this.state.position._offset
+      return Math.abs(gesture.dy) < Math.abs(gesture.dx)
+    }
+
+    this._pan = PanResponder.create({
+      // Ask to be the responder:
+      onMoveShouldSetPanResponder       : grant,
+      onMoveShouldSetPanResponderCapture: grant,
+
+      onPanResponderGrant: () => {
+        this.state.position.setOffset(this._value)
+        this.state.position.setValue(0)
+        this.setState({dragging: true})
+      },
+
+      onPanResponderMove: (e, gesture) => {
+        let position = this.state.position._value + this.state.position._offset
+
+        // Allow moving only if the sidebar is not fully open OR allow left swipe only when the sidebar is fully open
+        if (position < 0 || (position >= 0 && gesture.dx <= 0)) {
+          Animated.event([null, {dx: this.state.position}])(e, gesture)
+        }
+
+        this.setState({open: position > -sidebarWidth})
+      },
+
+      onPanResponderRelease: (e, {dx, vx}) => {
+        this.state.position.flattenOffset()
+
+        if (dx > 60 || vx > 0.05) {
+          this.open()
+        } else {
+          this.close()
+        }
+
+        this.setState({dragging: false})
+      }
+    })
+  }
+
+  componentWillUnmount() {
+    this.state.position.removeAllListeners()
+  }
+
+  /**
+   * Set the routes.
+   */
   componentDidMount() {
     this.setState({routes: this.props.routes})
   }
 
+  /**
+   * Update routes if they change.
+   *
+   * @param props
+   */
   componentWillReceiveProps(props) {
-    this.setState({routes: props.routes})
+    if (this.state.routes !== props.routes) {
+      this.setState({routes: props.routes})
+    }
   }
 
+  /**
+   * Open or close menu.
+   */
   toggleMenu() {
     if (this.state.open) {
-      setTimeout(() => {
-        this.refs['container'].setNativeProps({
-          style: {width: 0}
-        })
-      }, 200)
-      Animated.timing(
-        this.state.position,
-        {
-          toValue : -250,
-          duration: 200
-        }
-      ).start()
+      this.close()
     }
     else {
-      this.refs['container'].setNativeProps({
-        style: {width: 7000}
-      })
-      Animated.timing(
-        this.state.position,
-        {
-          toValue : 0,
-          duration: 200
-        }
-      ).start()
+      this.open()
     }
+  }
 
-    this.setState({open: !this.state.open})
+  close() {
 
-    this.broadcast()
+    Animated.timing(this.state.position, {
+      toValue : -sidebarWidth,
+      duration: 300
+    }).start(() => {
+      this.setState({open: false})
+      this.broadcast(false)
+    })
+  }
+
+  open() {
+
+    this.setState({open: true})
+
+    Animated.timing(this.state.position, {
+      toValue : 0,
+      duration: 300
+    }).start(() => {
+      this.broadcast(true)
+    })
   }
 
   render() {
+    let containerWidth = this.state.open ? window.width : 0
+
     return (
-      <View ref="container" style={style.container}>
+      <Animated.View ref="container" style={[style.container, {width: containerWidth, backgroundColor: `rgba(0,0,0,${this.state.opacity._value})`}]}>
         <TouchableOpacity onPress={this.toggleMenu.bind(this)} style={{
-             flex: 1,
-             backgroundColor: 'transparent',
-             width: undefined,
-             zIndex: 800
+          flex           : 1,
+          backgroundColor: 'transparent',
+          width          : undefined,
+          zIndex         : 800
         }} activeOpacity={1}>
         </TouchableOpacity>
-        <Animated.ScrollView style={[style.sidebar, {left: this.state.position}]} ref="sidebar">
+        <Animated.ScrollView style={[style.sidebar, {transform: [{translateX: this.state.position}]}]} ref="sidebar">
           {this.state.routes.map((route, index) => {
             return (
               <TouchableWithoutFeedback
                 key={index}
-                onPress={() => {this.goTo.call(this, route)}}>
+                onPress={() => {
+                  this.goTo.call(this, route)
+                }}>
                 <MKRipple
                   style={style.touchable}
-                  rippleColor={"rgba(0,0,0,0.1)"}>
+                  rippleColor={'rgba(0,0,0,0.1)'}>
                   <Icon name={route.icon} size={20} style={style.icon}/>
                   <Text style={style.text}>
                     {route.title}
@@ -96,14 +178,19 @@ export default class Sidebar extends Component {
             )
           })}
         </Animated.ScrollView>
-      </View>
+      </Animated.View>
     )
   }
 
+  /**
+   * Navigate to a route.
+   *
+   * @param route
+   */
   goTo(route) {
     this.toggleMenu()
 
-    if(typeof route.onPress == 'function') {
+    if (typeof route.onPress === 'function') {
       route.onPress()
       return
     }
@@ -111,21 +198,34 @@ export default class Sidebar extends Component {
     this.props.navigator.push(route)
   }
 
-  broadcast() {
-    DeviceEventEmitter.emit('sidebarToggled')
+  getPan() {
+    return this._pan.panHandlers
+  }
+
+  broadcast(open) {
+    if (open) {
+      DeviceEventEmitter.emit('sidebarOpened')
+    } else {
+      DeviceEventEmitter.emit('sidebarClosed')
+    }
   }
 }
 
 Sidebar.propTypes = {
   navigator: PropTypes.object.isRequired,
-  routes   : PropTypes.array.isRequired
+  routes   : PropTypes.array.isRequired,
+  left     : PropTypes.number
+}
+
+Sidebar.defaultProps = {
+  left: -sidebarWidth
 }
 
 function getVerticalMargin() {
-  if (Platform.OS == 'android')
+  if (Platform.OS === 'android')
     return 60
   else
-    return 75.5
+    return 75
 }
 
 const style = StyleSheet.create({
@@ -150,7 +250,7 @@ const style = StyleSheet.create({
     position       : 'absolute',
     top            : 0,
     bottom         : 0,
-    width          : 250
+    width          : sidebarWidth
   },
 
   text: {
@@ -164,7 +264,6 @@ const style = StyleSheet.create({
   },
 
   icon: {
-    color          : Colors.sidebarText,
     paddingVertical: 12,
     paddingLeft    : 10,
     color          : Colors.primary

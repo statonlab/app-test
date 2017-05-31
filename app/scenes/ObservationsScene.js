@@ -17,6 +17,7 @@ import Elevation from '../helpers/Elevation'
 import Observation from '../helpers/Observation'
 import Spinner from '../components/Spinner'
 import File from '../helpers/File'
+import SnackBar from '../components/SnackBarNotice'
 
 export default class ObservationsScene extends Component {
   constructor(props) {
@@ -32,10 +33,12 @@ export default class ObservationsScene extends Component {
     this.state = {
       hasData    : (this.submissions.length > 0),
       submissions: this.dataSource.cloneWithRowsAndSections(this._createMap(this.submissions)),
-      isLoggedIn : false
+      isLoggedIn : false,
+      noticeText : ''
     }
 
-    this.events = []
+    this.events   = []
+    this.snackbar = {}
 
     this.fs = new File()
   }
@@ -207,12 +210,12 @@ export default class ObservationsScene extends Component {
   _renderList = () => {
     return (
       <View style={{flex: 1}}>
-      <ListView
-        dataSource={this.state.submissions}
-        renderRow={this._renderRow}
-        renderSectionHeader={this._renderSectionHeader}
-        enableEmptySections={true}
-      />
+        <ListView
+          dataSource={this.state.submissions}
+          renderRow={this._renderRow}
+          renderSectionHeader={this._renderSectionHeader}
+          enableEmptySections={true}
+        />
       </View>
     )
   }
@@ -249,53 +252,70 @@ export default class ObservationsScene extends Component {
     })
   }
 
+  _uploadUnsynced() {
+    let observations   = realm.objects('Submission').filtered('synced == false')
+    let unsynced       = observations.length
+    let unsynced_count = 0
+    if (unsynced > 0) {
+      this.refs.spinner.open()
+
+      observations.forEach(observation => {
+        Observation.upload(observation).then(response => {
+          realm.write(() => {
+            observation.synced         = true
+            observation.observation_id = response.data.data.observation_id
+            this._resetDataSource()
+          })
+          unsynced_count++
+        }).catch(error => {
+          console.log(error)
+          unsynced_count++
+          if (unsynced === unsynced_count) {
+            this.refs.spinner.close()
+            this.setState({noticeText: 'Network error. Please try again later.'})
+            this.snackbar.showBar()
+          }
+        })
+      })
+    }
+  }
+
+  _uploadUpdated() {
+    let toSync        = realm.objects('Submission').filtered('needs_update == true')
+    let updated       = toSync.length
+    let updated_count = 0
+    if (updated > 0) {
+      this.refs.spinner.open()
+
+      toSync.forEach(observation => {
+        Observation.update(observation).then(response => {
+          realm.write(() => {
+            observation.needs_update = false
+            this._resetDataSource()
+            this.refs.spinner.close()
+          })
+          updated_count++
+        }).catch(error => {
+          updated_count++
+          console.log(error)
+          if (updated === updated_count) {
+            this.refs.spinner.close()
+            this.setState({noticeText: 'Network error. Please try again later.'})
+            this.snackbar.showBar()
+          }
+        })
+      })
+    }
+  }
+
   /**
    * Upload all entries.
    *
    * @private
    */
   _uploadAll() {
-    let observations = realm.objects('Submission').filtered('synced == false')
-
-    if (observations.length > 0) {
-      this.refs.spinner.open()
-
-      observations.forEach(observation => {
-        Observation.upload(observation).then(response => {
-          // TODO: Add snackbar notification
-          // console.log(response)
-          realm.write(() => {
-            observation.synced         = true
-            observation.observation_id = response.data.data.observation_id
-            this._resetDataSource()
-            this.refs.spinner.close()
-          })
-        }).catch(error => {
-          // TODO: Handle Error!
-          console.log(error)
-        })
-      })
-    }
-
-    let toSync = realm.objects('Submission').filtered('needs_update == true')
-
-    if (toSync.length > 0) {
-      this.refs.spinner.open()
-
-      toSync.forEach(observation => {
-        Observation.update(observation).then(response => {
-          // TODO: Add snackbar notification
-          realm.write(() => {
-            observation.needs_update = false
-            this._resetDataSource()
-            this.refs.spinner.close()
-          })
-        }).catch(error => {
-          // TODO: Handle Error!
-          console.log(error)
-        })
-      })
-    }
+    this._uploadUnsynced()
+    this._uploadUpdated()
   }
 
   /**
@@ -314,6 +334,7 @@ export default class ObservationsScene extends Component {
         <Spinner ref="spinner"/>
         <Header navigator={this.props.navigator} title="Your Entries"/>
         {this.state.hasData ? this._renderList() : this._renderEmpty()}
+        <SnackBar ref={(snackbar) => this.snackbar = snackbar} noticeText={this.state.noticeText}/>
       </View>
     )
   }
