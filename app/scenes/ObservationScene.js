@@ -24,7 +24,7 @@ import File from '../helpers/File'
 import Elevation from '../helpers/Elevation'
 import ImageZoom from 'react-native-image-pan-zoom'
 
-const trash = (<Icon name="ios-trash" size={24} color="#fff"/>)
+const trash   = (<Icon name="ios-trash" size={24} color="#fff"/>)
 const android = Platform.OS === 'android'
 
 export default class ObservationScene extends Component {
@@ -37,7 +37,8 @@ export default class ObservationScene extends Component {
       isLoggedIn    : false,
       needs_update  : false,
       selectedCircle: 0,
-      pages         : 0
+      pages         : 0,
+      noticeText    : ''
     }
     this.user  = realm.objects('User')[0]
     this.fs    = new File()
@@ -102,12 +103,17 @@ export default class ObservationScene extends Component {
           observation.synced   = true
         })
         this.refs.spinner.close()
-        this.setState({synced: true})
+        this.setState({
+          synced    : true,
+          noticeText: 'Entry synced successfully!'
+        })
         this.refs.snackbar.showBar()
       }
     }).catch(error => {
       console.log(error)
       this.refs.spinner.close()
+      this.setState({noticeText: 'Network error. Please try again later.'})
+      this.refs.snackbar.showBar()
     })
   }
 
@@ -127,12 +133,17 @@ export default class ObservationScene extends Component {
             observation.needs_update = false
           })
           this.refs.spinner.close()
-          this.setState({needs_update: false})
+          this.setState({
+            needs_update: false,
+            noticeText  : 'Entry synced successfully!'
+          })
           this.refs.snackbar.showBar()
         }
       }).catch(error => {
         console.log(error)
         this.refs.spinner.close()
+        this.setState({noticeText: 'Network error. Please try again later.'})
+        this.refs.snackbar.showBar()
       })
     }
   }
@@ -375,7 +386,7 @@ export default class ObservationScene extends Component {
     return (
       <View style={styles.container}>
         <Spinner ref="spinner"/>
-        <SnackBarNotice ref="snackbar" noticeText="Entry synced successfully!"/>
+        <SnackBarNotice ref="snackbar" noticeText={this.state.noticeText}/>
 
         <Header navigator={this.props.navigator} title={entry.name} rightIcon={trash} onRightPress={() => {
           this.deleteAlert.call(this, entry)
@@ -397,10 +408,10 @@ export default class ObservationScene extends Component {
                 }
 
                 return images[key].map((image, index) => {
-                  if(android) {
+                  if (android) {
                     return (
                       <View style={{flex: 0, height: 250, width}} key={index}>
-                        <Image  source={{uri: this.fs.image(image)}} style={styles.image}/>
+                        <Image source={{uri: this.fs.image(image)}} style={styles.image}/>
                       </View>
                     )
                   }
