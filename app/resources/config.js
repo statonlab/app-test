@@ -96,13 +96,14 @@ const DCP = {
       'Yes', 'No'
     ],
     placeHolder  : "Please select",
-    camera       : ['yes']
+    camera       : ['Yes']
   },
 
   heightFirstBranch      : {
     label      : 'Height of first branch',
     description: 'Approximately (no need to measure) how high up is the first branch of the tree?',
-    slider     : true
+    slider     : true,
+    units      : "Feet",
   },
   oakHealthProblems      : {
     label        : 'Health problems',
@@ -141,6 +142,7 @@ const DCP = {
     selectChoices: ['Dominant. This tree\'s crown extends above others in the area.',
       'Codominant. This tree\'s crown is level with or slightly below other nearby trees.',
       'Overtopped. This tree\'s crown is entirely below other trees nearby.',
+      'Not applicable (Tree is isolated)',
       'I\'m not sure.'],
     placeHolder  : "Please select"
   },
