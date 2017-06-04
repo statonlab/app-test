@@ -34,28 +34,33 @@ const DCPrules = {
   woollyAdesCoverage     : t.enums.of(DCP.woollyAdesCoverage.selectChoices, 'woollyAdesCoverage'),
   acorns                 : t.enums.of(DCP.acorns.selectChoices, 'acorns'),
   heightFirstBranch      : t.Number,
-  oakHealthProblems      : t.maybe(t.String),
   diameterNumeric        : t.Number,
   heightNumeric          : t.Number,
-  chestnutBlightSigns    : t.maybe(t.String),
   ashSpecies             : t.enums.of(DCP.ashSpecies.selectChoices, 'ashSpecies'),
-  emeraldAshBorer        : t.maybe(t.String),
   crownHealth            : t.Number,
   otherLabel             : t.String,
-  locationCharacteristics: t.maybe(t.enums.of(DCP.locationCharacteristics.selectChoices, 'locations')),
-  // nearbySmall            : t.enums.of(DCP.nearbySmall.selectChoices),
-  // nearbyDead             : t.enums.of(DCP.nearbyDead.selectChoices),
   treated                : t.enums.of(DCP.treated.selectChoices),
   cones                  : t.enums.of(DCP.cones.selectChoices),
   crownClassification    : t.enums.of(DCP.crownClassification.selectChoices),
-  // nearByHemlock          : t.enums.of(DCP.nearByHemlock.selectChoices),
   partOfStudy            : t.enums.of(DCP.partOfStudy.selectChoices),
-  // accessibility          : t.enums.of(DCP.accessibility.selectChoices),
   locationComment        : t.maybe(t.String),
   burrs                  : t.enums.of(DCP.burrs.selectChoices),
   catkins                : t.enums.of(DCP.catkins.selectChoices),
-  nearbyTrees            : t.maybe(t.enums.of(DCP.nearbyTrees.selectChoices))
+  //Multichoice: must be string
+  //TO DO: validate to a list of the choices instead
+  locationCharacteristics: t.String,
+  nearbyTrees            : t.String,
+  emeraldAshBorer        : t.maybe(t.String),
+  oakHealthProblems      : t.maybe(t.String),
+  chestnutBlightSigns    : t.maybe(t.String),
+  //Deprecated choices
   // surroundings           : t.enums.of(DCP.surroundings.selectChoices)
+  // nearbySmall            : t.enums.of(DCP.nearbySmall.selectChoices),
+  // nearbyDead             : t.enums.of(DCP.nearbyDead.selectChoices),
+  // accessibility          : t.enums.of(DCP.accessibility.selectChoices),
+  // nearByHemlock          : t.enums.of(DCP.nearByHemlock.selectChoices),
+
+
 }
 
 const Coordinate = t.refinement(t.Number, (n) => n !== 0, 'Coordinate')
@@ -309,7 +314,8 @@ export default class Form extends Component {
    * @param validationAttempt
    */
   notifyIncomplete = (validationAttempt) => {
-    let errors    = validationAttempt.errors
+    let errors = validationAttempt.errors
+    console.log(this.state.metadata)
     let errorList = []
     let warnings  = {}
 
