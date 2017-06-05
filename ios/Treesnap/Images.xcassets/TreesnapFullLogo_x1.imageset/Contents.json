@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "TreesnapFullLogo_x1.png",
+      "filename" : "TreeSnapFullLogo_x1.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "TreesnapFullLogo_x2.png",
+      "filename" : "TreeSnapFullLogo_x2.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "TreesnapFullLogo_x3.png",
+      "filename" : "TreeSnapFullLogo_x3.png",
       "scale" : "3x"
     }
   ],
