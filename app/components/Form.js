@@ -315,7 +315,7 @@ export default class Form extends Component {
    */
   notifyIncomplete = (validationAttempt) => {
     let errors = validationAttempt.errors
-    console.log(this.state.metadata)
+    console.log(errors)
     let errorList = []
     let warnings  = {}
 
@@ -325,7 +325,11 @@ export default class Form extends Component {
         errorList.push('Required field: ' + DCP[error.path].label)
       }
     })
-
+    //Add error for no location
+    console.log(this.state.location)
+    if (this.state.location.latitude === 0 && this.state.location.longitude === 0 && this.state.location.accuracy === -1) {
+      errorList.push('Cannot get location.  Please wait for GPS signal and try again.')
+    }
     this.setState({warnings})
 
     if (errorList) {
