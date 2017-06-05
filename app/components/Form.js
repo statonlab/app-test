@@ -477,7 +477,7 @@ export default class Form extends Component {
           <Text style={[styles.label, {paddingTop: 5}]}>Location</Text>
           <TextInput
             style={[styles.textField, styles.comment]}
-            placeholder="Comments regarding the location of this tree.  These comments will only be veiwable to Treesnap forestry partners"
+            placeholder="Comments regarding the location of this tree.  These comments will only be veiwable to TreeSnap forestry partners"
             placeholderTextColor="#aaa"
             value={this.state.metadata.comment}
             onChangeText={(comment) => this.setState({metadata: {...this.state.metadata, locationComment: comment}})}

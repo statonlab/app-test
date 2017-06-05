@@ -16,11 +16,11 @@
 #define TIMEOUT_SECONDS 600
 #define TEXT_TO_LOOK_FOR @"Welcome to React Native!"
 
-@interface TreesnapTests : XCTestCase
+@interface TreeSnapTests : XCTestCase
 
 @end
 
-@implementation TreesnapTests
+@implementation TreeSnapTests
 
 - (BOOL)findSubviewInView:(UIView *)view matching:(BOOL(^)(UIView *view))test
 {

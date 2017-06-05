@@ -152,7 +152,7 @@ export default class LoginScene extends Component {
         <ScrollView keyboardDismissMode={'on-drag'} showsVerticalScrollIndicator={false}>
           <View style={styles.form}>
             <View style={styles.formGroup}>
-              <Text style={styles.title}>Treesnap</Text>
+              <Text style={styles.title}>TreeSnap</Text>
             </View>
 
             <View style={styles.formGroup}>
