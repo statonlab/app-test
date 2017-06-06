@@ -14,20 +14,23 @@ export default class DateModal extends Component {
       animationType: 'fade',
       modalVisible : false,
       cancelText   : 'OK',
-      selectedYear     : null,
+      selectedYear : null,
       dateChoices  : [1, 2, 3]
     }
   }
 
   componentWillMount() {
-    this.setState({selectedYear: this.props.selectedYear})
+    this.setState({})
 
     let dateChoices = []
     let currentYear = new Date().getFullYear()
     for (let i = 0; i < 100; i++) {
       dateChoices.push(currentYear - i)
     }
-    this.setState({dateChoices})
+    this.setState({
+      selectedYear: this.props.selectedYear,
+      dateChoices
+    })
   }
 
   open = () => {
@@ -43,13 +46,11 @@ export default class DateModal extends Component {
   }
 
   onValChange = (year) => {
-          this.props.onSelect(year)
-         this.setState({selectedYear: year})
+    this.props.onSelect(year)
+    this.setState({selectedYear: year})
   }
 
   render() {
-
-
     return (
       <View>
         <Modal
@@ -67,7 +68,7 @@ export default class DateModal extends Component {
 
               <View style={styles.modalChoices}>
                 <Picker selectedValue={this.state.selectedYear}
-                onValueChange={(year) => this.onValChange(year)}>
+                  onValueChange={(year) => this.onValChange(year)}>
                   {this.state.dateChoices.map(this.renderPickChoices)}
                 </Picker>
               </View>
@@ -94,7 +95,6 @@ DateModal.propTypes = {
   onSelect    : PropTypes.func,
   style       : View.propTypes.style,
   selectedYear: PropTypes.number
-
 }
 
 DateModal.defaultProps = {
@@ -102,8 +102,6 @@ DateModal.defaultProps = {
   }
 }
 
-
-const elevationStyle = new Elevation(2)
 
 const styles = StyleSheet.create({
 

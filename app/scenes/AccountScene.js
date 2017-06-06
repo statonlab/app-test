@@ -178,7 +178,8 @@ export default class AccountScene extends Component {
       if (error.response) {
         switch (error.response.status) {
           case 500:
-            alert('Could not reach server. Make sure you have internet connection.')
+            alert('Server error. Please try again later.')
+            console.log(error.response)
             break
           default:
             this.handleValidationErrors(error.response.data.error)
