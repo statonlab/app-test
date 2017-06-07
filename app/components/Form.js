@@ -52,7 +52,7 @@ const DCPrules = {
   nearbyTrees            : t.String,
   emeraldAshBorer        : t.maybe(t.String),
   oakHealthProblems      : t.maybe(t.String),
-  chestnutBlightSigns    : t.maybe(t.String),
+  chestnutBlightSigns    : t.maybe(t.String)
   //Deprecated choices
   // surroundings           : t.enums.of(DCP.surroundings.selectChoices)
   // nearbySmall            : t.enums.of(DCP.nearbySmall.selectChoices),
@@ -192,13 +192,55 @@ export default class Form extends Component {
     return true
   }
 
-  // Do the actual cancellation
+  /**
+   * Recursively flatten an object.
+   *
+   * @param o
+   * @returns {Array}
+   */
+  flattenObject = (o) => {
+    let results = []
+    Object.keys(o).map(key => {
+      let o2 = o[key]
+      if (typeof o2 === 'object' && !Array.isArray(o2)) {
+        o2 = this.flattenObject(o2)
+      }
+
+      if (Array.isArray(o2)) {
+        o2.map(item => {
+          results.push(item)
+        })
+      }
+    })
+
+    return results
+  }
+
+  /**
+   *  Do the actual cancellation.
+   *  Deals with image deletion.
+   */
   doCancel = () => {
+    if (this.props.edit === true) {
+      // Extract new images only
+      let oldImages = this.flattenObject(JSON.parse(this.props.entryInfo.images))
+      let allImages = this.flattenObject(this.state.images)
+      let newImages = allImages.filter(image => oldImages.indexOf(image) === -1)
+
+      // Convert to object
+      newImages = {images: newImages}
+      this.fs.delete(newImages, () => {
+        this.refs.spinner.close()
+        this.props.navigator.pop()
+      })
+      return
+    }
+
     this.refs.spinner.open()
     // Delete all images
     this.fs.delete(this.state.images, () => {
       this.refs.spinner.close()
-      this.props.navigator.popToTop()
+      this.props.navigator.pop()
     })
   }
 
@@ -314,7 +356,7 @@ export default class Form extends Component {
    * @param validationAttempt
    */
   notifyIncomplete = (validationAttempt) => {
-    let errors = validationAttempt.errors
+    let errors    = validationAttempt.errors
     let errorList = []
     let warnings  = {}
 

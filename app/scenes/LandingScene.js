@@ -270,7 +270,9 @@ export default class LandingScene extends Component {
             realm.write(() => {
               let user = realm.objects('User')
               realm.delete(user)
+
               let submissions = realm.objects('Submission')
+              // TODO: Delete all images first
               realm.delete(submissions)
             })
             DeviceEventEmitter.emit('userLoggedOut')
