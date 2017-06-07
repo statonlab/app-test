@@ -121,6 +121,13 @@ export default class WildType extends Component {
       }
     }
 
+    if (route.label === 'TreeScene') {
+      config = {
+        ...config,
+        gestures: {}
+      }
+    }
+
     return config
   }
 

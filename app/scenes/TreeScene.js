@@ -1,4 +1,4 @@
-import React, {Component, PropTypes} from 'React'
+import React, {Component, PropTypes} from 'react'
 import {View} from 'react-native'
 import Header from '../components/Header'
 import {Tabs, Tab} from '../components/Tabs'
@@ -10,7 +10,9 @@ export default class TreeScene extends Component {
   render() {
     return (
       <View style={{flex: 1, backgroundColor: '#f5f5f5'}}>
-        <Header title={this.props.title} navigator={this.props.navigator} showRightIcon={false} elevation={0} onBackPress={() => {return this.refs.form.cancel()}}/>
+        <Header title={this.props.title} navigator={this.props.navigator} showRightIcon={false} elevation={0} onBackPress={() => {
+          return this.refs.form.cancel()
+        }}/>
         <Tabs>
           <Tab title="ADD ENTRY">
             <Form
@@ -35,4 +37,9 @@ TreeScene.PropTypes = {
   title    : PropTypes.string.isRequired,
   entryInfo: PropTypes.object,
   edit     : PropTypes.bool
+}
+
+TreeScene.defaultProps = {
+  entryInfo: {},
+  edit     : false
 }
