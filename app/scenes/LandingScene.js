@@ -92,7 +92,7 @@ export default class LandingScene extends Component {
       {
         icon   : 'logout-variant',
         title  : 'Logout',
-        onPress: this.logout
+        onPress: this.logout.bind(this)
       }
     ]
 
@@ -272,7 +272,9 @@ export default class LandingScene extends Component {
               realm.delete(user)
 
               let submissions = realm.objects('Submission')
-              // TODO: Delete all images first
+              submissions.map((submission) => {
+                this.fs.delete(JSON.parse(JSON.stringify(submission.images)))
+              })
               realm.delete(submissions)
             })
             DeviceEventEmitter.emit('userLoggedOut')
