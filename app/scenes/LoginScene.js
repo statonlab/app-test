@@ -132,13 +132,16 @@ export default class LoginScene extends Component {
         response.data.data.zipcode = ''
       }
 
+      let data = response.data.data
+
       this.realm.create('User', {
-        name            : response.data.data.name.toString(),
-        email           : response.data.data.email.toString(),
-        anonymous       : response.data.data.is_anonymous,
-        zipcode         : response.data.data.zipcode,
-        api_token       : response.data.data.api_token,
-        is_over_thirteen: response.data.data.is_over_thirteen
+        name      : data.name,
+        email     : data.email,
+        anonymous : data.is_anonymous,
+        zipcode   : data.zipcode,
+        api_token : data.api_token,
+        birth_year: data.birth_year,
+        is_private: data.is_private
       })
     })
   }
