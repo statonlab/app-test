@@ -37,7 +37,7 @@ const DCPrules = {
   diameterNumeric        : t.Number,
   heightNumeric          : t.Number,
   ashSpecies             : t.enums.of(DCP.ashSpecies.selectChoices, 'ashSpecies'),
-  crownHealth            : t.Number,
+  crownHealth            : t.enums.of(DCP.crownHealth.selectChoices, 'crownHealth'),
   otherLabel             : t.String,
   treated                : t.enums.of(DCP.treated.selectChoices),
   cones                  : t.enums.of(DCP.cones.selectChoices),
