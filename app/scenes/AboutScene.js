@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import {View, ScrollView, StyleSheet, Text} from 'react-native'
 import Header from '../components/Header'
 import Elevation from '../helpers/Elevation'
+import Atext from '../components/Atext'
 
 export default class AboutScene extends Component {
 
@@ -13,7 +14,7 @@ export default class AboutScene extends Component {
         <ScrollView style={styles.scrollView}>
           <View style={styles.card}>
             <Text style={styles.title}>TreeSnap</Text>
-            <Text style={styles.textBody}>App version: 0.1.0 beta.1</Text>
+            <Text style={styles.textBody}>App version: 1.0</Text>
           </View>
           <View style={styles.card}>
             <Text style={styles.title}>The TreeSnap Project</Text>
@@ -22,7 +23,7 @@ export default class AboutScene extends Component {
             <Text style={styles.textBody}>Invasive diseases and pests threaten the health of America’s forests.
               Scientists are working to understand what allows some individual trees to survive, but they need to find healthy, resilient trees in the forest to study.
               That’s where concerned foresters, landowners, and citizens (you!) can help.</Text>
-            <Text style={styles.textBody}>Tag trees you find in your community, on your property, or out in the wild to help us understand Forest health!
+            <Text style={styles.textBody}>Tag trees you find in your community, on your property, or out in the wild to help us understand Forest health!  To learn more, visit our website at <Atext url="treeSnap.org">treeSnap.org</Atext>
             </Text>
           </View>
           <View style={styles.card}>
