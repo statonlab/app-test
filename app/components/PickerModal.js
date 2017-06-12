@@ -33,9 +33,18 @@ export default class PickerModal extends Component {
 
   onChange = (item) => {
     if (this.props.multiCheck) {
+      //If not sure, null all other choices
+      if (item === 'I\'m not sure') {
+        this.setState({selectedMulti: [item]})
+        return
+      }
+
       //For multiCheck type, allow for multiple checks, and keep track of them
       let selected = this.state.selectedMulti
-      let index    = selected.indexOf(item)
+      if (selected[0] === 'I\'m not sure') {
+        selected = []
+      }
+      let index = selected.indexOf(item)
 
       if (index >= 0) {
         selected.splice(index, 1)

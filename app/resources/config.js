@@ -10,10 +10,11 @@ const DCP = {
   seedsBinary        : {
     label        : 'Seeds',
     selectChoices: [
-      'Yes', 'No'
+      'Yes', 'No', 'I\'m not sure'
     ],
     description  : 'Are seeds present?',
-    placeHolder  : 'Are seeds present?'
+    placeHolder  : 'Are seeds present?',
+    camera : ['Yes']
   },
   flowersBinary      : {
     label        : 'Flowers',
@@ -28,8 +29,8 @@ const DCP = {
   emeraldAshBorer    : {
     label        : 'Ash borer',
     selectChoices: [
-      'D-shaped adult exit holes', 'Bark coming off with tunneling underneath',
-      'Emerald ash borer beetles/larvae', 'Stump sprouting'
+      'D-shaped adult exit holes', 'Bark coming off with tunneling underneath', "Bark splitting",
+      'Emerald ash borer beetles/larvae', 'Stump sprouting or epicormic growth', "Woodpecker feeding holes"
     ],
     description  : 'Do you see any of these signs of emerald ash borers?  Check all that apply.',
     placeHolder  : 'No signs of pest',
@@ -39,7 +40,6 @@ const DCP = {
       require('../img/DCP/EmAshBorer/Emerald ash borer adult.jpg'),
       require('../img/DCP/EmAshBorer/D-shaped_holes.jpg'),
       require('../img/DCP/EmAshBorer/epicormic_ash.jpg'),
-
     ],
     captions     : [
       "Tunneling under bark by EAB larvae. Photo credit: Eric R. Day, Virginia Polytechnic Institute and State University, Bugwood.org",
@@ -51,7 +51,7 @@ const DCP = {
   woollyAdesCoverage : {
     label        : 'Woolly adelgids',
     selectChoices: [
-      '0%', '1-24%', '25-49%', '50-74%', '75-100%'
+      '0%', '1-24%', '25-49%', '50-74%', '75-100%',  'I\'m not sure'
     ],
     description  : 'What percentage of the branches you see have hemlock Woolly adelgids?',
     placeHolder  : '% Adelgid coverage',
@@ -84,7 +84,7 @@ const DCP = {
   acorns             : {
     label        : 'Acorns',
     selectChoices: [
-      'None', 'Some', 'Lots'
+      'None', 'Some', 'Lots', 'I\'m not sure'
     ],
     description  : 'Are there acorns on the tree?  Don\'t include fallen acorns on the ground in your estimate.',
     placeHolder  : 'Number of acorns'
@@ -93,7 +93,7 @@ const DCP = {
     label        : 'Cones',
     description  : "Are cones present?  Please take a close-up photo if possible.",
     selectChoices: [
-      'Yes', 'No'
+      'Yes', 'No', 'I\'m not sure'
     ],
     placeHolder  : "Please select",
     camera       : ['Yes']
@@ -126,15 +126,25 @@ const DCP = {
 
     //  startValue : 25,
   },
-  crownHealth            : {
-    label      : 'Crown health',
-    description: 'How would you rate the health of this tree\'s crown?',
-    slider     : true,
-    minValue   : 1,
-    maxValue   : 100,
-    units      : "%",
-
-    //  startValue : 100,
+  // crownHealth            : {
+  //   label      : 'Crown health',
+  //   description: 'How would you rate the health of this tree\'s crown?',
+  //   slider     : true,
+  //   minValue   : 1,
+  //   maxValue   : 100,
+  //   units      : "%",
+  //   //  startValue : 100,
+  // },
+  crownHealth    : {
+    label        : 'Crown health',
+    description  : "What is the health of this tree's crown?",
+    selectChoices: ['1 - Healthy',
+      '2 - Thinning',
+      '3 - Some dead branches (less than 50%)',
+      '4 - Many dead branches (more than 50%)',
+      '5 - Completely dead',
+      'I\'m not sure'],
+    placeHolder  : "Please select"
   },
   crownClassification    : {
     label        : 'Crown classification',
@@ -166,7 +176,7 @@ const DCP = {
     label        : 'Trees nearby',
     description  : 'If there are trees of the same species nearby, what state are they in?  Check all that apply.',
     selectChoices: [
-      'Dead and/or dying', 'Healthy and large', 'Healthy and small', 'No trees of this species nearby', 'Not sure'],
+      'Dead and/or dying', 'Healthy and large', 'Healthy and small', 'No trees of this species nearby', 'I\'m not sure'],
     placeHolder  : "Please select",
     multiCheck   : true
   },
