@@ -28,7 +28,7 @@ export default class AboutScene extends Component {
           </View>
           <View style={styles.card}>
             <Text style={styles.title}>The TreeSnap Team</Text>
-            <Text style={styles.textBody}>TreeSnap is developed as a collaboration between Scientists at the University of Kentucky, the University of Tennessee Knoxville. </Text>
+            <Text style={styles.textBody}>TreeSnap is developed as a collaboration between scientists at the University of Kentucky and the University of Tennessee.</Text>
           </View>
 
         </ScrollView>

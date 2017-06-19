@@ -22,7 +22,7 @@ export default class PrivacyPolicyScene extends Component {
           </View>
           <View style={styles.card}>
             <Text style={styles.title}>What information do we collect?</Text>
-            <Text style={styles.textBody}>When you create a user account for this app, we will collect your name, email address, zip code, and your age. We will also collect some information related to your device (operating system, model). This information will be stored in the Treesnap user database and will not be shown, disseminated, or sold to any third parties. This information may be used, without personal identifying information, to report demographic data in grant reports and/or scientific publication.</Text>
+            <Text style={styles.textBody}>When you create a user account for this app, we will collect your name, email address, zip code, and your age. We will also collect some information related to your device (operating system, model). This information will be stored in the TreeSnap user database and will not be shown, disseminated, or sold to any third parties. This information may be used, without personal identifying information, to report demographic data in grant reports and/or scientific publication.</Text>
           </View>
           <View style={styles.card}>
             <Text style={styles.title}>How do we use this information?</Text>
@@ -32,14 +32,14 @@ export default class PrivacyPolicyScene extends Component {
           </View>
           <View style={styles.card}>
             <Text style={styles.title}>E-mail address</Text>
-            <Text style={styles.textBody}>To create an account, you must provide a valid email address, which will be used to validate your account and send important information about the Treesnap project. Your email address will not be shown, disseminated, or sold to any third parties not affiliated with tree research programs. Your email will only be used to manage your Treesnap account and for the scientists using the Treesnap dataset to contact you with questions regarding your submitted observations.
+            <Text style={styles.textBody}>To create an account, you must provide a valid email address, which will be used to validate your account and send important information about the TreeSnap project. Your email address will not be shown, disseminated, or sold to any third parties not affiliated with tree research programs. Your email will only be used to manage your TreeSnap account and for the scientists using the TreeSnap dataset to contact you with questions regarding your submitted observations.
             </Text>
             <Text style={styles.textBody}>You are able to delete your TreeSnap account or opt out of receiving emails at any time.
             </Text>
           </View>
           <View style={styles.card}>
             <Text style={styles.title}>How do we use the submitted observations?</Text>
-            <Text style={styles.textBody}>All observations submitted to our database will be stored on the Treesnap website. This includes all data and metadata, including GPS coordinates, and images. Observation data will be displayed on the Treesnap website, and be made available to outside parties through an API. Observations can be made anonymous in the profile settings of the app or website: anonymous observations will only be visible to you and the scientists behind Treesnap.
+            <Text style={styles.textBody}>All observations submitted to our database will be stored on the TreeSnap website. This includes all data and metadata, including GPS coordinates, and images. Observation data will be displayed on the TreeSnap website, and be made available to outside parties through an API. Observations can be made anonymous in the profile settings of the app or website: anonymous observations will only be visible to you and the scientists behind TreeSnap.
             </Text>
           </View>
           <View style={styles.card}>
@@ -54,10 +54,21 @@ export default class PrivacyPolicyScene extends Component {
           </View>
           <View style={styles.card}>
             <Text style={styles.title}>Will this policy change?</Text>
-            <Text style={styles.textBody}> As Treesnap evolves, we may make changes to our data usage and privacy policy. We will never show, sell, or disseminate your personal information to any outside parties not affiliated with tree research programs.
+            <Text style={styles.textBody}> As TreeSnap evolves, we may make changes to our data usage and privacy policy. We will never show, sell, or disseminate your personal information to any outside parties not affiliated with tree research programs.
               Users will receive an email notification upon any change to the privacy policy if they have not opted out of email notifications.
             </Text>
           </View>
+          <View style={styles.card}>
+            <Text style={styles.title}>Terms of Use</Text>
+            <Text style={styles.textBody}> By using this app you agree that you will not collect observations for trees on private land without permission. Observations may only be submitted for trees on public land, trees on the user's own private land, or trees on other private land for which the user has obtained all necessary permissions from the private land owner.
+            </Text>
+            <Text style={styles.textBody}>
+              By submitting observations using the TreeSnap app, you affirm that the tree is on public land, or that you own the private land the tree is located on or have permission to use the private land.</Text>
+            <Text style={styles.textBody}>
+              All data submitted to the TreeSnap server is considered the property of TreeSnap and subject to TreeSnap data licensing. Data stripped of identifying material may be included in promotional material or scientific publication. Upon publication, all data will be made available via our API according to our data licensing policy.
+            </Text>
+          </View>
+
         </ScrollView>
       </View>
     )
