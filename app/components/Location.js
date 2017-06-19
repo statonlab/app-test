@@ -1,9 +1,8 @@
 import React, {Component, PropTypes} from 'react'
-import {View, Text, StyleSheet, DeviceEventEmitter} from 'react-native'
+import {View, Text, StyleSheet, Alert, DeviceEventEmitter} from 'react-native'
 import {MKSpinner, MKButton} from 'react-native-material-kit'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import Colors from '../helpers/Colors'
-import Elevation from '../helpers/Elevation'
 
 export default class Location extends Component {
   constructor(props) {
@@ -58,7 +57,22 @@ export default class Location extends Component {
   getLocation() {
     navigator.geolocation.getCurrentPosition(
       this.setLocation.bind(this),
-      (error) => console.log(JSON.stringify(error)),
+      (error) => {
+        if (error.code === 1 && error.PERMISSION_DENIED) {
+          // Permission Denied
+          clearTimeout(this.timeoutHolder)
+
+          Alert.alert(
+            'Permission to access your location.',
+            'Please enable location services from Settings -> TreeSnap -> Location',
+            [{
+              text: 'Ok', onPress: () => {
+                DeviceEventEmitter.emit('LocationDenied')
+              }
+            }]
+          )
+        }
+      },
       {
         enableHighAccuracy: true,
         timeout           : 20000,
