@@ -56,7 +56,7 @@ export default class CameraScene extends Component {
    */
   componentWillMount() {
     if (!android) {
-      Camera.checkDeviceAuthorizationStatus().then(response => {
+      Camera.checkVideoAuthorizationStatus().then(response => {
         if (!response) {
           Alert.alert(
             'We need permission to access the camera.',
@@ -161,20 +161,21 @@ export default class CameraScene extends Component {
         showsHorizontalScrollIndicator={false}
         scrollEnabled={false}
       >
-        {this.state.hasPermission ?
-          <View style={[styles.container, {width: this.state.pageWidth}]}>
-            <View style={styles.topToolsContainer}>
-              {flashIcon}
-              <TouchableOpacity
-                style={[styles.toolTouchable, {
-                  alignItems: 'flex-end',
-                  paddingRight: 15
-                }]}
-                onPress={this.switchType}>
-                <IonIcon name="ios-reverse-camera-outline" size={32}
-                         color={'#fff'}/>
-              </TouchableOpacity>
-            </View>
+
+        <View style={[styles.container, {width: this.state.pageWidth}]}>
+          <View style={styles.topToolsContainer}>
+            {flashIcon}
+            <TouchableOpacity
+              style={[styles.toolTouchable, {
+                alignItems: 'flex-end',
+                paddingRight: 15
+              }]}
+              onPress={this.switchType}>
+              <IonIcon name="ios-reverse-camera-outline" size={32}
+                       color={'#fff'}/>
+            </TouchableOpacity>
+          </View>
+          {this.state.hasPermission ?
             <Camera
               ref={cam => {
                 this.camera = cam
@@ -186,6 +187,8 @@ export default class CameraScene extends Component {
               type={this.state.camera.type}
               aspect={Camera.constants.Aspect.fill}
               captureQuality="high"
+              captureAudio={false}
+              captureMode={Camera.constants.CaptureMode.still}
               flashMode={this.state.camera.flash}
               onZoomChanged={this.zoom}
               defaultOnFocusComponent={true}
@@ -193,30 +196,30 @@ export default class CameraScene extends Component {
                 let focusLeft = e.nativeEvent.touchPoint.x - 40
                 let focusTop  = e.nativeEvent.touchPoint.y - 40
                 this.setState({focusLeft, focusTop})
-                console.log({focusLeft, focusTop})
               }}/>
-            <View style={styles.toolsContainer}>
-              <TouchableOpacity style={[styles.toolTouchable]} onPress={this._cancel}>
-                <Text style={[styles.toolText]}>Cancel</Text>
+            : <View style={{flex: 1, backgroundColor: '#000'}}/>}
+          <View style={styles.toolsContainer}>
+            <TouchableOpacity style={[styles.toolTouchable]} onPress={this._cancel}>
+              <Text style={[styles.toolText]}>Cancel</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.capture} onPress={this.takePicture}>
+              <Icon name="camera" size={36} color={'#fff'}/>
+            </TouchableOpacity>
+            {this.state.images.length > 0 ?
+              <TouchableOpacity
+                style={[styles.toolTouchable, {alignItems: 'flex-end'}]}
+                onPress={this._forward}>
+                <Image
+                  source={{uri: this.state.images[this.state.images.length - 1]}}
+                  style={styles.thumbnail}/>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.capture} onPress={this.takePicture}>
-                <Icon name="camera" size={36} color={'#fff'}/>
-              </TouchableOpacity>
-              {this.state.images.length > 0 ?
-                <TouchableOpacity
-                  style={[styles.toolTouchable, {alignItems: 'flex-end'}]}
-                  onPress={this._forward}>
-                  <Image
-                    source={{uri: this.state.images[this.state.images.length - 1]}}
-                    style={styles.thumbnail}/>
-                </TouchableOpacity>
-                :
-                <View style={[styles.toolTouchable, {alignItems: 'flex-end'}]}>
-                  <View style={[styles.thumbnail, {backgroundColor: '#222'}]}/>
-                </View>
-              }
-            </View>
-          </View> : null}
+              :
+              <View style={[styles.toolTouchable, {alignItems: 'flex-end'}]}>
+                <View style={[styles.thumbnail, {backgroundColor: '#222'}]}/>
+              </View>
+            }
+          </View>
+        </View>
 
         <View style={[styles.container, {
           width: this.state.pageWidth,
