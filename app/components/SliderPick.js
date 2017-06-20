@@ -26,6 +26,9 @@ export default class SliderPick extends Component {
 
   onChange = (curValue) => {
     let value = Math.round(curValue)
+    // if (value = 0) {
+    //   value = null
+    // }
     this.setState({value})
     this.props.onChange(value)
   }
@@ -52,8 +55,9 @@ export default class SliderPick extends Component {
           style={styles.slider}
           lowerTrackColor={Colors.primary}
           onChange={(value) => this.onChange(value)}
-          thumbRadius={this.state.value ? 2 : 0}
-        />
+          thumbRadius={this.state.value ? 6 : 0}
+          thumbPadding={10}
+      />
         {this.displayLegend()}
         <InstructionModal style={styles.modalContainer}
           text={this.props.description}
