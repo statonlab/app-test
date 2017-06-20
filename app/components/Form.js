@@ -175,7 +175,8 @@ export default class Form extends Component {
         'Data will be permanently lost if you leave. Are you sure?', [
           {
             text   : 'Leave',
-            onPress: this.doCancel
+            onPress: this.doCancel,
+            style : 'destructive'
           },
           {
             text   : 'Stay',
