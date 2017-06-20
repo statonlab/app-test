@@ -171,14 +171,14 @@ export default class Form extends Component {
    */
   cancel = () => {
     if (this.state.images['images'] || Object.keys(this.state.metadata)[0]) {
-      Alert.alert('Cancel Submission',
-        'Data will be permanently lost if you cancel. Are you sure?', [
+      Alert.alert('Abandon entry',
+        'Data will be permanently lost if you leave. Are you sure?', [
           {
-            text   : 'Yes',
+            text   : 'Leave',
             onPress: this.doCancel
           },
           {
-            text   : 'Back',
+            text   : 'Stay',
             onPress: () => {
               // On cancel do nothing.
             },
