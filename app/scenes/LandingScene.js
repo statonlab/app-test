@@ -260,12 +260,28 @@ export default class LandingScene extends Component {
    * Logs the user out after confirming the click.
    */
   logout() {
+    //Set alert text
+    let observations = realm.objects('Submission').filtered('synced == false')
+    let alertText    = {
+      label    : "Log out",
+      labelText: "Are you sure you would like to log out?",
+      cancel   : "Cancel",
+      confirm  : "Log out"
+    }
+    if (observations.length > 0) {
+      alertText = {
+        label    : "Warning",
+        labelText: "You have observations that are not uploaded.  If you log out, these observations will be deleted permanently.",
+        cancel   : "Cancel",
+        confirm  : "Log out"
+      }
+    }
     Alert.alert(
-      'Logging Out',
-      'Are you sure you want to log out? Observations will be lost if you logout before uploading them.', [
+      alertText.label,
+      alertText.labelText, [
         {
-          text   : 'Yes',
-          onPress: () => {
+          text: alertText.confirm, style: 'destructive',
+          onPress                       : () => {
             // Deletes all user records thus logging out
             realm.write(() => {
               let user = realm.objects('User')
@@ -280,7 +296,7 @@ export default class LandingScene extends Component {
             DeviceEventEmitter.emit('userLoggedOut')
           }
         },
-        {text: 'Cancel', style: 'cancel'}
+        {text: alertText.cancel, style: 'cancel'}
       ])
   }
 
