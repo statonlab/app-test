@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react'
-import {View, Text, StyleSheet, Alert, DeviceEventEmitter} from 'react-native'
-import {MKSpinner, MKButton} from 'react-native-material-kit'
+import {View, Text, StyleSheet, Alert, DeviceEventEmitter, TouchableOpacity} from 'react-native'
+import {MKSpinner} from 'react-native-material-kit'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import Colors from '../helpers/Colors'
 
@@ -146,8 +146,8 @@ export default class Location extends Component {
           }
 
           {this.state.done &&
-          <MKButton style={styles.button} onPress={this.retake}>
-            <Text style={styles.buttonText}>Tap to retake location</Text></MKButton>
+          <TouchableOpacity style={styles.button} onPress={this.retake}>
+            <Text style={styles.buttonText}>Tap to retake location</Text></TouchableOpacity>
           }
         </View>
 

@@ -1,6 +1,5 @@
 import React, {Component, PropTypes} from 'react'
 import {View, Text, TextInput, StyleSheet, Modal, TouchableOpacity} from 'react-native'
-import {MKButton} from 'react-native-material-kit'
 import Colors from '../helpers/Colors'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import realm from '../db/Schema'
@@ -203,11 +202,11 @@ export default class PickerModal extends Component {
 
               {this.props.freeText ? this.renderTextBox() : null}
 
-              <MKButton style={styles.button} onPress={this.close}>
+              <TouchableOpacity style={styles.button} onPress={this.close}>
                 <Text style={styles.buttonText}>
                   {this.state.cancelText}
                 </Text>
-              </MKButton>
+              </TouchableOpacity>
             </View>
           </KeyboardAwareScrollView>
         </Modal>

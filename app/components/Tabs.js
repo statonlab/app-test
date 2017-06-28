@@ -1,6 +1,5 @@
 import React, {Component, PropTypes} from 'react'
-import {View, Text, StyleSheet, ScrollView, Dimensions, Animated} from 'react-native'
-import {MKButton} from 'react-native-material-kit'
+import {View, Text, StyleSheet, ScrollView, Dimensions, Animated, TouchableOpacity} from 'react-native'
 import Colors from '../helpers/Colors'
 import Elevation from '../helpers/Elevation'
 import Tab from './subcomponents/Tab'
@@ -46,13 +45,12 @@ class Tabs extends Component {
 
   _renderTitle(title, index) {
     return (
-      <MKButton
+      <TouchableOpacity
         style={[styles.title, this.state.active === index ? styles.activeContainer : {}]}
         key={index}
-        rippleColor="rgba(0,0,0,.1)"
         onPress={() => this.switchTab(index)}>
         <Text style={[styles.titleText, this.state.active === index ? styles.active : {}]}>{title}</Text>
-      </MKButton>
+      </TouchableOpacity>
     )
   }
 

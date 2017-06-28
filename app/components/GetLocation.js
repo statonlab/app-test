@@ -7,7 +7,7 @@ import {
   DeviceEventEmitter
 } from 'react-native'
 import MapView from 'react-native-maps'
-import {MKSpinner, MKButton, getTheme} from 'react-native-material-kit'
+import {MKSpinner, TouchableOpacity, getTheme} from 'react-native-material-kit'
 import Colors from '../helpers/Colors'
 import Elevation from '../helpers/Elevation'
 
@@ -149,16 +149,16 @@ export default class GetLocation extends Component {
             }
 
             <View style={styles.row}>
-              <MKButton
+              <TouchableOpacity
                 style={styles.button}
                 onPress={this.accept}>
                 <Text style={styles.buttonText}>Accept Location</Text>
-              </MKButton>
-              <MKButton
+              </TouchableOpacity>
+              <TouchableOpacity
                 style={[styles.button, {backgroundColor: "#eee"}]}
                 onPress={this.cancel}>
                 <Text style={[styles.buttonText, {color: "#666"}]}>Cancel</Text>
-              </MKButton>
+              </TouchableOpacity>
             </View>
           </View>
         </View>

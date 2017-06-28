@@ -5,9 +5,9 @@ import {
   TextInput,
   Text,
   DeviceEventEmitter,
-  Platform
+  Platform,
+  TouchableOpacity
 } from 'react-native'
-import {MKButton} from 'react-native-material-kit'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import Header from '../components/Header'
 import Elevation from '../helpers/Elevation'
@@ -341,18 +341,18 @@ export default class RegistrationScene extends Component {
             {this.displayMinorsBox()}
 
             <View style={styles.formGroup}>
-              <MKButton style={styles.button}
+              <TouchableOpacity style={styles.button}
                 onPress={this.submitRegistration}>
                 <Text style={styles.buttonText}>Register</Text>
-              </MKButton>
+              </TouchableOpacity>
             </View>
 
             <View style={[styles.formGroup, {marginBottom: 30}]}>
-              <MKButton onPress={() => {
+              <TouchableOpacity onPress={() => {
                 this.props.navigator.replace({label: 'LoginScene'})
               }}>
                 <Text style={styles.link}>Have an account? Login here</Text>
-              </MKButton>
+              </TouchableOpacity>
             </View>
           </View>
         </KeyboardAwareScrollView>

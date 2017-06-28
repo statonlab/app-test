@@ -1,6 +1,5 @@
 import React, {Component, PropTypes} from 'react'
-import {View, Text, StyleSheet, ActivityIndicator} from 'react-native'
-import {MKButton} from 'react-native-material-kit'
+import {View, Text, StyleSheet, ActivityIndicator, TouchableOpacity} from 'react-native'
 import realm from '../db/Schema'
 import Observation from '../helpers/Observation'
 import Colors from '../helpers/Colors'
@@ -78,12 +77,12 @@ export default class UploadButton extends Component {
     return (
       <View>
         {!this.state.show || this.state.observations.length === 0 ? null :
-          <MKButton
+          <TouchableOpacity
             style={styles.button}
             onPress={this.upload.bind(this)}
           >
             <Text style={styles.buttonText}>{this.props.label} ({this.state.observations.length})</Text>
-          </MKButton>
+          </TouchableOpacity>
         }
 
         {!this.state.uploading ? null :

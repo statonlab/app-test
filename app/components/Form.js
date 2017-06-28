@@ -8,11 +8,11 @@ import {
   DeviceEventEmitter,
   Animated,
   Alert,
-  Platform
+  Platform,
+  TouchableOpacity
 } from 'react-native'
 import moment from 'moment'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
-import {MKButton} from 'react-native-material-kit'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
@@ -564,10 +564,8 @@ export default class Form extends Component {
 
     return (
       <View style={[styles.formGroup]}>
-        <MKButton
-          style={[styles.buttonLink, {height: this.state.images[id] && this.state.images[id].length > 0 ? 60 : 40}]}
-          onPress={() => this._goToCamera(id)}
-        >
+        <TouchableOpacity style={[styles.buttonLink, {height: this.state.images[id] && this.state.images[id].length > 0 ? 60 : 40}]}
+          onPress={() => this._goToCamera(id)}>
           <Text style={this.state.warnings.photos ? [styles.label, styles.labelWarning] : styles.label}>{label}</Text>
           {!this.state.images[id] || this.state.images[id].length === 0 ?
             <View style={{flex: 1, alignItems: 'center', flexDirection: 'row'}}>
@@ -577,7 +575,7 @@ export default class Form extends Component {
             :
             this.renderPhotosField(id)
           }
-        </MKButton>
+        </TouchableOpacity>
       </View>
     )
 
@@ -646,17 +644,16 @@ export default class Form extends Component {
         </KeyboardAwareScrollView>
 
         <View style={styles.footer}>
-          <MKButton style={[styles.button, styles.flex1]} onPress={this.props.edit ? this.submitEdit : this.submit} rippleColor="rgba(0,0,0,0.5)">
+          <TouchableOpacity style={[styles.button, styles.flex1]} onPress={this.props.edit ? this.submitEdit : this.submit} rippleColor="rgba(0,0,0,0.5)">
             <Text style={styles.buttonText}>
               {this.props.edit ? 'Confirm Edit' : 'Submit Entry'}
             </Text>
-          </MKButton>
-
-          <MKButton style={[styles.button, styles.buttonAlt, styles.flex1]} onPress={this.cancel}>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.button, styles.buttonAlt, styles.flex1]} onPress={this.cancel}>
             <Text style={styles.buttonAltText}>
               Cancel
             </Text>
-          </MKButton>
+          </TouchableOpacity>
         </View>
       </View>
     )

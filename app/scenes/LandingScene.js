@@ -6,10 +6,10 @@ import {
   Image,
   StyleSheet,
   Alert,
-  DeviceEventEmitter
+  DeviceEventEmitter,
+  TouchableOpacity
 } from 'react-native'
 import moment from 'moment'
-import {MKButton} from 'react-native-material-kit'
 import Icon from 'react-native-vector-icons/Ionicons'
 import realm from '../db/Schema'
 import Header from '../components/Header'
@@ -323,9 +323,9 @@ export default class LandingScene extends Component {
    */
   loginButton() {
     return (
-      <MKButton style={[styles.button, {marginHorizontal: 5}]} onPress={() => this.props.navigator.push({label: 'LoginScene'})}>
+      <TouchableOpacity style={[styles.button, {marginHorizontal: 5}]} onPress={() => this.props.navigator.push({label: 'LoginScene'})}>
         <Text style={styles.buttonText}>Login to upload your entries</Text>
-      </MKButton>
+      </TouchableOpacity>
     )
   }
 
@@ -367,10 +367,9 @@ export default class LandingScene extends Component {
 
             {plants.map((plant, index) => {
               return (
-                <MKButton
+                <TouchableOpacity
                   style={styles.card}
                   key={index}
-                  rippleColor="rgba(0,0,0,.1)"
                   onPress={() => {
                     this.props.navigator.push({label: 'TreeScene', title: plant.title})
                   }}>
@@ -390,7 +389,7 @@ export default class LandingScene extends Component {
                       </View>
                     </View>
                   </View>
-                </MKButton>
+                </TouchableOpacity>
               )
             })}
           </View>

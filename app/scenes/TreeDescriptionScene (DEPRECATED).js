@@ -59,13 +59,13 @@ export default class TreeDescriptionScene extends Component {
           <Image source={Plants[this.props.title].image} style={styles.cardImage}/>
           {this._renderImageModalIcons()}
           <View style={styles.buttonContainer}>
-            <MKButton style={styles.button} onPress={() => {
+            <TouchableOpacity style={styles.button} onPress={() => {
               this.props.navigator.push({label: 'FormScene', title: this.props.title, formProps: Plants[this.props.title].formProps})
             }}>
               <Text style={styles.buttonText}>
                 Add New Entry
               </Text>
-            </MKButton>
+            </TouchableOpacity>
           </View>
           <View style={styles.card}>
             {Plants[this.props.title].descriptionCards.map((card, index) => {
