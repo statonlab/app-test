@@ -2,10 +2,10 @@ import React, {Component, PropTypes} from 'react'
 import {
   View,
   StyleSheet,
-  Text
+  Text,
+  TouchableOpacity
 } from 'react-native'
 import Header from '../components/Header'
-import {MKButton} from 'react-native-material-kit'
 import Colors from '../helpers/Colors'
 import Elevation from '../helpers/Elevation'
 import realm from '../db/Schema'
@@ -103,11 +103,11 @@ export default class SubmittedScene extends Component {
 
         <View style={styles.footer}>
           <Text style={styles.text}>Your entry has been saved!</Text>
-          <MKButton
+          <TouchableOpacity
             style={styles.button}
             onPress={() => this.props.navigator.popToTop()}>
             <Text style={styles.buttonText}>Continue</Text>
-          </MKButton>
+          </TouchableOpacity>
         </View>
       </View>
     )

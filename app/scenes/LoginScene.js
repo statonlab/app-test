@@ -1,6 +1,5 @@
 import React, {Component, PropTypes} from 'react'
-import {View, ScrollView, StyleSheet, TextInput, Text, DeviceEventEmitter} from 'react-native'
-import {MKButton} from 'react-native-material-kit'
+import {View, ScrollView, StyleSheet, TextInput, Text, DeviceEventEmitter, TouchableOpacity} from 'react-native'
 import Header from '../components/Header'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
@@ -186,24 +185,24 @@ export default class LoginScene extends Component {
             </View>
 
             <View style={styles.formGroup}>
-              <MKButton
+              <TouchableOpacity
                 style={styles.button}
                 onPress={() => {
                   this.logInUser()
                 }}>
                 <Text style={styles.buttonText}>Login</Text>
-              </MKButton>
+              </TouchableOpacity>
             </View>
 
             <View style={[styles.formGroup, {flexDirection: 'row', justifyContent: 'space-between'}]}>
-              <MKButton>
+              <TouchableOpacity>
                 <Text style={styles.link}>Forgot your password?</Text>
-              </MKButton>
-              <MKButton onPress={() => {
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => {
                 this.props.navigator.replace({label: 'RegistrationScene'})
               }}>
                 <Text style={[styles.link]}>Register</Text>
-              </MKButton>
+              </TouchableOpacity>
             </View>
 
           </View>

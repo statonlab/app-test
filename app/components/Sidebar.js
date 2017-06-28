@@ -5,7 +5,6 @@ import {
   Text,
   StyleSheet,
   Platform,
-  TouchableWithoutFeedback,
   TouchableOpacity,
   DeviceEventEmitter,
   PanResponder,
@@ -13,7 +12,6 @@ import {
 } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import Colors from '../helpers/Colors'
-import {MKRipple} from 'react-native-material-kit'
 import Elevation from '../helpers/Elevation'
 
 const window       = Dimensions.get('window')
@@ -161,20 +159,20 @@ export default class Sidebar extends Component {
         <Animated.ScrollView style={[style.sidebar, {transform: [{translateX: this.state.position}]}]} ref="sidebar">
           {this.state.routes.map((route, index) => {
             return (
-              <TouchableWithoutFeedback
+              <TouchableOpacity
                 key={index}
                 onPress={() => {
                   this.goTo.call(this, route)
                 }}>
-                <MKRipple
+                <View
                   style={style.touchable}
-                  rippleColor={'rgba(0,0,0,0.1)'}>
+                >
                   <Icon name={route.icon} size={20} style={style.icon}/>
                   <Text style={style.text}>
                     {route.title}
                   </Text>
-                </MKRipple>
-              </TouchableWithoutFeedback>
+                </View>
+              </TouchableOpacity>
             )
           })}
         </Animated.ScrollView>

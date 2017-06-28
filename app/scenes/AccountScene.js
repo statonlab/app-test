@@ -1,9 +1,8 @@
 import React, {Component, PropTypes} from 'react'
-import {View, StyleSheet, Text, TextInput} from 'react-native'
+import {View, StyleSheet, Text, TextInput, TouchableOpacity} from 'react-native'
 import Header from '../components/Header'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
-import {MKButton} from 'react-native-material-kit'
 import PickerModal from '../components/PickerModal'
 import realm from '../db/Schema'
 import axios from '../helpers/Axios'
@@ -443,20 +442,19 @@ export default class AccountScene extends Component {
 
         <View style={styles.footer}>
           <View style={styles.column}>
-            <MKButton style={styles.button} onPress={this.submit.bind(this)}>
+            <TouchableOpacity style={styles.button} onPress={this.submit.bind(this)}>
               <Text style={styles.buttonText}>Update</Text>
-            </MKButton>
+            </TouchableOpacity>
           </View>
           <View style={styles.column}>
-            <MKButton
+            <TouchableOpacity
               style={[styles.button, styles.buttonLink]}
-              rippleColor="rgba(0,0,0,0.1)"
               onPress={() => {
                 this.props.navigator.pop()
               }}
             >
               <Text style={[styles.buttonText, styles.buttonLinkText]}>Cancel</Text>
-            </MKButton>
+            </TouchableOpacity>
           </View>
         </View>
 

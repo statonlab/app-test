@@ -8,11 +8,11 @@ import {
   Dimensions,
   DeviceEventEmitter,
   Alert,
-  Platform
+  Platform,
+  TouchableOpacity
 } from 'react-native'
 import Header from '../components/Header'
 import Colors from '../helpers/Colors'
-import {MKButton} from 'react-native-material-kit'
 import DCP from '../resources/config.js'
 import Observation from '../helpers/Observation'
 import Spinner from '../components/Spinner'
@@ -199,9 +199,9 @@ export default class ObservationScene extends Component {
     if ((!this.state.synced && !this.state.isLoggedIn) || (this.state.needs_update && !this.state.isLoggedIn)) {
       return (
         <View style={styles.field}>
-          <MKButton style={styles.button} onPress={() => this.props.navigator.push({label: 'LoginScene'})}>
+          <TouchableOpacity style={styles.button} onPress={() => this.props.navigator.push({label: 'LoginScene'})}>
             <Text style={styles.buttonText}>Login to Sync</Text>
-          </MKButton>
+          </TouchableOpacity>
         </View>
       )
     }
@@ -209,10 +209,10 @@ export default class ObservationScene extends Component {
     if (!this.state.synced || this.state.needs_update) {
       return (
         <View style={styles.field}>
-          <MKButton style={styles.button}
+          <TouchableOpacity style={styles.button}
             onPress={this.state.needs_update && this.state.synced ? () => this.update.call(this, entry) : () => this.upload.call(this, entry)}>
             <Text style={styles.buttonText}>Sync With Server</Text>
-          </MKButton>
+          </TouchableOpacity>
         </View>
       )
     }
@@ -346,7 +346,7 @@ export default class ObservationScene extends Component {
     return (
       <View style={styles.circlesContainer}>
         {all.map((image, index) => {
-          return <MKButton key={index} style={[styles.circle, this.state.selectedCircle === index ? styles.selectedCircle : {}]}/>
+          return <TouchableOpacity key={index} style={[styles.circle, this.state.selectedCircle === index ? styles.selectedCircle : {}]}/>
         })}
       </View>
     )
@@ -442,9 +442,9 @@ export default class ObservationScene extends Component {
           </View>
         </ScrollView>
         <View style={styles.multiButtonField}>
-          <MKButton style={styles.button } onPress={() => this.editEntry(entry)}>
+          <TouchableOpacity style={styles.button } onPress={() => this.editEntry(entry)}>
             <Text style={styles.buttonText}>Edit Entry</Text>
-          </MKButton>
+          </TouchableOpacity>
         </View>
       </View>
     )

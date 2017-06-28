@@ -1,6 +1,5 @@
 import React, {Component, PropTypes} from 'react'
 import {View, Text, Picker, StyleSheet, Modal, TouchableOpacity} from 'react-native'
-import {MKButton} from 'react-native-material-kit'
 import Colors from '../helpers/Colors'
 import Elevation from '../helpers/Elevation'
 
@@ -73,11 +72,11 @@ export default class DateModal extends Component {
                 </Picker>
               </View>
 
-              <MKButton style={styles.button} onPress={this.close}>
+              <TouchableOpacity style={styles.button} onPress={this.close}>
                 <Text style={styles.buttonText}>
                   {this.state.cancelText}
                 </Text>
-              </MKButton>
+              </TouchableOpacity>
             </View>
           </View>
         </Modal>

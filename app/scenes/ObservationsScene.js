@@ -4,7 +4,8 @@ import {
   StyleSheet,
   Text,
   Image,
-  DeviceEventEmitter
+  DeviceEventEmitter,
+  TouchableOpacity
 } from 'react-native'
 import Header from '../components/Header'
 import Colors from '../helpers/Colors'
@@ -12,7 +13,6 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import realm from '../db/Schema'
 import {ListView} from 'realm/react-native'
 import moment from 'moment'
-import {MKButton} from 'react-native-material-kit'
 import Elevation from '../helpers/Elevation'
 import Observation from '../helpers/Observation'
 import Spinner from '../components/Spinner'
@@ -133,7 +133,7 @@ export default class ObservationsScene extends Component {
     }
 
     return (
-      <MKButton style={styles.row} key={submission.id} rippleColor="rgba(10,10,10,.1)" onPress={() => this._goToEntryScene(submission)}>
+      <TouchableOpacity style={styles.row} key={submission.id} onPress={() => this._goToEntryScene(submission)}>
         {thumbnail ?
           <Image source={{uri: thumbnail}} style={styles.image}/>
           : null}
@@ -142,10 +142,10 @@ export default class ObservationsScene extends Component {
           <Text style={styles.body}>{moment(submission.date, 'MM-DD-YYYY HH:mm:ss').format('MMMM Do YYYY')}</Text>
           <Text style={styles.body}>Near {submission.location.latitude.toFixed(4)}, {submission.location.longitude.toFixed(4)}</Text>
         </View>
-        <MKButton style={[styles.textContainer, styles.rightElement]}>
+        <TouchableOpacity style={[styles.textContainer, styles.rightElement]}>
           <Icon name="md-more" size={30} color="#aaa"/>
-        </MKButton>
-      </MKButton>
+        </TouchableOpacity>
+      </TouchableOpacity>
     )
   }
 
@@ -163,14 +163,14 @@ export default class ObservationsScene extends Component {
         <View style={[styles.headerContainer, {flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}]}>
           <Text style={styles.headerText}>{id}</Text>
           {this.state.isLoggedIn ?
-            <MKButton style={styles.warningButton}
+            <TouchableOpacity style={styles.warningButton}
               onPress={this._uploadAll.bind(this)}>
               <Text style={[styles.headerText, {color: Colors.warningText}]}>Sync All</Text>
-            </MKButton> :
-            <MKButton style={styles.warningButton}
+            </TouchableOpacity> :
+            <TouchableOpacity style={styles.warningButton}
               onPress={() => this.props.navigator.push({label: 'LoginScene'})}>
               <Text style={[styles.headerText, {color: Colors.warningText}]}>Login to Sync</Text>
-            </MKButton>
+            </TouchableOpacity>
           }
         </View>
       )
@@ -181,14 +181,14 @@ export default class ObservationsScene extends Component {
         <View style={[styles.headerContainer, {flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}]}>
           <Text style={styles.headerText}>{id}</Text>
           {this.state.isLoggedIn ?
-            <MKButton style={styles.warningButton}
+            <TouchableOpacity style={styles.warningButton}
               onPress={this._uploadAll.bind(this)}>
               <Text style={[styles.headerText, {color: Colors.warningText}]}>Sync All</Text>
-            </MKButton> :
-            <MKButton style={styles.warningButton}
+            </TouchableOpacity> :
+            <TouchableOpacity style={styles.warningButton}
               onPress={() => this.props.navigator.push({label: 'LoginScene'})}>
               <Text style={[styles.headerText, {color: Colors.warningText}]}>Login to Sync</Text>
-            </MKButton>
+            </TouchableOpacity>
           }
         </View>
       )

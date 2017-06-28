@@ -46,11 +46,11 @@ export default class InstructionModal extends Component {
 
               <ImageSlider style={styles.container} images={this.props.images} onPress={this._toggle.bind(this)}/>
 
-              <MKButton style={styles.button} onPress={this._toggle.bind(this)}>
+              <TouchableOpacity style={styles.button} onPress={this._toggle.bind(this)}>
                 <Text style={styles.buttonText}>
                   OK
                 </Text>
-              </MKButton>
+              </TouchableOpacity>
             </View>
           </View>
         </Modal>
