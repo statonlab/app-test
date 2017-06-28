@@ -5,7 +5,6 @@ import {
   Text,
   StyleSheet,
   Platform,
-  TouchableWithoutFeedback,
   TouchableOpacity,
   DeviceEventEmitter,
   PanResponder,
@@ -160,16 +159,20 @@ export default class Sidebar extends Component {
         <Animated.ScrollView style={[style.sidebar, {transform: [{translateX: this.state.position}]}]} ref="sidebar">
           {this.state.routes.map((route, index) => {
             return (
-              <TouchableWithoutFeedback
+              <TouchableOpacity
                 key={index}
                 onPress={() => {
                   this.goTo.call(this, route)
                 }}>
+                <View
+                  style={style.touchable}
+                >
                   <Icon name={route.icon} size={20} style={style.icon}/>
                   <Text style={style.text}>
                     {route.title}
                   </Text>
-              </TouchableWithoutFeedback>
+                </View>
+              </TouchableOpacity>
             )
           })}
         </Animated.ScrollView>
