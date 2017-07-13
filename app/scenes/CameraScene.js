@@ -9,7 +9,8 @@ import {
   ScrollView,
   Image,
   Animated,
-  Alert
+  Alert,
+  BackAndroid
 } from 'react-native'
 import Camera from 'react-native-camera'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -76,6 +77,11 @@ export default class CameraScene extends Component {
     } else {
       this.setState({hasPermission: true})
     }
+
+    this.backEvent = BackAndroid.addEventListener('hardwareBackPress', () => {
+      this._cancel()
+      return true
+    })
   }
 
   /**

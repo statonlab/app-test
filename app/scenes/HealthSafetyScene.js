@@ -3,12 +3,19 @@ import {
   View,
   ScrollView,
   StyleSheet,
-  Text
+  Text,
+  BackAndroid
 } from 'react-native'
 import Header from '../components/Header'
 import Elevation from '../helpers/Elevation'
 
 export default class HealthSafetyScene extends Component {
+  componentWillMount() {
+    this.backEvent = BackAndroid.addEventListener('hardwareBackPress', () => {
+      this.props.navigator.pop()
+      return true
+    })
+  }
 
   render() {
     return (

@@ -3,7 +3,8 @@ import {
   View,
   StyleSheet,
   Text,
-  TouchableOpacity
+  TouchableOpacity,
+  BackAndroid
 } from 'react-native'
 import Header from '../components/Header'
 import Colors from '../helpers/Colors'
@@ -55,6 +56,11 @@ export default class SubmittedScene extends Component {
     })
 
     this.markers = markers
+
+    this.backEvent = BackAndroid.addEventListener('hardwareBackPress', () => {
+      this.props.navigator.popToTop()
+      return true
+    })
   }
 
   /**
@@ -98,7 +104,8 @@ export default class SubmittedScene extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Header title="Submission Aerial View" navigator={this.props.navigator} showLeftIcon={false} showRightIcon={false}/>
+        <Header title="Submission Aerial View" navigator={this.props.navigator} showLeftIcon={false}
+                showRightIcon={false}/>
         {this.renderMap()}
 
         <View style={styles.footer}>
