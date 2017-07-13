@@ -5,7 +5,8 @@ import {
   Text,
   Image,
   DeviceEventEmitter,
-  TouchableOpacity
+  TouchableOpacity,
+  BackAndroid
 } from 'react-native'
 import Header from '../components/Header'
 import Colors from '../helpers/Colors'
@@ -50,6 +51,13 @@ export default class ObservationsScene extends Component {
     this._isLoggedIn()
 
     this.loggedEvent = DeviceEventEmitter.addListener('userLoggedIn', this._isLoggedIn.bind(this))
+  }
+
+  componentWillMount() {
+    this.backEvent = BackAndroid.addEventListener('hardwareBackPress', () => {
+      this.props.navigator.pop()
+      return true
+    })
   }
 
   /**
@@ -133,14 +141,17 @@ export default class ObservationsScene extends Component {
     }
 
     return (
-      <TouchableOpacity style={styles.row} key={submission.id} onPress={() => this._goToEntryScene(submission)}>
+      <TouchableOpacity style={styles.row} key={submission.id}
+                        onPress={() => this._goToEntryScene(submission)}>
         {thumbnail ?
           <Image source={{uri: thumbnail}} style={styles.image}/>
           : null}
         <View style={styles.textContainer}>
           <Text style={styles.title}>{submission.name}</Text>
-          <Text style={styles.body}>{moment(submission.date, 'MM-DD-YYYY HH:mm:ss').format('MMMM Do YYYY')}</Text>
-          <Text style={styles.body}>Near {submission.location.latitude.toFixed(4)}, {submission.location.longitude.toFixed(4)}</Text>
+          <Text style={styles.body}>{moment(submission.date, 'MM-DD-YYYY HH:mm:ss')
+            .format('MMMM Do YYYY')}</Text>
+          <Text
+            style={styles.body}>Near {submission.location.latitude.toFixed(4)}, {submission.location.longitude.toFixed(4)}</Text>
         </View>
         <TouchableOpacity style={[styles.textContainer, styles.rightElement]}>
           <Icon name="md-more" size={30} color="#aaa"/>
@@ -160,15 +171,17 @@ export default class ObservationsScene extends Component {
   _renderSectionHeader = (data, id) => {
     if (id === 'Needs Uploading') {
       return (
-        <View style={[styles.headerContainer, {flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}]}>
+        <View style={[styles.headerContainer, {
+          flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
+        }]}>
           <Text style={styles.headerText}>{id}</Text>
           {this.state.isLoggedIn ?
             <TouchableOpacity style={styles.warningButton}
-              onPress={this._uploadAll.bind(this)}>
+                              onPress={this._uploadAll.bind(this)}>
               <Text style={[styles.headerText, {color: Colors.warningText}]}>Sync All</Text>
             </TouchableOpacity> :
             <TouchableOpacity style={styles.warningButton}
-              onPress={() => this.props.navigator.push({label: 'LoginScene'})}>
+                              onPress={() => this.props.navigator.push({label: 'LoginScene'})}>
               <Text style={[styles.headerText, {color: Colors.warningText}]}>Login to Sync</Text>
             </TouchableOpacity>
           }
@@ -178,15 +191,17 @@ export default class ObservationsScene extends Component {
 
     if (id === 'Needs Updating') {
       return (
-        <View style={[styles.headerContainer, {flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}]}>
+        <View style={[styles.headerContainer, {
+          flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
+        }]}>
           <Text style={styles.headerText}>{id}</Text>
           {this.state.isLoggedIn ?
             <TouchableOpacity style={styles.warningButton}
-              onPress={this._uploadAll.bind(this)}>
+                              onPress={this._uploadAll.bind(this)}>
               <Text style={[styles.headerText, {color: Colors.warningText}]}>Sync All</Text>
             </TouchableOpacity> :
             <TouchableOpacity style={styles.warningButton}
-              onPress={() => this.props.navigator.push({label: 'LoginScene'})}>
+                              onPress={() => this.props.navigator.push({label: 'LoginScene'})}>
               <Text style={[styles.headerText, {color: Colors.warningText}]}>Login to Sync</Text>
             </TouchableOpacity>
           }
@@ -196,7 +211,8 @@ export default class ObservationsScene extends Component {
 
     return (
       <View style={styles.headerContainer}>
-        <Text style={styles.headerText}>{id} ({realm.objects('Submission').filtered('synced == true && needs_update == false').length})</Text>
+        <Text style={styles.headerText}>{id} ({realm.objects('Submission')
+          .filtered('synced == true && needs_update == false').length})</Text>
       </View>
     )
   }

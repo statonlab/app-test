@@ -9,7 +9,8 @@ import {
   DeviceEventEmitter,
   Alert,
   Platform,
-  TouchableOpacity
+  TouchableOpacity,
+  BackAndroid
 } from 'react-native'
 import Header from '../components/Header'
 import Colors from '../helpers/Colors'
@@ -42,6 +43,13 @@ export default class ObservationScene extends Component {
     }
     this.user  = realm.objects('User')[0]
     this.fs    = new File()
+  }
+
+  componentWillMount() {
+    this.backEvent = BackAndroid.addEventListener('hardwareBackPress', () => {
+      this.props.navigator.pop()
+      return true
+    })
   }
 
   /**

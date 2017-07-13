@@ -9,7 +9,8 @@ import {
   Animated,
   Alert,
   Platform,
-  TouchableOpacity
+  TouchableOpacity,
+  BackAndroid
 } from 'react-native'
 import moment from 'moment'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
@@ -132,6 +133,11 @@ export default class Form extends Component {
 
     // Add image resize event listener
     this.events.push(DeviceEventEmitter.addListener('imagesResized', this._handleResizedImages))
+
+    this.backEvent = BackAndroid.addEventListener('hardwareBackPress', () => {
+      this.cancel()
+      return true
+    })
   }
 
   componentDidMount() {
@@ -171,12 +177,12 @@ export default class Form extends Component {
    */
   cancel = () => {
     if (this.state.images['images'] || Object.keys(this.state.metadata)[0]) {
-      Alert.alert('Abandon entry',
+      Alert.alert('Abandon Entry',
         'Data will be permanently lost if you leave. Are you sure?', [
           {
             text   : 'Leave',
             onPress: this.doCancel,
-            style : 'destructive'
+            style  : 'destructive'
           },
           {
             text   : 'Stay',
@@ -421,7 +427,9 @@ export default class Form extends Component {
    * @returns {XML}
    */
   populateFormItem = (key) => {
-    if (typeof DCP[key] === undefined) return
+    if (typeof DCP[key] === undefined) {
+      return
+    }
 
     if (DCP[key].comment) {
       return
@@ -430,7 +438,8 @@ export default class Form extends Component {
     if (DCP[key].slider) {
       return (
         <View style={styles.formGroup} key={key}>
-          <Text style={this.state.warnings[key] ? [styles.label, styles.labelWarning] : styles.label}>{DCP[key].label}</Text>
+          <Text
+            style={this.state.warnings[key] ? [styles.label, styles.labelWarning] : styles.label}>{DCP[key].label}</Text>
           <SliderPick
             key={key}
             images={DCP[key].images}
@@ -463,7 +472,8 @@ export default class Form extends Component {
             }}
           >
             <View style={styles.picker}>
-              <Text style={this.state.warnings[key] ? [styles.label, styles.labelWarning] : styles.label}>{DCP[key].label}</Text>
+              <Text
+                style={this.state.warnings[key] ? [styles.label, styles.labelWarning] : styles.label}>{DCP[key].label}</Text>
               <TextInput
                 style={styles.textField}
                 editable={false}
@@ -523,7 +533,11 @@ export default class Form extends Component {
             placeholder="Comments regarding the location of this tree.  These comments will only be veiwable to TreeSnap forestry partners"
             placeholderTextColor="#aaa"
             value={this.state.metadata.comment}
-            onChangeText={(comment) => this.setState({metadata: {...this.state.metadata, locationComment: comment}})}
+            onChangeText={(comment) => this.setState({
+              metadata: {
+                ...this.state.metadata, locationComment: comment
+              }
+            })}
             multiline={true}
             numberOfLines={4}
             underlineColorAndroid="transparent"
@@ -564,9 +578,11 @@ export default class Form extends Component {
 
     return (
       <View style={[styles.formGroup]}>
-        <TouchableOpacity style={[styles.buttonLink, {height: this.state.images[id] && this.state.images[id].length > 0 ? 60 : 40}]}
+        <TouchableOpacity
+          style={[styles.buttonLink, {height: this.state.images[id] && this.state.images[id].length > 0 ? 60 : 40}]}
           onPress={() => this._goToCamera(id)}>
-          <Text style={this.state.warnings.photos ? [styles.label, styles.labelWarning] : styles.label}>{label}</Text>
+          <Text
+            style={this.state.warnings.photos ? [styles.label, styles.labelWarning] : styles.label}>{label}</Text>
           {!this.state.images[id] || this.state.images[id].length === 0 ?
             <View style={{flex: 1, alignItems: 'center', flexDirection: 'row'}}>
               <Text style={[styles.buttonLinkText, {color: '#aaa'}]}>{description}</Text>
@@ -626,7 +642,11 @@ export default class Form extends Component {
                 placeholder="Additional Comments"
                 placeholderTextColor="#aaa"
                 value={this.state.metadata.comment}
-                onChangeText={(comment) => this.setState({metadata: {...this.state.metadata, comment: comment}})}
+                onChangeText={(comment) => this.setState({
+                  metadata: {
+                    ...this.state.metadata, comment: comment
+                  }
+                })}
                 multiline={true}
                 numberOfLines={4}
                 underlineColorAndroid="transparent"
@@ -635,7 +655,8 @@ export default class Form extends Component {
             <View style={[styles.formGroup, {flex: 0}]}>
               <Text style={[styles.label, {width: 60}]}>Location</Text>
               {this.props.edit ?
-                <Location edit={this.props.edit} coordinates={this.props.entryInfo.location} onChange={(location) => this.setState({location})}/> :
+                <Location edit={this.props.edit} coordinates={this.props.entryInfo.location}
+                          onChange={(location) => this.setState({location})}/> :
                 <Location onChange={(location) => this.setState({location})}/>
               }
 
@@ -644,12 +665,15 @@ export default class Form extends Component {
         </KeyboardAwareScrollView>
 
         <View style={styles.footer}>
-          <TouchableOpacity style={[styles.button, styles.flex1]} onPress={this.props.edit ? this.submitEdit : this.submit} rippleColor="rgba(0,0,0,0.5)">
+          <TouchableOpacity style={[styles.button, styles.flex1]}
+                            onPress={this.props.edit ? this.submitEdit : this.submit}
+                            rippleColor="rgba(0,0,0,0.5)">
             <Text style={styles.buttonText}>
               {this.props.edit ? 'Confirm Edit' : 'Submit Entry'}
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.button, styles.buttonAlt, styles.flex1]} onPress={this.cancel}>
+          <TouchableOpacity style={[styles.button, styles.buttonAlt, styles.flex1]}
+                            onPress={this.cancel}>
             <Text style={styles.buttonAltText}>
               Cancel
             </Text>

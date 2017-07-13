@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react'
-import {View, StyleSheet, Text, TextInput, TouchableOpacity} from 'react-native'
+import {View, StyleSheet, Text, TextInput, TouchableOpacity, BackAndroid} from 'react-native'
 import Header from '../components/Header'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
@@ -41,6 +41,13 @@ export default class AccountScene extends Component {
     }
 
     this.user = realm.objects('User')[0]
+  }
+
+  componentWillMount() {
+    this.backEvent = BackAndroid.addEventListener('hardwareBackPress', () => {
+      this.props.navigator.pop()
+      return true
+    })
   }
 
   /**

@@ -1,5 +1,14 @@
 import React, {Component, PropTypes} from 'react'
-import {View, ScrollView, StyleSheet, TextInput, Text, DeviceEventEmitter, TouchableOpacity} from 'react-native'
+import {
+  View,
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  Text,
+  DeviceEventEmitter,
+  TouchableOpacity,
+  BackAndroid
+} from 'react-native'
 import Header from '../components/Header'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
@@ -24,6 +33,13 @@ export default class LoginScene extends Component {
     this.loginRules = t.struct({
       email   : t.String,
       password: t.refinement(t.String, (pw) => pw.length >= 6, 'pw')
+    })
+  }
+
+  componentWillMount() {
+    this.backEvent = BackAndroid.addEventListener('hardwareBackPress', () => {
+      this.props.navigator.pop()
+      return true
     })
   }
 
@@ -194,7 +210,8 @@ export default class LoginScene extends Component {
               </TouchableOpacity>
             </View>
 
-            <View style={[styles.formGroup, {flexDirection: 'row', justifyContent: 'space-between'}]}>
+            <View
+              style={[styles.formGroup, {flexDirection: 'row', justifyContent: 'space-between'}]}>
               <TouchableOpacity>
                 <Text style={styles.link}>Forgot your password?</Text>
               </TouchableOpacity>

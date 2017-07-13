@@ -6,7 +6,8 @@ import {
   Text,
   DeviceEventEmitter,
   Platform,
-  TouchableOpacity
+  TouchableOpacity,
+  BackAndroid
 } from 'react-native'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import Header from '../components/Header'
@@ -56,6 +57,12 @@ export default class RegistrationScene extends Component {
   componentWillMount() {
     let currentYear = new Date().getFullYear()
     this.setState({currentYear: currentYear})
+
+
+    this.backEvent = BackAndroid.addEventListener('hardwareBackPress', () => {
+      this.props.navigator.pop()
+      return true
+    })
   }
 
   /**
@@ -240,7 +247,8 @@ export default class RegistrationScene extends Component {
             </View>
 
             <View style={styles.formGroup}>
-              <Text style={this.state.warnings.name ? [styles.label, styles.labelWarning] : styles.label}>Name</Text>
+              <Text
+                style={this.state.warnings.name ? [styles.label, styles.labelWarning] : styles.label}>Name</Text>
               <TextInput
                 autoCapitalize={'words'}
                 style={this.state.warnings.name ? [styles.textField, styles.textFieldWarning] : styles.textField}
@@ -253,7 +261,8 @@ export default class RegistrationScene extends Component {
             </View>
 
             <View style={styles.formGroup}>
-              <Text style={this.state.warnings.email ? [styles.label, styles.labelWarning] : styles.label}>Email</Text>
+              <Text
+                style={this.state.warnings.email ? [styles.label, styles.labelWarning] : styles.label}>Email</Text>
               <TextInput
                 autoCapitalize={'none'}
                 style={this.state.warnings.email ? [styles.textField, styles.textFieldWarning] : styles.textField}
@@ -266,7 +275,8 @@ export default class RegistrationScene extends Component {
             </View>
 
             <View style={styles.formGroup}>
-              <Text style={this.state.warnings.password ? [styles.label, styles.labelWarning] : styles.label}>Password</Text>
+              <Text
+                style={this.state.warnings.password ? [styles.label, styles.labelWarning] : styles.label}>Password</Text>
               <TextInput
                 style={this.state.warnings.password ? [styles.textField, styles.textFieldWarning] : styles.textField}
                 placeholder={'Password'}
@@ -278,7 +288,9 @@ export default class RegistrationScene extends Component {
             </View>
 
             <View style={styles.formGroup}>
-              <Text style={this.state.warnings.confirmPassword ? [styles.label, styles.labelWarning] : styles.label}>Confirm Password</Text>
+              <Text
+                style={this.state.warnings.confirmPassword ? [styles.label, styles.labelWarning] : styles.label}>Confirm
+                Password</Text>
               <TextInput
                 style={this.state.warnings.confirmPassword ? [styles.textField, styles.textFieldWarning] : styles.textField}
                 placeholder={'Repeat Password'}
@@ -314,7 +326,9 @@ export default class RegistrationScene extends Component {
                   (this.state.birth_year > 0) ? this.state.birth_year : null
                 }
               >
-                <Text style={this.state.warnings.birth_year ? [styles.label, styles.labelWarning] : styles.label}>Year of Birth</Text>
+                <Text
+                  style={this.state.warnings.birth_year ? [styles.label, styles.labelWarning] : styles.label}>Year
+                  of Birth</Text>
                 <TextInput
                   autoCapitalize={'none'}
                   style={this.state.warnings.birth_year ? [styles.textField, styles.textFieldWarning] : styles.textField}
@@ -342,7 +356,7 @@ export default class RegistrationScene extends Component {
 
             <View style={styles.formGroup}>
               <TouchableOpacity style={styles.button}
-                onPress={this.submitRegistration}>
+                                onPress={this.submitRegistration}>
                 <Text style={styles.buttonText}>Register</Text>
               </TouchableOpacity>
             </View>

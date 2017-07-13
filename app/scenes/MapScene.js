@@ -2,7 +2,8 @@ import React, {Component, PropTypes} from 'react'
 import {
   View,
   StyleSheet,
-  Alert
+  Alert,
+  BackAndroid
 } from 'react-native'
 import MarkersMap from '../components/MarkersMap'
 import Header from '../components/Header'
@@ -48,6 +49,11 @@ export default class MapScene extends Component {
     })
 
     this.markers = markers
+
+      this.backEvent = BackAndroid.addEventListener('hardwareBackPress', () => {
+        this.props.navigator.pop()
+        return true
+      })
   }
 
 
