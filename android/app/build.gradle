@@ -2,6 +2,7 @@ apply plugin: "com.android.application"
 
 import com.android.build.OutputFile
 
+
 /**
  * The react.gradle file registers a task for each build variant (e.g. bundleDebugJsAndAssets
  * and bundleReleaseJsAndAssets).
@@ -99,8 +100,8 @@ android {
         applicationId "com.treesource"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 100
-        versionName "1.0.0"
+        versionCode 102
+        versionName "1.0.2"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }

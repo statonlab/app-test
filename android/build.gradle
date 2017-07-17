@@ -1,5 +1,11 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
+/**
+* Import our package.JSON to handle versioning
+* https://medium.com/@andr3wjack/versioning-react-native-apps-407469707661
+**/
+
+
 buildscript {
     repositories {
         jcenter()

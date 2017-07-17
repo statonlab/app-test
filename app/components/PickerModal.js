@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import realm from '../db/Schema'
 import ImageModal from './ImageModal'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
+import AutoComplete from '../components/AutoComplete'
 
 export default class PickerModal extends Component {
 
@@ -98,14 +99,15 @@ export default class PickerModal extends Component {
     this.setState({modalVisible: false})
   }
 
+  /**
+   * Returns the text box for freeform text.  This is for the Other label
+   * @returns {XML}
+   */
   renderTextBox = () => {
     return (
       <View style={styles.choiceContainer}>
         <View style={[styles.choiceItem]}>
-          <TextInput
-            style={styles.textField}
-            placeholder={'Add new label'}
-            placeholderTextColor="#aaa"
+          <AutoComplete
             onChangeText={(text) =>
               this.onChange(text)
             }
