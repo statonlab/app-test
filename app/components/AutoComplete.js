@@ -1,15 +1,14 @@
 import React, {Component, PropTypes} from 'react'
-import {StyleSheet, View, TouchableOpacity, TextInput} from 'react-native'
+import {StyleSheet, View, TouchableOpacity, TextInput, Text} from 'react-native'
 import Latin from '../resources/treeNames.js'
 
 export default class AutoComplete extends Component {
   constructor(props) {
     super(props)
-    this.state = {
-      text      : null,
-      resultList: null,
-      queryList : null,
+    this.state      = {
+      resultList: [],
     }
+    this.queryList = Latin
   }
 
   componentWillMount() {
@@ -20,16 +19,64 @@ export default class AutoComplete extends Component {
    * If entered text matches something, render the table of suggestions
    * @returns {XML}
    */
-  renderResults = () => {
+
+  renderResults(){
+    console.log("rendering results", this.state.resultList)
+    let common = "test common"
+    let species = "test species"
     if (this.state.resultList) {
       return (
-        <View>
-
-          null
-        </View>
+        <TouchableOpacity
+          style={styles.card}
+          key={species}
+          onPress={
+            this.updateText(species)
+          }>
+          <View style={[styles.flexHorizontal]}>
+            <View style={[styles.cardBody, styles.flexHorizontal, styles.flexSpace]}>
+              <View>
+                <Text style={styles.cardTitle}>
+                  {common}
+                </Text>
+                <Text style={[styles.cardBodyText, styles.italics] }>
+                  {species}
+                </Text>
+              </View>
+              <View>
+              </View>
+            </View>
+          </View>
+        </TouchableOpacity>
       )
     }
   }
+
+  updateText = (text) => {
+    this.props.onChangeText(text)
+    //Query Input against list
+    this.searchText(text)
+
+  }
+
+  /**
+   * Search the current input text and update the state with an array of matches (species: common name pairs)
+   * @param text
+   */
+  searchText(text) {
+
+    if text.length()
+    console.log("right now, the result state is ", this.state.resultList)
+    let matches = []
+    Object.keys(this.queryList).map((species) => {
+     let common = this.queryList[species]
+     if ( common.indexOf(text) > 0 || species.indexOf(text) > 0){
+       matches.push({species: common})
+      }
+    })
+    this.setState({resultList: matches})
+    console.log("but we're changing it to", matches)
+  }
+
 
   render() {
     return (
@@ -39,12 +86,12 @@ export default class AutoComplete extends Component {
           placeholder={'Add new label'}
           placeholderTextColor="#aaa"
           onChangeText={(text) =>
-            this.props.onChangeText(text)
+            this.updateText(text)
           }
           underlineColorAndroid="transparent"
         />
         {this.state.text}
-        {this.renderResults}
+        {this.renderResults()}
       </View>
     )
   }
@@ -67,7 +114,7 @@ const styles = StyleSheet.create({
     fontSize         : 14,
     backgroundColor  : '#f9f9f9'
   },
-  rowView: {
+  rowView  : {
     flex         : 0,
     flexDirection: 'row',
     alignItems   : 'center'
