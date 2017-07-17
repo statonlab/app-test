@@ -136,7 +136,8 @@ const Plants = {
         title : 'Description',
         body  : [
           <Text
-            style={styles.paragraph}>Ash trees share several features that can be used to distinguish them from other tree species. Ash trees have an opposite branching pattern, where buds are positioned opposite each other on twigs. Ash trees also have compound leaves. Compound leaves are made up of many leaflets, each of which looks like a leaf. However leaves and leaflets can be distinguished because buds are only found at the base of the overall leaf, and not each individual leaflet. Ashes typically have 5-9 leaflets per leaf, although this varies by species. In addition, mature ash trees have a characteristic diamond pattern to their bark and ash seeds are distinctively shaped.</Text>, <Text style={styles.paragraph}>Please include a photograph of dormant bud scars if they are present.</Text>],
+            style={styles.paragraph}>Ash trees share several features that can be used to distinguish them from other tree species. Ash trees have an opposite branching pattern, where buds are positioned opposite each other on twigs. Ash trees also have compound leaves. Compound leaves are made up of many leaflets, each of which looks like a leaf. However leaves and leaflets can be distinguished because buds are only found at the base of the overall leaf, and not each individual leaflet. Ashes typically have 5-9 leaflets per leaf, although this varies by species. In addition, mature ash trees have a characteristic diamond pattern to their bark and ash seeds are distinctively shaped.</Text>,
+          <Text style={styles.paragraph}>Please include a photograph of dormant bud scars if they are present.</Text>],
         images: []
       }, {
         title : 'Range',
@@ -305,18 +306,22 @@ const Plants = {
     images          : [
       require('../img/elm_id/elmBark.jpg'),
       require('../img/elm_id/elmLeaf.jpg'),
-      require('../img/elm_id/Elm_seeds.jpg'),
       require('../img/elm_id/elmFlowers.jpg'),
-      require('../img/elm_id/Elm_vase_shape.jpg'),
-      require('../img/elm_id/Dutch_elm_diseases.jpg'),
-
+      require('../img/elm_id/elmNonNative.jpg'),
+      require('../img/elm_id/elmother.jpg'),
+      require('../img/elm_id/elmTree.jpg'),
+      require('../img/elm_id/elmTwig.jpg'),
+      require('../img/elm_id/Elm_seeds.jpg'),
     ],
     captions        : [
-     null , null ,
-      "Elms produce seeds that are small, oval, papery samaras. Paul Wray, Iowa State University, Bugwood.org",
-      "Elms are one of first to bloom in spring.  These flowers are not very showy (they have no petals) but are on long pedicels. Rob Routledge, Sault College, Bugwood.org",
-      "Large elm trees tend to have a vase shape.  Photo credit: Joseph OBrien, USDA Forest Service, Bugwood.org",
-      "Symptoms of Dutch elm disease include wilted or yellowing leaves and brown streaking in sapwood. Photo credit: George Hudler, Cornell University, Bugwood.org."
+      null, //bark
+      null, //leaf
+      null, //flowers
+      null, // nonnative
+      null, //elmOther
+      null, //elmTree
+      null, //elmTwig
+      "Elms produce seeds that are small, oval, papery samaras. Paul Wray, Iowa State University, Bugwood.org",//seeds
     ],
     descriptionCards: [
       {
