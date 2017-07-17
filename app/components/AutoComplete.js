@@ -5,7 +5,7 @@ import Latin from '../resources/treeNames.js'
 export default class AutoComplete extends Component {
   constructor(props) {
     super(props)
-    this.state      = {
+    this.state     = {
       resultList: [],
     }
     this.queryList = Latin
@@ -20,35 +20,36 @@ export default class AutoComplete extends Component {
    * @returns {XML}
    */
 
-  renderResults(){
-    console.log("rendering results", this.state.resultList)
-    let common = "test common"
-    let species = "test species"
-    if (this.state.resultList) {
+  renderResults() {
+
+    if (this.state.resultList.length > 0) {
+
+      let results = this.state.resultList.slice(0, 5)
       return (
-        <TouchableOpacity
-          style={styles.card}
-          key={species}
-          onPress={
-            this.updateText(species)
-          }>
-          <View style={[styles.flexHorizontal]}>
-            <View style={[styles.cardBody, styles.flexHorizontal, styles.flexSpace]}>
-              <View>
-                <Text style={styles.cardTitle}>
-                  {common}
-                </Text>
-                <Text style={[styles.cardBodyText, styles.italics] }>
-                  {species}
-                </Text>
-              </View>
-              <View>
-              </View>
+        results.map((pair) => {
+          let species = Object.keys(pair)[0]
+          let common = pair[species]
+          return(
+          <TouchableOpacity
+            style={styles.card}
+            key={species}
+            onPress={null}>
+            <View>
+              <Text style={styles.cardTitle}>
+                {common}
+              </Text>
+              <Text style={[styles.cardBodyText, styles.italics] }>
+                {species}
+              </Text>
             </View>
-          </View>
-        </TouchableOpacity>
+          </TouchableOpacity>
+          )
+
+        })
       )
+
     }
+    return null
   }
 
   updateText = (text) => {
@@ -63,34 +64,35 @@ export default class AutoComplete extends Component {
    * @param text
    */
   searchText(text) {
-
-    if text.length()
-    console.log("right now, the result state is ", this.state.resultList)
-    let matches = []
-    Object.keys(this.queryList).map((species) => {
-     let common = this.queryList[species]
-     if ( common.indexOf(text) > 0 || species.indexOf(text) > 0){
-       matches.push({species: common})
-      }
-    })
-    this.setState({resultList: matches})
-    console.log("but we're changing it to", matches)
+    if (text.length > 1) {
+      console.log("right now, the result state is ", this.state.resultList)
+      let matches = []
+      Object.keys(this.queryList).map((species) => {
+        let common = this.queryList[species]
+        if (common.indexOf(text) > 0 || species.indexOf(text) > 0) {
+          matches.push({species: common})
+        }
+      })
+      this.setState({resultList: matches})
+      console.log("but we're changing it to", matches)
+    }
   }
 
 
   render() {
     return (
-      <View style={styles.rowView}>
-        <TextInput
-          style={styles.textField}
-          placeholder={'Add new label'}
-          placeholderTextColor="#aaa"
-          onChangeText={(text) =>
-            this.updateText(text)
-          }
-          underlineColorAndroid="transparent"
-        />
-        {this.state.text}
+      <View>
+        <View style={styles.rowView}>
+          <TextInput
+            style={styles.textField}
+            placeholder={'Add new label'}
+            placeholderTextColor="#aaa"
+            onChangeText={(text) =>
+              this.updateText(text)
+            }
+            underlineColorAndroid="transparent"
+          />
+        </View>
         {this.renderResults()}
       </View>
     )
@@ -106,7 +108,7 @@ AutoComplete.defaultProps = {}
 const styles = StyleSheet.create({
   textField: {
     height           : 40,
-    flex             : 1,
+    width            : 300,
     borderWidth      : 1,
     borderColor      : '#dedede',
     borderRadius     : 2,
