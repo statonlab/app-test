@@ -117,12 +117,11 @@ const DCP = {
   },
   diameterNumeric        : {
     label      : 'Tree diameter',
-    description: 'Approximately how many feet is the diameter of the tree?',
     slider     : true,
     minValue   : 0,
     maxValue   : 40,
     units      : "Inches",
-    images     : [require("../img/DCP/diameter_photo_1.jpg")]
+    images     : [require("../img/DCP/diameter.jpg")]
 
     //  startValue : 25,
   },

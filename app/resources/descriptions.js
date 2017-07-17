@@ -303,18 +303,16 @@ const Plants = {
     latinName       : 'Ulmus americana',
     maps            : [require('../img/maps/elm_map.png')],
     images          : [
-      require('../img/elm_id/Elm_bark.jpg'),
-      require('../img/elm_id/Elm_leaf.jpg'),
+      require('../img/elm_id/elmBark.jpg'),
+      require('../img/elm_id/elmLeaf.jpg'),
       require('../img/elm_id/Elm_seeds.jpg'),
-      require('../img/elm_id/Elm_flowers.jpg'),
+      require('../img/elm_id/elmFlowers.jpg'),
       require('../img/elm_id/Elm_vase_shape.jpg'),
       require('../img/elm_id/Dutch_elm_diseases.jpg'),
 
     ],
     captions        : [
-      "The bark on large elm trees is rough with flattened ridges and crisscrossing furrows. Photo credit: Kathy Smith, Ohio State University Extension, Bugwood.org",
-      "Elm leaves are alternating, have asymmetrical bases, and have doublely serrated margins. Photo credit: Paul Wray, Iowa State University, Bugwood.org",
-
+     null , null ,
       "Elms produce seeds that are small, oval, papery samaras. Paul Wray, Iowa State University, Bugwood.org",
       "Elms are one of first to bloom in spring.  These flowers are not very showy (they have no petals) but are on long pedicels. Rob Routledge, Sault College, Bugwood.org",
       "Large elm trees tend to have a vase shape.  Photo credit: Joseph OBrien, USDA Forest Service, Bugwood.org",
