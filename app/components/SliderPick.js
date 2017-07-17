@@ -8,7 +8,7 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import {MKSlider} from 'react-native-material-kit'
 import Colors from '../helpers/Colors'
-import InstructionModal from '../components/InstructionModal'
+import ImageModal from "./ImageModal";
 
 export default class SliderPick extends Component {
   constructor(props) {
@@ -33,6 +33,10 @@ export default class SliderPick extends Component {
     this.props.onChange(value)
   }
 
+  /**
+   * Display the current value if set
+   * @returns {XML}
+   */
   displayLegend = () => {
     if (this.state.value) {
       return (
@@ -43,6 +47,23 @@ export default class SliderPick extends Component {
       <Text style={styles.label}>Not set</Text>
 
     )
+  }
+  /**
+   * Display the help icon if there are help images to view
+   * @returns {XML}
+   */
+  displayIcon   = () => {
+    let captions = [this.props.description]
+    if (this.props.images) {
+      return (
+        <ImageModal
+          captions={captions}
+          images={this.props.images}
+        >
+          <Icon name="help-circle" style={styles.icon}/>
+        </ImageModal>
+      )
+    }
   }
 
   render() {
@@ -57,14 +78,9 @@ export default class SliderPick extends Component {
           onChange={(value) => this.onChange(value)}
           thumbRadius={this.state.value ? 6 : 0}
           thumbPadding={10}
-      />
+        />
         {this.displayLegend()}
-        <InstructionModal style={styles.modalContainer}
-          text={this.props.description}
-          images={this.props.images}
-        >
-          <Icon name="help-circle" style={styles.icon}/>
-        </InstructionModal>
+        {this.displayIcon()}
       </View>
     )
   }
@@ -81,12 +97,11 @@ SliderPick.propTypes = {
 }
 
 SliderPick.defaultProps = {
-  min        : 1,
-  max        : 50,
-  start      : 25,
-  legendText : "Inches",
-  description: "please provide a description",
-  onChange   : () => {
+  min       : 1,
+  max       : 50,
+  start     : 25,
+  legendText: "Inches",
+  onChange  : () => {
   }
 }
 
