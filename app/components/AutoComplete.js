@@ -20,46 +20,37 @@ export default class AutoComplete extends Component {
    * @returns {XML}
    */
 
-  renderResults() {
-
+  renderResults = () => {
     if (this.state.resultList.length > 0) {
       let results = this.state.resultList.slice(0, 5)
-      return (
-
-        results.forEach(function (arrayItem) {
+      return(
+        results.forEach((arrayItem) => {
           let species = Object.keys(arrayItem)[0]
           let common  = arrayItem[species]
-      console.log(species, common)
+          console.log(species)
           return (
-            <View>
+
             <TouchableOpacity
-              style={styles.card}
               key={species}
               onPress={() => {this.updateText(common)}}>
-              <View>
-                <Text style={styles.cardTitle}>
+              <View style={styles.rowView}>
+                <Text style={styles.textField}>
                   {common}
-                </Text>
-                <Text style={[styles.cardBodyText, styles.italics] }>
                   {species}
                 </Text>
               </View>
             </TouchableOpacity>
-            </View>
           )
         })
       )
-
-
     }
-    return null
+    //return (<View><Text>Suggestions will appear here</Text></View>)
   }
 
   updateText = (text) => {
     this.props.onChangeText(text)
     //Query Input against list
     this.searchText(text)
-
   }
 
   /**
@@ -86,9 +77,6 @@ export default class AutoComplete extends Component {
     return (
       <View>
         <View style={styles.rowView}>
-          {this.renderResults()}
-        </View>
-        <View style={styles.rowView}>
           <TextInput
             style={styles.textField}
             placeholder={'Add new label'}
@@ -99,7 +87,9 @@ export default class AutoComplete extends Component {
             underlineColorAndroid="transparent"
           />
         </View>
-
+        <View style={styles.searchBox}>
+          {this.state.resultList.length > 0 ? this.renderResults() : null}
+        </View>
       </View>
     )
   }
@@ -129,6 +119,7 @@ const styles = StyleSheet.create({
   },
   searchBox : {
     flex : 0,
+    padding : 10,
     flexDirection: 'column'
   }
 })
