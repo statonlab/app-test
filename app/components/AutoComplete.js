@@ -23,30 +23,33 @@ export default class AutoComplete extends Component {
   renderResults() {
 
     if (this.state.resultList.length > 0) {
-
       let results = this.state.resultList.slice(0, 5)
       return (
-        results.map((pair) => {
-          let species = Object.keys(pair)[0]
-          let common = pair[species]
-          return(
-          <TouchableOpacity
-            style={styles.card}
-            key={species}
-            onPress={null}>
-            <View>
-              <Text style={styles.cardTitle}>
-                {common}
-              </Text>
-              <Text style={[styles.cardBodyText, styles.italics] }>
-                {species}
-              </Text>
-            </View>
-          </TouchableOpacity>
-          )
 
+        results.forEach(function (arrayItem) {
+          let species = Object.keys(arrayItem)[0]
+          let common  = arrayItem[species]
+      console.log(species, common)
+          return (
+            <View>
+            <TouchableOpacity
+              style={styles.card}
+              key={species}
+              onPress={() => {this.updateText(common)}}>
+              <View>
+                <Text style={styles.cardTitle}>
+                  {common}
+                </Text>
+                <Text style={[styles.cardBodyText, styles.italics] }>
+                  {species}
+                </Text>
+              </View>
+            </TouchableOpacity>
+            </View>
+          )
         })
       )
+
 
     }
     return null
@@ -65,16 +68,16 @@ export default class AutoComplete extends Component {
    */
   searchText(text) {
     if (text.length > 1) {
-      console.log("right now, the result state is ", this.state.resultList)
       let matches = []
       Object.keys(this.queryList).map((species) => {
         let common = this.queryList[species]
         if (common.indexOf(text) > 0 || species.indexOf(text) > 0) {
-          matches.push({species: common})
+          let entry      = {}
+          entry[species] = common
+          matches.push(entry)
         }
       })
       this.setState({resultList: matches})
-      console.log("but we're changing it to", matches)
     }
   }
 
@@ -82,6 +85,9 @@ export default class AutoComplete extends Component {
   render() {
     return (
       <View>
+        <View style={styles.rowView}>
+          {this.renderResults()}
+        </View>
         <View style={styles.rowView}>
           <TextInput
             style={styles.textField}
@@ -93,7 +99,7 @@ export default class AutoComplete extends Component {
             underlineColorAndroid="transparent"
           />
         </View>
-        {this.renderResults()}
+
       </View>
     )
   }
@@ -121,4 +127,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems   : 'center'
   },
+  searchBox : {
+    flex : 0,
+    flexDirection: 'column'
+  }
 })
