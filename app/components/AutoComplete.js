@@ -7,7 +7,7 @@ export default class AutoComplete extends Component {
     super(props)
     this.state     = {
       resultList: [],
-      selected : null
+      selected  : null
     }
     this.queryList = Latin
   }
@@ -33,12 +33,12 @@ export default class AutoComplete extends Component {
 
   renderResults = () => {
     if (this.state.resultList.length > 0) {
-     // let results = this.state.resultList.slice(0, 5)
+      // let results = this.state.resultList.slice(0, 5)
       let results = this.state.resultList
       return results.map((arrayItem) => {
-        let species = Object.keys(arrayItem)[0]
-        let common  = arrayItem[species]
-        return (
+          let species = Object.keys(arrayItem)[0]
+          let common  = arrayItem[species]
+          return (
             <TouchableOpacity
               key={species}
               onPress={() => {
@@ -53,8 +53,8 @@ export default class AutoComplete extends Component {
                 </Text>
               </View>
             </TouchableOpacity>
-        )
-      }
+          )
+        }
       )
     }
   }
@@ -93,10 +93,10 @@ export default class AutoComplete extends Component {
   render() {
     return (
       <View>
-        {this.state.resultList.length !==0 ?
+        {this.state.resultList.length !== 0 ?
           <ScrollView style={styles.searchBox}>
             {this.renderResults()}
-        </ScrollView>: null}
+          </ScrollView> : null}
 
 
         <View style={styles.rowView}>
@@ -134,21 +134,21 @@ const styles = StyleSheet.create({
     backgroundColor  : '#f9f9f9'
   },
   rowView   : {
-    flex         : 0,
-    flexDirection: 'row',
-    alignItems   : 'center',
+    flex          : 0,
+    flexDirection : 'row',
+    alignItems    : 'center',
     justifyContent: 'center',
-    borderColor : '#dedede',
-    borderWidth : 1,
-    borderRadius : 2
+    borderColor   : '#dedede',
+    borderWidth   : 1,
+    borderRadius  : 2
   },
   searchBox : {
     flex           : 1,
     padding        : 1,
-    width : 300,
-    height : 200,
-    position: 'absolute',
-    bottom: 0,
+    width          : 300,
+    height         : 200,
+    position       : 'absolute',
+    bottom         : 0,
     backgroundColor: '#f9f9f9',
     flexDirection  : 'column',
   },
@@ -156,8 +156,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     paddingVertical  : 10,
   },
-  species: {
-    fontStyle: 'italic',
+  species   : {
+    fontStyle  : 'italic',
     marginRight: 0
   }
 })
