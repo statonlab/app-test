@@ -23,12 +23,11 @@ export default class AutoComplete extends Component {
   renderResults = () => {
     if (this.state.resultList.length > 0) {
       let results = this.state.resultList.slice(0, 5)
-      return results.forEach((arrayItem) => {
+      return results.map((arrayItem) => {
           let species = Object.keys(arrayItem)[0]
           let common  = arrayItem[species]
           console.log(species)
           return (
-
             <TouchableOpacity
               key={species}
               onPress={() => {this.updateText(common)}}>
@@ -41,7 +40,6 @@ export default class AutoComplete extends Component {
             </TouchableOpacity>
           )
         })
-
     }
     //return (<View><Text>Suggestions will appear here</Text></View>)
   }
