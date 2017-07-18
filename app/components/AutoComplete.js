@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react'
-import {StyleSheet, View, TouchableOpacity, TextInput, Text} from 'react-native'
+import {StyleSheet, View, TouchableOpacity, TextInput, Text, KeyboardAvoidingView, ScrollView} from 'react-native'
 import Latin from '../resources/treeNames.js'
 
 export default class AutoComplete extends Component {
@@ -13,6 +13,15 @@ export default class AutoComplete extends Component {
   }
 
   componentWillMount() {
+    let list = []
+    Object.keys(this.queryList).map((species) => {
+      let common = this.queryList[species]
+        let entry      = {}
+        entry[species] = common
+        list.push(entry)
+      }
+    )
+    this.setState({resultList: list})
   }
 
 
@@ -23,7 +32,8 @@ export default class AutoComplete extends Component {
 
   renderResults = () => {
     if (this.state.resultList.length > 0) {
-      let results = this.state.resultList.slice(0, 5)
+     // let results = this.state.resultList.slice(0, 5)
+      let results = this.state.resultList
       return results.map((arrayItem) => {
         let species = Object.keys(arrayItem)[0]
         let common  = arrayItem[species]
@@ -43,10 +53,11 @@ export default class AutoComplete extends Component {
               </View>
             </TouchableOpacity>
         )
-      })
+      }
+      )
     }
-    //return (<View><Text>Suggestions will appear here</Text></View>)
   }
+
 
   updateText = (text) => {
     this.props.onChangeText(text)
@@ -78,20 +89,20 @@ export default class AutoComplete extends Component {
   render() {
     return (
       <View>
-        <View style={styles.searchBox}>
-          {this.state.resultList.length > 0 ?
+        <ScrollView style={styles.searchBox}>
+          {this.state.resultList  ?
           this.renderResults() : null}
-        </View>
+        </ScrollView>
+
         <View style={styles.rowView}>
           <TextInput
             style={styles.textField}
-            placeholder={'Add new label'}
+            placeholder={'Type to search'}
             placeholderTextColor="#aaa"
             onChangeText={(text) =>
               this.updateText(text)
             }
             value={this.state.selected ? this.state.selected : null}
-
             underlineColorAndroid="transparent"
           />
         </View>
@@ -129,6 +140,11 @@ const styles = StyleSheet.create({
   searchBox : {
     flex           : 0,
     padding        : 1,
+    //height : 200,
+    width : 300,
+    height : 200,
+    position: 'absolute',
+    bottom: 0,
     backgroundColor: '#f9f9f9',
     flexDirection  : 'column',
   },
