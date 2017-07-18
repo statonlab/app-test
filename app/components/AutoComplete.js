@@ -7,6 +7,7 @@ export default class AutoComplete extends Component {
     super(props)
     this.state     = {
       resultList: [],
+      selected : null
     }
     this.queryList = Latin
   }
@@ -24,22 +25,25 @@ export default class AutoComplete extends Component {
     if (this.state.resultList.length > 0) {
       let results = this.state.resultList.slice(0, 5)
       return results.map((arrayItem) => {
-          let species = Object.keys(arrayItem)[0]
-          let common  = arrayItem[species]
-          console.log(species)
-          return (
+        let species = Object.keys(arrayItem)[0]
+        let common  = arrayItem[species]
+        return (
             <TouchableOpacity
               key={species}
-              onPress={() => {this.updateText(common)}}>
+              onPress={() => {
+                this.updateText(common)
+                this.setState({selected: common})
+              }}>
               <View style={styles.rowView}>
-                <Text style={styles.textField}>
-                  {common}
+                <Text style={styles.searchText}>
+                  {common}</Text>
+                <Text style={styles.searchText}>
                   {species}
                 </Text>
               </View>
             </TouchableOpacity>
-          )
-        })
+        )
+      })
     }
     //return (<View><Text>Suggestions will appear here</Text></View>)
   }
@@ -57,9 +61,10 @@ export default class AutoComplete extends Component {
   searchText(text) {
     if (text.length > 1) {
       let matches = []
+      text        = text.toLowerCase().trim()
       Object.keys(this.queryList).map((species) => {
         let common = this.queryList[species]
-        if (common.indexOf(text) > 0 || species.indexOf(text) > 0) {
+        if (common.toLowerCase().trim().indexOf(text) !== -1 || species.toLowerCase().trim().indexOf(text) !== -1) {
           let entry      = {}
           entry[species] = common
           matches.push(entry)
@@ -73,6 +78,10 @@ export default class AutoComplete extends Component {
   render() {
     return (
       <View>
+        <View style={styles.searchBox}>
+          {this.state.resultList.length > 0 ?
+          this.renderResults() : null}
+        </View>
         <View style={styles.rowView}>
           <TextInput
             style={styles.textField}
@@ -81,11 +90,10 @@ export default class AutoComplete extends Component {
             onChangeText={(text) =>
               this.updateText(text)
             }
+            value={this.state.selected ? this.state.selected : null}
+
             underlineColorAndroid="transparent"
           />
-        </View>
-        <View style={styles.searchBox}>
-          {this.state.resultList.length > 0 ? this.renderResults() : null}
         </View>
       </View>
     )
@@ -99,7 +107,7 @@ AutoComplete.PropTypes = {
 AutoComplete.defaultProps = {}
 
 const styles = StyleSheet.create({
-  textField: {
+  textField : {
     height           : 40,
     width            : 300,
     borderWidth      : 1,
@@ -109,14 +117,20 @@ const styles = StyleSheet.create({
     fontSize         : 14,
     backgroundColor  : '#f9f9f9'
   },
-  rowView  : {
+  rowView   : {
     flex         : 0,
     flexDirection: 'row',
     alignItems   : 'center'
   },
   searchBox : {
-    flex : 0,
-    padding : 10,
-    flexDirection: 'column'
+    flex           : 0,
+    padding        : 1,
+    backgroundColor: '#f9f9f9',
+    flexDirection  : 'column'
+  },
+  searchText: {
+    paddingHorizontal: 5,
+    paddingVertical  : 2
+
   }
 })
