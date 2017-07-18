@@ -13,15 +13,16 @@ export default class AutoComplete extends Component {
   }
 
   componentWillMount() {
-    let list = []
-    Object.keys(this.queryList).map((species) => {
-      let common = this.queryList[species]
-        let entry      = {}
-        entry[species] = common
-        list.push(entry)
-      }
-    )
-    this.setState({resultList: list})
+    //populate the list with everything.  Kind of slow, obscures recent choices...
+    // let list = []
+    // Object.keys(this.queryList).map((species) => {
+    //   let common = this.queryList[species]
+    //     let entry      = {}
+    //     entry[species] = common
+    //     list.push(entry)
+    //   }
+    // )
+    // this.setState({resultList: list})
   }
 
 
@@ -82,17 +83,21 @@ export default class AutoComplete extends Component {
         }
       })
       this.setState({resultList: matches})
+      return
     }
+// clear the state of resultList
+    this.setState({resultList: []})
   }
 
 
   render() {
     return (
       <View>
-        <ScrollView style={styles.searchBox}>
-          {this.state.resultList  ?
-          this.renderResults() : null}
-        </ScrollView>
+        {this.state.resultList.length !==0 ?
+          <ScrollView style={styles.searchBox}>
+            {this.renderResults()}
+        </ScrollView>: null}
+
 
         <View style={styles.rowView}>
           <TextInput
@@ -138,9 +143,8 @@ const styles = StyleSheet.create({
     borderRadius : 2
   },
   searchBox : {
-    flex           : 0,
+    flex           : 1,
     padding        : 1,
-    //height : 200,
     width : 300,
     height : 200,
     position: 'absolute',
