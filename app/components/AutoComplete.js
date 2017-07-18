@@ -37,7 +37,7 @@ export default class AutoComplete extends Component {
               <View style={styles.rowView}>
                 <Text style={styles.searchText}>
                   {common}</Text>
-                <Text style={styles.searchText}>
+                <Text style={[styles.searchText, styles.species]}>
                   {species}
                 </Text>
               </View>
@@ -120,17 +120,24 @@ const styles = StyleSheet.create({
   rowView   : {
     flex         : 0,
     flexDirection: 'row',
-    alignItems   : 'center'
+    alignItems   : 'center',
+    justifyContent: 'center',
+    borderColor : '#dedede',
+    borderWidth : 1,
+    borderRadius : 2
   },
   searchBox : {
     flex           : 0,
     padding        : 1,
     backgroundColor: '#f9f9f9',
-    flexDirection  : 'column'
+    flexDirection  : 'column',
   },
   searchText: {
     paddingHorizontal: 5,
-    paddingVertical  : 2
-
+    paddingVertical  : 10,
+  },
+  species: {
+    fontStyle: 'italic',
+    marginRight: 0
   }
 })
