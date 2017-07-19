@@ -555,7 +555,7 @@ export default class Form extends Component {
    * @returns {XML}
    */
   renderBiominder = () => {
-    let header      = "Submitting Chestnut Samples"
+    let header      = "Mailing Samples to the American Chestnut Foundation"
     let specialText = ACFCollection
     return (
       <PickerModal
