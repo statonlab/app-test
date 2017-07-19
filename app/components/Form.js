@@ -25,7 +25,7 @@ import SliderPick from '../components/SliderPick'
 import Location from '../components/Location'
 import File from '../helpers/File'
 import Spinner from '../components/Spinner'
-
+import AutoComplete from '../components/AutoComplete'
 const isAndroid = Platform.OS === 'android'
 
 const DCPrules = {
@@ -435,6 +435,35 @@ export default class Form extends Component {
       return
     }
 
+    if (DCP[key].modalFreeText) {
+      return (
+        <View style={styles.formGroup} key={key}>
+          <AutoComplete
+            style={styles.picker}
+            header={DCP[key].description}
+            choices={DCP[key].selectChoices}
+            onChange={(option) => {
+              this.setState({metadata: {...this.state.metadata, [key]: option}})
+            }}
+          >
+            <View style={styles.picker}>
+              <Text
+                style={this.state.warnings[key] ? [styles.label, styles.labelWarning] : styles.label}>{DCP[key].label}</Text>
+              <TextInput
+                style={styles.textField}
+                editable={false}
+                placeholder={DCP[key].placeHolder}
+                placeholderTextColor="#aaa"
+                value={this.getMultiCheckValue(this.state.metadata[key], DCP[key].multiCheck)}
+                underlineColorAndroid="transparent"
+              />
+              {dropdownIcon}
+            </View>
+          </AutoComplete>
+        </View>
+      )
+    }
+
     if (DCP[key].slider) {
       return (
         <View style={styles.formGroup} key={key}>
@@ -464,7 +493,6 @@ export default class Form extends Component {
             images={DCP[key].images}
             captions={DCP[key].captions}
             multiCheck={DCP[key].multiCheck}
-            freeText={DCP[key].modalFreeText}
             header={DCP[key].description}
             choices={DCP[key].selectChoices}
             onSelect={(option) => {
@@ -656,7 +684,7 @@ export default class Form extends Component {
               <Text style={[styles.label, {width: 60}]}>Location</Text>
               {this.props.edit ?
                 <Location edit={this.props.edit} coordinates={this.props.entryInfo.location}
-                          onChange={(location) => this.setState({location})}/> :
+                  onChange={(location) => this.setState({location})}/> :
                 <Location onChange={(location) => this.setState({location})}/>
               }
 
@@ -666,14 +694,14 @@ export default class Form extends Component {
 
         <View style={styles.footer}>
           <TouchableOpacity style={[styles.button, styles.flex1]}
-                            onPress={this.props.edit ? this.submitEdit : this.submit}
-                            rippleColor="rgba(0,0,0,0.5)">
+            onPress={this.props.edit ? this.submitEdit : this.submit}
+            rippleColor="rgba(0,0,0,0.5)">
             <Text style={styles.buttonText}>
               {this.props.edit ? 'Confirm Edit' : 'Submit Entry'}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.button, styles.buttonAlt, styles.flex1]}
-                            onPress={this.cancel}>
+            onPress={this.cancel}>
             <Text style={styles.buttonAltText}>
               Cancel
             </Text>
