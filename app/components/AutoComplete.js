@@ -3,6 +3,8 @@ import {StyleSheet, View, TouchableOpacity, TextInput, Text, Modal, KeyboardAvoi
 import Latin from '../resources/treeNames.js'
 import Colors from '../helpers/Colors'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
+import Elevation from '../helpers/Elevation'
+
 
 export default class AutoComplete extends Component {
   constructor(props) {
@@ -102,19 +104,19 @@ export default class AutoComplete extends Component {
 
   render() {
     return (
-      <View>
+      <View style={styles.mainContainer}>
         <Modal
           transparent={true}
           visible={this.state.modalVisible}
           onRequestClose={this.close}
           animationType={this.state.animationType}>
-          <KeyboardAwareScrollView contentContainerStyle={styles.mainContainer} bounces={false}>
-            <TouchableOpacity
-              style={styles.overlay}
-              onPress={this.close.bind(this)}
-              activeOpacity={.9}
-            />
-            <View style={styles.container}>
+          <View style={styles.overlay}>
+          <KeyboardAwareScrollView
+              showsVerticalScrollIndicator={false}
+              enableResetScrollToCoords={false}
+              extraScrollHeight={20}
+            >
+              <View style={styles.container}>
                 <TextInput
                   style={styles.textField}
                   placeholder={'Type to search or create your own label'}
@@ -125,16 +127,17 @@ export default class AutoComplete extends Component {
                   value={this.state.selected ? this.state.selected : null}
                   underlineColorAndroid="transparent"
                 />
-              <ScrollView style={styles.searchBox}>
-                {this.renderResults()}
-              </ScrollView>
-              <TouchableOpacity style={styles.button} onPress={this.close}>
-                <Text style={styles.buttonText}>
-                  Submit
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </KeyboardAwareScrollView>
+                <ScrollView style={styles.searchBox}>
+                  {this.renderResults()}
+                </ScrollView>
+                <TouchableOpacity style={styles.button} onPress={this.close}>
+                  <Text style={styles.buttonText}>
+                    Submit
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </KeyboardAwareScrollView>
+          </View>
         </Modal>
         <TouchableOpacity style={this.props.style} onPress={this.open}>
           {this.props.children}
@@ -167,41 +170,44 @@ const styles = StyleSheet.create({
   },
   container    : {
     backgroundColor  : '#fefefe',
-    flex             : 0,
+    flex             : 1,
     flexDirection    : 'column',
     borderRadius     : 2,
     paddingVertical  : 10,
     paddingHorizontal: 15,
-    maxHeight        : 500,
     minWidth         : 350,
-    marginHorizontal : 20
+    marginHorizontal : 20,
+    marginTop        : 100
   },
   textField    : {
     height         : 40,
-    minWidth       : 350,
     borderWidth    : 1,
     borderColor    : Colors.black,
     borderRadius   : 2,
     paddingLeft    : 10,
     fontSize       : 14,
     backgroundColor: '#f9f9f9',
-    marginBottom : 3
+    marginBottom   : 3
   },
   rowView      : {
-    flex          : 0,
-    flexDirection : 'row',
-    alignItems    : 'center',
-    justifyContent: 'center',
-    borderColor   : '#dedede',
-    borderWidth   : 1,
-    borderRadius  : 2,
-    paddingVertical : 5,
-    marginVertical : 3,
+    flex           : 1,
+    flexDirection  : 'row',
+    alignItems     : 'center',
+    justifyContent : 'center',
+//    borderColor   : '#dedede',
+    //  borderWidth   : 1,
+    // borderRadius  : 2,
+    margin         : 5,
+    paddingVertical: 5,
+    backgroundColor: '#fefefe',
+    ...(new Elevation(2)),
+
   },
   searchBox    : {
     flex           : 1,
     padding        : 1,
-    height         : 200,
+    maxHeight      : 500,
+    minHeight      : 300,
     backgroundColor: '#f9f9f9',
     flexDirection  : 'column',
   },
@@ -214,9 +220,9 @@ const styles = StyleSheet.create({
     marginRight: 0
   },
   button       : {
-    flex        : 0,
-    borderRadius: 2,
-    padding     : 10
+    flex           : 0,
+    borderRadius   : 2,
+    paddingVertical: 5
   },
 
   buttonText: {
