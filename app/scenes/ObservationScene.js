@@ -443,6 +443,10 @@ export default class ObservationScene extends Component {
           <View style={styles.card}>
             {this._renderUploadButton(entry)}
             <View style={styles.field}>
+              <Text style={styles.label}>Unique ID</Text>
+              <Text style={styles.dataText}>{entry.id}</Text>
+            </View>
+            <View style={styles.field}>
               <Text style={styles.label}>Date Collected</Text>
               <Text style={styles.dataText}>{entry.date}</Text>
             </View>

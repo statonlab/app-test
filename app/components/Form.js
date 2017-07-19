@@ -26,6 +26,8 @@ import Location from '../components/Location'
 import File from '../helpers/File'
 import Spinner from '../components/Spinner'
 import AutoComplete from '../components/AutoComplete'
+import {ACFCollection} from  '../resources/descriptions'
+
 const isAndroid = Platform.OS === 'android'
 
 const DCPrules = {
@@ -575,17 +577,32 @@ export default class Form extends Component {
   }
 
   /**
-   * Render mailable submission id.
+   * Render mailable submission id with special instruction modal.
    *
    * @returns {XML}
    */
   renderBiominder = () => {
+    let header      = "Mailing Samples to the American Chestnut Foundation"
+    let specialText = ACFCollection
     return (
-      <View style={[styles.formGroup, {justifyContent: 'center'}]}>
-        <Text style={[{color: '#444', flex: 1, fontWeight: 'bold', justifyContent: 'center'}]}>
-          ID number for submission: {this.primaryKey}
-        </Text>
-      </View>
+      <PickerModal
+        style={styles.picker}
+        header={header}
+        specialText={specialText}
+        onSelect={(option) => {
+          this.setState({metadata: {...this.state.metadata, [key]: option}})
+        }}
+      >
+        <View style={[styles.formGroup, {justifyContent: 'center'}]}>
+          <Text style={[{color: '#444', flex: 1, fontWeight: 'bold'}]}>
+            Submission ID:
+          </Text>
+          <Text style={[{color: '#444', flex: 1, fontWeight: 'bold'}]}>
+            {this.primaryKey}
+          </Text>
+          <Icon name="help-circle" style={[styles.icon, {color: Colors.info}]}/>
+        </View>
+      </PickerModal>
     )
   }
 

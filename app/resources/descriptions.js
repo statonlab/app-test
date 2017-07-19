@@ -13,7 +13,34 @@ const styles = StyleSheet.create({
   }
 })
 
-const Plants = {
+export const ACFCollection = [<Text style={styles.paragraph}>In order for the American Chestnut Foundation to confirm your sample, you <Text style={{fontWeight: 'bold'}}>must mail in a plant sample</Text>. When submitting an observation, please collect a leaf and twig sample. The sample should be collected and preserved as described below.</Text>,
+
+  <Text style={styles.paragraph}>{'\u2022'} A 6-12" twig and attached, mature, green leaves growing in the full sun. </Text>,
+  <Text style={styles.paragraph}>{'\u2022'} Press the sample flat between sheets of cardboard and place in an envelope.</Text>,
+  <Text style={styles.paragraph}>{'\u2022'} Use a single paper towel between the sample and cardboard to cushion and absorb moisture.
+  </Text>,
+  <Text style={styles.paragraph}>{'\u2022'} Do not wrap in plastic, as samples will mold in the mail.
+  </Text>,
+  <Text style={styles.paragraph}>{'\u2022'} Do not ship overnight. It's not necessary and we won't ID your sample right away.
+  </Text>,
+  <Text style={styles.paragraph}>
+    <Text style={{fontWeight: 'bold'}}>Submission address:</Text> please choose the office below closest to the tree's location.
+  </Text>,
+  <Text style={styles.paragraph}>
+    {'\u2022'} Tom Saielli, The American Chestnut Foundation, 50 N. Merrimon Ave, Suite 115, Asheville, NC 28804
+  </Text>,
+  <Text style={styles.paragraph}>
+    {'\u2022'} Matt Brinckman, VA DOF, 900 Natural Resources Drive, Charlottesville, VA 22903
+  </Text>,
+  <Text style={styles.paragraph}>
+    {'\u2022'} Sara Fitzsimmons, Pennsylvania State University, 206 Forest Resources Lab, University Park, PA 16802
+  </Text>,
+  <Text style={styles.paragraph}>
+    {'\u2022'} Kendra Collins, USFS Northern Research Station, 705 Spear St, South Burlington, VT 05403
+  </Text>
+]
+
+export const Plants = {
   'American Chestnut': {
     image           : require('../img/am_chestnut4.jpg'),
     latinName       : 'Castanea dentata',
@@ -60,34 +87,7 @@ const Plants = {
       },
       {
         title : 'Collection Instructions',
-        body  : [
-          <Text style={styles.paragraph}>In order for the American Chestnut Foundation to confirm your sample, you must mail in a plant sample. When submitting an observation, please collect a leaf and twig sample. The sample should be collected and preserved as described below.</Text>,
-
-          <Text style={styles.paragraph}> {'\u2022'} A 6-12" twig and attached, mature, green leaves growing in the full sun. </Text>,
-          <Text style={styles.paragraph}>  {'\u2022'} Press the sample flat between sheets of cardboard and place in an envelope.</Text>,
-          <Text style={styles.paragraph}>
-            {'\u2022'} Use a single paper towel between the sample and cardboard to cushion and absorb moisture.
-          </Text>,
-          <Text style={styles.paragraph}>
-            {'\u2022'} Do not wrap in plastic, as samples will mold in the mail.
-          </Text>,
-          <Text style={styles.paragraph}>
-            {'\u2022'} Do not ship overnight. It's not necessary and we won't ID your sample right away.
-          </Text>,
-          <Text style={styles.paragraph}>
-            Submission address - please choose the office closest to the tree located.
-            Tom Saielli, The American Chestnut Foundation, 50 N. Merrimon Ave, Suite 115, Asheville, NC 28804
-          </Text>,
-          <Text style={styles.paragraph}>
-            Matt Brinckman, VA DOF, 900 Natural Resources Drive, Charlottesville, VA 22903
-          </Text>,
-          <Text style={styles.paragraph}>
-            Sara Fitzsimmons, Pennsylvania State University, 206 Forest Resources Lab, University Park, PA 16802
-          </Text>,
-          <Text style={styles.paragraph}>
-            Kendra Collins, USFS Northern Research Station, 705 Spear St, South Burlington, VT 05403
-          </Text>
-        ],
+        body  : ACFCollection,
         images: []
       },
     ],
@@ -351,4 +351,3 @@ const Plants = {
   }
 }
 
-export default Plants

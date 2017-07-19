@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react'
-import {View, Text, TextInput, StyleSheet, Modal, TouchableOpacity} from 'react-native'
+import {View, Text, ScrollView, TextInput, StyleSheet, Modal, TouchableOpacity} from 'react-native'
 import Colors from '../helpers/Colors'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import realm from '../db/Schema'
@@ -24,6 +24,9 @@ export default class PickerModal extends Component {
     this.setState({selected: this.props.initialSelect})
     if (this.props.multiCheck || this.props.freeText) {
       this.setState({cancelText: 'CONFIRM'})
+    }
+    if (this.props.specialText) {
+      this.setState({cancelText: 'OK'})
     }
     if (this.props.freeText) {
       this.fetchSelections()
@@ -113,6 +116,25 @@ export default class PickerModal extends Component {
     )
   }
 
+  /**
+   * If JSX is passed to the modal via specialText as an array, loop through and render it.
+   */
+  renderJSXText() {
+    if (this.props.specialText) {
+      return (
+        <ScrollView>
+          {this.props.specialText.map((text, index) => {
+            return (
+              <View key={index}>
+                {text}
+              </View>
+            )
+          })}
+        </ScrollView>
+      )
+    }
+  }
+
   renderOptions(choice, index) {
     const uncheckedBox = (<Icon name="checkbox-blank-outline" style={styles.icon}/>)
     const checkedBox   = (<Icon name="checkbox-marked" style={[styles.icon, {color: Colors.primary}]}/>)
@@ -196,6 +218,8 @@ export default class PickerModal extends Component {
               <View style={[styles.modalChoices]}>
                 {this.state.choices.map(this.renderOptions.bind(this))}
               </View>
+              {this.props.specialText ? this.renderJSXText() : null}
+              {this.props.freeText ? this.renderTextBox() : null}
               <TouchableOpacity style={styles.button} onPress={this.close}>
                 <Text style={styles.buttonText}>
                   {this.state.cancelText}
@@ -223,7 +247,8 @@ PickerModal.propTypes = {
   multiCheck   : PropTypes.bool,
   freeText     : PropTypes.bool,
   images       : PropTypes.array,
-  captions     : PropTypes.array
+  captions     : PropTypes.array,
+  specialText  : PropTypes.array
 }
 
 PickerModal.defaultProps = {
