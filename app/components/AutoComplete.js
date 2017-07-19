@@ -17,6 +17,15 @@ export default class AutoComplete extends Component {
   }
 
   componentWillMount() {
+
+    let matches = []
+    Object.keys(this.queryList).map((species) => {
+      let common     = this.queryList[species]
+      let entry      = {}
+      entry[species] = common
+      matches.push(entry)
+    })
+    this.setState({resultList: matches})
   }
 
   /**
@@ -106,29 +115,24 @@ export default class AutoComplete extends Component {
               activeOpacity={.9}
             />
             <View style={styles.container}>
-              <View style={{position: 'relative'}}>
-                {this.state.resultList.length !== 0 ?
-                  <ScrollView style={styles.searchBox}>
-                    {this.renderResults()}
-                  </ScrollView> : null}
-                <View style={styles.rowView}>
-                  <TextInput
-                    style={styles.textField}
-                    placeholder={'Type to search'}
-                    placeholderTextColor="#aaa"
-                    onChangeText={(text) =>
-                      this.updateText(text)
-                    }
-                    value={this.state.selected ? this.state.selected : null}
-                    underlineColorAndroid="transparent"
-                  />
-                </View>
-                <TouchableOpacity style={styles.button} onPress={this.close}>
-                  <Text style={styles.buttonText}>
-                    {this.state.cancelText}
-                  </Text>
-                </TouchableOpacity>
-              </View>
+                <TextInput
+                  style={styles.textField}
+                  placeholder={'Type to search or create your own label'}
+                  placeholderTextColor="#aaa"
+                  onChangeText={(text) =>
+                    this.updateText(text)
+                  }
+                  value={this.state.selected ? this.state.selected : null}
+                  underlineColorAndroid="transparent"
+                />
+              <ScrollView style={styles.searchBox}>
+                {this.renderResults()}
+              </ScrollView>
+              <TouchableOpacity style={styles.button} onPress={this.close}>
+                <Text style={styles.buttonText}>
+                  Submit
+                </Text>
+              </TouchableOpacity>
             </View>
           </KeyboardAwareScrollView>
         </Modal>
@@ -169,18 +173,19 @@ const styles = StyleSheet.create({
     paddingVertical  : 10,
     paddingHorizontal: 15,
     maxHeight        : 500,
-    minWidth         : 300,
+    minWidth         : 350,
     marginHorizontal : 20
   },
   textField    : {
-    height           : 40,
-    width            : 300,
-    borderWidth      : 1,
-    borderColor      : '#dedede',
-    borderRadius     : 2,
-    paddingHorizontal: 10,
-    fontSize         : 14,
-    backgroundColor  : '#f9f9f9'
+    height         : 40,
+    minWidth       : 350,
+    borderWidth    : 1,
+    borderColor    : Colors.black,
+    borderRadius   : 2,
+    paddingLeft    : 10,
+    fontSize       : 14,
+    backgroundColor: '#f9f9f9',
+    marginBottom : 3
   },
   rowView      : {
     flex          : 0,
@@ -189,15 +194,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderColor   : '#dedede',
     borderWidth   : 1,
-    borderRadius  : 2
+    borderRadius  : 2,
+    paddingVertical : 5,
+    marginVertical : 3,
   },
   searchBox    : {
     flex           : 1,
     padding        : 1,
-    width          : 300,
     height         : 200,
-    position       : 'absolute',
-    bottom         : 0,
     backgroundColor: '#f9f9f9',
     flexDirection  : 'column',
   },
@@ -208,5 +212,26 @@ const styles = StyleSheet.create({
   species      : {
     fontStyle  : 'italic',
     marginRight: 0
-  }
+  },
+  button       : {
+    flex        : 0,
+    borderRadius: 2,
+    padding     : 10
+  },
+
+  buttonText: {
+    textAlign : 'right',
+    color     : Colors.primary,
+    fontWeight: '500'
+  },
+
+
 })
+
+//The styles currently being passed in:
+// picker: {
+//   flex         : 0,
+//     flexDirection: 'row',
+//     alignItems   : 'center',
+//     width        : undefined
+// },

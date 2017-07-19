@@ -440,8 +440,6 @@ export default class Form extends Component {
         <View style={styles.formGroup} key={key}>
           <AutoComplete
             style={styles.picker}
-            header={DCP[key].description}
-            choices={DCP[key].selectChoices}
             onChange={(option) => {
               this.setState({metadata: {...this.state.metadata, [key]: option}})
             }}
