@@ -4,7 +4,7 @@ import Header from '../components/Header'
 import {Tabs, Tab} from '../components/Tabs'
 import TreeDescription from '../components/TreeDescription'
 import Form from '../components/Form'
-import Plants from '../resources/descriptions'
+import {Plants} from '../resources/descriptions'
 
 export default class TreeScene extends Component {
   constructor(props) {

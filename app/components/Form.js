@@ -25,6 +25,7 @@ import SliderPick from '../components/SliderPick'
 import Location from '../components/Location'
 import File from '../helpers/File'
 import Spinner from '../components/Spinner'
+import {ACFCollection} from  '../resources/descriptions'
 
 const isAndroid = Platform.OS === 'android'
 
@@ -549,17 +550,32 @@ export default class Form extends Component {
   }
 
   /**
-   * Render mailable submission id.
+   * Render mailable submission id with special instruction modal.
    *
    * @returns {XML}
    */
   renderBiominder = () => {
+    let header      = "Submitting Chestnut Samples"
+    let specialText = ACFCollection
     return (
-      <View style={[styles.formGroup, {justifyContent: 'center'}]}>
-        <Text style={[{color: '#444', flex: 1, fontWeight: 'bold', justifyContent: 'center'}]}>
-          ID number for submission: {this.primaryKey}
-        </Text>
-      </View>
+      <PickerModal
+        style={styles.picker}
+        header={header}
+        specialText={specialText}
+        onSelect={(option) => {
+          this.setState({metadata: {...this.state.metadata, [key]: option}})
+        }}
+      >
+        <View style={[styles.formGroup, {justifyContent: 'center'}]}>
+          <Text style={[{color: '#444', flex: 1, fontWeight: 'bold'}]}>
+            Submission ID:
+          </Text>
+          <Text style={[{color: '#444', flex: 1, fontWeight: 'bold'}]}>
+            {this.primaryKey}
+          </Text>
+          <Icon name="help-circle" style={[styles.icon, {color: Colors.info}]}/>
+        </View>
+      </PickerModal>
     )
   }
 
@@ -656,7 +672,7 @@ export default class Form extends Component {
               <Text style={[styles.label, {width: 60}]}>Location</Text>
               {this.props.edit ?
                 <Location edit={this.props.edit} coordinates={this.props.entryInfo.location}
-                          onChange={(location) => this.setState({location})}/> :
+                  onChange={(location) => this.setState({location})}/> :
                 <Location onChange={(location) => this.setState({location})}/>
               }
 
@@ -666,14 +682,14 @@ export default class Form extends Component {
 
         <View style={styles.footer}>
           <TouchableOpacity style={[styles.button, styles.flex1]}
-                            onPress={this.props.edit ? this.submitEdit : this.submit}
-                            rippleColor="rgba(0,0,0,0.5)">
+            onPress={this.props.edit ? this.submitEdit : this.submit}
+            rippleColor="rgba(0,0,0,0.5)">
             <Text style={styles.buttonText}>
               {this.props.edit ? 'Confirm Edit' : 'Submit Entry'}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.button, styles.buttonAlt, styles.flex1]}
-                            onPress={this.cancel}>
+            onPress={this.cancel}>
             <Text style={styles.buttonAltText}>
               Cancel
             </Text>
