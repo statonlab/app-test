@@ -14,7 +14,7 @@ const DCP = {
     ],
     description  : 'Are seeds present?',
     placeHolder  : 'Are seeds present?',
-    camera : ['Yes']
+    camera       : ['Yes']
   },
   flowersBinary      : {
     label        : 'Flowers',
@@ -51,7 +51,7 @@ const DCP = {
   woollyAdesCoverage : {
     label        : 'Woolly adelgids',
     selectChoices: [
-      '0%', '1-24%', '25-49%', '50-74%', '75-100%',  'I\'m not sure'
+      '0%', '1-24%', '25-49%', '50-74%', '75-100%', 'I\'m not sure'
     ],
     description  : 'What percentage of the branches you see have hemlock Woolly adelgids?',
     placeHolder  : '% Adelgid coverage',
@@ -116,34 +116,31 @@ const DCP = {
     multiCheck   : true,
   },
   diameterNumeric        : {
-    label      : 'Tree diameter',
-    slider     : true,
-    minValue   : 0,
-    maxValue   : 40,
-    units      : "Inches",
-    images     : [require("../img/DCP/diameter.jpg")]
+    label   : 'Tree diameter',
+    slider  : true,
+    minValue: 0,
+    maxValue: 40,
+    units   : "Inches",
+    images  : [require("../img/DCP/diameter.jpg")]
 
     //  startValue : 25,
   },
-  // crownHealth            : {
-  //   label      : 'Crown health',
-  //   description: 'How would you rate the health of this tree\'s crown?',
-  //   slider     : true,
-  //   minValue   : 1,
-  //   maxValue   : 100,
-  //   units      : "%",
-  //   //  startValue : 100,
-  // },
-  crownHealth    : {
-    label        : 'Crown health',
-    description  : "What is the health of this tree's crown?",
+  crownHealth            : {
+    label        : 'Canopy health',
+    description  : "What is the health of this tree's canopy?",
     selectChoices: ['1 - Healthy',
       '2 - Thinning',
       '3 - Some dead branches (less than 50%)',
       '4 - Many dead branches (more than 50%)',
       '5 - Completely dead',
       'I\'m not sure'],
-    placeHolder  : "Please select"
+    placeHolder  : "Please select",
+    images       : [require('../img/DCP/canopy/canopy1.jpg'),
+      require('../img/DCP/canopy/canopy2.jpg'),
+      require('../img/DCP/canopy/canopy3.jpg'),
+      require('../img/DCP/canopy/canopy4.jpg'),
+      require('../img/DCP/canopy/canopy5.jpg'),
+    ]
   },
   crownClassification    : {
     label        : 'Crown classification',
