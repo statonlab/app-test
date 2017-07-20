@@ -44,6 +44,8 @@ export default class AutoComplete extends Component {
    * @returns {XML}
    */
   open = () => {
+    this.setState({searchText: ''})
+    this.setState({selected: null})
     this.setState({modalVisible: true})
   }
 
@@ -53,6 +55,7 @@ export default class AutoComplete extends Component {
 
 
   renderResults = () => {
+    console.log("current resultList", this.state.resultList)
     if (this.state.resultList.length > 0) {
       let results = this.state.resultList
       return results.map(arrayItem => {
@@ -76,22 +79,22 @@ export default class AutoComplete extends Component {
       )
     } else {
       return (
-        <View
-          key={species}
-          onPress={() => this.updateText(common)}>
+        <View>
           <View style={styles.rowView}>
             <Text style={styles.searchText}>
-              No results found
+              No results found.  Submit to use a custom name.
             </Text>
           </View>
-        </View>
+          <TouchableOpacity/>
+          </View>
       )
     }
   }
 
   updateText = (text) => {
+    console.log("trying to close with ", text)
     this.props.onChange(text)
-    this.setState({selected: common})
+    this.setState({selected: text})
     this.close()
   }
 
@@ -150,7 +153,8 @@ export default class AutoComplete extends Component {
                 value={this.state.selected}
                 underlineColorAndroid="transparent"
                 autoFocus={true}
-              />
+                onSubmitEditing={(searchText) => {this.updateText(searchText)}}
+            />
 
               <TouchableOpacity style={styles.button} onPress={this.close}>
                 <Text style={styles.buttonText}>
