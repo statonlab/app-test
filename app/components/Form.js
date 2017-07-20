@@ -25,6 +25,7 @@ import SliderPick from '../components/SliderPick'
 import Location from '../components/Location'
 import File from '../helpers/File'
 import Spinner from '../components/Spinner'
+import AutoComplete from '../components/AutoComplete'
 import {ACFCollection} from  '../resources/descriptions'
 
 const isAndroid = Platform.OS === 'android'
@@ -436,6 +437,33 @@ export default class Form extends Component {
       return
     }
 
+    if (DCP[key].modalFreeText) {
+      return (
+        <View style={styles.formGroup} key={key}>
+          <AutoComplete
+            style={styles.picker}
+            onChange={(option) => {
+              this.setState({metadata: {...this.state.metadata, [key]: option}})
+            }}
+          >
+            <View style={styles.picker}>
+              <Text
+                style={this.state.warnings[key] ? [styles.label, styles.labelWarning] : styles.label}>{DCP[key].label}</Text>
+              <TextInput
+                style={styles.textField}
+                editable={false}
+                placeholder={DCP[key].placeHolder}
+                placeholderTextColor="#aaa"
+                value={this.getMultiCheckValue(this.state.metadata[key], DCP[key].multiCheck)}
+                underlineColorAndroid="transparent"
+              />
+              {dropdownIcon}
+            </View>
+          </AutoComplete>
+        </View>
+      )
+    }
+
     if (DCP[key].slider) {
       return (
         <View style={styles.formGroup} key={key}>
@@ -465,7 +493,6 @@ export default class Form extends Component {
             images={DCP[key].images}
             captions={DCP[key].captions}
             multiCheck={DCP[key].multiCheck}
-            freeText={DCP[key].modalFreeText}
             header={DCP[key].description}
             choices={DCP[key].selectChoices}
             onSelect={(option) => {

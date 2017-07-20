@@ -101,19 +101,16 @@ export default class PickerModal extends Component {
     this.setState({modalVisible: false})
   }
 
+  /**
+   * Returns the text box for freeform text.  This is for the Other label.
+   * DEPRECATED
+   * Use AutoComplete modal instead
+   * @returns {XML}
+   */
   renderTextBox = () => {
     return (
       <View style={styles.choiceContainer}>
         <View style={[styles.choiceItem]}>
-          <TextInput
-            style={styles.textField}
-            placeholder={'Add new label'}
-            placeholderTextColor="#aaa"
-            onChangeText={(text) =>
-              this.onChange(text)
-            }
-            underlineColorAndroid="transparent"
-          />
         </View>
       </View>
     )
@@ -223,7 +220,6 @@ export default class PickerModal extends Component {
               </View>
               {this.props.specialText ? this.renderJSXText() : null}
               {this.props.freeText ? this.renderTextBox() : null}
-
               <TouchableOpacity style={styles.button} onPress={this.close}>
                 <Text style={styles.buttonText}>
                   {this.state.cancelText}
