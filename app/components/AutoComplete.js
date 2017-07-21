@@ -55,7 +55,6 @@ export default class AutoComplete extends Component {
 
 
   renderResults = () => {
-    console.log("current resultList", this.state.resultList)
     if (this.state.resultList.length > 0) {
       let results = this.state.resultList
       return results.map(arrayItem => {
@@ -64,7 +63,7 @@ export default class AutoComplete extends Component {
           return (
             <TouchableOpacity
               key={species}
-              onPress={() => this.updateText(common)}>
+              onPress={() => this.submit(common)}>
               <View style={styles.rowView}>
                 <Text style={styles.searchText}>
                   {common}
@@ -79,26 +78,20 @@ export default class AutoComplete extends Component {
       )
     } else {
       return (
-        <View>
-          <View style={styles.rowView}>
-            <Text style={styles.searchText}>
-              No results found.
-            </Text>
-          </View>
-          <TouchableOpacity
-            onPress={() => this.updateText(this.state.searchText)}>
-            <View style={[styles.rowView, {marginTop : 5}, {marginHorizontal : 20} ]}>
-              <Text style={styles.submitText}>
-               Submit custom name
-              </Text>
-            </View>
-          </TouchableOpacity>
+        <View style={styles.rowView}>
+          <Text style={styles.searchText}>
+            No results found.
+          </Text>
         </View>
       )
     }
   }
 
-  updateText = (text) => {
+  /**
+   * Submit a text and close the modal
+   * @param text
+   */
+  submit = (text) => {
     this.props.onChange(text)
     this.setState({selected: text})
     this.close()
@@ -140,7 +133,7 @@ export default class AutoComplete extends Component {
               height        : 40, backgroundColor: Colors.primary, flex: 0, alignItems: 'center',
               justifyContent: 'center'
             }, new Elevation(2)]}>
-              <Text style={{color: '#fff', fontWeight: '500'}}>Select a Tree Type</Text>
+              <Text style={{color: '#fff', fontWeight: '500'}}>Select a Tree</Text>
             </View>
             <ScrollView style={{flex: 1}}
               keyboardShouldPersistTaps="always"
@@ -159,10 +152,15 @@ export default class AutoComplete extends Component {
                 value={this.state.selected}
                 underlineColorAndroid="transparent"
                 autoFocus={true}
+                onSubmitEditing={({nativeEvent}) => {
+                  this.submit(nativeEvent.text)
+                }
+                }
+
               />
-              <TouchableOpacity style={styles.button} onPress={this.close}>
+              <TouchableOpacity style={styles.button} onPress={() => this.submit(this.state.searchText)}>
                 <Text style={styles.buttonText}>
-                  Cancel
+                  Add
                 </Text>
               </TouchableOpacity>
             </View>
@@ -276,9 +274,9 @@ const styles = StyleSheet.create({
     color     : Colors.primary,
     fontWeight: '500'
   },
-  submitText : {
+  submitText: {
     textAlign : 'center',
-    color : Colors.primary,
+    color     : Colors.primary,
     fontWeight: '500'
   }
 
