@@ -8,11 +8,12 @@ import {
   Modal,
   KeyboardAvoidingView,
   ScrollView,
-  StatusBar
+  StatusBar,
 } from 'react-native'
 import Latin from '../resources/treeNames.js'
 import Colors from '../helpers/Colors'
 import Elevation from '../helpers/Elevation'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 export default class AutoComplete extends Component {
   constructor(props) {
@@ -90,6 +91,7 @@ export default class AutoComplete extends Component {
   /**
    * Submit a text and close the modal
    * @param text
+   * TODO: Validate zero length novel submissions (lets user submit blank other observations...)
    */
   submit = (text) => {
     this.props.onChange(text)
@@ -130,10 +132,12 @@ export default class AutoComplete extends Component {
           <KeyboardAvoidingView style={{flex: 1, backgroundColor: '#f7f7f7'}} behavior="padding"
             keyboardVerticalOffset={0}>
             <View style={[{
-              height        : 40, backgroundColor: Colors.primary, flex: 0, alignItems: 'center',
-              justifyContent: 'center'
-            }, new Elevation(2)]}>
-              <Text style={{color: '#fff', fontWeight: '500'}}>Select a Tree</Text>
+              height       : 40, backgroundColor: Colors.primary, flex: 0, alignItems: 'center', justifyContent: 'flex-start',
+              flexDirection: 'row', paddingLeft: 10}, new Elevation(2)]}>
+              <TouchableOpacity style={{paddingRight: 30}} onPress={()=>{this.close()}}>
+              <Icon name="chevron-left" style={{fontSize: 25}} color="#fff"/>
+              </TouchableOpacity>
+              <Text style={{color: '#fff', fontWeight: '500', alignSelf: 'center'}}>Select a tree </Text>
             </View>
             <ScrollView style={{flex: 1}}
               keyboardShouldPersistTaps="always"
