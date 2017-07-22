@@ -132,12 +132,13 @@ export default class AutoComplete extends Component {
           <KeyboardAvoidingView style={{flex: 1, backgroundColor: '#f7f7f7'}} behavior="padding"
             keyboardVerticalOffset={0}>
             <View style={[{
-              height       : 40, backgroundColor: Colors.primary, flex: 0, alignItems: 'center', justifyContent: 'flex-start',
+              height       : 40, backgroundColor: Colors.primary, flex: 0, alignItems: 'center', justifyContent: 'space-between',
               flexDirection: 'row', paddingLeft: 10}, new Elevation(2)]}>
-              <TouchableOpacity style={{paddingRight: 30}} onPress={()=>{this.close()}}>
+              <TouchableOpacity onPress={()=>{this.close()}}>
               <Icon name="chevron-left" style={{fontSize: 25}} color="#fff"/>
               </TouchableOpacity>
               <Text style={{color: '#fff', fontWeight: '500', alignSelf: 'center'}}>Select a tree </Text>
+              <Text style={{paddingRight: 10}}/>
             </View>
             <ScrollView style={{flex: 1}}
               keyboardShouldPersistTaps="always"
