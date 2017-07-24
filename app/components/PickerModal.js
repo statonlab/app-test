@@ -16,13 +16,15 @@ export default class PickerModal extends Component {
       cancelText   : 'CANCEL',
       selected     : 'not set',
       selectedMulti: [],
-      choices      : this.props.choices
+      choices      : this.props.choices,
+      numberVal : {value: null},//expect {value: int, confidence: string}
+
     }
   }
 
   componentDidMount() {
     this.setState({selected: this.props.initialSelect})
-    if (this.props.multiCheck || this.props.freeText) {
+    if (this.props.multiCheck || this.props.freeText || this.props.numeric) {
       this.setState({cancelText: 'CONFIRM'})
     }
     if (this.props.specialText) {
@@ -30,6 +32,9 @@ export default class PickerModal extends Component {
     }
     if (this.props.freeText) {
       this.fetchSelections()
+    }
+    if (this.props.default){
+      this.onChange(this.props.default)
     }
   }
 
@@ -67,6 +72,15 @@ export default class PickerModal extends Component {
       return
     }
 
+    if (this.props.numeric){
+      //For numeric,d on't close on checking box, need to type in!
+      let current = this.state.numberVal
+      current.confidence = item
+      this.setState({numberVal: current})
+      this.setState({selected: item})
+      return
+    }
+
     // For single select
     this.props.onSelect(item)
     this.setState({selected: item})
@@ -75,6 +89,12 @@ export default class PickerModal extends Component {
 
   open = () => {
     this.setState({modalVisible: true})
+  }
+
+  handleNumber = (number) => {
+    let current = this.state.numberVal
+current.value = number
+    this.setState({numberVal: current})
   }
 
   fetchSelections = () => {
@@ -97,7 +117,9 @@ export default class PickerModal extends Component {
     if (this.props.multiCheck) {
       this.props.onSelect(JSON.stringify(this.state.selectedMulti))
     }
-
+    if (this.props.numeric){
+      this.props.onSelect((this.state.numberVal))
+    }
     this.setState({modalVisible: false})
   }
 
@@ -107,10 +129,15 @@ export default class PickerModal extends Component {
    * Use AutoComplete modal instead
    * @returns {XML}
    */
-  renderTextBox = () => {
+  renderNumeric = () => {
     return (
       <View style={styles.choiceContainer}>
         <View style={[styles.choiceItem]}>
+            <TextInput style={styles.textField} keyboardType={'numeric'}
+              value={this.state.numberVal.value}
+              placeholder={"Tap to enter diameter"}
+              onChangeText={(number) => this.handleNumber(number)}/>
+          <Text style={{paddingLeft: 10}}>{this.props.units}</Text>
         </View>
       </View>
     )
@@ -148,7 +175,7 @@ export default class PickerModal extends Component {
             this.onChange(choice)
           }}>
           <View style={styles.choiceItem}>
-            {this.state.selectedMulti.indexOf(choice) >= 0 ? checkedBox : uncheckedBox  }
+            {this.state.selectedMulti.indexOf(choice) >= 0 ? checkedBox : uncheckedBox}
             <Text style={styles.choiceText}>
               {choice}
             </Text>
@@ -165,7 +192,7 @@ export default class PickerModal extends Component {
           this.onChange(choice)
         }}>
         <View style={styles.choiceItem}>
-          {this.state.selected === choice ? checkedBox : uncheckedBox  }
+          {this.state.selected === choice ? checkedBox : uncheckedBox}
           <Text style={styles.choiceText}>
             {choice}
           </Text>
@@ -219,7 +246,7 @@ export default class PickerModal extends Component {
                 {this.state.choices.map(this.renderOptions.bind(this))}
               </View>
               {this.props.specialText ? this.renderJSXText() : null}
-              {this.props.freeText ? this.renderTextBox() : null}
+              {this.props.numeric ? this.renderNumeric() : null}
               <TouchableOpacity style={styles.button} onPress={this.close}>
                 <Text style={styles.buttonText}>
                   {this.state.cancelText}
@@ -245,10 +272,13 @@ PickerModal.propTypes = {
   style        : View.propTypes.style,
   initialSelect: PropTypes.string,
   multiCheck   : PropTypes.bool,
+  numeric      : PropTypes.bool,
+  units : PropTypes.string, //units to display for numeric input
   freeText     : PropTypes.bool,
   images       : PropTypes.array,
   captions     : PropTypes.array,
-  specialText  : PropTypes.array
+  specialText  : PropTypes.array,
+  default : PropTypes.string
 }
 
 PickerModal.defaultProps = {
@@ -259,7 +289,8 @@ PickerModal.defaultProps = {
   initialSelect: '',
   multiCheck   : false,
   freeText     : false,
-  images       : []
+  images       : [],
+  numeric      : false
 }
 
 const styles = StyleSheet.create({
