@@ -26,7 +26,7 @@ import Location from '../components/Location'
 import File from '../helpers/File'
 import Spinner from '../components/Spinner'
 import AutoComplete from '../components/AutoComplete'
-import {ACFCollection} from  '../resources/descriptions'
+import {ACFCollection} from '../resources/descriptions'
 
 const isAndroid = Platform.OS === 'android'
 
@@ -68,6 +68,9 @@ const DCPrules = {
 
 const Coordinate = t.refinement(t.Number, (n) => n !== 0, 'Coordinate')
 const LocationT  = t.dict(t.String, Coordinate)
+//const cameraT = t.refinement(t.dict, (d) => Object.keys(d).length !== 0, 'camera')
+//const imageT = t.refinement(t.dict(t.String, t.dict(t.String, t.list)), (o) => Object.keys(o).length > 0, 'images')//TO DO: this doesn't validate length properly.
+const imageT = t.refinement(t.String, (s) => s.length > 10, 'images') // why 10?  because i stringify images and the result of an empty image object is {}, so must be longer than this.  Why not 2?  Because an empty object gets replaced with "{}" which is then longer than 2 somewhere in the validation process
 
 
 export default class Form extends Component {
@@ -95,7 +98,7 @@ export default class Form extends Component {
     this.formProps  = this.props.formProps // read in form items to display
 
     let formRules = {
-      images  : t.maybe(t.dict(t.String, t.list(t.String))),
+      images  : imageT,
       title   : t.String,
       location: LocationT
     }
@@ -131,8 +134,6 @@ export default class Form extends Component {
         this.primaryKey = this.primaryKey.sorted('id', true)[0].id + 1
       }
     }
-
-
     // Add image resize event listener
     this.events.push(DeviceEventEmitter.addListener('imagesResized', this._handleResizedImages))
 
@@ -174,11 +175,12 @@ export default class Form extends Component {
 
   /**
    * Method for Cancel button.  Change scene, alert user about losing data.
+   **
    *
    * @returns {boolean}
    */
   cancel = () => {
-    if (this.state.images['images'] || Object.keys(this.state.metadata)[0]) {
+    if (this.state.images['images'] || Object.keys(this.state.metadata)[0]) { //TO DO: we complain if there are keys set without values IE if the user clicked something but didnt select.  Would be better to test if the keys have values or to have a  value in the state that checks if its OK to cancel.
       Alert.alert('Abandon Entry',
         'Data will be permanently lost if you leave. Are you sure?', [
           {
@@ -214,14 +216,12 @@ export default class Form extends Component {
       if (typeof o2 === 'object' && !Array.isArray(o2)) {
         o2 = this.flattenObject(o2)
       }
-
       if (Array.isArray(o2)) {
         o2.map(item => {
           results.push(item)
         })
       }
     })
-
     return results
   }
 
@@ -271,12 +271,10 @@ export default class Form extends Component {
       this.notifyIncomplete(this.validateState())
       return
     }
-
     if (!this.validateMeta().isValid()) {
       this.notifyIncomplete(this.validateMeta())
       return
     }
-
     this.generateImages()
   }
 
@@ -346,7 +344,12 @@ export default class Form extends Component {
    * @returns {*}
    */
   validateState = () => {
-    return t.validate(this.state, this.formT)
+
+    let submit = this.state
+    submit.images = JSON.stringify(this.state.images)
+    console.log("this time the images are ", this.state.images)
+    console.log("output of validate state: ", t.validate(submit, this.formT))
+    return t.validate(submit, this.formT)
   }
 
   /**
@@ -380,6 +383,7 @@ export default class Form extends Component {
       errorList.push('Cannot get location.  Please wait for GPS signal and try again.')
     }
     this.setState({warnings})
+    console.log("warnings: ", warnings)
 
     if (errorList) {
       alert(errorList.join('\n'))
@@ -472,7 +476,7 @@ export default class Form extends Component {
           <SliderPick
             key={key}
             images={DCP[key].images}
-            start={ this.state.metadata[key] ? this.state.metadata[key] : null}
+            start={this.state.metadata[key] ? this.state.metadata[key] : null}
             max={DCP[key].maxValue}
             min={DCP[key].minValue}
             legendText={DCP[key].units}
@@ -625,7 +629,7 @@ export default class Form extends Component {
           style={[styles.buttonLink, {height: this.state.images[id] && this.state.images[id].length > 0 ? 60 : 40}]}
           onPress={() => this._goToCamera(id)}>
           <Text
-            style={this.state.warnings.photos ? [styles.label, styles.labelWarning] : styles.label}>{label}</Text>
+            style={this.state.warnings[id] ? [styles.label, styles.labelWarning] : styles.label}>{label}</Text>
           {!this.state.images[id] || this.state.images[id].length === 0 ?
             <View style={{flex: 1, alignItems: 'center', flexDirection: 'row'}}>
               <Text style={[styles.buttonLinkText, {color: '#aaa'}]}>{description}</Text>

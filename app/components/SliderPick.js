@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import {
   StyleSheet,
   Text,
+  TextInput,
   View,
   TouchableOpacity,
 } from 'react-native'
@@ -9,6 +10,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import {MKSlider} from 'react-native-material-kit'
 import Colors from '../helpers/Colors'
 import ImageModal from "./ImageModal";
+import NumericModal from '../components/NumericModal'
 
 export default class SliderPick extends Component {
   constructor(props) {
@@ -40,12 +42,15 @@ export default class SliderPick extends Component {
   displayLegend = () => {
     if (this.state.value) {
       return (
+        <NumericModal setValue={this.state.value} onSelect={(value) => this.onChange(value)}>
         <Text style={styles.label}>{this.state.value} {this.props.legendText}</Text>
+        </NumericModal>
       )
     }
     return (
+      <NumericModal onSelect={(value) => this.onChange(value)}>
       <Text style={styles.label}>Not set</Text>
-
+      </NumericModal>
     )
   }
   /**
