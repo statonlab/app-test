@@ -17,7 +17,7 @@ export default class PickerModal extends Component {
       selected     : 'not set',
       selectedMulti: [],
       choices      : this.props.choices,
-      numberVal : {},//expect {value: int, confidence: string}
+      numberVal : {value: null},//expect {value: int, confidence: string}
 
     }
   }
@@ -32,6 +32,9 @@ export default class PickerModal extends Component {
     }
     if (this.props.freeText) {
       this.fetchSelections()
+    }
+    if (this.props.default){
+      this.onChange(this.props.default)
     }
   }
 
@@ -275,6 +278,7 @@ PickerModal.propTypes = {
   images       : PropTypes.array,
   captions     : PropTypes.array,
   specialText  : PropTypes.array,
+  default : PropTypes.string
 }
 
 PickerModal.defaultProps = {

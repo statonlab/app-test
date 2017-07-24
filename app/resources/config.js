@@ -121,11 +121,12 @@ const DCP = {
    // slider  : true,
     numeric : true,
     description  : "Please enter the diameter, in inches, of this tree below.  Is this a rough estimate or a precise measurement?",
-    minValue: 0,
-    maxValue: 40,
+    // minValue: 0,
+    // maxValue: 40,
     units   : "Inches",
     images  : [require("../img/DCP/diameter.jpg")],
     selectChoices : ['Measured', 'Estimated'],
+    default : 'Estimated',
     placeHolder: "Diameter"
 
     //  startValue : 25,

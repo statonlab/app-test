@@ -37,7 +37,11 @@ const DCPrules = {
   woollyAdesCoverage     : t.enums.of(DCP.woollyAdesCoverage.selectChoices, 'woollyAdesCoverage'),
   acorns                 : t.enums.of(DCP.acorns.selectChoices, 'acorns'),
   heightFirstBranch      : t.Number,
-  diameterNumeric        : t.Number,
+  // diameterNumeric        : t.Number,
+  diameterNumeric        : t.struct({
+    value      : t.String,
+    confidence: t.String
+  }),
   heightNumeric          : t.Number,
   ashSpecies             : t.enums.of(DCP.ashSpecies.selectChoices, 'ashSpecies'),
   crownHealth            : t.enums.of(DCP.crownHealth.selectChoices, 'crownHealth'),
@@ -70,7 +74,7 @@ const Coordinate = t.refinement(t.Number, (n) => n !== 0, 'Coordinate')
 const LocationT  = t.dict(t.String, Coordinate)
 //const cameraT = t.refinement(t.dict, (d) => Object.keys(d).length !== 0, 'camera')
 //const imageT = t.refinement(t.dict(t.String, t.dict(t.String, t.list)), (o) => Object.keys(o).length > 0, 'images')//TO DO: this doesn't validate length properly.
-const imageT = t.refinement(t.String, (s) => s.length > 10, 'images') // why 10?  because i stringify images and the result of an empty image object is {}, so must be longer than this.  Why not 2?  Because an empty object gets replaced with "{}" which is then longer than 2 somewhere in the validation process
+//const imageT = t.refinement(t.String, (s) => s.length > 10, 'images') // why 10?  because i stringify images and the result of an empty image object is {}, so must be longer than this.  Why not 2?  Because an empty object gets replaced with "{}" which is then longer than 2 somewhere in the validation process
 
 
 export default class Form extends Component {
@@ -98,7 +102,7 @@ export default class Form extends Component {
     this.formProps  = this.props.formProps // read in form items to display
 
     let formRules = {
-      images  : imageT,
+      //images  : imageT,
       title   : t.String,
       location: LocationT
     }
@@ -344,12 +348,7 @@ export default class Form extends Component {
    * @returns {*}
    */
   validateState = () => {
-
-    let submit    = this.state
-    submit.images = JSON.stringify(this.state.images)
-    console.log("this time the images are ", this.state.images)
-    console.log("output of validate state: ", t.validate(submit, this.formT))
-    return t.validate(submit, this.formT)
+    return t.validate(this.state, this.formT)
   }
 
   /**
@@ -373,9 +372,10 @@ export default class Form extends Component {
     let warnings  = {}
 
     errors.map((error) => {
-      warnings[error.path] = true
-      if (typeof DCP[error.path] !== 'undefined') {
-        errorList.push('Required field: ' + DCP[error.path].label)
+      console.log("error is ", error)
+      warnings[error.path[0]] = true
+      if (typeof DCP[error.path[0]] !== 'undefined') {
+        errorList.push('Required field: ' + DCP[error.path[0]].label)
       }
     })
     //Add error for no location
@@ -476,6 +476,7 @@ export default class Form extends Component {
               images={DCP[key].images}
               captions={DCP[key].captions}
               multiCheck={DCP[key].multiCheck}
+              default={DCP[key].default}
               numeric={DCP[key].numeric}
               units={DCP[key].units}
               header={DCP[key].description}
@@ -492,7 +493,7 @@ export default class Form extends Component {
                   editable={false}
                   placeholder={DCP[key].placeHolder}
                   placeholderTextColor="#aaa"
-                  value={this.state.metadata[key] ? this.state.metadata[key].value.concat(" ", DCP[key].units) : null}
+                  value={this.state.metadata[key] && this.state.metadata[key].value ? this.state.metadata[key].value.concat(" ", DCP[key].units) : null}
                   underlineColorAndroid="transparent"
                 />
                 {dropdownIcon}
