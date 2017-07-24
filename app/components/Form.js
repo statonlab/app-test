@@ -422,7 +422,6 @@ export default class Form extends Component {
     if (typeof value === 'string' && isArray) {
       return JSON.parse(value).toString()
     }
-
     return value
   }
 
@@ -468,23 +467,41 @@ export default class Form extends Component {
       )
     }
 
-    if (DCP[key].slider) {
+    if (DCP[key].numeric) {
       return (
-        <View style={styles.formGroup} key={key}>
-          <Text
-            style={this.state.warnings[key] ? [styles.label, styles.labelWarning] : styles.label}>{DCP[key].label}</Text>
-          <SliderPick
-            key={key}
-            images={DCP[key].images}
-            start={this.state.metadata[key] ? this.state.metadata[key] : null}
-            max={DCP[key].maxValue}
-            min={DCP[key].minValue}
-            legendText={DCP[key].units}
-            description={DCP[key].description}
-            onChange={(value) => {
-              this.setState({metadata: {...this.state.metadata, [key]: value}})
-            }}
-          />
+        <View key={key}>
+          <View style={styles.formGroup} key={key}>
+            <PickerModal
+              style={styles.picker}
+              images={DCP[key].images}
+              captions={DCP[key].captions}
+              multiCheck={DCP[key].multiCheck}
+              numeric={DCP[key].numeric}
+              units={DCP[key].units}
+              header={DCP[key].description}
+              choices={DCP[key].selectChoices}
+              onSelect={(option) => {
+                this.setState({metadata: {...this.state.metadata, [key]: option}})
+              }}
+            >
+              <View style={styles.picker}>
+                <Text
+                  style={this.state.warnings[key] ? [styles.label, styles.labelWarning] : styles.label}>{DCP[key].label}</Text>
+                <TextInput
+                  style={styles.textField}
+                  editable={false}
+                  placeholder={DCP[key].placeHolder}
+                  placeholderTextColor="#aaa"
+                  value={this.state.metadata[key] ? this.state.metadata[key].join() : null}
+                  underlineColorAndroid="transparent"
+                />
+
+                {dropdownIcon}
+              </View>
+            </PickerModal>
+          </View>
+          {DCP[key].camera && DCP[key].camera.includes(this.state.metadata[key]) ? this.renderCameraItem(DCP[key].label, DCP[key].label)
+            : null}
         </View>
       )
     }
@@ -497,6 +514,8 @@ export default class Form extends Component {
             images={DCP[key].images}
             captions={DCP[key].captions}
             multiCheck={DCP[key].multiCheck}
+            numeric={DCP[key].numeric}
+            units={DCP[key].units}
             header={DCP[key].description}
             choices={DCP[key].selectChoices}
             onSelect={(option) => {

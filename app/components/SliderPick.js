@@ -43,13 +43,13 @@ export default class SliderPick extends Component {
     if (this.state.value) {
       return (
         <NumericModal setValue={this.state.value} onSelect={(value) => this.onChange(value)}>
-        <Text style={styles.label}>{this.state.value} {this.props.legendText}</Text>
+          <Text style={styles.label}>{this.state.value} {this.props.legendText}</Text>
         </NumericModal>
       )
     }
     return (
       <NumericModal onSelect={(value) => this.onChange(value)}>
-      <Text style={styles.label}>Not set</Text>
+        <Text style={styles.label}>Not set</Text>
       </NumericModal>
     )
   }

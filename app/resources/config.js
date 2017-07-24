@@ -102,8 +102,9 @@ const DCP = {
   heightFirstBranch      : {
     label      : 'Height of first branch',
     description: 'Approximately (no need to measure) how high up is the first branch of the tree?',
-    slider     : true,
+   // slider     : true,
     units      : "Feet",
+    numeric : true,
   },
   oakHealthProblems      : {
     label        : 'Health problems',
@@ -117,11 +118,15 @@ const DCP = {
   },
   diameterNumeric        : {
     label   : 'Tree diameter',
-    slider  : true,
+   // slider  : true,
+    numeric : true,
+    description  : "Please enter the diameter, in inches, of this tree below.  Is this a rough estimate or a precise measurement?",
     minValue: 0,
     maxValue: 40,
     units   : "Inches",
-    images  : [require("../img/DCP/diameter.jpg")]
+    images  : [require("../img/DCP/diameter.jpg")],
+    selectChoices : ['Measured', 'Estimated'],
+    placeHolder: "Diameter"
 
     //  startValue : 25,
   },
@@ -204,7 +209,8 @@ const DCP = {
   heightNumeric  : {
     label      : 'Tree height',
     description: 'Approximately how many feet tall is the tree?',
-    slider     : true,
+  //  slider     : true,
+    numeric : true,
     minValue   : 0,
     maxValue   : 150,
     units      : "Feet",
