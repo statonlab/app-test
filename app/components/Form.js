@@ -345,7 +345,7 @@ export default class Form extends Component {
    */
   validateState = () => {
 
-    let submit = this.state
+    let submit    = this.state
     submit.images = JSON.stringify(this.state.images)
     console.log("this time the images are ", this.state.images)
     console.log("output of validate state: ", t.validate(submit, this.formT))
@@ -492,10 +492,9 @@ export default class Form extends Component {
                   editable={false}
                   placeholder={DCP[key].placeHolder}
                   placeholderTextColor="#aaa"
-                  value={this.state.metadata[key] ? this.state.metadata[key].join() : null}
+                  value={this.state.metadata[key] ? this.state.metadata[key].value.concat(" ", DCP[key].units) : null}
                   underlineColorAndroid="transparent"
                 />
-
                 {dropdownIcon}
               </View>
             </PickerModal>

@@ -17,7 +17,7 @@ export default class PickerModal extends Component {
       selected     : 'not set',
       selectedMulti: [],
       choices      : this.props.choices,
-      numberVal : [],//expect array of two : number and string
+      numberVal : {},//expect {value: int, confidence: string}
 
     }
   }
@@ -72,7 +72,7 @@ export default class PickerModal extends Component {
     if (this.props.numeric){
       //For numeric,d on't close on checking box, need to type in!
       let current = this.state.numberVal
-      current[1] = item
+      current.confidence = item
       this.setState({numberVal: current})
       this.setState({selected: item})
       return
@@ -90,7 +90,7 @@ export default class PickerModal extends Component {
 
   handleNumber = (number) => {
     let current = this.state.numberVal
-current[0] = number
+current.value = number
     this.setState({numberVal: current})
   }
 
@@ -115,11 +115,8 @@ current[0] = number
       this.props.onSelect(JSON.stringify(this.state.selectedMulti))
     }
     if (this.props.numeric){
-
-
-      this.props.onSelect(JSON.stringify(this.state.numberVal))
+      this.props.onSelect((this.state.numberVal))
     }
-
     this.setState({modalVisible: false})
   }
 
@@ -134,7 +131,7 @@ current[0] = number
       <View style={styles.choiceContainer}>
         <View style={[styles.choiceItem]}>
             <TextInput style={styles.textField} keyboardType={'numeric'}
-              value={this.state.numberVal[0]}
+              value={this.state.numberVal.value}
               placeholder={"Tap to enter diameter"}
               onChangeText={(number) => this.handleNumber(number)}/>
           <Text style={{paddingLeft: 10}}>{this.props.units}</Text>
