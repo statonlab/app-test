@@ -39,10 +39,12 @@ export default class ObservationScene extends Component {
       needs_update  : false,
       selectedCircle: 0,
       pages         : 0,
-      noticeText    : ''
+      noticeText    : '',
+      entry         : null
     }
-    this.user  = realm.objects('User')[0]
-    this.fs    = new File()
+
+    this.user = realm.objects('User')[0]
+    this.fs   = new File()
   }
 
   componentWillMount() {
@@ -50,6 +52,8 @@ export default class ObservationScene extends Component {
       this.props.navigator.pop()
       return true
     })
+
+    this.setState({entry: this.props.plant})
   }
 
   /**
@@ -59,14 +63,16 @@ export default class ObservationScene extends Component {
     this._isLoggedIn()
 
     this.loggedEvent = DeviceEventEmitter.addListener('userLoggedIn', this._isLoggedIn.bind(this))
+    this.editedEvent = DeviceEventEmitter.addListener('editSubmission', this._reloadEntry.bind(this))
 
     let pages  = 0
     let images = JSON.parse(this.props.plant.images)
     Object.keys(images).map((key) => {
-      if (Array.isArray(images[key]))
+      if (Array.isArray(images[key])) {
         images[key].map(() => {
           pages++
         })
+      }
     })
 
     this.setState({
@@ -81,7 +87,21 @@ export default class ObservationScene extends Component {
    */
   componentWillUnmount() {
     this.loggedEvent.remove()
+    this.editedEvent.remove()
+    this.backEvent.remove()
     this.props.onUnmount()
+  }
+
+  /**
+   * Listed to editing event and reload the entry from Realm.
+   *
+   * @private
+   */
+  _reloadEntry() {
+    this.setState({
+      entry       : realm.objects('Submission').filtered(`id == ${this.state.entry.id}`)[0],
+      needs_update: true
+    })
   }
 
   /**
@@ -177,13 +197,21 @@ export default class ObservationScene extends Component {
       let text  = data[key]
       let label = DCP[key] ? DCP[key].label : key
 
+      if (typeof text === 'object') {
+        if (typeof text.value === 'undefined') {
+          return null
+        }
+
+        text = text.value
+      }
+
       // If it is an array, convert it to text
       if (/^\[.*\]$/g.test(text)) {
         let array = JSON.parse(text)
         text      = array.toString().replace(',', ', ')
       }
 
-      if (text === '' || text === null) {
+      if (typeof text !== 'string' || text === '' || text === null) {
         return null
       }
 
@@ -207,7 +235,8 @@ export default class ObservationScene extends Component {
     if ((!this.state.synced && !this.state.isLoggedIn) || (this.state.needs_update && !this.state.isLoggedIn)) {
       return (
         <View style={styles.field}>
-          <TouchableOpacity style={styles.button} onPress={() => this.props.navigator.push({label: 'LoginScene'})}>
+          <TouchableOpacity style={styles.button}
+                            onPress={() => this.props.navigator.push({label: 'LoginScene'})}>
             <Text style={styles.buttonText}>Login to Sync</Text>
           </TouchableOpacity>
         </View>
@@ -218,7 +247,7 @@ export default class ObservationScene extends Component {
       return (
         <View style={styles.field}>
           <TouchableOpacity style={styles.button}
-            onPress={this.state.needs_update && this.state.synced ? () => this.update.call(this, entry) : () => this.upload.call(this, entry)}>
+                            onPress={this.state.needs_update && this.state.synced ? () => this.update.call(this, entry) : () => this.upload.call(this, entry)}>
             <Text style={styles.buttonText}>Sync With Server</Text>
           </TouchableOpacity>
         </View>
@@ -240,21 +269,24 @@ export default class ObservationScene extends Component {
     this.refs.spinner.open()
 
     if (this.state.synced) {
-      axios.delete(`observation/${entry.serverID}?api_token=${this.user.api_token}`).then(response => {
-        // Delete locally
-        this.deleteLocally()
-      }).catch(error => {
-        this.refs.spinner.close()
-        if (error.response && error.response.status === 404) {
-          // Observation does not exist on the server so delete locally
+      axios.delete(`observation/${entry.serverID}?api_token=${this.user.api_token}`)
+        .then(response => {
+          // Delete locally
           this.deleteLocally()
-          return
-        }
+        })
+        .catch(error => {
+          this.refs.spinner.close()
+          if (error.response && error.response.status === 404) {
+            // Observation does not exist on the server so delete locally
+            this.deleteLocally()
+            return
+          }
 
-        alert('Unable to delete at this time.  Please check your internet connection and try again.')
-      }).then(() => {
-        this.refs.spinner.close()
-      })
+          alert('Unable to delete at this time.  Please check your internet connection and try again.')
+        })
+        .then(() => {
+          this.refs.spinner.close()
+        })
     } else {
       this.deleteLocally()
       this.refs.spinner.close()
@@ -354,7 +386,8 @@ export default class ObservationScene extends Component {
     return (
       <View style={styles.circlesContainer}>
         {all.map((image, index) => {
-          return <TouchableOpacity key={index} style={[styles.circle, this.state.selectedCircle === index ? styles.selectedCircle : {}]}/>
+          return <TouchableOpacity key={index}
+                                   style={[styles.circle, this.state.selectedCircle === index ? styles.selectedCircle : {}]}/>
         })}
       </View>
     )
@@ -388,7 +421,14 @@ export default class ObservationScene extends Component {
    * @returns {XML}
    */
   render() {
-    let entry  = this.props.plant
+    let entry = this.state.entry
+
+    if (entry === null) {
+      return null
+    }
+
+    console.log(entry)
+
     let images = JSON.parse(entry.images)
     let width  = Dimensions.get('window').width
     return (
@@ -396,9 +436,10 @@ export default class ObservationScene extends Component {
         <Spinner ref="spinner"/>
         <SnackBarNotice ref="snackbar" noticeText={this.state.noticeText}/>
 
-        <Header navigator={this.props.navigator} title={entry.name} rightIcon={trash} onRightPress={() => {
-          this.deleteAlert.call(this, entry)
-        }}/>
+        <Header navigator={this.props.navigator} title={entry.name} rightIcon={trash}
+                onRightPress={() => {
+                  this.deleteAlert.call(this, entry)
+                }}/>
 
         <ScrollView style={styles.contentContainer} bounces={false}>
           <View style={{position: 'relative'}}>
@@ -454,7 +495,7 @@ export default class ObservationScene extends Component {
           </View>
         </ScrollView>
         <View style={styles.multiButtonField}>
-          <TouchableOpacity style={styles.button } onPress={() => this.editEntry(entry)}>
+          <TouchableOpacity style={styles.button} onPress={() => this.editEntry(entry)}>
             <Text style={styles.buttonText}>Edit Entry</Text>
           </TouchableOpacity>
         </View>

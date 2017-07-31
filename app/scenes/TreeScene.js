@@ -18,9 +18,13 @@ export default class TreeScene extends Component {
   render() {
     return (
       <View style={{flex: 1, backgroundColor: '#f5f5f5'}}>
-        <Header title={this.props.title} navigator={this.props.navigator} showRightIcon={false} elevation={0} onBackPress={() => {
-          return this.refs.form.cancel()
-        }}/>
+        <Header title={this.props.title}
+                navigator={this.props.navigator}
+                showRightIcon={false}
+                elevation={0}
+                onBackPress={() => {
+                  return this.refs.form.cancel()
+                }}/>
         <Tabs>
           <Tab title="ADD ENTRY">
             <Form
