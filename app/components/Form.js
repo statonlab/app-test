@@ -336,6 +336,8 @@ export default class Form extends Component {
       needs_update: true
     }
 
+console.log("attempting to update")
+
     this.realm.write(() => {
       realm.create('Submission', observation, true)  // true as 3rd argument updates
     })

@@ -38,7 +38,7 @@ export default class AboutScene extends Component {
           <View style={styles.card}>
             <Text style={styles.title}>The TreeSnap Team</Text>
             <Text style={styles.textBody}>TreeSnap is developed as a collaboration between
-              scientists at the University of Kentucky and the University of Tennessee.</Text>
+              scientists at the University of Tennessee Knoxville and the Forest Health Research Center at the University of Kentucky.  TreeSnap was funded by the <Atext url="https://www.nsf.gov/awardsearch/showAward?AWD_ID=1444573"> NSF Plant Genome Research Program, award 1444573</Atext>.</Text>
           </View>
         </ScrollView>
       </View>
