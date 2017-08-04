@@ -36,18 +36,9 @@ const DCPrules = {
   woollyAdesPres         : t.Boolean,
   woollyAdesCoverage     : t.enums.of(DCP.woollyAdesCoverage.selectChoices, 'woollyAdesCoverage'),
   acorns                 : t.enums.of(DCP.acorns.selectChoices, 'acorns'),
-  heightFirstBranch      : t.struct({
-    value     : t.String,
-    confidence: t.String
-  }),
-  diameterNumeric        : t.struct({
-    value     : t.String,
-    confidence: t.String
-  }),
-  heightNumeric          : t.struct({
-    value     : t.String,
-    confidence: t.String
-  }),
+  heightFirstBranch      : t.String,
+  diameterNumeric        : t.String,
+  heightNumeric          : t.String,
   ashSpecies             : t.enums.of(DCP.ashSpecies.selectChoices, 'ashSpecies'),
   crownHealth            : t.enums.of(DCP.crownHealth.selectChoices, 'crownHealth'),
   otherLabel             : t.String,
@@ -477,7 +468,7 @@ export default class Form extends Component {
     }
 
     if (DCP[key].numeric) {
-      let key2 = [key]+"_confidence"
+      let key2 = [key] + "_confidence"
       return (
         <View key={key}>
           <View style={styles.formGroup} key={key}>
@@ -494,8 +485,8 @@ export default class Form extends Component {
               choices={DCP[key].selectChoices}
               onSelect={(number, string) => {
                 console.log("here it is", number, string, key, key2)
-                let newData = this.state.metadata
-                newData[key] = number
+                let newData   = this.state.metadata
+                newData[key]  = number
                 newData[key2] = string
                 this.setState({metadata: newData})
               }}

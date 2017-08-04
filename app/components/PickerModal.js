@@ -39,12 +39,14 @@ export default class PickerModal extends Component {
 
     // load in entry values if editing
     if (this.props.startingNumeric){
+      let       confidence = this.props.startingNumeric[1]
+      if (! confidence) {confidence = "Estimated"}
       let newState = {
         value: this.props.startingNumeric[0],
-      confidence: this.props.startingNumeric[1]
+      confidence: confidence
       }
       this.setState({numberVal: newState})
-      this.setState({selected: this.props.startingNumeric[1]})
+    //  this.setState({selected: this.props.confidence})
     }
     if (this.props.startingString){
       console.log("starting string: ",this.props.startingString)
