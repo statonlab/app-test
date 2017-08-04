@@ -36,6 +36,11 @@ export default class PickerModal extends Component {
     if (this.props.default){
       this.onChange(this.props.default)
     }
+
+    // load in entry values if editing
+    if (this.props.startingNumeric){
+      this.setState({numberVal: this.props.startingNumeric})
+    }
   }
 
   onChange = (item) => {
@@ -280,7 +285,7 @@ PickerModal.propTypes = {
   captions     : PropTypes.array,
   specialText  : PropTypes.array,
   default : PropTypes.string,
-  startingValue : PropTypes.object
+  startingNumeric : PropTypes.object
 }
 
 PickerModal.defaultProps = {
