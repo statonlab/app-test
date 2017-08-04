@@ -477,6 +477,7 @@ export default class Form extends Component {
     }
 
     if (DCP[key].numeric) {
+      let key2 = [key]+"_confidence"
       return (
         <View key={key}>
           <View style={styles.formGroup} key={key}>
@@ -486,13 +487,17 @@ export default class Form extends Component {
               captions={DCP[key].captions}
               multiCheck={DCP[key].multiCheck}
               default={DCP[key].default}
-              startingNumeric={this.state.metadata[key]}
+              startingNumeric={[this.state.metadata[key], this.state.metadata[key2]]}
               numeric={DCP[key].numeric}
               units={DCP[key].units}
               header={DCP[key].description}
               choices={DCP[key].selectChoices}
-              onSelect={(option) => {
-                this.setState({metadata: {...this.state.metadata, [key]: option}})
+              onSelect={(number, string) => {
+                console.log("here it is", number, string, key, key2)
+                let newData = this.state.metadata
+                newData[key] = number
+                newData[key2] = string
+                this.setState({metadata: newData})
               }}
             >
               <View style={styles.picker}>
@@ -503,7 +508,7 @@ export default class Form extends Component {
                   editable={false}
                   placeholder={DCP[key].placeHolder}
                   placeholderTextColor="#aaa"
-                  value={this.state.metadata[key] && this.state.metadata[key].value ? this.state.metadata[key].value.concat(" ", DCP[key].units) : null}
+                  value={this.state.metadata[key] ? this.state.metadata[key].concat(" ", DCP[key].units) : null}
                   underlineColorAndroid="transparent"
                 />
                 {dropdownIcon}

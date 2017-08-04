@@ -39,7 +39,12 @@ export default class PickerModal extends Component {
 
     // load in entry values if editing
     if (this.props.startingNumeric){
-      this.setState({numberVal: this.props.startingNumeric})
+      let newState = {
+        value: this.props.startingNumeric[0],
+      confidence: this.props.startingNumeric[1]
+      }
+      this.setState({numberVal: newState})
+      this.setState({selected: this.props.startingNumeric[1]})
     }
     if (this.props.startingString){
       console.log("starting string: ",this.props.startingString)
@@ -129,9 +134,13 @@ current.value = number
     if (this.props.multiCheck) {
       this.props.onSelect(JSON.stringify(this.state.selectedMulti))
     }
+
     if (this.props.numeric){
-      this.props.onSelect((this.state.numberVal))
+      let number = this.state.numberVal.value
+      let confidence = this.state.numberVal.confidence
+      this.props.onSelect(number, confidence)
     }
+
     this.setState({modalVisible: false})
   }
 
@@ -293,7 +302,7 @@ PickerModal.propTypes = {
   specialText  : PropTypes.array,
   default : PropTypes.string,
   //The following 3 props allow pre-existing values (IE from edit) to be passed into the modal.
-  startingNumeric : PropTypes.object,
+  startingNumeric : PropTypes.array,
   startingString : PropTypes.string
 }
 
