@@ -213,9 +213,10 @@ const DCP = {
     description: 'Approximately how many feet tall is the tree?',
   //  slider     : true,
     numeric : true,
-    minValue   : 0,
-    maxValue   : 150,
     units      : "Feet",
+    selectChoices : ['Measured', 'Estimated'],
+    default : 'Estimated',
+    placeHolder: "Height"
   },
   burrs          : {
     label        : 'Nuts/burrs',

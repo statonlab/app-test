@@ -36,13 +36,18 @@ const DCPrules = {
   woollyAdesPres         : t.Boolean,
   woollyAdesCoverage     : t.enums.of(DCP.woollyAdesCoverage.selectChoices, 'woollyAdesCoverage'),
   acorns                 : t.enums.of(DCP.acorns.selectChoices, 'acorns'),
-  heightFirstBranch      : t.Number,
-  // diameterNumeric        : t.Number,
-  diameterNumeric        : t.struct({
-    value      : t.String,
+  heightFirstBranch      : t.struct({
+    value     : t.String,
     confidence: t.String
   }),
-  heightNumeric          : t.Number,
+  diameterNumeric        : t.struct({
+    value     : t.String,
+    confidence: t.String
+  }),
+  heightNumeric          : t.struct({
+    value     : t.String,
+    confidence: t.String
+  }),
   ashSpecies             : t.enums.of(DCP.ashSpecies.selectChoices, 'ashSpecies'),
   crownHealth            : t.enums.of(DCP.crownHealth.selectChoices, 'crownHealth'),
   otherLabel             : t.String,
@@ -336,7 +341,7 @@ export default class Form extends Component {
       needs_update: true
     }
 
-console.log("attempting to update")
+    console.log("attempting to update")
 
     this.realm.write(() => {
       realm.create('Submission', observation, true)  // true as 3rd argument updates
@@ -470,7 +475,6 @@ console.log("attempting to update")
     }
 
     if (DCP[key].numeric) {
-      //console.log(this.state.metadata[key])
       return (
         <View key={key}>
           <View style={styles.formGroup} key={key}>
@@ -518,6 +522,7 @@ console.log("attempting to update")
             images={DCP[key].images}
             captions={DCP[key].captions}
             multiCheck={DCP[key].multiCheck}
+            startingString={this.state.metadata[key]}
             numeric={DCP[key].numeric}
             units={DCP[key].units}
             header={DCP[key].description}
