@@ -105,6 +105,7 @@ const DCP = {
    // slider     : true,
     units      : "Feet",
     numeric : true,
+    placeHolder: "Height"
   },
   oakHealthProblems      : {
     label        : 'Health problems',

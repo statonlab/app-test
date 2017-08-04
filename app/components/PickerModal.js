@@ -133,11 +133,12 @@ current.value = number
     return (
       <View style={styles.choiceContainer}>
         <View style={[styles.choiceItem]}>
-            <TextInput style={styles.textField} keyboardType={'numeric'}
+            <TextInput style={styles.textField}
+              keyboardType={'numeric'}
               value={this.state.numberVal.value}
               placeholder={"Tap to enter diameter"}
               onChangeText={(number) => this.handleNumber(number)}/>
-          <Text style={{paddingLeft: 10}}>{this.props.units}</Text>
+          <Text style={{paddingLeft: 30, paddingRight: 30}}>{this.props.units}</Text>
         </View>
       </View>
     )
@@ -278,7 +279,8 @@ PickerModal.propTypes = {
   images       : PropTypes.array,
   captions     : PropTypes.array,
   specialText  : PropTypes.array,
-  default : PropTypes.string
+  default : PropTypes.string,
+  startingValue : PropTypes.object
 }
 
 PickerModal.defaultProps = {

@@ -470,6 +470,7 @@ console.log("attempting to update")
     }
 
     if (DCP[key].numeric) {
+      console.log(this.state.metadata[key])
       return (
         <View key={key}>
           <View style={styles.formGroup} key={key}>
@@ -479,6 +480,7 @@ console.log("attempting to update")
               captions={DCP[key].captions}
               multiCheck={DCP[key].multiCheck}
               default={DCP[key].default}
+              startingValue={null}
               numeric={DCP[key].numeric}
               units={DCP[key].units}
               header={DCP[key].description}
