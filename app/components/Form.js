@@ -276,6 +276,11 @@ export default class Form extends Component {
    * Submit button method.  Validate the primary and meta data with tcomb.
    */
   submit = () => {
+    if (!this.state.images['images']) {
+      this.notifyIncomplete(this.validateState())
+      return
+    }
+
     if (!this.validateState().isValid()) {
       this.notifyIncomplete(this.validateState())
       return
@@ -378,19 +383,23 @@ export default class Form extends Component {
     let errorList = []
     let warnings  = {}
 
+
+
     errors.map((error) => {
-      console.log("error is ", error)
       warnings[error.path[0]] = true
       if (typeof DCP[error.path[0]] !== 'undefined') {
         errorList.push('Required field: ' + DCP[error.path[0]].label)
       }
     })
+    if (!this.state.images['images']) {
+      warnings.images = true
+      errorList.push('A photo is required.')
+    }
     //Add error for no location
     if (this.state.location.latitude === 0 && this.state.location.longitude === 0 && this.state.location.accuracy === -1) {
       errorList.push('Cannot get location.  Please wait for GPS signal and try again.')
     }
     this.setState({warnings})
-    console.log("warnings: ", warnings)
 
     if (errorList) {
       alert(errorList.join('\n'))
