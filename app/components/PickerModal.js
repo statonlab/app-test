@@ -36,6 +36,18 @@ export default class PickerModal extends Component {
     if (this.props.default){
       this.onChange(this.props.default)
     }
+
+    // load in entry values if editing
+    if (this.props.startingNumeric){
+      this.setState({numberVal: this.props.startingNumeric})
+    }
+    if (this.props.startingString){
+      console.log("starting string: ",this.props.startingString)
+
+     if (this.props.multiCheck) {this.setState({selectedMulti: JSON.parse(this.props.startingString)})
+     }
+     this.setState({selected: this.props.startingString})
+    }
   }
 
   onChange = (item) => {
@@ -133,11 +145,12 @@ current.value = number
     return (
       <View style={styles.choiceContainer}>
         <View style={[styles.choiceItem]}>
-            <TextInput style={styles.textField} keyboardType={'numeric'}
+            <TextInput style={styles.textField}
+              keyboardType={'numeric'}
               value={this.state.numberVal.value}
               placeholder={"Tap to enter diameter"}
               onChangeText={(number) => this.handleNumber(number)}/>
-          <Text style={{paddingLeft: 10}}>{this.props.units}</Text>
+          <Text style={{paddingLeft: 30, paddingRight: 30}}>{this.props.units}</Text>
         </View>
       </View>
     )
@@ -278,7 +291,10 @@ PickerModal.propTypes = {
   images       : PropTypes.array,
   captions     : PropTypes.array,
   specialText  : PropTypes.array,
-  default : PropTypes.string
+  default : PropTypes.string,
+  //The following 3 props allow pre-existing values (IE from edit) to be passed into the modal.
+  startingNumeric : PropTypes.object,
+  startingString : PropTypes.string
 }
 
 PickerModal.defaultProps = {
