@@ -101,7 +101,7 @@ const DCP = {
 
   heightFirstBranch      : {
     label      : 'Height of first branch',
-    description: 'Approximately (no need to measure) how high up is the first branch of the tree?',
+    description: 'Approximately (no need to measure) how high up is the first main branch of the tree?',
    // slider     : true,
     units      : "Feet",
     numeric : true,
