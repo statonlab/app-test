@@ -298,24 +298,23 @@ export default class File {
       return
     }
 
+    // ImageResizer.createResizedImage(image, 1000, 1000, 'JPEG', 100).then(full_image => {
+    // Get image name
+    let name = image.split('/')
+    name     = name[name.length - 1]
 
-    ImageResizer.createResizedImage(image, 1000, 1000, 'JPEG', 100).then(full_image => {
-      // Get image name
-      let name = full_image.split('/')
-      name     = name[name.length - 1]
+    let path = `${this._imagesDir}/${name}`
 
-      let path = `${this._imagesDir}/${name}`
+    this.move(image.replace('file:', ''), path, () => {
+      this._setupThumbnail(path)
 
-      this.move(full_image.replace('file:', ''), path, () => {
-        this._setupThumbnail(path)
-
-        if (typeof  callback !== 'undefined') {
-          callback(path)
-        }
-      })
-    }).catch((error) => {
-      console.log('Full image error', error, image)
+      if (typeof  callback !== 'undefined') {
+        callback(path)
+      }
     })
+    //}).catch((error) => {
+    //   console.log('Full image error', error, image)
+    // })
   }
 
   /**
@@ -329,11 +328,13 @@ export default class File {
     let name = image.split('/')
     name     = name[name.length - 1]
 
-    ImageResizer.createResizedImage(image, 160, 160, 'JPEG', 100, 0, this._thumbnailsDir).then(thumbnail => {
-      // Let it have the same name of the original image
-      this.move(thumbnail.replace('file:', ''), `${this._thumbnailsDir}/${name}`)
-    }).catch((error) => {
-      console.log('Thumbnail error', error, image)
-    })
+    ImageResizer.createResizedImage(image, 160, 160, 'JPEG', 100, 0, this._thumbnailsDir)
+      .then(thumbnail => {
+        // Let it have the same name of the original image
+        this.move(thumbnail.replace('file:', ''), `${this._thumbnailsDir}/${name}`)
+      })
+      .catch((error) => {
+        console.log('Thumbnail error', error, image)
+      })
   }
 }

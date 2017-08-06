@@ -23,12 +23,12 @@ export default class TreeScene extends Component {
                 showRightIcon={false}
                 elevation={0}
                 onBackPress={() => {
-                  return this.refs.form.cancel()
+                  return this.form.cancel()
                 }}/>
         <Tabs>
           <Tab title="ADD ENTRY">
             <Form
-              ref="form"
+              ref={ref => this.form = ref}
               title={this.props.title}
               formProps={Plants[this.props.title].formProps}
               entryInfo={this.props.entryInfo}

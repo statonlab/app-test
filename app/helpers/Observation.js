@@ -1,4 +1,3 @@
-import {Platform} from 'react-native'
 import Axios from './Axios'
 import realm from '../db/Schema'
 import File from './File'
@@ -8,7 +7,7 @@ class Observation {
 
   constructor() {
     this.api_token = false
-    this.fs = new File()
+    this.fs        = new File()
   }
 
   /**
@@ -50,6 +49,12 @@ class Observation {
   }
 
 
+  /**
+   * Sync a given observation.
+   *
+   * @param observation
+   * @returns {Promise.<*>}
+   */
   async update(observation) {
     this._setApiToken()
 
@@ -68,7 +73,7 @@ class Observation {
 
     let form = this._setUpForm(observation)
 
-    return await Axios.post(`observation/${observation.serverID}?api_token=${this.api_token}`, form)
+    return await Axios.post(`observation/${observation.serverID}`, form)
   }
 
   // Private Methods
@@ -118,7 +123,6 @@ class Observation {
         let extension = name.split('.')
         extension     = extension[extension.length - 1]
 
-        //let prefix = Platform.OS === 'android' && image.indexOf('file:') === -1 ? 'file://' : 'file://'
         let file = this.fs.image(image)
         form.append(`images[${key}][${i}]`, {uri: file, name: name, type: `image/${extension}`})
       })

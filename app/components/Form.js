@@ -21,7 +21,6 @@ import realm from '../db/Schema'
 import t from 'tcomb-validation'
 import PickerModal from '../components/PickerModal'
 import DCP from '../resources/config.js'
-import SliderPick from '../components/SliderPick'
 import Location from '../components/Location'
 import File from '../helpers/File'
 import Spinner from '../components/Spinner'
@@ -332,8 +331,6 @@ export default class Form extends Component {
       needs_update: true
     }
 
-    console.log("attempting to update")
-
     this.realm.write(() => {
       realm.create('Submission', observation, true)  // true as 3rd argument updates
     })
@@ -468,7 +465,7 @@ export default class Form extends Component {
     }
 
     if (DCP[key].numeric) {
-      let key2 = [key] + "_confidence"
+      let key2 = [key] + '_confidence'
       return (
         <View key={key}>
           <View style={styles.formGroup} key={key}>
@@ -484,7 +481,6 @@ export default class Form extends Component {
               header={DCP[key].description}
               choices={DCP[key].selectChoices}
               onSelect={(number, string) => {
-                console.log("here it is", number, string, key, key2)
                 let newData   = this.state.metadata
                 newData[key]  = number
                 newData[key2] = string
@@ -499,7 +495,7 @@ export default class Form extends Component {
                   editable={false}
                   placeholder={DCP[key].placeHolder}
                   placeholderTextColor="#aaa"
-                  value={this.state.metadata[key] ? this.state.metadata[key].concat(" ", DCP[key].units) : null}
+                  value={this.state.metadata[key] ? this.state.metadata[key] + ' ' + DCP[key].units : null}
                   underlineColorAndroid="transparent"
                 />
                 {dropdownIcon}
@@ -612,7 +608,7 @@ export default class Form extends Component {
    * @returns {XML}
    */
   renderBiominder = () => {
-    let header      = "Mailing Samples to the American Chestnut Foundation"
+    let header      = 'Mailing Samples to the American Chestnut Foundation'
     let specialText = ACFCollection
     return (
       <PickerModal
@@ -729,7 +725,7 @@ export default class Form extends Component {
               <Text style={[styles.label, {width: 60}]}>Location</Text>
               {this.props.edit ?
                 <Location edit={this.props.edit} coordinates={this.props.entryInfo.location}
-                  onChange={(location) => this.setState({location})}/> :
+                          onChange={(location) => this.setState({location})}/> :
                 <Location onChange={(location) => this.setState({location})}/>
               }
 
@@ -739,14 +735,14 @@ export default class Form extends Component {
 
         <View style={styles.footer}>
           <TouchableOpacity style={[styles.button, styles.flex1]}
-            onPress={this.props.edit ? this.submitEdit : this.submit}
-            rippleColor="rgba(0,0,0,0.5)">
+                            onPress={this.props.edit ? this.submitEdit : this.submit}
+                            rippleColor="rgba(0,0,0,0.5)">
             <Text style={styles.buttonText}>
               {this.props.edit ? 'Confirm Edit' : 'Submit Entry'}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.button, styles.buttonAlt, styles.flex1]}
-            onPress={this.cancel}>
+                            onPress={this.cancel}>
             <Text style={styles.buttonAltText}>
               Cancel
             </Text>

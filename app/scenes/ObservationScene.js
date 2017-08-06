@@ -427,8 +427,6 @@ export default class ObservationScene extends Component {
       return null
     }
 
-    console.log(entry)
-
     let images = JSON.parse(entry.images)
     let width  = Dimensions.get('window').width
     return (
