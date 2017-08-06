@@ -1,7 +1,6 @@
 import React, {Component, PropTypes} from 'react'
 import {View, Text, StyleSheet, Modal, TouchableOpacity, TextInput} from 'react-native'
 import Colors from '../helpers/Colors'
-import Elevation from '../helpers/Elevation'
 
 export default class NumericModal extends Component {
   constructor(props) {

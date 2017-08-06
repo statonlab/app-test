@@ -412,7 +412,6 @@ export default class CameraScene extends Component {
       jpegQuality: 100
     }).then(data => {
       let image = data.path
-      console.log(image)
       let images = this.state.images.concat(image)
       this.setState({
         selectedImage: image,

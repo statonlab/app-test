@@ -8,7 +8,7 @@ import {
   Modal,
   KeyboardAvoidingView,
   ScrollView,
-  StatusBar,
+  StatusBar
 } from 'react-native'
 import Latin from '../resources/treeNames.js'
 import Colors from '../helpers/Colors'
@@ -29,7 +29,6 @@ export default class AutoComplete extends Component {
   }
 
   componentWillMount() {
-
     let matches = []
     Object.keys(this.queryList).map((species) => {
       let common     = this.queryList[species]
@@ -130,19 +129,24 @@ export default class AutoComplete extends Component {
           animationType={this.state.animationType}>
           <StatusBar hidden={true}/>
           <KeyboardAvoidingView style={{flex: 1, backgroundColor: '#f7f7f7'}} behavior="padding"
-            keyboardVerticalOffset={0}>
+                                keyboardVerticalOffset={0}>
             <View style={[{
-              height       : 40, backgroundColor: Colors.primary, flex: 0, alignItems: 'center', justifyContent: 'space-between',
-              flexDirection: 'row', paddingLeft: 10}, new Elevation(2)]}>
-              <TouchableOpacity onPress={()=>{this.close()}}>
-              <Icon name="chevron-left" style={{fontSize: 25}} color="#fff"/>
+              height        : 40, backgroundColor: Colors.primary, flex: 0, alignItems: 'center',
+              justifyContent: 'space-between',
+              flexDirection : 'row', paddingLeft: 10
+            }, new Elevation(2)]}>
+              <TouchableOpacity onPress={() => {
+                this.close()
+              }}>
+                <Icon name="chevron-left" style={{fontSize: 25}} color="#fff"/>
               </TouchableOpacity>
-              <Text style={{color: '#fff', fontWeight: '500', alignSelf: 'center'}}>Select a tree </Text>
+              <Text style={{color: '#fff', fontWeight: '500', alignSelf: 'center'}}>Select a
+                tree </Text>
               <Text style={{paddingRight: 10}}/>
             </View>
             <ScrollView style={{flex: 1}}
-              keyboardShouldPersistTaps="always"
-              keyboardDismissMode="interactive">
+                        keyboardShouldPersistTaps="always"
+                        keyboardDismissMode="interactive">
               {this.renderResults()}
             </ScrollView>
             <View style={styles.textInputContainer}>
@@ -163,7 +167,8 @@ export default class AutoComplete extends Component {
                 }
 
               />
-              <TouchableOpacity style={styles.button} onPress={() => this.submit(this.state.searchText)}>
+              <TouchableOpacity style={styles.button}
+                                onPress={() => this.submit(this.state.searchText)}>
                 <Text style={styles.buttonText}>
                   Add
                 </Text>

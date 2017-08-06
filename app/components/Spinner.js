@@ -52,7 +52,7 @@ Spinner.PropTypes = {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'transparent',
+    backgroundColor: 'rgba(0,0,0,.1)',
     flex           : 1,
     height         : undefined,
     width          : undefined,

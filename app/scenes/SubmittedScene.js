@@ -38,7 +38,7 @@ export default class SubmittedScene extends Component {
       let marker = {
         id         : submission.id,
         title      : submission.name,
-        image      : this.fs.thumbnail(image),
+        image      : this.fs.image(image),
         description: `${submission.location.latitude.toFixed(4)}, ${submission.location.longitude.toFixed(4)}`,
         coord      : {
           latitude : submission.location.latitude,

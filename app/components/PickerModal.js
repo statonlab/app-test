@@ -17,8 +17,7 @@ export default class PickerModal extends Component {
       selected     : 'not set',
       selectedMulti: [],
       choices      : this.props.choices,
-      numberVal : {value: null},//expect {value: int, confidence: string}
-
+      numberVal    : {value: null}//expect {value: int, confidence: string}
     }
   }
 
@@ -33,27 +32,27 @@ export default class PickerModal extends Component {
     if (this.props.freeText) {
       this.fetchSelections()
     }
-    if (this.props.default){
+    if (this.props.default) {
       this.onChange(this.props.default)
     }
 
     // load in entry values if editing
-    if (this.props.startingNumeric){
-      let       confidence = this.props.startingNumeric[1]
-      if (! confidence) {confidence = "Estimated"}
+    if (this.props.startingNumeric) {
+      let confidence = this.props.startingNumeric[1]
+      if (!confidence) {
+        confidence = 'Estimated'
+      }
       let newState = {
-        value: this.props.startingNumeric[0],
-      confidence: confidence
+        value     : this.props.startingNumeric[0],
+        confidence: confidence
       }
       this.setState({numberVal: newState})
-    //  this.setState({selected: this.props.confidence})
     }
-    if (this.props.startingString){
-      console.log("starting string: ",this.props.startingString)
-
-     if (this.props.multiCheck) {this.setState({selectedMulti: JSON.parse(this.props.startingString)})
-     }
-     this.setState({selected: this.props.startingString})
+    if (this.props.startingString) {
+      if (this.props.multiCheck) {
+        this.setState({selectedMulti: JSON.parse(this.props.startingString)})
+      }
+      this.setState({selected: this.props.startingString})
     }
   }
 
@@ -91,9 +90,9 @@ export default class PickerModal extends Component {
       return
     }
 
-    if (this.props.numeric){
+    if (this.props.numeric) {
       //For numeric,d on't close on checking box, need to type in!
-      let current = this.state.numberVal
+      let current        = this.state.numberVal
       current.confidence = item
       this.setState({numberVal: current})
       this.setState({selected: item})
@@ -111,8 +110,8 @@ export default class PickerModal extends Component {
   }
 
   handleNumber = (number) => {
-    let current = this.state.numberVal
-current.value = number
+    let current   = this.state.numberVal
+    current.value = number
     this.setState({numberVal: current})
   }
 
@@ -137,8 +136,8 @@ current.value = number
       this.props.onSelect(JSON.stringify(this.state.selectedMulti))
     }
 
-    if (this.props.numeric){
-      let number = this.state.numberVal.value
+    if (this.props.numeric) {
+      let number     = this.state.numberVal.value
       let confidence = this.state.numberVal.confidence
       this.props.onSelect(number, confidence)
     }
@@ -156,11 +155,11 @@ current.value = number
     return (
       <View style={styles.choiceContainer}>
         <View style={[styles.choiceItem]}>
-            <TextInput style={styles.textField}
-              keyboardType={'numeric'}
-              value={this.state.numberVal.value}
-              placeholder={"Tap to enter diameter"}
-              onChangeText={(number) => this.handleNumber(number)}/>
+          <TextInput style={styles.textField}
+                     keyboardType={'numeric'}
+                     value={this.state.numberVal.value}
+                     placeholder={'Tap to enter diameter'}
+                     onChangeText={(number) => this.handleNumber(number)}/>
           <Text style={{paddingLeft: 30, paddingRight: 30}}>{this.props.units}</Text>
         </View>
       </View>
@@ -188,7 +187,9 @@ current.value = number
 
   renderOptions(choice, index) {
     const uncheckedBox = (<Icon name="checkbox-blank-outline" style={styles.icon}/>)
-    const checkedBox   = (<Icon name="checkbox-marked" style={[styles.icon, {color: Colors.primary}]}/>)
+    const checkedBox   = (
+      <Icon name="checkbox-marked" style={[styles.icon, {color: Colors.primary}]}/>
+    )
 
     if (this.props.multiCheck) {
       return (
@@ -248,7 +249,7 @@ current.value = number
                 {this.props.images.length === 0 ? null :
                   <View style={styles.iconsContainer}>
                     <ImageModal images={this.props.images}
-                      captions={this.props.captions ? this.props.captions : null}>
+                                captions={this.props.captions ? this.props.captions : null}>
                       <View style={{flexDirection: 'row', alignItems: 'center'}}>
                         <Icon name="camera-burst" size={18} color={Colors.primary}/>
                         <Text style={{
@@ -290,21 +291,21 @@ current.value = number
 
 PickerModal.propTypes = {
   ...View.PropTypes,
-  choices      : PropTypes.array,
-  header       : PropTypes.string,
-  onSelect     : PropTypes.func,
-  style        : View.propTypes.style,
-  initialSelect: PropTypes.string,
-  multiCheck   : PropTypes.bool,
-  numeric      : PropTypes.bool,
-  units : PropTypes.string, //units to display for numeric input
-  freeText     : PropTypes.bool,
-  images       : PropTypes.array,
-  captions     : PropTypes.array,
-  specialText  : PropTypes.array,
-  default : PropTypes.string,
+  choices        : PropTypes.array,
+  header         : PropTypes.string,
+  onSelect       : PropTypes.func,
+  style          : View.propTypes.style,
+  initialSelect  : PropTypes.string,
+  multiCheck     : PropTypes.bool,
+  numeric        : PropTypes.bool,
+  units          : PropTypes.string, //units to display for numeric input
+  freeText       : PropTypes.bool,
+  images         : PropTypes.array,
+  captions       : PropTypes.array,
+  specialText    : PropTypes.array,
+  default        : PropTypes.string,
   //The following 3 props allow pre-existing values (IE from edit) to be passed into the modal.
-  startingNumeric : PropTypes.array,
+  startingNumeric: PropTypes.array,
   startingString : PropTypes.string
 }
 
