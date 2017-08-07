@@ -105,7 +105,8 @@ const DCP = {
    // slider     : true,
     units      : "Feet",
     numeric : true,
-    placeHolder: "Height"
+    placeHolder: "Height",
+    default : 'Estimated'
   },
   oakHealthProblems      : {
     label        : 'Health problems',
@@ -214,7 +215,6 @@ const DCP = {
   //  slider     : true,
     numeric : true,
     units      : "Feet",
-    selectChoices : ['Measured', 'Estimated'],
     default : 'Estimated',
     placeHolder: "Height"
   },
@@ -230,7 +230,6 @@ const DCP = {
     selectChoices: ["Present", "Absent", "Unknown"],
     placeHolder  : "Please select",
   },
-
 }
 
 
