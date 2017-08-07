@@ -686,24 +686,23 @@ export default class Form extends Component {
               <Text style={[styles.label, {width: 60}]}>Location</Text>
               {this.props.edit ?
                 <Location edit={this.props.edit} coordinates={this.props.entryInfo.location}
-                          onChange={(location) => this.setState({location})}/> :
+                  onChange={(location) => this.setState({location})}/> :
                 <Location onChange={(location) => this.setState({location})}/>
               }
-
             </View>
           </View>
         </KeyboardAwareScrollView>
 
         <View style={styles.footer}>
           <TouchableOpacity style={[styles.button, styles.flex1]}
-                            onPress={this.props.edit ? this.submitEdit : this.submit}
-                            rippleColor="rgba(0,0,0,0.5)">
+            onPress={this.props.edit ? this.submitEdit : this.submit}
+            rippleColor="rgba(0,0,0,0.5)">
             <Text style={styles.buttonText}>
               {this.props.edit ? 'Confirm Edit' : 'Submit Entry'}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.button, styles.buttonAlt, styles.flex1]}
-                            onPress={this.cancel}>
+            onPress={this.cancel}>
             <Text style={styles.buttonAltText}>
               Cancel
             </Text>
