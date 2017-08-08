@@ -91,8 +91,6 @@ export default class File {
    * @param callback Function to call on success
    */
   delete(file, callback) {
-    console.log(file)
-
     let count     = 0
     let processed = 0
 

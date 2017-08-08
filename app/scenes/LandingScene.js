@@ -289,7 +289,10 @@ export default class LandingScene extends Component {
 
               let submissions = realm.objects('Submission')
               submissions.map((submission) => {
-                this.fs.delete(JSON.parse(JSON.stringify(submission.images)))
+                let images = JSON.parse(submission.images)
+                console.log('Initiating delete of: ', images, typeof images)
+
+                this.fs.delete(images)
               })
               realm.delete(submissions)
             })
