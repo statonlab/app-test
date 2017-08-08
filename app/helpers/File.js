@@ -91,6 +91,8 @@ export default class File {
    * @param callback Function to call on success
    */
   delete(file, callback) {
+    console.log(file)
+
     let count     = 0
     let processed = 0
 
@@ -125,7 +127,8 @@ export default class File {
 
         file[key].map(f => {
           // Increment the count.
-          this._system.unlink(f.replace('file:', '')).then(() => {
+          this._system.unlink(this.image(f).replace('file:', '')).then(() => {
+            this._deleteThumbnail(f)
             // Increment the number of deleted items.
             processed++
             // If all files have been deleted, run the callback.
@@ -141,6 +144,19 @@ export default class File {
         })
       })
     }
+  }
+
+  /**
+   * Delete thumbnails
+   * @param file
+   * @private
+   */
+  _deleteThumbnail(file) {
+    this._system.unlink(this.thumbnail(file).replace('file:', '')).then(() => {
+      // nothing to do here
+    }).catch(error => {
+      console.log('couldn\'t delete thumbnail')
+    })
   }
 
   /**
@@ -224,7 +240,6 @@ export default class File {
           this._processed++
           if (this._processed === total) {
             DeviceEventEmitter.emit('imagesResized', this._images)
-            console.log(this._images)
           }
         })
       })
@@ -287,20 +302,24 @@ export default class File {
    * @private
    */
   _setupImage(image, callback) {
-    if (this._android && image.indexOf('http') > -1) {
+    if (image.indexOf('http') > -1) {
       FS.config({
         fileCache: true
       }).fetch('GET', image).then(response => {
-        this._setupImage(response.path(), callback)
+        this._moveImage(response.path(), image, callback)
       }).catch(error => {
         console.log('Download error: ', error, image)
       })
       return
     }
 
+    this._moveImage(image, image, callback)
+  }
+
+  _moveImage(image, link, callback) {
     // ImageResizer.createResizedImage(image, 1000, 1000, 'JPEG', 100).then(full_image => {
     // Get image name
-    let name = image.split('/')
+    let name = link.split('/')
     name     = name[name.length - 1]
 
     let path = `${this._imagesDir}/${name}`
@@ -331,10 +350,10 @@ export default class File {
     ImageResizer.createResizedImage(image, 160, 160, 'JPEG', 100, 0, this._thumbnailsDir)
       .then(thumbnail => {
         // Let it have the same name of the original image
-        this.move(thumbnail.replace('file:', ''), `${this._thumbnailsDir}/${name}`)
+        this.move(thumbnail.replace('file:', ''), `${this._thumbnailsDir}/${name}`, () => {
+        })
       })
       .catch((error) => {
-        console.log('Thumbnail error', error, image)
       })
   }
 }
