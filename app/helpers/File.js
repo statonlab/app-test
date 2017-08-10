@@ -315,23 +315,39 @@ export default class File {
   }
 
   _moveImage(image, link, callback) {
-    // ImageResizer.createResizedImage(image, 1000, 1000, 'JPEG', 100).then(full_image => {
+    //ImageResizer.createResizedImage(image, 1000, 1000, 'JPEG', 100).then(full_image => {
+
     // Get image name
     let name = link.split('/')
     name     = name[name.length - 1]
 
     let path = `${this._imagesDir}/${name}`
 
-    this.move(image.replace('file:', ''), path, () => {
+    // On android, copy the image to permanent storage
+    if (this._android) {
+      this.copy(image.replace('file://', ''), path, () => {
+        this._setupThumbnail(path)
+
+        if (typeof  callback !== 'undefined') {
+          callback(path)
+        }
+      })
+
+      return
+    }
+
+    // On iOS, move the image to permanent storage
+    this.move(image, path, () => {
       this._setupThumbnail(path)
 
       if (typeof  callback !== 'undefined') {
         callback(path)
       }
     })
+
     //}).catch((error) => {
-    //   console.log('Full image error', error, image)
-    // })
+    //console.log('Full image error', error, image)
+    //})
   }
 
   /**
