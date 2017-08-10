@@ -45,14 +45,17 @@ export default class ObservationScene extends Component {
 
     this.user = realm.objects('User')[0]
     this.fs   = new File()
+
+    this.events = []
   }
 
   componentWillMount() {
-    this.backEvent = BackAndroid.addEventListener('hardwareBackPress', () => {
+    this.events.push(BackAndroid.addEventListener('hardwareBackPress', () => {
       this.props.navigator.pop()
       return true
-    })
-
+    }))
+    this.events.push(DeviceEventEmitter.addListener('userLoggedIn', this._isLoggedIn.bind(this)))
+    this.events.push(DeviceEventEmitter.addListener('editSubmission', this._reloadEntry.bind(this)))
     this.setState({entry: this.props.plant})
   }
 
@@ -61,9 +64,6 @@ export default class ObservationScene extends Component {
    */
   componentDidMount() {
     this._isLoggedIn()
-
-    this.loggedEvent = DeviceEventEmitter.addListener('userLoggedIn', this._isLoggedIn.bind(this))
-    this.editedEvent = DeviceEventEmitter.addListener('editSubmission', this._reloadEntry.bind(this))
 
     let pages  = 0
     let images = JSON.parse(this.props.plant.images)
@@ -86,9 +86,7 @@ export default class ObservationScene extends Component {
    * Call onUnmount property.
    */
   componentWillUnmount() {
-    this.loggedEvent.remove()
-    this.editedEvent.remove()
-    this.backEvent.remove()
+    this.events.map(event => event.remove())
     this.props.onUnmount()
   }
 
@@ -175,7 +173,6 @@ export default class ObservationScene extends Component {
       })
     }
   }
-
 
   /**
    * Render meta data as list items.
@@ -272,6 +269,7 @@ export default class ObservationScene extends Component {
       axios.delete(`observation/${entry.serverID}?api_token=${this.user.api_token}`)
         .then(response => {
           // Delete locally
+          this.refs.spinner.close()
           this.deleteLocally()
         })
         .catch(error => {
@@ -283,9 +281,6 @@ export default class ObservationScene extends Component {
           }
 
           alert('Unable to delete at this time.  Please check your internet connection and try again.')
-        })
-        .then(() => {
-          this.refs.spinner.close()
         })
     } else {
       this.deleteLocally()
