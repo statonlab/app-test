@@ -128,15 +128,15 @@ export default class File {
         }
 
         file[key].map(f => {
-          let isNew = false
+          let isNew = true
           if (f.indexOf('/images/') > -1) {
-            isNew = true
+            isNew = false
             f     = this.image(f)
           }
 
           // Increment the count.
           this._system.unlink(f.replace('file:', '')).then(() => {
-            if (isNew) {
+            if (!isNew) {
               this._deleteThumbnail(f)
             }
             // Increment the number of deleted items.
@@ -260,6 +260,9 @@ export default class File {
         if (typeof processedImages[key] !== 'undefined') {
           if (processedImages[key].indexOf(image) > -1) {
             this._processed++
+            if (this._processed === total) {
+              DeviceEventEmitter.emit('imagesResized', this._images)
+            }
             return
           }
         }

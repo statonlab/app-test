@@ -116,6 +116,7 @@ export default class Form extends Component {
    * @private
    */
   _handleResizedImages = (images) => {
+    console.log('EVENT COMPLETED')
     this.refs.spinner.close()
     this.setState({images})
 
