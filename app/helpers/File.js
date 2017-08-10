@@ -94,16 +94,19 @@ export default class File {
     let count     = 0
     let processed = 0
 
+    console.log('IN DELETE FUNCTION: ', file)
+
     if (typeof file === 'string') {
-      if (file.indexOf('/images/') > -1) {
-        file = this.image(file)
-      }
+      file = this.image(file)
 
       this._system.unlink(file.replace('file:', '')).then(() => {
         if (typeof  callback !== 'undefined') {
           callback()
         }
       }).catch(error => {
+        if (typeof  callback !== 'undefined') {
+          callback()
+        }
         console.log('Could not delete file ' + file + ': ', error)
       })
 
@@ -120,6 +123,7 @@ export default class File {
 
       if (count === 0) {
         typeof callback !== 'undefined' && callback()
+        return
       }
 
       keys.map(key => {
@@ -128,17 +132,11 @@ export default class File {
         }
 
         file[key].map(f => {
-          let isNew = true
-          if (f.indexOf('/images/') > -1) {
-            isNew = false
-            f     = this.image(f)
-          }
-
+          f = this.image(f)
+          console.log('DELETING: ', f)
           // Increment the count.
           this._system.unlink(f.replace('file:', '')).then(() => {
-            if (!isNew) {
-              this._deleteThumbnail(f)
-            }
+            this._deleteThumbnail(f)
             // Increment the number of deleted items.
             processed++
             // If all files have been deleted, run the callback.
@@ -157,15 +155,24 @@ export default class File {
   }
 
   /**
-   * Delete thumbnails
+   * Delete thumbnail.
+   *
    * @param file
    * @private
    */
   _deleteThumbnail(file) {
-    this._system.unlink(this.thumbnail(file).replace('file:', '')).then(() => {
-      // nothing to do here
-    }).catch(error => {
-      console.log('couldn\'t delete thumbnail')
+    let thumbnail = this.thumbnail(file)
+
+    this.exists(thumbnail).then(exists => {
+      if (!exists) {
+        return
+      }
+
+      this._system.unlink(thumbnail.replace('file:', '')).then(() => {
+        // nothing to do here
+      }).catch(error => {
+        console.log('couldn\'t delete thumbnail')
+      })
     })
   }
 

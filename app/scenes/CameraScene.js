@@ -10,7 +10,8 @@ import {
   Image,
   Animated,
   Alert,
-  BackAndroid
+  BackAndroid,
+  DeviceEventEmitter
 } from 'react-native'
 import Camera from 'react-native-camera'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -44,7 +45,8 @@ export default class CameraScene extends Component {
       focus        : new Animated.Value(0),
       focusLeft    : 0,
       focusRight   : 0,
-      hasPermission: false
+      hasPermission: false,
+      deletedImages: []
     }
 
     this.isCapturing = false
@@ -267,7 +269,7 @@ export default class CameraScene extends Component {
 
   _getCameraSideThumbnail() {
     let image = this.fs.image(this.state.images[this.state.images.length - 1])
-
+    console.log(image, this.state.images)
     return (
       <TouchableOpacity
         style={[styles.toolTouchable, {alignItems: 'flex-end'}]}
@@ -366,7 +368,7 @@ export default class CameraScene extends Component {
       })
     }
 
-    this.fs.delete(imageToDelete)
+    this.setState({deletedImages: this.state.deletedImages.concat(imageToDelete)})
   }
 
   /**
@@ -375,6 +377,10 @@ export default class CameraScene extends Component {
    * @private
    */
   _done = () => {
+    if (this.state.deletedImages.length > 0) {
+      this.props.onDelete(this.state.deletedImages)
+    }
+
     this.props.onDone(this.state.images, this.props.id)
     this.props.navigator.pop()
   }
@@ -477,6 +483,7 @@ export default class CameraScene extends Component {
  */
 CameraScene.PropTypes = {
   navigator: PropTypes.object.isRequired,
+  onDelete : PropTypes.func.isRequired,
   onDone   : PropTypes.func.isRequired,
   images   : PropTypes.array,
   id       : PropTypes.string
