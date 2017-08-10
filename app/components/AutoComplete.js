@@ -8,7 +8,8 @@ import {
   Modal,
   KeyboardAvoidingView,
   ScrollView,
-  StatusBar
+  StatusBar,
+  Platform
 } from 'react-native'
 import Latin from '../resources/treeNames.js'
 import Colors from '../helpers/Colors'
@@ -120,6 +121,7 @@ export default class AutoComplete extends Component {
 
 
   render() {
+    const offset = (Platform.OS === 'android') ? -200 : 0
     return (
       <View style={styles.mainContainer}>
         <Modal
@@ -129,7 +131,7 @@ export default class AutoComplete extends Component {
           animationType={this.state.animationType}>
           <StatusBar hidden={true}/>
           <KeyboardAvoidingView style={{flex: 1, backgroundColor: '#f7f7f7'}} behavior="padding"
-                                keyboardVerticalOffset={0}>
+                                keyboardVerticalOffset={offset}>
             <View style={[{
               height        : 40, backgroundColor: Colors.primary, flex: 0, alignItems: 'center',
               justifyContent: 'space-between',
