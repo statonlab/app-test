@@ -33,17 +33,17 @@ export default class CameraScene extends Component {
     super(props)
 
     this.state = {
-      camera: {
-        type: Camera.constants.Type.back,
+      camera       : {
+        type : Camera.constants.Type.back,
         flash: Camera.constants.FlashMode.auto
       },
       selectedImage: '',
-      images: [],
-      pageWidth: 0,
-      newImages: [],
-      focus: new Animated.Value(0),
-      focusLeft: 0,
-      focusRight: 0,
+      images       : [],
+      pageWidth    : 0,
+      newImages    : [],
+      focus        : new Animated.Value(0),
+      focusLeft    : 0,
+      focusRight   : 0,
       hasPermission: false
     }
 
@@ -91,11 +91,13 @@ export default class CameraScene extends Component {
     let length = this.props.images.length
     this.setState({
       pageWidth: Dimensions.get('window').width,
-      images: this.props.images
+      images   : this.props.images
     })
 
     if (length > 0) {
-      this.setState({selectedImage: this.props.images[length - 1]})
+      let selectedImage = this.fs.image(this.props.images[length - 1])
+
+      this.setState({selectedImage})
     }
   }
 
@@ -173,7 +175,7 @@ export default class CameraScene extends Component {
             {flashIcon}
             <TouchableOpacity
               style={[styles.toolTouchable, {
-                alignItems: 'flex-end',
+                alignItems  : 'flex-end',
                 paddingRight: 15
               }]}
               onPress={this.switchType}>
@@ -212,13 +214,7 @@ export default class CameraScene extends Component {
               <Icon name="camera" size={36} color={'#fff'}/>
             </TouchableOpacity>
             {this.state.images.length > 0 ?
-              <TouchableOpacity
-                style={[styles.toolTouchable, {alignItems: 'flex-end'}]}
-                onPress={this._forward}>
-                <Image
-                  source={{uri: this.state.images[this.state.images.length - 1]}}
-                  style={styles.thumbnail}/>
-              </TouchableOpacity>
+              this._getCameraSideThumbnail()
               :
               <View style={[styles.toolTouchable, {alignItems: 'flex-end'}]}>
                 <View style={[styles.thumbnail, {backgroundColor: '#222'}]}/>
@@ -228,7 +224,7 @@ export default class CameraScene extends Component {
         </View>
 
         <View style={[styles.container, {
-          width: this.state.pageWidth,
+          width          : this.state.pageWidth,
           backgroundColor: '#000'
         }]}>
           <View style={styles.header}>
@@ -269,6 +265,20 @@ export default class CameraScene extends Component {
     )
   }
 
+  _getCameraSideThumbnail() {
+    let image = this.fs.image(this.state.images[this.state.images.length - 1])
+
+    return (
+      <TouchableOpacity
+        style={[styles.toolTouchable, {alignItems: 'flex-end'}]}
+        onPress={this._forward}>
+        <Image
+          source={{uri: image}}
+          style={styles.thumbnail}/>
+      </TouchableOpacity>
+    )
+  }
+
   /**
    * Renders the thumbnail for each image.
    *
@@ -277,6 +287,7 @@ export default class CameraScene extends Component {
    * @returns {XML}
    */
   renderThumbnail = (image, index) => {
+    image = this.fs.image(image)
     return (
       <TouchableOpacity
         key={index}
@@ -341,13 +352,15 @@ export default class CameraScene extends Component {
     if (images.length === 0) {
       this.setState({
         selectedImage: '',
-        images: [],
-        newImages: []
+        images       : [],
+        newImages    : []
       })
       this._back()
     } else {
+      let selectedImage = this.fs.image(images[0])
+
       this.setState({
-        selectedImage: images[0],
+        selectedImage,
         images,
         newImages
       })
@@ -411,12 +424,12 @@ export default class CameraScene extends Component {
     this.camera.capture({
       jpegQuality: 100
     }).then(data => {
-      let image = data.path
+      let image  = data.path
       let images = this.state.images.concat(image)
       this.setState({
         selectedImage: image,
-        images: images,
-        newImages: this.state.newImages.concat(image)
+        images       : images,
+        newImages    : this.state.newImages.concat(image)
       })
       this._forward()
     }).catch(error => {
@@ -464,14 +477,14 @@ export default class CameraScene extends Component {
  */
 CameraScene.PropTypes = {
   navigator: PropTypes.object.isRequired,
-  onDone: PropTypes.func.isRequired,
-  images: PropTypes.array,
-  id: PropTypes.string
+  onDone   : PropTypes.func.isRequired,
+  images   : PropTypes.array,
+  id       : PropTypes.string
 }
 
 CameraScene.defaultProps = {
   images: [],
-  id: 'images'
+  id    : 'images'
 }
 
 /**
@@ -492,89 +505,89 @@ function getVerticalPadding() {
  */
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex : 1,
     width: undefined
   },
 
   header: {
     backgroundColor: Colors.primary,
-    paddingTop: getVerticalPadding(),
-    flex: 0,
-    justifyContent: 'space-between',
-    flexDirection: 'row',
+    paddingTop     : getVerticalPadding(),
+    flex           : 0,
+    justifyContent : 'space-between',
+    flexDirection  : 'row',
     ...(new Elevation(4))
   },
 
   headerButton: {
     paddingHorizontal: 10,
-    paddingVertical: 15,
-    flexDirection: 'row'
+    paddingVertical  : 15,
+    flexDirection    : 'row'
   },
 
   headerText: {
-    color: '#fff',
+    color     : '#fff',
     fontWeight: '500',
-    fontSize: 16
+    fontSize  : 16
   },
 
   preview: {
-    flex: 1,
+    flex          : 1,
     justifyContent: 'space-between',
-    height: undefined,
-    width: undefined
+    height        : undefined,
+    width         : undefined
   },
 
   toolsContainer: {
-    flex: 0,
-    flexDirection: 'row',
-    width: undefined,
-    height: 80,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: '#000',
+    flex             : 0,
+    flexDirection    : 'row',
+    width            : undefined,
+    height           : 80,
+    justifyContent   : 'space-between',
+    alignItems       : 'center',
+    backgroundColor  : '#000',
     paddingHorizontal: 10
   },
 
   capture: {
-    flex: 1,
-    width: undefined,
-    height: undefined,
+    flex      : 1,
+    width     : undefined,
+    height    : undefined,
     alignItems: 'center',
-    marginTop: 5
+    marginTop : 5
   },
 
   toolText: {
-    color: '#fff',
-    flex: 0,
+    color  : '#fff',
+    flex   : 0,
     padding: 5,
-    width: 90
+    width  : 90
   },
 
   toolTouchable: {
-    flex: 0,
-    width: 90,
+    flex  : 0,
+    width : 90,
     height: undefined
   },
 
   topToolsContainer: {
-    flex: 0,
-    width: undefined,
-    height: undefined,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flex           : 0,
+    width          : undefined,
+    height         : undefined,
+    flexDirection  : 'row',
+    justifyContent : 'space-between',
+    alignItems     : 'center',
     backgroundColor: '#000',
-    paddingTop: getVerticalPadding()
+    paddingTop     : getVerticalPadding()
   },
 
   iconText: {
-    flex: 0,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flex          : 0,
+    flexDirection : 'row',
+    alignItems    : 'center',
     justifyContent: 'center',
-    padding: 0,
-    paddingLeft: 5,
-    marginBottom: 5
+    padding       : 0,
+    paddingLeft   : 5,
+    marginBottom  : 5
   },
 
   flash: {
@@ -583,52 +596,52 @@ const styles = StyleSheet.create({
   },
 
   flashTouchable: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection    : 'row',
+    alignItems       : 'center',
+    justifyContent   : 'center',
     paddingHorizontal: 15,
-    paddingVertical: 5
+    paddingVertical  : 5
   },
 
   thumbnailsContainer: {
-    backgroundColor: '#ddd',
-    height: 70,
+    backgroundColor  : '#ddd',
+    height           : 70,
     paddingHorizontal: 5,
     ...(new Elevation(4)),
-    shadowOffset: {
+    shadowOffset     : {
       height: -3
     },
-    shadowColor: '#888'
+    shadowColor      : '#888'
   },
 
   thumbnail: {
-    width: 50,
-    height: 50,
+    width           : 50,
+    height          : 50,
     marginHorizontal: 5,
-    borderRadius: 3
+    borderRadius    : 3
   },
 
   addIcon: {
-    width: 50,
-    height: 50,
-    backgroundColor: '#ccc',
-    alignItems: 'center',
-    justifyContent: 'center',
+    width           : 50,
+    height          : 50,
+    backgroundColor : '#ccc',
+    alignItems      : 'center',
+    justifyContent  : 'center',
     marginHorizontal: 5,
-    borderRadius: 3
+    borderRadius    : 3
   },
 
   focusBox: {
-    width: 80,
-    height: 80,
-    borderWidth: 1,
-    borderRadius: 2,
+    width          : 80,
+    height         : 80,
+    borderWidth    : 1,
+    borderRadius   : 2,
     backgroundColor: 'transparent',
-    borderColor: Colors.warning,
-    borderStyle: 'solid',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    zIndex: 1
+    borderColor    : Colors.warning,
+    borderStyle    : 'solid',
+    position       : 'absolute',
+    top            : 0,
+    left           : 0,
+    zIndex         : 1
   }
 })

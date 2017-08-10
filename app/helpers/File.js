@@ -95,6 +95,10 @@ export default class File {
     let processed = 0
 
     if (typeof file === 'string') {
+      if (file.indexOf('/images/') > -1) {
+        file = this.image(file)
+      }
+
       this._system.unlink(file.replace('file:', '')).then(() => {
         if (typeof  callback !== 'undefined') {
           callback()
@@ -124,9 +128,17 @@ export default class File {
         }
 
         file[key].map(f => {
+          let isNew = false
+          if (f.indexOf('/images/') > -1) {
+            isNew = true
+            f     = this.image(f)
+          }
+
           // Increment the count.
-          this._system.unlink(this.image(f).replace('file:', '')).then(() => {
-            this._deleteThumbnail(f)
+          this._system.unlink(f.replace('file:', '')).then(() => {
+            if (isNew) {
+              this._deleteThumbnail(f)
+            }
             // Increment the number of deleted items.
             processed++
             // If all files have been deleted, run the callback.
@@ -165,12 +177,20 @@ export default class File {
    * @param callback Function to call on success
    */
   move(from, to, callback) {
-    this._system.mv(from, to).then(() => {
-      if (typeof  callback !== 'undefined') {
-        callback()
+    this.exists(from.replace('file:')).then(exists => {
+      if (!exists) {
+        return
       }
+
+      this._system.mv(from, to).then(() => {
+        if (typeof  callback !== 'undefined') {
+          callback()
+        }
+      }).catch(error => {
+        console.log('Could not move file from ' + from + ' to ' + to + ': ', error)
+      })
     }).catch(error => {
-      console.log('Could not move file from ' + from + ' to ' + to + ': ', error)
+      console.log(error)
     })
   }
 
@@ -213,9 +233,13 @@ export default class File {
   /**
    * Resize a list of images.
    *
+   * @param {Object} images Object of images to process
+   * @param {Object} processedImages Object of images to ignore. Helpful when editing to detect
+   *                                  images that have already been processed previously
+   *
    * @param images
    */
-  resizeImages(images) {
+  resizeImages(images, processedImages) {
     let total       = 0
     this._processed = 0
     this._images    = images
@@ -232,6 +256,14 @@ export default class File {
 
     Object.keys(images).map(key => {
       images[key].map((image, index) => {
+        // Detect images that are already processed.
+        if (typeof processedImages[key] !== 'undefined') {
+          if (processedImages[key].indexOf(image) > -1) {
+            this._processed++
+            return
+          }
+        }
+
         this._setupImage(image, new_image => {
           this._images[key][index] = new_image
           this.delete(image)
@@ -259,6 +291,10 @@ export default class File {
       return image
     }
 
+    if (image.indexOf('/images/') === -1) {
+      return image
+    }
+
     // Get image name
     let name = image.split('/')
     name     = name[name.length - 1]
@@ -280,6 +316,10 @@ export default class File {
     }
 
     if (image.indexOf('http') > -1) {
+      return image
+    }
+
+    if (image.indexOf('/images/') === -1) {
       return image
     }
 
