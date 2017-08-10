@@ -65,21 +65,23 @@ export default class ObservationScene extends Component {
   componentDidMount() {
     this._isLoggedIn()
 
-    let pages  = 0
-    let images = JSON.parse(this.props.plant.images)
-    Object.keys(images).map((key) => {
-      if (Array.isArray(images[key])) {
-        images[key].map(() => {
-          pages++
-        })
-      }
-    })
-
     this.setState({
       synced      : this.props.plant.synced,
       needs_update: this.props.plant.needs_update,
-      pages       : pages
+      pages       : this._generatePages(this.props.plant)
     })
+  }
+
+  _generatePages(observation) {
+    let pages  = 0
+    let images = JSON.parse(observation.images)
+    Object.keys(images).map((key) => {
+      if (Array.isArray(images[key])) {
+        pages += images[key].length
+      }
+    })
+
+    return pages
   }
 
   /**
@@ -96,9 +98,11 @@ export default class ObservationScene extends Component {
    * @private
    */
   _reloadEntry() {
+    let observation = realm.objects('Submission').filtered(`id == ${this.state.entry.id}`)[0]
     this.setState({
-      entry       : realm.objects('Submission').filtered(`id == ${this.state.entry.id}`)[0],
-      needs_update: true
+      entry       : observation,
+      needs_update: true,
+      pages       : this._generatePages(observation)
     })
   }
 
@@ -374,7 +378,7 @@ export default class ObservationScene extends Component {
 
     // Flatten images
     let all = []
-    for (let i = 0; i < this.state.pages; i++) {
+    for (let i = 0; i < this._generatePages(this.state.entry); i++) {
       all.push(i)
     }
 

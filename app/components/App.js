@@ -44,7 +44,7 @@ export default class WildType extends Component {
      **/
 
     if (route.label === 'CameraScene') {
-      return <CameraScene navigator={navigator} images={route.images ? route.images : []} onDone={route.onDone} id={route.id}/>
+      return <CameraScene navigator={navigator} images={route.images ? route.images : []} onDone={route.onDone} id={route.id} onDelete={route.onDelete}/>
     }
 
     /** DEPRECATED

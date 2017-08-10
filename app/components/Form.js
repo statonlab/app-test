@@ -38,17 +38,18 @@ export default class Form extends Component {
     super(props)
 
     this.state = {
-      images      : {},
-      title       : this.props.title,
-      location    : {
+      images       : {},
+      title        : this.props.title,
+      location     : {
         latitude : 0,
         longitude: 0,
         accuracy : -1
       },
-      metadata    : {},
-      id          : '',
-      warnings    : {},
-      bottomMargin: new Animated.Value(0)
+      metadata     : {},
+      id           : '',
+      warnings     : {},
+      bottomMargin : new Animated.Value(0),
+      deletedImages: []
     }
 
     this.events     = []
@@ -139,6 +140,38 @@ export default class Form extends Component {
     let _images = this.state.images
     _images[id] = images
     this.setState({images: _images})
+  }
+
+  /**
+   * Handle deleted images event (pass as a prop to camera scene).
+   * Set the state to delete all images.
+   *
+   * @param deletedImages
+   */
+  handleDeletedImages = (deletedImages) => {
+    this.setState({deletedImages})
+  }
+
+  /**
+   * Remove deleted images from the state.
+   */
+  getRemainingImages = () => {
+    let images = this.state.images
+
+    if (this.state.deletedImages.length === 0) {
+      return images
+    }
+
+    Object.keys(images).map(key => {
+      images[key].map(image => {
+        let index = this.state.deletedImages.indexOf(image)
+        if (index > -1) {
+          images[key].splice(index, 1)
+        }
+      })
+    })
+
+    return images
   }
 
   /**
@@ -254,7 +287,7 @@ export default class Form extends Component {
     let observation = {
       id       : this.primaryKey,
       name     : this.state.title.toString(),
-      images   : JSON.stringify(this.state.images),
+      images   : JSON.stringify(this.getRemainingImages()),
       location : this.state.location,
       date     : moment().format('MM-DD-YYYY HH:mm:ss').toString(),
       synced   : false,
@@ -265,17 +298,16 @@ export default class Form extends Component {
       this.realm.create('Submission', observation)
     })
 
-    // Tell anyone who cares that there is a new submission
-    if (this.props.edit === false) {
+    console.log('DELETING: ', this.state.deletedImages)
+    this.fs.delete({images: this.state.deletedImages}, () => {
+      // Tell anyone who cares that there is a new submission
       this.props.navigator.replace({
         label   : 'SubmittedScene',
         plant   : observation,
         gestures: {}
       })
       DeviceEventEmitter.emit('newSubmission')
-    } else {
-      this.props.navigator.pop()
-    }
+    })
   }
 
   /**
@@ -295,13 +327,16 @@ export default class Form extends Component {
     this.generateImages()
   }
 
+  /**
+   * Update observation in realm.
+   */
   saveEdit = () => {
     this.realm.write(() => {
       // true as 3rd argument updates
       realm.create('Submission', {
         id          : this.props.entryInfo.id,
         name        : this.state.title.toString(),
-        images      : JSON.stringify(this.state.images),
+        images      : JSON.stringify(this.getRemainingImages()),
         location    : this.props.entryInfo.location,
         date        : this.props.entryInfo.date,
         synced      : this.props.entryInfo.synced,
@@ -310,7 +345,10 @@ export default class Form extends Component {
       }, true)
     })
 
-    this.props.navigator.pop()
+    console.log('DELETING: ', this.state.deletedImages)
+    this.fs.delete({images: this.state.deletedImages}, () => {
+      this.props.navigator.pop()
+    })
   }
 
   /**
@@ -751,6 +789,7 @@ export default class Form extends Component {
       label   : 'CameraScene',
       images  : this.state.images[id] ? this.state.images[id] : [],
       onDone  : this.handleImages.bind(this),
+      onDelete: this.handleDeletedImages.bind(this),
       id      : id,
       gestures: {}
     })
