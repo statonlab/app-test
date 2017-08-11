@@ -25,7 +25,7 @@ const plants = [
   {
     title    : 'American Chestnut',
     latinName: 'Castanea dentata',
-    image    : require('../img/am_chestnut4.jpg')
+    image    : require('../img/am_chestnut3.jpg')
   },
   {
     title    : 'Ash',
@@ -45,7 +45,7 @@ const plants = [
   {
     title    : 'American Elm',
     latinName: 'Ulmus americana',
-    image    : require('../img/elm.jpg')
+    image    : require('../img/elmleaf.jpg')
   },
   {
     title    : 'Other',

@@ -284,6 +284,7 @@ export default class ObservationScene extends Component {
             return
           }
 
+          console.log(error.response.status)
           alert('Unable to delete at this time.  Please check your internet connection and try again.')
         })
     } else {
@@ -421,7 +422,6 @@ export default class ObservationScene extends Component {
    */
   render() {
     let entry = this.state.entry
-console.log('O ENTRY', entry)
     if (entry === null) {
       return null
     }
