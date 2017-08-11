@@ -117,7 +117,6 @@ export default class Form extends Component {
    * @private
    */
   _handleResizedImages = (images) => {
-    console.log('EVENT COMPLETED')
     this.refs.spinner.close()
     this.setState({images})
 
@@ -298,7 +297,6 @@ export default class Form extends Component {
       this.realm.create('Submission', observation)
     })
 
-    console.log('DELETING: ', this.state.deletedImages)
     this.fs.delete({images: this.state.deletedImages}, () => {
       // Tell anyone who cares that there is a new submission
       this.props.navigator.replace({
@@ -345,7 +343,6 @@ export default class Form extends Component {
       }, true)
     })
 
-    console.log('DELETING: ', this.state.deletedImages)
     this.fs.delete({images: this.state.deletedImages}, () => {
       this.props.navigator.pop()
     })

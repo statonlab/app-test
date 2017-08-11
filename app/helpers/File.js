@@ -94,8 +94,6 @@ export default class File {
     let count     = 0
     let processed = 0
 
-    console.log('IN DELETE FUNCTION: ', file)
-
     if (typeof file === 'string') {
       file = this.image(file)
 
@@ -133,7 +131,6 @@ export default class File {
 
         file[key].map(f => {
           f = this.image(f)
-          console.log('DELETING: ', f)
           // Increment the count.
           this._system.unlink(f.replace('file:', '')).then(() => {
             this._deleteThumbnail(f)
@@ -171,7 +168,7 @@ export default class File {
       this._system.unlink(thumbnail.replace('file:', '')).then(() => {
         // nothing to do here
       }).catch(error => {
-        console.log('couldn\'t delete thumbnail')
+        console.log('couldn\'t delete thumbnail', error)
       })
     })
   }
