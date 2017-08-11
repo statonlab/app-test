@@ -187,51 +187,52 @@ export default class LandingScene extends Component {
    * Download observations from the server and add them to realm
    * if they don't already exist
    */
-  downloadObservations() {
-    let emptyDB = (realm.objects('Submission').length <= 0)
+  async downloadObservations() {
+    let response = await Observation.get()
+    let records  = response.data.data
 
-    Observation.get().then(response => {
-      let records = response.data.data
-      records.map(record => {
-        let exists = (realm.objects('Submission').filtered(`serverID == ${record.observation_id}`).length > 0)
-        if (exists) {
-          return
-        }
-        let primaryKey = 1
-        if (record.mobile_id) {
-          primaryKey = record.mobile_id
-        } else if (!emptyDB) {
-          primaryKey = realm.objects('Submission').sorted('id', true)[0].id + 1
-        }
+    records.map(record => {
+      let primaryKey = parseInt(record.mobile_id)
+      let count      = realm.objects('Submission')
+        .filtered(`serverID == ${record.observation_id} OR id == ${primaryKey}`)
+        .length
 
-        realm.write(() => {
-          realm.create('Submission', {
-            id       : primaryKey,
-            name     : record.observation_category,
-            images   : JSON.stringify(record.images),
-            location : record.location,
-            date     : moment(record.date.date).format('MM-DD-YYYY HH:mm:ss').toString(),
-            synced   : true,
-            meta_data: JSON.stringify(record.meta_data),
-            serverID : parseInt(record.observation_id)
-          })
-          emptyDB = false
+      if (count > 0) {
+        return
+      }
+
+      realm.write(() => {
+        realm.create('Submission', {
+          id       : primaryKey,
+          name     : record.observation_category,
+          images   : JSON.stringify(record.images),
+          location : record.location,
+          date     : moment(record.date.date).format('MM-DD-YYYY HH:mm:ss').toString(),
+          synced   : true,
+          meta_data: JSON.stringify(record.meta_data),
+          serverID : parseInt(record.observation_id)
         })
       })
-
-      this.downloadImages()
-    }).catch(error => {
-      console.log(error)
     })
+
+    try {
+      await this.downloadImages()
+    } catch (error) {
+      console.log('Could not download images: ', error)
+    }
   }
 
   // Download images
-  downloadImages() {
+  async downloadImages() {
     let observations = realm.objects('Submission')
 
-    observations.map(observation => {
-      this.fs.download(observation)
-    })
+    return await Promise.all(observations.map(async observation => {
+      try {
+        await this.fs.download(observation)
+      } catch (error) {
+        console.log(`Failed to download ${observation.name}`)
+      }
+    }))
   }
 
   /**
@@ -263,17 +264,17 @@ export default class LandingScene extends Component {
     //Set alert text
     let observations = realm.objects('Submission').filtered('synced == false')
     let alertText    = {
-      label    : "Log out",
-      labelText: "Are you sure you would like to log out?",
-      cancel   : "Cancel",
-      confirm  : "Log out"
+      label    : 'Log out',
+      labelText: 'Are you sure you would like to log out?',
+      cancel   : 'Cancel',
+      confirm  : 'Log out'
     }
     if (observations.length > 0) {
       alertText = {
-        label    : "Warning",
-        labelText: "You have observations that are not uploaded.  If you log out, these observations will be deleted permanently.",
-        cancel   : "Cancel",
-        confirm  : "Log out"
+        label    : 'Warning',
+        labelText: 'You have observations that are not uploaded.  If you log out, these observations will be deleted permanently.',
+        cancel   : 'Cancel',
+        confirm  : 'Log out'
       }
     }
     Alert.alert(
@@ -290,8 +291,6 @@ export default class LandingScene extends Component {
               let submissions = realm.objects('Submission')
               submissions.map((submission) => {
                 let images = JSON.parse(submission.images)
-                console.log('Initiating delete of: ', images, typeof images)
-
                 this.fs.delete(images)
               })
               realm.delete(submissions)
@@ -326,7 +325,8 @@ export default class LandingScene extends Component {
    */
   loginButton() {
     return (
-      <TouchableOpacity style={[styles.button, {marginHorizontal: 5}]} onPress={() => this.props.navigator.push({label: 'LoginScene'})}>
+      <TouchableOpacity style={[styles.button, {marginHorizontal: 5}]}
+                        onPress={() => this.props.navigator.push({label: 'LoginScene'})}>
         <Text style={styles.buttonText}>Login to upload your entries</Text>
       </TouchableOpacity>
     )
@@ -364,7 +364,8 @@ export default class LandingScene extends Component {
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.plantsContainer}>
             {this.state.userLoggedIn ?
-              <UploadButton ref="uploadButton" onUploadDone={this.uploadCompleted.bind(this)} onError={this.uploadError.bind(this)}/> :
+              <UploadButton ref="uploadButton" onUploadDone={this.uploadCompleted.bind(this)}
+                            onError={this.uploadError.bind(this)}/> :
               this.loginButton.call(this)
             }
 
@@ -383,7 +384,8 @@ export default class LandingScene extends Component {
                         <Text style={styles.cardTitle}>
                           {plant.title}
                         </Text>
-                        <Text style={plant.title != 'Other' ? [styles.cardBodyText, styles.italics] : styles.cardBodyText}>
+                        <Text
+                          style={plant.title != 'Other' ? [styles.cardBodyText, styles.italics] : styles.cardBodyText}>
                           {plant.latinName}
                         </Text>
                       </View>

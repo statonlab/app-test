@@ -75,7 +75,6 @@ export default class LoginScene extends Component {
       email   : this.state.email,
       password: this.state.password
     }).then(response => {
-
       this.storeUser(response)
       this.setState({showSpinner: false})
 

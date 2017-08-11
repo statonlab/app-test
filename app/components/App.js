@@ -19,6 +19,7 @@ import RegistrationScene from '../scenes/RegisterationScene'
 import ObservationsScene from '../scenes/ObservationsScene'
 import ObservationScene from '../scenes/ObservationScene'
 import TreeScene from '../scenes/TreeScene'
+import Diagnostics from '../helpers/Diagnostics'
 
 const initialRouteStack = [
   {
@@ -27,6 +28,10 @@ const initialRouteStack = [
 ]
 
 export default class WildType extends Component {
+  componentDidMount() {
+    Diagnostics.run()
+  }
+
   renderScene(route, navigator) {
     if (route.label === 'LandingScene') {
       return <LandingScene title="Overview" navigator={navigator}/>
