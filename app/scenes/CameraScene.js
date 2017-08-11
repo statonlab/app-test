@@ -269,7 +269,6 @@ export default class CameraScene extends Component {
 
   _getCameraSideThumbnail() {
     let image = this.fs.image(this.state.images[this.state.images.length - 1])
-    console.log(image, this.state.images)
     return (
       <TouchableOpacity
         style={[styles.toolTouchable, {alignItems: 'flex-end'}]}
