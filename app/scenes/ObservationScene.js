@@ -421,7 +421,7 @@ export default class ObservationScene extends Component {
    */
   render() {
     let entry = this.state.entry
-
+console.log('O ENTRY', entry)
     if (entry === null) {
       return null
     }

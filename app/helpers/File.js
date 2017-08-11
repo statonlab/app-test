@@ -225,6 +225,7 @@ export default class File {
           processed++
           images[key][index] = image
           if (processed === count) {
+            console.log('Images downloaded')
             realm.write(() => {
               observation.images = JSON.stringify(images)
             })
@@ -232,6 +233,12 @@ export default class File {
         })
       })
     })
+  }
+
+  async downloadImage(image) {
+    let response = await FS.config({fileCache: true}).fetch('GET', image)
+
+    return response.path()
   }
 
   /**
@@ -346,15 +353,14 @@ export default class File {
    * @param callback (image, thumbnail) gets called on success
    * @private
    */
-  _setupImage(image, callback) {
+  async _setupImage(image, callback) {
     if (image.indexOf('http') > -1) {
-      FS.config({
-        fileCache: true
-      }).fetch('GET', image).then(response => {
-        this._moveImage(response.path(), image, callback)
-      }).catch(error => {
+      try {
+        let path = await this.downloadImage(image)
+        this._moveImage(path, image, callback)
+      } catch (error) {
         console.log('Download error: ', error, image)
-      })
+      }
       return
     }
 
@@ -411,8 +417,7 @@ export default class File {
     ImageResizer.createResizedImage(image, 160, 160, 'JPEG', 100, 0, this._thumbnailsDir)
       .then(thumbnail => {
         // Let it have the same name of the original image
-        this.move(thumbnail.replace('file:', ''), `${this._thumbnailsDir}/${name}`, () => {
-        })
+        this.move(thumbnail.replace('file:', ''), `${this._thumbnailsDir}/${name}`)
       })
       .catch((error) => {
       })
