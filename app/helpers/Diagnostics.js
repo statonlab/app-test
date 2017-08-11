@@ -8,6 +8,9 @@ class Diagnostics {
     this._android = Platform.OS === 'android'
   }
 
+  /**
+   * Fix all observations.
+   */
   run() {
     const observations = realm.objects('Submission')
     observations.map(async observation => {
@@ -23,6 +26,13 @@ class Diagnostics {
     })
   }
 
+  /**
+   * Fix broken images.
+   *
+   * @param {Array} images List of images
+   * @returns {Promise.<{}>}
+   * @private
+   */
   async _fixBrokenImages(images) {
     let fixed = {}
 
@@ -54,6 +64,13 @@ class Diagnostics {
     return fixed
   }
 
+  /**
+   * Fix the path of an image and download the image if necessary.
+   *
+   * @param {String} image Path to the image
+   * @returns {Promise.<*>}
+   * @private
+   */
   async _fixPath(image) {
     let name   = this._extractName(image)
     let path   = `${this.fs._imagesDir}/${name}`
@@ -85,6 +102,14 @@ class Diagnostics {
     return image
   }
 
+  /**
+   * Move the images to the permanent directory.
+   *
+   * @param {String} image Path to the image
+   * @param {String} url If provided the name will be extracted from the url
+   * @returns {Promise.<string>}
+   * @private
+   */
   async _moveToImages(image, url) {
     let name = this._extractName(image, url)
     let path = `${this.fs._imagesDir}/${name}`
@@ -108,6 +133,14 @@ class Diagnostics {
     return path
   }
 
+  /**
+   * Create thumbnail if missing.
+   *
+   * @param {String} image Path of the image
+   * @param {String} url If provided the name will be extracted from the url
+   * @returns {Promise.<string>}
+   * @private
+   */
   async _fixThumbnail(image, url) {
     let name          = this._extractName(image, url)
     let thumbnailPath = `${this.fs._thumbnailsDir}/${name}`
@@ -127,6 +160,14 @@ class Diagnostics {
     return thumbnailPath
   }
 
+  /**
+   * Extract the name of the image.
+   *
+   * @param {String} image Path of the image
+   * @param {String} url If provided the name will be extracted from the url
+   * @returns {*}
+   * @private
+   */
   _extractName(image, url) {
     let name
     if (typeof url !== 'undefined') {
