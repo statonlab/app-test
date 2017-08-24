@@ -202,6 +202,7 @@ export default class CameraScene extends Component {
               flashMode={this.state.camera.flash}
               onZoomChanged={this.zoom}
               defaultOnFocusComponent={true}
+              orientation="portrait"
               onFocusChanged={e => {
                 let focusLeft = e.nativeEvent.touchPoint.x - 40
                 let focusTop  = e.nativeEvent.touchPoint.y - 40
