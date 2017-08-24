@@ -240,17 +240,22 @@ export default class Form extends Component {
 
       // Delete only new images
       this.fs.delete(newImages, () => {
-        this.refs.spinner.close()
+        if (typeof this.refs.spinner !== 'undefined') {
+          this.refs.spinner.close()
+        }
         this.props.navigator.pop()
       })
       return
     }
-
-    this.refs.spinner.open()
+    if (typeof this.refs.spinner !== 'undefined') {
+      this.refs.spinner.open()
+    }
 
     // Delete all images
     this.fs.delete(this.state.images, () => {
-      this.refs.spinner.close()
+      if (typeof this.refs.spinner !== 'undefined') {
+        this.refs.spinner.close()
+      }
       this.props.navigator.pop()
     })
   }
