@@ -235,7 +235,7 @@ export default class PickerModal extends Component {
           visible={this.state.modalVisible}
           onRequestClose={this.close}
           animationType={this.state.animationType}>
-          <KeyboardAwareScrollView contentContainerStyle={styles.mainContainer} bounces={false}>
+          <KeyboardAwareScrollView contentContainerStyle={styles.mainContainer} bounces={false} keyboardShouldPersistTaps="handled">
             <TouchableOpacity
               style={styles.overlay}
               onPress={this.close.bind(this)}

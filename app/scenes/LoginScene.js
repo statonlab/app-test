@@ -16,6 +16,7 @@ import t from 'tcomb-validation'
 import axios from '../helpers/Axios'
 import realm from '../db/Schema'
 import Spinner from '../components/Spinner'
+import AText from '../components/Atext'
 
 export default class LoginScene extends Component {
   constructor(props) {
@@ -166,7 +167,7 @@ export default class LoginScene extends Component {
       <View style={styles.container}>
         <Spinner show={this.state.showSpinner}/>
         <Header title={'Login'} navigator={this.props.navigator} showRightIcon={false}/>
-        <ScrollView keyboardDismissMode={'on-drag'} showsVerticalScrollIndicator={false}>
+        <ScrollView keyboardDismissMode={'on-drag'} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
           <View style={styles.form}>
             <View style={styles.formGroup}>
               <Text style={styles.title}>TreeSnap</Text>
@@ -212,7 +213,7 @@ export default class LoginScene extends Component {
             <View
               style={[styles.formGroup, {flexDirection: 'row', justifyContent: 'space-between'}]}>
               <TouchableOpacity>
-                <Text style={styles.link}>Forgot your password?</Text>
+                <AText style={styles.link} url="https://treesnap.org/password/reset">Forgot your password?</AText>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => {
                 this.props.navigator.replace({label: 'RegistrationScene'})

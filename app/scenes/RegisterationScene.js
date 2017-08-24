@@ -240,6 +240,7 @@ export default class RegistrationScene extends Component {
           showsVerticalScrollIndicator={false}
           extraScrollHeight={20}
           enableResetScrollToCoords={false}
+          keyboardShouldPersistTaps="handled"
         >
           <View style={styles.form}>
             <View style={styles.formGroup}>

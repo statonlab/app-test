@@ -133,9 +133,13 @@ export default class AutoComplete extends Component {
           <KeyboardAvoidingView style={{flex: 1, backgroundColor: '#f7f7f7'}} behavior="padding"
                                 keyboardVerticalOffset={offset}>
             <View style={[{
-              height        : 40, backgroundColor: Colors.primary, flex: 0, alignItems: 'center',
-              justifyContent: 'space-between',
-              flexDirection : 'row', paddingLeft: 10
+              height         : 40,
+              backgroundColor: Colors.primary,
+              flex           : 0,
+              alignItems     : 'center',
+              justifyContent : 'space-between',
+              flexDirection  : 'row',
+              paddingLeft    : 10
             }, new Elevation(2)]}>
               <TouchableOpacity onPress={() => {
                 this.close()
@@ -147,7 +151,7 @@ export default class AutoComplete extends Component {
               <Text style={{paddingRight: 10}}/>
             </View>
             <ScrollView style={{flex: 1}}
-                        keyboardShouldPersistTaps="always"
+                        keyboardShouldPersistTaps="handled"
                         keyboardDismissMode="interactive">
               {this.renderResults()}
             </ScrollView>
@@ -165,9 +169,7 @@ export default class AutoComplete extends Component {
                 autoFocus={true}
                 onSubmitEditing={({nativeEvent}) => {
                   this.submit(nativeEvent.text)
-                }
-                }
-
+                }}
               />
               <TouchableOpacity style={styles.button}
                                 onPress={() => this.submit(this.state.searchText)}>
