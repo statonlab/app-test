@@ -11,19 +11,37 @@ class Diagnostics {
   /**
    * Fix all observations.
    */
-  run() {
+   async run() {
     const observations = realm.objects('Submission')
-    observations.map(async observation => {
-      let images = JSON.parse(observation.images)
+    for(let i = 0; i < observations.length; i++) {
       try {
-        let fixed = await this._fixBrokenImages(images)
-        realm.write(() => {
-          observation.images = JSON.stringify(fixed)
-        })
+        await this._fixObservation(observations[i])
       } catch (error) {
         console.log(error)
       }
-    })
+    }
+  }
+
+  /**
+   * Fix each observation asynchronously.
+   *
+   * @param observation
+   * @returns {Promise.<null>}
+   * @private
+   */
+  async _fixObservation(observation) {
+    let images = JSON.parse(observation.images)
+    try {
+      console.log('STARTED', observation.id)
+      let fixed = await this._fixBrokenImages(images)
+      realm.write(() => {
+        observation.images = JSON.stringify(fixed)
+      })
+      console.log('ENDED', observation.id)
+      return null
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   /**
