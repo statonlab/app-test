@@ -19,7 +19,7 @@ export default class AboutScene extends Component {
         <ScrollView style={styles.scrollView}>
           <View style={styles.card}>
             <Text style={styles.title}>TreeSnap</Text>
-            <Text style={styles.textBody}>App version: 1.0.3</Text>
+            <Text style={styles.textBody}>App version: 1.0.4</Text>
           </View>
           <View style={styles.card}>
             <Text style={styles.title}>The TreeSnap Project</Text>
