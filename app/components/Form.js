@@ -722,6 +722,7 @@ export default class Form extends Component {
           showsVerticalScrollIndicator={false}
           extraScrollHeight={60}
           enableResetScrollToCoords={true}
+          keyboardShouldPersistTaps="handled"
         >
           <View style={[styles.card]}>
             {this.renderCameraItem('images', 'Images')}

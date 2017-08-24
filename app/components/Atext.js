@@ -21,7 +21,7 @@ export default class Atext extends Component {
     return (
       <Text
         onPress={this.handleClick}
-        style={[this.props.style, styles.linkText]}>
+        style={[styles.linkText, this.props.style]}>
         {this.props.children}
       </Text>
     )
