@@ -20,6 +20,8 @@ import ObservationsScene from '../scenes/ObservationsScene'
 import ObservationScene from '../scenes/ObservationScene'
 import TreeScene from '../scenes/TreeScene'
 import Diagnostics from '../helpers/Diagnostics'
+import Actions from '../helpers/Actions'
+import Spinner from '../components/Spinner'
 
 const initialRouteStack = [
   {
@@ -28,8 +30,31 @@ const initialRouteStack = [
 ]
 
 export default class WildType extends Component {
-  componentDidMount() {
-    Diagnostics.run()
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      loading: false
+    }
+  }
+
+  componentWillMount() {
+    this.initApp()
+  }
+
+  async initApp() {
+    try {
+      await Diagnostics.run()
+    } catch (error) {
+      console.log(error)
+    }
+
+    try {
+      const actions = new Actions()
+      await actions.run()
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   renderScene(route, navigator) {
@@ -41,21 +66,10 @@ export default class WildType extends Component {
       return <MapScene title="Your Entries" navigator={navigator}/>
     }
 
-    /** Deprecated
-
-     if (route.label === 'FormScene') {
-      return <FormScene title={route.title} navigator={navigator} formProps={route.formProps} entryInfo={route.entryInfo} edit={route.edit}/>
-    }
-     **/
-
     if (route.label === 'CameraScene') {
-      return <CameraScene navigator={navigator} images={route.images ? route.images : []} onDone={route.onDone} id={route.id} onDelete={route.onDelete}/>
+      return <CameraScene navigator={navigator} images={route.images ? route.images : []}
+                          onDone={route.onDone} id={route.id} onDelete={route.onDelete}/>
     }
-
-    /** DEPRECATED
-     if (route.label == 'CapturedScene') {
-      return <CapturedScene navigator={navigator} image={route.image}/>
-    }**/
 
     if (route.label === 'CaptureLocationScene') {
       return <CaptureLocationScene title={route.title} navigator={navigator}/>
@@ -63,7 +77,7 @@ export default class WildType extends Component {
 
     if (route.label === 'TreeScene') {
       return <TreeScene title={route.title} navigator={navigator}
-        entryInfo={route.entryInfo} edit={route.edit}/>
+                        entryInfo={route.entryInfo} edit={route.edit}/>
     }
 
     if (route.label === 'SubmittedScene') {
@@ -149,6 +163,7 @@ export default class WildType extends Component {
           renderScene={this.renderScene}
           configureScene={this.configureScene}
         />
+        <Spinner show={this.state.loading}/>
       </View>
     )
   }
