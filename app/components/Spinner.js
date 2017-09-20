@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react'
 import {View, StyleSheet} from 'react-native'
 import {MKSpinner} from 'react-native-material-kit'
-import Elevation from  '../helpers/Elevation'
+import Elevation from '../helpers/Elevation'
 
 export default class Spinner extends Component {
   constructor(props) {
@@ -47,12 +47,12 @@ export default class Spinner extends Component {
 }
 
 Spinner.PropTypes = {
-  show: PropTypes.bool.isRequired
+  show   : PropTypes.bool.isRequired
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'rgba(0,0,0,.1)',
+    backgroundColor: 'rgba(0,0,0,.2)',
     flex           : 1,
     height         : undefined,
     width          : undefined,

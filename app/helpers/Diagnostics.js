@@ -32,12 +32,10 @@ class Diagnostics {
   async _fixObservation(observation) {
     let images = JSON.parse(observation.images)
     try {
-      console.log('STARTED', observation.id)
       let fixed = await this._fixBrokenImages(images)
       realm.write(() => {
         observation.images = JSON.stringify(fixed)
       })
-      console.log('ENDED', observation.id)
       return null
     } catch (error) {
       console.log(error)
