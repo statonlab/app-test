@@ -10,7 +10,7 @@
   "dependencies": {
     "axios": "^0.15.3",
     "camelcase": "^4.1.0",
-    "moment": "^2.17.1",
+    "moment": "^2.19.1",
     "react": "~15.4.*",
     "react-native": "^0.42.*",
     "react-native-camera": "^1.0.0-alpha1",
@@ -23,8 +23,8 @@
     "react-native-material-kit": "^0.4.1",
     "react-native-modal-picker": "0.0.16",
     "react-native-tab-view": "0.0.65",
-    "react-native-vector-icons": "^4.4.0",
-    "realm": "^1.12.0",
+    "react-native-vector-icons": "^4.4.2",
+    "realm": "^1.13.0",
     "tcomb": "^3.2.24",
     "tcomb-validation": "^3.4.1"
   },
