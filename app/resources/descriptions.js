@@ -27,16 +27,16 @@ export const ACFCollection = [<Text style={styles.paragraph}>In order for the Am
     <Text style={{fontWeight: 'bold'}}>Submission address:</Text> please choose the office below closest to the tree's location.
   </Text>,
   <Text style={styles.paragraph}>
-    {'\u2022'} Tom Saielli, The American Chestnut Foundation, 50 N. Merrimon Ave, Suite 115, Asheville, NC 28804
+    {'\u2022'} “Southern Regional Science Coordinator, The American Chestnut Foundation, 50 N. Merrimon Ave, Suite 115, Asheville, NC 28804
   </Text>,
   <Text style={styles.paragraph}>
-    {'\u2022'} Matt Brinckman, VA DOF, 900 Natural Resources Drive, Charlottesville, VA 22903
+    {'\u2022'} TACF Mid-Atlantic Regional Science Coordinator, VA DOF, 900 Natural Resources Drive, Charlottesville, VA 22903
   </Text>,
   <Text style={styles.paragraph}>
-    {'\u2022'} Sara Fitzsimmons, Pennsylvania State University, 206 Forest Resources Lab, University Park, PA 16802
+    {'\u2022'} TACF North Central Regional Science Coordinator, Pennsylvania State University, 206 Forest Resources Lab, University Park, PA 16802
   </Text>,
   <Text style={styles.paragraph}>
-    {'\u2022'} Kendra Collins, USFS Northern Research Station, 705 Spear St, South Burlington, VT 05403
+    {'\u2022'} TACF New England Regional Science Coordinator, USFS Northern Research Station, 705 Spear St, South Burlington, VT 05403
   </Text>
 ]
 
