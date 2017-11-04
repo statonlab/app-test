@@ -1,4 +1,6 @@
-import React, {Component, PropTypes} from 'react'
+import React from 'react'
+import Screen from './Screen'
+import PropTypes from 'prop-types'
 import {
   View,
   Text,
@@ -54,7 +56,7 @@ const plants = [
   }
 ]
 
-export default class LandingScene extends Component {
+export default class LandingScreen extends Screen {
   constructor(props) {
     super(props)
 
@@ -63,22 +65,22 @@ export default class LandingScene extends Component {
       {
         icon : 'map-marker-radius',
         title: 'My Entries',
-        label: 'ObservationsScene'
+        route: 'Observations'
       },
       {
         icon : 'account-card-details',
         title: 'About Us',
-        label: 'AboutScene'
+        route: 'About'
       },
       {
         icon : 'sign-caution',
         title: 'Health and Safety',
-        label: 'HealthSafetyScene'
+        route: 'HealthSafety'
       },
       {
         icon : 'lock',
         title: 'Privacy Policy',
-        label: 'PrivacyPolicyScene'
+        route: 'PrivacyPolicy'
       }
     ]
 
@@ -87,7 +89,7 @@ export default class LandingScene extends Component {
       {
         icon : 'account',
         title: 'Account',
-        label: 'AccountScene'
+        route: 'Account'
       },
       {
         icon   : 'logout-variant',
@@ -101,11 +103,11 @@ export default class LandingScene extends Component {
       {
         icon : 'account-key',
         title: 'Login',
-        label: 'LoginScene'
+        route: 'Login'
       }, {
         icon : 'account-plus',
         title: 'Register',
-        label: 'RegistrationScene'
+        route: 'Registration'
       }
     ]
 
@@ -158,10 +160,15 @@ export default class LandingScene extends Component {
     }))
 
     this.events.push(DeviceEventEmitter.addListener('ObservationDeleted', () => {
-      this.setState({
-        noticeText: 'Observation deleted!'
-      })
-      this.refs.snackbar.showBar()
+      if (this.refs.uploadButton) {
+        this.refs.uploadButton.getObservations()
+      }
+    }))
+
+    this.events.push(DeviceEventEmitter.addListener('ObservationUploaded', () => {
+      if (this.refs.uploadButton) {
+        this.refs.uploadButton.getObservations()
+      }
     }))
 
     this.events.push(DeviceEventEmitter.addListener('userRegistered', () => {
@@ -326,7 +333,7 @@ export default class LandingScene extends Component {
   loginButton() {
     return (
       <TouchableOpacity style={[styles.button, {marginHorizontal: 5}]}
-                        onPress={() => this.props.navigator.push({label: 'LoginScene'})}>
+                        onPress={() => this.navigator.navigate('Login')}>
         <Text style={styles.buttonText}>Login to upload your entries</Text>
       </TouchableOpacity>
     )
@@ -352,14 +359,14 @@ export default class LandingScene extends Component {
     return (
       <View style={styles.container} {...(this.sidebar ? this.sidebar.getPan() : {})}>
         <Header
-          title={this.props.title}
-          navigator={this.props.navigator}
+          title="Overview"
+          navigator={this.navigator}
           initial={true}
           onMenuPress={this.toggleMenu.bind(this)}
           sidebar={this.sidebar}/>
         <Sidebar
           ref={ref => this.sidebar = ref}
-          navigator={this.props.navigator}
+          navigator={this.navigator}
           routes={this.state.sidebar}/>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.plantsContainer}>
@@ -375,7 +382,7 @@ export default class LandingScene extends Component {
                   style={styles.card}
                   key={index}
                   onPress={() => {
-                    this.props.navigator.push({label: 'TreeScene', title: plant.title})
+                    this.navigator.navigate('Tree', {title: plant.title})
                   }}>
                   <View style={[styles.flexHorizontal]}>
                     <Image source={plant.image} style={styles.cardImage}/>
@@ -385,7 +392,7 @@ export default class LandingScene extends Component {
                           {plant.title}
                         </Text>
                         <Text
-                          style={plant.title != 'Other' ? [styles.cardBodyText, styles.italics] : styles.cardBodyText}>
+                          style={plant.title !== 'Other' ? [styles.cardBodyText, styles.italics] : styles.cardBodyText}>
                           {plant.latinName}
                         </Text>
                       </View>
@@ -403,11 +410,6 @@ export default class LandingScene extends Component {
       </View>
     )
   }
-}
-
-LandingScene.propTypes = {
-  title    : PropTypes.string.isRequired,
-  navigator: PropTypes.object.isRequired
 }
 
 const elevationStyle = new Elevation(2)

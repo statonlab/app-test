@@ -31,7 +31,7 @@
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
                BuildableName = "TreeSnap.app"
                BlueprintName = "TreeSnap"
-               ReferencedContainer = "container:TreeSnap.xcodeproj">
+               ReferencedContainer = "container:Treesnap.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -45,7 +45,7 @@
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
                BuildableName = "TreeSnapTests.xctest"
                BlueprintName = "TreeSnapTests"
-               ReferencedContainer = "container:TreeSnap.xcodeproj">
+               ReferencedContainer = "container:Treesnap.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -54,6 +54,7 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      language = ""
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
          <TestableReference
@@ -63,7 +64,7 @@
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
                BuildableName = "TreeSnapTests.xctest"
                BlueprintName = "TreeSnapTests"
-               ReferencedContainer = "container:TreeSnap.xcodeproj">
+               ReferencedContainer = "container:Treesnap.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -73,16 +74,17 @@
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
             BuildableName = "TreeSnap.app"
             BlueprintName = "TreeSnap"
-            ReferencedContainer = "container:TreeSnap.xcodeproj">
+            ReferencedContainer = "container:Treesnap.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
    <LaunchAction
-      buildConfiguration = "Debug"
-      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
-      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      buildConfiguration = "Release"
+      selectedDebuggerIdentifier = ""
+      selectedLauncherIdentifier = "Xcode.IDEFoundation.Launcher.PosixSpawn"
+      language = ""
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
@@ -96,7 +98,7 @@
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
             BuildableName = "TreeSnap.app"
             BlueprintName = "TreeSnap"
-            ReferencedContainer = "container:TreeSnap.xcodeproj">
+            ReferencedContainer = "container:Treesnap.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -115,7 +117,7 @@
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
             BuildableName = "TreeSnap.app"
             BlueprintName = "TreeSnap"
-            ReferencedContainer = "container:TreeSnap.xcodeproj">
+            ReferencedContainer = "container:Treesnap.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

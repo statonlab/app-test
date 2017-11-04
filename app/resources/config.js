@@ -36,8 +36,8 @@ const DCP = {
     placeHolder  : 'No signs of pest',
     multiCheck   : true,
     images       : [
-      require('../img/DCP/EmAshBorer/EAB tunneling.jpg'),
-      require('../img/DCP/EmAshBorer/Emerald ash borer adult.jpg'),
+      require('../img/DCP/EmAshBorer/EAB_tunneling.jpg'),
+      require('../img/DCP/EmAshBorer/Emerald_ash_borer_adult.jpg'),
       require('../img/DCP/EmAshBorer/D-shaped_holes.jpg'),
       require('../img/DCP/EmAshBorer/epicormic_ash.jpg'),
     ],
@@ -56,8 +56,8 @@ const DCP = {
     description  : 'What percentage of the branches you see have hemlock Woolly adelgids?',
     placeHolder  : '% Adelgid coverage',
     images       : [
-      require('../img/DCP/HemWoolly/HWA photo 1.jpg'),
-      require('../img/DCP/HemWoolly/HWA photo 2.jpg')
+      require('../img/DCP/HemWoolly/HWA_photo_1.jpg'),
+      require('../img/DCP/HemWoolly/HWA_photo_2.jpg')
     ],
     camera       : ['1-24%', '25-49%', '50-74%', '75-100%']
   },

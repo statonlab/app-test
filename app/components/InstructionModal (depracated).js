@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react'
+import React, {Component} from 'react'
+import PropTypes from 'prop-types'
 import {View, StyleSheet, Text, Modal, TouchableOpacity, Dimensions} from 'react-native'
 import Colors from '../helpers/Colors'
 import {MKButton} from 'react-native-material-kit'

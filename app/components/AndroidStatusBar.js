@@ -1,4 +1,5 @@
 import {Dimensions, Platform} from 'react-native'
+import PropTypes from 'prop-types'
 class AndroidStatusBar {
   constructor() {
     this.width = Dimensions.get('window').width

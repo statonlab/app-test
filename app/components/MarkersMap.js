@@ -1,9 +1,15 @@
-import React, {Component, PropTypes} from 'react'
+import React, {Component} from 'react'
+import PropTypes from 'prop-types'
 import {StyleSheet, View, Text, Image, TouchableHighlight} from 'react-native'
 import MapView from 'react-native-maps'
 import Colors from '../helpers/Colors'
 
 export default class MarkersMap extends Component {
+  constructor(props) {
+    super(props)
+    this.fitted = false
+  }
+
   /**
    * Call zoom to marker if a starting marker is specified.
    */
@@ -63,6 +69,12 @@ export default class MarkersMap extends Component {
         {...this.props}
         style={styles.map}
         ref="map"
+        onMapReady={() => {
+          if (this.props.markers.length && !this.fitted) {
+            this.fitted = true
+            this.refs.map.fitToElements(true)
+          }
+        }}
       >
         {this.props.markers.map(this.renderMarker.bind(this))}
         {this.props.startingMarker !== null ? this.renderStartingMarker(this.props.startingMarker) : null}

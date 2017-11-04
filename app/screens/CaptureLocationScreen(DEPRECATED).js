@@ -1,4 +1,6 @@
-import React, {Component, PropTypes} from 'react'
+import React from 'react'
+import Screen from './Screen'
+import PropTypes from 'prop-types'
 import {
   View,
   StyleSheet
@@ -6,11 +8,11 @@ import {
 import GetLocation from '../components/GetLocation'
 import Header from '../components/Header'
 
-export default class CaptureLocationScene extends Component {
+export default class CaptureLocationScreen extends Screen {
   render() {
     return (
       <View style={styles.container}>
-        <Header title="Capture Location" navigator={this.props.navigator}/>
+        <Header title="Capture Location" navigator={this.navigator}/>
         <GetLocation
           accept={this.goToForm}
           cancel={this.goToForm}/>
@@ -23,7 +25,7 @@ export default class CaptureLocationScene extends Component {
   }
 }
 
-CaptureLocationScene.propTypes = {
+CaptureLocationScreen.propTypes = {
   navigator : PropTypes.object.isRequired
 }
 

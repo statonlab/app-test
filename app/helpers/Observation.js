@@ -22,7 +22,7 @@ class Observation {
       throw Error('User not signed in')
     }
 
-    // Do sync already synced record
+    // Don't sync already synced record
     if (observation.synced) {
       return
     }

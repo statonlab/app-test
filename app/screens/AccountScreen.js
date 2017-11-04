@@ -1,5 +1,7 @@
-import React, {Component, PropTypes} from 'react'
-import {View, StyleSheet, Text, TextInput, TouchableOpacity, BackAndroid} from 'react-native'
+import React from 'react'
+import Screen from './Screen'
+import PropTypes from 'prop-types'
+import {View, StyleSheet, Text, TextInput, TouchableOpacity, BackHandler} from 'react-native'
 import Header from '../components/Header'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
@@ -11,7 +13,7 @@ import Spinner from '../components/Spinner'
 import DateModal from '../components/DateModal'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 
-export default class AccountScene extends Component {
+export default class AccountScreen extends Screen {
   constructor(props) {
     super(props)
 
@@ -44,8 +46,8 @@ export default class AccountScene extends Component {
   }
 
   componentWillMount() {
-    this.backEvent = BackAndroid.addEventListener('hardwareBackPress', () => {
-      this.props.navigator.pop()
+    this.backEvent = BackHandler.addEventListener('hardwareBackPress', () => {
+      this.navigator.goBack()
       return true
     })
   }
@@ -291,7 +293,7 @@ export default class AccountScene extends Component {
     return (
       <View style={styles.container}>
         <Spinner show={this.state.showSpinner}/>
-        <Header title="Account" navigator={this.props.navigator} elevation={4} showRightIcon={false}/>
+        <Header title="Account" navigator={this.navigator} elevation={4} showRightIcon={false}/>
         <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.innerContainer}>
             <Text style={styles.title}>PERSONAL</Text>
@@ -457,7 +459,7 @@ export default class AccountScene extends Component {
             <TouchableOpacity
               style={[styles.button, styles.buttonLink]}
               onPress={() => {
-                this.props.navigator.pop()
+                this.navigator.goBack()
               }}
             >
               <Text style={[styles.buttonText, styles.buttonLinkText]}>Cancel</Text>
@@ -471,7 +473,7 @@ export default class AccountScene extends Component {
   }
 }
 
-AccountScene.PropTypes = {
+AccountScreen.PropTypes = {
   navigator: PropTypes.object.isRequired
 }
 

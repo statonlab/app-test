@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react'
+import React from 'react'
+import Screen from './Screen'
 import {
   View,
   StyleSheet,
@@ -10,8 +11,7 @@ import {
   Image,
   Animated,
   Alert,
-  BackAndroid,
-  DeviceEventEmitter
+  BackHandler
 } from 'react-native'
 import Camera from 'react-native-camera'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -21,10 +21,12 @@ import Elevation from '../helpers/Elevation'
 import File from '../helpers/File'
 import ImageZoom from 'react-native-image-pan-zoom'
 import AndroidStatusBar from '../components/AndroidStatusBar'
+import {isIphoneX, ifIphoneX} from 'react-native-iphone-x-helper'
+
 
 const android = Platform.OS === 'android'
 
-export default class CameraScene extends Component {
+export default class CameraScreen extends Screen {
   /**
    * Construct the properties and state.
    *
@@ -67,7 +69,7 @@ export default class CameraScene extends Component {
             [
               {
                 text: 'Ok', onPress: () => {
-                this.props.navigator.pop()
+                this.navigator.goBack()
               }
               }
             ]
@@ -80,7 +82,7 @@ export default class CameraScene extends Component {
       this.setState({hasPermission: true})
     }
 
-    this.backEvent = BackAndroid.addEventListener('hardwareBackPress', () => {
+    this.backEvent = BackHandler.addEventListener('hardwareBackPress', () => {
       this._cancel()
       return true
     })
@@ -90,14 +92,14 @@ export default class CameraScene extends Component {
    * Fixes the width of each page
    */
   componentDidMount() {
-    let length = this.props.images.length
+    let length = this.params.images.length
     this.setState({
       pageWidth: Dimensions.get('window').width,
-      images   : this.props.images
+      images   : this.params.images
     })
 
     if (length > 0) {
-      let selectedImage = this.fs.image(this.props.images[length - 1])
+      let selectedImage = this.fs.image(this.params.images[length - 1])
 
       this.setState({selectedImage})
     }
@@ -117,7 +119,7 @@ export default class CameraScene extends Component {
         >
           <IonIcon name="ios-flash"
                    color={Colors.warning}
-                   size={28}
+                   size={32}
                    style={styles.flash}
           />
           <Text style={[styles.toolText, styles.iconText]}>
@@ -134,7 +136,7 @@ export default class CameraScene extends Component {
         >
           <IonIcon name="ios-flash-outline"
                    color="#fff"
-                   size={28}
+                   size={32}
                    style={styles.flash}
           />
           <Text style={[styles.toolText, styles.iconText]}>
@@ -150,7 +152,7 @@ export default class CameraScene extends Component {
         >
           <IonIcon name="ios-flash-outline"
                    color={Colors.warning}
-                   size={28}
+                   size={32}
                    style={styles.flash}
           />
           <Text style={[styles.toolText, styles.iconText]}>
@@ -171,9 +173,8 @@ export default class CameraScene extends Component {
         showsHorizontalScrollIndicator={false}
         scrollEnabled={false}
       >
-
         <View style={[styles.container, {width: this.state.pageWidth}]}>
-          <View style={styles.topToolsContainer}>
+          <View style={[styles.topToolsContainer, {width: this.state.pageWidth}]}>
             {flashIcon}
             <TouchableOpacity
               style={[styles.toolTouchable, {
@@ -181,8 +182,11 @@ export default class CameraScene extends Component {
                 paddingRight: 15
               }]}
               onPress={this.switchType}>
-              <IonIcon name="ios-reverse-camera-outline" size={32}
-                       color={'#fff'}/>
+              <IonIcon name="ios-reverse-camera-outline"
+                       size={42}
+                       color={'#fff'}
+                       style={textShadow}
+              />
             </TouchableOpacity>
           </View>
           {this.state.hasPermission ?
@@ -208,13 +212,17 @@ export default class CameraScene extends Component {
                 let focusTop  = e.nativeEvent.touchPoint.y - 40
                 this.setState({focusLeft, focusTop})
               }}/>
-            : <View style={{flex: 1, backgroundColor: '#000'}}/>}
-          <View style={styles.toolsContainer}>
-            <TouchableOpacity style={[styles.toolTouchable]} onPress={this._cancel}>
+            : <View style={[styles.preview, {backgroundColor: '#000'}]}/>}
+          <View style={[
+            styles.toolsContainer,
+            styles.bottomToolsContainer,
+            {width: this.state.pageWidth, top: height - (isIphoneX() ? 130 : 110)}
+          ]}>
+            <TouchableOpacity style={[styles.toolTouchable, {paddingTop: 15}]} onPress={this._cancel}>
               <Text style={[styles.toolText]}>Cancel</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.capture} onPress={this.takePicture}>
-              <Icon name="camera" size={36} color={'#fff'}/>
+              {/*<Icon name="camera" size={36} color={'#fff'} style={textShadow}/>*/}
             </TouchableOpacity>
             {this.state.images.length > 0 ?
               this._getCameraSideThumbnail()
@@ -247,15 +255,16 @@ export default class CameraScene extends Component {
           {this.state.selectedImage === '' ?
             <View style={{flex: 1, backgroundColor: '#000'}}/> :
             <ImageZoom
-              cropHeight={height - (134 + statusBarHeight)}
+              cropHeight={height - (isIphoneX() ? (174 + statusBarHeight) : (144 + statusBarHeight))}
               cropWidth={width}
               imageHeight={height - (134 + statusBarHeight)}
               imageWidth={width}>
               <Image source={{uri: this.state.selectedImage}}
-                     style={[styles.preview, {resizeMode: 'center'}]}/>
+                     style={[styles.preview, {resizeMode: 'contain'}]}/>
             </ImageZoom>
           }
-          <View style={[styles.toolsContainer, styles.thumbnailsContainer]}>
+          <View
+            style={[styles.toolsContainer, styles.thumbnailsContainer]}>
             <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
               {this.state.images.map(this.renderThumbnail)}
               <TouchableOpacity style={styles.addIcon} onPress={this._back}>
@@ -378,11 +387,11 @@ export default class CameraScene extends Component {
    */
   _done = () => {
     if (this.state.deletedImages.length > 0) {
-      this.props.onDelete(this.state.deletedImages)
+      this.params.onDelete(this.state.deletedImages)
     }
 
-    this.props.onDone(this.state.images, this.props.id)
-    this.props.navigator.pop()
+    this.params.onDone(this.state.images, this.params.id)
+    this.params.navigator.goBack(null)
   }
 
   /**
@@ -471,7 +480,7 @@ export default class CameraScene extends Component {
    */
   _cancel = () => {
     this.fs.delete({images: this.state.newImages}, () => {
-      this.props.navigator.pop()
+      this.navigator.goBack()
     })
   }
 }
@@ -481,17 +490,16 @@ export default class CameraScene extends Component {
  *
  * @type {{navigator: *}}
  */
-CameraScene.PropTypes = {
-  navigator: PropTypes.object.isRequired,
-  onDelete : PropTypes.func.isRequired,
-  onDone   : PropTypes.func.isRequired,
-  images   : PropTypes.array,
-  id       : PropTypes.string
+CameraScreen.PropTypes = {
+  // onDelete : PropTypes.func.isRequired,
+  // onDone   : PropTypes.func.isRequired,
+  // images   : PropTypes.array,
+  // id       : PropTypes.string
 }
 
-CameraScene.defaultProps = {
-  images: [],
-  id    : 'images'
+CameraScreen.defaultProps = {
+  // images: [],
+  // id    : 'images'
 }
 
 /**
@@ -503,8 +511,17 @@ function getVerticalPadding() {
   if (Platform.OS === 'android') {
     return 0
   } else {
+    if (isIphoneX()) {
+      return 30
+    }
     return 15
   }
+}
+
+const textShadow = {
+  textShadowColor : 'rgba(0,0,0,.6)',
+  textShadowOffset: {width: 1, height: 1},
+  textShadowRadius: 2
 }
 
 /**
@@ -512,8 +529,7 @@ function getVerticalPadding() {
  */
 const styles = StyleSheet.create({
   container: {
-    flex : 1,
-    width: undefined
+    flex: 1
   },
 
   header: {
@@ -547,44 +563,59 @@ const styles = StyleSheet.create({
   toolsContainer: {
     flex             : 0,
     flexDirection    : 'row',
-    width            : undefined,
     height           : 80,
     justifyContent   : 'space-between',
     alignItems       : 'center',
-    backgroundColor  : '#000',
+    backgroundColor  : 'transparent',
     paddingHorizontal: 10
   },
 
   capture: {
-    flex      : 1,
-    width     : undefined,
-    height    : undefined,
-    alignItems: 'center',
-    marginTop : 5
+    flex           : 0,
+    width          : 70,
+    height         : 70,
+    borderRadius   : 70 / 2,
+    alignItems     : 'center',
+    backgroundColor: 'rgba(255, 255, 255, .2)',
+    borderWidth    : 6,
+    borderColor    : '#fff',
+    marginTop      : 5,
+    ...(new Elevation(1))
   },
 
   toolText: {
     color  : '#fff',
     flex   : 0,
     padding: 5,
-    width  : 90
+    width  : 90,
+    fontSize: 16,
+    fontWeight: '600',
+    ...textShadow
   },
 
   toolTouchable: {
-    flex  : 0,
-    width : 90,
-    height: undefined
+    flex           : 0,
+    width          : 90,
+    height         : undefined,
+    backgroundColor: 'transparent'
   },
 
   topToolsContainer: {
-    flex           : 0,
-    width          : undefined,
-    height         : undefined,
-    flexDirection  : 'row',
-    justifyContent : 'space-between',
-    alignItems     : 'center',
-    backgroundColor: '#000',
-    paddingTop     : getVerticalPadding()
+    flex          : 0,
+    height        : undefined,
+    flexDirection : 'row',
+    justifyContent: 'space-between',
+    alignItems    : 'center',
+    paddingTop    : getVerticalPadding(),
+    position      : 'absolute',
+    zIndex        : 10,
+    top           : 10
+  },
+
+  bottomToolsContainer: {
+    width   : undefined,
+    height  : 90,
+    position: 'absolute'
   },
 
   iconText: {
@@ -612,25 +643,31 @@ const styles = StyleSheet.create({
 
   thumbnailsContainer: {
     backgroundColor  : '#ddd',
-    height           : 70,
+    height           : 80,
     paddingHorizontal: 5,
     ...(new Elevation(4)),
     shadowOffset     : {
       height: -3
     },
-    shadowColor      : '#888'
+    shadowColor      : '#888',
+    ...ifIphoneX({
+      height       : 110,
+      paddingBottom: 30
+    })
   },
 
   thumbnail: {
-    width           : 50,
-    height          : 50,
+    width           : 70,
+    height          : 70,
     marginHorizontal: 5,
-    borderRadius    : 3
+    borderRadius    : 3,
+    alignItems      : 'center',
+    justifyContent  : 'center'
   },
 
   addIcon: {
-    width           : 50,
-    height          : 50,
+    width           : 70,
+    height          : 70,
     backgroundColor : '#ccc',
     alignItems      : 'center',
     justifyContent  : 'center',

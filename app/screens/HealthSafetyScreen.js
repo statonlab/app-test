@@ -1,18 +1,20 @@
-import React, {Component, PropTypes} from 'react'
+import React from 'react'
+import Screen from './Screen'
+import PropTypes from 'prop-types'
 import {
   View,
   ScrollView,
   StyleSheet,
   Text,
-  BackAndroid
+  BackHandler
 } from 'react-native'
 import Header from '../components/Header'
 import Elevation from '../helpers/Elevation'
 
-export default class HealthSafetyScene extends Component {
+export default class HealthSafetyScreen extends Screen {
   componentWillMount() {
-    this.backEvent = BackAndroid.addEventListener('hardwareBackPress', () => {
-      this.props.navigator.pop()
+    this.backEvent = BackHandler.addEventListener('hardwareBackPress', () => {
+      this.navigator.goBack()
       return true
     })
   }
@@ -20,7 +22,7 @@ export default class HealthSafetyScene extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Header title="Health and Safety" navigator={this.props.navigator} elevation={2}/>
+        <Header title="Health and Safety" navigator={this.navigator} elevation={2}/>
         <ScrollView style={styles.scrollView}>
 
 
@@ -38,7 +40,7 @@ export default class HealthSafetyScene extends Component {
   }
 }
 
-HealthSafetyScene.PropTypes = {
+HealthSafetyScreen.PropTypes = {
   navigator: PropTypes.object.isRequired
 }
 

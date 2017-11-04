@@ -80,7 +80,7 @@ export default class File {
         callback()
       }
     }).catch(error => {
-      console.log('Could not copy file ' + filePath + ': ', error)
+      console.log('Could not copy file ' + from + ': ', error)
     })
   }
 

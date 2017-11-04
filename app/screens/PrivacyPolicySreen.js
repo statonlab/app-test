@@ -1,18 +1,20 @@
-import React, {Component, PropTypes} from 'react'
+import React from 'react'
+import Screen from './Screen'
+import PropTypes from 'prop-types'
 import {
   View,
   ScrollView,
   StyleSheet,
   Text,
-  BackAndroid
+  BackHandler
 } from 'react-native'
 import Header from '../components/Header'
 import Elevation from '../helpers/Elevation'
 
-export default class PrivacyPolicyScene extends Component {
+export default class PrivacyPolicyScreen extends Screen {
   componentWillMount() {
-    this.backEvent = BackAndroid.addEventListener('hardwareBackPress', () => {
-      this.props.navigator.pop()
+    this.backEvent = BackHandler.addEventListener('hardwareBackPress', () => {
+      this.navigator.goBack()
       return true
     })
   }
@@ -20,7 +22,7 @@ export default class PrivacyPolicyScene extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Header title="Privacy Policy" navigator={this.props.navigator} elevation={2}/>
+        <Header title="Privacy Policy" navigator={this.navigator} elevation={2}/>
         <ScrollView style={styles.scrollView}>
           <View style={styles.card}>
             <Text style={styles.title}>Privacy Policy</Text>
@@ -128,7 +130,7 @@ export default class PrivacyPolicyScene extends Component {
   }
 }
 
-PrivacyPolicyScene.PropTypes = {
+PrivacyPolicyScreen.PropTypes = {
   navigator: PropTypes.object.isRequired
 }
 

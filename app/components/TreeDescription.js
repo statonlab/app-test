@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react'
+import React, {Component} from 'react'
+import PropTypes from 'prop-types'
 import {
   View,
   StyleSheet,
@@ -11,6 +12,7 @@ import Colors from '../helpers/Colors'
 import {Plants} from '../resources/descriptions'
 import ImageModal from '../components/ImageModal'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import {ifIphoneX} from 'react-native-iphone-x-helper'
 
 export default class TreeDescription extends Component {
 
@@ -36,7 +38,9 @@ export default class TreeDescription extends Component {
             <ImageModal
               images={Plants[this.props.title].images}
               captions={Plants[this.props.title].captions}
-              style={[styles.buttonAlt, {flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}]}>
+              style={[styles.buttonAlt, {
+                flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
+              }]}>
               <Text style={styles.cardTitle}>ID Photos</Text>
               <Icon name="camera-burst" size={23} style={styles.icon}/>
             </ImageModal>
@@ -46,7 +50,9 @@ export default class TreeDescription extends Component {
           <View style={[styles.cardBody, {paddingTop: 10}]}>
             <ImageModal
               images={Plants[this.props.title].maps}
-              style={[styles.buttonAlt, {flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}]}>
+              style={[styles.buttonAlt, {
+                flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
+              }]}>
               <Text style={styles.cardTitle}>Distribution Maps</Text>
               <Icon name="map" size={23} style={styles.icon}/>
             </ImageModal>
@@ -54,7 +60,8 @@ export default class TreeDescription extends Component {
           }
           {Plants[this.props.title].descriptionCards.map((card, index) => {
             return (
-              <View key={index} style={[styles.cardBody, {borderBottomWidth: len === index ? 0 : 1}]}>
+              <View key={index}
+                    style={[styles.cardBody, {borderBottomWidth: len === index ? 0 : 1}]}>
                 <Text style={styles.cardTitle}>{card.title}</Text>
                 {card.body.map((body, bodyIndex) => {
                   return (<View key={bodyIndex}>
@@ -79,11 +86,15 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#f5f5f5',
     flex           : 1,
-    flexDirection  : 'column'
+    flexDirection  : 'column',
+
   },
 
   scrollView: {
-    flex: 1
+    flex: 1,
+    ...ifIphoneX({
+      marginBottom: 20
+    })
   },
 
   iconsContainer: {

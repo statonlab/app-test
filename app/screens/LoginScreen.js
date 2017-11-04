@@ -1,4 +1,6 @@
-import React, {Component, PropTypes} from 'react'
+import React from 'react'
+import Screen from './Screen'
+import PropTypes from 'prop-types'
 import {
   View,
   ScrollView,
@@ -7,7 +9,7 @@ import {
   Text,
   DeviceEventEmitter,
   TouchableOpacity,
-  BackAndroid
+  BackHandler
 } from 'react-native'
 import Header from '../components/Header'
 import Elevation from '../helpers/Elevation'
@@ -18,7 +20,7 @@ import realm from '../db/Schema'
 import Spinner from '../components/Spinner'
 import AText from '../components/Atext'
 
-export default class LoginScene extends Component {
+export default class LoginScreen extends Screen {
   constructor(props) {
     super(props)
 
@@ -38,8 +40,8 @@ export default class LoginScene extends Component {
   }
 
   componentWillMount() {
-    this.backEvent = BackAndroid.addEventListener('hardwareBackPress', () => {
-      this.props.navigator.pop()
+    this.backEvent = BackHandler.addEventListener('hardwareBackPress', () => {
+      this.navigator.goBack()
       return true
     })
   }
@@ -81,7 +83,7 @@ export default class LoginScene extends Component {
 
       DeviceEventEmitter.emit('userLoggedIn')
 
-      this.props.navigator.pop()
+      this.navigator.goBack()
     }).catch(error => {
       this.setState({showSpinner: false})
       this.handleErrorAxios(error)
@@ -166,7 +168,7 @@ export default class LoginScene extends Component {
     return (
       <View style={styles.container}>
         <Spinner show={this.state.showSpinner}/>
-        <Header title={'Login'} navigator={this.props.navigator} showRightIcon={false}/>
+        <Header title="Login" navigator={this.navigator} showRightIcon={false}/>
         <ScrollView keyboardDismissMode={'on-drag'} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
           <View style={styles.form}>
             <View style={styles.formGroup}>
@@ -216,7 +218,7 @@ export default class LoginScene extends Component {
                 <AText style={styles.link} url="https://treesnap.org/password/reset">Forgot your password?</AText>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => {
-                this.props.navigator.replace({label: 'RegistrationScene'})
+                this.navigator.navigate('Registration')
               }}>
                 <Text style={[styles.link]}>Register</Text>
               </TouchableOpacity>
@@ -229,7 +231,7 @@ export default class LoginScene extends Component {
   }
 }
 
-LoginScene.PropTypes = {
+LoginScreen.PropTypes = {
   navigator: PropTypes.object.isRequired
 }
 

@@ -3,20 +3,8 @@
  * @flow
  */
 
-import React, {Component} from 'react'
-import {
-  AppRegistry
-} from 'react-native'
+import React from 'react'
+import {AppRegistry} from 'react-native'
+import TreeSnap from './App'
 
-import App from './app/components/App'
-
-export default class TreeSnap extends Component {
-
-  render() {
-    return (
-      <App/>
-    )
-  }
-}
-
-AppRegistry.registerComponent('TreeSnap', () => TreeSnap);
+AppRegistry.registerComponent('TreeSnap', () => TreeSnap)

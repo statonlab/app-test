@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react'
+import React, {Component} from 'react'
+import PropTypes from 'prop-types'
 import {View, Text, ScrollView, TextInput, StyleSheet, Modal, TouchableOpacity} from 'react-native'
 import Colors from '../helpers/Colors'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -157,6 +158,7 @@ export default class PickerModal extends Component {
         <View style={[styles.choiceItem]}>
           <TextInput style={styles.textField}
                      keyboardType={'numeric'}
+                     underlineColorAndroid={'transparent'}
                      value={this.state.numberVal.value}
                      placeholder={'Tap to enter diameter'}
                      onChangeText={(number) => this.handleNumber(number)}/>

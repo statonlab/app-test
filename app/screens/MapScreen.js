@@ -1,9 +1,10 @@
-import React, {Component, PropTypes} from 'react'
+import React from 'react'
+import Screen from './Screen'
 import {
   View,
   StyleSheet,
   Alert,
-  BackAndroid
+  BackHandler
 } from 'react-native'
 import MarkersMap from '../components/MarkersMap'
 import Header from '../components/Header'
@@ -11,7 +12,7 @@ import realm from '../db/Schema'
 import moment from 'moment'
 import File from '../helpers/File'
 
-export default class MapScene extends Component {
+export default class MapScreen extends Screen {
   constructor(props) {
     super(props)
 
@@ -50,17 +51,17 @@ export default class MapScene extends Component {
 
     this.markers = markers
 
-      this.backEvent = BackAndroid.addEventListener('hardwareBackPress', () => {
-        this.props.navigator.pop()
-        return true
-      })
+    this.backEvent = BackHandler.addEventListener('hardwareBackPress', () => {
+      this.navigator.goBack()
+      return true
+    })
   }
 
 
   render() {
     return (
       <View style={styles.container}>
-        <Header title={this.props.title} navigator={this.props.navigator} showRightIcon={false}/>
+        <Header title="Map" navigator={this.navigator} showRightIcon={false}/>
         {this.renderMap()}
       </View>
     )
@@ -77,8 +78,7 @@ export default class MapScene extends Component {
         return
       }
       let plant = realm.objects('Submission').filtered(`id == "${marker.id}"`)[0]
-      this.props.navigator.push({
-        label    : 'ObservationScene',
+      this.navigator.navigate('Observation', {
         plant    : JSON.parse(JSON.stringify(plant)),
         onUnmount: () => {
           this.setState({shouldNavigate: true})
@@ -101,14 +101,10 @@ export default class MapScene extends Component {
         }}
         markers={this.markers}
         onCalloutPress={this.navigateCallout.bind(this)}
+
       />
     )
   }
-}
-
-MapScene.propTypes = {
-  title    : PropTypes.string.isRequired,
-  navigator: PropTypes.object.isRequired
 }
 
 const styles = StyleSheet.create({

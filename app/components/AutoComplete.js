@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react'
+import React, {Component} from 'react'
+import PropTypes from 'prop-types'
 import {
   StyleSheet,
   View,
@@ -9,12 +10,14 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   StatusBar,
-  Platform
+  Platform,
+  Keyboard
 } from 'react-native'
 import Latin from '../resources/treeNames.js'
 import Colors from '../helpers/Colors'
 import Elevation from '../helpers/Elevation'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import {ifIphoneX} from 'react-native-iphone-x-helper'
 
 export default class AutoComplete extends Component {
   constructor(props) {
@@ -24,9 +27,14 @@ export default class AutoComplete extends Component {
       selected     : null,
       animationType: 'fade',
       modalVisible : false,
-      searchText   : ''
+      searchText   : '',
+      textFieldBottomSpacing: 0
     }
     this.queryList = Latin
+
+    this.events = []
+    this.events.push(Keyboard.addListener('keyboardDidShow', () => this.setBottomSpacing(true)))
+    this.events.push(Keyboard.addListener('keyboardDidHide', () => this.setBottomSpacing(false)))
   }
 
   componentWillMount() {
@@ -119,6 +127,12 @@ export default class AutoComplete extends Component {
     this.setState({resultList: matches})
   }
 
+  setBottomSpacing(keyboardIsOpen) {
+    console.log(keyboardIsOpen)
+    let textFieldBottomSpacing =  !keyboardIsOpen ? (ifIphoneX(20) || 0) : 0
+
+    this.setState({textFieldBottomSpacing})
+  }
 
   render() {
     const offset = (Platform.OS === 'android') ? -200 : 0
@@ -133,29 +147,34 @@ export default class AutoComplete extends Component {
           <KeyboardAvoidingView style={{flex: 1, backgroundColor: '#f7f7f7'}} behavior="padding"
                                 keyboardVerticalOffset={offset}>
             <View style={[{
-              height         : 40,
+              paddingVertical: 10,
               backgroundColor: Colors.primary,
               flex           : 0,
               alignItems     : 'center',
-              justifyContent : 'space-between',
+              //justifyContent : 'space-between',
               flexDirection  : 'row',
-              paddingLeft    : 10
+              paddingLeft    : 10,
+              ...ifIphoneX({
+                paddingTop: 40
+              })
             }, new Elevation(2)]}>
-              <TouchableOpacity onPress={() => {
-                this.close()
-              }}>
+              <TouchableOpacity
+                style={{paddingRight: 20, paddingTop: 5}}
+                onPress={() => {
+                  this.close()
+                }}>
                 <Icon name="chevron-left" style={{fontSize: 25}} color="#fff"/>
               </TouchableOpacity>
-              <Text style={{color: '#fff', fontWeight: '500', alignSelf: 'center'}}>Select a
-                tree </Text>
-              <Text style={{paddingRight: 10}}/>
+              <Text style={{color: '#fff', fontWeight: '500', alignSelf: 'center', fontSize: 18}}>
+                Select a Tree
+              </Text>
             </View>
             <ScrollView style={{flex: 1}}
                         keyboardShouldPersistTaps="handled"
                         keyboardDismissMode="interactive">
               {this.renderResults()}
             </ScrollView>
-            <View style={styles.textInputContainer}>
+            <View style={[styles.textInputContainer, {paddingBottom: this.state.textFieldBottomSpacing}]}>
               <TextInput
                 style={[styles.textField, {flex: 1}]}
                 placeholder={'Type to search or create your own label'}

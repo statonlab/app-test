@@ -1,10 +1,11 @@
-import React, {Component, PropTypes} from 'react'
+import React from 'react'
+import Screen from './Screen'
 import {
   View,
   StyleSheet,
   Text,
   TouchableOpacity,
-  BackAndroid
+  BackHandler
 } from 'react-native'
 import Header from '../components/Header'
 import Colors from '../helpers/Colors'
@@ -13,14 +14,14 @@ import realm from '../db/Schema'
 import MarkersMap from '../components/MarkersMap'
 import File from '../helpers/File'
 
-export default class SubmittedScene extends Component {
+export default class SubmittedScreen extends Screen {
   constructor(props) {
     super(props)
 
     this.state  = {
       shouldNavigate: true
     }
-    this.id     = this.props.plant.id
+    this.id     = this.params.plant.id
     this.marker = {}
     this.fs     = new File()
   }
@@ -57,14 +58,15 @@ export default class SubmittedScene extends Component {
 
     this.markers = markers
 
-    this.backEvent = BackAndroid.addEventListener('hardwareBackPress', () => {
-      this.props.navigator.popToTop()
+    this.backEvent = BackHandler.addEventListener('hardwareBackPress', () => {
+      this.navigator.reset()
       return true
     })
   }
 
   /**
-   * The navigation function to be passed to the Marker callout. To prevent against bubble effect, we use shouldNavigate in the state.
+   * The navigation function to be passed to the Marker callout.
+   * To prevent against bubble effect, we use shouldNavigate in the state.
    *
    * @param marker
    */
@@ -73,9 +75,9 @@ export default class SubmittedScene extends Component {
       if (marker.id === undefined) {
         return
       }
+
       let plant = realm.objects('Submission').filtered(`id == "${marker.id}"`)[0]
-      this.props.navigator.push({
-        label    : 'ObservationScene',
+      this.navigator.navigate('Observation', {
         plant    : JSON.parse(JSON.stringify(plant)),
         onUnmount: () => {
           this.setState({shouldNavigate: true})
@@ -104,26 +106,25 @@ export default class SubmittedScene extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Header title="Submission Aerial View" navigator={this.props.navigator} showLeftIcon={false}
-                showRightIcon={false}/>
+        <Header title="Submission Aerial View"
+                navigator={this.navigator}
+                showLeftIcon={false}
+                showRightIcon={false}
+        />
+
         {this.renderMap()}
 
         <View style={styles.footer}>
           <Text style={styles.text}>Your entry has been saved!</Text>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => this.props.navigator.popToTop()}>
+            onPress={() => this.navigator.reset()}>
             <Text style={styles.buttonText}>Continue</Text>
           </TouchableOpacity>
         </View>
       </View>
     )
   }
-}
-
-SubmittedScene.propTypes = {
-  navigator: PropTypes.object.isRequired,
-  plant    : PropTypes.object.isRequired
 }
 
 const styles = StyleSheet.create({

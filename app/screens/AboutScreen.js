@@ -1,13 +1,15 @@
-import React, {Component, PropTypes} from 'react'
-import {View, ScrollView, StyleSheet, Text, BackAndroid} from 'react-native'
+import React from 'react'
+import Screen from './Screen'
+import PropTypes from 'prop-types'
+import {View, ScrollView, StyleSheet, Text, BackHandler} from 'react-native'
 import Header from '../components/Header'
 import Elevation from '../helpers/Elevation'
 import Atext from '../components/Atext'
 
-export default class AboutScene extends Component {
+export default class AboutScreen extends Screen {
   componentWillMount() {
-    this.backEvent = BackAndroid.addEventListener('hardwareBackPress', () => {
-      this.props.navigator.pop()
+    this.backEvent = BackHandler.addEventListener('hardwareBackPress', () => {
+      this.navigator.goBack()
       return true
     })
   }
@@ -15,7 +17,7 @@ export default class AboutScene extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Header title="About Us" navigator={this.props.navigator} elevation={2}/>
+        <Header title="About Us" navigator={this.navigator} elevation={2}/>
         <ScrollView style={styles.scrollView}>
           <View style={styles.card}>
             <Text style={styles.title}>TreeSnap</Text>
@@ -38,7 +40,10 @@ export default class AboutScene extends Component {
           <View style={styles.card}>
             <Text style={styles.title}>The TreeSnap Team</Text>
             <Text style={styles.textBody}>TreeSnap is developed as a collaboration between
-              scientists at the University of Tennessee Knoxville and the Forest Health Research Center at the University of Kentucky.  TreeSnap was funded by the <Atext url="https://www.nsf.gov/awardsearch/showAward?AWD_ID=1444573"> NSF Plant Genome Research Program, award 1444573</Atext>.</Text>
+              scientists at the University of Tennessee Knoxville and the Forest Health Research
+              Center at the University of Kentucky. TreeSnap was funded by the <Atext
+                url="https://www.nsf.gov/awardsearch/showAward?AWD_ID=1444573"> NSF Plant Genome
+                Research Program, award 1444573</Atext>.</Text>
           </View>
         </ScrollView>
       </View>
@@ -46,40 +51,40 @@ export default class AboutScene extends Component {
   }
 }
 
-AboutScene.PropTypes = {
+AboutScreen.PropTypes = {
   navigator: PropTypes.object.isRequired
 }
 
 const styles = StyleSheet.create({
 
   container: {
-    flex: 1,
+    flex           : 1,
     backgroundColor: '#f5f5f5'
   },
 
   scrollView: {
-    flex: 1,
+    flex           : 1,
     paddingVertical: 5
   },
 
   card: {
     ...(new Elevation(2)),
     backgroundColor: '#fff',
-    padding: 10,
-    margin: 5,
-    borderRadius: 2
+    padding        : 10,
+    margin         : 5,
+    borderRadius   : 2
   },
 
   title: {
-    color: '#222',
+    color     : '#222',
     fontWeight: '500',
-    fontSize: 16
+    fontSize  : 16
   },
 
   textBody: {
-    color: '#444',
-    fontSize: 14,
+    color     : '#444',
+    fontSize  : 14,
     lineHeight: 16,
-    marginTop: 10
+    marginTop : 10
   }
 })
