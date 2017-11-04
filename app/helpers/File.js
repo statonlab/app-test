@@ -368,7 +368,7 @@ export default class File {
   }
 
   _moveImage(image, link, callback) {
-    //ImageResizer.createResizedImage(image, 1000, 1000, 'JPEG', 100).then(full_image => {
+    //ImageResizer.createResizedImage(image, 1000, 1000, 'JPEG', 100).then(({path}) => {
 
     // Get image name
     let name = link.split('/')
@@ -415,11 +415,12 @@ export default class File {
     name     = name[name.length - 1]
 
     ImageResizer.createResizedImage(image, 160, 160, 'JPEG', 100, 0, this._thumbnailsDir)
-      .then(thumbnail => {
+      .then(({path}) => {
         // Let it have the same name of the original image
-        this.move(thumbnail.replace('file:', ''), `${this._thumbnailsDir}/${name}`)
+        this.move(path, `${this._thumbnailsDir}/${name}`)
       })
       .catch((error) => {
+        console.log('Could not create thumbnail', error)
       })
   }
 }
