@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react'
+import React from 'react'
+import Screen from './Screen'
 import {
   View,
   StyleSheet,
@@ -6,7 +7,7 @@ import {
   Image,
   DeviceEventEmitter,
   TouchableOpacity,
-  BackAndroid
+  BackHandler
 } from 'react-native'
 import Header from '../components/Header'
 import Colors from '../helpers/Colors'
@@ -19,8 +20,9 @@ import Observation from '../helpers/Observation'
 import Spinner from '../components/Spinner'
 import File from '../helpers/File'
 import SnackBar from '../components/SnackBarNotice'
+import {ifIphoneX} from 'react-native-iphone-x-helper'
 
-export default class ObservationsScene extends Component {
+export default class ObservationsScreen extends Screen {
   constructor(props) {
     super(props)
 
@@ -54,8 +56,8 @@ export default class ObservationsScene extends Component {
   }
 
   componentWillMount() {
-    this.backEvent = BackAndroid.addEventListener('hardwareBackPress', () => {
-      this.props.navigator.pop()
+    this.backEvent = BackHandler.addEventListener('hardwareBackPress', () => {
+      this.navigator.goBack()
       return true
     })
   }
@@ -153,9 +155,9 @@ export default class ObservationsScene extends Component {
           <Text
             style={styles.body}>Near {submission.location.latitude.toFixed(4)}, {submission.location.longitude.toFixed(4)}</Text>
         </View>
-        <TouchableOpacity style={[styles.textContainer, styles.rightElement]}>
+        <Text style={[styles.textContainer, styles.rightElement]}>
           <Icon name="md-more" size={30} color="#aaa"/>
-        </TouchableOpacity>
+        </Text>
       </TouchableOpacity>
     )
   }
@@ -171,48 +173,62 @@ export default class ObservationsScene extends Component {
   _renderSectionHeader = (data, id) => {
     if (id === 'Needs Uploading') {
       return (
-        <View style={[styles.headerContainer, {
-          flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
-        }]}>
-          <Text style={styles.headerText}>{id}</Text>
-          {this.state.isLoggedIn ?
-            <TouchableOpacity style={styles.warningButton}
-                              onPress={this._uploadAll.bind(this)}>
-              <Text style={[styles.headerText, {color: Colors.warningText}]}>Sync All</Text>
-            </TouchableOpacity> :
-            <TouchableOpacity style={styles.warningButton}
-                              onPress={() => this.props.navigator.push({label: 'LoginScene'})}>
-              <Text style={[styles.headerText, {color: Colors.warningText}]}>Login to Sync</Text>
-            </TouchableOpacity>
-          }
+        <View style={styles.headerContainer}>
+          <View style={styles.headerRow}>
+            <Text style={styles.headerText}>{id}</Text>
+            {this.state.isLoggedIn ?
+              <TouchableOpacity style={styles.warningButton}
+                                onPress={this._uploadAll.bind(this)}>
+                <Text style={[styles.headerText, {color: Colors.warningText}]}>
+                  Sync All
+                </Text>
+              </TouchableOpacity> :
+              <TouchableOpacity style={styles.warningButton}
+                                onPress={() => this.navigator.navigate('Login')}>
+                <Text style={[styles.headerText, {color: Colors.warningText}]}>
+                  Login to Sync
+                </Text>
+              </TouchableOpacity>
+            }
+          </View>
         </View>
       )
     }
 
     if (id === 'Needs Updating') {
       return (
-        <View style={[styles.headerContainer, {
-          flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
-        }]}>
-          <Text style={styles.headerText}>{id}</Text>
-          {this.state.isLoggedIn ?
-            <TouchableOpacity style={styles.warningButton}
-                              onPress={this._uploadAll.bind(this)}>
-              <Text style={[styles.headerText, {color: Colors.warningText}]}>Sync All</Text>
-            </TouchableOpacity> :
-            <TouchableOpacity style={styles.warningButton}
-                              onPress={() => this.props.navigator.push({label: 'LoginScene'})}>
-              <Text style={[styles.headerText, {color: Colors.warningText}]}>Login to Sync</Text>
-            </TouchableOpacity>
-          }
+        <View style={styles.headerContainer}>
+          <View
+            style={styles.headerRow}>
+            <Text style={styles.headerText}>{id}</Text>
+            {this.state.isLoggedIn ?
+              <TouchableOpacity style={styles.warningButton}
+                                onPress={this._uploadAll.bind(this)}>
+                <Text style={[styles.headerText, {color: Colors.warningText}]}>
+                  Sync All
+                </Text>
+              </TouchableOpacity> :
+              <TouchableOpacity style={styles.warningButton}
+                                onPress={() => this.navigator.navigate('Login')}>
+                <Text style={[styles.headerText, {color: Colors.warningText}]}>
+                  Login to Sync
+                </Text>
+              </TouchableOpacity>
+            }
+          </View>
         </View>
       )
     }
 
+    let count = realm
+      .objects('Submission')
+      .filtered('synced == true && needs_update == false')
+      .length
     return (
       <View style={styles.headerContainer}>
-        <Text style={styles.headerText}>{id} ({realm.objects('Submission')
-          .filtered('synced == true && needs_update == false').length})</Text>
+        <Text style={styles.headerText}>
+          {id} ({count})
+        </Text>
       </View>
     )
   }
@@ -261,8 +277,7 @@ export default class ObservationsScene extends Component {
    * @private
    */
   _goToEntryScene = (plant) => {
-    this.props.navigator.push({
-      label    : 'ObservationScene',
+    this.navigator.navigate('Observation', {
       onUnmount: this._resetDataSource.bind(this),
       plant
     })
@@ -283,6 +298,7 @@ export default class ObservationsScene extends Component {
             this._resetDataSource()
           })
           unsynced_count++
+          DeviceEventEmitter.emit('ObservationUploaded')
         }).catch(error => {
           console.log(error)
           unsynced_count++
@@ -309,6 +325,7 @@ export default class ObservationsScene extends Component {
             observation.needs_update = false
             this._resetDataSource()
             this.refs.spinner.close()
+            DeviceEventEmitter.emit('ObservationUploaded')
           })
           updated_count++
         }).catch(error => {
@@ -348,7 +365,7 @@ export default class ObservationsScene extends Component {
     return (
       <View style={styles.container}>
         <Spinner ref="spinner"/>
-        <Header navigator={this.props.navigator} title="Your Entries"/>
+        <Header navigator={this.navigator} title="Your Entries"/>
         {this.state.hasData ? this._renderList() : this._renderEmpty()}
         <SnackBar ref={(snackbar) => this.snackbar = snackbar} noticeText={this.state.noticeText}/>
       </View>
@@ -356,14 +373,17 @@ export default class ObservationsScene extends Component {
   }
 }
 
-ObservationsScene.PropTypes = {
-  navigator: PropTypes.object.isRequired
-}
+// ObservationsScreen.PropTypes = {
+//   navigator: PropTypes.object.isRequired
+// }
 
 const styles = StyleSheet.create({
   container: {
     flex           : 1,
-    backgroundColor: '#f7f7f7'
+    backgroundColor: '#f7f7f7',
+    ...ifIphoneX({
+      paddingBottom: 20
+    })
   },
 
   row: {
@@ -436,7 +456,17 @@ const styles = StyleSheet.create({
     padding          : 10,
     backgroundColor  : '#f5f5f5',
     borderBottomWidth: 1,
-    borderBottomColor: '#eee'
+    borderBottomColor: '#eee',
+    flexDirection    : 'row',
+    justifyContent   : 'space-between',
+    flex             : 0
+  },
+
+  headerRow: {
+    flexDirection : 'row',
+    alignItems    : 'center',
+    justifyContent: 'space-between',
+    flex          : 1
   },
 
   headerText: {

@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react'
+import React, {Component} from 'react'
+import PropTypes from 'prop-types'
 import {View, Text, StyleSheet, Alert, DeviceEventEmitter, TouchableOpacity} from 'react-native'
 import {MKSpinner} from 'react-native-material-kit'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'

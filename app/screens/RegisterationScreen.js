@@ -1,4 +1,6 @@
-import React, {Component, PropTypes} from 'react'
+import React from 'react'
+import Screen from './Screen'
+import PropTypes from 'prop-types'
 import {
   View,
   StyleSheet,
@@ -7,7 +9,7 @@ import {
   DeviceEventEmitter,
   Platform,
   TouchableOpacity,
-  BackAndroid
+  BackHandler
 } from 'react-native'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import Header from '../components/Header'
@@ -22,7 +24,7 @@ import DateModal from '../components/DateModal'
 
 const isAndroid = Platform.OS === 'android'
 
-export default class RegistrationScene extends Component {
+export default class RegistrationScreen extends Screen {
   constructor(props) {
     super(props)
     this.state = {
@@ -59,8 +61,8 @@ export default class RegistrationScene extends Component {
     this.setState({currentYear: currentYear})
 
 
-    this.backEvent = BackAndroid.addEventListener('hardwareBackPress', () => {
-      this.props.navigator.pop()
+    this.backEvent = BackHandler.addEventListener('hardwareBackPress', () => {
+      this.navigator.goBack()
       return true
     })
   }
@@ -120,7 +122,7 @@ export default class RegistrationScene extends Component {
         this.setState({showSpinner: false})
         DeviceEventEmitter.emit('userRegistered')
         // Transition to Landing Scene.
-        this.props.navigator.popToTop()
+        this.navigator.reset()
       })
       .catch(error => {
         this.handleErrorAxios(error)
@@ -185,7 +187,6 @@ export default class RegistrationScene extends Component {
     }
   }
 
-
   handleErrorAxios = (error) => {
     if (!error.response) {
       alert('Unable to connect to server.  Please verify your internet connection and try again.')
@@ -234,7 +235,7 @@ export default class RegistrationScene extends Component {
     return (
       <View style={styles.container}>
         <Spinner show={this.state.showSpinner}/>
-        <Header title="Register" navigator={this.props.navigator} showRightIcon={false}/>
+        <Header title="Register" navigator={this.navigator} showRightIcon={false}/>
         <KeyboardAwareScrollView
           keyboardDismissMode={isAndroid ? 'none' : 'on-drag'}
           showsVerticalScrollIndicator={false}
@@ -364,7 +365,7 @@ export default class RegistrationScene extends Component {
 
             <View style={[styles.formGroup, {marginBottom: 30}]}>
               <TouchableOpacity onPress={() => {
-                this.props.navigator.replace({label: 'LoginScene'})
+                this.navigator.navigate('Login')
               }}>
                 <Text style={styles.link}>Have an account? Login here</Text>
               </TouchableOpacity>
@@ -376,7 +377,7 @@ export default class RegistrationScene extends Component {
   }
 }
 
-RegistrationScene.PropTypes = {
+RegistrationScreen.PropTypes = {
   navigator: PropTypes.object.isRequired
 }
 

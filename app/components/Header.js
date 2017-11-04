@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react'
+import React, {Component} from 'react'
+import PropTypes from 'prop-types'
 import {
   View,
   Text,
@@ -8,6 +9,7 @@ import {
   DeviceEventEmitter
 } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import {isIphoneX} from 'react-native-iphone-x-helper'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
 
@@ -39,11 +41,7 @@ export default class Header extends Component {
       return
     }
 
-    let routes = this.props.navigator.getCurrentRoutes()
-
-    if (routes.length > 1) {
-      this.props.navigator.pop()
-    }
+    this.props.navigator.goBack()
   }
 
   getLeftIcon = () => {
@@ -53,13 +51,15 @@ export default class Header extends Component {
 
     if (this.props.initial) {
       return (
-        <TouchableHighlight style={style.touchable} onPress={this.onMenuPress} underlayColor={Colors.primary}>
+        <TouchableHighlight style={style.touchable} onPress={this.onMenuPress}
+                            underlayColor={Colors.primary}>
           <Icon name={this.state.menuIcon} style={{fontSize: 25}} color="#fff"/>
         </TouchableHighlight>
       )
     } else {
       return (
-        <TouchableHighlight style={style.touchable} onPress={this.back} underlayColor={Colors.primary}>
+        <TouchableHighlight style={style.touchable} onPress={this.back}
+                            underlayColor={Colors.primary}>
           <Icon name="chevron-left" size={25} color="#fff"/>
         </TouchableHighlight>
       )
@@ -71,29 +71,25 @@ export default class Header extends Component {
       return
     }
 
-    let icon = (<Icon name="map-marker-multiple" size={23} color="#fff"/>)
+    let icon    = (<Icon name="map-marker-multiple" size={23} color="#fff"/>)
     let onPress = this.navigateToMap
 
-    if(this.props.rightIcon !== null) {
-      icon = this.props.rightIcon
+    if (this.props.rightIcon !== null) {
+      icon    = this.props.rightIcon
       onPress = this.props.onRightPress
     }
 
     return (
       <TouchableHighlight style={style.touchable}
-        underlayColor={Colors.primary}
-        onPress={onPress}>
+                          underlayColor={Colors.primary}
+                          onPress={onPress}>
         {icon}
       </TouchableHighlight>
     )
   }
 
   navigateToMap = () => {
-    let routes = this.props.navigator.getCurrentRoutes()
-    let route  = routes[routes.length - 1]
-    if (route.index !== 1) {
-      this.props.navigator.push({title: 'Map', label: 'MapScene'})
-    }
+    this.props.navigator.navigate('Map')
   }
 
   onMenuPress = () => {
@@ -105,7 +101,8 @@ export default class Header extends Component {
       <View style={[style.wrapper, {...(new Elevation(this.props.elevation))}]} ref="header">
         {this.getLeftIcon()}
 
-        <View style={[style.titleContainer, {alignItems: this.props.showLeftIcon ? 'flex-start' : 'center'}]}>
+        <View
+          style={[style.titleContainer, {alignItems: this.props.showLeftIcon ? 'flex-start' : 'center'}]}>
           <Text style={[style.text, style.title]}>{this.props.title}</Text>
         </View>
 
@@ -134,10 +131,10 @@ Header.defaultProps = {
   onMenuPress  : () => {
 
   },
-  onBackPress  : () => {
+  onBackPress() {
     return true
   },
-  onRightPress : () => {
+  onRightPress() {
 
   },
   elevation    : 3,
@@ -147,10 +144,14 @@ Header.defaultProps = {
 }
 
 function getVerticalPadding() {
-  if (Platform.OS == 'android')
+  if (Platform.OS === 'android') {
     return 0
-  else
+  } else {
+    if (isIphoneX()) {
+      return 30
+    }
     return 15
+  }
 }
 
 const style = StyleSheet.create({

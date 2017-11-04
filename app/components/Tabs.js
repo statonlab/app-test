@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react'
+import React, {Component} from 'react'
+import PropTypes from 'prop-types'
 import {View, Text, StyleSheet, ScrollView, Dimensions, Animated, TouchableOpacity} from 'react-native'
 import Colors from '../helpers/Colors'
 import Elevation from '../helpers/Elevation'

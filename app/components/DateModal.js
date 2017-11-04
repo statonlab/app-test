@@ -1,9 +1,14 @@
-import React, {Component, PropTypes} from 'react'
-import {View, Text, Picker, StyleSheet, Modal, TouchableOpacity} from 'react-native'
+import React, {Component} from 'react'
+import PropTypes from 'prop-types'
+import {
+  View,
+  Text,
+  Picker,
+  StyleSheet,
+  Modal,
+  TouchableOpacity
+} from 'react-native'
 import Colors from '../helpers/Colors'
-import Elevation from '../helpers/Elevation'
-
-let dateChoices = [1, 2, 3]
 
 export default class DateModal extends Component {
 
@@ -92,7 +97,6 @@ export default class DateModal extends Component {
 DateModal.propTypes = {
   ...View.PropTypes,
   onSelect    : PropTypes.func,
-  style       : View.propTypes.style,
   selectedYear: PropTypes.number
 }
 

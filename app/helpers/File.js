@@ -80,7 +80,7 @@ export default class File {
         callback()
       }
     }).catch(error => {
-      console.log('Could not copy file ' + filePath + ': ', error)
+      console.log('Could not copy file ' + from + ': ', error)
     })
   }
 
@@ -225,7 +225,6 @@ export default class File {
           processed++
           images[key][index] = image
           if (processed === count) {
-            console.log('Images downloaded')
             realm.write(() => {
               observation.images = JSON.stringify(images)
             })
@@ -236,6 +235,10 @@ export default class File {
   }
 
   async downloadImage(image) {
+    if (__DEV__ && Platform.OS === 'android') {
+      image = image.replace('treesnap.app', '192.168.2.81:3000')
+    }
+
     let response = await FS.config({fileCache: true}).fetch('GET', image)
 
     return response.path()
@@ -368,7 +371,7 @@ export default class File {
   }
 
   _moveImage(image, link, callback) {
-    //ImageResizer.createResizedImage(image, 1000, 1000, 'JPEG', 100).then(full_image => {
+    //ImageResizer.createResizedImage(image, 1000, 1000, 'JPEG', 100).then(({uri}) => {
 
     // Get image name
     let name = link.split('/')
@@ -414,12 +417,17 @@ export default class File {
     let name = image.split('/')
     name     = name[name.length - 1]
 
+    if (this._android) {
+      //image = 'file:/' + image
+    }
+
     ImageResizer.createResizedImage(image, 160, 160, 'JPEG', 100, 0, this._thumbnailsDir)
-      .then(thumbnail => {
+      .then(({uri}) => {
         // Let it have the same name of the original image
-        this.move(thumbnail.replace('file:', ''), `${this._thumbnailsDir}/${name}`)
+        this.move(uri.replace('file:', ''), `${this._thumbnailsDir}/${name}`)
       })
       .catch((error) => {
+        console.log('Unable to create thumbnail: ', error, image)
       })
   }
 }

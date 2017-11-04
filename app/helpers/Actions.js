@@ -39,6 +39,10 @@ export default class Actions {
    * @return {Promise.<void>}
    */
   async run() {
+    if(!this.user) {
+      return
+    }
+
     if (!this._loaded) {
       try {
         await this.load()

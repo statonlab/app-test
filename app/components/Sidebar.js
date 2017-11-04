@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react'
+import React, {Component} from 'react'
+import PropTypes from 'prop-types'
 import {
   Animated,
   View,
@@ -11,6 +12,7 @@ import {
   Dimensions
 } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { isIphoneX } from 'react-native-iphone-x-helper'
 import Colors from '../helpers/Colors'
 import Elevation from '../helpers/Elevation'
 
@@ -148,7 +150,9 @@ export default class Sidebar extends Component {
     let containerWidth = this.state.open ? window.width : 0
 
     return (
-      <Animated.View ref="container" style={[style.container, {width: containerWidth, backgroundColor: `rgba(0,0,0,${this.state.opacity._value})`}]}>
+      <Animated.View ref="container" style={[style.container, {
+        width: containerWidth, backgroundColor: `rgba(0,0,0,${this.state.opacity._value})`
+      }]}>
         <TouchableOpacity onPress={this.toggleMenu.bind(this)} style={{
           flex           : 1,
           backgroundColor: 'transparent',
@@ -156,7 +160,8 @@ export default class Sidebar extends Component {
           zIndex         : 800
         }} activeOpacity={1}>
         </TouchableOpacity>
-        <Animated.ScrollView style={[style.sidebar, {transform: [{translateX: this.state.position}]}]} ref="sidebar">
+        <Animated.ScrollView
+          style={[style.sidebar, {transform: [{translateX: this.state.position}]}]} ref="sidebar">
           {this.state.routes.map((route, index) => {
             return (
               <TouchableOpacity
@@ -193,7 +198,7 @@ export default class Sidebar extends Component {
       return
     }
 
-    this.props.navigator.push(route)
+    this.props.navigator.navigate(route.route)
   }
 
   getPan() {
@@ -220,10 +225,14 @@ Sidebar.defaultProps = {
 }
 
 function getVerticalMargin() {
-  if (Platform.OS === 'android')
+  if (Platform.OS === 'android') {
     return 60
-  else
+  } else {
+    if(isIphoneX()) {
+      return 90
+    }
     return 75
+  }
 }
 
 const style = StyleSheet.create({

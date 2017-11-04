@@ -3,7 +3,7 @@ import Realm from 'realm'
 /**
  * Define Coordinate Type
  * -------------------------------------------------
- * @type class
+ * @type object
  */
 const CoordinateSchema = {
   name      : 'Coordinate',

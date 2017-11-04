@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react'
+import React, {Component} from 'react'
+import PropTypes from 'prop-types'
 import {
   View,
   Text,
@@ -10,7 +11,7 @@ import {
   Alert,
   Platform,
   TouchableOpacity,
-  BackAndroid
+  BackHandler
 } from 'react-native'
 import moment from 'moment'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
@@ -27,6 +28,7 @@ import Spinner from '../components/Spinner'
 import AutoComplete from '../components/AutoComplete'
 import {ACFCollection} from '../resources/descriptions'
 import DCPrules from '../resources/validation'
+import {ifIphoneX} from 'react-native-iphone-x-helper'
 
 const isAndroid = Platform.OS === 'android'
 
@@ -98,7 +100,7 @@ export default class Form extends Component {
     // Add image resize event listener
     this.events.push(DeviceEventEmitter.addListener('imagesResized', this._handleResizedImages))
 
-    this.backEvent = BackAndroid.addEventListener('hardwareBackPress', () => {
+    this.backEvent = BackHandler.addEventListener('hardwareBackPress', () => {
       this.cancel()
       return true
     })
@@ -243,10 +245,11 @@ export default class Form extends Component {
         if (typeof this.refs.spinner !== 'undefined') {
           this.refs.spinner.close()
         }
-        this.props.navigator.pop()
+        this.props.navigator.goBack()
       })
       return
     }
+
     if (typeof this.refs.spinner !== 'undefined') {
       this.refs.spinner.open()
     }
@@ -256,7 +259,7 @@ export default class Form extends Component {
       if (typeof this.refs.spinner !== 'undefined') {
         this.refs.spinner.close()
       }
-      this.props.navigator.pop()
+      this.props.navigator.goBack()
     })
   }
 
@@ -304,10 +307,8 @@ export default class Form extends Component {
 
     this.fs.delete({images: this.state.deletedImages}, () => {
       // Tell anyone who cares that there is a new submission
-      this.props.navigator.replace({
-        label   : 'SubmittedScene',
-        plant   : observation,
-        gestures: {}
+      this.props.navigator.navigate('Submitted', {
+        plant: observation
       })
       DeviceEventEmitter.emit('newSubmission')
     })
@@ -349,7 +350,7 @@ export default class Form extends Component {
     })
 
     this.fs.delete({images: this.state.deletedImages}, () => {
-      this.props.navigator.pop()
+      this.props.navigator.goBack()
     })
   }
 
@@ -459,37 +460,37 @@ export default class Form extends Component {
     }
 
     if (DCP[key].modalFreeText) {
+      let value = this.getMultiCheckValue(this.state.metadata[key], DCP[key].multiCheck)
       return (
-        <View style={styles.formGroup} key={key}>
-          <AutoComplete
-            style={styles.picker}
-            onChange={(option) => {
-              this.setState({metadata: {...this.state.metadata, [key]: option}})
-            }}
-          >
+        <AutoComplete
+          style={styles.picker}
+          onChange={(option) => {
+            this.setState({metadata: {...this.state.metadata, [key]: option}})
+          }}
+          key={key}
+        >
+          <View style={styles.formGroup}>
             <View style={styles.picker}>
               <Text
-                style={this.state.warnings[key] ? [styles.label, styles.labelWarning] : styles.label}>{DCP[key].label}</Text>
-              <TextInput
-                style={styles.textField}
-                editable={false}
-                placeholder={DCP[key].placeHolder}
-                placeholderTextColor="#aaa"
-                value={this.getMultiCheckValue(this.state.metadata[key], DCP[key].multiCheck)}
-                underlineColorAndroid="transparent"
-              />
+                style={this.state.warnings[key] ? [styles.label, styles.labelWarning] : styles.label}>
+                {DCP[key].label}
+              </Text>
+              <Text style={[styles.textField, value ? {} : styles.placeholder]}>
+                {value || DCP[key].placeHolder}
+              </Text>
               {dropdownIcon}
             </View>
-          </AutoComplete>
-        </View>
+          </View>
+        </AutoComplete>
       )
     }
 
     if (DCP[key].numeric) {
-      let key2 = [key] + '_confidence'
+      let key2  = [key] + '_confidence'
+      let value = this.state.metadata[key] ? this.state.metadata[key] + ' ' + DCP[key].units : null
       return (
         <View key={key}>
-          <View style={styles.formGroup} key={key}>
+          <View style={styles.formGroup}>
             <PickerModal
               style={styles.picker}
               images={DCP[key].images}
@@ -510,15 +511,12 @@ export default class Form extends Component {
             >
               <View style={styles.picker}>
                 <Text
-                  style={this.state.warnings[key] ? [styles.label, styles.labelWarning] : styles.label}>{DCP[key].label}</Text>
-                <TextInput
-                  style={styles.textField}
-                  editable={false}
-                  placeholder={DCP[key].placeHolder}
-                  placeholderTextColor="#aaa"
-                  value={this.state.metadata[key] ? this.state.metadata[key] + ' ' + DCP[key].units : null}
-                  underlineColorAndroid="transparent"
-                />
+                  style={this.state.warnings[key] ? [styles.label, styles.labelWarning] : styles.label}>
+                  {DCP[key].label}
+                </Text>
+                <Text style={[styles.textField, value ? {} : styles.placeholder]}>
+                  {value || DCP[key].placeHolder}
+                </Text>
                 {dropdownIcon}
               </View>
             </PickerModal>
@@ -529,9 +527,10 @@ export default class Form extends Component {
       )
     }
 
+    let value = this.getMultiCheckValue(this.state.metadata[key], DCP[key].multiCheck)
     return (
       <View key={key}>
-        <View style={styles.formGroup} key={key}>
+        <View style={styles.formGroup}>
           <PickerModal
             style={styles.picker}
             images={DCP[key].images}
@@ -548,21 +547,21 @@ export default class Form extends Component {
           >
             <View style={styles.picker}>
               <Text
-                style={this.state.warnings[key] ? [styles.label, styles.labelWarning] : styles.label}>{DCP[key].label}</Text>
-              <TextInput
-                style={styles.textField}
-                editable={false}
-                placeholder={DCP[key].placeHolder}
-                placeholderTextColor="#aaa"
-                value={this.getMultiCheckValue(this.state.metadata[key], DCP[key].multiCheck)}
-                underlineColorAndroid="transparent"
-              />
+                style={this.state.warnings[key] ? [styles.label, styles.labelWarning] : styles.label}>
+                {DCP[key].label}
+              </Text>
+              <Text style={[styles.textField, value ? {} : styles.placeholder]}>
+                {value || DCP[key].placeHolder}
+              </Text>
               {dropdownIcon}
             </View>
           </PickerModal>
         </View>
-        {DCP[key].camera && DCP[key].camera.includes(this.state.metadata[key]) ? this.renderCameraItem(DCP[key].label, DCP[key].label)
-          : null}
+        {DCP[key].camera && DCP[key].camera.includes(this.state.metadata[key]) ?
+          this.renderCameraItem(DCP[key].label, DCP[key].label)
+          :
+          null
+        }
       </View>
     )
   }
@@ -686,7 +685,6 @@ export default class Form extends Component {
         </TouchableOpacity>
       </View>
     )
-
   }
 
   /**
@@ -788,13 +786,12 @@ export default class Form extends Component {
    * @private
    */
   _goToCamera = (id) => {
-    this.props.navigator.push({
-      label   : 'CameraScene',
-      images  : this.state.images[id] ? this.state.images[id] : [],
-      onDone  : this.handleImages.bind(this),
-      onDelete: this.handleDeletedImages.bind(this),
-      id      : id,
-      gestures: {}
+    this.props.navigator.navigate('Camera', {
+      navigator: this.props.navigator,
+      images   : this.state.images[id] ? this.state.images[id] : [],
+      onDone   : this.handleImages.bind(this),
+      onDelete : this.handleDeletedImages.bind(this),
+      id       : id
     })
   }
 }
@@ -875,7 +872,8 @@ const styles = StyleSheet.create({
   },
 
   textField: {
-    height           : 40,
+    //height           : 40,
+    //marginTop        : 10,
     paddingHorizontal: 5,
     color            : '#444',
     fontSize         : 14,
@@ -967,11 +965,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     borderTopWidth   : 1,
     borderTopColor   : '#ddd',
-    backgroundColor  : '#f5f5f5'
+    backgroundColor  : '#f5f5f5',
+    ...ifIphoneX({
+      paddingBottom    : 25,
+      paddingHorizontal: 10
+    })
   },
 
   slider: {
     width: 200
+  },
+
+  placeholder: {
+    color: '#aaa'
   }
 })
 

@@ -1,4 +1,6 @@
-import React, {Component, PropTypes} from 'react'
+import React from 'react'
+import Screen from './Screen'
+import PropTypes from 'prop-types'
 import {
   View,
   ScrollView,
@@ -10,7 +12,7 @@ import {
   Alert,
   Platform,
   TouchableOpacity,
-  BackAndroid
+  BackHandler
 } from 'react-native'
 import Header from '../components/Header'
 import Colors from '../helpers/Colors'
@@ -24,11 +26,12 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import File from '../helpers/File'
 import Elevation from '../helpers/Elevation'
 import ImageZoom from 'react-native-image-pan-zoom'
+import {ifIphoneX} from 'react-native-iphone-x-helper'
 
 const trash   = (<Icon name="ios-trash" size={24} color="#fff"/>)
 const android = Platform.OS === 'android'
 
-export default class ObservationScene extends Component {
+export default class ObservationScreen extends Screen {
   constructor(props) {
     super(props)
 
@@ -50,13 +53,13 @@ export default class ObservationScene extends Component {
   }
 
   componentWillMount() {
-    this.events.push(BackAndroid.addEventListener('hardwareBackPress', () => {
-      this.props.navigator.pop()
+    this.events.push(BackHandler.addEventListener('hardwareBackPress', () => {
+      this.navigator.goBack()
       return true
     }))
     this.events.push(DeviceEventEmitter.addListener('userLoggedIn', this._isLoggedIn.bind(this)))
     this.events.push(DeviceEventEmitter.addListener('editSubmission', this._reloadEntry.bind(this)))
-    this.setState({entry: this.props.plant})
+    this.setState({entry: this.params.plant})
   }
 
   /**
@@ -66,9 +69,9 @@ export default class ObservationScene extends Component {
     this._isLoggedIn()
 
     this.setState({
-      synced      : this.props.plant.synced,
-      needs_update: this.props.plant.needs_update,
-      pages       : this._generatePages(this.props.plant)
+      synced      : this.params.plant.synced,
+      needs_update: this.params.plant.needs_update,
+      pages       : this._generatePages(this.params.plant)
     })
   }
 
@@ -89,7 +92,7 @@ export default class ObservationScene extends Component {
    */
   componentWillUnmount() {
     this.events.map(event => event.remove())
-    this.props.onUnmount()
+    this.params.onUnmount()
   }
 
   /**
@@ -139,6 +142,7 @@ export default class ObservationScene extends Component {
         })
         this.refs.snackbar.showBar()
       }
+      DeviceEventEmitter.emit('ObservationUploaded')
     }).catch(error => {
       console.log(error)
       this.refs.spinner.close()
@@ -237,7 +241,7 @@ export default class ObservationScene extends Component {
       return (
         <View style={styles.field}>
           <TouchableOpacity style={styles.button}
-                            onPress={() => this.props.navigator.push({label: 'LoginScene'})}>
+                            onPress={() => this.navigator.navigate('LoginScene')}>
             <Text style={styles.buttonText}>Login to Sync</Text>
           </TouchableOpacity>
         </View>
@@ -297,7 +301,7 @@ export default class ObservationScene extends Component {
    * Delete entry from realm.
    */
   deleteLocally() {
-    let entry = this.props.plant
+    let entry = this.params.plant
 
     // Delete locally
     let deleteTarget = realm.objects('Submission').filtered(`id == ${entry.id}`)
@@ -315,7 +319,9 @@ export default class ObservationScene extends Component {
       })
     }
 
-    this.props.navigator.pop()
+    DeviceEventEmitter.emit('ObservationDeleted')
+
+    this.navigator.goBack()
   }
 
   /**
@@ -323,8 +329,7 @@ export default class ObservationScene extends Component {
    * @param entry
    */
   editEntry(entry) {
-    this.props.navigator.push({
-      label    : 'TreeScene',
+    this.navigator.navigate('Tree', {
       title    : entry.name,
       entryInfo: entry,
       edit     : true
@@ -341,7 +346,7 @@ export default class ObservationScene extends Component {
           {
             text   : 'OK',
             onPress: () => {
-              this.props.navigator.push({label: 'LoginScene'})
+              this.navigator.navigate('Login')
             }
           },
           {
@@ -422,6 +427,7 @@ export default class ObservationScene extends Component {
    */
   render() {
     let entry = this.state.entry
+
     if (entry === null) {
       return null
     }
@@ -433,7 +439,7 @@ export default class ObservationScene extends Component {
         <Spinner ref="spinner"/>
         <SnackBarNotice ref="snackbar" noticeText={this.state.noticeText}/>
 
-        <Header navigator={this.props.navigator} title={entry.name} rightIcon={trash}
+        <Header navigator={this.navigator} title={entry.name} rightIcon={trash}
                 onRightPress={() => {
                   this.deleteAlert.call(this, entry)
                 }}/>
@@ -502,13 +508,13 @@ export default class ObservationScene extends Component {
 }
 
 
-ObservationScene.PropTypes = {
+ObservationScreen.PropTypes = {
   navigator: PropTypes.object.isRequired,
   plant    : PropTypes.object.isRequired,
   onUnmount: PropTypes.func
 }
 
-ObservationScene.defaultProps = {
+ObservationScreen.defaultProps = {
   onUnmount: () => {
   }
 }
@@ -516,7 +522,10 @@ ObservationScene.defaultProps = {
 const styles = StyleSheet.create({
   container: {
     flex           : 1,
-    backgroundColor: '#f7f7f7'
+    backgroundColor: '#f7f7f7',
+    ...ifIphoneX({
+      paddingBottom: 20
+    })
   },
 
   contentContainer: {

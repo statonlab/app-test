@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react'
+import React, {Component} from 'react'
+import PropTypes from 'prop-types'
 import {View, Text, StyleSheet, ActivityIndicator, TouchableOpacity} from 'react-native'
 import realm from '../db/Schema'
 import Observation from '../helpers/Observation'
@@ -49,22 +50,23 @@ export default class UploadButton extends Component {
       uploading: true
     })
 
-    this.state.observations.forEach(observation => {
-      Observation.upload(observation).then(response => {
+    this.state.observations.forEach(async observation => {
+      try {
+        let response = await Observation.upload(observation)
         realm.write(() => {
           observation.synced   = true
           observation.serverID = response.data.data.observation_id
         })
         this.done()
         uploaded++
-      }).catch(error => {
+      } catch (error) {
         console.log('REQUEST ERROR', error)
         uploaded++
         if (uploaded === len) {
           this.setState({uploading: false, show: true})
           this.props.onError()
         }
-      })
+      }
     })
   }
 

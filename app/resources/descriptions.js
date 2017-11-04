@@ -159,8 +159,8 @@ export const Plants = {
           <Atext style={styles.paragraph} url=": http://www.hungrypests.com/the-threat/emerald-ash-borer.php">Read more about the emerald ash borer here</Atext>
         ],
         images: [
-          require('../img/DCP/EmAshBorer/EAB tunneling.jpg'),
-          require('../img/DCP/EmAshBorer/Emerald ash borer adult.jpg')
+          require('../img/DCP/EmAshBorer/EAB_tunneling.jpg'),
+          require('../img/DCP/EmAshBorer/Emerald_ash_borer_adult.jpg')
         ]
       }
     ],
@@ -210,8 +210,8 @@ export const Plants = {
           <Text style={styles.paragraph}>The hemlock woolly adelgid’s name comes from the insect’s egg sacs, which hang from the undersides of branches at certain times of year and look like small woolly tufts. These insects are invasive in North America, introduced from Japan.</Text>,
           <Text style={styles.paragraph}>Our hope is that this reporting app will let members of the public identify hemlock trees that have some natural resistance to hemlock woolly adelgid. We will then collect seeds from these trees and add them to tree breeding programs to try and propagate resistant trees to use in forest restoration.</Text>],
         images: [
-          require('../img/DCP/HemWoolly/HWA photo 1.jpg'),
-          require('../img/DCP/HemWoolly/HWA photo 2.jpg')
+          require('../img/DCP/HemWoolly/HWA_photo_1.jpg'),
+          require('../img/DCP/HemWoolly/HWA_photo_2.jpg')
         ]
       }
     ],
