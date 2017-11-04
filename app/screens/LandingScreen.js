@@ -195,51 +195,55 @@ export default class LandingScreen extends Screen {
    * if they don't already exist
    */
   async downloadObservations() {
-    let response = await Observation.get()
-    let records  = response.data.data
+    try {
+      let response = await Observation.get()
+      let records  = response.data.data
 
-    records.map(record => {
-      let primaryKey = parseInt(record.mobile_id)
-      let count      = realm.objects('Submission')
-        .filtered(`serverID == ${record.observation_id} OR id == ${primaryKey}`)
-        .length
+      records.map(record => {
+        let primaryKey = parseInt(record.mobile_id)
+        let count      = realm.objects('Submission')
+          .filtered(`serverID == ${record.observation_id} OR id == ${primaryKey}`)
+          .length
 
-      if (count > 0) {
-        return
-      }
+        if (count > 0) {
+          return
+        }
 
-      realm.write(() => {
-        realm.create('Submission', {
-          id       : primaryKey,
-          name     : record.observation_category,
-          images   : JSON.stringify(record.images),
-          location : record.location,
-          date     : moment(record.date.date).format('MM-DD-YYYY HH:mm:ss').toString(),
-          synced   : true,
-          meta_data: JSON.stringify(record.meta_data),
-          serverID : parseInt(record.observation_id)
+        realm.write(() => {
+          realm.create('Submission', {
+            id       : primaryKey,
+            name     : record.observation_category,
+            images   : JSON.stringify(record.images),
+            location : record.location,
+            date     : moment(record.date.date).format('MM-DD-YYYY HH:mm:ss').toString(),
+            synced   : true,
+            meta_data: JSON.stringify(record.meta_data),
+            serverID : parseInt(record.observation_id)
+          })
         })
       })
-    })
 
-    try {
       await this.downloadImages()
     } catch (error) {
-      console.log('Could not download images: ', error)
+      console.log(error)
     }
   }
 
-  // Download images
+  /**
+   * Download images
+   *
+   * @return {Promise.<void>}
+   */
   async downloadImages() {
     let observations = realm.objects('Submission')
 
-    return await Promise.all(observations.map(async observation => {
+    for (let key in observations) {
       try {
-        await this.fs.download(observation)
+        await this.fs.download(observations[key])
       } catch (error) {
         console.log(`Failed to download ${observation.name}`)
       }
-    }))
+    }
   }
 
   /**

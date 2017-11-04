@@ -296,7 +296,7 @@ PickerModal.propTypes = {
   choices        : PropTypes.array,
   header         : PropTypes.string,
   onSelect       : PropTypes.func,
-  style          : View.propTypes.style,
+  // style          : PropTypes.style,
   initialSelect  : PropTypes.string,
   multiCheck     : PropTypes.bool,
   numeric        : PropTypes.bool,

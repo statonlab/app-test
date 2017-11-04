@@ -74,7 +74,8 @@ import com.android.build.OutputFile
  */
 
 project.ext.react = [
-        nodeExecutableAndArgs: ["/usr/local/bin/node"]
+        nodeExecutableAndArgs: ["/usr/local/bin/node"],
+        entryFile            : "index.js"
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"

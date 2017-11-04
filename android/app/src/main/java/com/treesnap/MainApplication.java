@@ -44,6 +44,11 @@ public class MainApplication extends Application implements ReactApplication {
           new MapsPackage()
       );
     }
+
+    @Override
+    protected String getJSMainModuleName() {
+      return "index";
+    }
   };
 
   @Override

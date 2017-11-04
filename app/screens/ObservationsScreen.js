@@ -174,8 +174,7 @@ export default class ObservationsScreen extends Screen {
     if (id === 'Needs Uploading') {
       return (
         <View style={styles.headerContainer}>
-          <View
-            style={styles.headerRow}>
+          <View style={styles.headerRow}>
             <Text style={styles.headerText}>{id}</Text>
             {this.state.isLoggedIn ?
               <TouchableOpacity style={styles.warningButton}
@@ -466,7 +465,8 @@ const styles = StyleSheet.create({
   headerRow: {
     flexDirection : 'row',
     alignItems    : 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    flex          : 1
   },
 
   headerText: {
