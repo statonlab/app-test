@@ -32,6 +32,10 @@ const trash   = (<Icon name="ios-trash" size={24} color="#fff"/>)
 const android = Platform.OS === 'android'
 
 export default class ObservationScreen extends Screen {
+  static navigationOptions = {
+    tabBarVisible: false
+  }
+
   constructor(props) {
     super(props)
 

@@ -22,6 +22,7 @@ import UploadButton from '../components/UploadButton'
 import SnackBarNotice from '../components/SnackBarNotice'
 import Observation from '../helpers/Observation'
 import File from '../helpers/File'
+import User from '../db/User'
 
 const plants = [
   {
@@ -60,61 +61,9 @@ export default class LandingScreen extends Screen {
   constructor(props) {
     super(props)
 
-    // Links that always show up
-    this.defaultSidebarLinks = [
-      {
-        icon : 'map-marker-radius',
-        title: 'My Entries',
-        route: 'Observations'
-      },
-      {
-        icon : 'account-card-details',
-        title: 'About Us',
-        route: 'About'
-      },
-      {
-        icon : 'sign-caution',
-        title: 'Health and Safety',
-        route: 'HealthSafety'
-      },
-      {
-        icon : 'lock',
-        title: 'Privacy Policy',
-        route: 'PrivacyPolicy'
-      }
-    ]
-
-    // Links that show up when the user is logged in
-    this.loggedInLinks = [
-      {
-        icon : 'account',
-        title: 'Account',
-        route: 'Account'
-      },
-      {
-        icon   : 'logout-variant',
-        title  : 'Logout',
-        onPress: this.logout.bind(this)
-      }
-    ]
-
-    // Links that show up when the user is not logged in
-    this.loggedOutLinks = [
-      {
-        icon : 'account-key',
-        title: 'Login',
-        route: 'Login'
-      }, {
-        icon : 'account-plus',
-        title: 'Register',
-        route: 'Registration'
-      }
-    ]
-
     this.state = {
-      sidebar     : [],
       userLoggedIn: false,
-      noticeText  : 'default message'
+      noticeText  : 'Success!'
     }
 
     // Hold all events so we can remove them later and prevent memory leaks
@@ -126,7 +75,6 @@ export default class LandingScreen extends Screen {
    * Sets the initial sidebar links and listens to events.
    */
   componentDidMount() {
-    this.setSidebarLinks()
     this.setState({
       userLoggedIn: this.isLoggedIn()
     })
@@ -135,7 +83,6 @@ export default class LandingScreen extends Screen {
       if (this.refs.uploadButton) {
         this.refs.uploadButton.getObservations()
       }
-      this.setSidebarLinks()
       this.setState({
         userLoggedIn: false,
         noticeText  : 'Successfully logged out!'
@@ -154,7 +101,6 @@ export default class LandingScreen extends Screen {
         userLoggedIn: true,
         noticeText  : 'Successfully logged in!'
       })
-      this.setSidebarLinks()
       this.refs.snackbar.showBar()
       this.downloadObservations()
     }))
@@ -176,7 +122,6 @@ export default class LandingScreen extends Screen {
         userLoggedIn: true,
         noticeText  : 'Successfully registered membership!'
       })
-      this.setSidebarLinks()
       this.refs.snackbar.showBar()
     }))
   }
@@ -247,73 +192,6 @@ export default class LandingScreen extends Screen {
   }
 
   /**
-   * Resets the sidebar links based on logged in status
-   */
-  setSidebarLinks() {
-    if (this.isLoggedIn()) {
-      this.setState({
-        sidebar: [
-          ...this.defaultSidebarLinks,
-          ...this.loggedInLinks
-        ]
-      })
-      return
-    }
-
-    this.setState({
-      sidebar: [
-        ...this.loggedOutLinks,
-        ...this.defaultSidebarLinks
-      ]
-    })
-  }
-
-  /**
-   * Logs the user out after confirming the click.
-   */
-  logout() {
-    //Set alert text
-    let observations = realm.objects('Submission').filtered('synced == false')
-    let alertText    = {
-      label    : 'Log out',
-      labelText: 'Are you sure you would like to log out?',
-      cancel   : 'Cancel',
-      confirm  : 'Log out'
-    }
-    if (observations.length > 0) {
-      alertText = {
-        label    : 'Warning',
-        labelText: 'You have observations that are not uploaded.  If you log out, these observations will be deleted permanently.',
-        cancel   : 'Cancel',
-        confirm  : 'Log out'
-      }
-    }
-    Alert.alert(
-      alertText.label,
-      alertText.labelText, [
-        {
-          text: alertText.confirm, style: 'destructive',
-          onPress                       : () => {
-            // Deletes all user records thus logging out
-            realm.write(() => {
-              let user = realm.objects('User')
-              realm.delete(user)
-
-              let submissions = realm.objects('Submission')
-              submissions.map((submission) => {
-                let images = JSON.parse(submission.images)
-                this.fs.delete(images)
-              })
-              realm.delete(submissions)
-            })
-            DeviceEventEmitter.emit('userLoggedOut')
-          }
-        },
-        {text: alertText.cancel, style: 'cancel'}
-      ])
-  }
-
-  /**
    * Checks if the user is logged in.
    *
    * @returns {boolean}
@@ -326,7 +204,7 @@ export default class LandingScreen extends Screen {
    * Toggle sidebar menu (show/hide)
    */
   toggleMenu() {
-    this.sidebar.toggleMenu()
+    this.navigator.navigate('DrawerToggle')
   }
 
   /**
@@ -363,15 +241,10 @@ export default class LandingScreen extends Screen {
     return (
       <View style={styles.container} {...(this.sidebar ? this.sidebar.getPan() : {})}>
         <Header
-          title="Overview"
+          title="Observe"
           navigator={this.navigator}
           initial={true}
-          onMenuPress={this.toggleMenu.bind(this)}
-          sidebar={this.sidebar}/>
-        <Sidebar
-          ref={ref => this.sidebar = ref}
-          navigator={this.navigator}
-          routes={this.state.sidebar}/>
+          onMenuPress={this.toggleMenu.bind(this)}/>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.plantsContainer}>
             {this.state.userLoggedIn ?
@@ -449,7 +322,7 @@ const styles = StyleSheet.create({
   },
 
   cardTitle: {
-    backgroundColor: '#fff',
+    backgroundColor: 'transparent',
     fontSize       : 16,
     flex           : 0,
     paddingLeft    : 5,

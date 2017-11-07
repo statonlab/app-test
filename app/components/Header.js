@@ -5,8 +5,7 @@ import {
   Text,
   TouchableHighlight,
   StyleSheet,
-  Platform,
-  DeviceEventEmitter
+  Platform
 } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import {isIphoneX} from 'react-native-iphone-x-helper'
@@ -24,12 +23,6 @@ export default class Header extends Component {
 
   componentWillMount() {
     this.listeners = []
-    this.listeners.push(DeviceEventEmitter.addListener('sidebarOpened', () => {
-      this.setState({menuIcon: 'backburger'})
-    }))
-    this.listeners.push(DeviceEventEmitter.addListener('sidebarClosed', () => {
-      this.setState({menuIcon: 'menu'})
-    }))
   }
 
   componentWillUnmount() {
@@ -98,7 +91,8 @@ export default class Header extends Component {
 
   render() {
     return (
-      <View style={[style.wrapper, {...(new Elevation(this.props.elevation))}]} ref="header">
+      <View style={[style.wrapper, {...(Platform.OS === 'android' ? new Elevation(this.props.elevation) : null)}]}
+            ref="header">
         {this.getLeftIcon()}
 
         <View
@@ -120,7 +114,6 @@ Header.propTypes = {
   elevation    : PropTypes.number,
   showLeftIcon : PropTypes.bool,
   showRightIcon: PropTypes.bool,
-  sidebar      : PropTypes.object,
   onBackPress  : PropTypes.func,
   rightIcon    : PropTypes.object,
   onRightPress : PropTypes.func

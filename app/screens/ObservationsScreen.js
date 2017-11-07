@@ -23,14 +23,19 @@ import SnackBar from '../components/SnackBarNotice'
 import {ifIphoneX} from 'react-native-iphone-x-helper'
 
 export default class ObservationsScreen extends Screen {
+  static navigationOptions = {
+    tabBarVisible: false
+  }
+
   constructor(props) {
     super(props)
 
-    this.dataSource  = new ListView.DataSource({
+    this.dataSource = new ListView.DataSource({
       rowHasChanged          : (r1, r2) => r1.id !== r2.id,
       sectionHeaderHasChanged: () => {
       }
     })
+
     this.submissions = realm.objects('Submission')
 
     this.state = {
@@ -365,7 +370,10 @@ export default class ObservationsScreen extends Screen {
     return (
       <View style={styles.container}>
         <Spinner ref="spinner"/>
-        <Header navigator={this.navigator} title="Your Entries"/>
+        <Header navigator={this.navigator}
+                title="My Observations"
+                initial={true}
+                onMenuPress={() => this.navigator.navigate('DrawerToggle')}/>
         {this.state.hasData ? this._renderList() : this._renderEmpty()}
         <SnackBar ref={(snackbar) => this.snackbar = snackbar} noticeText={this.state.noticeText}/>
       </View>

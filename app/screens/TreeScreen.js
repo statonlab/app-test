@@ -9,6 +9,10 @@ import Form from '../components/Form'
 import {Plants} from '../resources/descriptions'
 
 export default class TreeScreen extends Screen {
+  static navigationOptions = {
+    tabBarVisible: false
+  }
+
   constructor(props) {
     super(props)
 

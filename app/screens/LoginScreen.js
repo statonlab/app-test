@@ -21,6 +21,10 @@ import Spinner from '../components/Spinner'
 import AText from '../components/Atext'
 
 export default class LoginScreen extends Screen {
+  static navigationOptions = {
+    tabBarVisible: false
+  }
+
   constructor(props) {
     super(props)
 
@@ -83,7 +87,9 @@ export default class LoginScreen extends Screen {
 
       DeviceEventEmitter.emit('userLoggedIn')
 
-      this.navigator.goBack()
+      if (!this.props.onLogin()) {
+        this.navigator.goBack()
+      }
     }).catch(error => {
       this.setState({showSpinner: false})
       this.handleErrorAxios(error)
@@ -168,8 +174,14 @@ export default class LoginScreen extends Screen {
     return (
       <View style={styles.container}>
         <Spinner show={this.state.showSpinner}/>
-        <Header title="Login" navigator={this.navigator} showRightIcon={false}/>
-        <ScrollView keyboardDismissMode={'on-drag'} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
+        <Header title="Login"
+                navigator={this.navigator}
+                showRightIcon={false}
+                initial={true}
+                onMenuPress={() => this.navigator.navigate('DrawerToggle')}/>
+        <ScrollView keyboardDismissMode={'on-drag'}
+                    showsVerticalScrollIndicator={false}
+                    keyboardShouldPersistTaps="handled">
           <View style={styles.form}>
             <View style={styles.formGroup}>
               <Text style={styles.title}>TreeSnap</Text>
@@ -232,7 +244,14 @@ export default class LoginScreen extends Screen {
 }
 
 LoginScreen.PropTypes = {
-  navigator: PropTypes.object.isRequired
+  //navigator: PropTypes.object.isRequired
+  onLogin: PropTypes.func
+}
+
+LoginScreen.defaultProps = {
+  onLogin() {
+    return false
+  }
 }
 
 const styles = StyleSheet.create({

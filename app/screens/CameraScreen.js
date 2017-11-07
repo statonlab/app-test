@@ -27,6 +27,10 @@ import {isIphoneX, ifIphoneX} from 'react-native-iphone-x-helper'
 const android = Platform.OS === 'android'
 
 export default class CameraScreen extends Screen {
+  static navigationOptions = {
+    tabBarVisible: false
+  }
+
   /**
    * Construct the properties and state.
    *

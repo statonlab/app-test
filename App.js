@@ -52,9 +52,6 @@ export default class App extends Component {
 }
 
 const styles = StyleSheet.create({
-  navigator: {
-    flex: 1
-  },
   container: {
     flex: 1
   }

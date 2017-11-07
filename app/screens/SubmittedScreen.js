@@ -15,6 +15,10 @@ import MarkersMap from '../components/MarkersMap'
 import File from '../helpers/File'
 
 export default class SubmittedScreen extends Screen {
+  static navigationOptions = {
+    tabBarVisible: false
+  }
+
   constructor(props) {
     super(props)
 

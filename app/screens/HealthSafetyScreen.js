@@ -12,6 +12,10 @@ import Header from '../components/Header'
 import Elevation from '../helpers/Elevation'
 
 export default class HealthSafetyScreen extends Screen {
+  static navigationOptions = {
+    tabBarVisible: false
+  }
+
   componentWillMount() {
     this.backEvent = BackHandler.addEventListener('hardwareBackPress', () => {
       this.navigator.goBack()
@@ -22,7 +26,11 @@ export default class HealthSafetyScreen extends Screen {
   render() {
     return (
       <View style={styles.container}>
-        <Header title="Health and Safety" navigator={this.navigator} elevation={2}/>
+        <Header title="Health and Safety"
+                navigator={this.navigator}
+                elevation={2}
+                initial={true}
+                onMenuPress={() => this.navigator.navigate('DrawerToggle')}/>
         <ScrollView style={styles.scrollView}>
 
 

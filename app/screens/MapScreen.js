@@ -11,8 +11,15 @@ import Header from '../components/Header'
 import realm from '../db/Schema'
 import moment from 'moment'
 import File from '../helpers/File'
+import Colors from '../helpers/Colors'
 
 export default class MapScreen extends Screen {
+  static navigationOptions = {
+    tabBarOptions: {
+      activeTintColor: Colors.primary
+    }
+  }
+
   constructor(props) {
     super(props)
 
@@ -61,7 +68,11 @@ export default class MapScreen extends Screen {
   render() {
     return (
       <View style={styles.container}>
-        <Header title="Map" navigator={this.navigator} showRightIcon={false}/>
+        <Header title="Map"
+                navigator={this.navigator}
+                showRightIcon={false}
+                initial={true}
+                onMenuPress={() => this.navigator.navigate('DrawerToggle')}/>
         {this.renderMap()}
       </View>
     )

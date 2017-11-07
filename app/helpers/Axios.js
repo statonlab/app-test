@@ -5,7 +5,7 @@ import Axios from 'axios'
 let url
 if (__DEV__) {
   if (Platform.OS === 'android') {
-    url = 'http://192.168.1.81:3000/api/v1/'
+    url = 'http://10.0.2.2:3000/api/v1/'
   } else {
     url = 'http://treesnap.app/api/v1/'
   }
