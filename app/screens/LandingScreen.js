@@ -1,13 +1,11 @@
 import React from 'react'
 import Screen from './Screen'
-import PropTypes from 'prop-types'
 import {
   View,
   Text,
   ScrollView,
   Image,
   StyleSheet,
-  Alert,
   DeviceEventEmitter,
   TouchableOpacity
 } from 'react-native'
@@ -15,7 +13,6 @@ import moment from 'moment'
 import Icon from 'react-native-vector-icons/Ionicons'
 import realm from '../db/Schema'
 import Header from '../components/Header'
-import Sidebar from '../components/Sidebar'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
 import UploadButton from '../components/UploadButton'
