@@ -25,6 +25,10 @@ import DateModal from '../components/DateModal'
 const isAndroid = Platform.OS === 'android'
 
 export default class RegistrationScreen extends Screen {
+  static navigationOptions = {
+    tabBarVisible: false
+  }
+
   constructor(props) {
     super(props)
     this.state = {
@@ -235,7 +239,11 @@ export default class RegistrationScreen extends Screen {
     return (
       <View style={styles.container}>
         <Spinner show={this.state.showSpinner}/>
-        <Header title="Register" navigator={this.navigator} showRightIcon={false}/>
+        <Header title="Register"
+                navigator={this.navigator}
+                showRightIcon={false}
+                initial={true}
+                onMenuPress={() => this.navigator.navigate('DrawerToggle')}/>
         <KeyboardAwareScrollView
           keyboardDismissMode={isAndroid ? 'none' : 'on-drag'}
           showsVerticalScrollIndicator={false}

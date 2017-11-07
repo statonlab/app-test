@@ -1,7 +1,7 @@
 import React from 'react'
 import Screen from './Screen'
 import PropTypes from 'prop-types'
-import {View, StyleSheet, Text, TextInput, TouchableOpacity, BackHandler} from 'react-native'
+import {View, StyleSheet, Text, TextInput, TouchableOpacity, BackHandler, DeviceEventEmitter} from 'react-native'
 import Header from '../components/Header'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
@@ -12,6 +12,7 @@ import SnackBar from '../components/SnackBarNotice'
 import Spinner from '../components/Spinner'
 import DateModal from '../components/DateModal'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
+import User from '../db/User'
 
 export default class AccountScreen extends Screen {
   constructor(props) {
@@ -42,7 +43,7 @@ export default class AccountScreen extends Screen {
       snackMessage             : 'Account updated successfully'
     }
 
-    this.user = realm.objects('User')[0]
+    this.user = User.user()
   }
 
   componentWillMount() {
@@ -50,6 +51,14 @@ export default class AccountScreen extends Screen {
       this.navigator.goBack()
       return true
     })
+    this.events    = [
+      DeviceEventEmitter.addListener('userLoggedOut', this.props.onLogout)
+    ]
+  }
+
+  componentWillUnmount() {
+    this.backEvent.remove()
+    this.events.map(event => event.remove())
   }
 
   /**
@@ -293,7 +302,13 @@ export default class AccountScreen extends Screen {
     return (
       <View style={styles.container}>
         <Spinner show={this.state.showSpinner}/>
-        <Header title="Account" navigator={this.navigator} elevation={4} showRightIcon={false}/>
+        <Header title="Account"
+                navigator={this.navigator}
+                elevation={4}
+                showRightIcon={false}
+                initial={true}
+                onMenuPress={() => this.navigator.navigate('DrawerToggle')}
+        />
         <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.innerContainer}>
             <Text style={styles.title}>PERSONAL</Text>
@@ -393,7 +408,8 @@ export default class AccountScreen extends Screen {
                     editable={false}
                   />
                 </View>
-                {this.state.errors.birth_year ? <Text style={styles.warning}>{this.state.errors.birth_year}</Text> : null}
+                {this.state.errors.birth_year ?
+                  <Text style={styles.warning}>{this.state.errors.birth_year}</Text> : null}
               </DateModal>
 
             </View>
@@ -413,7 +429,8 @@ export default class AccountScreen extends Screen {
                     underlineColorAndroid="transparent"
                   />
                 </View>
-                {this.state.errors.old_password ? <Text style={styles.warning}>{this.state.errors.old_password}</Text> : null}
+                {this.state.errors.old_password ?
+                  <Text style={styles.warning}>{this.state.errors.old_password}</Text> : null}
               </View>
               <View style={styles.formGroup}>
                 <View style={styles.row}>
@@ -428,7 +445,8 @@ export default class AccountScreen extends Screen {
                     underlineColorAndroid="transparent"
                   />
                 </View>
-                {this.state.errors.new_password ? <Text style={styles.warning}>{this.state.errors.new_password}</Text> : null}
+                {this.state.errors.new_password ?
+                  <Text style={styles.warning}>{this.state.errors.new_password}</Text> : null}
               </View>
               <View style={[styles.formGroup, styles.noBorder]}>
                 <View style={styles.row}>
@@ -439,14 +457,34 @@ export default class AccountScreen extends Screen {
                     autoCapitalize={'words'}
                     placeholderTextColor="#aaa"
                     placeholder={'Repeat New Password'}
-                    onChangeText={(new_password_confirmation) => this.setState({new_password_confirmation, passwordChanges: true})}
+                    onChangeText={(new_password_confirmation) => this.setState({
+                      new_password_confirmation,
+                      passwordChanges: true
+                    })}
                     underlineColorAndroid="transparent"
                   />
                 </View>
-                {this.state.errors.new_password_confirmation ? <Text style={styles.warning}>{this.state.errors.new_password_confirmation}</Text> : null}
+                {this.state.errors.new_password_confirmation ?
+                  <Text style={styles.warning}>{this.state.errors.new_password_confirmation}</Text> : null}
+              </View>
+            </View>
+
+            <Text style={styles.title}>LOG OUT</Text>
+            <View style={styles.card}>
+              <View style={[styles.formGroup, styles.row, styles.noBorder]}>
+                <TouchableOpacity
+                  style={[{height: 40, justifyContent: 'center'}]}
+                  onPress={() => {
+                    User.logout()
+                  }}
+                >
+                  <Text style={[{color: Colors.danger}]}>Press to log out</Text>
+                </TouchableOpacity>
               </View>
             </View>
           </View>
+
+
         </KeyboardAwareScrollView>
 
         <View style={styles.footer}>
@@ -474,7 +512,14 @@ export default class AccountScreen extends Screen {
 }
 
 AccountScreen.PropTypes = {
-  navigator: PropTypes.object.isRequired
+  //navigator: PropTypes.object.isRequired
+  onLogout: PropTypes.func
+}
+
+AccountScreen.defaultProps = {
+  onLogout() {
+    return false
+  }
 }
 
 const styles = StyleSheet.create({
@@ -511,10 +556,10 @@ const styles = StyleSheet.create({
   },
 
   label: {
-    fontSize        : 14,
-    color           : '#222',
-    fontWeight      : 'bold',
-    width           : 100
+    fontSize  : 14,
+    color     : '#222',
+    fontWeight: 'bold',
+    width     : 100
   },
 
   labelLg: {

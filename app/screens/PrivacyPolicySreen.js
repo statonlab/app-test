@@ -12,6 +12,10 @@ import Header from '../components/Header'
 import Elevation from '../helpers/Elevation'
 
 export default class PrivacyPolicyScreen extends Screen {
+  static navigationOptions = {
+    tabBarVisible: false
+  }
+
   componentWillMount() {
     this.backEvent = BackHandler.addEventListener('hardwareBackPress', () => {
       this.navigator.goBack()
@@ -22,7 +26,13 @@ export default class PrivacyPolicyScreen extends Screen {
   render() {
     return (
       <View style={styles.container}>
-        <Header title="Privacy Policy" navigator={this.navigator} elevation={2}/>
+        <Header
+          title="Privacy Policy"
+          navigator={this.navigator}
+          elevation={2}
+          initial={true}
+          onMenuPress={() => this.navigator.navigate('DrawerToggle')}
+        />
         <ScrollView style={styles.scrollView}>
           <View style={styles.card}>
             <Text style={styles.title}>Privacy Policy</Text>

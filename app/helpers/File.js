@@ -87,8 +87,8 @@ export default class File {
   /**
    * Delete file.
    *
-   * @param file File path to delete
-   * @param callback Function to call on success
+   * @param {string|array|object} file File path to delete
+   * @param {function} callback (Optional) Function to call on success
    */
   delete(file, callback) {
     let count     = 0
@@ -236,12 +236,15 @@ export default class File {
 
   async downloadImage(image) {
     if (__DEV__ && Platform.OS === 'android') {
-      image = image.replace('treesnap.app', '192.168.2.81:3000')
+      image = image.replace('treesnap.app', '10.0.2.2:3000')
     }
 
-    let response = await FS.config({fileCache: true}).fetch('GET', image)
-
-    return response.path()
+    try {
+      let response = await FS.config({fileCache: true}).fetch('GET', image)
+      return response.path()
+    } catch (error) {
+      console.log('Error downloading image, ' + image)
+    }
   }
 
   /**

@@ -7,6 +7,10 @@ import Elevation from '../helpers/Elevation'
 import Atext from '../components/Atext'
 
 export default class AboutScreen extends Screen {
+  static navigationOptions = {
+    tabBarVisible: false
+  }
+
   componentWillMount() {
     this.backEvent = BackHandler.addEventListener('hardwareBackPress', () => {
       this.navigator.goBack()
@@ -17,7 +21,13 @@ export default class AboutScreen extends Screen {
   render() {
     return (
       <View style={styles.container}>
-        <Header title="About Us" navigator={this.navigator} elevation={2}/>
+        <Header
+          title="About Us"
+          navigator={this.navigator}
+          elevation={2}
+          initial={true}
+          onMenuPress={() => this.navigator.navigate('DrawerToggle')}
+        />
         <ScrollView style={styles.scrollView}>
           <View style={styles.card}>
             <Text style={styles.title}>TreeSnap</Text>
