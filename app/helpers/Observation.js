@@ -1,9 +1,13 @@
 import Axios from './Axios'
 import realm from '../db/Schema'
 import File from './File'
+import moment from 'moment'
 
 class Observation {
-  // Public Methods
+  static navigationOptions = {
+    tabBarVisible: false
+
+  }
 
   constructor() {
     this.api_token = false
@@ -129,6 +133,65 @@ class Observation {
     })
 
     return form
+  }
+
+  /**
+   * Download observations from the server and add them to realm
+   * if they don't already exist
+   */
+  async download() {
+    try {
+      let response = await this.get()
+      let records  = response.data.data
+
+      console.log(records)
+
+      records.map(record => {
+        let primaryKey = parseInt(record.mobile_id)
+        let count      = realm.objects('Submission')
+          .filtered(`serverID == ${record.observation_id} OR id == ${primaryKey}`)
+          .length
+
+        if (count > 0) {
+          return
+        }
+
+        realm.write(() => {
+          console.log('Creating observation')
+          realm.create('Submission', {
+            id       : primaryKey,
+            name     : record.observation_category,
+            images   : JSON.stringify(record.images),
+            location : record.location,
+            date     : moment(record.date.date).format('MM-DD-YYYY HH:mm:ss').toString(),
+            synced   : true,
+            meta_data: JSON.stringify(record.meta_data),
+            serverID : parseInt(record.observation_id)
+          })
+        })
+      })
+
+      await this.downloadImages()
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  /**
+   * Download images
+   *
+   * @return {Promise.<void>}
+   */
+  async downloadImages() {
+    let observations = realm.objects('Submission')
+
+    for (let key in observations) {
+      try {
+        await this.fs.download(observations[key])
+      } catch (error) {
+        console.log(`Failed to download ${observation.name}`)
+      }
+    }
   }
 }
 

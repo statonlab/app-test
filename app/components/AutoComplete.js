@@ -11,7 +11,8 @@ import {
   ScrollView,
   StatusBar,
   Platform,
-  Keyboard
+  Keyboard,
+  Alert
 } from 'react-native'
 import Latin from '../resources/treeNames.js'
 import Colors from '../helpers/Colors'
@@ -23,11 +24,11 @@ export default class AutoComplete extends Component {
   constructor(props) {
     super(props)
     this.state     = {
-      resultList   : [],
-      selected     : null,
-      animationType: 'fade',
-      modalVisible : false,
-      searchText   : '',
+      resultList            : [],
+      selected              : null,
+      animationType         : 'fade',
+      modalVisible          : false,
+      searchText            : '',
       textFieldBottomSpacing: 0
     }
     this.queryList = Latin
@@ -48,20 +49,25 @@ export default class AutoComplete extends Component {
     this.setState({resultList: matches})
   }
 
+  componentWillUnmount() {
+    this.events.map(event => event.remove())
+  }
+
   /**
    * If entered text matches something, render the table of suggestions
    * @returns {XML}
    */
   open = () => {
-    this.setState({searchText: ''})
-    this.setState({selected: null})
-    this.setState({modalVisible: true})
+    this.setState({
+      searchText  : '',
+      selected    : null,
+      modalVisible: true
+    })
   }
 
   close = () => {
     this.setState({modalVisible: false})
   }
-
 
   renderResults = () => {
     if (this.state.resultList.length > 0) {
@@ -128,8 +134,7 @@ export default class AutoComplete extends Component {
   }
 
   setBottomSpacing(keyboardIsOpen) {
-    console.log(keyboardIsOpen)
-    let textFieldBottomSpacing =  !keyboardIsOpen ? (ifIphoneX(20) || 0) : 0
+    let textFieldBottomSpacing = !keyboardIsOpen ? (ifIphoneX(20) || 5) : 5
 
     this.setState({textFieldBottomSpacing})
   }
@@ -139,61 +144,68 @@ export default class AutoComplete extends Component {
     return (
       <View style={styles.mainContainer}>
         <Modal
-          transparent={true}
+          transparent={false}
           visible={this.state.modalVisible}
           onRequestClose={this.close}
           animationType={this.state.animationType}>
           <StatusBar hidden={true}/>
-          <KeyboardAvoidingView style={{flex: 1, backgroundColor: '#f7f7f7'}} behavior="padding"
-                                keyboardVerticalOffset={offset}>
-            <View style={[{
-              paddingVertical: 10,
-              backgroundColor: Colors.primary,
-              flex           : 0,
-              alignItems     : 'center',
-              //justifyContent : 'space-between',
-              flexDirection  : 'row',
-              paddingLeft    : 10,
-              ...ifIphoneX({
-                paddingTop: 40
-              })
-            }, new Elevation(2)]}>
-              <TouchableOpacity
-                style={{paddingRight: 20, paddingTop: 5}}
-                onPress={() => {
-                  this.close()
-                }}>
-                <Icon name="chevron-left" style={{fontSize: 25}} color="#fff"/>
-              </TouchableOpacity>
-              <Text style={{color: '#fff', fontWeight: '500', alignSelf: 'center', fontSize: 18}}>
-                Select a Tree
-              </Text>
-            </View>
-            <ScrollView style={{flex: 1}}
-                        keyboardShouldPersistTaps="handled"
-                        keyboardDismissMode="interactive">
-              {this.renderResults()}
-            </ScrollView>
+          <View style={[{
+            paddingVertical: 10,
+            backgroundColor: Colors.primary,
+            flex           : 0,
+            alignItems     : 'center',
+            //justifyContent : 'space-between',
+            flexDirection  : 'row',
+            paddingLeft    : 10,
+            ...ifIphoneX({
+              paddingTop: 40
+            })
+          }, new Elevation(2)]}>
+            <TouchableOpacity
+              style={{paddingRight: 20, paddingTop: 5}}
+              onPress={() => {
+                this.close()
+              }}>
+              <Icon name="chevron-left" style={{fontSize: 25}} color="#fff"/>
+            </TouchableOpacity>
+            <Text style={{color: '#fff', fontWeight: '500', alignSelf: 'center', fontSize: 18}}>
+              Select a Tree
+            </Text>
+          </View>
+          <ScrollView style={{flex: 1}}
+                      keyboardShouldPersistTaps="always"
+                      keyboardDismissMode="interactive">
+            {this.renderResults()}
+          </ScrollView>
+          <KeyboardAvoidingView style={{flex: 0, backgroundColor: '#f7f7f7'}}
+                                behavior={Platform.OS === 'android' ? 'height' : 'padding'}
+                                pointerEvents={'auto'}>
             <View style={[styles.textInputContainer, {paddingBottom: this.state.textFieldBottomSpacing}]}>
-              <TextInput
-                style={[styles.textField, {flex: 1}]}
-                placeholder={'Type to search or create your own label'}
-                placeholderTextColor="#aaa"
-                onChangeText={searchText => {
-                  this.setState({searchText})
-                  this.search(searchText)
-                }}
-                value={this.state.selected}
-                underlineColorAndroid="transparent"
-                autoFocus={true}
-                onSubmitEditing={({nativeEvent}) => {
-                  this.submit(nativeEvent.text)
-                }}
-              />
+              <View style={{flex: 1}}>
+                <TextInput
+                  style={[styles.textField]}
+                  placeholder={'Search or create your own label'}
+                  placeholderTextColor="#aaa"
+                  onChangeText={searchText => {
+                    this.setState({searchText})
+                    this.search(searchText)
+                  }}
+                  value={this.state.selected}
+                  underlineColorAndroid="transparent"
+                  autoFocus={true}
+                  onSubmitEditing={({nativeEvent}) => {
+                    let text = nativeEvent.text
+                    if(text.length > 0) {
+                      this.submit(nativeEvent.text)
+                    }
+                  }}
+                  returnKeyType="done"
+                />
+              </View>
               <TouchableOpacity style={styles.button}
                                 onPress={() => this.submit(this.state.searchText)}>
                 <Text style={styles.buttonText}>
-                  Add
+                  Create
                 </Text>
               </TouchableOpacity>
             </View>

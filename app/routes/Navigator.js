@@ -3,7 +3,8 @@ import {
   Platform,
   StyleSheet,
   ScrollView,
-  Text
+  Text,
+  DeviceEventEmitter
 } from 'react-native'
 import {
   StackNavigator,
@@ -25,6 +26,7 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import Colors from '../helpers/Colors'
 import IntermediateAccountScreen from '../screens/IntermediateAccountScreen'
 import ObservationsNavigator from './ObservationsNavigator'
+import User from '../db/User'
 
 /**
  * Implementation of react-navigation.
@@ -34,6 +36,27 @@ import ObservationsNavigator from './ObservationsNavigator'
 export default class Navigator extends Component {
   constructor(props) {
     super(props)
+
+    this.state = {
+      loggedIn: User.loggedIn()
+    }
+
+    this.events = []
+  }
+
+  /**
+   * Listen to log in and out events.
+   */
+  componentWillMount() {
+    this.events.push(DeviceEventEmitter.addListener('userLoggedIn', () => this.setState({loggedIn: User.loggedIn()})))
+    this.events.push(DeviceEventEmitter.addListener('userLoggedOut', () => this.setState({loggedIn: User.loggedIn()})))
+  }
+
+  /**
+   * Remove event listeners.
+   */
+  componentWillUnmount() {
+    this.events.map(event => event.remove())
   }
 
   /**
@@ -84,30 +107,28 @@ export default class Navigator extends Component {
    */
   tabs() {
     return new TabNavigator({
-      Landing: {
+      Landing              : {
         screen           : this.observationStack(),
         navigationOptions: {
-          tabBarLabel: 'Observe',
-          tabBarIcon : (settings) => {
-            console.log(settings, 'Observe')
-            return (
-              <Icon name="md-aperture" color={settings.tintColor} size={30}/>
-            )
-          }
+          ...(this.navigationOptions('Observe', 'md-aperture'))
         }
       },
-      Map    : {
+      ObservationsNavigator: {
+        screen           : ObservationsNavigator,
+        navigationOptions: {
+          ...(this.navigationOptions('Observations', 'ios-leaf'))
+        }
+      },
+      Map                  : {
         screen           : MapScreen,
         navigationOptions: {
-          tabBarLabel: 'Map',
-          tabBarIcon : ({tintColor}) => <Icon name="md-map" color={tintColor} size={30}/>
+          ...(this.navigationOptions('Map', 'md-map'))
         }
       },
-      Account: {
+      Account              : {
         screen           : IntermediateAccountScreen,
         navigationOptions: {
-          tabBarLabel: 'Settings',
-          tabBarIcon : ({tintColor}) => <Icon name="md-settings" color={tintColor} size={30}/>
+          ...(this.navigationOptions('Settings', 'md-settings'))
         }
       }
     }, {
@@ -121,18 +142,53 @@ export default class Navigator extends Component {
   }
 
   /**
+   * Display routes only if the user is not logged in.
+   *
+   * @return {*}
+   */
+  getRegistrationRoutes() {
+    if (!this.state.loggedIn) {
+      return {
+        Registration: {
+          screen           : RegistrationScreen,
+          navigationOptions: {
+            ...(this.navigationOptions('Register', 'md-person-add', 25))
+          }
+        },
+        Login       : {
+          screen           : LoginScreen,
+          navigationOptions: {
+            ...(this.navigationOptions('Login', 'md-person', 25))
+          }
+        }
+      }
+    }
+
+    return null
+  }
+
+  getLogoutRoute() {
+    if (this.state.loggedIn) {
+      return {
+        Logout: {
+          screen           : LoginScreen,
+          navigationOptions: {
+            ...(this.navigationOptions('Logout', 'md-log-out', 25))
+          }
+        }
+      }
+    }
+
+    return null
+  }
+
+  /**
    * Routes shared between IOS and Android.
    *
    * @return {Object}
    */
   sharedRoutes() {
     return {
-      ObservationsNavigator: {
-        screen           : ObservationsNavigator,
-        navigationOptions: {
-          ...(this.navigationOptions('My Observations', 'ios-leaf', 25))
-        }
-      },
       // Needed to add this here since it needs to go right after the observations item
       ...(Platform.OS === 'android' ? {
         Map: {
@@ -142,36 +198,31 @@ export default class Navigator extends Component {
           }
         }
       } : null),
-      Registration         : {
-        screen           : RegistrationScreen,
-        navigationOptions: {
-          ...(this.navigationOptions('Register', 'md-person-add', 25))
-        }
-      },
-      Login                : {
-        screen           : LoginScreen,
-        navigationOptions: {
-          ...(this.navigationOptions('Login', 'md-person', 25))
-        }
-      },
-      About                : {
+
+      // Get registration routes
+      ...this.getRegistrationRoutes(),
+
+      About        : {
         screen           : AboutScreen,
         navigationOptions: {
           ...(this.navigationOptions('About Us', 'md-contacts', 25))
         }
       },
-      PrivacyPolicy        : {
+      PrivacyPolicy: {
         screen           : PrivacyPolicyScreen,
         navigationOptions: {
           ...(this.navigationOptions('Privacy Policy', 'md-lock', 25))
         }
       },
-      HealthSafety         : {
+      HealthSafety : {
         screen           : HealthSafetyScreen,
         navigationOptions: {
           ...(this.navigationOptions('Health and Safety', 'md-heart', 25))
         }
-      }
+      },
+
+      // Get logout route
+      ...(this.getLogoutRoute())
     }
   }
 
@@ -185,7 +236,16 @@ export default class Navigator extends Component {
     return (
       <ScrollView style={{flex: 1}}>
         <Text style={style.sidebarHeader}>NAVIGATION MENU</Text>
-        <DrawerItems {...props}/>
+        <DrawerItems {...{
+          ...props,
+          onItemPress: (route) => {
+            if (route.route.routeName === 'Logout') {
+              User.logout()
+              return
+            }
+            props.onItemPress(route)
+          }
+        }}/>
       </ScrollView>
     )
   }
@@ -258,16 +318,25 @@ export default class Navigator extends Component {
    */
   android() {
     const Nav = new DrawerNavigator({
-      Landing: {
+      Landing              : {
         screen           : this.observationStack(),
         navigationOptions: {
-          ...(this.navigationOptions('Observer', 'md-home', 25))
+          ...(this.navigationOptions('Observe', 'md-aperture', 25))
         }
       },
-      Account: {
-        screen           : IntermediateAccountScreen,
+      // Show AccountScreen if user is logged in
+      ...(this.state.loggedIn ? {
+        Account: {
+          screen           : IntermediateAccountScreen,
+          navigationOptions: {
+            ...(this.navigationOptions('My Account', 'md-settings', 25))
+          }
+        }
+      } : null),
+      ObservationsNavigator: {
+        screen           : ObservationsNavigator,
         navigationOptions: {
-          ...(this.navigationOptions('My Account', 'md-settings', 25))
+          ...(this.navigationOptions('My Observations', 'ios-leaf', 25))
         }
       },
       ...(this.sharedRoutes())

@@ -91,7 +91,7 @@ export default class Header extends Component {
 
   render() {
     return (
-      <View style={[style.wrapper, {...(Platform.OS === 'android' ? new Elevation(this.props.elevation) : null)}]}
+      <View style={[style.wrapper, {...new Elevation(this.props.elevation)}]}
             ref="header">
         {this.getLeftIcon()}
 

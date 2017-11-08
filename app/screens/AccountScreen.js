@@ -22,6 +22,7 @@ export default class AccountScreen extends Screen {
       showSpinner              : false,
       name                     : '',
       anonymous                : '',
+      auto_sync                : false,
       email                    : '',
       zipcode                  : '',
       birth_year               : '',
@@ -292,6 +293,7 @@ export default class AccountScreen extends Screen {
         this.user.anonymous  = response.is_anonymous
         this.user.birth_year = response.birth_year
         this.user.zipcode    = response.zipcode === null ? '' : response.zipcode
+        this.user.auto_sync  = this.state.auto_sync
       })
     } catch (error) {
       console.warn(error)
@@ -411,7 +413,32 @@ export default class AccountScreen extends Screen {
                 {this.state.errors.birth_year ?
                   <Text style={styles.warning}>{this.state.errors.birth_year}</Text> : null}
               </DateModal>
+            </View>
 
+            <Text style={styles.title}>AUTO SYNCHRONIZE</Text>
+            <View style={styles.card}>
+              <PickerModal
+                style={[styles.formGroup, styles.noBorder]}
+                onSelect={(auto_sync) => this.setState({auto_sync: auto_sync === 'Yes' ? true : false, userChanges: true})}
+                initialSelect={this.user.auto_sync ? 'Yes' : 'No'}
+                choices={['Yes', 'No']}
+                header="Auto sync allows TreeSnap to upload observations as soon as you reach a WiFi enabled area. Would you like to activate auto sync?"
+              >
+                <View style={styles.row}>
+                  <Text style={styles.label}>Activated</Text>
+                  <TextInput
+                    style={styles.textField}
+                    autoCapitalize={'words'}
+                    placeholder={'No'}
+                    placeholderTextColor="#aaa"
+                    returnKeyType={'next'}
+                    value={this.user.auto_sync ? 'Yes' : 'No'}
+                    underlineColorAndroid="transparent"
+                    editable={false}
+                    readOnly={true}
+                  />
+                </View>
+              </PickerModal>
             </View>
 
             <Text style={styles.title}>PASSWORD</Text>
@@ -571,7 +598,8 @@ const styles = StyleSheet.create({
     height           : 40,
     borderRadius     : 2,
     paddingHorizontal: 10,
-    fontSize         : 14
+    fontSize         : 14,
+    color: '#000'
   },
 
   title: {

@@ -1,18 +1,29 @@
 import React from 'react'
 import Screen from './Screen'
 import {
+  ScrollView,
   View,
   StyleSheet,
   Text,
   TouchableOpacity,
-  BackHandler
+  BackHandler,
+  Image,
+  Platform,
+  Alert,
+  NetInfo,
+  DeviceEventEmitter
 } from 'react-native'
 import Header from '../components/Header'
 import Colors from '../helpers/Colors'
 import Elevation from '../helpers/Elevation'
-import realm from '../db/Schema'
-import MarkersMap from '../components/MarkersMap'
 import File from '../helpers/File'
+import moment from 'moment'
+import Observation from '../helpers/Observation'
+import MapView from 'react-native-maps'
+import {ACFCollection} from '../resources/descriptions'
+import Spinner from '../components/Spinner'
+import realm from '../db/Schema'
+import User from '../db/User'
 
 export default class SubmittedScreen extends Screen {
   static navigationOptions = {
@@ -22,110 +33,230 @@ export default class SubmittedScreen extends Screen {
   constructor(props) {
     super(props)
 
-    this.state  = {
-      shouldNavigate: true
+    this.state   = {
+      loading : false,
+      uploaded: false
     }
-    this.id     = this.params.plant.id
-    this.marker = {}
-    this.fs     = new File()
+    this.id      = this.params.plant.id
+    this.fs      = new File()
+    this.android = Platform.OS === 'android'
   }
 
   componentWillMount() {
-    let submissions = realm.objects('Submission')
-    let markers     = []
-
-    submissions.map(submission => {
-      let image = JSON.parse(submission.images)
-      if (Array.isArray(image['images'])) {
-        image = image['images'][0]
-      }
-
-      let marker = {
-        id         : submission.id,
-        title      : submission.name,
-        image      : this.fs.image(image),
-        description: `${submission.location.latitude.toFixed(4)}, ${submission.location.longitude.toFixed(4)}`,
-        coord      : {
-          latitude : submission.location.latitude,
-          longitude: submission.location.longitude
-        },
-        pinColor   : Colors.primary
-      }
-
-      if (submission.id === this.id) {
-        marker.pinColor = Colors.info
-        this.marker     = marker
-      }
-
-      markers.push(marker)
-    })
-
-    this.markers = markers
-
     this.backEvent = BackHandler.addEventListener('hardwareBackPress', () => {
       this.navigator.reset()
       return true
     })
   }
 
-  /**
-   * The navigation function to be passed to the Marker callout.
-   * To prevent against bubble effect, we use shouldNavigate in the state.
-   *
-   * @param marker
-   */
-  navigateCallout(marker) {
-    if (this.state.shouldNavigate) {
-      if (marker.id === undefined) {
+  renderImage(observation, android) {
+    let images = JSON.parse(observation.images)
+    let keys   = Object.keys(images)
+
+    if (keys.length <= 0) {
+      return null
+    }
+
+    let image = this.fs.thumbnail(images[keys[0]][0])
+    return (
+      <Image source={{uri: image}} style={android ? styles.androidImage : styles.image}/>
+    )
+  }
+
+  renderCallout(observation) {
+    return (
+      <MapView.Callout>
+        {this.renderImage(observation, true)}
+      </MapView.Callout>
+    )
+  }
+
+  renderMap(observation) {
+    return (
+      <MapView
+        style={{height: 250, width: undefined}}
+        initialRegion={{
+          latitude      : observation.location.latitude,
+          longitude     : observation.location.longitude,
+          latitudeDelta : 0.0075,
+          longitudeDelta: 0.0045
+        }}
+        mapType="hybrid"
+      >
+        <MapView.Marker
+          coordinate={{
+            latitude : observation.location.latitude,
+            longitude: observation.location.longitude
+          }}
+        >
+          {this.android ? this.renderCallout(observation) : this.renderImage(observation)}
+        </MapView.Marker>
+      </MapView>
+    )
+  }
+
+  renderSampleMailingInstructions(observation) {
+    if (observation.name !== 'American Chestnut') {
+      return null
+    }
+
+    return (
+      <View style={styles.card}>
+        <Text style={styles.title}>
+          Sample Collection Instructions
+        </Text>
+        {ACFCollection.map((item, index) => {
+          return (
+            <View key={index}>
+              {item}
+            </View>
+          )
+        })}
+      </View>
+    )
+  }
+
+  upload(observation) {
+    this.setState({loading: true})
+
+    NetInfo.getConnectionInfo().then(info => {
+      let type = info.type.toLowerCase()
+      console.log(info, type)
+      if (type !== 'wifi' && type !== 'unknown') {
+        Alert.alert('No WiFi Detected', 'Are you sure you want to upload without WiFi?', [
+          {
+            text   : 'Upload Now',
+            onPress: () => {
+              this.doUpload(observation)
+            }
+          },
+          {
+            text   : 'Cancel',
+            onPress: () => {
+              this.setState({loading: false})
+            },
+            style  : 'cancel'
+          }
+        ])
+
         return
       }
 
-      let plant = realm.objects('Submission').filtered(`id == "${marker.id}"`)[0]
-      this.navigator.navigate('Observation', {
-        plant    : JSON.parse(JSON.stringify(plant)),
-        onUnmount: () => {
-          this.setState({shouldNavigate: true})
-        }
-      })
-
-      this.setState({shouldNavigate: false})
-    }
+      this.doUpload(observation)
+    })
   }
 
-  renderMap() {
+  doUpload(observation) {
+    Observation.upload(observation).then(response => {
+      this.setState({
+        uploaded: true,
+        loading : false
+      })
+
+      observation = realm.objects('Submission').filtered(`id == ${observation.id}`)[0]
+      realm.write(() => {
+        let data = response.data.data
+
+        observation.serverID = data.observation_id
+        observation.synced   = true
+      })
+
+      DeviceEventEmitter.emit('observationUploaded')
+    }).catch(error => {
+      this.setState({loading: false})
+
+      if (!error.response) {
+        Alert.alert('Connection Error', 'Please try uploading again later')
+      }
+    })
+  }
+
+  renderButtons(observation) {
+    if (!User.loggedIn()) {
+      return (
+        <View style={[styles.row]}>
+          <TouchableOpacity style={{padding: 10}}
+                            onPress={() => {
+                              this.navigator.reset()
+                            }}>
+            <Text style={{color: Colors.danger}}>Upload Later</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.uploadButton}
+                            onPress={() => this.navigator.navigate('Login')}>
+            <Text style={styles.uploadText}>Login to Upload</Text>
+          </TouchableOpacity>
+        </View>
+      )
+    }
+
+
     return (
-      <MarkersMap
-        markers={this.markers}
-        initialRegion={{
-          ...this.marker.coord,
-          latitudeDelta : 0.0322,
-          longitudeDelta: 0.0321
-        }}
-        startingMarker={this.marker}
-        onCalloutPress={this.navigateCallout.bind(this)}
-      />
+      <View>
+        {this.state.uploaded ? null :
+          <View style={styles.row}>
+            <TouchableOpacity style={{padding: 10}}
+                              onPress={() => {
+                                this.navigator.reset()
+                              }}>
+              <Text style={{color: Colors.danger}}>Upload Later</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.uploadButton}
+                              onPress={() => this.upload(observation)}>
+              <Text style={styles.uploadText}>Upload Now</Text>
+            </TouchableOpacity>
+          </View>
+        }
+        {this.state.uploaded ?
+          <View style={styles.row}>
+            <Text style={{color: Colors.success}}>Observation Uploaded Successfully!</Text>
+            <TouchableOpacity style={[styles.uploadButton, {
+              backgroundColor: Colors.success,
+              borderColor    : Colors.success
+            }]}
+                              onPress={() => this.navigator.reset()}>
+              <Text style={[styles.uploadText, {color: Colors.successText}]}>Continue</Text>
+            </TouchableOpacity>
+          </View>
+          : null}
+      </View>
     )
   }
 
   render() {
+    let observation = this.params.plant
+    let data        = JSON.parse(observation.meta_data)
     return (
       <View style={styles.container}>
-        <Header title="Submission Aerial View"
+        <Header title="Successful Submission"
                 navigator={this.navigator}
                 showLeftIcon={false}
                 showRightIcon={false}
         />
+        <ScrollView style={styles.container}>
+          <View style={[styles.card, {marginBottom: 0}]}>
+            <Text style={{color: '#444'}}>
+              You may upload your observation to the TreeSnap server now or choose to upload it later.
+              It is best to upload observations when a WiFi connection is available.
+            </Text>
+          </View>
 
-        {this.renderMap()}
+          <View style={[styles.card, {marginBottom: observation.name === 'American Chestnut' ? 0 : undefined}]}>
+            {this.renderMap(observation)}
+            <Text style={styles.title}>
+              {observation.name === 'Other' ? `${observation.name} (${data.otherLabel})` : observation.name}
+            </Text>
+            <Text style={styles.textLight}>
+              {moment(observation.date, 'MM-DD-YYYY HH:mm:ss').format('LLL')}
+            </Text>
+            <Text style={styles.textLight}>
+              {observation.location.latitude}, {observation.location.longitude}
+            </Text>
+            {this.renderButtons(observation)}
+          </View>
 
-        <View style={styles.footer}>
-          <Text style={styles.text}>Your entry has been saved!</Text>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => this.navigator.reset()}>
-            <Text style={styles.buttonText}>Continue</Text>
-          </TouchableOpacity>
-        </View>
+          {this.renderSampleMailingInstructions(observation)}
+        </ScrollView>
+        <Spinner show={this.state.loading}/>
       </View>
     )
   }
@@ -136,42 +267,88 @@ const styles = StyleSheet.create({
     flex: 1
   },
 
-  map: {
-    flex  : 1,
-    width : undefined,
-    height: undefined
+  card: {
+    backgroundColor : '#ffffff',
+    marginVertical  : 22,
+    marginHorizontal: 10,
+    borderRadius    : 5,
+    padding         : 10,
+    ...(new Elevation(1))
   },
 
-  calloutText: {
-    fontSize: 12,
-    color   : '#444'
+  image: {
+    resizeMode  : 'cover',
+    height      : 95,
+    width       : 95,
+    borderRadius: 95 / 2,
+    borderWidth : 5,
+    borderColor : 'rgba(0,0,0,.25)'
   },
 
-  footer: {
-    flex           : 0,
-    flexDirection  : 'row',
-    justifyContent : 'space-between',
-    alignItems     : 'center',
-    padding        : 10,
-    backgroundColor: '#24292e'
+  title: {
+    color       : '#444',
+    fontSize    : 16,
+    fontWeight  : '600',
+    marginBottom: 5,
+    marginTop   : 10
   },
 
-  button: {
-    ...(new Elevation(2)),
-    backgroundColor  : Colors.warning,
-    paddingVertical  : 10,
-    paddingHorizontal: 15,
-    borderRadius     : 2,
-    marginLeft       : 15
-  },
-
-  buttonText: {
-    color    : Colors.warningText,
-    textAlign: 'center'
+  row: {
+    flex          : 0,
+    flexDirection : 'row',
+    justifyContent: 'space-between',
+    alignItems    : 'center',
+    marginTop     : 10
   },
 
   text: {
-    color     : '#eee',
+    color     : '#444',
+    fontWeight: '600'
+  },
+
+  textLight: {
+    color: '#777'
+  },
+
+  footer: {
+    paddingHorizontal: 10,
+    marginTop        : 5,
+    justifyContent   : 'space-between',
+    flexDirection    : 'row',
+    backgroundColor  : '#f7f7f7',
+    borderTopWidth   : 1,
+    borderTopColor   : '#dddddd'
+  },
+
+  footerButton: {
+    paddingHorizontal: 10,
+    paddingVertical  : 15
+  },
+
+  footerButtonText: {
+    color     : Colors.success,
     fontWeight: '500'
+  },
+
+  uploadButton: {
+    paddingVertical  : 10,
+    paddingHorizontal: 15,
+    ...(Platform.select({
+      ios    : {borderWidth: 1},
+      android: null
+    })),
+    borderColor      : '#ddd',
+    borderRadius     : 30,
+    ...(new Elevation(1))
+  },
+
+  uploadText: {
+    color: Colors.primary
+  },
+
+  androidImage: {
+    resizeMode: 'cover',
+    width     : 95,
+    height    : 95
   }
 })

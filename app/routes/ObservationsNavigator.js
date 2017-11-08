@@ -10,7 +10,9 @@ const Nav = new StackNavigator({
   },
   Observation : {
     screen           : ObservationScreen,
-    navigationOptions: {}
+    navigationOptions: {
+      drawerLockMode : 'locked-closed'
+    }
   }
 }, {
   headerMode      : 'none'

@@ -11,7 +11,6 @@ import {
 import Colors from '../helpers/Colors'
 
 export default class DateModal extends Component {
-
   constructor(props) {
     super(props)
     this.state = {
@@ -24,8 +23,6 @@ export default class DateModal extends Component {
   }
 
   componentWillMount() {
-    this.setState({})
-
     let dateChoices = []
     let currentYear = new Date().getFullYear()
     for (let i = 0; i < 100; i++) {
@@ -35,6 +32,7 @@ export default class DateModal extends Component {
       selectedYear: this.props.selectedYear,
       dateChoices
     })
+    console.log(this.props.selectedYear)
   }
 
   open = () => {
@@ -72,7 +70,7 @@ export default class DateModal extends Component {
 
               <View style={styles.modalChoices}>
                 <Picker selectedValue={this.state.selectedYear}
-                  onValueChange={(year) => this.onValChange(year)}>
+                        onValueChange={(year) => this.onValChange(year)}>
                   {this.state.dateChoices.map(this.renderPickChoices)}
                 </Picker>
               </View>
@@ -87,7 +85,9 @@ export default class DateModal extends Component {
         </Modal>
 
         <TouchableOpacity style={this.props.style} onPress={this.open}>
-          {this.props.children}
+          <View pointerEvents="none">
+            {this.props.children}
+          </View>
         </TouchableOpacity>
       </View>
     )

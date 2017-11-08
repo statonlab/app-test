@@ -235,7 +235,6 @@ export default class LoginScreen extends Screen {
                 <Text style={[styles.link]}>Register</Text>
               </TouchableOpacity>
             </View>
-
           </View>
         </ScrollView>
       </View>

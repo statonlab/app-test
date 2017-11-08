@@ -283,8 +283,10 @@ export default class PickerModal extends Component {
           </KeyboardAwareScrollView>
         </Modal>
 
-        <TouchableOpacity style={this.props.style} onPress={this.open}>
-          {this.props.children}
+        <TouchableOpacity onPress={this.open}>
+          <View pointerEvents="none" style={this.props.style}>
+            {this.props.children}
+          </View>
         </TouchableOpacity>
       </View>
     )
