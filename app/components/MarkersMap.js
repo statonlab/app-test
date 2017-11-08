@@ -1,6 +1,11 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
-import {StyleSheet, View, Text, Image, TouchableHighlight} from 'react-native'
+import {
+  StyleSheet,
+  View,
+  Text,
+  Image
+} from 'react-native'
 import MapView from 'react-native-maps'
 import Colors from '../helpers/Colors'
 
@@ -97,7 +102,7 @@ export default class MarkersMap extends Component {
       <MapView.Callout style={{width: 165}} onPress={() => this.pressEvent.call(this, marker)}>
         <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
           {!marker.image ? null :
-            <Image source={{uri: marker.image}} style={{width: 45, height: 45}}/>
+            <Image source={{uri: marker.image}} style={{width: 45, height: 45, resizeMode: 'cover'}}/>
           }
           <View style={{flex: 1, marginLeft: 5, flexDirection: 'column', alignItems: 'flex-start'}}>
             <Text style={[styles.calloutText, {flex: 0, fontWeight: '500'}]}>{marker.title}</Text>
@@ -138,7 +143,7 @@ export default class MarkersMap extends Component {
   renderStartingMarker(marker) {
     return (
       <MapView.Marker
-        key="1010"
+        key="startingMarker-451010"
         ref="startingMarker"
         coordinate={marker.coord}
         pinColor={marker.pinColor}

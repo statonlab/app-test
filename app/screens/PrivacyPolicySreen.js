@@ -30,6 +30,7 @@ export default class PrivacyPolicyScreen extends Screen {
           title="Privacy Policy"
           navigator={this.navigator}
           elevation={2}
+          showRightIcon={false}
           initial={true}
           onMenuPress={() => this.navigator.navigate('DrawerToggle')}
         />

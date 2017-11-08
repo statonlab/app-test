@@ -234,6 +234,12 @@ export default class File {
     })
   }
 
+  /**
+   * Fetch image form server.
+   *
+   * @param image
+   * @return {Promise.<void>}
+   */
   async downloadImage(image) {
     if (__DEV__ && Platform.OS === 'android') {
       image = image.replace('treesnap.app', '10.0.2.2:3000')

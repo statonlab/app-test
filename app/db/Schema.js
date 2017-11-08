@@ -59,7 +59,8 @@ const UserSchema = {
     is_private: {type: 'bool', default: false},
     api_token : {type: 'string', default: ''},
     zipcode   : {type: 'string', default: ''},
-    birth_year: {type: 'int', default: 1980}
+    birth_year: {type: 'int', default: 1980},
+    auto_sync: {type: 'bool', default: true}
   }
 }
 
@@ -69,7 +70,7 @@ export default new Realm({
     CoordinateSchema,
     SubmissionSchema
   ],
-  schemaVersion: 5,
+  schemaVersion: 6,
   migration    : function (oldRealm, newRealm) {
     if (oldRealm.schemaVersion < 2) {
       let newUser = newRealm.objects('User')
@@ -96,6 +97,13 @@ export default new Realm({
       let user = newRealm.objects('User')
       if (user.length > 0) {
         user.is_private = false
+      }
+    }
+
+    if (oldRealm.schemaVersion < 6) {
+      let user = newRealm.objects('User')
+      if (user.length > 0) {
+        user.auto_sync = true
       }
     }
   }

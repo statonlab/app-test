@@ -267,6 +267,7 @@ export default class Form extends Component {
    * Generate resized images and thumbnails.
    */
   generateImages = () => {
+    // Pass all the images as param 1, and the set that we know already has been processed as a 2nd param
     this.fs.resizeImages(this.state.images, this.props.edit ? JSON.parse(this.props.entryInfo.images) : {})
 
     this.refs.spinner.open()

@@ -146,7 +146,7 @@ export default class ObservationScreen extends Screen {
         })
         this.refs.snackbar.showBar()
       }
-      DeviceEventEmitter.emit('ObservationUploaded')
+      DeviceEventEmitter.emit('observationUploaded')
     }).catch(error => {
       console.log(error)
       this.refs.spinner.close()
@@ -202,9 +202,10 @@ export default class ObservationScreen extends Screen {
       return null
     }
 
-    return Object.keys(data).sort().map((key) => {
-      let text  = data[key]
-      let label = DCP[key] ? DCP[key].label : key
+    return Object.keys(data).sort().map((key, index) => {
+      let label_key = key.replace('_confidence', '')
+      let text      = data[key]
+      let label     = DCP[label_key] ? DCP[label_key].label : key
 
       if (typeof text === 'object') {
         if (typeof text.value === 'undefined') {
@@ -225,7 +226,7 @@ export default class ObservationScreen extends Screen {
       }
 
       return (
-        <View style={styles.field} key={key}>
+        <View style={styles.field} key={key + '_' + index}>
           <Text style={styles.label}>{label}</Text>
           <Text style={styles.dataText}>{text}</Text>
         </View>
@@ -245,7 +246,7 @@ export default class ObservationScreen extends Screen {
       return (
         <View style={styles.field}>
           <TouchableOpacity style={styles.button}
-                            onPress={() => this.navigator.navigate('LoginScene')}>
+                            onPress={() => this.navigator.navigate('Login')}>
             <Text style={styles.buttonText}>Login to Sync</Text>
           </TouchableOpacity>
         </View>

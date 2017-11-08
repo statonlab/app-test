@@ -23,10 +23,6 @@ import SnackBar from '../components/SnackBarNotice'
 import {ifIphoneX} from 'react-native-iphone-x-helper'
 
 export default class ObservationsScreen extends Screen {
-  static navigationOptions = {
-    tabBarVisible: false
-  }
-
   constructor(props) {
     super(props)
 
@@ -303,7 +299,7 @@ export default class ObservationsScreen extends Screen {
             this._resetDataSource()
           })
           unsynced_count++
-          DeviceEventEmitter.emit('ObservationUploaded')
+          DeviceEventEmitter.emit('observationUploaded')
         }).catch(error => {
           console.log(error)
           unsynced_count++
@@ -330,7 +326,7 @@ export default class ObservationsScreen extends Screen {
             observation.needs_update = false
             this._resetDataSource()
             this.refs.spinner.close()
-            DeviceEventEmitter.emit('ObservationUploaded')
+            DeviceEventEmitter.emit('observationUploaded')
           })
           updated_count++
         }).catch(error => {
@@ -372,6 +368,7 @@ export default class ObservationsScreen extends Screen {
         <Spinner ref="spinner"/>
         <Header navigator={this.navigator}
                 title="My Observations"
+                showRightIcon={false}
                 initial={true}
                 onMenuPress={() => this.navigator.navigate('DrawerToggle')}/>
         {this.state.hasData ? this._renderList() : this._renderEmpty()}
