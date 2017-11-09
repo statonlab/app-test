@@ -46,8 +46,6 @@ export default class Guide extends Component {
       })
       this.show()
     }
-
-    this.show()
   }
 
   show() {
