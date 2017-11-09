@@ -5,10 +5,22 @@ export default class Screen extends Component {
   constructor(props) {
     super(props)
 
-    this.navigator         = props.navigation
-    this.navigator.reset   = this.resetNavigationState
-    this.navigator.replace = this.replaceNavigationState
-    this.params            = props.navigation.state.params
+    this.navigator          = Object.assign({}, props.navigation)
+    // Prevent navigator from double navigating with multi clicks
+    this.navigator.navigate = (routeName, params) => {
+      if (this._isNavigating) {
+        return
+      }
+
+      this._isNavigating = true
+      props.navigation.navigate(routeName, params)
+      setTimeout(() => {
+        this._isNavigating = false
+      }, 500)
+    }
+    this.navigator.reset    = this.resetNavigationState
+    this.params             = props.navigation.state.params
+    this._isNavigating      = false
   }
 
   resetNavigationState = () => {
@@ -21,17 +33,5 @@ export default class Screen extends Component {
     })
 
     this.navigator.dispatch(resetAction)
-  }
-
-  replaceNavigationState = (routeName, params) => {
-    const replaceAction = NavigationActions.reset({
-      index  : 0,
-      actions: [
-        NavigationActions.navigate({routeName}, params)
-      ],
-      key    : null
-    })
-
-    this.navigator.dispatch(replaceAction)
   }
 }

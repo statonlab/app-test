@@ -57,7 +57,7 @@ export default class SubmittedScreen extends Screen {
       return null
     }
 
-    let image = this.fs.thumbnail(images[keys[0]][0])
+    let image = this.fs.image(images[keys[0]][0])
     return (
       <Image source={{uri: image}} style={android ? styles.androidImage : styles.image}/>
     )
@@ -88,6 +88,7 @@ export default class SubmittedScreen extends Screen {
             latitude : observation.location.latitude,
             longitude: observation.location.longitude
           }}
+          flat={false}
         >
           {this.android ? this.renderCallout(observation) : this.renderImage(observation)}
         </MapView.Marker>
@@ -251,6 +252,13 @@ export default class SubmittedScreen extends Screen {
             <Text style={styles.textLight}>
               {observation.location.latitude}, {observation.location.longitude}
             </Text>
+
+            {observation.name === 'American Chestnut' ?
+              <Text style={[styles.text, {marginTop: 5}]}>
+                Please collect a sample. See below for instructions.
+              </Text>
+              : null}
+
             {this.renderButtons(observation)}
           </View>
 
@@ -270,7 +278,7 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor : '#ffffff',
     marginVertical  : 22,
-    marginHorizontal: 10,
+    marginHorizontal: 5,
     borderRadius    : 5,
     padding         : 10,
     ...(new Elevation(1))
@@ -307,7 +315,8 @@ const styles = StyleSheet.create({
   },
 
   textLight: {
-    color: '#777'
+    color       : '#777',
+    marginBottom: 5
   },
 
   footer: {

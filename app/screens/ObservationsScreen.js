@@ -21,6 +21,7 @@ import Spinner from '../components/Spinner'
 import File from '../helpers/File'
 import SnackBar from '../components/SnackBarNotice'
 import {ifIphoneX} from 'react-native-iphone-x-helper'
+import Guide from '../components/Guide'
 
 export default class ObservationsScreen extends Screen {
   constructor(props) {
@@ -362,6 +363,20 @@ export default class ObservationsScreen extends Screen {
     })
   }
 
+  renderGuideMessage() {
+    return (
+      <View>
+        <Text style={Guide.style.headerText}>
+          Browse Your Observations
+        </Text>
+        <Text style={Guide.style.bodyText}>
+          Your observations list will be shown here.
+          Tap an observation to view more information about it.
+        </Text>
+      </View>
+    )
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -371,6 +386,13 @@ export default class ObservationsScreen extends Screen {
                 showRightIcon={false}
                 initial={true}
                 onMenuPress={() => this.navigator.navigate('DrawerToggle')}/>
+        <Guide
+          screen="ObservationsScreen"
+          message={this.renderGuideMessage()}
+          version={1}
+          icon="ios-leaf-outline"
+          marginBottom={10}
+        />
         {this.state.hasData ? this._renderList() : this._renderEmpty()}
         <SnackBar ref={(snackbar) => this.snackbar = snackbar} noticeText={this.state.noticeText}/>
       </View>

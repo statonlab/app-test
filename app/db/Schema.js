@@ -1,7 +1,23 @@
 import Realm from 'realm'
 
 /**
- * Define Coordinate Type
+ * Define a guide schema.
+ * -------------------------------------------------
+ * Saves the state of the guide to determine whether
+ * the user saw the message or not.
+ *
+ * @type object
+ */
+const GuideSchema = {
+  name      : 'Guide',
+  properties: {
+    screen : {type: 'string'},
+    version: {type: 'int'}
+  }
+}
+
+/**
+ * Define Coordinate Type.
  * -------------------------------------------------
  * @type object
  */
@@ -15,7 +31,7 @@ const CoordinateSchema = {
 }
 
 /**
- * Submissions Schema
+ * Submissions Schema.
  * -------------------------------------------------
  * Saves user's submissions locally and permanently.
  *
@@ -42,7 +58,7 @@ const SubmissionSchema = {
 
 
 /**
- * User Schema
+ * User Schema.
  * -------------------------------------------------
  * Saves user's info locally and permanently.
  * Keep track of their api token for contacting the website.
@@ -60,7 +76,7 @@ const UserSchema = {
     api_token : {type: 'string', default: ''},
     zipcode   : {type: 'string', default: ''},
     birth_year: {type: 'int', default: 1980},
-    auto_sync: {type: 'bool', default: true}
+    auto_sync : {type: 'bool', default: true}
   }
 }
 
@@ -68,9 +84,10 @@ export default new Realm({
   schema       : [
     UserSchema,
     CoordinateSchema,
-    SubmissionSchema
+    SubmissionSchema,
+    GuideSchema
   ],
-  schemaVersion: 6,
+  schemaVersion: 7,
   migration    : function (oldRealm, newRealm) {
     if (oldRealm.schemaVersion < 2) {
       let newUser = newRealm.objects('User')
@@ -96,14 +113,14 @@ export default new Realm({
     if (oldRealm.schemaVersion < 5) {
       let user = newRealm.objects('User')
       if (user.length > 0) {
-        user.is_private = false
+        user[0].is_private = false
       }
     }
 
     if (oldRealm.schemaVersion < 6) {
       let user = newRealm.objects('User')
       if (user.length > 0) {
-        user.auto_sync = true
+        user[0].auto_sync = true
       }
     }
   }

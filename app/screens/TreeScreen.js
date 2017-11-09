@@ -1,12 +1,12 @@
 import React from 'react'
 import Screen from './Screen'
-import PropTypes from 'prop-types'
-import {View, DeviceEventEmitter} from 'react-native'
+import {View, DeviceEventEmitter, Text} from 'react-native'
 import Header from '../components/Header'
 import {Tabs, Tab} from '../components/Tabs'
 import TreeDescription from '../components/TreeDescription'
 import Form from '../components/Form'
 import {Plants} from '../resources/descriptions'
+import Guide from '../components/Guide'
 
 export default class TreeScreen extends Screen {
   static navigationOptions = {
@@ -21,9 +21,32 @@ export default class TreeScreen extends Screen {
     })
   }
 
+  renderGuideMessage() {
+    return (
+      <View>
+        <Text style={Guide.style.headerText}>
+          Submitting a New Entry
+        </Text>
+        <Text style={Guide.style.bodyText}>
+          Fill the form below to submit a new observation.
+        </Text>
+        <Text style={[Guide.style.bodyText, {marginBottom: 0}]}>
+          You can view information about a tree using the "information" tab above.
+        </Text>
+      </View>
+    )
+  }
+
   render() {
     return (
-      <View style={{flex: 1, backgroundColor: '#f5f5f5'}}>
+      <View style={{flex: 1, backgroundColor: '#f5f5f5', position: 'relative'}}>
+        <Guide
+          screen="TreeDescription"
+          message={this.renderGuideMessage()}
+          icon="md-create"
+          version={1}
+          marginBottom={10}
+        />
         <Header title={this.params.title}
                 navigator={this.navigator}
                 showRightIcon={false}

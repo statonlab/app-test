@@ -21,7 +21,13 @@ export default class Location extends Component {
    */
   componentDidMount() {
     if (this.props.edit) {
-      let currentPosition = {'coords': {'latitude': this.props.coordinates.latitude, 'longitude': this.props.coordinates.longitude, 'accuracy': this.props.coordinates.accuracy}}
+      let currentPosition = {
+        coords: {
+          latitude : this.props.coordinates.latitude,
+          longitude: this.props.coordinates.longitude,
+          accuracy : this.props.coordinates.accuracy
+        }
+      }
       this.setState({
         currentPosition   : currentPosition,
         reachedMaxAccuracy: true,
@@ -104,8 +110,8 @@ export default class Location extends Component {
       })
     }
 
-    // If 1 minute passes, accept location no matter the accuracy
-    if ((this.state.timeConsumed / 1000) >= 60) {
+    // If 30 seconds passes, accept location no matter the accuracy
+    if ((this.state.timeConsumed / 1000) >= 30) {
       this.setState({done: true})
     }
 
@@ -131,29 +137,35 @@ export default class Location extends Component {
   }
 
   render() {
+    let position = this.state.currentPosition
     return (
       <View style={styles.container}>
         <View style={styles.coordsContainer}>
-          {!this.state.done &&
-          <Text style={[styles.text, {color: '#aaa'}]}>Acquiring Location...</Text>
-          }
+          {!this.state.done ?
+            <Text style={[styles.text, {color: '#aaa'}]}>Acquiring Location...</Text>
+            : null}
 
-          {this.state.done &&
-          <Text style={[styles.text]}>{this.state.currentPosition.coords.latitude.toFixed(5)}, {this.state.currentPosition.coords.longitude.toFixed(5)}</Text>
-          }
+          {this.state.done ?
+            <Text style={[styles.text]}>
+              {position.coords.latitude.toFixed(5)}, {position.coords.longitude.toFixed(5)}
+            </Text>
+            : null}
 
           {typeof this.state.currentPosition === 'object' &&
           <Text style={[styles.text, {color: '#aaa'}]}>Accuracy {parseInt(this.state.currentPosition.coords.accuracy)} meters</Text>
           }
 
-          {this.state.done &&
-          <TouchableOpacity style={styles.button} onPress={this.retake}>
-            <Text style={styles.buttonText}>Tap to retake location</Text></TouchableOpacity>
-          }
+          {this.state.done ?
+            <TouchableOpacity style={styles.button} onPress={this.retake}>
+              <Text style={styles.buttonText}>Tap to retake location</Text>
+            </TouchableOpacity>
+            : null}
         </View>
 
-        {this.state.done ? <Icon name="check" style={[styles.icon, {color: Colors.primary}]}/> : <MKSpinner style={{width: 30, height: 30}}/>}
-
+        {this.state.done ?
+          <Icon name="check" style={[styles.icon, {color: Colors.primary}]}/> :
+          <MKSpinner style={{width: 30, height: 30}}/>
+        }
       </View>
     )
   }

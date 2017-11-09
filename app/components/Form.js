@@ -643,10 +643,10 @@ export default class Form extends Component {
         }}
       >
         <View style={[styles.formGroup, {justifyContent: 'center'}]}>
-          <Text style={[{color: '#444', flex: 1, fontWeight: 'bold'}]}>
-            Submission ID:
+          <Text style={[styles.label]}>
+            Submission ID
           </Text>
-          <Text style={[{color: '#444', flex: 1, fontWeight: 'bold'}]}>
+          <Text style={[styles.textField]}>
             {this.primaryKey}
           </Text>
           <Icon name="help-circle" style={[styles.icon, {color: Colors.info}]}/>
