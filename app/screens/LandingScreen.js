@@ -65,6 +65,8 @@ export default class LandingScreen extends Screen {
     // Hold all events so we can remove them later and prevent memory leaks
     this.events = []
     this.fs     = new File()
+
+    // Guide.reset()
   }
 
   /**
@@ -171,15 +173,21 @@ export default class LandingScreen extends Screen {
   }
 
   renderGuideMessage() {
-    return (
+    return [
       <View>
         <Text style={Guide.style.headerText}>Welcome to TreeSnap!</Text>
         <Text style={Guide.style.bodyText}>
           Select the type of tree you'd like to report.
           If the tree is not listed, select <Text style={{fontStyle: 'italic'}}>Other</Text>.
         </Text>
+      </View>,
+      <View>
+        <Text style={Guide.style.headerText}>Identifying Trees</Text>
+        <Text style={Guide.style.bodyText}>
+          When selecting a tree, be sure to check out the information tab for help in identifying the tree.
+        </Text>
       </View>
-    )
+    ]
   }
 
   render() {
@@ -195,7 +203,6 @@ export default class LandingScreen extends Screen {
           screen="LandingScreen"
           message={this.renderGuideMessage()}
           version={1}
-          marginBottom={0}
         />
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.plantsContainer}>
