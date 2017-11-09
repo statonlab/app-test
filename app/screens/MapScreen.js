@@ -4,7 +4,8 @@ import {
   View,
   StyleSheet,
   Alert,
-  BackHandler
+  BackHandler,
+  Text
 } from 'react-native'
 import MarkersMap from '../components/MarkersMap'
 import Header from '../components/Header'
@@ -12,6 +13,7 @@ import realm from '../db/Schema'
 import moment from 'moment'
 import File from '../helpers/File'
 import Colors from '../helpers/Colors'
+import Guide from '../components/Guide'
 
 export default class MapScreen extends Screen {
   static navigationOptions = {
@@ -64,6 +66,18 @@ export default class MapScreen extends Screen {
     })
   }
 
+  renderGuideMessage() {
+    return (
+      <View>
+        <Text style={Guide.style.headerText}>
+          Your Observations Map
+        </Text>
+        <Text style={Guide.style.bodyText}>
+          Tap the markers on the map to view more information about the observation.
+        </Text>
+      </View>
+    )
+  }
 
   render() {
     return (
@@ -73,6 +87,11 @@ export default class MapScreen extends Screen {
                 showRightIcon={false}
                 initial={true}
                 onMenuPress={() => this.navigator.navigate('DrawerToggle')}/>
+        <Guide
+          screen={'MapScreen'}
+          version={1}
+          message={this.renderGuideMessage()}
+        />
         {this.renderMap()}
       </View>
     )

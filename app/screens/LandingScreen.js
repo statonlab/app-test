@@ -9,7 +9,6 @@ import {
   DeviceEventEmitter,
   TouchableOpacity
 } from 'react-native'
-import moment from 'moment'
 import Icon from 'react-native-vector-icons/Ionicons'
 import realm from '../db/Schema'
 import Header from '../components/Header'
@@ -17,9 +16,9 @@ import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
 import UploadButton from '../components/UploadButton'
 import SnackBarNotice from '../components/SnackBarNotice'
-import Observation from '../helpers/Observation'
 import File from '../helpers/File'
 import User from '../db/User'
+import Guide from '../components/Guide'
 
 const plants = [
   {
@@ -171,6 +170,18 @@ export default class LandingScreen extends Screen {
     this.refs.snackbar.showBar()
   }
 
+  renderGuideMessage() {
+    return (
+      <View>
+        <Text style={Guide.style.headerText}>Welcome to TreeSnap!</Text>
+        <Text style={Guide.style.bodyText}>
+          Select the type of tree you'd like to report.
+          If the tree is not listed, select <Text style={{fontStyle: 'italic'}}>Other</Text>.
+        </Text>
+      </View>
+    )
+  }
+
   render() {
     return (
       <View style={styles.container} {...(this.sidebar ? this.sidebar.getPan() : {})}>
@@ -180,6 +191,12 @@ export default class LandingScreen extends Screen {
           showRightIcon={false}
           initial={true}
           onMenuPress={this.toggleMenu.bind(this)}/>
+        <Guide
+          screen="LandingScreen"
+          message={this.renderGuideMessage()}
+          version={1}
+          marginBottom={0}
+        />
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.plantsContainer}>
             {this.state.userLoggedIn ?
