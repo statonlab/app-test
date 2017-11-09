@@ -19,10 +19,21 @@ export default class Guide extends Component {
     super(props)
 
     this.state = {
-      closing  : false,
-      show     : false,
-      opacity  : new Animated.Value(1),
-      translate: new Animated.Value(-30)
+      closing    : false,
+      show       : false,
+      opacity    : new Animated.Value(1),
+      translate  : new Animated.Value(-30),
+      currentStep: 0,
+      hasSteps   : false
+    }
+  }
+
+  static reset() {
+    let guides = realm.objects('Guide')
+    if (guides.length > 0) {
+      realm.write(() => {
+        realm.delete(guides)
+      })
     }
   }
 
@@ -45,6 +56,10 @@ export default class Guide extends Component {
         })
       })
       this.show()
+    }
+
+    if (typeof this.props.message !== 'string' && Array.isArray(this.props.message)) {
+      this.setState({hasSteps: true})
     }
   }
 
@@ -72,6 +87,72 @@ export default class Guide extends Component {
     })
   }
 
+  renderMessage() {
+    if (typeof this.props.message === 'string') {
+      return (<Text style={[style.bodyText]}>{this.props.message}</Text>)
+    }
+
+    if (this.state.hasSteps) {
+      return this.props.message[this.state.currentStep]
+    }
+
+    return this.props.message
+  }
+
+  renderFooter() {
+    if (!this.state.hasSteps) {
+      return (
+        <View style={style.footer}>
+          <TouchableOpacity style={style.footerButton} onPress={this.close.bind(this)}>
+            <Text style={style.footerButtonText}>Got it</Text>
+          </TouchableOpacity>
+        </View>
+      )
+    }
+
+    let remainingSteps = this.props.message.length - (this.state.currentStep + 1)
+    let isFirstStep    = this.state.currentStep === 0
+    let isLastStep     = remainingSteps === 0
+
+    return (
+      <View style={[style.footer, {justifyContent: 'flex-end', flexDirection: 'row'}]}>
+        <TouchableOpacity
+          style={[style.footerButton, isFirstStep ? style.disabled : null]}
+          onPress={this.back.bind(this)}
+          activeOpacity={isFirstStep ? 1 : 0.2}
+        >
+          <Text style={[style.footerButtonText, isFirstStep ? style.disabledText : null]}>Back</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={style.footerButton} onPress={() => {
+          if (isLastStep) {
+            this.close()
+          } else {
+            this.next()
+          }
+        }}>
+          <Text style={style.footerButtonText}>
+            {isLastStep ? 'Got it' : 'Next'}
+          </Text>
+        </TouchableOpacity>
+      </View>
+    )
+  }
+
+  back() {
+    let isFirstStep = this.state.currentStep === 0
+    if (isFirstStep) {
+      return
+    }
+
+    this.setState({currentStep: this.state.currentStep - 1})
+  }
+
+  next() {
+    this.setState({
+      currentStep: this.state.currentStep + 1
+    })
+  }
+
   render() {
     if (!this.state.show) {
       return null
@@ -91,17 +172,9 @@ export default class Guide extends Component {
           </View>
           <View style={[style.innerContainer]}>
             <View style={[style.body]}>
-              {typeof this.props.message === 'string' ?
-                <Text style={[style.bodyText]}>{this.props.message}</Text>
-                :
-                this.props.message
-              }
+              {this.renderMessage()}
             </View>
-            <View style={style.footer}>
-              <TouchableOpacity style={style.footerButton} onPress={this.close.bind(this)}>
-                <Text style={style.footerButtonText}>Got it</Text>
-              </TouchableOpacity>
-            </View>
+            {this.renderFooter()}
           </View>
         </Animated.View>
       </View>
@@ -115,11 +188,13 @@ Guide.propTypes = {
   // Text or component message to display
   message     : PropTypes.oneOfType([
     PropTypes.string,
-    PropTypes.object
+    PropTypes.object,
+    PropTypes.array
   ]).isRequired,
   // Version of message (used to determine whether the user has seen this new message)
   version     : PropTypes.number.isRequired,
   // Optional IonIcon name (E.g, md-star)
+  // @see https://ionicframework.com/docs/ionicons/
   icon        : PropTypes.string,
   // Optional bottom margin
   marginBottom: PropTypes.number
@@ -210,6 +285,14 @@ const style = StyleSheet.create({
   icon: {
     margin         : 10,
     backgroundColor: 'transparent'
+  },
+
+  disabled: {
+    backgroundColor: '#f5f5f5'
+  },
+
+  disabledText: {
+    color: '#aaa'
   }
 })
 
