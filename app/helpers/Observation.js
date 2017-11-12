@@ -144,8 +144,6 @@ class Observation {
       let response = await this.get()
       let records  = response.data.data
 
-      console.log(records)
-
       records.map(record => {
         let primaryKey = parseInt(record.mobile_id)
         let count      = realm.objects('Submission')
@@ -157,7 +155,6 @@ class Observation {
         }
 
         realm.write(() => {
-          console.log('Creating observation')
           realm.create('Submission', {
             id       : primaryKey,
             name     : record.observation_category,

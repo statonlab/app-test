@@ -722,11 +722,11 @@ export default class Form extends Component {
       <View style={styles.container}>
         <Spinner ref="spinner"/>
         <KeyboardAwareScrollView
-          keyboardDismissMode={isAndroid ? 'none' : 'on-drag'}
           showsVerticalScrollIndicator={false}
           extraScrollHeight={60}
           enableResetScrollToCoords={true}
-          keyboardShouldPersistTaps="handled"
+          keyboardShouldPersistTaps="always"
+          keyboardDismissMode={isAndroid ? 'none' : 'on-drag'}
         >
           <View style={[styles.card]}>
             {this.renderCameraItem('images', 'Images')}

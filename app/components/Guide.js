@@ -115,7 +115,7 @@ export default class Guide extends Component {
     let isLastStep     = remainingSteps === 0
 
     return (
-      <View style={[style.footer, {justifyContent: 'flex-end', flexDirection: 'row'}]}>
+      <View style={[style.footer, {justifyContent: 'space-between', flexDirection: 'row'}]}>
         <TouchableOpacity
           style={[style.footerButton, isFirstStep ? style.disabled : null]}
           onPress={this.back.bind(this)}
@@ -288,7 +288,9 @@ const style = StyleSheet.create({
   },
 
   disabled: {
-    backgroundColor: '#f5f5f5'
+    backgroundColor: '#f5f5f5',
+    elevation: 0,
+    shadowColor: 'transparent'
   },
 
   disabledText: {

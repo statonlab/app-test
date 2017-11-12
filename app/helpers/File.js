@@ -380,8 +380,6 @@ export default class File {
   }
 
   _moveImage(image, link, callback) {
-    //ImageResizer.createResizedImage(image, 1000, 1000, 'JPEG', 100).then(({uri}) => {
-
     // Get image name
     let name = link.split('/')
     name     = name[name.length - 1]
@@ -409,10 +407,6 @@ export default class File {
         callback(path)
       }
     })
-
-    //}).catch((error) => {
-    //console.log('Full image error', error, image)
-    //})
   }
 
   /**

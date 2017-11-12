@@ -17,10 +17,9 @@ import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
 import Checkbox from '../components/Checkbox'
 import t from 'tcomb-validation'
-import axios from '../helpers/Axios'
-import realm from '../db/Schema'
 import Spinner from '../components/Spinner'
 import DateModal from '../components/DateModal'
+import User from '../db/User'
 
 const isAndroid = Platform.OS === 'android'
 
@@ -46,8 +45,6 @@ export default class RegistrationScreen extends Screen {
       currentYear    : null
     }
 
-    this.realm = realm
-
     this.registrationRules = t.struct({
       name           : t.String,
       email          : t.String, // No validation
@@ -64,7 +61,6 @@ export default class RegistrationScreen extends Screen {
     let currentYear = new Date().getFullYear()
     this.setState({currentYear: currentYear})
 
-
     this.backEvent = BackHandler.addEventListener('hardwareBackPress', () => {
       this.navigator.goBack()
       return true
@@ -76,39 +72,11 @@ export default class RegistrationScreen extends Screen {
    */
   submitRegistration = () => {
     // if over 13, set the Consent to true automatically
-
     if (!this.validateState().isValid()) {
       this.notifyIncomplete(this.validateState())
       return
     }
     this.axiosRequest()
-  }
-
-  /**
-   * Save user to realm.
-   *
-   * @param responseFull
-   */
-  writeToRealm = (responseFull) => {
-    this.realm.write(() => {
-      // Delete existing users first
-      let old_users = this.realm.objects('User')
-      this.realm.delete(old_users)
-
-      let response = responseFull.data.data
-
-      if (!response.zipcode) {
-        response.zipcode = ''
-      }
-      this.realm.create('User', {
-        name      : response.name.toString(),
-        email     : response.email.toString(),
-        anonymous : response.is_anonymous,
-        zipcode   : response.zipcode,
-        api_token : response.api_token,
-        birth_year: response.birth_year
-      })
-    })
   }
 
   /**
@@ -119,19 +87,14 @@ export default class RegistrationScreen extends Screen {
 
     this.setState({showSpinner: true})
 
-    axios.post('users', request)
-      .then(response => {
-        //write to realm
-        this.writeToRealm(response)
-        this.setState({showSpinner: false})
-        DeviceEventEmitter.emit('userRegistered')
-        // Transition to Landing Scene.
-        this.navigator.reset()
-      })
-      .catch(error => {
-        this.handleErrorAxios(error)
-        this.setState({showSpinner: false})
-      })
+    User.register(request).then(response => {
+      this.setState({showSpinner: false})
+      // Transition to Landing Scene.
+      this.navigator.reset()
+    }).catch(error => {
+      this.handleErrorAxios(error)
+      this.setState({showSpinner: false})
+    })
   }
 
   /**
@@ -227,7 +190,6 @@ export default class RegistrationScreen extends Screen {
               this.setState({minorConsent: checked})
             }}
             warning={this.state.warnings.minorConsent}
-
           />
         </View>
       )
@@ -253,7 +215,9 @@ export default class RegistrationScreen extends Screen {
         >
           <View style={styles.form}>
             <View style={styles.formGroup}>
-              <Text style={styles.title}>TreeSnap</Text>
+              <Text style={styles.title}>
+                Tree<Text style={{fontWeight: '200'}}>Snap</Text>
+              </Text>
             </View>
 
             <View style={styles.formGroup}>
@@ -267,6 +231,10 @@ export default class RegistrationScreen extends Screen {
                 returnKeyType={'next'}
                 onChangeText={(name) => this.setState({name})}
                 underlineColorAndroid="transparent"
+                blurOnSubmit={true}
+                onSubmitEditing={() => {
+                  this.emailInput.focus()
+                }}
               />
             </View>
 
@@ -281,6 +249,11 @@ export default class RegistrationScreen extends Screen {
                 returnKeyType={'next'}
                 onChangeText={(email) => this.setState({email})}
                 underlineColorAndroid="transparent"
+                ref={ref => this.emailInput = ref}
+                blurOnSubmit={true}
+                onSubmitEditing={() => {
+                  this.passwordInput.focus()
+                }}
               />
             </View>
 
@@ -294,6 +267,11 @@ export default class RegistrationScreen extends Screen {
                 placeholderTextColor="#aaa"
                 onChangeText={(password) => this.setState({password})}
                 underlineColorAndroid="transparent"
+                ref={ref => this.passwordInput = ref}
+                blurOnSubmit={true}
+                onSubmitEditing={() => {
+                  this.passwordRepeatInput.focus()
+                }}
               />
             </View>
 
@@ -308,6 +286,11 @@ export default class RegistrationScreen extends Screen {
                 placeholderTextColor="#aaa"
                 onChangeText={(confirmPassword) => this.setState({confirmPassword})}
                 underlineColorAndroid="transparent"
+                ref={ref => this.passwordRepeatInput = ref}
+                blurOnSubmit={true}
+                onSubmitEditing={() => {
+                  this.zipcodeInput.focus()
+                }}
               />
             </View>
 
@@ -321,10 +304,16 @@ export default class RegistrationScreen extends Screen {
                 returnKeyType={'next'}
                 onChangeText={(zipcode) => this.setState({zipcode})}
                 underlineColorAndroid="transparent"
+                ref={ref => this.zipcodeInput = ref}
+                blurOnSubmit={true}
+                onSubmitEditing={() => {
+                  this.dateModal.open()
+                }}
               />
             </View>
             <View style={styles.formGroup}>
               <DateModal
+                ref={ref => this.dateModal = ref}
                 style={styles.picker}
                 onSelect={(option) => {
                   this.setState({birth_year: option})
