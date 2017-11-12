@@ -32,7 +32,6 @@ export default class DateModal extends Component {
       selectedYear: this.props.selectedYear,
       dateChoices
     })
-    console.log(this.props.selectedYear)
   }
 
   open = () => {

@@ -1,5 +1,5 @@
 import {Platform} from 'react-native'
-import Axios from 'axios'
+import axios, {CancelToken} from 'axios'
 
 // Set url based on environment
 let url
@@ -13,8 +13,70 @@ if (__DEV__) {
   url = 'https://treesnap.org/api/v1/'
 }
 
-export default Axios.create({
-  baseURL: url,
-  timeout: 7000,
-  headers: {Accept: 'application/json'}
-})
+class Http {
+  constructor() {
+    axios.defaults.baseURL = url
+    axios.defaults.timeout = 7000
+    axios.defaults.headers = {
+      Accept: 'application/json'
+    }
+  }
+
+  get(url, params) {
+    return this.send('get', url, params)
+  }
+
+  post(url, params) {
+    return this.send('post', url, params)
+  }
+
+  put(url, params) {
+    return this.send('put', url, params)
+  }
+
+  patch(url, params) {
+    return this.send('patch', url, params)
+  }
+
+  delete(url, params) {
+    return this.send('delete', url, params)
+  }
+
+  send(method, url, params) {
+    if (typeof axios[method] !== 'function') {
+      throw new Error('Axios ' + method + ' is not a function')
+    }
+
+    return new Promise((resolve, onFail) => {
+      let loaded = false
+      let cancel = () => {
+      }
+      setTimeout(() => {
+        if (!loaded) {
+          cancel()
+          onFail({
+            timeout: true
+          })
+          loaded = true
+        }
+      }, 7000)
+
+      axios[method](url, {
+        cancelToken: new CancelToken(c => cacnel = c),
+        ...params
+      }).then(response => {
+        if (!loaded) {
+          loaded = true
+          resolve(response)
+        }
+      }).catch(error => {
+        if (!loaded) {
+          loaded = true
+          onFail(error)
+        }
+      })
+    })
+  }
+}
+
+export default new Http()

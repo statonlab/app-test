@@ -59,13 +59,16 @@ export default class LandingScreen extends Screen {
 
     this.state = {
       userLoggedIn: false,
-      noticeText  : 'Success!'
+      noticeText  : 'Success!',
+      // Wait for welcome modal to finish
+      showGuide   : false
     }
 
     // Hold all events so we can remove them later and prevent memory leaks
     this.events = []
     this.fs     = new File()
 
+    // Uncomment this line to test the guide
     // Guide.reset()
   }
 
@@ -115,6 +118,9 @@ export default class LandingScreen extends Screen {
       })
       this.refs.snackbar.showBar()
     }))
+
+    this.events.push(DeviceEventEmitter.addListener('welcomeModalDone', () => this.setState({showGuide: true})))
+    this.events.push(DeviceEventEmitter.addListener('loginRequest', () => this.navigator.navigate('Login')))
   }
 
   /**
@@ -184,7 +190,7 @@ export default class LandingScreen extends Screen {
       <View>
         <Text style={Guide.style.headerText}>Identifying Trees</Text>
         <Text style={Guide.style.bodyText}>
-          When selecting a tree, be sure to check out the information tab for help in identifying the tree.
+          When selecting a tree, be sure to check out the information tab for help identifying the tree.
         </Text>
       </View>
     ]
@@ -199,11 +205,13 @@ export default class LandingScreen extends Screen {
           showRightIcon={false}
           initial={true}
           onMenuPress={this.toggleMenu.bind(this)}/>
-        <Guide
-          screen="LandingScreen"
-          message={this.renderGuideMessage()}
-          version={1}
-        />
+        {this.state.showGuide ?
+          <Guide
+            screen="LandingScreen"
+            message={this.renderGuideMessage()}
+            version={1}
+          />
+          : null}
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.plantsContainer}>
             {this.state.userLoggedIn ?

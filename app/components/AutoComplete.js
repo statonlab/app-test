@@ -174,7 +174,7 @@ export default class AutoComplete extends Component {
           </View>
           <ScrollView style={{flex: 1}}
                       keyboardShouldPersistTaps="always"
-                      keyboardDismissMode="interactive">
+                      keyboardDismissMode={Platform.OS === 'android' ? 'none' : 'on-drag'}>
             {this.renderResults()}
           </ScrollView>
           <KeyboardAvoidingView style={{flex: 0, backgroundColor: '#f7f7f7'}}

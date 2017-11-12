@@ -19,6 +19,7 @@ import axios from '../helpers/Axios'
 import realm from '../db/Schema'
 import Spinner from '../components/Spinner'
 import AText from '../components/Atext'
+import User from '../db/User'
 
 export default class LoginScreen extends Screen {
   static navigationOptions = {
@@ -78,14 +79,8 @@ export default class LoginScreen extends Screen {
   loginRequest = () => {
     this.setState({showSpinner: true})
 
-    axios.post('user/login', {
-      email   : this.state.email,
-      password: this.state.password
-    }).then(response => {
-      this.storeUser(response)
+    User.login(this.state.email, this.state.password).then(response => {
       this.setState({showSpinner: false})
-
-      DeviceEventEmitter.emit('userLoggedIn')
 
       if (!this.props.onLogin()) {
         this.navigator.goBack()
@@ -93,6 +88,7 @@ export default class LoginScreen extends Screen {
     }).catch(error => {
       this.setState({showSpinner: false})
       this.handleErrorAxios(error)
+      console.log(error)
     })
   }
 
@@ -138,38 +134,6 @@ export default class LoginScreen extends Screen {
   }
 
 
-  /**
-   * Stores the user in Realm.
-   *
-   * @param response
-   */
-  storeUser = (response) => {
-    this.realm.write(() => {
-      let user = realm.objects('User')
-      if (user.length > 0) {
-        // Delete existing users first
-        this.realm.delete(user)
-      }
-
-      if (!response.data.data.zipcode) {
-        response.data.data.zipcode = ''
-      }
-
-      let data = response.data.data
-
-      this.realm.create('User', {
-        name      : data.name,
-        email     : data.email,
-        anonymous : data.is_anonymous,
-        zipcode   : data.zipcode,
-        api_token : data.api_token,
-        birth_year: data.birth_year,
-        is_private: data.is_private
-      })
-    })
-  }
-
-
   render() {
     return (
       <View style={styles.container}>
@@ -184,7 +148,9 @@ export default class LoginScreen extends Screen {
                     keyboardShouldPersistTaps="handled">
           <View style={styles.form}>
             <View style={styles.formGroup}>
-              <Text style={styles.title}>TreeSnap</Text>
+              <Text style={styles.title}>
+                Tree<Text style={{fontWeight: '200'}}>Snap</Text>
+              </Text>
             </View>
 
             <View style={styles.formGroup}>
@@ -198,6 +164,10 @@ export default class LoginScreen extends Screen {
                 returnKeyType={'next'}
                 onChangeText={(email) => this.setState({email})}
                 underlineColorAndroid="transparent"
+                blurOnSubmit={true}
+                onSubmitEditing={() => {
+                  this.passwordInput.focus()
+                }}
               />
             </View>
 
@@ -211,6 +181,7 @@ export default class LoginScreen extends Screen {
                 placeholderTextColor="#aaa"
                 onChangeText={(password) => this.setState({password})}
                 underlineColorAndroid="transparent"
+                ref={ref => this.passwordInput = ref}
               />
             </View>
 

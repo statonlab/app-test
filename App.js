@@ -3,8 +3,7 @@ import {
   StatusBar,
   View,
   StyleSheet,
-  DeviceEventEmitter,
-  Alert
+  DeviceEventEmitter
 } from 'react-native'
 import Diagnostics from './app/helpers/Diagnostics'
 import Actions from './app/helpers/Actions'
@@ -13,6 +12,7 @@ import Spinner from './app/components/Spinner'
 import SnackBarNotice from './app/components/SnackBarNotice'
 import Navigator from './app/routes/Navigator'
 import Observation from './app/helpers/Observation'
+import WelcomeModal from './app/components/WelcomeModal'
 
 export default class App extends Component {
   constructor(props) {
@@ -77,6 +77,14 @@ export default class App extends Component {
         <StatusBar
           backgroundColor="#25897d"
           barStyle="light-content"
+        />
+        <WelcomeModal
+          onLoginRequest={() => {
+            DeviceEventEmitter.emit('loginRequest')
+          }}
+          onDone={() =>{
+            DeviceEventEmitter.emit('welcomeModalDone')
+          }}
         />
         <Navigator/>
         <Spinner show={this.state.loading}/>

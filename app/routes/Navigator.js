@@ -27,6 +27,7 @@ import Colors from '../helpers/Colors'
 import IntermediateAccountScreen from '../screens/IntermediateAccountScreen'
 import ObservationsNavigator from './ObservationsNavigator'
 import User from '../db/User'
+import {ifIphoneX} from 'react-native-iphone-x-helper'
 
 /**
  * Implementation of react-navigation.
@@ -50,6 +51,7 @@ export default class Navigator extends Component {
   componentWillMount() {
     this.events.push(DeviceEventEmitter.addListener('userLoggedIn', () => this.setState({loggedIn: User.loggedIn()})))
     this.events.push(DeviceEventEmitter.addListener('userLoggedOut', () => this.setState({loggedIn: User.loggedIn()})))
+    this.events.push(DeviceEventEmitter.addListener('userRegistered', () => this.setState({loggedIn: User.loggedIn()})))
   }
 
   /**
@@ -235,7 +237,7 @@ export default class Navigator extends Component {
   renderDrawer(props) {
     return (
       <ScrollView style={{flex: 1}}>
-        <Text style={style.sidebarHeader}>NAVIGATION MENU</Text>
+        <Text style={[style.sidebarHeader, ifIphoneX({marginTop: 45})]}>NAVIGATION MENU</Text>
         <DrawerItems {...{
           ...props,
           onItemPress: (route) => {
