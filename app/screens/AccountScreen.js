@@ -323,11 +323,12 @@ export default class AccountScreen extends Screen {
                     autoCapitalize={'words'}
                     placeholder={'E.g, Jane Doe'}
                     placeholderTextColor="#aaa"
-                    returnKeyType={'next'}
+                    returnKeyType={'done'}
                     onChangeText={(name) => this.setState({name, userChanges: true})}
                     defaultValue={this.state.name}
                     underlineColorAndroid="transparent"
                     onBlur={this.validate.bind(this)}
+                    blurOnSubmit={true}
                   />
                 </View>
                 {this.state.errors.name ? <Text style={styles.warning}>{this.state.errors.name}</Text> : null}
@@ -340,7 +341,7 @@ export default class AccountScreen extends Screen {
                     autoCapitalize={'words'}
                     placeholder={'E.g, jane@example.com'}
                     placeholderTextColor="#aaa"
-                    returnKeyType={'next'}
+                    returnKeyType={'done'}
                     onChangeText={(email) => this.setState({email, userChanges: true})}
                     defaultValue={this.state.email}
                     underlineColorAndroid="transparent"
@@ -357,7 +358,7 @@ export default class AccountScreen extends Screen {
                     autoCapitalize={'words'}
                     placeholder={'E.g, 37919'}
                     placeholderTextColor="#aaa"
-                    returnKeyType={'next'}
+                    returnKeyType={'done'}
                     onChangeText={(zipcode) => this.setState({zipcode, userChanges: true})}
                     defaultValue={this.state.zipcode}
                     underlineColorAndroid="transparent"
@@ -384,7 +385,7 @@ export default class AccountScreen extends Screen {
                     autoCapitalize={'words'}
                     placeholder={'No'}
                     placeholderTextColor="#aaa"
-                    returnKeyType={'next'}
+                    returnKeyType={'done'}
                     value={this.state.anonymous}
                     underlineColorAndroid="transparent"
                     editable={false}
@@ -404,7 +405,7 @@ export default class AccountScreen extends Screen {
                     style={styles.textField}
                     autoCapitalize={'words'}
                     placeholderTextColor="#aaa"
-                    returnKeyType={'next'}
+                    returnKeyType={'done'}
                     underlineColorAndroid="transparent"
                     value={this.state.birth_year.toString()}
                     editable={false}
@@ -419,7 +420,10 @@ export default class AccountScreen extends Screen {
             <View style={styles.card}>
               <PickerModal
                 style={[styles.formGroup, styles.noBorder]}
-                onSelect={(auto_sync) => this.setState({auto_sync: auto_sync === 'Yes' ? true : false, userChanges: true})}
+                onSelect={(auto_sync) => this.setState({
+                  auto_sync  : auto_sync === 'Yes' ? true : false,
+                  userChanges: true
+                })}
                 initialSelect={this.user.auto_sync ? 'Yes' : 'No'}
                 choices={['Yes', 'No']}
                 header="Auto sync allows TreeSnap to upload observations as soon as you reach a WiFi enabled area. Would you like to activate auto sync?"
@@ -431,7 +435,7 @@ export default class AccountScreen extends Screen {
                     autoCapitalize={'words'}
                     placeholder={'No'}
                     placeholderTextColor="#aaa"
-                    returnKeyType={'next'}
+                    returnKeyType={'done'}
                     value={this.user.auto_sync ? 'Yes' : 'No'}
                     underlineColorAndroid="transparent"
                     editable={false}
@@ -449,7 +453,6 @@ export default class AccountScreen extends Screen {
                   <TextInput
                     secureTextEntry={true}
                     style={styles.textField}
-                    autoCapitalize={'words'}
                     placeholderTextColor="#aaa"
                     onChangeText={(old_password) => this.setState({old_password, passwordChanges: true})}
                     placeholder={'Old Password'}
@@ -465,7 +468,6 @@ export default class AccountScreen extends Screen {
                   <TextInput
                     secureTextEntry={true}
                     style={styles.textField}
-                    autoCapitalize={'words'}
                     placeholderTextColor="#aaa"
                     placeholder={'New Password'}
                     onChangeText={(new_password) => this.setState({new_password, passwordChanges: true})}
@@ -481,7 +483,6 @@ export default class AccountScreen extends Screen {
                   <TextInput
                     secureTextEntry={true}
                     style={styles.textField}
-                    autoCapitalize={'words'}
                     placeholderTextColor="#aaa"
                     placeholder={'Repeat New Password'}
                     onChangeText={(new_password_confirmation) => this.setState({
@@ -599,7 +600,7 @@ const styles = StyleSheet.create({
     borderRadius     : 2,
     paddingHorizontal: 10,
     fontSize         : 14,
-    color: '#000'
+    color            : '#000'
   },
 
   title: {
