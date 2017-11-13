@@ -32,7 +32,7 @@ export default class AboutScreen extends Screen {
         <ScrollView style={styles.scrollView}>
           <View style={styles.card}>
             <Text style={styles.title}>TreeSnap</Text>
-            <Text style={styles.textBody}>App version: {PackageJSON.version}</Text>
+            <Text style={styles.textBody}>App version: {PackageJSON.version} ({PackageJSON.buildNum})</Text>
           </View>
           <View style={styles.card}>
             <Text style={styles.title}>The TreeSnap Project</Text>
