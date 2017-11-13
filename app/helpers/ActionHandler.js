@@ -68,9 +68,7 @@ export default class ActionHandler {
     try {
 
       realm.write(() => {
-        observations.forEach((observation) => {
-          observation.delete()
-        })
+        realm.delete(observations)
       })
     } catch (error) {
       console.log(error)

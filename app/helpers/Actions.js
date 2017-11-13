@@ -22,9 +22,9 @@ export default class Actions {
         }
       })
       response.data.data.forEach(action => {
-        console.log(action)
         this._actions.push(new ActionHandler(action))
       })
+
       this._loaded = true
     } catch (error) {
       console.log('loading error', error)
@@ -39,7 +39,7 @@ export default class Actions {
    * @return {Promise.<void>}
    */
   async run() {
-    if(!this.user) {
+    if (!this.user) {
       return
     }
 
