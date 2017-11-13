@@ -102,7 +102,7 @@ export default class SubmittedScreen extends Screen {
     }
 
     return (
-      <View style={styles.card}>
+      <View style={[styles.card, {marginBottom: 22}]}>
         <Text style={styles.title}>
           Sample Collection Instructions
         </Text>
@@ -232,12 +232,23 @@ export default class SubmittedScreen extends Screen {
                 showRightIcon={false}
         />
         <ScrollView style={styles.container}>
-          <View style={[styles.card, {marginBottom: 0}]}>
+          <View style={[styles.card]}>
             <Text style={{color: '#444'}}>
               You may upload your observation to the TreeSnap server now or choose to upload it later.
               It is best to upload observations when a WiFi connection is available.
             </Text>
           </View>
+
+          {observation.name === 'American Chestnut' ?
+            <View style={[styles.card]}>
+              <Text style={[styles.text, {marginBottom: 5}]}>
+                Please collect a sample and label it with the following ID number: {observation.id}.
+              </Text>
+              <Text style={[styles.text]}>
+                See below for instructions.
+              </Text>
+            </View>
+            : null}
 
           <View style={[styles.card, {marginBottom: observation.name === 'American Chestnut' ? 0 : undefined}]}>
             {this.renderMap(observation)}
@@ -250,12 +261,6 @@ export default class SubmittedScreen extends Screen {
             <Text style={styles.textLight}>
               {observation.location.latitude}, {observation.location.longitude}
             </Text>
-
-            {observation.name === 'American Chestnut' ?
-              <Text style={[styles.text, {marginTop: 5}]}>
-                Please collect a sample. See below for instructions.
-              </Text>
-              : null}
 
             {this.renderButtons(observation)}
           </View>
@@ -275,7 +280,7 @@ const styles = StyleSheet.create({
 
   card: {
     backgroundColor : '#ffffff',
-    marginVertical  : 22,
+    marginTop       : 10,
     marginHorizontal: 5,
     borderRadius    : 5,
     padding         : 10,
@@ -357,5 +362,15 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     width     : 95,
     height    : 95
+  },
+
+  warningCard: {
+    borderColor    : Colors.warning,
+    backgroundColor: Colors.warning
+  },
+
+  warningText: {
+    color     : Colors.warningText,
+    fontWeight: 'normal'
   }
 })
