@@ -1,5 +1,5 @@
 import {Platform} from 'react-native'
-import axios, {CancelToken} from 'axios'
+import axios from 'axios'
 
 // Set url based on environment
 let url
@@ -49,11 +49,8 @@ class Http {
 
     return new Promise((resolve, onFail) => {
       let loaded = false
-      let cancel = () => {
-      }
       setTimeout(() => {
         if (!loaded) {
-          cancel()
           onFail({
             timeout: true
           })
@@ -61,10 +58,7 @@ class Http {
         }
       }, 7000)
 
-      axios[method](url, {
-        cancelToken: new CancelToken(c => cacnel = c),
-        ...params
-      }).then(response => {
+      axios[method](url, params).then(response => {
         if (!loaded) {
           loaded = true
           resolve(response)

@@ -122,7 +122,6 @@ export default class SubmittedScreen extends Screen {
 
     NetInfo.getConnectionInfo().then(info => {
       let type = info.type.toLowerCase()
-      console.log(info, type)
       if (type !== 'wifi' && type !== 'unknown') {
         Alert.alert('No WiFi Detected', 'Are you sure you want to upload without WiFi?', [
           {
@@ -189,7 +188,6 @@ export default class SubmittedScreen extends Screen {
         </View>
       )
     }
-
 
     return (
       <View>
