@@ -65,6 +65,7 @@ export default class Guide extends Component {
 
   show() {
     this.setState({show: true})
+    this.state.opacity.setValue(1)
     Animated.timing(this.state.translate, {
       toValue : 0,
       duration: 700
@@ -83,7 +84,7 @@ export default class Guide extends Component {
         duration: 500
       })
     ]).start(() => {
-      this.setState({show: false})
+      this.setState({show: false, closing: false})
     })
   }
 

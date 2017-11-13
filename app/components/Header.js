@@ -70,6 +70,10 @@ export default class Header extends Component {
     if (this.props.rightIcon !== null) {
       icon    = this.props.rightIcon
       onPress = this.props.onRightPress
+
+      if(icon === 'help') {
+        icon = <Icon name={"help-circle"} size={23} color={"#fff"}/>
+      }
     }
 
     return (
@@ -115,7 +119,7 @@ Header.propTypes = {
   showLeftIcon : PropTypes.bool,
   showRightIcon: PropTypes.bool,
   onBackPress  : PropTypes.func,
-  rightIcon    : PropTypes.object,
+  rightIcon    : PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
   onRightPress : PropTypes.func
 }
 

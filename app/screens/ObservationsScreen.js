@@ -383,10 +383,12 @@ export default class ObservationsScreen extends Screen {
         <Spinner ref="spinner"/>
         <Header navigator={this.navigator}
                 title="My Observations"
-                showRightIcon={false}
+                rightIcon="help"
+                onRightPress={() => this.guide.show()}
                 initial={true}
                 onMenuPress={() => this.navigator.navigate('DrawerToggle')}/>
         <Guide
+          ref={ref => this.guide = ref}
           screen="ObservationsScreen"
           message={this.renderGuideMessage()}
           version={1}

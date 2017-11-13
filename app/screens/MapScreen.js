@@ -84,10 +84,12 @@ export default class MapScreen extends Screen {
       <View style={styles.container}>
         <Header title="Map"
                 navigator={this.navigator}
-                showRightIcon={false}
+                rightIcon="help"
+                onRightPress={() => this.guide.show()}
                 initial={true}
                 onMenuPress={() => this.navigator.navigate('DrawerToggle')}/>
         <Guide
+          ref={ref => this.guide = ref}
           screen={'MapScreen'}
           version={1}
           message={this.renderGuideMessage()}
