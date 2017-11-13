@@ -325,9 +325,9 @@ export default class RegistrationScreen extends Screen {
                   (this.state.birth_year > 0) ? this.state.birth_year : null
                 }
               >
-                <Text
-                  style={this.state.warnings.birth_year ? [styles.label, styles.labelWarning] : styles.label}>Year
-                  of Birth</Text>
+                <Text style={this.state.warnings.birth_year ? [styles.label, styles.labelWarning] : styles.label}>
+                  Year of Birth
+                </Text>
                 <TextInput
                   autoCapitalize={'none'}
                   style={this.state.warnings.birth_year ? [styles.textField, styles.textFieldWarning] : styles.textField}

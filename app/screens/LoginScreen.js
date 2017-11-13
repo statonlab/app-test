@@ -182,6 +182,13 @@ export default class LoginScreen extends Screen {
                 onChangeText={(password) => this.setState({password})}
                 underlineColorAndroid="transparent"
                 ref={ref => this.passwordInput = ref}
+                returnKeyType={'done'}
+                blurOnSubmit={true}
+                onSubmitEditing={() => {
+                  if (this.state.password.length > 0 && this.state.email.length > 0) {
+                    this.logInUser()
+                  }
+                }}
               />
             </View>
 
