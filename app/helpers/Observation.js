@@ -1,4 +1,4 @@
-import Axios from './Axios'
+import axios from './Axios'
 import realm from '../db/Schema'
 import File from './File'
 import moment from 'moment'
@@ -18,7 +18,7 @@ class Observation {
    * Upload record to API
    *
    * @param observation
-   * @returns {Promise<AxiosPromise>}
+   * @returns {Promise<Promise>}
    */
   async upload(observation) {
     this._setApiToken()
@@ -34,13 +34,13 @@ class Observation {
     let form = this._setUpForm(observation)
 
     // Run AXIOS POST request
-    return await Axios.post('observations', form)
+    return await axios.post('observations', form)
   }
 
   /**
    * Get observations from API
    *
-   * @returns {Promise<AxiosPromise>}
+   * @returns {Promise<Promise>}
    */
   async get() {
     this._setApiToken()
@@ -49,7 +49,7 @@ class Observation {
       throw Error('User not signed in')
     }
 
-    return await Axios.get(`observations/?api_token=${this.api_token}`)
+    return await axios.get(`observations/?api_token=${this.api_token}`)
   }
 
 
@@ -66,6 +66,7 @@ class Observation {
       throw Error('User not signed in')
     }
 
+
     if (!observation.needs_update) {
       return
     }
@@ -77,7 +78,7 @@ class Observation {
 
     let form = this._setUpForm(observation)
 
-    return await Axios.post(`observation/${observation.serverID}`, form)
+    return await axios.post(`observation/${observation.serverID}`, form)
   }
 
   // Private Methods
