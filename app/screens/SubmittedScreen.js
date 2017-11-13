@@ -226,7 +226,7 @@ export default class SubmittedScreen extends Screen {
     let data        = JSON.parse(observation.meta_data)
     return (
       <View style={styles.container}>
-        <Header title="Successful Submission"
+        <Header title="Observation Created"
                 navigator={this.navigator}
                 showLeftIcon={false}
                 showRightIcon={false}
