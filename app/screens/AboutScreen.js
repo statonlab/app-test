@@ -5,6 +5,7 @@ import {View, ScrollView, StyleSheet, Text, BackHandler} from 'react-native'
 import Header from '../components/Header'
 import Elevation from '../helpers/Elevation'
 import Atext from '../components/Atext'
+import PackageJSON from '../../package.json'
 
 export default class AboutScreen extends Screen {
   static navigationOptions = {
@@ -31,7 +32,7 @@ export default class AboutScreen extends Screen {
         <ScrollView style={styles.scrollView}>
           <View style={styles.card}>
             <Text style={styles.title}>TreeSnap</Text>
-            <Text style={styles.textBody}>App version: 1.1.0</Text>
+            <Text style={styles.textBody}>App version: {PackageJSON.version} ({PackageJSON.buildNum})</Text>
           </View>
           <View style={styles.card}>
             <Text style={styles.title}>The TreeSnap Project</Text>
