@@ -41,6 +41,7 @@ export default class TreeScreen extends Screen {
     return (
       <View style={{flex: 1, backgroundColor: '#f5f5f5', position: 'relative'}}>
         <Guide
+          ref={ref => this.guide = ref}
           screen="TreeDescription"
           message={this.renderGuideMessage()}
           icon="md-create"
@@ -49,8 +50,9 @@ export default class TreeScreen extends Screen {
         />
         <Header title={this.params.title}
                 navigator={this.navigator}
-                showRightIcon={false}
                 elevation={0}
+                rightIcon="help"
+                onRightPress={() => this.guide.show()}
                 onBackPress={() => {
                   return this.form.cancel()
                 }}/>

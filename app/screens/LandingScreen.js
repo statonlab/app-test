@@ -202,11 +202,23 @@ export default class LandingScreen extends Screen {
         <Header
           title="Observe"
           navigator={this.navigator}
-          showRightIcon={false}
+          rightIcon="help"
+          onRightPress={() => {
+            if(typeof this.guide === 'undefined') {
+              this.setState({showGuide: true})
+              setTimeout(() => {
+                this.guide.show()
+              }, 100)
+            } else {
+              this.guide.show()
+            }
+          }}
           initial={true}
-          onMenuPress={this.toggleMenu.bind(this)}/>
+          onMenuPress={this.toggleMenu.bind(this)}
+        />
         {this.state.showGuide ?
           <Guide
+            ref={ref => this.guide = ref}
             screen="LandingScreen"
             message={this.renderGuideMessage()}
             version={1}
