@@ -9,22 +9,26 @@ export default class BackgroundJobs {
    * Initiate background jobs
    */
   init() {
-    BackgroundTask.define(() => {
-      // Run the background task only if the user has wifi connection
-      NetInfo.getConnectionInfo().then(connectionInfo => {
-        if (connectionInfo.type.toLowerCase() === 'wifi') {
-          this.execute()
-          return
-        }
+    try {
+      BackgroundTask.define(() => {
+        // Run the background task only if the user has wifi connection
+        NetInfo.getConnectionInfo().then(connectionInfo => {
+          if (connectionInfo.type.toLowerCase() === 'wifi') {
+            this.execute()
+            return
+          }
 
-        BackgroundTask.finish()
+          BackgroundTask.finish()
+        })
       })
-    })
 
-    BackgroundTask.schedule({
-      // Run once every 30 minutes
-      period: 1800
-    })
+      BackgroundTask.schedule({
+        // Run once every 30 minutes
+        period: 1800
+      })
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   /**
@@ -33,8 +37,12 @@ export default class BackgroundJobs {
    * @return {Promise.<void>}
    */
   async execute() {
-    await this.syncObservations()
-    BackgroundTask.finish()
+    try {
+      await this.syncObservations()
+      BackgroundTask.finish()
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   /**
