@@ -365,15 +365,28 @@ export default class ObservationsScreen extends Screen {
 
   renderGuideMessage() {
     return (
-      <View>
+      [<View>
         <Text style={Guide.style.headerText}>
           Browse Your Observations
         </Text>
         <Text style={Guide.style.bodyText}>
           Your observations list will be shown here.
-          Tap an observation to view more information about it.
         </Text>
-      </View>
+        <Text style={[Guide.style.bodyText, {marginBottom: 0}]}>
+          Tap an observation to view more information, edit, or delete it.
+        </Text>
+      </View>,
+        <View>
+          <Text style={Guide.style.headerText}>
+            Submit Your Observations to TreeSnap
+          </Text>
+          <Text style={Guide.style.bodyText}>
+            Observations listed under "Needs Uploading" are stored on your phone, but have not been submitted to TreeSnap.
+          </Text>
+          <Text style={Guide.style.bodyText}>
+            You can tap the "Sync All" button to submit all observations, or submit individual observations by tapping on that observation.
+          </Text>
+        </View>]
     )
   }
 

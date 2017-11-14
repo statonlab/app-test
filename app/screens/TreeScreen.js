@@ -22,19 +22,27 @@ export default class TreeScreen extends Screen {
   }
 
   renderGuideMessage() {
-    return (
+    return ([
       <View>
         <Text style={Guide.style.headerText}>
           Submitting a New Entry
         </Text>
         <Text style={Guide.style.bodyText}>
-          Fill the form below to submit a new observation.
+          Complete the form below to submit a new observation. TreeSnap will collect your GPS location automatically.
         </Text>
-        <Text style={[Guide.style.bodyText, {marginBottom: 0}]}>
-          You can view information about a tree using the "information" tab above.
-        </Text>
-      </View>
-    )
+      </View>,
+        <View>
+          <Text style={Guide.style.headerText}>
+            Getting Help
+          </Text>
+          <Text style={Guide.style.bodyText}>
+            You can view distribution maps, species ID images, and more by tapping the "information" tab.
+          </Text>
+          <Text style={[Guide.style.bodyText, {marginBottom: 0}]}>
+            Individual questions can offer guides and examples, tool. Tap the green question marks or the Show Examples icon to get more information.
+          </Text>
+        </View>
+    ])
   }
 
   render() {

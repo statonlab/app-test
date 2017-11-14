@@ -18,6 +18,8 @@ export const ACFCollection = [
   <Text style={styles.paragraph}>
     In order for the American Chestnut Foundation to confirm your sample, you
     <Text style={{fontWeight: 'bold'}}> must mail in a plant sample</Text>.
+
+    We provide a unique ID to include with the sample: this will link your mailed sample with your digital TreeSnap observation.
     When submitting an observation, please collect a leaf and twig sample. The sample should be collected and preserved as described below.
   </Text>,
   <Text style={styles.paragraph}>{'\u2022'} A 6-12" twig and attached, mature, green leaves growing in the full sun. </Text>,

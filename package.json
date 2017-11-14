@@ -35,6 +35,7 @@
   "devDependencies": {
     "babel-jest": "18.0.0",
     "babel-preset-react-native": "1.9.1",
+    "extract-zip": "^1.6.6",
     "jest": "18.1.0",
     "react-test-renderer": "~15.4.0-rc.4"
   },
