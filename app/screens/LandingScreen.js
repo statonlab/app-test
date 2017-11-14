@@ -2,6 +2,7 @@ import React from 'react'
 import Screen from './Screen'
 import {
   View,
+  Platform,
   Text,
   ScrollView,
   Image,
@@ -65,8 +66,9 @@ export default class LandingScreen extends Screen {
     }
 
     // Hold all events so we can remove them later and prevent memory leaks
-    this.events = []
-    this.fs     = new File()
+    this.events  = []
+    this.fs      = new File()
+    this.android = Platform.OS === 'android'
 
     // Uncomment this line to test the guide
     // Guide.reset()
@@ -183,16 +185,40 @@ export default class LandingScreen extends Screen {
       <View>
         <Text style={Guide.style.headerText}>Welcome to TreeSnap!</Text>
         <Text style={Guide.style.bodyText}>
-          Select the type of tree you'd like to report.
-          If the tree is not listed, select <Text style={{fontStyle: 'italic'}}>Other</Text>.
+          To get started, first select the type of tree you'd like to report.
+          We have scientific partners with breeding programs for the listed trees, but you can report any tree by selecting
+          <Text style={{fontStyle: 'italic'}}>Other</Text>.
         </Text>
       </View>,
       <View>
-        <Text style={Guide.style.headerText}>Identifying Trees</Text>
+        <Text style={Guide.style.headerText}>Submit Your Observations</Text>
         <Text style={Guide.style.bodyText}>
-          When selecting a tree, be sure to check out the information tab for help identifying the tree.
+          When you've returned from the woods and are back in wi-fi range, submit your observations to the TreeSnap servers.
         </Text>
+        <Text style={Guide.style.bodyText}>
+          You can visit TreeSnap.org to see your trees and learn more about the TreeSnap project and our scientific partners.
+        </Text>
+      </View>,
+
+      <View>
+        <Text style={Guide.style.headerText}>Navigating TreeSnap</Text>
+
+        {this.Android ?
+          <Text style={Guide.style.bodyText}>
+            You can access the menu by tapping the drawer icon in the upper left.
+            From here you can view your submitted observations, change your account settings, and learn more about TreeSnap.
+          </Text> :
+          <View>
+            <Text style={Guide.style.bodyText}>
+              Observations can be viewed and edited by tapping the navigation icons at the bottom of the screen to visit the map or observations area.
+            </Text>
+            <Text>
+              Tap the drawer icon in the upper left to access your account settings or learn more about TreeSnap.
+            </Text>
+          </View>
+        }
       </View>
+
     ]
   }
 
@@ -204,7 +230,7 @@ export default class LandingScreen extends Screen {
           navigator={this.navigator}
           rightIcon="help"
           onRightPress={() => {
-            if(typeof this.guide === 'undefined') {
+            if (typeof this.guide === 'undefined') {
               this.setState({showGuide: true})
               setTimeout(() => {
                 this.guide.show()

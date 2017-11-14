@@ -68,14 +68,23 @@ export default class MapScreen extends Screen {
 
   renderGuideMessage() {
     return (
-      <View>
+     [ <View>
         <Text style={Guide.style.headerText}>
           Your Observations Map
         </Text>
         <Text style={Guide.style.bodyText}>
-          Tap the markers on the map to view more information about the observation.
+          This map displays all of your observed trees, whether they have been submitted to the server or not.
+          Tap the markers on the map to view or edit an observation.
         </Text>
-      </View>
+      </View>,
+        <View>
+          <Text style={Guide.style.headerText}>
+            Privacy
+          </Text>
+          <Text style={Guide.style.bodyText}>
+            This is your personal map, and does not show other users' observations. It also displays the exact location: these locations are protected on the TreeSnap website.
+          </Text>
+        </View>]
     )
   }
 
@@ -94,6 +103,7 @@ export default class MapScreen extends Screen {
           version={1}
           message={this.renderGuideMessage()}
         />
+
         {this.renderMap()}
       </View>
     )

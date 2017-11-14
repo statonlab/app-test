@@ -242,10 +242,10 @@ export default class SubmittedScreen extends Screen {
           {observation.name === 'American Chestnut' ?
             <View style={[styles.card]}>
               <Text style={[styles.text, {marginBottom: 5}]}>
-                Please collect a sample and label it with the following ID number: {observation.id}.
+                The American Chestnut Foundation requires a mailed twig and leaf sample to use your data.
               </Text>
               <Text style={[styles.text]}>
-                See below for instructions.
+                See below for instructions.  Include the ID with your submission to link it to your TreeSnap submission: {observation.id}.
               </Text>
             </View>
             : null}
