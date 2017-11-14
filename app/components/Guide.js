@@ -154,6 +154,14 @@ export default class Guide extends Component {
     })
   }
 
+  renderSkip() {
+    return (
+      <TouchableOpacity style={style.skip} onPress={this.close.bind(this)}>
+        <Icon name="md-close" size={12} color="#777"/>
+      </TouchableOpacity>
+    )
+  }
+
   render() {
     if (!this.state.show) {
       return null
@@ -172,6 +180,7 @@ export default class Guide extends Component {
             <Icon name={this.props.icon ? this.props.icon : 'md-bulb'} color={Colors.primary} size={32}/>
           </View>
           <View style={[style.innerContainer]}>
+            {this.renderSkip()}
             <View style={[style.body]}>
               {this.renderMessage()}
             </View>
@@ -217,7 +226,26 @@ const style = StyleSheet.create({
     })
   },
 
+  skip: {
+    position: 'absolute',
+    top: 5,
+    right: 5,
+    backgroundColor: '#f5f5f5',
+    width: 24,
+    height: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 12,
+    zIndex  : 19999999,
+    ...Platform.select({
+      android: {
+        elevation: 5
+      }
+    })
+  },
+
   container: {
+    position         : 'relative',
     backgroundColor  : '#fff',//'#278F82',
     flexDirection    : 'row',
     paddingHorizontal: 5,
@@ -290,8 +318,8 @@ const style = StyleSheet.create({
 
   disabled: {
     backgroundColor: '#f5f5f5',
-    elevation: 0,
-    shadowColor: 'transparent'
+    elevation      : 0,
+    shadowColor    : 'transparent'
   },
 
   disabledText: {

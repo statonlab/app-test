@@ -69,7 +69,7 @@ export default class LandingScreen extends Screen {
     this.fs     = new File()
 
     // Uncomment this line to test the guide
-    // Guide.reset()
+    Guide.reset()
   }
 
   /**
