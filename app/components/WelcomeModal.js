@@ -77,7 +77,7 @@ export default class WelcomeModal extends Component {
                style={style.image}/>
         <Text style={style.title}>Welcome to TreeSnap!</Text>
         <Text style={style.bodyText}>
-          Welcome to TreeSnap! Submit trees using TreeSnap and Scientists can use the data
+          Submit trees using TreeSnap and Scientists will use the data
           to improve breeding programs and save threatened tree species.
         </Text>
       </View>,
