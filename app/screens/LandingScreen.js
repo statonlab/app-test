@@ -71,7 +71,7 @@ export default class LandingScreen extends Screen {
     this.android = Platform.OS === 'android'
 
     // Uncomment this line to test the guide
-    Guide.reset()
+    // Guide.reset()
   }
 
   /**
