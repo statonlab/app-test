@@ -64,7 +64,7 @@ export default class Guide extends Component {
   }
 
   show() {
-    this.setState({show: true})
+    this.setState({show: true, currentStep: 0})
     this.state.opacity.setValue(1)
     Animated.timing(this.state.translate, {
       toValue : 0,

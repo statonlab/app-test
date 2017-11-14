@@ -174,7 +174,7 @@ export default class SubmittedScreen extends Screen {
   renderButtons(observation) {
     if (!User.loggedIn()) {
       return (
-        <View style={[styles.row]}>
+        <View style={[styles.row, {marginTop: 0}]}>
           <TouchableOpacity style={{padding: 10}}
                             onPress={() => {
                               this.navigator.reset()
@@ -197,7 +197,7 @@ export default class SubmittedScreen extends Screen {
                               onPress={() => {
                                 this.navigator.reset()
                               }}>
-              <Text style={{color: Colors.danger}}>Upload Later</Text>
+              <Text style={{color: '#fff'}}>Upload Later</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.uploadButton}
                               onPress={() => this.upload(observation)}>
@@ -207,13 +207,13 @@ export default class SubmittedScreen extends Screen {
         }
         {this.state.uploaded ?
           <View style={styles.row}>
-            <Text style={{color: Colors.success}}>Observation Uploaded Successfully!</Text>
+            <Text style={{color: Colors.primary}}>Observation Uploaded Successfully!</Text>
             <TouchableOpacity style={[styles.uploadButton, {
               backgroundColor: Colors.success,
               borderColor    : Colors.success
             }]}
                               onPress={() => this.navigator.reset()}>
-              <Text style={[styles.uploadText, {color: Colors.successText}]}>Continue</Text>
+              <Text style={[styles.uploadText, {color: Colors.primaryText}]}>Continue</Text>
             </TouchableOpacity>
           </View>
           : null}
@@ -261,12 +261,13 @@ export default class SubmittedScreen extends Screen {
             <Text style={styles.textLight}>
               {observation.location.latitude}, {observation.location.longitude}
             </Text>
-
-            {this.renderButtons(observation)}
           </View>
 
           {this.renderSampleMailingInstructions(observation)}
         </ScrollView>
+        <View style={styles.mainFooter}>
+          {this.renderButtons(observation)}
+        </View>
         <Spinner show={this.state.loading}/>
       </View>
     )
@@ -285,6 +286,12 @@ const styles = StyleSheet.create({
     borderRadius    : 5,
     padding         : 10,
     ...(new Elevation(1))
+  },
+
+  mainFooter: {
+    backgroundColor: '#212121',
+    padding        : 5,
+    paddingBottom  : 10
   },
 
   image: {
@@ -345,17 +352,13 @@ const styles = StyleSheet.create({
   uploadButton: {
     paddingVertical  : 10,
     paddingHorizontal: 15,
-    ...(Platform.select({
-      ios    : {borderWidth: 1},
-      android: null
-    })),
-    borderColor      : '#ddd',
     borderRadius     : 30,
+    backgroundColor  : Colors.primary,
     ...(new Elevation(1))
   },
 
   uploadText: {
-    color: Colors.primary
+    color: Colors.primaryText
   },
 
   androidImage: {
