@@ -209,10 +209,10 @@ export default class LandingScreen extends Screen {
           </Text> :
           <View>
             <Text style={Guide.style.bodyText}>
-              Observations can be viewed and edited by tapping the navigation icons at the bottom of the screen to visit the map or observations area.
+              Observations can be viewed and edited by tapping the  icons at the bottom of the screen to visit the map or see your previously submitted observations.
             </Text>
             <Text style={Guide.style.bodyText}>
-              Tap the drawer icon in the upper left to access your account settings or learn more about TreeSnap.
+              Tap the menu icon in the upper left to access your account settings or learn more about TreeSnap.
             </Text>
           </View>
         }

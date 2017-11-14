@@ -39,7 +39,7 @@ export default class TreeScreen extends Screen {
             You can view distribution maps, species ID images, and more by tapping the "information" tab.
           </Text>
           <Text style={[Guide.style.bodyText, {marginBottom: 0}]}>
-            Look for the green question marks or the Show Examples icon when answering questions.  They provide additional instructions or diagrams to help!
+            Look for the green question marks or the "Show Examples" icon when answering questions.  They provide additional instructions or diagrams to help!
           </Text>
         </View>
     ])

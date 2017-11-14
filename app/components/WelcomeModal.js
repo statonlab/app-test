@@ -77,7 +77,7 @@ export default class WelcomeModal extends Component {
                style={style.image}/>
         <Text style={style.title}>Welcome to TreeSnap!</Text>
         <Text style={style.bodyText}>
-          Submit trees using TreeSnap and Scientists will use the data
+          Submit trees using TreeSnap and scientists can use the data
           to improve breeding programs and save threatened tree species.
         </Text>
       </View>,
@@ -88,7 +88,10 @@ export default class WelcomeModal extends Component {
                style={style.image}/>
         <Text style={style.title}>Observe</Text>
         <Text style={style.bodyText}>
-          Found an interesting tree? Snap a picture, answer the additional
+          Found an interesting tree?  Our scientists partners are especially interested in ash, elm, hemlock, chestnut and white oak.
+        </Text>
+      <Text style={style.bodyText}>
+          Snap a picture, answer the additional
           questions and upload it to TreeSnap.
         </Text>
       </View>,
