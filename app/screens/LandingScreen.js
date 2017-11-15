@@ -186,8 +186,8 @@ export default class LandingScreen extends Screen {
         <Text style={Guide.style.headerText}>Welcome to TreeSnap!</Text>
         <Text style={Guide.style.bodyText}>
           To get started, first select the type of tree you'd like to report.
-          We have scientific partners with breeding programs for the listed trees, but you can report any tree by selecting
-          <Text style={{fontStyle: 'italic'}}>Other</Text>.
+          We have scientific partners with breeding programs for the listed trees, but you can report any tree by
+          selecting <Text style={{fontStyle: 'italic'}}>Other</Text>.
         </Text>
       </View>,
       <View>
