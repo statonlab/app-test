@@ -209,7 +209,7 @@ export default class LandingScreen extends Screen {
           </Text> :
           <View>
             <Text style={Guide.style.bodyText}>
-              Observations can be viewed and edited by tapping the  icons at the bottom of the screen to visit the map or see your previously submitted observations.
+              Observations can be viewed and edited by tapping the icons at the bottom of the screen to visit the map or see your previously submitted observations.
             </Text>
             <Text style={Guide.style.bodyText}>
               Tap the menu icon in the upper left to access your account settings or learn more about TreeSnap.
@@ -217,7 +217,6 @@ export default class LandingScreen extends Screen {
           </View>
         }
       </View>
-
     ]
   }
 
