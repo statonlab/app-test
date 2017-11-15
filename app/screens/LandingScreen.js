@@ -8,7 +8,8 @@ import {
   Image,
   StyleSheet,
   DeviceEventEmitter,
-  TouchableOpacity
+  TouchableOpacity,
+  Platform
 } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import realm from '../db/Schema'
@@ -202,7 +203,7 @@ export default class LandingScreen extends Screen {
       <View>
         <Text style={Guide.style.headerText}>Navigating TreeSnap</Text>
 
-        {this.Android ?
+        {this.android ?
           <Text style={Guide.style.bodyText}>
             You can access the menu by tapping the drawer icon in the upper left.
             From here you can view your submitted observations, change your account settings, and learn more about TreeSnap.
