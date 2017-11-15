@@ -209,8 +209,8 @@ export default class SubmittedScreen extends Screen {
           <View style={styles.row}>
             <Text style={{color: Colors.primary}}>Observation Uploaded Successfully!</Text>
             <TouchableOpacity style={[styles.uploadButton, {
-              backgroundColor: Colors.success,
-              borderColor    : Colors.success
+              backgroundColor: Colors.primary,
+              borderColor    : Colors.primary
             }]}
                               onPress={() => this.navigator.reset()}>
               <Text style={[styles.uploadText, {color: Colors.primaryText}]}>Continue</Text>
@@ -245,7 +245,7 @@ export default class SubmittedScreen extends Screen {
                 The American Chestnut Foundation requires a mailed twig and leaf sample to use your data. Scroll down for sample collection instructions.
               </Text>
               <Text style={[styles.text]}>
-               Unique ID for mailing this submission:   {observation.id}
+                Unique ID for mailing this submission: {observation.id}
               </Text>
             </View>
             : null}
