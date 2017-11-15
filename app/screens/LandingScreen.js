@@ -187,7 +187,8 @@ export default class LandingScreen extends Screen {
         <Text style={Guide.style.headerText}>Welcome to TreeSnap!</Text>
         <Text style={Guide.style.bodyText}>
           To get started, first select the type of tree you'd like to report.
-          We have scientific partners with breeding programs for the listed trees, but you can report any tree by selecting <Text style={{fontStyle: 'italic'}}>Other</Text>.
+          We have scientific partners with breeding programs for the listed trees, but you can report any tree by selecting
+          <Text style={{fontStyle: 'italic'}}>Other</Text>.
         </Text>
       </View>,
       <View>
@@ -199,10 +200,8 @@ export default class LandingScreen extends Screen {
           You can visit TreeSnap.org to see your trees and learn more about the TreeSnap project and our scientific partners.
         </Text>
       </View>,
-
       <View>
         <Text style={Guide.style.headerText}>Navigating TreeSnap</Text>
-
         {this.android ?
           <Text style={Guide.style.bodyText}>
             You can access the menu by tapping the drawer icon in the upper left.
