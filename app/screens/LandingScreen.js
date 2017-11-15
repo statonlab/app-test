@@ -8,8 +8,7 @@ import {
   Image,
   StyleSheet,
   DeviceEventEmitter,
-  TouchableOpacity,
-  Platform
+  TouchableOpacity
 } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import realm from '../db/Schema'
