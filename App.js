@@ -7,7 +7,6 @@ import {
 } from 'react-native'
 import Diagnostics from './app/helpers/Diagnostics'
 import Actions from './app/helpers/Actions'
-import BackgroundJobs from './app/helpers/BackgroundJobs'
 import Spinner from './app/components/Spinner'
 import SnackBarNotice from './app/components/SnackBarNotice'
 import Navigator from './app/routes/Navigator'
