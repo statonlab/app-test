@@ -22,13 +22,6 @@ export default class App extends Component {
       snackMessage: ''
     }
 
-    // try {
-    //   let jobs = new BackgroundJobs()
-    //   jobs.init()
-    // } catch (error) {
-    //   console.log(error)
-    // }
-
     this.events = []
   }
 
