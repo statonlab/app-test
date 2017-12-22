@@ -242,7 +242,7 @@ export default class File {
    */
   async downloadImage(image) {
     if (__DEV__ && Platform.OS === 'android') {
-      image = image.replace('treesnap.app', '10.0.2.2:3000')
+      image = image.replace('treesnap.test', '10.0.2.2:3000')
     }
 
     try {
