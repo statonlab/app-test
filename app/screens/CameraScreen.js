@@ -23,7 +23,6 @@ import ImageZoom from 'react-native-image-pan-zoom'
 import AndroidStatusBar from '../components/AndroidStatusBar'
 import {isIphoneX, ifIphoneX} from 'react-native-iphone-x-helper'
 
-
 const android = Platform.OS === 'android'
 
 export default class CameraScreen extends Screen {
@@ -210,7 +209,7 @@ export default class CameraScreen extends Screen {
               flashMode={this.state.camera.flash}
               onZoomChanged={this.zoom}
               defaultOnFocusComponent={true}
-              orientation="auto"
+              orientation="portrait"
               onFocusChanged={e => {
                 let focusLeft = e.nativeEvent.touchPoint.x - 40
                 let focusTop  = e.nativeEvent.touchPoint.y - 40
