@@ -209,7 +209,7 @@ export default class CameraScreen extends Screen {
               flashMode={this.state.camera.flash}
               onZoomChanged={this.zoom}
               defaultOnFocusComponent={true}
-              orientation="portrait"
+              orientation="auto"
               fixOrientation={true}
               onFocusChanged={e => {
                 let focusLeft = e.nativeEvent.touchPoint.x - 40
