@@ -166,6 +166,11 @@ export default class SubmittedScreen extends Screen {
       this.setState({loading: false})
 
       Alert.alert('Connection Error', 'Please try uploading again later')
+      if (error.response) {
+        console.log(error.response)
+      } else {
+        console.log(error)
+      }
     })
   }
 

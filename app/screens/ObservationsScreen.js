@@ -7,13 +7,13 @@ import {
   Image,
   DeviceEventEmitter,
   TouchableOpacity,
-  BackHandler
+  BackHandler,
+  ListView
 } from 'react-native'
 import Header from '../components/Header'
 import Colors from '../helpers/Colors'
 import Icon from 'react-native-vector-icons/Ionicons'
 import realm from '../db/Schema'
-import {ListView} from 'realm/react-native'
 import moment from 'moment'
 import Elevation from '../helpers/Elevation'
 import Observation from '../helpers/Observation'
@@ -24,6 +24,13 @@ import {ifIphoneX} from 'react-native-iphone-x-helper'
 import Guide from '../components/Guide'
 
 export default class ObservationsScreen extends Screen {
+  static navigationOptions = {
+    tabBarOnPress: ({scene, jumpToIndex}) => {
+      DeviceEventEmitter.emit('observationsScreenRequested')
+      jumpToIndex(scene.index)
+    }
+  }
+
   constructor(props) {
     super(props)
 
@@ -37,7 +44,7 @@ export default class ObservationsScreen extends Screen {
 
     this.state = {
       hasData    : (this.submissions.length > 0),
-      submissions: this.dataSource.cloneWithRowsAndSections(this._createMap(this.submissions)),
+      submissions: this.dataSource.cloneWithRowsAndSections({}),
       isLoggedIn : false,
       noticeText : ''
     }
@@ -54,7 +61,10 @@ export default class ObservationsScreen extends Screen {
   componentDidMount() {
     this._isLoggedIn()
 
-    this.loggedEvent = DeviceEventEmitter.addListener('userLoggedIn', this._isLoggedIn.bind(this))
+    this.events.push(DeviceEventEmitter.addListener('userLoggedIn', this._isLoggedIn.bind(this)))
+    this.events.push(DeviceEventEmitter.addListener('observationsScreenRequested', () => {
+      this._resetDataSource()
+    }))
   }
 
   componentWillMount() {
@@ -68,7 +78,7 @@ export default class ObservationsScreen extends Screen {
    * Remove events.
    */
   componentWillUnmount() {
-    this.loggedEvent.remove()
+    this.events.map(event => event.remove())
   }
 
   /**
@@ -134,7 +144,6 @@ export default class ObservationsScreen extends Screen {
    * @returns {XML}
    * @private
    */
-
   _renderRow = (submission) => {
     let images    = JSON.parse(submission.images)
     let key       = Object.keys(images)[0]
