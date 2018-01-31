@@ -36,10 +36,6 @@ export default class MapScreen extends Screen {
     let submissions = realm.objects('Submission')
     let markers     = []
 
-    if (submissions.length < 1) {
-      Alert.alert('You have not submitted any entries. Once you do, they will show on this map.')
-    }
-
     submissions.map((submission, index) => {
       let image = JSON.parse(submission.images)
       if (Array.isArray(image['images'])) {

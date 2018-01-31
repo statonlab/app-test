@@ -1,7 +1,7 @@
 import React from 'react'
 import Screen from './Screen'
 import PropTypes from 'prop-types'
-import {View, StyleSheet, Text, TextInput, TouchableOpacity, BackHandler, DeviceEventEmitter} from 'react-native'
+import {View, StyleSheet, Text, TextInput, TouchableOpacity, BackHandler, DeviceEventEmitter, Alert} from 'react-native'
 import Header from '../components/Header'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
@@ -196,7 +196,7 @@ export default class AccountScreen extends Screen {
       if (error.response) {
         switch (error.response.status) {
           case 500:
-            alert('Server error. Please try again later.')
+            Alert.alert('Server Error', 'Please try again later.')
             console.log(error.response)
             break
           default:
@@ -204,7 +204,7 @@ export default class AccountScreen extends Screen {
             break
         }
       } else {
-        alert('Could not reach server. Make sure you have internet connection.')
+        Alert.alert('Network Error', 'Could not reach server. Make sure you have internet connection.')
       }
     }).then(() => {
       this.setState({showSpinner: false})
