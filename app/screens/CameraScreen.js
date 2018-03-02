@@ -11,10 +11,10 @@ import {
   Image,
   Animated,
   Alert,
-  BackHandler
+  BackHandler,
+  PermissionsAndroid
 } from 'react-native'
 import Camera from 'react-native-camera'
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import Colors from '../helpers/Colors'
 import Elevation from '../helpers/Elevation'
@@ -59,11 +59,32 @@ export default class CameraScreen extends Screen {
     this.fs = new File()
   }
 
-  /**
-   * Check for permissions
-   */
-  componentWillMount() {
-    if (!android) {
+  async requestCameraPermission() {
+    if (android) {
+      try {
+        const granted  = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.CAMERA,
+          {
+            title  : 'Camera Permission',
+            message: 'We need permission to access the camera'
+          })
+
+        const granted2 = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          {
+            title  : 'Storage Permission',
+            message: 'We need permission to write to your storage file system'
+          })
+
+        if (granted === PermissionsAndroid.RESULTS.GRANTED && granted2 === PermissionsAndroid.RESULTS.GRANTED) {
+          this.setState({hasPermission: true})
+        } else {
+          this._cancel();
+        }
+      } catch (err) {
+        console.warn(err)
+      }
+    } else {
       Camera.checkVideoAuthorizationStatus().then(response => {
         if (!response) {
           Alert.alert(
@@ -72,8 +93,8 @@ export default class CameraScreen extends Screen {
             [
               {
                 text: 'Ok', onPress: () => {
-                this.navigator.goBack()
-              }
+                  this.navigator.goBack()
+                }
               }
             ]
           )
@@ -81,20 +102,22 @@ export default class CameraScreen extends Screen {
           this.setState({hasPermission: true})
         }
       })
-    } else {
-      this.setState({hasPermission: true})
     }
+  }
+
+  /**
+   * Check for permissions
+   * and fix the width of each page
+   */
+  componentDidMount() {
+
+    this.requestCameraPermission()
 
     this.backEvent = BackHandler.addEventListener('hardwareBackPress', () => {
       this._cancel()
       return true
     })
-  }
 
-  /**
-   * Fixes the width of each page
-   */
-  componentDidMount() {
     let length = this.params.images.length
     this.setState({
       pageWidth: Dimensions.get('window').width,
@@ -339,6 +362,7 @@ export default class CameraScreen extends Screen {
    * @private
    */
   _forward = () => {
+    console.log('forwarding')
     this.refs.page.scrollTo({x: Dimensions.get('window').width, y: 0, animated: true})
   }
 
@@ -452,6 +476,7 @@ export default class CameraScreen extends Screen {
       })
       this._forward()
     }).catch(error => {
+      alert(error)
       console.log(error)
     })
   }
@@ -588,11 +613,11 @@ const styles = StyleSheet.create({
   },
 
   toolText: {
-    color  : '#fff',
-    flex   : 0,
-    padding: 5,
-    width  : 90,
-    fontSize: 16,
+    color     : '#fff',
+    flex      : 0,
+    padding   : 5,
+    width     : 90,
+    fontSize  : 16,
     fontWeight: '600',
     ...textShadow
   },

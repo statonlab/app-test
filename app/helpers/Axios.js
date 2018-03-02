@@ -13,10 +13,16 @@ if (__DEV__) {
   url = 'https://treesnap.org/api/v1/'
 }
 
+/**
+ * Specify maximum number of seconds before a request should timeout
+ * @type {number}
+ */
+const TIMEOUT = 20000
+
 class Http {
   constructor() {
     axios.defaults.baseURL = url
-    axios.defaults.timeout = 7000
+    axios.defaults.timeout = TIMEOUT
     axios.defaults.headers = {
       Accept: 'application/json'
     }
@@ -56,7 +62,7 @@ class Http {
           })
           loaded = true
         }
-      }, 7000)
+      }, TIMEOUT)
 
       axios[method](url, params).then(response => {
         if (!loaded) {
