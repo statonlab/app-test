@@ -60,14 +60,14 @@ export default class ObservationsScreen extends Screen {
    */
   componentDidMount() {
     this._isLoggedIn()
+    this._resetDataSource()
+
 
     this.events.push(DeviceEventEmitter.addListener('userLoggedIn', this._isLoggedIn.bind(this)))
     this.events.push(DeviceEventEmitter.addListener('observationsScreenRequested', () => {
       this._resetDataSource()
     }))
-  }
 
-  componentWillMount() {
     this.backEvent = BackHandler.addEventListener('hardwareBackPress', () => {
       this.navigator.goBack()
       return true
