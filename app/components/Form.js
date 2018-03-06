@@ -503,6 +503,7 @@ export default class Form extends Component {
               units={DCP[key].units}
               header={DCP[key].description}
               choices={DCP[key].selectChoices}
+              numberPlaceHolder={DCP[key].numberPlaceHolder}
               onSelect={(number, string) => {
                 let newData   = this.state.metadata
                 newData[key]  = number
