@@ -4,6 +4,8 @@ import android.app.Application;
 
 import com.facebook.react.ReactApplication;
 
+import org.reactnative.camera.RNCameraPackage;
+
 import io.realm.react.RealmReactPackage;
 
 import com.airbnb.android.react.maps.MapsPackage;
@@ -14,7 +16,9 @@ import com.github.xinthink.rnmk.ReactMaterialKitPackage;
 import fr.bamlab.rnimageresizer.ImageResizerPackage;
 
 import com.RNFetchBlob.RNFetchBlobPackage;
-import com.lwansbrough.RCTCamera.RCTCameraPackage;
+
+import org.reactnative.camera.RNCameraPackage;
+
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -35,12 +39,12 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+          new RNCameraPackage(),
           new RealmReactPackage(),
           new VectorIconsPackage(),
           new ReactMaterialKitPackage(),
           new ImageResizerPackage(),
           new RNFetchBlobPackage(),
-          new RCTCameraPackage(),
           new MapsPackage()
       );
     }

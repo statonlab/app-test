@@ -177,12 +177,12 @@ export default class SubmittedScreen extends Screen {
   renderButtons(observation) {
     if (!User.loggedIn()) {
       return (
-        <View style={[styles.row, {marginTop: 0}]}>
+        <View style={[styles.row]}>
           <TouchableOpacity style={{padding: 10}}
                             onPress={() => {
                               this.navigator.reset()
                             }}>
-            <Text style={{color: Colors.danger}}>Upload Later</Text>
+            <Text style={{color: '#fff'}}>Upload Later</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.uploadButton}
                             onPress={() => this.navigator.navigate('Login')}>
