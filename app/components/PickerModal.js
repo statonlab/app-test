@@ -18,7 +18,8 @@ export default class PickerModal extends Component {
       selected     : 'not set',
       selectedMulti: [],
       choices      : this.props.choices,
-      numberVal    : {value: null}//expect {value: int, confidence: string}
+      numberVal    : {value: null}, //expect {value: int, confidence: string},
+      numberPlaceHolder: 'Tap to enter diameter'
     }
   }
 
@@ -55,6 +56,12 @@ export default class PickerModal extends Component {
       }
       this.setState({selected: this.props.startingString})
     }
+
+    if (this.props.numberPlaceHolder) {
+      this.setState({numberPlaceHolder: this.props.numberPlaceHolder})
+    }
+
+
   }
 
   onChange = (item) => {
@@ -160,7 +167,7 @@ export default class PickerModal extends Component {
                      keyboardType={'numeric'}
                      underlineColorAndroid={'transparent'}
                      value={this.state.numberVal.value}
-                     placeholder={'Tap to enter diameter'}
+                     placeholder={this.state.numberPlaceHolder}
                      onChangeText={(number) => this.handleNumber(number)}/>
           <Text style={{paddingLeft: 30, paddingRight: 30}}>{this.props.units}</Text>
         </View>
@@ -303,6 +310,7 @@ PickerModal.propTypes = {
   multiCheck     : PropTypes.bool,
   numeric        : PropTypes.bool,
   units          : PropTypes.string, //units to display for numeric input
+  numberPlaceHolder : PropTypes.string,
   freeText       : PropTypes.bool,
   images         : PropTypes.array,
   captions       : PropTypes.array,
@@ -315,6 +323,7 @@ PickerModal.propTypes = {
 
 PickerModal.defaultProps = {
   choices      : [],
+  numberPlaceHolder: 'Tap to enter diameter',
   header       : 'default header',
   onSelect     : () => {
   },

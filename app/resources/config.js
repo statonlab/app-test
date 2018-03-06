@@ -106,7 +106,8 @@ const DCP = {
     units      : "Feet",
     numeric : true,
     placeHolder: "Height",
-    default : 'Estimated'
+    default : 'Estimated',
+    numberPlaceHolder: "Tap to enter height"
   },
   oakHealthProblems      : {
     label        : 'Health problems',
