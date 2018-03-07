@@ -18,11 +18,12 @@ if (__DEV__) {
  * @type {number}
  */
 const TIMEOUT = 20000
-
-export default new axios.create({
+const Axios   = new axios.create({
   baseURL: url,
   timeout: TIMEOUT,
   headers: {
     Accept: 'application/json'
   }
 })
+
+export default Axios
