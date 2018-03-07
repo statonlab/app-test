@@ -21,6 +21,7 @@ import Elevation from '../helpers/Elevation'
 import File from '../helpers/File'
 import ImageZoom from 'react-native-image-pan-zoom'
 import AndroidStatusBar from '../components/AndroidStatusBar'
+import PinchResponder from '../helpers/PinchResponder'
 import {isIphoneX, ifIphoneX} from 'react-native-iphone-x-helper'
 
 const android = Platform.OS === 'android'
@@ -51,12 +52,14 @@ export default class CameraScreen extends Screen {
       focusLeft    : 0,
       focusRight   : 0,
       hasPermission: false,
-      deletedImages: []
+      deletedImages: [],
+      zoom         : 0
     }
 
     this.isCapturing = false
 
-    this.fs = new File()
+    this.fs             = new File()
+    this.pinchResponder = new PinchResponder(this.zoom.bind(this))
   }
 
   async requestCameraPermission() {
@@ -78,6 +81,7 @@ export default class CameraScreen extends Screen {
         if (granted === PermissionsAndroid.RESULTS.GRANTED && granted2 === PermissionsAndroid.RESULTS.GRANTED) {
           this.setState({hasPermission: true})
         } else {
+          this.alertPermissionDenied()
           this._cancel()
         }
       } catch (err) {
@@ -107,7 +111,6 @@ export default class CameraScreen extends Screen {
    * and fix the width of each page
    */
   componentDidMount() {
-
     this.requestCameraPermission()
 
     this.backEvent = BackHandler.addEventListener('hardwareBackPress', () => {
@@ -127,6 +130,7 @@ export default class CameraScreen extends Screen {
       this.setState({selectedImage})
     }
   }
+
 
   render() {
     let flashIcon
@@ -196,7 +200,9 @@ export default class CameraScreen extends Screen {
         showsHorizontalScrollIndicator={false}
         scrollEnabled={false}
       >
-        <View style={[styles.container, {width: this.state.pageWidth}]}>
+        <View style={[styles.container, {width: this.state.pageWidth}]}
+              {...this.pinchResponder.getResponderProps()}
+        >
           <View style={[styles.topToolsContainer, {width: this.state.pageWidth}]}>
             {flashIcon}
             <TouchableOpacity
@@ -222,8 +228,11 @@ export default class CameraScreen extends Screen {
               autoFocus={RNCamera.Constants.AutoFocus.on}
               captureAudio={false}
               type={this.state.camera.type}
+              zoom={this.state.zoom}
             />
-            : <View style={[styles.preview, {backgroundColor: '#000'}]}/>}
+            :
+            <View style={[styles.preview, {backgroundColor: '#000'}]}/>
+          }
           <View style={[
             styles.toolsContainer,
             styles.bottomToolsContainer,
@@ -428,6 +437,13 @@ export default class CameraScreen extends Screen {
     })
   }
 
+  zoom(value) {
+    let zoom = Math.round(value * 100) / 100
+    zoom     = Math.max(zoom, 0)
+    zoom     = Math.min(zoom, 1)
+    this.setState({zoom})
+  }
+
   /**
    * Captures the image.
    */
@@ -442,13 +458,15 @@ export default class CameraScreen extends Screen {
     try {
       const data = await this.camera.takePictureAsync({
         quality           : 1,
+        // Specify a max width to avoid extra large images
+        width             : 2400,
+        // Want an actual file rather than an base64 string
         base64            : false,
         mirrorImage       : false,
-        exif              : true,
+        // We don't want metadata, let the camera module handle orientations
+        exif              : false,
         fixOrientation    : true,
-        // forceUpOrientation: true,
-        // Specify a max width to avoid extra large images
-        width             : 2400
+        forceUpOrientation: true
       })
 
       let image  = data.uri
@@ -463,7 +481,7 @@ export default class CameraScreen extends Screen {
     } catch (error) {
       this.isCapturing = false
       alert(error)
-      console.warn(error)
+      console.log(error)
     }
   }
 
@@ -582,7 +600,8 @@ const styles = StyleSheet.create({
     justifyContent   : 'space-between',
     alignItems       : 'center',
     backgroundColor  : 'transparent',
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
+    zIndex           : 10000
   },
 
   capture: {
@@ -612,7 +631,9 @@ const styles = StyleSheet.create({
     flex           : 0,
     width          : 90,
     height         : undefined,
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
+    elevation      : 5,
+    zIndex         : 10000
   },
 
   topToolsContainer: {
@@ -623,7 +644,6 @@ const styles = StyleSheet.create({
     alignItems    : 'center',
     paddingTop    : getVerticalPadding(),
     position      : 'absolute',
-    zIndex        : 10,
     top           : 10
   },
 
