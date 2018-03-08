@@ -6,7 +6,6 @@ import moment from 'moment'
 class Observation {
   static navigationOptions = {
     tabBarVisible: false
-
   }
 
   constructor() {
@@ -17,10 +16,11 @@ class Observation {
   /**
    * Upload record to API
    *
-   * @param observation
+   * @param {Object} observation
+   * @param {Function} callback
    * @returns {Promise<Promise>}
    */
-  async upload(observation) {
+  async upload(observation, callback) {
     this._setApiToken()
     if (this.api_token === false) {
       throw Error('User not signed in')
@@ -33,8 +33,30 @@ class Observation {
 
     let form = this._setUpForm(observation)
 
-    // Run AXIOS POST request
-    return await axios.post('observations', form)
+    let response = await axios.post('observations', form)
+    try {
+      let id             = response.data.data.observation_id
+      let imageResponses = await this.uploadImages(observation, id, callback)
+    } catch (error) {
+      this.delete(observation).then(() => {
+        realm.write(() => {
+          realmObservation.synced   = false
+          realmObservation.serverID = -1
+        })
+      }).catch(error => {
+        throw error
+      })
+
+      throw error
+    }
+
+    let realmObservation = realm.objects('Submission').filtered(`id == ${observation.id}`)[0]
+    realm.write(() => {
+      realmObservation.synced   = true
+      realmObservation.serverID = response.data.data.observation_id
+    })
+
+    return response
   }
 
   /**
@@ -52,14 +74,35 @@ class Observation {
     return await axios.get(`observations/?api_token=${this.api_token}`)
   }
 
+  /**
+   * Delete an observation from the server.
+   *
+   * @param observation
+   * @return {Promise<*>}
+   */
+  async delete(observation) {
+    this._setApiToken()
+
+    if (this.api_token === false) {
+      throw Error('User not signed in')
+    }
+
+    return await axios.delete(`observation/${observation.serverID}`, {
+      params: {
+        api_token: this.api_token
+      }
+    })
+  }
+
 
   /**
    * Sync a given observation.
    *
-   * @param observation
+   * @param {Object} observation
+   * @param {Function} callback
    * @returns {Promise.<*>}
    */
-  async update(observation) {
+  async update(observation, callback) {
     this._setApiToken()
 
     if (this.api_token === false) {
@@ -76,20 +119,26 @@ class Observation {
       return
     }
 
-    let form = this._setUpForm(observation)
+    let form     = this._setUpForm(observation)
+    let response = await axios.post(`observation/${observation.serverID}`, form)
 
-    return await axios.post(`observation/${observation.serverID}`, form)
+    try {
+      await this.uploadImages(observation, observation.serverID, callback)
+    } catch (error) {
+      throw error
+    }
+
+    return response
   }
 
   /**
    * Incrementally upload images of a given observation.
    * @param {Object} observation
-   * @param {Object} options: {onError: Function, onSuccess: Function}
-   *                   onError is called per error.
-   *                   onSuccess is called per response
+   * @param {Number} id Observation Server ID
+   * @param {Function} onSuccess
    * @return {Promise<Array>} An array of all successful responses
    */
-  async uploadImages(observation, options) {
+  async uploadImages(observation, id, onSuccess) {
     const forms  = this._setUpImagesForm(observation)
     const length = forms.length
 
@@ -97,20 +146,18 @@ class Observation {
 
     for (let i = 0; i < forms.length; i++) {
       try {
-        let response = await axios.post(`observation/image/${observation.serverID}`, forms[i])
+        let response = await axios.post(`observation/image/${id}`, forms[i])
         responses.push(response)
 
-        if (typeof options.onSuccess === 'function') {
-          options.onSuccess({
+        if (typeof onSuccess === 'function') {
+          onSuccess({
             completed: i + 1,
             total    : length,
             response : response
           })
         }
       } catch (error) {
-        if (typeof options.onError === 'function') {
-          options.onError(error)
-        }
+        throw error
       }
     }
 
