@@ -20,7 +20,7 @@ import File from '../helpers/File'
 import moment from 'moment'
 import Observation from '../helpers/Observation'
 import MapView from 'react-native-maps'
-import { isIphoneX } from 'react-native-iphone-x-helper'
+import {isIphoneX} from 'react-native-iphone-x-helper'
 import {ACFCollection} from '../resources/descriptions'
 import Spinner from '../components/Spinner'
 import realm from '../db/Schema'
@@ -152,29 +152,6 @@ export default class SubmittedScreen extends Screen {
       this.setState({
         uploaded: true,
         loading : false
-      })
-
-      observation = realm.objects('Submission').filtered(`id == ${observation.id}`)[0]
-      realm.write(() => {
-        let data = response.data.data
-
-        observation.serverID = data.observation_id
-        observation.synced   = true
-
-        Observation.uploadImages(observation, {
-          onError: (error) => {
-            // Handle error for a single image here
-            // Or collect errors and inform the user about them
-            // when done since we don't want to throw too many alerts
-            // if more than 1 error occurs
-            console.log(error)
-            alert(error)
-          },
-          onSuccess: (data) => {
-            // We can use this to inform the user about progress
-            console.log(`Completed ${data.completed} out of ${data.total}`)
-          }
-        })
       })
 
       DeviceEventEmitter.emit('observationUploaded')

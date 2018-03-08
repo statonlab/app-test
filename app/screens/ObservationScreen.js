@@ -131,36 +131,12 @@ export default class ObservationScreen extends Screen {
   upload(entry) {
     this.refs.spinner.open()
     Observation.upload(entry).then(response => {
-      let data   = response.data.data
-      submission = realm.objects('Submission').filtered(`id == ${entry.id}`)
-      if (submission.length > 0) {
-        let observation = submission[0]
-        realm.write(() => {
-          observation.serverID = data.observation_id
-          observation.synced   = true
-
-          Observation.uploadImages(observation, {
-            onError: (error) => {
-              // Handle error for a single image here
-              // Or collect errors and inform the user about them
-              // when done since we don't want to throw too many alerts
-              // if more than 1 error occurs
-              console.log(error)
-            },
-            onSuccess: (data) => {
-              // We can use this to inform the user about progress
-              console.log(`Completed ${data.completed} out of ${data.total}`)
-            }
-          })
-        })
-
-        this.refs.spinner.close()
-        this.setState({
-          synced    : true,
-          noticeText: 'Entry synced successfully!'
-        })
-        this.refs.snackbar.showBar()
-      }
+      this.refs.spinner.close()
+      this.setState({
+        synced    : true,
+        noticeText: 'Entry synced successfully!'
+      })
+      this.refs.snackbar.showBar()
       DeviceEventEmitter.emit('observationUploaded')
     }).catch(error => {
       console.log(error)
@@ -184,20 +160,6 @@ export default class ObservationScreen extends Screen {
           let observation = submission[0]
           realm.write(() => {
             observation.needs_update = false
-
-            Observation.uploadImages(observation, {
-              onError: (error) => {
-                // Handle error for a single image here
-                // Or collect errors and inform the user about them
-                // when done since we don't want to throw too many alerts
-                // if more than 1 error occurs
-                console.log(error)
-              },
-              onSuccess: (data) => {
-                // We can use this to inform the user about progress
-                console.log(`Completed ${data.completed} out of ${data.total}`)
-              }
-            })
           })
           this.refs.spinner.close()
           this.setState({

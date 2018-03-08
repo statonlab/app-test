@@ -27,14 +27,14 @@ export default class UploadButton extends Component {
    * Set the unsynced observations in the state.
    */
   getObservations() {
-    let observations = realm.objects('Submission').filtered('synced == false')
+    let observations = realm.objects('Submission').filtered('synced == false OR needs_update == true')
     if (observations.length > 0) {
       this.setState({
         show: true,
         observations
       })
     } else {
-      this.setState({show: false})
+      this.setState({show: false, observations: []})
     }
   }
 
@@ -52,26 +52,14 @@ export default class UploadButton extends Component {
 
     this.state.observations.forEach(async observation => {
       try {
-        let response = await Observation.upload(observation)
-        realm.write(() => {
-          observation.synced   = true
-          observation.serverID = response.data.data.observation_id
-
-          Observation.uploadImages(observation, {
-            onError: (error) => {
-              // Handle error for a single image here
-              // Or collect errors and inform the user about them
-              // when done since we don't want to throw too many alerts
-              // if more than 1 error occurs
-              console.log(error)
-            },
-            onSuccess: (data) => {
-              // We can use this to inform the user about progress
-              console.log(`Completed ${data.completed} out of ${data.total}`)
-            }
+        if (!observation.needs_update) {
+          await Observation.upload(observation)
+        } else {
+          await Observation.update(observation)
+          realm.write(() => {
+            observation.needs_update = false
           })
-        })
-
+        }
         this.done()
         uploaded++
       } catch (error) {
