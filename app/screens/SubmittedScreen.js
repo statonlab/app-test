@@ -160,6 +160,21 @@ export default class SubmittedScreen extends Screen {
 
         observation.serverID = data.observation_id
         observation.synced   = true
+
+        Observation.uploadImages(observation, {
+          onError: (error) => {
+            // Handle error for a single image here
+            // Or collect errors and inform the user about them
+            // when done since we don't want to throw too many alerts
+            // if more than 1 error occurs
+            console.log(error)
+            alert(error)
+          },
+          onSuccess: (data) => {
+            // We can use this to inform the user about progress
+            console.log(`Completed ${data.completed} out of ${data.total}`)
+          }
+        })
       })
 
       DeviceEventEmitter.emit('observationUploaded')

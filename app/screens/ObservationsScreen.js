@@ -306,9 +306,25 @@ export default class ObservationsScreen extends Screen {
           realm.write(() => {
             observation.synced         = true
             observation.observation_id = response.data.data.observation_id
+
+            Observation.uploadImages(observation, {
+              onError: (error) => {
+                // Handle error for a single image here
+                // Or collect errors and inform the user about them
+                // when done since we don't want to throw too many alerts
+                // if more than 1 error occurs
+                console.log(error)
+              },
+              onSuccess: (data) => {
+                // We can use this to inform the user about progress
+                console.log(`Completed ${data.completed} out of ${data.total}`)
+              }
+            })
+
             this._resetDataSource()
           })
           unsynced_count++
+
           DeviceEventEmitter.emit('observationUploaded')
         }).catch(error => {
           console.log(error)
@@ -337,7 +353,22 @@ export default class ObservationsScreen extends Screen {
             this._resetDataSource()
             this.refs.spinner.close()
             DeviceEventEmitter.emit('observationUploaded')
+
+            Observation.uploadImages(observation, {
+              onError: (error) => {
+                // Handle error for a single image here
+                // Or collect errors and inform the user about them
+                // when done since we don't want to throw too many alerts
+                // if more than 1 error occurs
+                console.log(error)
+              },
+              onSuccess: (data) => {
+                // We can use this to inform the user about progress
+                console.log(`Completed ${data.completed} out of ${data.total}`)
+              }
+            })
           })
+
           updated_count++
         }).catch(error => {
           updated_count++
