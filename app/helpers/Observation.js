@@ -63,7 +63,7 @@ class Observation {
     this._setApiToken()
 
     if (this.api_token === false) {
-      throw Error('User not signed in')
+      throw new Error('User not signed in')
     }
 
 
@@ -72,13 +72,49 @@ class Observation {
     }
 
     if (!observation.serverID) {
-      console.log('warning: Updating observation with no server ID.  Local only.')
+      console.log('warning: Updating observation with no server ID. Local only.')
       return
     }
 
     let form = this._setUpForm(observation)
 
     return await axios.post(`observation/${observation.serverID}`, form)
+  }
+
+  /**
+   * Incrementally upload images of a given observation.
+   * @param {Object} observation
+   * @param {Object} options: {onError: Function, onSuccess: Function}
+   *                   onError is called per error.
+   *                   onSuccess is called per response
+   * @return {Promise<Array>} An array of all successful responses
+   */
+  async uploadImages(observation, options) {
+    const forms  = this._setUpImagesForm(observation)
+    const length = forms.length
+
+    let responses = []
+
+    for (let i = 0; i < forms.length; i++) {
+      try {
+        let response = await axios.post(`observation/image/${observation.serverID}`, forms[i])
+        responses.push(response)
+
+        if (typeof options.onSuccess === 'function') {
+          options.onSuccess({
+            completed: i + 1,
+            total    : length,
+            response : response
+          })
+        }
+      } catch (error) {
+        if (typeof options.onError === 'function') {
+          options.onError(error)
+        }
+      }
+    }
+
+    return responses
   }
 
   // Private Methods
@@ -101,7 +137,7 @@ class Observation {
    * Formats the request for submission.
    *
    * @param observation
-   * @returns {FormData}
+   * @return {FormData}
    * @private
    */
   _setUpForm(observation) {
@@ -117,11 +153,23 @@ class Observation {
     form.append('api_token', this.api_token)
     form.append('mobile_id', observation.id)
 
+    return form
+  }
+
+  /**
+   *
+   * @param observation
+   * @private
+   * @return {Array}
+   */
+  _setUpImagesForm(observation) {
     let images = JSON.parse(observation.images)
+    let forms  = []
 
     // set up images
-    Object.keys(images).map((key) => {
-      images[key].map((image, i) => {
+    Object.keys(images).map(key => {
+      images[key].map(image => {
+        let form = new FormData()
         let name = image.split('/')
         name     = name[name.length - 1]
 
@@ -129,11 +177,15 @@ class Observation {
         extension     = extension[extension.length - 1]
 
         let file = this.fs.image(image)
-        form.append(`images[${key}][${i}]`, {uri: file, name: name, type: `image/${extension}`})
+        form.append('api_token', this.api_token)
+        form.append('image', {uri: file, name: name, type: `image/${extension}`})
+        form.append('key', key)
+
+        forms.push(form)
       })
     })
 
-    return form
+    return forms
   }
 
   /**
