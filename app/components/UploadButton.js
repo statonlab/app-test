@@ -27,14 +27,14 @@ export default class UploadButton extends Component {
    * Set the unsynced observations in the state.
    */
   getObservations() {
-    let observations = realm.objects('Submission').filtered('synced == false')
+    let observations = realm.objects('Submission').filtered('synced == false OR needs_update == true')
     if (observations.length > 0) {
       this.setState({
         show: true,
         observations
       })
     } else {
-      this.setState({show: false})
+      this.setState({show: false, observations: []})
     }
   }
 
@@ -52,11 +52,14 @@ export default class UploadButton extends Component {
 
     this.state.observations.forEach(async observation => {
       try {
-        let response = await Observation.upload(observation)
-        realm.write(() => {
-          observation.synced   = true
-          observation.serverID = response.data.data.observation_id
-        })
+        if (!observation.needs_update) {
+          await Observation.upload(observation)
+        } else {
+          await Observation.update(observation)
+          realm.write(() => {
+            observation.needs_update = false
+          })
+        }
         this.done()
         uploaded++
       } catch (error) {

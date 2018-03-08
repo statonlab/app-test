@@ -156,13 +156,19 @@ dependencies {
     implementation project(':react-native-image-resizer')
     implementation project(':react-native-fetch-blob')
     implementation project(':react-native-maps')
-    implementation(project(':react-native-camera')) {
-        exclude group: "com.android.support"
+    implementation (project(':react-native-camera')) {
+        exclude group: "com.google.android.gms"
+    }
+    implementation ("com.google.android.gms:play-services-vision:10.2.0") {
+        force = true
+    }
+//    implementation(project(':react-native-camera')) {
+        ///exclude group: "com.android.support"
 
         // uncomment this if also com.google.android.gms:play-services-vision versions are conflicting
         // this can happen if you use react-native-firebase
 //        exclude group: "com.google.android.gms"
-    }
+//    }
     // uncomment this if you uncommented this line (exclude group: "com.google.android.gms") above
     //    compile ('com.google.android.gms:play-services-vision:11.6.0') {
     //        force = true;

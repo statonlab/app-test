@@ -14,13 +14,14 @@ import {
   BackHandler,
   PermissionsAndroid
 } from 'react-native'
-import Camera from 'react-native-camera'
+import {RNCamera} from 'react-native-camera'
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import Colors from '../helpers/Colors'
 import Elevation from '../helpers/Elevation'
 import File from '../helpers/File'
 import ImageZoom from 'react-native-image-pan-zoom'
 import AndroidStatusBar from '../components/AndroidStatusBar'
+import PinchResponder from '../helpers/PinchResponder'
 import {isIphoneX, ifIphoneX} from 'react-native-iphone-x-helper'
 
 const android = Platform.OS === 'android'
@@ -40,8 +41,8 @@ export default class CameraScreen extends Screen {
 
     this.state = {
       camera       : {
-        type : Camera.constants.Type.back,
-        flash: Camera.constants.FlashMode.auto
+        type : RNCamera.Constants.Type.back,
+        flash: RNCamera.Constants.FlashMode.auto
       },
       selectedImage: '',
       images       : [],
@@ -51,18 +52,20 @@ export default class CameraScreen extends Screen {
       focusLeft    : 0,
       focusRight   : 0,
       hasPermission: false,
-      deletedImages: []
+      deletedImages: [],
+      zoom         : 0
     }
 
     this.isCapturing = false
 
-    this.fs = new File()
+    this.fs             = new File()
+    this.pinchResponder = new PinchResponder(this.zoom.bind(this))
   }
 
   async requestCameraPermission() {
     if (android) {
       try {
-        const granted  = await PermissionsAndroid.request(
+        const granted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.CAMERA,
           {
             title  : 'Camera Permission',
@@ -75,34 +78,32 @@ export default class CameraScreen extends Screen {
             title  : 'Storage Permission',
             message: 'We need permission to write to your storage file system'
           })
-
         if (granted === PermissionsAndroid.RESULTS.GRANTED && granted2 === PermissionsAndroid.RESULTS.GRANTED) {
           this.setState({hasPermission: true})
         } else {
-          this._cancel();
+          this.alertPermissionDenied()
+          this._cancel()
         }
       } catch (err) {
         console.warn(err)
       }
     } else {
-      Camera.checkVideoAuthorizationStatus().then(response => {
-        if (!response) {
-          Alert.alert(
-            'We need permission to access the camera.',
-            'Please fix that from Settings -> TreeSnap -> Camera.',
-            [
-              {
-                text: 'Ok', onPress: () => {
-                  this.navigator.goBack()
-                }
-              }
-            ]
-          )
-        } else {
-          this.setState({hasPermission: true})
-        }
-      })
+      this.setState({hasPermission: true})
     }
+  }
+
+  alertPermissionDenied() {
+    Alert.alert(
+      'We need permission to access the camera.',
+      'Please fix that from Settings -> TreeSnap -> Camera.',
+      [
+        {
+          text: 'Ok', onPress: () => {
+            this.navigator.goBack()
+          }
+        }
+      ]
+    )
   }
 
   /**
@@ -110,7 +111,6 @@ export default class CameraScreen extends Screen {
    * and fix the width of each page
    */
   componentDidMount() {
-
     this.requestCameraPermission()
 
     this.backEvent = BackHandler.addEventListener('hardwareBackPress', () => {
@@ -131,9 +131,10 @@ export default class CameraScreen extends Screen {
     }
   }
 
+
   render() {
     let flashIcon
-    const {auto, on, off} = Camera.constants.FlashMode
+    const {auto, on, off} = RNCamera.Constants.FlashMode
     let height            = Dimensions.get('window').height
     let width             = Dimensions.get('window').width
 
@@ -199,7 +200,9 @@ export default class CameraScreen extends Screen {
         showsHorizontalScrollIndicator={false}
         scrollEnabled={false}
       >
-        <View style={[styles.container, {width: this.state.pageWidth}]}>
+        <View style={[styles.container, {width: this.state.pageWidth}]}
+              {...this.pinchResponder.getResponderProps()}
+        >
           <View style={[styles.topToolsContainer, {width: this.state.pageWidth}]}>
             {flashIcon}
             <TouchableOpacity
@@ -216,30 +219,20 @@ export default class CameraScreen extends Screen {
             </TouchableOpacity>
           </View>
           {this.state.hasPermission ?
-            <Camera
+            <RNCamera
               ref={cam => {
                 this.camera = cam
               }}
-              captureTarget={Camera.constants.CaptureTarget.disk}
-              style={[styles.preview, {flex: 1}]}
-              keepAwake={true}
-              mirrorImage={false}
-              type={this.state.camera.type}
-              aspect={Camera.constants.Aspect.fill}
-              captureQuality="high"
-              captureAudio={false}
-              captureMode={Camera.constants.CaptureMode.still}
+              style={[{flex: 1}]}
               flashMode={this.state.camera.flash}
-              onZoomChanged={this.zoom}
-              defaultOnFocusComponent={true}
-              orientation="auto"
-              fixOrientation={true}
-              onFocusChanged={e => {
-                let focusLeft = e.nativeEvent.touchPoint.x - 40
-                let focusTop  = e.nativeEvent.touchPoint.y - 40
-                this.setState({focusLeft, focusTop})
-              }}/>
-            : <View style={[styles.preview, {backgroundColor: '#000'}]}/>}
+              autoFocus={RNCamera.Constants.AutoFocus.on}
+              captureAudio={false}
+              type={this.state.camera.type}
+              zoom={this.state.zoom}
+            />
+            :
+            <View style={[styles.preview, {backgroundColor: '#000'}]}/>
+          }
           <View style={[
             styles.toolsContainer,
             styles.bottomToolsContainer,
@@ -248,7 +241,7 @@ export default class CameraScreen extends Screen {
             <TouchableOpacity style={[styles.toolTouchable, {paddingTop: 15}]} onPress={this._cancel}>
               <Text style={[styles.toolText]}>Cancel</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.capture} onPress={this.takePicture}>
+            <TouchableOpacity style={styles.capture} onPress={this.takePicture.bind(this)}>
               {/*<Icon name="camera" size={36} color={'#fff'} style={textShadow}/>*/}
             </TouchableOpacity>
             {this.state.images.length > 0 ?
@@ -362,7 +355,6 @@ export default class CameraScreen extends Screen {
    * @private
    */
   _forward = () => {
-    console.log('forwarding')
     this.refs.page.scrollTo({x: Dimensions.get('window').width, y: 0, animated: true})
   }
 
@@ -423,19 +415,11 @@ export default class CameraScreen extends Screen {
   }
 
   /**
-   *TODO: UNDER DEVELOPMENT
-   * @param e
-   */
-  zoom = (e) => {
-    console.log(e)
-  }
-
-  /**
    * Switches the flash between auto, on and off in that order.
    */
   switchFlash = () => {
     let newFlashMode
-    const {auto, on, off} = Camera.constants.FlashMode
+    const {auto, on, off} = RNCamera.Constants.FlashMode
 
     if (this.state.camera.flash === auto) {
       newFlashMode = on
@@ -453,10 +437,17 @@ export default class CameraScreen extends Screen {
     })
   }
 
+  zoom(value) {
+    let zoom = Math.round(value * 100) / 100
+    zoom     = Math.max(zoom, 0)
+    zoom     = Math.min(zoom, 1)
+    this.setState({zoom})
+  }
+
   /**
    * Captures the image.
    */
-  takePicture = () => {
+  async takePicture() {
     // Do not allow multiple capture calls before processing
     if (this.isCapturing) {
       return
@@ -464,21 +455,34 @@ export default class CameraScreen extends Screen {
 
     this.isCapturing = true
 
-    this.camera.capture({
-      jpegQuality: 100
-    }).then(data => {
-      let image  = data.path
+    try {
+      const data = await this.camera.takePictureAsync({
+        quality           : 1,
+        // Specify a max width to avoid extra large images
+        width             : 2400,
+        // Want an actual file rather than an base64 string
+        base64            : false,
+        mirrorImage       : false,
+        // We don't want metadata, let the camera module handle orientations
+        exif              : false,
+        fixOrientation    : true,
+        forceUpOrientation: true
+      })
+
+      let image  = data.uri
       let images = this.state.images.concat(image)
       this.setState({
         selectedImage: image,
         images       : images,
         newImages    : this.state.newImages.concat(image)
       })
+
       this._forward()
-    }).catch(error => {
+    } catch (error) {
+      this.isCapturing = false
       alert(error)
       console.log(error)
-    })
+    }
   }
 
   /**
@@ -486,7 +490,7 @@ export default class CameraScreen extends Screen {
    */
   switchType = () => {
     let newType
-    const {back, front} = Camera.constants.Type
+    const {back, front} = RNCamera.Constants.Type
 
     if (this.state.camera.type === back) {
       newType = front
@@ -596,7 +600,8 @@ const styles = StyleSheet.create({
     justifyContent   : 'space-between',
     alignItems       : 'center',
     backgroundColor  : 'transparent',
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
+    zIndex           : 10000
   },
 
   capture: {
@@ -626,7 +631,9 @@ const styles = StyleSheet.create({
     flex           : 0,
     width          : 90,
     height         : undefined,
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
+    elevation      : 5,
+    zIndex         : 10000
   },
 
   topToolsContainer: {
@@ -637,7 +644,6 @@ const styles = StyleSheet.create({
     alignItems    : 'center',
     paddingTop    : getVerticalPadding(),
     position      : 'absolute',
-    zIndex        : 10,
     top           : 10
   },
 

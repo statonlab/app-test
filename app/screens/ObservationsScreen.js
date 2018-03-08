@@ -303,12 +303,9 @@ export default class ObservationsScreen extends Screen {
 
       observations.forEach(observation => {
         Observation.upload(observation).then(response => {
-          realm.write(() => {
-            observation.synced         = true
-            observation.observation_id = response.data.data.observation_id
-            this._resetDataSource()
-          })
+          this._resetDataSource()
           unsynced_count++
+
           DeviceEventEmitter.emit('observationUploaded')
         }).catch(error => {
           console.log(error)
@@ -338,6 +335,7 @@ export default class ObservationsScreen extends Screen {
             this.refs.spinner.close()
             DeviceEventEmitter.emit('observationUploaded')
           })
+
           updated_count++
         }).catch(error => {
           updated_count++

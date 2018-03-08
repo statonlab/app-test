@@ -20,6 +20,7 @@ import File from '../helpers/File'
 import moment from 'moment'
 import Observation from '../helpers/Observation'
 import MapView from 'react-native-maps'
+import {isIphoneX} from 'react-native-iphone-x-helper'
 import {ACFCollection} from '../resources/descriptions'
 import Spinner from '../components/Spinner'
 import realm from '../db/Schema'
@@ -153,14 +154,6 @@ export default class SubmittedScreen extends Screen {
         loading : false
       })
 
-      observation = realm.objects('Submission').filtered(`id == ${observation.id}`)[0]
-      realm.write(() => {
-        let data = response.data.data
-
-        observation.serverID = data.observation_id
-        observation.synced   = true
-      })
-
       DeviceEventEmitter.emit('observationUploaded')
     }).catch(error => {
       this.setState({loading: false})
@@ -177,12 +170,12 @@ export default class SubmittedScreen extends Screen {
   renderButtons(observation) {
     if (!User.loggedIn()) {
       return (
-        <View style={[styles.row, {marginTop: 0}]}>
+        <View style={[styles.row, styles.bottomRow]}>
           <TouchableOpacity style={{padding: 10}}
                             onPress={() => {
                               this.navigator.reset()
                             }}>
-            <Text style={{color: Colors.danger}}>Upload Later</Text>
+            <Text style={{color: '#fff'}}>Upload Later</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.uploadButton}
                             onPress={() => this.navigator.navigate('Login')}>
@@ -195,7 +188,7 @@ export default class SubmittedScreen extends Screen {
     return (
       <View>
         {this.state.uploaded ? null :
-          <View style={styles.row}>
+          <View style={[styles.row, styles.bottomRow]}>
             <TouchableOpacity style={{padding: 10}}
                               onPress={() => {
                                 this.navigator.reset()
@@ -209,7 +202,7 @@ export default class SubmittedScreen extends Screen {
           </View>
         }
         {this.state.uploaded ?
-          <View style={styles.row}>
+          <View style={[styles.row, styles.bottomRow]}>
             <Text style={{color: Colors.primary}}>Observation Uploaded Successfully!</Text>
             <TouchableOpacity style={[styles.uploadButton, {
               backgroundColor: Colors.primary,
@@ -235,7 +228,7 @@ export default class SubmittedScreen extends Screen {
                 showRightIcon={false}
         />
         <ScrollView style={styles.container}>
-          <View style={[styles.card]}>
+          <View style={[styles.card, {marginTop: 10}]}>
             <Text style={{color: '#444'}}>
               You may upload your observation to the TreeSnap server now or choose to upload it later.
               It is best to upload observations when a WiFi connection is available.
@@ -284,7 +277,7 @@ const styles = StyleSheet.create({
 
   card: {
     backgroundColor : '#ffffff',
-    marginTop       : 10,
+    marginBottom    : 10,
     marginHorizontal: 5,
     borderRadius    : 5,
     padding         : 10,
@@ -320,6 +313,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems    : 'center',
     marginTop     : 10
+  },
+
+  bottomRow: {
+    paddingBottom: isIphoneX() ? 15 : 0
   },
 
   text: {
