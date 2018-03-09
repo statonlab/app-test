@@ -4,10 +4,18 @@ export default class HTTPCodeHandler {
     this.errorCode = error.request.status
 
     this.message = "An unexpected error has occurred"
+
+    this._setMessage()
   }
 
+  _setMessage(){
+
+
+  }
+
+
   getMessage() {
-    return "message goes here"
+    return this.message
   }
 
 }

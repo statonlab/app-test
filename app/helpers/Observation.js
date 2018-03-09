@@ -2,6 +2,7 @@ import axios from './Axios'
 import realm from '../db/Schema'
 import File from './File'
 import moment from 'moment'
+import HTTPCodeHandler from './HTTPCodeHandler'
 
 class Observation {
   static navigationOptions = {
@@ -44,7 +45,9 @@ class Observation {
           realmObservation.serverID = -1
         })
       }).catch(error => {
-        throw error
+        new HTTPCodeHandler(error)
+        let message =  HTTPCodeHandler.getStatusMessage()
+        throw message
       })
 
       throw error
@@ -125,7 +128,10 @@ class Observation {
     try {
       await this.uploadImages(observation, observation.serverID, callback)
     } catch (error) {
-      throw error
+
+      new HTTPCodeHandler(error)
+     let message =  HTTPCodeHandler.getStatusMessage()
+      throw message
     }
 
     return response
@@ -157,8 +163,10 @@ class Observation {
           })
         }
       } catch (error) {
-        throw error
-      }
+
+        new HTTPCodeHandler(error)
+        let message =  HTTPCodeHandler.getStatusMessage()
+        throw message      }
     }
 
     return responses
@@ -270,8 +278,10 @@ class Observation {
 
       await this.downloadImages()
     } catch (error) {
-      console.log(error)
-    }
+
+      new HTTPCodeHandler(error)
+      let message =  HTTPCodeHandler.getStatusMessage()
+      throw message    }
   }
 
   /**
@@ -286,7 +296,13 @@ class Observation {
       try {
         await this.fs.download(observations[key])
       } catch (error) {
+
         console.log(`Failed to download ${observation.name}`)
+
+        new HTTPCodeHandler(error)
+        let message =  HTTPCodeHandler.getStatusMessage()
+        throw message
+
       }
     }
   }
