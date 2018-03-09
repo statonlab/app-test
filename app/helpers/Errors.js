@@ -73,18 +73,30 @@ export default class Errors {
 
     switch (errorCode) {
       case 404:
-        this.message = this.responses["404"]
+        this.errors = {'general':  [this.responses["404"]]}
         break//
-
-      case 422:// this is the complciated case
-        this.message = this.responses["422"]
-        break
-
 
       case 500:
 
-        this.message = this.responses["500"]
+        this.errors = {'general':  [this.responses["500"]]}
         break
+
+
+      case 422:
+
+        //there are 422 with custom errors, and 422s that are form validation rejections
+        let data = errors.response.data
+
+        if (data.error){//its a single error message
+          this.errors = {general: [data.error]}
+
+        }
+        else {//its a set of key: message pairs
+          this.errors = data
+        }
+
+        break
+
 
       case -1:
         //No error code.  We either have an array of errors, or,  something has gone very wrong.
