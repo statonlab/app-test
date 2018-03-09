@@ -1,4 +1,4 @@
-import Error from '../app/helpers/Error'
+import Errors from '../app/helpers/Errors'
 
 
 describe("HTTPCodeHandler checking error codes", () => {
@@ -56,24 +56,28 @@ describe("HTTPCodeHandler checking error codes", () => {
 
 
   it("should return the legend of error codes", () => {
-    let handler = new Error()
+    let handler = new Errors()
     let codes = handler.fetchCodes()
     expect(codes).toHaveProperty("404")
     expect(codes).toHaveProperty("422")
     expect(codes).toHaveProperty("500")
   })
 
-  it("should handle a basic string", () => {
-    let handler = new Error(errorString)
-    let message = handler.getMessage()
-    expect(message).toBeDefined()
-    expect(message).toBe(errorString)
 
+
+  it("should handle a basic string", () => {
+    let handler = new Errors(errorString)
+    let errors = handler.getErrors()
+    let codes = handler.fetchCodes()
+    let message = errors["general"]
+    expect(message).toBeDefined()
+    expect(message.length).toBe(1)
+    expect(message[0]).toBe(errorString)
   })
 
   it ('should handle error 500', () => {
 
-    let handler = new Error(error500)
+    let handler = new Errors(error500)
 
     let message = handler.getMessage()
     let codes = handler.fetchCodes()
@@ -85,7 +89,7 @@ describe("HTTPCodeHandler checking error codes", () => {
 
   it ('should handle error 404', () => {
 
-    let handler = new Error(error404)
+    let handler = new Errors(error404)
 
     let message = handler.getMessage()
     let codes = handler.fetchCodes()
@@ -98,7 +102,7 @@ describe("HTTPCodeHandler checking error codes", () => {
 
   it ('should handle error 422 with array', () => {
 
-    let handler = new Error(error422)
+    let handler = new Errors(error422)
 
     let message = handler.getMessage()
     let codes = handler.fetchCodes()
@@ -112,7 +116,7 @@ describe("HTTPCodeHandler checking error codes", () => {
 
   it ('should handle error 422 with custom message', () => {
 
-    let handler = new Error(error422_2)
+    let handler = new Errors(error422_2)
 
     let message = handler.getMessage()
     let codes = handler.fetchCodes()

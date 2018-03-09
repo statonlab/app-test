@@ -7,19 +7,33 @@
  *
  */
 
+//
+//EXAMPLE USAGE:
+
+// .catch(error => {
+//   const errors = new Errors(error)
+//   if(errors.has('general')) {
+//     alert(error.first('general'))
+//     return
+//   }
+//   this.setState({formErrors: errors.all()})
+// })
+
 code_responses = {"500": 'Server error 500: Please try again later',
 "404" : "some 404 error", "422" : "some 422 error"}
 
 
-export default class Error {
+export default class Errors {
 
   constructor(error) {
+
+    this.errors = {}
 
     this.responses = code_responses
 
 
     if (typeof error === 'string') {
-      this.message = error
+      this.errors = {general : [error]}
       return
     }
 
@@ -27,17 +41,13 @@ export default class Error {
       this.errorCode = error.response ? error.response.status : -1
     }
 
-    this.errors = {}
-
-    this.message = 'An unexpected error has occurred'
 
     this._extractErrors(error)
 
   }
 
-
-  getMessage() {
-    return this.message
+  getErrors() {
+    return this.errors
   }
 
 
