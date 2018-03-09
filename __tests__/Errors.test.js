@@ -100,7 +100,7 @@ describe('Errors checking error codes', () => {
     let errors  = handler.getErrors()
     let codes   = handler.fetchCodes()
 
-    let message = errors['general']//this is a different case
+    let message = errors['general']//this is a different case, so no general key
     expect(message).not.toBeDefined()
 
     let keys = Object.keys(errors)
@@ -121,6 +121,14 @@ describe('Errors checking error codes', () => {
     expect(message[0]).toBeDefined()
     expect(message[0]).toBe(fourTwentytwoCustomMessage)
 
+  })
+
+  it ('should handle an object of keys im not sure how this should behave', () => {
+
+    let handler = new Errors(errorObject)
+
+    //i dont know what to do in this case so im adding a fifailing test for now.
+    expect(true).toBe(false)
   })
 
 
