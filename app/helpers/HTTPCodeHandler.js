@@ -1,7 +1,9 @@
 export default class HTTPCodeHandler {
 
   constructor(error){
-    this.errorCode = error.request.status
+    this.errorCode = error.response ? error.response.status : -1
+
+    //code
 
     this.message = "An unexpected error has occurred"
 
@@ -10,9 +12,7 @@ export default class HTTPCodeHandler {
 
   _setMessage(){
 
-
   }
-
 
   getMessage() {
     return this.message

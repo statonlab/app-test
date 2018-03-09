@@ -3,7 +3,7 @@ import HTTPCodeHandler from '../app/helpers/HTTPCodeHandler'
 
 describe("HTTPCodeHandler checking error codes", () => {
 
-  it('should find an integer', () => {
+  it('should return a string', () => {
 
     let error = {request: {status: 400, stuff: "some stuff" }, other_stuff: {more: "stuff"}}
 
@@ -14,7 +14,6 @@ describe("HTTPCodeHandler checking error codes", () => {
     expect(message).toBeDefined()
     expect(message).toBeString()
 
-    //expect(message).toBeDefined("Success")
 
 
   })
