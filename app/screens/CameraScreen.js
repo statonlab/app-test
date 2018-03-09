@@ -203,12 +203,12 @@ export default class CameraScreen extends Screen {
         <View style={[styles.container, {width: this.state.pageWidth}]}
               {...this.pinchResponder.getResponderProps()}
         >
-          <View style={[styles.topToolsContainer, {width: this.state.pageWidth}]}>
+          <View style={[styles.topToolsContainer, {width: this.state.pageWidth, zIndex: 1000}]}>
             {flashIcon}
             <TouchableOpacity
               style={[styles.toolTouchable, {
-                alignItems  : 'flex-end',
-                paddingRight: 15
+                alignItems : 'flex-end',
+                marginRight: 15
               }]}
               onPress={this.switchType}>
               <IonIcon name="ios-reverse-camera-outline"
@@ -223,7 +223,7 @@ export default class CameraScreen extends Screen {
               ref={cam => {
                 this.camera = cam
               }}
-              style={[{flex: 1}]}
+              style={[{zIndex: 0, flex: 1}]}
               flashMode={this.state.camera.flash}
               autoFocus={RNCamera.Constants.AutoFocus.on}
               captureAudio={false}
@@ -542,12 +542,12 @@ CameraScreen.defaultProps = {
  */
 function getVerticalPadding() {
   if (Platform.OS === 'android') {
-    return 0
+    return 5
   } else {
     if (isIphoneX()) {
       return 30
     }
-    return 15
+    return 20
   }
 }
 
@@ -637,14 +637,17 @@ const styles = StyleSheet.create({
   },
 
   topToolsContainer: {
-    flex          : 0,
-    height        : undefined,
-    flexDirection : 'row',
-    justifyContent: 'space-between',
-    alignItems    : 'center',
-    paddingTop    : getVerticalPadding(),
-    position      : 'absolute',
-    top           : 10
+    flex           : 0,
+    height         : undefined,
+    flexDirection  : 'row',
+    justifyContent : 'space-between',
+    alignItems     : 'center',
+    paddingTop     : getVerticalPadding(),
+    backgroundColor: 'transparent',
+    position       : 'absolute',
+    top            : 0,
+    left           : 0,
+    right          : 0
   },
 
   bottomToolsContainer: {
