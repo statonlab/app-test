@@ -19,5 +19,6 @@ cache:
     - node_modules
 
 script:
-  - npm run ci
+  - npm -g i npm
+  - npm  ci
   - npm test
