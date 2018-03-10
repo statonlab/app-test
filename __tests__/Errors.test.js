@@ -123,12 +123,16 @@ describe('Errors checking error codes', () => {
 
   })
 
-  it ('should handle an object of keys im not sure how this should behave', () => {
+  it ('should handle an error object with other keys as network error', () => {
 
     let handler = new Errors(errorObject)
+    let errors  = handler.getErrors()
 
-    //i dont know what to do in this case so im adding a fifailing test for now.
-    expect(true).toBe(false)
+    let message = errors['general']
+    expect(message[0]).toBeDefined()
+
+    expect(message[0]).toBe("Network error!  Please check your internet connection and try again.")
+
   })
 
 

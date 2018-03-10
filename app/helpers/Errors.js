@@ -100,6 +100,9 @@ export default class Errors {
 
       case -1:
         //No error code.  We either have an array of errors, or,  something has gone very wrong.
+
+       this.errors = {'general': ["Network error!  Please check your internet connection and try again."]}
+
         break
 
 
