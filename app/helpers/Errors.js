@@ -109,9 +109,6 @@ export default class Errors {
     }
   }
 
-  fetchCodes() {
-    return this.responses
-  }
 
   hasField(field) {
     return this.errors.hasOwnProperty(field)

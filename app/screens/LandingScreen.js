@@ -175,7 +175,8 @@ export default class LandingScreen extends Screen {
   /**
    * Show error message if upload is unsuccessful.
    */
-  uploadError() {
+  uploadError(message) {
+
     this.setState({noticeText: 'Network error. Try again later.'})
     this.refs.snackbar.showBar()
   }

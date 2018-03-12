@@ -2,7 +2,7 @@ import axios from './Axios'
 import realm from '../db/Schema'
 import File from './File'
 import moment from 'moment'
-import HTTPCodeHandler from './HTTPCodeHandler'
+import Errors from './Errors'
 
 class Observation {
   static navigationOptions = {
@@ -45,8 +45,11 @@ class Observation {
           realmObservation.serverID = -1
         })
       }).catch(error => {
-        new HTTPCodeHandler(error)
-        let message =  HTTPCodeHandler.getStatusMessage()
+        new Errors(error)
+
+        let errors   = Errors.getErrors()
+        let message = errors.general
+
         throw message
       })
 
@@ -129,8 +132,10 @@ class Observation {
       await this.uploadImages(observation, observation.serverID, callback)
     } catch (error) {
 
-      new HTTPCodeHandler(error)
-     let message =  HTTPCodeHandler.getStatusMessage()
+      new Error(error)
+
+      let errors = Error.getErrors()
+      let message = errors.general
       throw message
     }
 
@@ -164,8 +169,11 @@ class Observation {
         }
       } catch (error) {
 
-        new HTTPCodeHandler(error)
-        let message =  HTTPCodeHandler.getStatusMessage()
+        new Error(error)
+        let errors =  Error.getErrors()
+
+        let message = errors.general
+
         throw message      }
     }
 

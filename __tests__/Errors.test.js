@@ -104,7 +104,6 @@ describe('Errors checking error codes', () => {
     expect(message).not.toBeDefined()
 
     let keys = Object.keys(errors)
-
     expect(keys).not.toContain('beer')
     expect(keys).toContain('email')
     expect(keys).toContain('name')

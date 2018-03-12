@@ -143,7 +143,7 @@ export default class WelcomeModal extends Component {
 
         return
       }
-
+//TODO:  Let Error class handle this instead
       if (response.status === 422) {
         let key     = Object.keys(response.data)[0]
         let message = response.data[key][0]
