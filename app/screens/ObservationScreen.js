@@ -169,6 +169,7 @@ export default class ObservationScreen extends Screen {
           this.refs.snackbar.showBar()
         }
       }).catch(error => {
+        console.log(error)
         this.refs.spinner.close()
         this.setState({noticeText: error})
         this.refs.snackbar.showBar()

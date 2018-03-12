@@ -50,6 +50,14 @@ export default class Errors {
     return this.errors
   }
 
+  /**
+   * Returns the responses used for different error codes: handy for testing.
+   *
+   * @returns {{'500': string, '404': string, '422': string}|*}
+   */
+  fetchCodes() {
+    return this.responses
+  }
 
   getField(field) {
     if (this.errors[field]) {
@@ -64,7 +72,7 @@ export default class Errors {
   }
 
   /**
-   * Sets an error message.
+   * Sets the errors object based on the errorCode.
    *
    * @private
    */

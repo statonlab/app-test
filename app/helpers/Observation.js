@@ -45,10 +45,11 @@ class Observation {
           realmObservation.serverID = -1
         })
       }).catch(error => {
-        new Errors(error)
+        const errors = new Errors(error)
 
-        let errors   = Errors.getErrors()
-        let message = errors.general
+        if (errors.has("general")){
+          let message = errors.getErrors().first('general')
+        }
 
         throw message
       })
@@ -132,10 +133,20 @@ class Observation {
       await this.uploadImages(observation, observation.serverID, callback)
     } catch (error) {
 
-      new Error(error)
+      //THIS ISNT HAPPENING!
 
-      let errors = Error.getErrors()
-      let message = errors.general
+      console.log("needle")
+      console.log(error)
+
+      console.log("breathe")
+
+      const error_class = new Errors(error)
+
+      let errors  = error_class.getErrors()
+      console.log(errors)
+      console.log("breathe")
+
+      let message = errors.general[0]
       throw message
     }
 
@@ -170,11 +181,12 @@ class Observation {
       } catch (error) {
 
         new Error(error)
-        let errors =  Error.getErrors()
+        let errors = Error.getErrors()
 
         let message = errors.general
 
-        throw message      }
+        throw message
+      }
     }
 
     return responses
@@ -288,8 +300,9 @@ class Observation {
     } catch (error) {
 
       new HTTPCodeHandler(error)
-      let message =  HTTPCodeHandler.getStatusMessage()
-      throw message    }
+      let message = HTTPCodeHandler.getStatusMessage()
+      throw message
+    }
   }
 
   /**
@@ -308,7 +321,7 @@ class Observation {
         console.log(`Failed to download ${observation.name}`)
 
         new HTTPCodeHandler(error)
-        let message =  HTTPCodeHandler.getStatusMessage()
+        let message = HTTPCodeHandler.getStatusMessage()
         throw message
 
       }
