@@ -170,7 +170,6 @@ export default class ObservationScreen extends Screen {
         }
       }).catch(error => {
         console.log(error)
-        console.log("its tuesday")
         this.refs.spinner.close()
         this.setState({noticeText: error})
         this.refs.snackbar.showBar()
@@ -284,8 +283,7 @@ export default class ObservationScreen extends Screen {
             this.deleteLocally()
             return
           }
-
-          console.log(error.response.status)
+          console.log(error)
           alert('Unable to delete at this time.  Please check your internet connection and try again.')
         })
     } else {

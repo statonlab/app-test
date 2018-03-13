@@ -112,8 +112,6 @@ class Observation {
    */
   async update(observation, callback) {
 
-    console.log('omega needle')
-    console.log(observation)
     this._setApiToken()
 
     if (this.api_token === false) {
@@ -135,21 +133,12 @@ class Observation {
     try {
       let response = await axios.post(`observation/${observation.serverID}`, form)
 
-
-      //  try {
       await this.uploadImages(observation, observation.serverID, callback)
 
-      //  }
     } catch (error) {
-      //THIS ISNT HAPPENING!
-
-      console.log('needle')
-
       const error_class = new Errors(error)
-
-      let errors = error_class.getErrors()
-
-      let message = errors.general[0]
+      let errors        = error_class.getErrors()
+      let message       = errors.general[0]
       throw message
 
     }
