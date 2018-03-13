@@ -11,7 +11,9 @@ import {
   Alert,
   Platform,
   TouchableOpacity,
-  BackHandler
+  BackHandler,
+  Modal,
+  KeyboardAvoidingView
 } from 'react-native'
 import moment from 'moment'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
@@ -28,7 +30,7 @@ import Spinner from '../components/Spinner'
 import AutoComplete from '../components/AutoComplete'
 import {ACFCollection} from '../resources/descriptions'
 import DCPrules from '../resources/validation'
-import {ifIphoneX} from 'react-native-iphone-x-helper'
+import {ifIphoneX, isIphoneX} from 'react-native-iphone-x-helper'
 
 const isAndroid = Platform.OS === 'android'
 
@@ -40,18 +42,19 @@ export default class Form extends Component {
     super(props)
 
     this.state = {
-      images       : {},
-      title        : this.props.title,
-      location     : {
+      images           : {},
+      title            : this.props.title,
+      location         : {
         latitude : 0,
         longitude: 0,
         accuracy : -1
       },
-      metadata     : {},
-      id           : '',
-      warnings     : {},
-      bottomMargin : new Animated.Value(0),
-      deletedImages: []
+      metadata         : {},
+      id               : '',
+      warnings         : {},
+      bottomMargin     : new Animated.Value(0),
+      deletedImages    : [],
+      showCommentsModal: false
     }
 
     this.events     = []
@@ -598,49 +601,17 @@ export default class Form extends Component {
   }
 
   /**
-   * Renders the extra comment field for hidden comments detailing directions to an observation.
-   * Not currently implemented
-   *
-   * @returns {*}
-   */
-  renderHiddenComments = () => {
-    if (this.props.formProps.locationComment) {
-      return (
-        <View style={[styles.formGroup, {flex: 0, alignItems: 'flex-start'}]}>
-          <Text style={[styles.label, {paddingTop: 5}]}>Location</Text>
-          <TextInput
-            style={[styles.textField, styles.comment]}
-            placeholder="Comments regarding the location of this tree.  These comments will only be veiwable to TreeSnap forestry partners"
-            placeholderTextColor="#aaa"
-            value={this.state.metadata.comment}
-            onChangeText={(comment) => this.setState({
-              metadata: {
-                ...this.state.metadata, locationComment: comment
-              }
-            })}
-            multiline={true}
-            numberOfLines={4}
-            underlineColorAndroid="transparent"
-          />
-        </View>
-      )
-    }
-    return null
-  }
-
-  /**
    * Render mailable submission id with special instruction modal.
    *
    * @returns {XML}
    */
   renderBiominder = () => {
-    let header      = 'Mailing Samples to the American Chestnut Foundation'
-    let specialText = ACFCollection
+    let header = 'Mailing Samples to the American Chestnut Foundation'
     return (
       <PickerModal
         style={styles.picker}
         header={header}
-        specialText={specialText}
+        specialText={ACFCollection}
         onSelect={(option) => {
           this.setState({metadata: {...this.state.metadata, [key]: option}})
         }}
@@ -734,26 +705,19 @@ export default class Form extends Component {
           <View style={[styles.card]}>
             {this.renderCameraItem('images', 'Images')}
             {this.renderForm()}
-            {this.renderHiddenComments()}
             {this.props.title === 'American Chestnut' ? this.renderBiominder() : null}
 
-            <View style={[styles.formGroup, {flex: 0, alignItems: 'flex-start'}]}>
-              <Text style={[styles.label, {paddingTop: 5}]}>Comments</Text>
-              <TextInput
-                style={[styles.textField, styles.comment]}
-                placeholder="Additional Comments"
-                placeholderTextColor="#aaa"
-                value={this.state.metadata.comment}
-                onChangeText={(comment) => this.setState({
-                  metadata: {
-                    ...this.state.metadata, comment: comment
-                  }
-                })}
-                multiline={true}
-                numberOfLines={4}
-                underlineColorAndroid="transparent"
-              />
-            </View>
+            <TouchableOpacity style={[styles.formGroup, {flex: 0, alignItems: 'flex-start'}]}
+                              onPress={() => {
+                                this.setState({showCommentsModal: true})
+                              }}>
+              <Text style={[styles.label, {paddingTop: 10}]}>Comments</Text>
+              <Text style={{
+                paddingTop: 10,
+                flex      : 1,
+                color     : this.state.metadata.comment ? '#444' : '#aaa'
+              }}>{this.state.metadata.comment || 'Add comment'}</Text>
+            </TouchableOpacity>
             <View style={[styles.formGroup, {flex: 0}]}>
               <Text style={[styles.label, {width: 60}]}>Location</Text>
               {this.props.edit ?
@@ -764,6 +728,8 @@ export default class Form extends Component {
             </View>
           </View>
         </KeyboardAwareScrollView>
+
+        {this._renderCommentsModal()}
 
         <View style={styles.footer}>
           <TouchableOpacity style={[styles.button, styles.flex1]}
@@ -781,6 +747,61 @@ export default class Form extends Component {
           </TouchableOpacity>
         </View>
       </View>
+    )
+  }
+
+  _renderCommentsModal() {
+    return (
+      <Modal
+        animationType="slide"
+        onCloseRequest={() => {
+          this.setState({showCommentsModal: false})
+        }}
+        visible={this.state.showCommentsModal}
+      >
+        <View style={styles.modalHeader}>
+          <Text style={styles.modalHeaderText}>Comments</Text>
+        </View>
+        <KeyboardAvoidingView style={{flex: 1}} 
+        {...(isAndroid ? null : {behavior: "padding"})}>
+          <View style={{flex: 1, padding: 10}}>
+            <TextInput
+              style={[styles.comment]}
+              placeholder="Additional Comments"
+              placeholderTextColor="#aaa"
+              value={this.state.metadata.comment}
+              onChangeText={(comment) => this.setState({
+                metadata: {
+                  ...this.state.metadata,
+                  comment: comment
+                }
+              })}
+              multiline={true}
+              numberOfLines={8}
+              underlineColorAndroid="transparent"
+              onEndEditing={() => this.setState({showCommentsModal: false})}
+              autoFocus={true}
+          />
+          </View>
+          <View style={{flex: 0, justifyContent: 'flex-end', borderTopWidth: 1, borderTopColor: '#eee'}}>
+            <TouchableOpacity style={[{
+                backgroundColor: '#f7f7f7',
+                flex: 0,
+                paddingVertical: 10,
+                paddingHorizontal: 15,              
+              }]}
+              onPress={() => {
+                this.setState({showCommentsModal: false})
+              }}>
+              <Text style={{
+                color: Colors.primary,
+                fontSize: 14,
+                textAlign: 'right'
+              }}>DONE</Text>
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
     )
   }
 
@@ -808,11 +829,37 @@ Form.propTypes = {
   entryInfo: PropTypes.object
 }
 
+function getVerticalPadding() {
+  if (Platform.OS === 'android') {
+    return 0
+  } else {
+    if (isIphoneX()) {
+      return 30
+    }
+    return 15
+  }
+}
+
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#f5f5f5',
     flex           : 1,
     flexDirection  : 'column'
+  },
+
+  modalHeader: {
+    backgroundColor: Colors.primary,
+    paddingTop: getVerticalPadding(),
+    paddingBottom: 10,
+    ...(new Elevation(2))
+  },
+
+  modalHeaderText: {
+    color: Colors.primaryText,
+    textAlign: 'center',
+    fontWeight: 'normal',
+    fontSize: 16,
+    paddingVertical: 5
   },
 
   card: {
@@ -944,8 +991,9 @@ const styles = StyleSheet.create({
   comment: {
     flex      : 1,
     width     : undefined,
-    height    : 130,
-    alignItems: 'flex-start'
+    height    : undefined,
+    alignItems: 'flex-start',
+    paddingVertical: 30,
   },
 
   icon: {
