@@ -1,5 +1,5 @@
 /**
- * When theres an AXIOS catch statement, we are goign to run it through this HTTP Code Handler.
+ * When theres an AXIOS catch statement, we are going to run it through this HTTP Code Handler.
  *
  * The utilizer will then run getMessage() to use the message as appropriate.
  *
@@ -19,8 +19,13 @@
 //   this.setState({formErrors: errors.all()})
 // })
 
-code_responses = {"500": 'Server error 500: Please try again later',
-"404" : "some 404 error", "422" : "some 422 error", "401" : 'You are not logged in! Please log in to upload to the server.', "403": "Authorization error: You don't have permission to access that observation."}
+const code_responses = {
+  '500': 'Server error 500: Please try again later',
+  '404': 'some 404 error',
+  '422': 'some 422 error',
+  '401': 'You are not logged in! Please log in to upload to the server.',
+  '403': 'Authorization error: You don\'t have permission to access that observation.'
+}
 
 
 export default class Errors {
@@ -31,16 +36,14 @@ export default class Errors {
 
     this.responses = code_responses
 
-
     if (typeof error === 'string') {
-      this.errors = {general : [error]}
+      this.errors = {general: [error]}
       return
     }
 
     if (typeof error === 'object') {
       this.errorCode = error.response ? error.response.status : -1
     }
-
 
     this._extractErrors(error)
 
@@ -50,7 +53,7 @@ export default class Errors {
     return this.errors
   }
 
-  first (field) {
+  first(field) {
     return this.errors[field][0]
   }
 
@@ -87,23 +90,28 @@ export default class Errors {
     errorCode = this.errorCode
 
     switch (errorCode) {
+      case 401:
+        this.errors = {'general': [this.responses['401']]}
+        break
+
+      case 403:
+        this.errors = {'general': [this.responses['403']]}
+        break
+
       case 404:
-        this.errors = {'general':  [this.responses["404"]]}
+        this.errors = {'general': [this.responses['404']]}
         break//
 
       case 500:
-
-        this.errors = {'general':  [this.responses["500"]]}
+        this.errors = {'general': [this.responses['500']]}
         break
-
-      //TODO: ADD 01 AND 403
 
       case 422:
 
         //there are 422 with custom errors, and 422s that are form validation rejections
         let data = errors.response.data
 
-        if (data.error){//its a single error message
+        if (data.error) {//its a single error message
           this.errors = {general: [data.error]}
 
         }
@@ -116,7 +124,7 @@ export default class Errors {
       default:
         //No error code or error code was -1 (unset, see intializer).  We either have an array of errors, or,  something has gone very wrong.
 
-       this.errors = {'general': ["Network error!  Please check your internet connection and try again."]}
+        this.errors = {'general': ['Network error!  Please check your internet connection and try again.']}
 
         break
 
