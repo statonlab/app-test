@@ -38,7 +38,6 @@ export default class RegistrationScreen extends Screen {
       birth_year     : '',
       zipcode        : null,
       is_anonymous   : true,
-      showSpinner    : false,
       warnings       : {},
       terms          : null,
       minorConsent   : null,
@@ -85,15 +84,15 @@ export default class RegistrationScreen extends Screen {
   axiosRequest = () => {
     let request = this.state
 
-    this.setState({showSpinner: true})
+    this.spinner.open()
 
     User.register(request).then(response => {
-      this.setState({showSpinner: false})
+      this.spinner.close()
       // Transition to Landing Scene.
       this.navigator.reset()
     }).catch(error => {
       this.handleErrorAxios(error)
-      this.setState({showSpinner: false})
+      this.spinner.close()
     })
   }
 
@@ -200,7 +199,7 @@ export default class RegistrationScreen extends Screen {
   render() {
     return (
       <View style={styles.container}>
-        <Spinner show={this.state.showSpinner}/>
+        <Spinner ref={ref => this.spinner = ref}/>
         <Header title="Register"
                 navigator={this.navigator}
                 showRightIcon={false}

@@ -7,7 +7,6 @@ import {
   StyleSheet,
   TextInput,
   Text,
-  DeviceEventEmitter,
   TouchableOpacity,
   BackHandler
 } from 'react-native'
@@ -15,11 +14,11 @@ import Header from '../components/Header'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
 import t from 'tcomb-validation'
-import axios from '../helpers/Axios'
 import realm from '../db/Schema'
 import Spinner from '../components/Spinner'
 import AText from '../components/Atext'
 import User from '../db/User'
+import Errors from '../helpers/Errors'
 
 export default class LoginScreen extends Screen {
   static navigationOptions = {
@@ -30,10 +29,9 @@ export default class LoginScreen extends Screen {
     super(props)
 
     this.state = {
-      email      : null,
-      password   : null,
-      showSpinner: false,
-      warnings   : {}
+      email   : null,
+      password: null,
+      warnings: {}
     }
 
     this.realm = realm
@@ -77,18 +75,24 @@ export default class LoginScreen extends Screen {
    * Send login request to server
    */
   loginRequest = () => {
-    this.setState({showSpinner: true})
+    this.spinner.open()
 
     User.login(this.state.email, this.state.password).then(response => {
-      this.setState({showSpinner: false})
+      this.spinner.close()
 
       if (!this.props.onLogin()) {
         this.navigator.goBack()
       }
     }).catch(error => {
-      this.setState({showSpinner: false})
-      this.handleErrorAxios(error)
-      console.log(error)
+      const errors = new Errors(error)
+      this.spinner.close()
+      if (errors.has('general')) {
+        alert(errors.first('general'))
+        return
+      }
+
+      let field = Object.keys(errors.all())[0]
+      alert(errors.first(field))
     })
   }
 
@@ -122,22 +126,11 @@ export default class LoginScreen extends Screen {
     }
   }
 
-  /**
-   * Handle server errors.
-   *
-   * @param error
-   */
-  handleErrorAxios = (error) => {
-    //if (error.response && error.response.status === 422) {
-    alert('Invalid credentials.')
-    this.setState({warnings: {emailWarning: true, passwordWarning: true}})
-  }
-
 
   render() {
     return (
       <View style={styles.container}>
-        <Spinner show={this.state.showSpinner}/>
+        <Spinner ref={ref => this.spinner = ref}/>
         <Header title="Login"
                 navigator={this.navigator}
                 showRightIcon={false}

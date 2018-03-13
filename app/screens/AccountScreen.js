@@ -19,7 +19,6 @@ export default class AccountScreen extends Screen {
     super(props)
 
     this.state = {
-      showSpinner              : false,
       name                     : '',
       anonymous                : '',
       auto_sync                : false,
@@ -178,7 +177,7 @@ export default class AccountScreen extends Screen {
       return
     }
 
-    this.setState({showSpinner: true})
+    this.spinner.open()
 
     axios.put('user', {
       api_token   : this.user.api_token,
@@ -192,6 +191,7 @@ export default class AccountScreen extends Screen {
       this.refs.snackbar.showBar()
       this.setState({userChanges: false})
       this.updateRealmUser(response.data.data)
+      this.spinner.close()
     }).catch(error => {
       if (error.response) {
         switch (error.response.status) {
@@ -206,8 +206,8 @@ export default class AccountScreen extends Screen {
       } else {
         Alert.alert('Network Error', 'Could not reach server. Make sure you have internet connection.')
       }
-    }).then(() => {
-      this.setState({showSpinner: false})
+
+      this.spinner.close()
     })
   }
 
@@ -219,7 +219,7 @@ export default class AccountScreen extends Screen {
       return
     }
 
-    this.setState({showSpinner: true})
+    this.spinner.open()
 
     axios.patch('user/password', {
       old_password             : this.state.old_password,
@@ -243,6 +243,7 @@ export default class AccountScreen extends Screen {
         console.log(e)
       }
 
+      this.spinner.close()
       this.refs.snackbar.showBar()
     }).catch(error => {
       console.log(error)
@@ -251,8 +252,8 @@ export default class AccountScreen extends Screen {
       } else {
         alert('Could not connect to server. Please try again later.')
       }
-    }).then(() => {
-      this.setState({showSpinner: false})
+
+      this.spinner.close()
     })
   }
 
@@ -303,7 +304,7 @@ export default class AccountScreen extends Screen {
   render() {
     return (
       <View style={styles.container}>
-        <Spinner show={this.state.showSpinner}/>
+        <Spinner ref={ref => this.spinner = ref}/>
         <Header title="Account"
                 navigator={this.navigator}
                 elevation={4}

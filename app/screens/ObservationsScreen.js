@@ -22,6 +22,7 @@ import File from '../helpers/File'
 import SnackBar from '../components/SnackBarNotice'
 import {ifIphoneX} from 'react-native-iphone-x-helper'
 import Guide from '../components/Guide'
+import Errors from '../helpers/Errors'
 
 export default class ObservationsScreen extends Screen {
   static navigationOptions = {
@@ -141,7 +142,7 @@ export default class ObservationsScreen extends Screen {
    * Render single row.
    *
    * @param submission
-   * @returns {XML}
+   * @returns {{XML}}
    * @private
    */
   _renderRow = (submission) => {
@@ -178,7 +179,7 @@ export default class ObservationsScreen extends Screen {
    *
    * @param data
    * @param id
-   * @returns {XML}
+   * @returns {{XML}}
    * @private
    */
   _renderSectionHeader = (data, id) => {
@@ -247,7 +248,7 @@ export default class ObservationsScreen extends Screen {
   /**
    * Render the whole list.
    *
-   * @returns {XML}
+   * @returns {{XML}}
    * @private
    */
   _renderList = () => {
@@ -266,7 +267,7 @@ export default class ObservationsScreen extends Screen {
   /**
    * In case the list is empty.
    *
-   * @returns {XML}
+   * @returns {{XML}}
    * @private
    */
   _renderEmpty = () => {
@@ -294,59 +295,84 @@ export default class ObservationsScreen extends Screen {
     })
   }
 
-  _uploadUnsynced() {
-    let observations   = realm.objects('Submission').filtered('synced == false')
-    let unsynced       = observations.length
-    let unsynced_count = 0
+  /**
+   * Upload new observations.
+   *
+   * @return {Promise<void>}
+   * @private
+   */
+  async _uploadUnsynced() {
+    let observations = realm.objects('Submission').filtered('synced == false')
+    let unsynced     = observations.length
     if (unsynced > 0) {
       this.refs.spinner.open()
 
-      observations.forEach(observation => {
-        Observation.upload(observation).then(response => {
-          this._resetDataSource()
-          unsynced_count++
+      for (let i in observations) {
+        let observation = observations[i]
 
+        try {
+          await Observation.upload(observation)
           DeviceEventEmitter.emit('observationUploaded')
-        }).catch(error => {
-          console.log(error)
-          unsynced_count++
-          if (unsynced === unsynced_count) {
-            this.refs.spinner.close()
-            this.setState({noticeText: error})
-            this.snackbar.showBar()
+          this._resetDataSource()
+        } catch (error) {
+          const errors = new Errors(error)
+
+          let message
+          if (errors.has('general')) {
+            message = errors.first('general')
+          } else {
+            message = 'Validation failed. Please make sure all fields are filled.'
           }
-        })
-      })
+
+          this.refs.spinner.close()
+          this.setState({noticeText: message})
+          this.snackbar.showBar()
+
+          break
+        }
+      }
     }
   }
 
-  _uploadUpdated() {
-    let toSync        = realm.objects('Submission').filtered('needs_update == true')
-    let updated       = toSync.length
-    let updated_count = 0
+  /**
+   * Upload edited observations.
+   *
+   * @return {Promise<void>}
+   * @private
+   */
+  async _uploadUpdated() {
+    let toSync  = realm.objects('Submission').filtered('needs_update == true')
+    let updated = toSync.length
     if (updated > 0) {
       this.refs.spinner.open()
 
-      toSync.forEach(observation => {
-        Observation.update(observation).then(response => {
+      for (let i in toSync) {
+        let observation = toSync[i]
+        try {
+          await Observation.update(observation)
           realm.write(() => {
             observation.needs_update = false
             this._resetDataSource()
             this.refs.spinner.close()
             DeviceEventEmitter.emit('observationUploaded')
           })
+        } catch (error) {
+          const errors = new Errors(error)
 
-          updated_count++
-        }).catch(error => {
-          updated_count++
-          console.log(error)
-          if (updated === updated_count) {
-            this.refs.spinner.close()
-            this.setState({noticeText: error})
-            this.snackbar.showBar()
+          let message
+          if (errors.has('general')) {
+            message = errors.first('general')
+          } else {
+            message = 'Validation failed. Please make sure all fields are filled.'
           }
-        })
-      })
+
+          this.refs.spinner.close()
+          this.setState({noticeText: message})
+          this.snackbar.showBar()
+
+          return
+        }
+      }
     }
   }
 
@@ -400,7 +426,6 @@ export default class ObservationsScreen extends Screen {
   render() {
     return (
       <View style={styles.container}>
-        <Spinner ref="spinner"/>
         <Header navigator={this.navigator}
                 title="My Observations"
                 rightIcon="help"
@@ -417,6 +442,7 @@ export default class ObservationsScreen extends Screen {
         />
         {this.state.hasData ? this._renderList() : this._renderEmpty()}
         <SnackBar ref={(snackbar) => this.snackbar = snackbar} noticeText={this.state.noticeText}/>
+        <Spinner ref="spinner"/>
       </View>
     )
   }

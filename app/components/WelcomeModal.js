@@ -37,8 +37,7 @@ export default class WelcomeModal extends Component {
       email        : '',
       password     : '',
       dateOfBirth  : new Date().getFullYear() - 13,
-      showPassword : false,
-      loading      : false
+      showPassword : false
     }
   }
 
@@ -51,7 +50,7 @@ export default class WelcomeModal extends Component {
 
     realm.write(() => {
       realm.create('Guide', {
-        screen: 'WelcomeModal',
+        screen : 'WelcomeModal',
         version: 1
       })
     })
@@ -88,9 +87,9 @@ export default class WelcomeModal extends Component {
                style={style.image}/>
         <Text style={style.title}>Observe</Text>
         <Text style={style.bodyText}>
-          Found an interesting tree?  Our scientists partners are especially interested in ash, elm, hemlock, chestnut and white oak.
+          Found an interesting tree? Our scientists partners are especially interested in ash, elm, hemlock, chestnut and white oak.
         </Text>
-      <Text style={style.bodyText}>
+        <Text style={style.bodyText}>
           Snap a picture, answer the additional
           questions and upload it to TreeSnap.
         </Text>
@@ -119,7 +118,7 @@ export default class WelcomeModal extends Component {
   }
 
   register() {
-    this.setState({loading: true})
+    this.spinner.open()
 
     User.register({
       name      : this.state.name,
@@ -127,38 +126,21 @@ export default class WelcomeModal extends Component {
       password  : this.state.password,
       birth_year: this.state.dateOfBirth
     }).then(response => {
-      this.setState({loading: false})
+      this.spinner.close()
+
       this.close()
     }).catch(error => {
-      this.setState({loading: false})
-      let response = error.response
+      this.spinner.close()
 
-      if (!response) {
-        Alert.alert('Network Error', 'Please make sure you are connect to the internet.', {
-          OK: {
-            onPress: () => {
-            }
-          }
-        })
-
-        return
-      }
-//TODO:  Let Error class handle this instead
-      if (response.status === 422) {
-        let key     = Object.keys(response.data)[0]
-        let message = response.data[key][0]
-        Alert.alert('Invalid', message, {
-          OK: {
-            onPress: () => {
-            }
-          }
-        })
+      const errors = new Errors(error)
+      if (errors.has('general')) {
+        Alert.alert('Invalid', errors.first('general'))
         return
       }
 
-      if(response.status === 500) {
-        Alert.alert('Server Error', 'Oops! Something went wrong on our part. Please try again later.')
-      }
+      // Display one field at a time
+      let field = Object.keys(errors.all())[0]
+      Alert.alert('Error', errors.first(field))
     })
   }
 
@@ -379,7 +361,7 @@ export default class WelcomeModal extends Component {
             </View>
             : null}
         </View>
-        <Spinner show={this.state.loading}/>
+        <Spinner ref={ref => this.spinner = ref}/>
       </Modal>
     )
   }

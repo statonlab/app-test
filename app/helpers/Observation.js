@@ -2,7 +2,6 @@ import axios from './Axios'
 import realm from '../db/Schema'
 import File from './File'
 import moment from 'moment'
-import Errors from './Errors'
 
 class Observation {
   static navigationOptions = {
@@ -24,7 +23,7 @@ class Observation {
   async upload(observation, callback) {
     this._setApiToken()
     if (this.api_token === false) {
-      throw Error('User not signed in')
+      throw new Error('User not signed in')
     }
 
     // Don't sync already synced record
@@ -32,39 +31,38 @@ class Observation {
       return
     }
 
-    let form = this._setUpForm(observation)
+    let realmObservation = realm.objects('Submission').filtered(`id == ${observation.id}`)[0]
+    let form             = this._setUpForm(observation)
 
-    let response = await axios.post('observations', form)
     try {
-      let id             = response.data.data.observation_id
-      let imageResponses = await this.uploadImages(observation, id, callback)
+      let response = await axios.post('observations', form)
+      let id       = response.data.data.observation_id
+      await this.uploadImages(observation, id, callback)
+
+      realm.write(() => {
+        realmObservation.synced   = true
+        realmObservation.serverID = id
+      })
+
+      return response
     } catch (error) {
-      this.delete(observation).then(() => {
-        realm.write(() => {
-          realmObservation.synced   = false
-          realmObservation.serverID = -1
-        })
-      }).catch(error => {
-        const errors = new Errors(error)
-        let message  = 'An unknown error has occurred'
-
-        if (errors.has('general')) {
-          let message = errors.getErrors().first('general')
+      // If the observation got uploaded but images failed
+      // Request to delete the observation from the server
+      if (typeof response !== 'undefined') {
+        try {
+          await this.delete(observation)
+        } catch (error) {
+          // Ignore error here since we are notifying the user of the error below
         }
+      }
 
-        throw message
+      realm.write(() => {
+        realmObservation.synced   = false
+        realmObservation.serverID = -1
       })
 
       throw error
     }
-
-    let realmObservation = realm.objects('Submission').filtered(`id == ${observation.id}`)[0]
-    realm.write(() => {
-      realmObservation.synced   = true
-      realmObservation.serverID = response.data.data.observation_id
-    })
-
-    return response
   }
 
   /**
@@ -76,7 +74,7 @@ class Observation {
     this._setApiToken()
 
     if (this.api_token === false) {
-      throw Error('User not signed in')
+      throw new Error('User not signed in')
     }
 
     return await axios.get(`observations/?api_token=${this.api_token}`)
@@ -92,7 +90,7 @@ class Observation {
     this._setApiToken()
 
     if (this.api_token === false) {
-      throw Error('User not signed in')
+      throw new Error('User not signed in')
     }
 
     return await axios.delete(`observation/${observation.serverID}`, {
@@ -111,13 +109,11 @@ class Observation {
    * @returns {Promise.<*>}
    */
   async update(observation, callback) {
-
     this._setApiToken()
 
     if (this.api_token === false) {
       throw new Error('User not signed in')
     }
-
 
     if (!observation.needs_update) {
       return
@@ -130,18 +126,9 @@ class Observation {
 
     let form = this._setUpForm(observation)
 
-    try {
-      let response = await axios.post(`observation/${observation.serverID}`, form)
+    let response = await axios.post(`observation/${observation.serverID}`, form)
+    await this.uploadImages(observation, observation.serverID, callback)
 
-      await this.uploadImages(observation, observation.serverID, callback)
-
-    } catch (error) {
-      const error_class = new Errors(error)
-      let errors        = error_class.getErrors()
-      let message       = errors.general[0]
-      throw message
-
-    }
     return response
   }
 
@@ -159,25 +146,15 @@ class Observation {
     let responses = []
 
     for (let i = 0; i < forms.length; i++) {
-      try {
-        let response = await axios.post(`observation/image/${id}`, forms[i])
-        responses.push(response)
+      let response = await axios.post(`observation/image/${id}`, forms[i])
+      responses.push(response)
 
-        if (typeof onSuccess === 'function') {
-          onSuccess({
-            completed: i + 1,
-            total    : length,
-            response : response
-          })
-        }
-      } catch (error) {
-
-        let errors    = new Errors(error)
-        let errorsOut = errors.getErrors()
-
-        let message = errorsOut.general
-
-        throw message
+      if (typeof onSuccess === 'function') {
+        onSuccess({
+          completed: i + 1,
+          total    : length,
+          response : response
+        })
       }
     }
 
