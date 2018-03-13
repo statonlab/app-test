@@ -5,6 +5,7 @@ import realm from '../db/Schema'
 import Observation from '../helpers/Observation'
 import Colors from '../helpers/Colors'
 import Elevation from '../helpers/Elevation'
+import Errors from '../helpers/Errors'
 
 export default class UploadButton extends Component {
   constructor(props) {
@@ -67,7 +68,13 @@ export default class UploadButton extends Component {
         uploaded++
         if (uploaded === len) {
           this.setState({uploading: false, show: true})
-          this.props.onError()
+          const errors = new Errors(error)
+
+          if (errors.has("general")) {
+            this.props.onError(errors.first('general'))
+          } else {
+            this.props.onError('There was a problem validating your observations.  Please ensure that all necessary fields are filled out.')
+          }
         }
       }
     })

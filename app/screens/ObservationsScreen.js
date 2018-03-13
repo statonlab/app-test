@@ -312,7 +312,7 @@ export default class ObservationsScreen extends Screen {
           unsynced_count++
           if (unsynced === unsynced_count) {
             this.refs.spinner.close()
-            this.setState({noticeText: 'Network error. Please try again later.'})
+            this.setState({noticeText: error})
             this.snackbar.showBar()
           }
         })
@@ -342,7 +342,7 @@ export default class ObservationsScreen extends Screen {
           console.log(error)
           if (updated === updated_count) {
             this.refs.spinner.close()
-            this.setState({noticeText: 'Network error. Please try again later.'})
+            this.setState({noticeText: error})
             this.snackbar.showBar()
           }
         })

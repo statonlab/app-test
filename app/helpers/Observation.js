@@ -2,6 +2,7 @@ import axios from './Axios'
 import realm from '../db/Schema'
 import File from './File'
 import moment from 'moment'
+import Errors from './Errors'
 
 class Observation {
   static navigationOptions = {
@@ -44,7 +45,14 @@ class Observation {
           realmObservation.serverID = -1
         })
       }).catch(error => {
-        throw error
+        const errors = new Errors(error)
+        let message  = 'An unknown error has occurred'
+
+        if (errors.has('general')) {
+          let message = errors.getErrors().first('general')
+        }
+
+        throw message
       })
 
       throw error
@@ -103,6 +111,7 @@ class Observation {
    * @returns {Promise.<*>}
    */
   async update(observation, callback) {
+
     this._setApiToken()
 
     if (this.api_token === false) {
@@ -119,15 +128,20 @@ class Observation {
       return
     }
 
-    let form     = this._setUpForm(observation)
-    let response = await axios.post(`observation/${observation.serverID}`, form)
+    let form = this._setUpForm(observation)
 
     try {
-      await this.uploadImages(observation, observation.serverID, callback)
-    } catch (error) {
-      throw error
-    }
+      let response = await axios.post(`observation/${observation.serverID}`, form)
 
+      await this.uploadImages(observation, observation.serverID, callback)
+
+    } catch (error) {
+      const error_class = new Errors(error)
+      let errors        = error_class.getErrors()
+      let message       = errors.general[0]
+      throw message
+
+    }
     return response
   }
 
@@ -157,7 +171,13 @@ class Observation {
           })
         }
       } catch (error) {
-        throw error
+
+        let errors    = new Errors(error)
+        let errorsOut = errors.getErrors()
+
+        let message = errorsOut.general
+
+        throw message
       }
     }
 
@@ -270,7 +290,10 @@ class Observation {
 
       await this.downloadImages()
     } catch (error) {
-      console.log(error)
+
+      new HTTPCodeHandler(error)
+      let message = HTTPCodeHandler.getStatusMessage()
+      throw message
     }
   }
 
@@ -286,7 +309,13 @@ class Observation {
       try {
         await this.fs.download(observations[key])
       } catch (error) {
+
         console.log(`Failed to download ${observation.name}`)
+
+        new HTTPCodeHandler(error)
+        let message = HTTPCodeHandler.getStatusMessage()
+        throw message
+
       }
     }
   }
