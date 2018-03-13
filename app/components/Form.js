@@ -350,6 +350,8 @@ export default class Form extends Component {
       }, true)
     })
 
+    DeviceEventEmitter.emit('newSubmission')
+
     this.fs.delete({images: this.state.deletedImages}, () => {
       this.props.navigator.goBack()
     })

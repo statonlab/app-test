@@ -6,7 +6,6 @@ import moment from 'moment'
 class Observation {
   static navigationOptions = {
     tabBarVisible: false
-
   }
 
   constructor() {
@@ -17,10 +16,11 @@ class Observation {
   /**
    * Upload record to API
    *
-   * @param observation
+   * @param {Object} observation
+   * @param {Function} callback
    * @returns {Promise<Promise>}
    */
-  async upload(observation) {
+  async upload(observation, callback) {
     this._setApiToken()
     if (this.api_token === false) {
       throw Error('User not signed in')
@@ -33,8 +33,30 @@ class Observation {
 
     let form = this._setUpForm(observation)
 
-    // Run AXIOS POST request
-    return await axios.post('observations', form)
+    let response = await axios.post('observations', form)
+    try {
+      let id             = response.data.data.observation_id
+      let imageResponses = await this.uploadImages(observation, id, callback)
+    } catch (error) {
+      this.delete(observation).then(() => {
+        realm.write(() => {
+          realmObservation.synced   = false
+          realmObservation.serverID = -1
+        })
+      }).catch(error => {
+        throw error
+      })
+
+      throw error
+    }
+
+    let realmObservation = realm.objects('Submission').filtered(`id == ${observation.id}`)[0]
+    realm.write(() => {
+      realmObservation.synced   = true
+      realmObservation.serverID = response.data.data.observation_id
+    })
+
+    return response
   }
 
   /**
@@ -52,18 +74,39 @@ class Observation {
     return await axios.get(`observations/?api_token=${this.api_token}`)
   }
 
-
   /**
-   * Sync a given observation.
+   * Delete an observation from the server.
    *
    * @param observation
-   * @returns {Promise.<*>}
+   * @return {Promise<*>}
    */
-  async update(observation) {
+  async delete(observation) {
     this._setApiToken()
 
     if (this.api_token === false) {
       throw Error('User not signed in')
+    }
+
+    return await axios.delete(`observation/${observation.serverID}`, {
+      params: {
+        api_token: this.api_token
+      }
+    })
+  }
+
+
+  /**
+   * Sync a given observation.
+   *
+   * @param {Object} observation
+   * @param {Function} callback
+   * @returns {Promise.<*>}
+   */
+  async update(observation, callback) {
+    this._setApiToken()
+
+    if (this.api_token === false) {
+      throw new Error('User not signed in')
     }
 
 
@@ -72,13 +115,53 @@ class Observation {
     }
 
     if (!observation.serverID) {
-      console.log('warning: Updating observation with no server ID.  Local only.')
+      console.log('warning: Updating observation with no server ID. Local only.')
       return
     }
 
-    let form = this._setUpForm(observation)
+    let form     = this._setUpForm(observation)
+    let response = await axios.post(`observation/${observation.serverID}`, form)
 
-    return await axios.post(`observation/${observation.serverID}`, form)
+    try {
+      await this.uploadImages(observation, observation.serverID, callback)
+    } catch (error) {
+      throw error
+    }
+
+    return response
+  }
+
+  /**
+   * Incrementally upload images of a given observation.
+   * @param {Object} observation
+   * @param {Number} id Observation Server ID
+   * @param {Function} onSuccess
+   * @return {Promise<Array>} An array of all successful responses
+   */
+  async uploadImages(observation, id, onSuccess) {
+    const forms  = this._setUpImagesForm(observation)
+    const length = forms.length
+
+    let responses = []
+
+    for (let i = 0; i < forms.length; i++) {
+      try {
+        let response = await axios.post(`observation/image/${id}`, forms[i])
+        responses.push(response)
+
+        if (typeof onSuccess === 'function') {
+          onSuccess({
+            completed: i + 1,
+            total    : length,
+            response : response
+          })
+        }
+      } catch (error) {
+        throw error
+      }
+    }
+
+    return responses
   }
 
   // Private Methods
@@ -101,7 +184,7 @@ class Observation {
    * Formats the request for submission.
    *
    * @param observation
-   * @returns {FormData}
+   * @return {FormData}
    * @private
    */
   _setUpForm(observation) {
@@ -117,11 +200,23 @@ class Observation {
     form.append('api_token', this.api_token)
     form.append('mobile_id', observation.id)
 
+    return form
+  }
+
+  /**
+   *
+   * @param observation
+   * @private
+   * @return {Array}
+   */
+  _setUpImagesForm(observation) {
     let images = JSON.parse(observation.images)
+    let forms  = []
 
     // set up images
-    Object.keys(images).map((key) => {
-      images[key].map((image, i) => {
+    Object.keys(images).map(key => {
+      images[key].map(image => {
+        let form = new FormData()
         let name = image.split('/')
         name     = name[name.length - 1]
 
@@ -129,11 +224,15 @@ class Observation {
         extension     = extension[extension.length - 1]
 
         let file = this.fs.image(image)
-        form.append(`images[${key}][${i}]`, {uri: file, name: name, type: `image/${extension}`})
+        form.append('api_token', this.api_token)
+        form.append('image', {uri: file, name: name, type: `image/${extension}`})
+        form.append('key', key)
+
+        forms.push(form)
       })
     })
 
-    return form
+    return forms
   }
 
   /**

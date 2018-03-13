@@ -131,21 +131,12 @@ export default class ObservationScreen extends Screen {
   upload(entry) {
     this.refs.spinner.open()
     Observation.upload(entry).then(response => {
-      let data   = response.data.data
-      submission = realm.objects('Submission').filtered(`id == ${entry.id}`)
-      if (submission.length > 0) {
-        let observation = submission[0]
-        realm.write(() => {
-          observation.serverID = data.observation_id
-          observation.synced   = true
-        })
-        this.refs.spinner.close()
-        this.setState({
-          synced    : true,
-          noticeText: 'Entry synced successfully!'
-        })
-        this.refs.snackbar.showBar()
-      }
+      this.refs.spinner.close()
+      this.setState({
+        synced    : true,
+        noticeText: 'Entry synced successfully!'
+      })
+      this.refs.snackbar.showBar()
       DeviceEventEmitter.emit('observationUploaded')
     }).catch(error => {
       console.log(error)
