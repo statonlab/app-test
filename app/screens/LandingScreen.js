@@ -29,8 +29,7 @@ export default class LandingScreen extends Screen {
       userLoggedIn: false,
       noticeText  : 'Success!',
       // Wait for welcome modal to finish
-      showGuide   : false,
-      loading     : false
+      showGuide   : false
     }
 
     // Hold all events so we can remove them later and prevent memory leaks
@@ -204,6 +203,7 @@ export default class LandingScreen extends Screen {
           initial={true}
           onMenuPress={this.toggleMenu.bind(this)}
         />
+        <Spinner ref={ref => this.spinner = ref}/>
         {this.state.showGuide ?
           <Guide
             ref={ref => this.guide = ref}
@@ -225,13 +225,12 @@ export default class LandingScreen extends Screen {
                 this.navigator.navigate('Tree', {title: tree.title})
               }}
               onReady={() => {
-                this.setState({loading: false})
+                this.spinner.close()
               }}
             />
           </View>
         </ScrollView>
         <SnackBarNotice ref="snackbar" noticeText={this.state.noticeText}/>
-        <Spinner show={this.state.loading}/>
       </View>
     )
   }

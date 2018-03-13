@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import PropTypes from 'prop-types'
 import {View, StyleSheet} from 'react-native'
 import {MKSpinner} from 'react-native-material-kit'
 import Elevation from '../helpers/Elevation'
@@ -9,7 +8,7 @@ export default class Spinner extends Component {
     super(props)
 
     this.state = {
-      show: true
+      show: false
     }
   }
 
@@ -21,34 +20,19 @@ export default class Spinner extends Component {
     this.setState({show: false})
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.show !== this.state.show) {
-      this.setState({show: nextProps.show})
-    }
-  }
-
-  componentDidMount() {
-    this.setState({show: this.props.show})
-  }
-
   render() {
-    let hiddenStyle = {
-      left : -999999,
-      width: 0
-    }
-
+    let hidden = !this.state.show ? {
+      width: 0,
+      left : -99999
+    } : {}
     return (
-      <View style={[styles.container, this.state.show ? {} : hiddenStyle]}>
+      <View style={[styles.container, hidden]}>
         <View style={styles.spinner}>
           <MKSpinner prgress={.5} buffer={.5}/>
         </View>
       </View>
     )
   }
-}
-
-Spinner.PropTypes = {
-  show   : PropTypes.bool.isRequired
 }
 
 const styles = StyleSheet.create({
@@ -64,7 +48,8 @@ const styles = StyleSheet.create({
     bottom         : 0,
     justifyContent : 'center',
     alignItems     : 'center',
-    zIndex         : 999999
+    zIndex         : 9999999999,
+    elevation      : 5
   },
 
   spinner: {

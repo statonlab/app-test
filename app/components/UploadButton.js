@@ -42,16 +42,14 @@ export default class UploadButton extends Component {
   /**
    * Upload observations to the server.
    */
-  upload() {
-    let len      = this.state.observations.length
-    let uploaded = 0
-
+  async upload() {
     this.setState({
       show     : false,
       uploading: true
     })
 
-    this.state.observations.forEach(async observation => {
+    for (let i in this.state.observations) {
+      let observation = this.state.observations[i]
       try {
         if (!observation.needs_update) {
           await Observation.upload(observation)
@@ -62,22 +60,19 @@ export default class UploadButton extends Component {
           })
         }
         this.done()
-        uploaded++
       } catch (error) {
-        console.log('REQUEST ERROR', error)
-        uploaded++
-        if (uploaded === len) {
-          this.setState({uploading: false, show: true})
-          const errors = new Errors(error)
-
-          if (errors.has("general")) {
-            this.props.onError(errors.first('general'))
-          } else {
-            this.props.onError('There was a problem validating your observations.  Please ensure that all necessary fields are filled out.')
-          }
+        console.log(error)
+        const errors = new Errors(error)
+        this.setState({uploading: false, show: true})
+        if (errors.has('general')) {
+          this.props.onError(errors.first('general'))
+        } else {
+          this.props.onError('Validation failed. Please ensure that all fields are filled out.')
         }
+
+        return
       }
-    })
+    }
   }
 
   done() {

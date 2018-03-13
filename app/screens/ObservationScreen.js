@@ -27,6 +27,7 @@ import File from '../helpers/File'
 import Elevation from '../helpers/Elevation'
 import ImageZoom from 'react-native-image-pan-zoom'
 import {ifIphoneX} from 'react-native-iphone-x-helper'
+import Errors from '../helpers/Errors'
 
 const trash   = (<Icon name="ios-trash" size={24} color="#fff"/>)
 const android = Platform.OS === 'android'
@@ -128,9 +129,10 @@ export default class ObservationScreen extends Screen {
    *
    * @param entry
    */
-  upload(entry) {
+  async upload(entry) {
     this.refs.spinner.open()
-    Observation.upload(entry).then(response => {
+    try {
+      await Observation.upload(entry)
       this.refs.spinner.close()
       this.setState({
         synced    : true,
@@ -138,12 +140,20 @@ export default class ObservationScreen extends Screen {
       })
       this.refs.snackbar.showBar()
       DeviceEventEmitter.emit('observationUploaded')
-    }).catch(error => {
-      console.log(error)
+    } catch (error) {
+      const errors = new Errors(error)
+
+      let message
+      if (errors.has('general')) {
+        message = errors.first('general')
+      } else {
+        message = 'Validation failed. Please make sure all fields are filled'
+      }
+
       this.refs.spinner.close()
-      this.setState({noticeText: 'Network error. Please try again later.'})
+      this.setState({noticeText: message})
       this.refs.snackbar.showBar()
-    })
+    }
   }
 
   /**
@@ -151,11 +161,12 @@ export default class ObservationScreen extends Screen {
    *
    * @param entry
    */
-  update(entry) {
+  async update(entry) {
     if (this.state.synced) {
       this.refs.spinner.open()
-      Observation.update(entry).then(response => {
-        submission = realm.objects('Submission').filtered(`id == ${entry.id}`)
+      try {
+        await Observation.update(entry)
+        let submission = realm.objects('Submission').filtered(`id == ${entry.id}`)
         if (submission.length > 0) {
           let observation = submission[0]
           realm.write(() => {
@@ -168,12 +179,20 @@ export default class ObservationScreen extends Screen {
           })
           this.refs.snackbar.showBar()
         }
-      }).catch(error => {
-        console.log(error)
+      } catch (error) {
+        const errors = new Errors(error)
+
+        let message
+        if (errors.has('general')) {
+          message = errors.first('general')
+        } else {
+          message = 'Validation failed. Please make sure all fields are filled'
+        }
+
         this.refs.spinner.close()
-        this.setState({noticeText: error})
+        this.setState({noticeText: message})
         this.refs.snackbar.showBar()
-      })
+      }
     }
   }
 

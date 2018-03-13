@@ -23,8 +23,8 @@ import MapView from 'react-native-maps'
 import {isIphoneX} from 'react-native-iphone-x-helper'
 import {ACFCollection} from '../resources/descriptions'
 import Spinner from '../components/Spinner'
-import realm from '../db/Schema'
 import User from '../db/User'
+import Errors from '../helpers/Errors'
 
 export default class SubmittedScreen extends Screen {
   static navigationOptions = {
@@ -35,7 +35,6 @@ export default class SubmittedScreen extends Screen {
     super(props)
 
     this.state   = {
-      loading : false,
       uploaded: false
     }
     this.id      = this.params.plant.id
@@ -119,7 +118,7 @@ export default class SubmittedScreen extends Screen {
   }
 
   upload(observation) {
-    this.setState({loading: true})
+    this.spinner.open()
 
     NetInfo.getConnectionInfo().then(info => {
       let type = info.type.toLowerCase()
@@ -134,7 +133,7 @@ export default class SubmittedScreen extends Screen {
           {
             text   : 'Cancel',
             onPress: () => {
-              this.setState({loading: false})
+              this.spinner.close()
             },
             style  : 'cancel'
           }
@@ -150,20 +149,19 @@ export default class SubmittedScreen extends Screen {
   doUpload(observation) {
     Observation.upload(observation).then(response => {
       this.setState({
-        uploaded: true,
-        loading : false
+        uploaded: true
       })
-
+      this.spinner.close()
       DeviceEventEmitter.emit('observationUploaded')
     }).catch(error => {
-      this.setState({loading: false})
-
-      Alert.alert('Connection Error', 'Please try uploading again later')
-      if (error.response) {
-        console.log(error.response)
-      } else {
-        console.log(error)
+      this.spinner.close()
+      const errors = new Errors(error)
+      if (errors.has('general')) {
+        Alert.alert('Error', errors.first('general'))
+        return
       }
+
+      Alert.alert('Error', 'Validation failed. Please make all fields are filled.')
     })
   }
 
@@ -264,7 +262,7 @@ export default class SubmittedScreen extends Screen {
         <View style={styles.mainFooter}>
           {this.renderButtons(observation)}
         </View>
-        <Spinner show={this.state.loading}/>
+        <Spinner ref={ref => this.spinner = ref}/>
       </View>
     )
   }

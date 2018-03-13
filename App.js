@@ -7,7 +7,6 @@ import {
 } from 'react-native'
 import Diagnostics from './app/helpers/Diagnostics'
 import Actions from './app/helpers/Actions'
-import Spinner from './app/components/Spinner'
 import SnackBarNotice from './app/components/SnackBarNotice'
 import Navigator from './app/routes/Navigator'
 import Observation from './app/helpers/Observation'
@@ -18,7 +17,6 @@ export default class App extends Component {
     super(props)
 
     this.state = {
-      loading: false,
       snackMessage: ''
     }
 
@@ -54,7 +52,6 @@ export default class App extends Component {
     } catch (error) {
       console.log(error)
     }
-
     try {
       const actions = new Actions()
       await actions.run()
@@ -79,7 +76,6 @@ export default class App extends Component {
           }}
         />
         <Navigator/>
-        <Spinner show={this.state.loading}/>
         <SnackBarNotice ref={(ref) => this.snackbar = ref} noticeText={this.state.snackMessage}/>
       </View>
     )
