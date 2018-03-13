@@ -20,7 +20,7 @@
 // })
 
 code_responses = {"500": 'Server error 500: Please try again later',
-"404" : "some 404 error", "422" : "some 422 error"}
+"404" : "some 404 error", "422" : "some 422 error", "401" : 'You are not logged in! Please log in to upload to the server.', "403": "Authorization error: You don't have permission to access that observation."}
 
 
 export default class Errors {
@@ -50,6 +50,11 @@ export default class Errors {
     return this.errors
   }
 
+  first (field) {
+    return this.errors[field][0]
+  }
+
+
   /**
    * Returns the responses used for different error codes: handy for testing.
    *
@@ -61,7 +66,9 @@ export default class Errors {
 
   getField(field) {
     if (this.errors[field]) {
-      return this.errors[field][0]
+      return this.errors[field]
+      //return this.errors[field][0]
+
     }
   }
 
@@ -89,6 +96,7 @@ export default class Errors {
         this.errors = {'general':  [this.responses["500"]]}
         break
 
+      //TODO: ADD 01 AND 403
 
       case 422:
 
@@ -105,9 +113,8 @@ export default class Errors {
 
         break
 
-
-      case -1:
-        //No error code.  We either have an array of errors, or,  something has gone very wrong.
+      default:
+        //No error code or error code was -1 (unset, see intializer).  We either have an array of errors, or,  something has gone very wrong.
 
        this.errors = {'general': ["Network error!  Please check your internet connection and try again."]}
 
@@ -118,7 +125,7 @@ export default class Errors {
   }
 
 
-  hasField(field) {
+  has(field) {
     return this.errors.hasOwnProperty(field)
   }
 

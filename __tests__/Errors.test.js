@@ -55,6 +55,29 @@ describe('Errors checking error codes', () => {
     }
   }
 
+  let error401 = {
+    response: {
+      status: 401,
+      data  : {
+        error: fourTwentytwoCustomMessage,
+        code : 100
+      }
+    }
+  }
+
+  let error403 = {
+    response: {
+      status: 403,
+      data  : {
+        error: fourTwentytwoCustomMessage,
+        code : 100
+      }
+    }
+  }
+
+
+
+
 
   it('should return the legend of error codes', () => {
     let handler = new Errors()
@@ -134,6 +157,24 @@ describe('Errors checking error codes', () => {
 
   })
 
+  it('should handle error 401', () => {
+    let handler = new Errors(error401)
+    let errors  = handler.getErrors()
+    let codes   = handler.fetchCodes()
+    let message = errors['general']
+    expect(message).toBeDefined()
+    expect(message[0]).toBe(codes['401'])
+
+  })
+
+  it('should handle error 403', () => {
+    let handler = new Errors(error403)
+    let errors  = handler.getErrors()
+    let codes   = handler.fetchCodes()
+    let message = errors['general']
+    expect(message).toBeDefined()
+    expect(message[0]).toBe(codes['403'])
+  })
 
 })
 

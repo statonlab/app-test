@@ -71,7 +71,7 @@ export default class UploadButton extends Component {
           const errors = new Errors(error)
 
           if (errors.has("general")) {
-            this.props.onError(errors.getErrors().first('general'))
+            this.props.onError(errors.first('general'))
           } else {
             this.props.onError('There was a problem validating your observations.  Please ensure that all necessary fields are filled out.')
           }

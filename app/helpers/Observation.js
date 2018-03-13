@@ -46,8 +46,9 @@ class Observation {
         })
       }).catch(error => {
         const errors = new Errors(error)
+        let message  = 'An unknown error has occurred'
 
-        if (errors.has("general")){
+        if (errors.has('general')) {
           let message = errors.getErrors().first('general')
         }
 
@@ -110,6 +111,9 @@ class Observation {
    * @returns {Promise.<*>}
    */
   async update(observation, callback) {
+
+    console.log('omega needle')
+    console.log(observation)
     this._setApiToken()
 
     if (this.api_token === false) {
@@ -126,30 +130,29 @@ class Observation {
       return
     }
 
-    let form     = this._setUpForm(observation)
-    let response = await axios.post(`observation/${observation.serverID}`, form)
+    let form = this._setUpForm(observation)
 
     try {
-      await this.uploadImages(observation, observation.serverID, callback)
-    } catch (error) {
+      let response = await axios.post(`observation/${observation.serverID}`, form)
 
+
+      //  try {
+      await this.uploadImages(observation, observation.serverID, callback)
+
+      //  }
+    } catch (error) {
       //THIS ISNT HAPPENING!
 
-      console.log("needle")
-      console.log(error)
-
-      console.log("breathe")
+      console.log('needle')
 
       const error_class = new Errors(error)
 
-      let errors  = error_class.getErrors()
-      console.log(errors)
-      console.log("breathe")
+      let errors = error_class.getErrors()
 
       let message = errors.general[0]
       throw message
-    }
 
+    }
     return response
   }
 
@@ -180,10 +183,10 @@ class Observation {
         }
       } catch (error) {
 
-        new Error(error)
-        let errors = Error.getErrors()
+        let errors    = new Errors(error)
+        let errorsOut = errors.getErrors()
 
-        let message = errors.general
+        let message = errorsOut.general
 
         throw message
       }
