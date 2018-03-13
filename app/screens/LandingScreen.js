@@ -5,12 +5,11 @@ import {
   Platform,
   Text,
   ScrollView,
-  Image,
   StyleSheet,
   DeviceEventEmitter,
   TouchableOpacity
 } from 'react-native'
-import Icon from 'react-native-vector-icons/Ionicons'
+import Spinner from '../components/Spinner'
 import realm from '../db/Schema'
 import Header from '../components/Header'
 import Elevation from '../helpers/Elevation'
@@ -20,39 +19,7 @@ import SnackBarNotice from '../components/SnackBarNotice'
 import File from '../helpers/File'
 import User from '../db/User'
 import Guide from '../components/Guide'
-
-const plants = [
-  {
-    title    : 'American Chestnut',
-    latinName: 'Castanea dentata',
-    image    : require('../img/am_chestnut3.jpg')
-  },
-  {
-    title    : 'Ash',
-    latinName: 'Fraxinus sp.',
-    image    : require('../img/ash.jpg')
-  },
-  {
-    title    : 'Hemlock',
-    latinName: 'Tsuga sp.',
-    image    : require('../img/hemlock.jpg')
-  },
-  {
-    title    : 'White Oak',
-    latinName: 'Quercus alba',
-    image    : require('../img/white_oak.jpg')
-  },
-  {
-    title    : 'American Elm',
-    latinName: 'Ulmus americana',
-    image    : require('../img/elmleaf.jpg')
-  },
-  {
-    title    : 'Other',
-    latinName: 'Other trees that aren\'t listed above',
-    image    : require('../img/forest.jpg')
-  }
-]
+import MainTrees from '../components/MainTrees'
 
 export default class LandingScreen extends Screen {
   constructor(props) {
@@ -62,16 +29,14 @@ export default class LandingScreen extends Screen {
       userLoggedIn: false,
       noticeText  : 'Success!',
       // Wait for welcome modal to finish
-      showGuide   : false
+      showGuide   : false,
+      loading     : false
     }
 
     // Hold all events so we can remove them later and prevent memory leaks
     this.events  = []
     this.fs      = new File()
     this.android = Platform.OS === 'android'
-
-    // Uncomment this line to test the guide
-    // Guide.reset()
   }
 
   /**
@@ -255,37 +220,18 @@ export default class LandingScreen extends Screen {
               this.loginButton.call(this)
             }
 
-            {plants.map((plant, index) => {
-              return (
-                <TouchableOpacity
-                  style={styles.card}
-                  key={index}
-                  onPress={() => {
-                    this.navigator.navigate('Tree', {title: plant.title})
-                  }}>
-                  <View style={[styles.flexHorizontal]}>
-                    <Image source={plant.image} style={styles.cardImage}/>
-                    <View style={[styles.cardBody, styles.flexHorizontal, styles.flexSpace]}>
-                      <View>
-                        <Text style={styles.cardTitle}>
-                          {plant.title}
-                        </Text>
-                        <Text
-                          style={plant.title !== 'Other' ? [styles.cardBodyText, styles.italics] : styles.cardBodyText}>
-                          {plant.latinName}
-                        </Text>
-                      </View>
-                      <View>
-                        <Icon name="ios-arrow-forward" size={24} style={styles.icon}/>
-                      </View>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              )
-            })}
+            <MainTrees
+              onPress={tree => {
+                this.navigator.navigate('Tree', {title: tree.title})
+              }}
+              onReady={() => {
+                this.setState({loading: false})
+              }}
+            />
           </View>
         </ScrollView>
         <SnackBarNotice ref="snackbar" noticeText={this.state.noticeText}/>
+        <Spinner show={this.state.loading}/>
       </View>
     )
   }
