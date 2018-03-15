@@ -74,7 +74,7 @@ export default class NumericModal extends Component {
 }
 
 NumericModal.propTypes = {
-  ...View.PropTypes,
+  ...View.propTypes,
   onSelect: PropTypes.func,
   setValue: PropTypes.number
 }

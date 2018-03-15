@@ -103,7 +103,7 @@ class Tabs extends Component {
   }
 }
 
-Tabs.PropTypes = {
+Tabs.propTypes = {
   elevation    : PropTypes.number,
   scrollEnabled: PropTypes.bool
 }

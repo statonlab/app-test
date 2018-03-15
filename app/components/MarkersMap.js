@@ -66,7 +66,7 @@ export default class MarkersMap extends Component {
   /**
    * Render Scene.
    *
-   * @returns {XML}
+   * @returns {{XML}}
    */
   render() {
     return (
@@ -95,7 +95,7 @@ export default class MarkersMap extends Component {
    * Render the callout for a marker.
    *
    * @param marker
-   * @returns {XML}
+   * @returns {{XML}}
    */
   renderCallout(marker) {
     return (
@@ -119,7 +119,7 @@ export default class MarkersMap extends Component {
    *
    * @param marker
    * @param index
-   * @returns {XML}
+   * @returns {{XML}}
    */
   renderMarker(marker, index) {
     return (
@@ -138,7 +138,7 @@ export default class MarkersMap extends Component {
    * need to assign a ref to the marker.
    *
    * @param marker
-   * @returns {XML}
+   * @returns {{XML}}
    */
   renderStartingMarker(marker) {
     return (

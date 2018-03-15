@@ -11,6 +11,7 @@ import {
 } from 'react-native'
 import ImageSlider from './ImageSlider'
 import Icon from 'react-native-vector-icons/Ionicons'
+import {isIphoneX} from 'react-native-iphone-x-helper'
 
 export default class ImageModal extends Component {
   constructor(props) {
@@ -18,10 +19,6 @@ export default class ImageModal extends Component {
     this.state = {
       show: false
     }
-  }
-
-  componentWillMount() {
-
   }
 
   _toggle() {
@@ -55,12 +52,14 @@ export default class ImageModal extends Component {
               <View style={styles.overlay}/>
               <TouchableOpacity
                 activeOpacity={.9}
-                style={styles.circle}
-                onPress={this._toggle.bind(this)}
-              >
+                style={[styles.circle, {marginTop: isIphoneX() ? 10 : 3}]}
+                onPress={this._toggle.bind(this)}>
                 <Icon name="md-close" size={24} color="#444" style={{marginTop: 3}}/>
               </TouchableOpacity>
-              <ImageSlider style={styles.container} images={this.props.images} captions={this.props.captions} onPress={this._toggle.bind(this)}/>
+              <ImageSlider style={styles.container}
+                           images={this.props.images}
+                           captions={this.props.captions}
+                           onPress={this._toggle.bind(this)}/>
             </View>
           </ScrollView>
         </Modal>
@@ -73,7 +72,7 @@ export default class ImageModal extends Component {
 }
 
 ImageModal.propTypes = {
-  ...TouchableOpacity.PropTypes,
+  ...TouchableOpacity.propTypes,
   images        : PropTypes.array,
   containerStyle: PropTypes.object,
   captions      : PropTypes.array

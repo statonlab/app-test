@@ -48,7 +48,7 @@ export default class HealthSafetyScreen extends Screen {
   }
 }
 
-HealthSafetyScreen.PropTypes = {
+HealthSafetyScreen.propTypes = {
   navigator: PropTypes.object.isRequired
 }
 

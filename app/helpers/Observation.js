@@ -33,10 +33,10 @@ class Observation {
 
     let realmObservation = realm.objects('Submission').filtered(`id == ${observation.id}`)[0]
     let form             = this._setUpForm(observation)
-
+    let response         = null
     try {
-      let response = await axios.post('observations', form)
-      let id       = response.data.data.observation_id
+      response = await axios.post('observations', form)
+      let id   = response.data.data.observation_id
       await this.uploadImages(observation, id, callback)
 
       realm.write(() => {
@@ -46,12 +46,14 @@ class Observation {
 
       return response
     } catch (error) {
+      console.log('TreeSnap Error', error)
       // If the observation got uploaded but images failed
       // Request to delete the observation from the server
-      if (typeof response !== 'undefined') {
+      if (response !== null) {
         try {
           await this.delete(observation)
         } catch (error) {
+          console.log('TreeSnap Error', error)
           // Ignore error here since we are notifying the user of the error below
         }
       }
@@ -237,41 +239,34 @@ class Observation {
    * if they don't already exist
    */
   async download() {
-    try {
-      let response = await this.get()
-      let records  = response.data.data
+    let response = await this.get()
+    let records  = response.data.data
 
-      records.map(record => {
-        let primaryKey = parseInt(record.mobile_id)
-        let count      = realm.objects('Submission')
-          .filtered(`serverID == ${record.observation_id} OR id == ${primaryKey}`)
-          .length
+    records.map(record => {
+      let primaryKey = parseInt(record.mobile_id)
+      let count      = realm.objects('Submission')
+        .filtered(`serverID == ${record.observation_id} OR id == ${primaryKey}`)
+        .length
 
-        if (count > 0) {
-          return
-        }
+      if (count > 0) {
+        return
+      }
 
-        realm.write(() => {
-          realm.create('Submission', {
-            id       : primaryKey,
-            name     : record.observation_category,
-            images   : JSON.stringify(record.images),
-            location : record.location,
-            date     : moment(record.date.date).format('MM-DD-YYYY HH:mm:ss').toString(),
-            synced   : true,
-            meta_data: JSON.stringify(record.meta_data),
-            serverID : parseInt(record.observation_id)
-          })
+      realm.write(() => {
+        realm.create('Submission', {
+          id       : primaryKey,
+          name     : record.observation_category,
+          images   : JSON.stringify(record.images),
+          location : record.location,
+          date     : moment(record.date.date).format('MM-DD-YYYY HH:mm:ss').toString(),
+          synced   : true,
+          meta_data: JSON.stringify(record.meta_data),
+          serverID : parseInt(record.observation_id)
         })
       })
+    })
 
-      await this.downloadImages()
-    } catch (error) {
-
-      new HTTPCodeHandler(error)
-      let message = HTTPCodeHandler.getStatusMessage()
-      throw message
-    }
+    await this.downloadImages()
   }
 
   /**
@@ -281,20 +276,7 @@ class Observation {
    */
   async downloadImages() {
     let observations = realm.objects('Submission')
-
-    for (let key in observations) {
-      try {
-        await this.fs.download(observations[key])
-      } catch (error) {
-
-        console.log(`Failed to download ${observation.name}`)
-
-        new HTTPCodeHandler(error)
-        let message = HTTPCodeHandler.getStatusMessage()
-        throw message
-
-      }
-    }
+    await this.fs.download(observations[key])
   }
 }
 

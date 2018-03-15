@@ -38,7 +38,7 @@ export default class SliderPick extends Component {
 
   /**
    * Display the current value if set
-   * @returns {XML}
+   * @returns {{XML}}
    */
   displayLegend = () => {
     if (this.state.value) {
@@ -56,7 +56,7 @@ export default class SliderPick extends Component {
   }
   /**
    * Display the help icon if there are help images to view
-   * @returns {XML}
+   * @returns {{XML}}
    */
   displayIcon   = () => {
     let captions = [this.props.description]

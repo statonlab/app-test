@@ -50,6 +50,6 @@ export default class IntermediateAccountScreen extends Screen {
   }
 }
 
-IntermediateAccountScreen.PropTypes = {
+IntermediateAccountScreen.propTypes = {
   // navigator: PropTypes.object.isRequired
 }

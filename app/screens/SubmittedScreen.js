@@ -117,6 +117,11 @@ export default class SubmittedScreen extends Screen {
     )
   }
 
+  /**
+   * Check whether we can upload using the current connection.
+   *
+   * @param observation
+   */
   upload(observation) {
     this.spinner.open()
 
@@ -161,7 +166,8 @@ export default class SubmittedScreen extends Screen {
         return
       }
 
-      Alert.alert('Error', 'Validation failed. Please make all fields are filled.')
+      let field = Object.keys(errors.all())[0]
+      Alert.alert('Error', errors.first(field))
     })
   }
 
@@ -205,8 +211,7 @@ export default class SubmittedScreen extends Screen {
             <TouchableOpacity style={[styles.uploadButton, {
               backgroundColor: Colors.primary,
               borderColor    : Colors.primary
-            }]}
-                              onPress={() => this.navigator.reset()}>
+            }]} onPress={() => this.navigator.reset()}>
               <Text style={[styles.uploadText, {color: Colors.primaryText}]}>Continue</Text>
             </TouchableOpacity>
           </View>

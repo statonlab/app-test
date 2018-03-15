@@ -157,7 +157,7 @@ export default class PickerModal extends Component {
    * Returns the text box for freeform text.  This is for the Other label.
    * DEPRECATED
    * Use AutoComplete modal instead
-   * @returns {XML}
+   * @returns {{XML}}
    */
   renderNumeric = () => {
     return (
@@ -301,7 +301,7 @@ export default class PickerModal extends Component {
 }
 
 PickerModal.propTypes = {
-  ...View.PropTypes,
+  ...View.propTypes,
   choices        : PropTypes.array,
   header         : PropTypes.string,
   onSelect       : PropTypes.func,

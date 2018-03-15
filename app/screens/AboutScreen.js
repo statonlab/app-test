@@ -62,7 +62,7 @@ export default class AboutScreen extends Screen {
   }
 }
 
-AboutScreen.PropTypes = {
+AboutScreen.propTypes = {
   navigator: PropTypes.object.isRequired
 }
 

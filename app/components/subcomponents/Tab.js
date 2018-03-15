@@ -17,7 +17,7 @@ export default class Tab extends Component {
 
 }
 
-Tab.PropTypes = {
+Tab.propTypes = {
   title: PropTypes.string.isRequired
 }
 

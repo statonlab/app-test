@@ -28,6 +28,8 @@ import Elevation from '../helpers/Elevation'
 import ImageZoom from 'react-native-image-pan-zoom'
 import {ifIphoneX} from 'react-native-iphone-x-helper'
 import Errors from '../helpers/Errors'
+import ImageModal from '../components/ImageModal'
+import ImageSlider from '../components/ImageSlider'
 
 const trash   = (<Icon name="ios-trash" size={24} color="#fff"/>)
 const android = Platform.OS === 'android'
@@ -41,14 +43,12 @@ export default class ObservationScreen extends Screen {
     super(props)
 
     this.state = {
-      imageIndex    : 0,
-      synced        : false,
-      isLoggedIn    : false,
-      needs_update  : false,
-      selectedCircle: 0,
-      pages         : 0,
-      noticeText    : '',
-      entry         : null
+      synced      : false,
+      isLoggedIn  : false,
+      needs_update: false,
+      noticeText  : '',
+      entry       : null,
+      images      : []
     }
 
     this.user = realm.objects('User')[0]
@@ -57,26 +57,33 @@ export default class ObservationScreen extends Screen {
     this.events = []
   }
 
-  componentWillMount() {
-    this.events.push(BackHandler.addEventListener('hardwareBackPress', () => {
-      this.navigator.goBack()
-      return true
-    }))
-    this.events.push(DeviceEventEmitter.addListener('userLoggedIn', this._isLoggedIn.bind(this)))
-    this.events.push(DeviceEventEmitter.addListener('editSubmission', this._reloadEntry.bind(this)))
-    this.setState({entry: this.params.plant})
-  }
-
   /**
    * Set the synced and updated status.
    */
   componentDidMount() {
     this._isLoggedIn()
 
+    this.events.push(BackHandler.addEventListener('hardwareBackPress', () => {
+      this.navigator.goBack()
+      return true
+    }))
+    this.events.push(DeviceEventEmitter.addListener('userLoggedIn', this._isLoggedIn.bind(this)))
+    this.events.push(DeviceEventEmitter.addListener('editSubmission', this._reloadEntry.bind(this)))
+
+    let entry  = this.params.plant
+    let parsed = JSON.parse(entry.images)
+    let images = []
+    Object.keys(parsed).map(key => {
+      parsed[key].map(image => {
+        images.push(this.fs.image(image))
+      })
+    })
+
     this.setState({
-      synced      : this.params.plant.synced,
-      needs_update: this.params.plant.needs_update,
-      pages       : this._generatePages(this.params.plant)
+      entry,
+      images,
+      synced      : entry.synced,
+      needs_update: entry.needs_update
     })
   }
 
@@ -147,7 +154,8 @@ export default class ObservationScreen extends Screen {
       if (errors.has('general')) {
         message = errors.first('general')
       } else {
-        message = 'Validation failed. Please make sure all fields are filled'
+        let field = Object.keys(errors.all())[0]
+        message   = errors.first(field)
       }
 
       this.refs.spinner.close()
@@ -186,7 +194,8 @@ export default class ObservationScreen extends Screen {
         if (errors.has('general')) {
           message = errors.first('general')
         } else {
-          message = 'Validation failed. Please make sure all fields are filled'
+          let field = Object.keys(errors.all())[0]
+          message   = errors.first(field)
         }
 
         this.refs.spinner.close()
@@ -248,7 +257,7 @@ export default class ObservationScreen extends Screen {
    * Render the sync button or login button if user is not logged in.
    *
    * @param entry
-   * @returns {XML}
+   * @returns {{XML}}
    * @private
    */
   _renderUploadButton(entry) {
@@ -391,53 +400,10 @@ export default class ObservationScreen extends Screen {
       ])
   }
 
-  _renderCircles() {
-    if (this.state.pages <= 1) {
-      return
-    }
-
-    // Flatten images
-    let all = []
-    for (let i = 0; i < this._generatePages(this.state.entry); i++) {
-      all.push(i)
-    }
-
-    return (
-      <View style={styles.circlesContainer}>
-        {all.map((image, index) => {
-          return <TouchableOpacity key={index}
-                                   style={[styles.circle, this.state.selectedCircle === index ? styles.selectedCircle : {}]}/>
-        })}
-      </View>
-    )
-  }
-
-  /**
-   * Scroll handler.
-   *
-   * @param event
-   * @private
-   */
-  _handleScroll(event) {
-    let width = Dimensions.get('window').width
-    let x     = event.nativeEvent.contentOffset.x
-    let pages = []
-
-    for (let i = 0; i < this.state.pages; i++) {
-      pages.push(i)
-    }
-
-    let page = pages.indexOf(x / width)
-
-    this.setState({
-      selectedCircle: page > -1 ? page : this.state.selectedCircle
-    })
-  }
-
   /**
    * Render Scene.
    *
-   * @returns {XML}
+   * @returns {{XML}}
    */
   render() {
     let entry = this.state.entry
@@ -446,8 +412,7 @@ export default class ObservationScreen extends Screen {
       return null
     }
 
-    let images = JSON.parse(entry.images)
-    let width  = Dimensions.get('window').width
+    let width = Dimensions.get('window').width
     return (
       <View style={styles.container}>
         <Spinner ref="spinner"/>
@@ -459,45 +424,15 @@ export default class ObservationScreen extends Screen {
                 }}/>
 
         <ScrollView style={styles.contentContainer} bounces={false}>
-          <View style={{position: 'relative'}}>
-            <ScrollView
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              alwaysBounceHorizontal={true}
-              pagingEnabled={true}
-              onScroll={this._handleScroll.bind(this)}
-              scrollEventThrottle={16}
-            >
-              {Object.keys(images).map((key) => {
-                if (!Array.isArray(images[key])) {
-                  return
-                }
-
-                return images[key].map((image, index) => {
-                  if (android) {
-                    return (
-                      <View style={{flex: 0, height: 250, width}} key={index}>
-                        <Image source={{uri: this.fs.image(image)}} style={styles.image}/>
-                      </View>
-                    )
-                  }
-
-                  return (
-                    <ImageZoom
-                      cropHeight={250}
-                      cropWidth={width}
-                      imageHeight={250}
-                      imageWidth={width}
-                      key={index}
-                    >
-                      <Image source={{uri: this.fs.image(image)}} style={styles.image}/>
-                    </ImageZoom>
-                  )
-                })
+          {this.state.images.length > 0 ?
+            <ImageModal images={this.state.images} style={{flexDirection: 'row'}}>
+              {this.state.images.map((image, i) => {
+                return <View key={i} style={{flex: 1, height: 200, ...(i > 0 ? {borderLeftWidth:1, borderLeftColor: '#eee'} : null)}}>
+                  <Image style={{width, height: 200, resizeMode: 'cover'}} source={{uri: image}}/>
+                </View>
               })}
-            </ScrollView>
-            {this._renderCircles()}
-          </View>
+            </ImageModal>
+            : null}
           <View style={styles.card}>
             {this._renderUploadButton(entry)}
             <View style={styles.field}>
@@ -522,16 +457,16 @@ export default class ObservationScreen extends Screen {
 }
 
 
-ObservationScreen.PropTypes = {
-  navigator: PropTypes.object.isRequired,
-  plant    : PropTypes.object.isRequired,
-  onUnmount: PropTypes.func
-}
+// ObservationScreen.propTypes = {
+//   navigator: PropTypes.object.isRequired,
+//   plant    : PropTypes.object.isRequired,
+//   onUnmount: PropTypes.func
+// }
 
-ObservationScreen.defaultProps = {
-  onUnmount: () => {
-  }
-}
+// ObservationScreen.defaultProps = {
+//   onUnmount: () => {
+//   }
+// }
 
 const styles = StyleSheet.create({
   container: {

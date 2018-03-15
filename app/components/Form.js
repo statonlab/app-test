@@ -13,10 +13,10 @@ import {
   TouchableOpacity,
   BackHandler,
   Modal,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  ScrollView
 } from 'react-native'
 import moment from 'moment'
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
@@ -454,7 +454,7 @@ export default class Form extends Component {
    * Form item will default to a picker Modal.
    *
    * @param key
-   * @returns {XML}
+   * @returns {{XML}}
    */
   populateFormItem = (key) => {
     if (typeof DCP[key] === undefined) {
@@ -603,7 +603,7 @@ export default class Form extends Component {
   /**
    * Render mailable submission id with special instruction modal.
    *
-   * @returns {XML}
+   * @returns {{XML}}
    */
   renderBiominder = () => {
     let header = 'Mailing Samples to the American Chestnut Foundation'
@@ -634,7 +634,7 @@ export default class Form extends Component {
    *
    * @param id
    * @param label
-   * @returns {XML}
+   * @returns {{XML}}
    */
   renderCameraItem = (id, label) => {
     let description = 'optional'
@@ -665,7 +665,7 @@ export default class Form extends Component {
   /**
    * Returns the form item describing photos added.
    *
-   * @returns {XML}
+   * @returns {{XML}}
    */
   renderPhotosField = (id) => {
     if (!this.state.images[id]) {
@@ -695,13 +695,11 @@ export default class Form extends Component {
     return (
       <View style={styles.container}>
         <Spinner ref="spinner"/>
-        <KeyboardAwareScrollView
+        <ScrollView
           showsVerticalScrollIndicator={false}
           extraScrollHeight={60}
           enableResetScrollToCoords={true}
-          keyboardShouldPersistTaps="always"
-          keyboardDismissMode={isAndroid ? 'none' : 'on-drag'}
-        >
+          keyboardShouldPersistTaps="always">
           <View style={[styles.card]}>
             {this.renderCameraItem('images', 'Images')}
             {this.renderForm()}
@@ -727,7 +725,7 @@ export default class Form extends Component {
               }
             </View>
           </View>
-        </KeyboardAwareScrollView>
+        </ScrollView>
 
         {this._renderCommentsModal()}
 
@@ -754,7 +752,7 @@ export default class Form extends Component {
     return (
       <Modal
         animationType="slide"
-        onCloseRequest={() => {
+        onRequestClose={() => {
           this.setState({showCommentsModal: false})
         }}
         visible={this.state.showCommentsModal}
@@ -762,7 +760,7 @@ export default class Form extends Component {
         <View style={styles.modalHeader}>
           <Text style={styles.modalHeaderText}>Comments</Text>
         </View>
-        <KeyboardAvoidingView style={{flex: 1}} 
+        <KeyboardAvoidingView style={{flex: 1}}
         {...(isAndroid ? null : {behavior: "padding"})}>
           <View style={{flex: 1, padding: 10}}>
             <TextInput
@@ -788,7 +786,7 @@ export default class Form extends Component {
                 backgroundColor: '#f7f7f7',
                 flex: 0,
                 paddingVertical: 10,
-                paddingHorizontal: 15,              
+                paddingHorizontal: 15,
               }]}
               onPress={() => {
                 this.setState({showCommentsModal: false})

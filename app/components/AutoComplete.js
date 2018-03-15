@@ -55,7 +55,7 @@ export default class AutoComplete extends Component {
 
   /**
    * If entered text matches something, render the table of suggestions
-   * @returns {XML}
+   * @returns {{XML}}
    */
   open = () => {
     this.setState({
@@ -172,14 +172,13 @@ export default class AutoComplete extends Component {
               Select a Tree
             </Text>
           </View>
-          <ScrollView style={{flex: 1}}
-                      keyboardShouldPersistTaps="always"
-                      keyboardDismissMode={Platform.OS === 'android' ? 'none' : 'on-drag'}>
-            {this.renderResults()}
-          </ScrollView>
-          <KeyboardAvoidingView style={{flex: 0, backgroundColor: '#f7f7f7'}}
-                                behavior={Platform.OS === 'android' ? 'height' : 'padding'}
-                                pointerEvents={'auto'}>
+          <KeyboardAvoidingView style={{flex: 1, backgroundColor: '#f7f7f7'}}
+                                behavior={Platform.OS === 'android' ? 'height' : 'padding'}>
+            <ScrollView style={{flex: 1}}
+                        contentContainerStyle={{flex: 1}}
+                        keyboardDismissMode={Platform.OS === 'android' ? 'none' : 'on-drag'}>
+              {this.renderResults()}
+            </ScrollView>
             <View style={[styles.textInputContainer, {paddingBottom: this.state.textFieldBottomSpacing}]}>
               <View style={{flex: 1}}>
                 <TextInput
@@ -195,7 +194,7 @@ export default class AutoComplete extends Component {
                   autoFocus={true}
                   onSubmitEditing={({nativeEvent}) => {
                     let text = nativeEvent.text
-                    if(text.length > 0) {
+                    if (text.length > 0) {
                       this.submit(nativeEvent.text)
                     }
                   }}
@@ -219,7 +218,7 @@ export default class AutoComplete extends Component {
   }
 }
 
-AutoComplete.PropTypes = {
+AutoComplete.propTypes = {
   onChange: PropTypes.func
 }
 
@@ -276,7 +275,7 @@ const styles = StyleSheet.create({
   },
 
   rowView: {
-    flex             : 1,
+    // flex             : 0,
     flexDirection    : 'column',
     paddingHorizontal: 15,
     paddingVertical  : 10,
