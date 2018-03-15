@@ -8,7 +8,10 @@ import {
   DeviceEventEmitter,
   TouchableOpacity,
   BackHandler,
-  ListView
+  SectionList,
+  TextInput,
+  Platform,
+  KeyboardAvoidingView
 } from 'react-native'
 import Header from '../components/Header'
 import Colors from '../helpers/Colors'
@@ -35,19 +38,13 @@ export default class ObservationsScreen extends Screen {
   constructor(props) {
     super(props)
 
-    this.dataSource = new ListView.DataSource({
-      rowHasChanged          : (r1, r2) => r1.id !== r2.id,
-      sectionHeaderHasChanged: () => {
-      }
-    })
-
-    this.submissions = realm.objects('Submission')
-
     this.state = {
-      hasData    : (this.submissions.length > 0),
-      submissions: this.dataSource.cloneWithRowsAndSections({}),
+      hasData    : realm.objects('Submission').length > 0,
+      submissions: [],
       isLoggedIn : false,
-      noticeText : ''
+      noticeText : '',
+      search     : '',
+      searchFocused: false
     }
 
     this.events   = []
@@ -88,13 +85,23 @@ export default class ObservationsScreen extends Screen {
    * @returns {{}}
    * @private
    */
-  _createMap() {
+  _createMap(search = '') {
     let synced   = []
     let unsynced = []
     let toUpdate = []
-    let list     = {}
+    let list     = []
 
-    this.submissions.map(submission => {
+    let submissions
+    if (search.length === 0) {
+      submissions = realm.objects('Submission').sorted('id', true)
+    } else {
+      submissions = realm
+        .objects('Submission')
+        .filtered(`name CONTAINS "${search}" OR meta_data CONTAINS "${search}"`)
+        .sorted('id', true)
+    }
+
+    submissions.map(submission => {
       if (submission.needs_update) {
         toUpdate.push(submission)
       }
@@ -105,24 +112,25 @@ export default class ObservationsScreen extends Screen {
       }
     })
 
+    if (toUpdate.length > 0) {
+      list.push({
+        title: 'Needs Updating',
+        data : toUpdate
+      })
+    }
+
     if (unsynced.length > 0) {
-      list = {
-        'Needs Uploading': unsynced
-      }
+      list.push({
+        title: 'Needs Uploading',
+        data : unsynced
+      })
     }
 
     if (synced.length > 0) {
-      list = {
-        ...list,
-        'Uploaded': synced
-      }
-    }
-
-    if (toUpdate.length > 0) {
-      list = {
-        'Needs Updating': toUpdate,
-        ...list
-      }
+      list.push({
+        title: 'Uploaded',
+        data : synced
+      })
     }
 
     return JSON.parse(JSON.stringify(list))
@@ -145,27 +153,29 @@ export default class ObservationsScreen extends Screen {
    * @returns {{XML}}
    * @private
    */
-  _renderRow = (submission) => {
-    let images    = JSON.parse(submission.images)
+  _renderRow = ({item}) => {
+    let images    = JSON.parse(item.images)
+    let meta_data = JSON.parse(item.meta_data)
     let key       = Object.keys(images)[0]
     let thumbnail = null
+    let category  = item.name === 'Other' ? `${item.name} (${meta_data.otherLabel})` : item.name
 
     if (key) {
       thumbnail = this.fs.thumbnail(images[key][0])
     }
 
     return (
-      <TouchableOpacity style={styles.row} key={submission.id}
-                        onPress={() => this._goToEntryScene(submission)}>
+      <TouchableOpacity style={styles.row} key={item.id}
+                        onPress={() => this._goToEntryScene(item)}>
         {thumbnail ?
           <Image source={{uri: thumbnail}} style={styles.image}/>
           : null}
         <View style={styles.textContainer}>
-          <Text style={styles.title}>{submission.name}</Text>
-          <Text style={styles.body}>{moment(submission.date, 'MM-DD-YYYY HH:mm:ss')
+          <Text style={styles.title}>{category}</Text>
+          <Text style={styles.body}>{moment(item.date, 'MM-DD-YYYY HH:mm:ss')
             .format('MMMM Do YYYY')}</Text>
           <Text
-            style={styles.body}>Near {submission.location.latitude.toFixed(4)}, {submission.location.longitude.toFixed(4)}</Text>
+            style={styles.body}>Near {item.location.latitude.toFixed(4)}, {item.location.longitude.toFixed(4)}</Text>
         </View>
         <Text style={[styles.textContainer, styles.rightElement]}>
           <Icon name="md-more" size={30} color="#aaa"/>
@@ -182,12 +192,12 @@ export default class ObservationsScreen extends Screen {
    * @returns {{XML}}
    * @private
    */
-  _renderSectionHeader = (data, id) => {
-    if (id === 'Needs Uploading') {
+  _renderSectionHeader = ({section}) => {
+    if (section.title === 'Needs Uploading') {
       return (
         <View style={styles.headerContainer}>
           <View style={styles.headerRow}>
-            <Text style={styles.headerText}>{id}</Text>
+            <Text style={styles.headerText}>{section.title}</Text>
             {this.state.isLoggedIn ?
               <TouchableOpacity style={styles.warningButton}
                                 onPress={this._uploadAll.bind(this)}>
@@ -207,12 +217,12 @@ export default class ObservationsScreen extends Screen {
       )
     }
 
-    if (id === 'Needs Updating') {
+    if (section.title === 'Needs Updating') {
       return (
         <View style={styles.headerContainer}>
           <View
             style={styles.headerRow}>
-            <Text style={styles.headerText}>{id}</Text>
+            <Text style={styles.headerText}>{section.title}</Text>
             {this.state.isLoggedIn ?
               <TouchableOpacity style={styles.warningButton}
                                 onPress={this._uploadAll.bind(this)}>
@@ -239,7 +249,7 @@ export default class ObservationsScreen extends Screen {
     return (
       <View style={styles.headerContainer}>
         <Text style={styles.headerText}>
-          {id} ({count})
+          {section.title} ({count})
         </Text>
       </View>
     )
@@ -254,11 +264,56 @@ export default class ObservationsScreen extends Screen {
   _renderList = () => {
     return (
       <View style={{flex: 1}}>
-        <ListView
-          dataSource={this.state.submissions}
-          renderRow={this._renderRow}
+        <SectionList
+          renderItem={this._renderRow}
           renderSectionHeader={this._renderSectionHeader}
-          enableEmptySections={true}
+          sections={this.state.submissions}
+          ListEmptyComponent={this._renderEmpty}
+          keyExtractor={item => {
+            return item.id
+          }}
+        />
+      </View>
+    )
+  }
+
+  _renderSearchBox = () => {
+    if (!this.state.hasData) {
+      return null
+    }
+
+    return (
+      <View style={{
+        backgroundColor  : '#f9f9f9',
+        borderBottomWidth: 1,
+        borderBottomColor: '#eee',
+        height           : 50,
+        padding          : 7
+      }}>
+        <TextInput
+          style={{
+            flex             : 1,
+            backgroundColor  : this.state.searchFocused ? '#fff' : '#eee',
+            paddingHorizontal: 10,
+            borderRadius     : 15,
+            borderWidth: 1,
+            borderColor: '#ececec',
+            color: '#444'
+          }}
+          value={this.state.search}
+          onChangeText={search => {
+            this._resetDataSource(search)
+            this.setState({search})
+          }}
+          onFocus={() => {
+            this.setState({searchFocused: true})
+          }}
+          onBlur={() => {
+            this.setState({searchFocused: false})
+          }}
+          placeholder={'Search'}
+          placeholderColor={'#888'}
+          underlineColorAndroid={'transparent'}
         />
       </View>
     )
@@ -271,6 +326,16 @@ export default class ObservationsScreen extends Screen {
    * @private
    */
   _renderEmpty = () => {
+    if (this.state.hasData && this.state.search.length > 0) {
+      return (
+        <View style={styles.centerContainer}>
+          <Text style={styles.emptyListText}>
+            No results found for "{this.state.search}"
+          </Text>
+        </View>
+      )
+    }
+
     return (
       <View style={styles.centerContainer}>
         <Icon name="ios-albums-outline" size={120} style={styles.emptyListIcon}/>
@@ -321,7 +386,8 @@ export default class ObservationsScreen extends Screen {
           if (errors.has('general')) {
             message = errors.first('general')
           } else {
-            message = 'Validation failed. Please make sure all fields are filled.'
+            let field = Object.keys(errors.all())[0]
+            message   = errors.first(field)
           }
 
           this.refs.spinner.close()
@@ -363,7 +429,8 @@ export default class ObservationsScreen extends Screen {
           if (errors.has('general')) {
             message = errors.first('general')
           } else {
-            message = 'Validation failed. Please make sure all fields are filled.'
+            let field = Object.keys(errors.all())[0]
+            message   = errors.first(field)
           }
 
           this.refs.spinner.close()
@@ -390,12 +457,17 @@ export default class ObservationsScreen extends Screen {
    * Reset data source with latest data.
    * @private
    */
-  _resetDataSource() {
+  _resetDataSource(search) {
     this.setState({
-      submissions: this.dataSource.cloneWithRowsAndSections(this._createMap())
+      submissions: this._createMap(search)
     })
   }
 
+  /**
+   * Get the guide.
+   *
+   * @return {*[]}
+   */
   renderGuideMessage() {
     return (
       [<View>
@@ -440,15 +512,20 @@ export default class ObservationsScreen extends Screen {
           icon="ios-leaf-outline"
           marginBottom={10}
         />
-        {this.state.hasData ? this._renderList() : this._renderEmpty()}
-        <SnackBar ref={(snackbar) => this.snackbar = snackbar} noticeText={this.state.noticeText}/>
+        <KeyboardAvoidingView
+          style={{flex: 1}}
+          behavior={Platform.os === 'android' ? 'height' : 'padding'}>
+          {this._renderSearchBox()}
+          {this._renderList()}
+        </KeyboardAvoidingView>
+        <SnackBar ref={ref => this.snackbar = ref} noticeText={this.state.noticeText}/>
         <Spinner ref="spinner"/>
       </View>
     )
   }
 }
 
-// ObservationsScreen.PropTypes = {
+// ObservationsScreen.propTypes = {
 //   navigator: PropTypes.object.isRequired
 // }
 

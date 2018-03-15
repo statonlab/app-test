@@ -38,7 +38,7 @@ export default class Checkbox extends Component {
 //<Text style={this.state.warnings.name ? [styles.label, styles.labelWarning] : styles.label}>Name</Text>
 
 
-Checkbox.PropTypes = {
+Checkbox.propTypes = {
   label   : PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   checked : PropTypes.bool,

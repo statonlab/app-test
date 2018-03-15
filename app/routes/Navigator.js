@@ -232,7 +232,7 @@ export default class Navigator extends Component {
    * Drawer component.
    *
    * @param props
-   * @return {XML}
+   * @return {{XML}}
    */
   renderDrawer(props) {
     return (
@@ -294,7 +294,7 @@ export default class Navigator extends Component {
   /**
    * IOS navigation.
    *
-   * @return {XML}
+   * @return {{XML}}
    */
   ios() {
     const Nav = new DrawerNavigator({
@@ -316,7 +316,7 @@ export default class Navigator extends Component {
   /**
    * Android Navigation.
    *
-   * @return {XML}
+   * @return {{XML}}
    */
   android() {
     const Nav = new DrawerNavigator({
@@ -353,7 +353,7 @@ export default class Navigator extends Component {
   /**
    * Main method to create the navigator.
    *
-   * @return {XML}
+   * @return {{XML}}
    */
   create() {
     if (Platform.OS === 'android') {

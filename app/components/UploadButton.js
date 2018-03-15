@@ -67,7 +67,8 @@ export default class UploadButton extends Component {
         if (errors.has('general')) {
           this.props.onError(errors.first('general'))
         } else {
-          this.props.onError('Validation failed. Please ensure that all fields are filled out.')
+          let field = Object.keys(errors.all())[0]
+          this.props.onError(errors.first(field))
         }
 
         return
@@ -103,7 +104,7 @@ export default class UploadButton extends Component {
   }
 }
 
-UploadButton.PropTypes = {
+UploadButton.propTypes = {
   label       : PropTypes.string,
   onUploadDone: PropTypes.func,
   onError     : PropTypes.func

@@ -141,7 +141,7 @@ export default class PrivacyPolicyScreen extends Screen {
   }
 }
 
-PrivacyPolicyScreen.PropTypes = {
+PrivacyPolicyScreen.propTypes = {
   navigator: PropTypes.object.isRequired
 }
 

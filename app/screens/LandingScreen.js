@@ -117,7 +117,7 @@ export default class LandingScreen extends Screen {
   /**
    * Render login button.
    *
-   * @returns {XML}
+   * @returns {{XML}}
    */
   loginButton() {
     return (

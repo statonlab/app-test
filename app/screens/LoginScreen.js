@@ -150,6 +150,7 @@ export default class LoginScreen extends Screen {
               <Text
                 style={this.state.warnings.emailWarning ? [styles.label, styles.labelWarning] : styles.label}>Email</Text>
               <TextInput
+                keyboardType={'email-address'}
                 autoCapitalize={'none'}
                 style={this.state.warnings.emailWarning ? [styles.textField, styles.textFieldWarning] : styles.textField}
                 placeholder={'Email'}
@@ -213,7 +214,7 @@ export default class LoginScreen extends Screen {
   }
 }
 
-LoginScreen.PropTypes = {
+LoginScreen.propTypes = {
   //navigator: PropTypes.object.isRequired
   onLogin: PropTypes.func
 }

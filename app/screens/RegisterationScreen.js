@@ -242,6 +242,7 @@ export default class RegistrationScreen extends Screen {
                 style={this.state.warnings.email ? [styles.label, styles.labelWarning] : styles.label}>Email</Text>
               <TextInput
                 autoCapitalize={'none'}
+                keyboardType={'email-address'}
                 style={this.state.warnings.email ? [styles.textField, styles.textFieldWarning] : styles.textField}
                 placeholder={'E.g, example@email.com'}
                 placeholderTextColor="#aaa"
@@ -373,7 +374,7 @@ export default class RegistrationScreen extends Screen {
   }
 }
 
-RegistrationScreen.PropTypes = {
+RegistrationScreen.propTypes = {
   navigator: PropTypes.object.isRequired
 }
 

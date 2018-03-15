@@ -83,7 +83,7 @@ export default class TreeScreen extends Screen {
   }
 }
 
-TreeScreen.PropTypes = {
+TreeScreen.propTypes = {
   //navigator: PropTypes.object.isRequired,
   //title    : PropTypes.string.isRequired,
   //entryInfo: PropTypes.object,

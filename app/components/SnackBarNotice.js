@@ -102,7 +102,7 @@ export default class SnackBarNotice extends Component {
   /**
    * For now will only get message icon.  In the future other icons could be displayed.
    *
-   * @returns {XML}
+   * @returns {{XML}}
    */
   getIcon = () => {
     return (

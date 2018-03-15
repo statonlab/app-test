@@ -19,7 +19,8 @@ import IonIcon from 'react-native-vector-icons/Ionicons'
 import Colors from '../helpers/Colors'
 import Elevation from '../helpers/Elevation'
 import File from '../helpers/File'
-import ImageZoom from 'react-native-image-pan-zoom'
+// import ImageZoom from 'react-native-image-pan-zoom'
+import PhotoView from 'react-native-photo-view'
 import AndroidStatusBar from '../components/AndroidStatusBar'
 import PinchResponder from '../helpers/PinchResponder'
 import {isIphoneX, ifIphoneX} from 'react-native-iphone-x-helper'
@@ -45,15 +46,18 @@ export default class CameraScreen extends Screen {
         flash: RNCamera.Constants.FlashMode.auto
       },
       selectedImage: '',
+      selectedIndex: 0,
       images       : [],
       pageWidth    : 0,
+      pageHeight   : 0,
       newImages    : [],
       focus        : new Animated.Value(0),
       focusLeft    : 0,
       focusRight   : 0,
       hasPermission: false,
       deletedImages: [],
-      zoom         : 0
+      zoom         : 0,
+      activeScale  : 1
     }
 
     this.isCapturing = false
@@ -85,7 +89,7 @@ export default class CameraScreen extends Screen {
           this._cancel()
         }
       } catch (err) {
-        console.warn(err)
+        alert(err)
       }
     } else {
       this.setState({hasPermission: true})
@@ -120,14 +124,16 @@ export default class CameraScreen extends Screen {
 
     let length = this.params.images.length
     this.setState({
-      pageWidth: Dimensions.get('window').width,
-      images   : this.params.images
+      pageWidth : Dimensions.get('window').width,
+      pageHeight: Dimensions.get('window').height,
+      images    : this.params.images
     })
 
     if (length > 0) {
-      let selectedImage = this.fs.image(this.params.images[length - 1])
+      let selectedIndex = this.params.images[length - 1]
+      let selectedImage = this.fs.image(selectedIndex)
 
-      this.setState({selectedImage})
+      this.setState({selectedImage, selectedIndex})
     }
   }
 
@@ -200,9 +206,24 @@ export default class CameraScreen extends Screen {
         showsHorizontalScrollIndicator={false}
         scrollEnabled={false}
       >
-        <View style={[styles.container, {width: this.state.pageWidth}]}
-              {...this.pinchResponder.getResponderProps()}
-        >
+        <View style={[styles.container, {width: this.state.pageWidth}]}>
+          {this.state.hasPermission ?
+            <RNCamera
+              ref={cam => {
+                this.camera = cam
+              }}
+              style={[{elevation: 0, zIndex: 0, flex: 1}]}
+              flashMode={this.state.camera.flash}
+              autoFocus={RNCamera.Constants.AutoFocus.on}
+              captureAudio={false}
+              type={this.state.camera.type}
+              zoom={this.state.zoom}
+            />
+            :
+            <View style={[styles.preview, {backgroundColor: '#000'}]}/>
+          }
+          <View style={styles.responder}
+                {...this.pinchResponder.getResponderProps()}/>
           <View style={[styles.topToolsContainer, {width: this.state.pageWidth, zIndex: 1000}]}>
             {flashIcon}
             <TouchableOpacity
@@ -218,82 +239,113 @@ export default class CameraScreen extends Screen {
               />
             </TouchableOpacity>
           </View>
-          {this.state.hasPermission ?
-            <RNCamera
-              ref={cam => {
-                this.camera = cam
-              }}
-              style={[{zIndex: 0, flex: 1}]}
-              flashMode={this.state.camera.flash}
-              autoFocus={RNCamera.Constants.AutoFocus.on}
-              captureAudio={false}
-              type={this.state.camera.type}
-              zoom={this.state.zoom}
-            />
-            :
-            <View style={[styles.preview, {backgroundColor: '#000'}]}/>
-          }
           <View style={[
             styles.toolsContainer,
             styles.bottomToolsContainer,
-            {width: this.state.pageWidth, top: height - (isIphoneX() ? 130 : 110)}
+            {width: this.state.pageWidth, bottom: isIphoneX() ? 20 : 10}
           ]}>
             <TouchableOpacity style={[styles.toolTouchable, {paddingTop: 15}]} onPress={this._cancel}>
               <Text style={[styles.toolText]}>Cancel</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.capture} onPress={this.takePicture.bind(this)}>
-              {/*<Icon name="camera" size={36} color={'#fff'} style={textShadow}/>*/}
-            </TouchableOpacity>
+            <TouchableOpacity style={styles.capture} onPress={this.takePicture.bind(this)}/>
             {this.state.images.length > 0 ?
               this._getCameraSideThumbnail()
               :
               <View style={[styles.toolTouchable, {alignItems: 'flex-end'}]}>
-                <View style={[styles.thumbnail, {backgroundColor: '#222'}]}/>
+                <View style={[styles.thumbnail, styles.cameraThumbnail, {backgroundColor: '#222'}]}/>
               </View>
             }
           </View>
         </View>
 
+        {/* Gallery View */}
         <View style={[styles.container, {
           width          : this.state.pageWidth,
-          backgroundColor: '#000'
+          height         : this.state.pageHeight,
+          backgroundColor: '#fff'
         }]}>
-          <View style={styles.header}>
-            <TouchableOpacity style={styles.headerButton} onPress={this._delete}>
-              <IonIcon name="md-trash"
-                       style={[styles.headerText, {width: 20, marginTop: 2}]}
-                       size={20}/>
-              <Text style={styles.headerText}>Delete</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.headerButton} onPress={this._done}>
-              <IonIcon name="md-checkmark"
-                       style={[styles.headerText, {width: 20, marginTop: 2}]}
-                       size={20}/>
-              <Text style={styles.headerText}>Done</Text>
-            </TouchableOpacity>
-          </View>
-          {this.state.selectedImage === '' ?
-            <View style={{flex: 1, backgroundColor: '#000'}}/> :
-            <ImageZoom
-              cropHeight={height - (isIphoneX() ? (174 + statusBarHeight) : (144 + statusBarHeight))}
-              cropWidth={width}
-              imageHeight={height - (134 + statusBarHeight)}
-              imageWidth={width}>
-              <Image source={{uri: this.state.selectedImage}}
-                     style={[styles.preview, {resizeMode: 'contain'}]}/>
-            </ImageZoom>
-          }
-          <View
-            style={[styles.toolsContainer, styles.thumbnailsContainer]}>
-            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-              {this.state.images.map(this.renderThumbnail)}
-              <TouchableOpacity style={styles.addIcon} onPress={this._back}>
-                <IonIcon name="md-add" size={30} color="#666"/>
+          <View style={{flex: 1}}>
+            <View style={styles.header}>
+              <TouchableOpacity style={styles.headerButton} onPress={this._delete}>
+                <IonIcon name="md-trash"
+                         style={[styles.headerText, {width: 20, marginTop: 2}]}
+                         size={20}/>
+                <Text style={styles.headerText}>Delete</Text>
               </TouchableOpacity>
-            </ScrollView>
+              <TouchableOpacity style={styles.headerButton} onPress={this._done}>
+                <IonIcon name="md-checkmark"
+                         style={[styles.headerText, {width: 20, marginTop: 2}]}
+                         size={20}/>
+                <Text style={styles.headerText}>Done</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={{flex: 1}}>
+              {this.state.images.length === 0 ?
+                <View style={{flex: 1}}/>
+                :
+                <ScrollView
+                  ref={ref => this.imagesScrollView = ref}
+                  horizontal={true}
+                  showsHorizontalScrollIndicator={false}
+                  pagingEnabled={true}
+                  scrollEnabled={this.state.activeScale < 1.2}
+                  showsVerticalScrollIndicator={false}
+                  scrollEventThrottle={16}
+                  onScroll={({nativeEvent}) => {
+                    const x = nativeEvent.contentOffset.x
+                    if (x % this.state.pageWidth === 0) {
+                      let selectedIndex = x / this.state.pageWidth
+                      let selectedImage = this.state.images[selectedIndex]
+                      this.setState({selectedIndex, selectedImage})
+                    }
+                  }}>
+                  {this.state.images.map(this._renderPagedImages.bind(this))}
+                </ScrollView>
+              }
+            </View>
+            <View style={[styles.thumbnailsContainer]}>
+              <ScrollView horizontal={true}
+                          showsHorizontalScrollIndicator={false}
+                          showsVerticalScrollIndicator={false}>
+                {this.state.images.map(this.renderThumbnail)}
+                <TouchableOpacity style={[styles.addIcon]} onPress={this._back}>
+                  <IonIcon name="md-add" size={30} color="#666"/>
+                </TouchableOpacity>
+              </ScrollView>
+            </View>
           </View>
         </View>
       </ScrollView>
+    )
+  }
+
+  _renderPagedImages(image, key) {
+    image = this.fs.image(image)
+    return (
+      <View key={key}
+            style={{
+              width          : this.state.pageWidth,
+              justifyContent : 'center',
+              alignItems     : 'center',
+              backgroundColor: '#fff'
+            }}>
+        <PhotoView source={{uri: image}}
+                   minimumZoomScale={1}
+                   maximumZoomScale={3}
+                   showsHorizontalScrollIndicator={false}
+                   showsVerticalScrollIndicator={false}
+                   onScale={({nativeEvent}) => {
+                     this.setState({activeScale: nativeEvent.scale})
+                   }}
+                   style={[{
+                     flex           : 1,
+                     width          : this.state.pageWidth,
+                     height         : undefined,
+                     justifyContent : 'center',
+                     alignItems     : 'center',
+                     backgroundColor: '#fff',
+                   }]}/>
+      </View>
     )
   }
 
@@ -301,7 +353,7 @@ export default class CameraScreen extends Screen {
     let image = this.fs.image(this.state.images[this.state.images.length - 1])
     return (
       <TouchableOpacity
-        style={[styles.toolTouchable, {alignItems: 'flex-end'}]}
+        style={[styles.toolTouchable, styles.cameraThumbnail, {alignItems: 'flex-end'}]}
         onPress={this._forward}>
         <Image
           source={{uri: image}}
@@ -315,15 +367,37 @@ export default class CameraScreen extends Screen {
    *
    * @param image object holding the index and the path of the image.
    * @param index integer identifying the thumbnail
-   * @returns {XML}
+   * @returns {{XML}}
    */
   renderThumbnail = (image, index) => {
     image = this.fs.image(image)
     return (
       <TouchableOpacity
         key={index}
-        onPress={() => this.setState({selectedImage: image})}>
-        <Image source={{uri: image}} style={styles.thumbnail}/>
+        style={{position: 'relative'}}
+        onPress={() => {
+          this.setState({
+            selectedImage: image,
+            selectedIndex: index
+          })
+          this.imagesScrollView.scrollTo({
+            x       : this.state.pageWidth * index,
+            y       : 0,
+            animated: false
+          })
+        }}>
+        {this.state.selectedIndex === index ?
+          <IonIcon size={18} name={'ios-checkmark-circle'} color={Colors.primary} style={{
+            position : 'absolute',
+            top      : 5,
+            right    : 5,
+            elevation: 1,
+            zIndex   : 100
+          }}/>
+          : null}
+        <Image source={{uri: image}} style={[styles.thumbnail, {
+          opacity: this.state.selectedIndex === index ? .7 : 1
+        }]}/>
       </TouchableOpacity>
     )
   }
@@ -356,6 +430,11 @@ export default class CameraScreen extends Screen {
    */
   _forward = () => {
     this.refs.page.scrollTo({x: Dimensions.get('window').width, y: 0, animated: true})
+    if (this.imagesScrollView) {
+      setTimeout(() => {
+        this.imagesScrollView.scrollToEnd({animated: false})
+      }, 50)
+    }
   }
 
   /**
@@ -364,36 +443,56 @@ export default class CameraScreen extends Screen {
    * @private
    */
   _delete = () => {
-    let images        = []
-    let imageToDelete = this.state.selectedImage
-    this.state.images.map(image => {
-      if (image !== imageToDelete) {
-        images.push(image)
-      }
-    })
+    let selectedIndex = this.state.selectedIndex
+    let imageToDelete = this.state.images[selectedIndex]
 
-    let newImages = []
-    this.state.newImages.map(image => {
-      if (image !== imageToDelete) {
-        newImages.push(image)
-      }
+    // Remove the selected image from the state
+    let images    = this.state.images.filter((image, i) => {
+      return i !== selectedIndex
+    })
+    let newImages = this.state.newImages.filter(image => {
+      return image !== imageToDelete
     })
 
 
     if (images.length === 0) {
       this.setState({
         selectedImage: '',
+        selectedIndex: 0,
         images       : [],
         newImages    : []
       })
+
       this._back()
     } else {
-      let selectedImage = this.fs.image(images[0])
+      let newSelectedIndex = 0
+
+      // Determine which image to select next
+      if (selectedIndex === 0) {
+        // The first image was selected so the next index is still 0
+        newSelectedIndex = 0
+      } else if (selectedIndex === this.state.images.length - 1) {
+        // Last image was selected so select the one was before it
+        newSelectedIndex = images.length - 1
+      } else {
+        // An image in the middle was selected, so select the one before it
+        newSelectedIndex = selectedIndex - 1
+      }
+
+      let selectedImage = this.fs.image(images[newSelectedIndex])
 
       this.setState({
+        selectedIndex: newSelectedIndex,
         selectedImage,
         images,
         newImages
+      })
+
+      // Move to the newly selected image
+      this.imagesScrollView.scrollTo({
+        x       : this.state.pageWidth * newSelectedIndex,
+        y       : 0,
+        animated: false
       })
     }
 
@@ -473,15 +572,16 @@ export default class CameraScreen extends Screen {
       let images = this.state.images.concat(image)
       this.setState({
         selectedImage: image,
+        selectedIndex: images.length - 1,
         images       : images,
         newImages    : this.state.newImages.concat(image)
       })
 
       this._forward()
+      this.isCapturing = false
     } catch (error) {
       this.isCapturing = false
       alert(error)
-      console.log(error)
     }
   }
 
@@ -523,7 +623,7 @@ export default class CameraScreen extends Screen {
  *
  * @type {{navigator: *}}
  */
-CameraScreen.PropTypes = {
+CameraScreen.propTypes = {
   // onDelete : PropTypes.func.isRequired,
   // onDone   : PropTypes.func.isRequired,
   // images   : PropTypes.array,
@@ -561,6 +661,16 @@ const textShadow = {
  * Create the scene's stylesheet.
  */
 const styles = StyleSheet.create({
+  responder: {
+    zIndex   : 900,
+    elevation: 1,
+    position : 'absolute',
+    top      : 0,
+    left     : 0,
+    right    : 0,
+    bottom   : 0
+  },
+
   container: {
     flex: 1
   },
@@ -680,37 +790,40 @@ const styles = StyleSheet.create({
   },
 
   thumbnailsContainer: {
-    backgroundColor  : '#ddd',
-    height           : 80,
-    paddingHorizontal: 5,
-    ...(new Elevation(4)),
-    shadowOffset     : {
-      height: -3
-    },
-    shadowColor      : '#888',
+    backgroundColor: '#f7f7f7',
+    shadowColor    : '#888',
+    borderTopWidth : 1,
+    borderTopColor : '#eee',
+    padding        : 5,
+    paddingLeft    : 0,
     ...ifIphoneX({
-      height       : 110,
       paddingBottom: 30
     })
   },
 
   thumbnail: {
+    width         : 50,
+    height        : 50,
+    borderRadius  : 4,
+    alignItems    : 'center',
+    justifyContent: 'center',
+    marginLeft    : 5
+  },
+
+  cameraThumbnail: {
     width           : 70,
     height          : 70,
-    marginHorizontal: 5,
-    borderRadius    : 3,
-    alignItems      : 'center',
-    justifyContent  : 'center'
+    marginHorizontal: 5
   },
 
   addIcon: {
-    width           : 70,
-    height          : 70,
-    backgroundColor : '#ccc',
-    alignItems      : 'center',
-    justifyContent  : 'center',
-    marginHorizontal: 5,
-    borderRadius    : 3
+    backgroundColor: 'rgba(0, 0, 0, .2)',
+    alignItems     : 'center',
+    justifyContent : 'center',
+    marginLeft     : 5,
+    borderRadius   : 4,
+    width          : 50,
+    height         : 50
   },
 
   focusBox: {

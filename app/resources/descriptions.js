@@ -1,5 +1,5 @@
 import React from 'react'
-import {Text, View, StyleSheet} from 'react-native'
+import {Text, StyleSheet} from 'react-native'
 import Atext from '../components/Atext'
 
 const styles = StyleSheet.create({
@@ -12,7 +12,6 @@ const styles = StyleSheet.create({
     lineHeight     : 21
   }
 })
-
 
 export const ACFCollection = [
   <Text style={styles.paragraph}>
@@ -166,7 +165,9 @@ export const Plants = {
           <Text
             style={styles.paragraph}>Green ash has a leaf scar below the bud while white ash has a leaf scar that wraps around the bud and is more “U”-shaped. In addition, white ash leaflets are white-colored on the undersides while green ash leaflets are green or rusty on their undersides. Blue ash can be distinguished by its thick square-shaped twigs which are often winged. Black ash has a leaf scar similar to green ash but leaflets are directly attached to the petiole without stalks to connect them. In addition, black ash has a more northern range and is typically found in wet sites.</Text>,
           <Atext style={styles.paragraph}
-                 url="https://www.ars.usda.gov/midwest-area/ames/plant-introduction-research/docs/npgs-ash-conservation-project/identifying-ash/">Read more here.</Atext>
+                 url="https://www.ars.usda.gov/midwest-area/ames/plant-introduction-research/docs/npgs-ash-conservation-project/identifying-ash/">
+            Read more here.
+          </Atext>
         ],
         images: []
       }, {

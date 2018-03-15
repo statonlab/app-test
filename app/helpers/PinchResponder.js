@@ -67,9 +67,9 @@ export default class PinchResponder {
       return
     }
 
-    if (moment().subtract(50, 'ms').isBefore(this.time)) {
-      return
-    }
+    // if (moment().subtract(10, 'ms').isBefore(this.time)) {
+    //   return
+    // }
 
     this.time = moment()
 
@@ -85,7 +85,6 @@ export default class PinchResponder {
 
     const yDistance = y[1] - y[0]
     const xDistance = x[1] - x[0]
-
 
     if (this.distance === null) {
       this.distance = [xDistance, yDistance]

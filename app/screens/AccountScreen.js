@@ -343,6 +343,7 @@ export default class AccountScreen extends Screen {
                     placeholder={'E.g, jane@example.com'}
                     placeholderTextColor="#aaa"
                     returnKeyType={'done'}
+                    keyboardType={'email-address'}
                     onChangeText={(email) => this.setState({email, userChanges: true})}
                     defaultValue={this.state.email}
                     underlineColorAndroid="transparent"
@@ -540,7 +541,7 @@ export default class AccountScreen extends Screen {
   }
 }
 
-AccountScreen.PropTypes = {
+AccountScreen.propTypes = {
   //navigator: PropTypes.object.isRequired
   onLogout: PropTypes.func
 }

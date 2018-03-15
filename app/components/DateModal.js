@@ -94,7 +94,7 @@ export default class DateModal extends Component {
 }
 
 DateModal.propTypes = {
-  ...View.PropTypes,
+  ...View.propTypes,
   onSelect    : PropTypes.func,
   selectedYear: PropTypes.number
 }

@@ -29,7 +29,7 @@ export default class Atext extends Component {
   }
 }
 
-Atext.PropTypes = {
+Atext.propTypes = {
   url  : PropTypes.string.isRequired,
   style: PropTypes.object
 }
