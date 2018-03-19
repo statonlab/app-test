@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "489875867005",
+    "firebase_url": "https://treesnap-d64df.firebaseio.com",
+    "project_id": "treesnap-d64df",
+    "storage_bucket": "treesnap-d64df.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:489875867005:android:b10daa3cac961b33",
+        "android_client_info": {
+          "package_name": "com.treesnap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "489875867005-7524sq717fsvtt0ffknal5r1pkdadbj4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.treesnap",
+            "certificate_hash": "5e3db0c810d74064a9443845043a63d34d45d84c"
+          }
+        },
+        {
+          "client_id": "489875867005-195afnbf8kkie2mkt73r0iamgm35f5d1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsAOG250Di5zoG9JK1LaDk2Kl_V_oIktc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "489875867005-4brg2tiv0kgta4n0gqiaapp69nnmk848.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "edu.utk.treesource",
+                "app_store_id": "1226499160"
+              }
+            },
+            {
+              "client_id": "489875867005-195afnbf8kkie2mkt73r0iamgm35f5d1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

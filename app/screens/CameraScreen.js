@@ -135,6 +135,8 @@ export default class CameraScreen extends Screen {
 
       this.setState({selectedImage, selectedIndex})
     }
+
+    this.analytics.visitScreen('CameraScreen')
   }
 
 

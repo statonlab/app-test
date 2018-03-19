@@ -1,6 +1,6 @@
 import React from 'react'
 import Screen from './Screen'
-import PropTypes from 'prop-types'
+
 import {
   View,
   ScrollView,
@@ -16,11 +16,13 @@ export default class HealthSafetyScreen extends Screen {
     tabBarVisible: false
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.backEvent = BackHandler.addEventListener('hardwareBackPress', () => {
       this.navigator.goBack()
       return true
     })
+
+    this.analytics.visitScreen('HealthSafetyScreen')
   }
 
   render() {
@@ -49,7 +51,7 @@ export default class HealthSafetyScreen extends Screen {
 }
 
 HealthSafetyScreen.propTypes = {
-  navigator: PropTypes.object.isRequired
+  // navigator: PropTypes.object.isRequired
 }
 
 const styles = StyleSheet.create({

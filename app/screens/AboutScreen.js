@@ -12,11 +12,13 @@ export default class AboutScreen extends Screen {
     tabBarVisible: false
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.backEvent = BackHandler.addEventListener('hardwareBackPress', () => {
       this.navigator.goBack()
       return true
     })
+
+    this.analytics.visitScreen('AboutScreen')
   }
 
   render() {
@@ -63,7 +65,7 @@ export default class AboutScreen extends Screen {
 }
 
 AboutScreen.propTypes = {
-  navigator: PropTypes.object.isRequired
+  // navigator: PropTypes.object.isRequired
 }
 
 const styles = StyleSheet.create({

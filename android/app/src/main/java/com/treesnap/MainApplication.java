@@ -2,7 +2,11 @@ package com.treesnap;
 
 import android.app.Application;
 
+import com.crashlytics.android.Crashlytics;
 import com.facebook.react.ReactApplication;
+import io.fabric.sdk.android.Fabric;
+import io.invertase.firebase.RNFirebasePackage;
+import io.invertase.firebase.analytics.RNFirebaseAnalyticsPackage;
 import com.reactnative.photoview.PhotoViewPackage;
 
 import org.reactnative.camera.RNCameraPackage;
@@ -17,8 +21,6 @@ import com.github.xinthink.rnmk.ReactMaterialKitPackage;
 import fr.bamlab.rnimageresizer.ImageResizerPackage;
 
 import com.RNFetchBlob.RNFetchBlobPackage;
-
-import org.reactnative.camera.RNCameraPackage;
 
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -40,7 +42,9 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new PhotoViewPackage(),
+          new RNFirebasePackage(),
+          new RNFirebaseAnalyticsPackage(),
+          new PhotoViewPackage(),
           new RNCameraPackage(),
           new RealmReactPackage(),
           new VectorIconsPackage(),
@@ -65,6 +69,7 @@ public class MainApplication extends Application implements ReactApplication {
   @Override
   public void onCreate() {
     super.onCreate();
+    Fabric.with(this, new Crashlytics());
     SoLoader.init(this, /* native exopackage */ false);
   }
 }

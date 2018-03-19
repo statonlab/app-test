@@ -3,6 +3,7 @@ import {Alert, DeviceEventEmitter} from 'react-native'
 import realm from './Schema'
 import File from '../helpers/File'
 import axios from '../helpers/Axios'
+import Analytics from '../helpers/Analytics'
 
 class User {
   /**
@@ -115,6 +116,9 @@ class User {
           })
         })
 
+        const analytics = new Analytics()
+        analytics.loggedIn(response.data.data.id)
+
         // Broadcast that the user has logged in
         DeviceEventEmitter.emit('userLoggedIn')
 
@@ -125,7 +129,7 @@ class User {
         if (typeof onFail === 'function') {
           onFail(error)
         } else {
-          throw new Error(error)
+          throw error
         }
       })
     })
@@ -161,6 +165,9 @@ class User {
           })
         })
 
+        const analytics = new Analytics()
+        analytics.registered(response.data.data.id)
+
         // Broadcast that the user has registered
         DeviceEventEmitter.emit('userRegistered')
 
@@ -172,7 +179,7 @@ class User {
         if (typeof onFail === 'function') {
           onFail(error)
         } else {
-          throw new Error(error)
+          throw error
         }
       })
     })

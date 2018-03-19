@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import {NavigationActions} from 'react-navigation'
+import Analytics from '../helpers/Analytics'
 
 export default class Screen extends Component {
   constructor(props) {
@@ -21,6 +22,9 @@ export default class Screen extends Component {
     this.navigator.reset    = this.resetNavigationState
     this.params             = props.navigation.state.params
     this._isNavigating      = false
+
+    // Initialize an analytics object
+    this.analytics = new Analytics()
   }
 
   resetNavigationState = () => {

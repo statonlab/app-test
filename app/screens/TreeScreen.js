@@ -19,6 +19,12 @@ export default class TreeScreen extends Screen {
     DeviceEventEmitter.addListener('LocationDenied', () => {
       this.navigator.goBack()
     })
+
+    this.shouldLogInfoTabAnalytics = true
+  }
+
+  componentDidMount() {
+    this.analytics.visitScreen(`TreeScreen_${this.params.title}`)
   }
 
   renderGuideMessage() {
@@ -31,17 +37,17 @@ export default class TreeScreen extends Screen {
           Complete the form below to submit a new observation. TreeSnap will collect your GPS location automatically.
         </Text>
       </View>,
-        <View>
-          <Text style={Guide.style.headerText}>
-            Getting Help
-          </Text>
-          <Text style={Guide.style.bodyText}>
-            You can view distribution maps, species ID images, and more by tapping the "information" tab.
-          </Text>
-          <Text style={[Guide.style.bodyText, {marginBottom: 0}]}>
-            Look for the green question marks or the "Show Examples" icon when answering questions.  They provide additional instructions or diagrams to help!
-          </Text>
-        </View>
+      <View>
+        <Text style={Guide.style.headerText}>
+          Getting Help
+        </Text>
+        <Text style={Guide.style.bodyText}>
+          You can view distribution maps, species ID images, and more by tapping the "information" tab.
+        </Text>
+        <Text style={[Guide.style.bodyText, {marginBottom: 0}]}>
+          Look for the green question marks or the "Show Examples" icon when answering questions. They provide additional instructions or diagrams to help!
+        </Text>
+      </View>
     ])
   }
 
@@ -64,7 +70,14 @@ export default class TreeScreen extends Screen {
                 onBackPress={() => {
                   return this.form.cancel()
                 }}/>
-        <Tabs>
+        <Tabs
+        onSwitch={title => {
+          if(this.shouldLogInfoTabAnalytics && title === 'INFORMATION') {
+            this.shouldLogInfoTabAnalytics = false
+            const screen = `InformationTab_${title}`
+            this.analytics.visitScreen(screen)
+          }
+        }}>
           <Tab title="ADD ENTRY">
             <Form
               ref={ref => this.form = ref}

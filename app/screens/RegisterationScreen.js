@@ -56,7 +56,9 @@ export default class RegistrationScreen extends Screen {
     })
   }
 
-  componentWillMount() {
+  componentDidMount() {
+    this.analytics.visitScreen('RegistrationScreen')
+
     let currentYear = new Date().getFullYear()
     this.setState({currentYear: currentYear})
 
@@ -375,7 +377,7 @@ export default class RegistrationScreen extends Screen {
 }
 
 RegistrationScreen.propTypes = {
-  navigator: PropTypes.object.isRequired
+  // navigator: PropTypes.object.isRequired
 }
 
 const styles = StyleSheet.create({

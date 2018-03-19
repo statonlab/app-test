@@ -98,8 +98,11 @@ export default class MarkersMap extends Component {
    * @returns {{XML}}
    */
   renderCallout(marker) {
+    console.log('MARKER', marker)
     return (
-      <MapView.Callout style={{width: 165}} onPress={() => this.pressEvent.call(this, marker)}>
+      <MapView.Callout
+        style={{width: 165}}
+        onPress={() => this.pressEvent(marker)}>
         <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
           {!marker.image ? null :
             <Image source={{uri: marker.image}} style={{width: 45, height: 45, resizeMode: 'cover'}}/>
@@ -122,11 +125,11 @@ export default class MarkersMap extends Component {
    * @returns {{XML}}
    */
   renderMarker(marker, index) {
+    console.log('NOT CALLOUT', marker)
     return (
       <MapView.Marker
         key={index}
         coordinate={marker.coord}
-        pinColor={marker.pinColor}
       >
         {this.renderCallout(marker)}
       </MapView.Marker>

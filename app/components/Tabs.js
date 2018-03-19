@@ -105,12 +105,14 @@ class Tabs extends Component {
 
 Tabs.propTypes = {
   elevation    : PropTypes.number,
-  scrollEnabled: PropTypes.bool
+  scrollEnabled: PropTypes.bool,
+  onSwitch: PropTypes.func
 }
 
 Tabs.defaultProps = {
   elevation    : 1,
-  scrollEnabled: false
+  scrollEnabled: false,
+  onSwitch: () => {}
 }
 
 const styles = StyleSheet.create({
