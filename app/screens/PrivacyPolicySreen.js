@@ -16,7 +16,9 @@ export default class PrivacyPolicyScreen extends Screen {
     tabBarVisible: false
   }
 
-  componentWillMount() {
+  componentDidMount() {
+    this.analytics.visitScreen('PrivacyPolicy')
+
     this.backEvent = BackHandler.addEventListener('hardwareBackPress', () => {
       this.navigator.goBack()
       return true
@@ -142,7 +144,7 @@ export default class PrivacyPolicyScreen extends Screen {
 }
 
 PrivacyPolicyScreen.propTypes = {
-  navigator: PropTypes.object.isRequired
+  // navigator: PropTypes.object.isRequired
 }
 
 const styles = StyleSheet.create({

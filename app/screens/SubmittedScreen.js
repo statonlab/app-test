@@ -42,7 +42,9 @@ export default class SubmittedScreen extends Screen {
     this.android = Platform.OS === 'android'
   }
 
-  componentWillMount() {
+  componentDidMount() {
+    this.analytics.visitScreen('SubmittedScreen')
+
     this.backEvent = BackHandler.addEventListener('hardwareBackPress', () => {
       this.navigator.reset()
       return true

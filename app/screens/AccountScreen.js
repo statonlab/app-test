@@ -46,16 +46,6 @@ export default class AccountScreen extends Screen {
     this.user = User.user()
   }
 
-  componentWillMount() {
-    this.backEvent = BackHandler.addEventListener('hardwareBackPress', () => {
-      this.navigator.goBack()
-      return true
-    })
-    this.events    = [
-      DeviceEventEmitter.addListener('userLoggedOut', this.props.onLogout)
-    ]
-  }
-
   componentWillUnmount() {
     this.backEvent.remove()
     this.events.map(event => event.remove())
@@ -65,6 +55,15 @@ export default class AccountScreen extends Screen {
    * Populate the user fields.
    */
   componentDidMount() {
+    this.backEvent = BackHandler.addEventListener('hardwareBackPress', () => {
+      this.navigator.goBack()
+      return true
+    })
+
+    this.events    = [
+      DeviceEventEmitter.addListener('userLoggedOut', this.props.onLogout)
+    ]
+
     this.setState({
       name      : this.user.name,
       email     : this.user.email,
@@ -72,6 +71,8 @@ export default class AccountScreen extends Screen {
       anonymous : this.user.anonymous ? 'Yes' : 'No',
       birth_year: this.user.birth_year
     })
+
+    this.analytics.visitScreen('AccountScreen')
   }
 
   /**

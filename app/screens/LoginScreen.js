@@ -42,7 +42,8 @@ export default class LoginScreen extends Screen {
     })
   }
 
-  componentWillMount() {
+  componentDidMount() {
+    this.analytics.visitScreen('LoginScreen')
     this.backEvent = BackHandler.addEventListener('hardwareBackPress', () => {
       this.navigator.goBack()
       return true
@@ -83,7 +84,8 @@ export default class LoginScreen extends Screen {
       if (!this.props.onLogin()) {
         this.navigator.goBack()
       }
-    }).catch(error => {
+      }).catch(error => {
+        console.log(error)
       const errors = new Errors(error)
       this.spinner.close()
       if (errors.has('general')) {

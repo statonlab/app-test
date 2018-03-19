@@ -31,6 +31,7 @@ import AutoComplete from '../components/AutoComplete'
 import {ACFCollection} from '../resources/descriptions'
 import DCPrules from '../resources/validation'
 import {ifIphoneX, isIphoneX} from 'react-native-iphone-x-helper'
+import Analytics from '../helpers/Analytics'
 
 const isAndroid = Platform.OS === 'android'
 
@@ -72,6 +73,8 @@ export default class Form extends Component {
     this.formRulesMeta = this.compileValRules() // build form rules from passed props
     this.formT         = t.struct(formRules, 'formT') // build tcomb validation from rules
     this.formTMeta     = t.struct(this.formRulesMeta, 'formTMeta') // build tcomb validation from rules
+
+    this.timeStarted = moment()
   }
 
   componentWillMount() {
@@ -316,6 +319,9 @@ export default class Form extends Component {
       })
       DeviceEventEmitter.emit('newSubmission')
     })
+
+    const analytics = new Analytics()
+    analytics.submittedObservation(observation, this.timeStarted, moment())
   }
 
   /**
@@ -711,9 +717,10 @@ export default class Form extends Component {
                               }}>
               <Text style={[styles.label, {paddingTop: 10}]}>Comments</Text>
               <Text style={{
-                paddingTop: 10,
-                flex      : 1,
-                color     : this.state.metadata.comment ? '#444' : '#aaa'
+                paddingTop : 10,
+                paddingLeft: 5,
+                flex       : 1,
+                color      : this.state.metadata.comment ? '#444' : '#aaa'
               }}>{this.state.metadata.comment || 'Add comment'}</Text>
             </TouchableOpacity>
             <View style={[styles.formGroup, {flex: 0}]}>
@@ -761,7 +768,7 @@ export default class Form extends Component {
           <Text style={styles.modalHeaderText}>Comments</Text>
         </View>
         <KeyboardAvoidingView style={{flex: 1}}
-        {...(isAndroid ? null : {behavior: "padding"})}>
+                              {...(isAndroid ? null : {behavior: 'padding'})}>
           <View style={{flex: 1, padding: 10}}>
             <TextInput
               style={[styles.comment]}
@@ -779,21 +786,21 @@ export default class Form extends Component {
               underlineColorAndroid="transparent"
               onEndEditing={() => this.setState({showCommentsModal: false})}
               autoFocus={true}
-          />
+            />
           </View>
           <View style={{flex: 0, justifyContent: 'flex-end', borderTopWidth: 1, borderTopColor: '#eee'}}>
             <TouchableOpacity style={[{
-                backgroundColor: '#f7f7f7',
-                flex: 0,
-                paddingVertical: 10,
-                paddingHorizontal: 15,
-              }]}
-              onPress={() => {
-                this.setState({showCommentsModal: false})
-              }}>
+              backgroundColor  : '#f7f7f7',
+              flex             : 0,
+              paddingVertical  : 10,
+              paddingHorizontal: 15
+            }]}
+                              onPress={() => {
+                                this.setState({showCommentsModal: false})
+                              }}>
               <Text style={{
-                color: Colors.primary,
-                fontSize: 14,
+                color    : Colors.primary,
+                fontSize : 14,
                 textAlign: 'right'
               }}>DONE</Text>
             </TouchableOpacity>
@@ -847,16 +854,16 @@ const styles = StyleSheet.create({
 
   modalHeader: {
     backgroundColor: Colors.primary,
-    paddingTop: getVerticalPadding(),
-    paddingBottom: 10,
+    paddingTop     : getVerticalPadding(),
+    paddingBottom  : 10,
     ...(new Elevation(2))
   },
 
   modalHeaderText: {
-    color: Colors.primaryText,
-    textAlign: 'center',
-    fontWeight: 'normal',
-    fontSize: 16,
+    color          : Colors.primaryText,
+    textAlign      : 'center',
+    fontWeight     : 'normal',
+    fontSize       : 16,
     paddingVertical: 5
   },
 
@@ -987,11 +994,11 @@ const styles = StyleSheet.create({
   },
 
   comment: {
-    flex      : 1,
-    width     : undefined,
-    height    : undefined,
-    alignItems: 'flex-start',
-    paddingVertical: 30,
+    flex           : 1,
+    width          : undefined,
+    height         : undefined,
+    alignItems     : 'flex-start',
+    paddingVertical: 30
   },
 
   icon: {

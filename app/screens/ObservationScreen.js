@@ -1,6 +1,5 @@
 import React from 'react'
 import Screen from './Screen'
-import PropTypes from 'prop-types'
 import {
   View,
   ScrollView,
@@ -61,6 +60,7 @@ export default class ObservationScreen extends Screen {
    * Set the synced and updated status.
    */
   componentDidMount() {
+    this.analytics.visitScreen('ObservationScreen')
     this._isLoggedIn()
 
     this.events.push(BackHandler.addEventListener('hardwareBackPress', () => {

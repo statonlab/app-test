@@ -42,6 +42,8 @@ export default class LandingScreen extends Screen {
    * Sets the initial sidebar links and listens to events.
    */
   componentDidMount() {
+    this.analytics.visitScreen('LandingScreen')
+
     this.setState({
       userLoggedIn: this.isLoggedIn()
     })

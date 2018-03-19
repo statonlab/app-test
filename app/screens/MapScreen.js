@@ -28,33 +28,38 @@ export default class MapScreen extends Screen {
     this.fs = new File()
 
     this.state = {
-      shouldNavigate: true
+      shouldNavigate: true,
+      markers: []
     }
   }
 
-  componentWillMount() {
+  componentDidMount() {
+    this.analytics.visitScreen('MapScreen')
+
     let submissions = realm.objects('Submission')
     let markers     = []
 
-    submissions.map((submission, index) => {
+    submissions.map(submission => {
       let image = JSON.parse(submission.images)
-      if (Array.isArray(image['images'])) {
-        image = image['images'][0]
+      if (Array.isArray(image.images)) {
+        image = this.fs.thumbnail(image.images[0])
+      } else {
+        image = ''
       }
 
       markers.push({
         id         : submission.id,
         title      : submission.name,
-        image      : this.fs.thumbnail(image),
+        image      : image,
         description: moment(submission.date, 'MM-DD-YYYY HH:mm:ss').fromNow(),
         coord      : {
-          longitude: submission.location.longitude,
-          latitude : submission.location.latitude
+          latitude : submission.location.latitude,
+          longitude: submission.location.longitude
         }
       })
     })
 
-    this.markers = markers
+    this.setState({markers})
 
     this.backEvent = BackHandler.addEventListener('hardwareBackPress', () => {
       this.navigator.goBack()
@@ -64,7 +69,7 @@ export default class MapScreen extends Screen {
 
   renderGuideMessage() {
     return (
-     [ <View>
+      [<View>
         <Text style={Guide.style.headerText}>
           Your Observations Map
         </Text>
@@ -99,7 +104,6 @@ export default class MapScreen extends Screen {
           version={1}
           message={this.renderGuideMessage()}
         />
-
         {this.renderMap()}
       </View>
     )
@@ -137,9 +141,8 @@ export default class MapScreen extends Screen {
           latitudeDelta : 60.0922,
           longitudeDelta: 60.0922
         }}
-        markers={this.markers}
+        markers={this.state.markers}
         onCalloutPress={this.navigateCallout.bind(this)}
-
       />
     )
   }
