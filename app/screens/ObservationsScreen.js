@@ -329,6 +329,7 @@ export default class ObservationsScreen extends Screen {
             borderColor      : '#ececec',
             color            : '#444'
           }}
+          autoCorrect={false}
           value={this.state.search}
           onChangeText={search => {
             this._resetDataSource(search)

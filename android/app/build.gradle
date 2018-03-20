@@ -150,7 +150,7 @@ android {
 }
 
 dependencies {
-    compile project(':react-native-firebase')
+    implementation project(':react-native-firebase')
     implementation project(':react-native-photo-view')
     implementation project(':realm')
     implementation project(':react-native-vector-icons')
