@@ -202,7 +202,10 @@ export default class ObservationsScreen extends Screen {
         </TouchableOpacity>
         <View style={{position: 'relative'}}>
           <TouchableOpacity ref={ref => this.buttons[item.id] = ref} onPress={() => this.showPopover(item)}
-                            style={[styles.textContainer, styles.rightElement, {flex: 1}]}>
+                            style={[styles.textContainer, styles.rightElement, {
+                              flex: 1,
+                              backgroundColor: this.state.selectedObservation.id === item.id ? '#eee' : 'transparent'
+                            }]}>
             <Icon name="md-more" size={30} color="#aaa"/>
           </TouchableOpacity>
         </View>
@@ -513,7 +516,7 @@ export default class ObservationsScreen extends Screen {
    * Close the popover dropdown.
    */
   closePopover() {
-    this.setState({popoverVisible: false})
+    this.setState({popoverVisible: false, selectedObservation: {}})
   }
 
   /**
