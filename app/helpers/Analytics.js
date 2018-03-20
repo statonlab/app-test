@@ -6,12 +6,16 @@ export default class Analytics {
    * Analytics Constructor.
    */
   constructor() {
-    this.ga     = firebase.analytics()
-    const users = realm.objects('User')
-    if (users.length === 0) {
-      this.user = false
-    } else {
-      this.user = users[0].id
+    try {
+      this.ga     = firebase.analytics()
+      const users = realm.objects('User')
+      if (users.length === 0) {
+        this.user = false
+      } else {
+        this.user = users[0].id
+      }
+    } catch (error) {
+      console.log(error)
     }
   }
 
@@ -21,10 +25,14 @@ export default class Analytics {
    * @param name
    */
   visitScreen(name) {
-    if (this.user !== false) {
-      this.ga.setUserId(this.user)
+    try {
+      if (this.user !== false) {
+        this.ga.setUserId(this.user)
+      }
+      this.ga.setCurrentScreen(name, name)
+    } catch (error) {
+      console.log(error)
     }
-    this.ga.setCurrentScreen(name, name)
   }
 
   /**
@@ -33,9 +41,13 @@ export default class Analytics {
    * @param user_id
    */
   registered(user_id) {
-    this.ga.logEvent('registered', {
-      user_id
-    })
+    try {
+      this.ga.logEvent('registered', {
+        user_id
+      })
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   /**
@@ -63,11 +75,31 @@ export default class Analytics {
   submittedObservation(observation, timeStarted, timeEnded) {
     const duration = Math.abs(timeEnded.diff(timeStarted, 'seconds'))
     const metaData = JSON.parse(observation.meta_data)
-    this.ga.logEvent('submitted_observation', {
-      tree: observation.name === 'Other' ? `${observation.name} (${metaData.otherLabel})` : observation.name,
-      timeStarted,
-      timeEnded,
-      duration
-    })
+    try {
+      this.ga.logEvent('submitted_observation', {
+        tree: observation.name === 'Other' ? `${observation.name} (${metaData.otherLabel})` : observation.name,
+        time_started: timeStarted,
+        time_ended: timeEnded,
+        duration: duration
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  /**
+   * Record a share event.
+   *
+   * @param observation
+   */
+  shared(observation) {
+    try {
+      this.ga.logEvent('share', {
+        CONTENT_TYPE: 'observation',
+        ITEM_ID: observation.serverID
+      })
+    } catch (error) {
+      console.log(error)
+    }
   }
 }

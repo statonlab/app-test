@@ -217,7 +217,9 @@ export default class LandingScreen extends Screen {
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.plantsContainer}>
             {this.state.userLoggedIn ?
-              <UploadButton ref="uploadButton" onUploadDone={this.uploadCompleted.bind(this)}
+              <UploadButton ref="uploadButton"
+                            spinner={this.spinner}
+                            onUploadDone={this.uploadCompleted.bind(this)}
                             onError={this.uploadError.bind(this)}/> :
               this.loginButton.call(this)
             }

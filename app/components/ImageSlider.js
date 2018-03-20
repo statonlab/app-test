@@ -91,7 +91,6 @@ export default class ImageSlider extends Component {
 
   render() {
     const width  = this.state.width
-    const height = Dimensions.get('window').height
     if (this.props.images.length === 0) {
       return null
     }
@@ -162,7 +161,7 @@ export default class ImageSlider extends Component {
                 onPress={() => {
                   return this._move(index)
                 }}
-                style={[styles.button, this.state.position === index && styles.buttonSelected]}>
+                style={[styles.button, this.state.position === index ? styles.buttonSelected : {}]}>
                 <View/>
               </TouchableHighlight>
             )

@@ -44,6 +44,7 @@ export default class Location extends Component {
    */
   componentWillUnmount() {
     clearTimeout(this.timeoutHolder)
+    this.timeoutHolder = null
   }
 
   /**
@@ -51,6 +52,10 @@ export default class Location extends Component {
    */
   updateLocation() {
     this.timeoutHolder = setTimeout(() => {
+      if (this.timeoutHolder === null) {
+        return
+      }
+
       if (!this.state.done) {
         this.getLocation()
         this.updateLocation()
@@ -68,6 +73,7 @@ export default class Location extends Component {
         if (error.code === 1 && error.PERMISSION_DENIED) {
           // Permission Denied
           clearTimeout(this.timeoutHolder)
+          this.timeoutHolder = null
 
           Alert.alert(
             'Permission to access your location.',
@@ -94,6 +100,10 @@ export default class Location extends Component {
    * @param position
    */
   setLocation(position) {
+    if (this.timeoutHolder === null) {
+      return
+    }
+
     this.latitude  = position.coords.latitude
     this.longitude = position.coords.longitude
 

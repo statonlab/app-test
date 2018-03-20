@@ -263,7 +263,7 @@ export default class CameraScreen extends Screen {
         {/* Gallery View */}
         <View style={[styles.container, {
           width          : this.state.pageWidth,
-          height         : this.state.pageHeight,
+          height         : this.state.pageHeight - (android ? statusBarHeight : 0),
           backgroundColor: '#fff'
         }]}>
           <View style={{flex: 1}}>
@@ -345,7 +345,7 @@ export default class CameraScreen extends Screen {
                      height         : undefined,
                      justifyContent : 'center',
                      alignItems     : 'center',
-                     backgroundColor: '#fff',
+                     backgroundColor: '#fff'
                    }]}/>
       </View>
     )
@@ -558,9 +558,9 @@ export default class CameraScreen extends Screen {
 
     try {
       const data = await this.camera.takePictureAsync({
-        quality           : 1,
+        quality           : .8,
         // Specify a max width to avoid extra large images
-        width             : 2400,
+        width             : 1700,
         // Want an actual file rather than an base64 string
         base64            : false,
         mirrorImage       : false,

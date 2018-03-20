@@ -11,10 +11,9 @@ import {
   ScrollView,
   StatusBar,
   Platform,
-  Keyboard,
-  Alert
+  Keyboard
 } from 'react-native'
-import Latin from '../resources/treeNames.js'
+import TreeNames from '../resources/treeNames.js'
 import Colors from '../helpers/Colors'
 import Elevation from '../helpers/Elevation'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -23,32 +22,23 @@ import {ifIphoneX} from 'react-native-iphone-x-helper'
 export default class AutoComplete extends Component {
   constructor(props) {
     super(props)
-    this.state     = {
-      resultList            : [],
+    this.state = {
+      resultList            : TreeNames,
       selected              : null,
       animationType         : 'fade',
       modalVisible          : false,
       searchText            : '',
       textFieldBottomSpacing: 0
     }
-    this.queryList = Latin
 
     this.events = []
     this.events.push(Keyboard.addListener('keyboardDidShow', () => this.setBottomSpacing(true)))
     this.events.push(Keyboard.addListener('keyboardDidHide', () => this.setBottomSpacing(false)))
   }
 
-  componentWillMount() {
-    let matches = []
-    Object.keys(this.queryList).map((species) => {
-      let common     = this.queryList[species]
-      let entry      = {}
-      entry[species] = common
-      matches.push(entry)
-    })
-    this.setState({resultList: matches})
-  }
-
+  /**
+   * Remove event listeners
+   */
   componentWillUnmount() {
     this.events.map(event => event.remove())
   }
@@ -59,22 +49,26 @@ export default class AutoComplete extends Component {
    */
   open = () => {
     this.setState({
+      resultList  : TreeNames,
       searchText  : '',
       selected    : null,
       modalVisible: true
     })
   }
 
+  /**
+   * Close the modal
+   */
   close = () => {
     this.setState({modalVisible: false})
   }
 
   renderResults = () => {
-    if (this.state.resultList.length > 0) {
-      let results = this.state.resultList
-      return results.map(arrayItem => {
-          let species = Object.keys(arrayItem)[0]
-          let common  = arrayItem[species]
+    let results = this.state.resultList
+    let keys    = Object.keys(results)
+    if (keys.length > 0) {
+      return keys.map(species => {
+          let common = results[species]
           return (
             <TouchableOpacity
               key={species}
@@ -91,15 +85,15 @@ export default class AutoComplete extends Component {
           )
         }
       )
-    } else {
-      return (
-        <View style={styles.rowView}>
-          <Text style={styles.searchText}>
-            No results found.
-          </Text>
-        </View>
-      )
     }
+
+    return (
+      <View style={styles.rowView}>
+        <Text style={styles.searchText}>
+          No results found.
+        </Text>
+      </View>
+    )
   }
 
   /**
@@ -118,18 +112,16 @@ export default class AutoComplete extends Component {
    * @param text
    */
   search = (text) => {
-    let matches = []
-    text        = text.toLowerCase().trim()
-    Object.keys(this.queryList).map((species) => {
-      let common = this.queryList[species]
-      if (common.toLowerCase().trim().indexOf(text) !== -1 || species.toLowerCase()
-          .trim()
-          .indexOf(text) !== -1) {
-        let entry      = {}
-        entry[species] = common
-        matches.push(entry)
+    text = text.toLowerCase().trim()
+
+    let matches = {}
+    Object.keys(TreeNames).map((species) => {
+      let common = TreeNames[species]
+      if (species.toLowerCase().trim().indexOf(text) > -1 || common.toLowerCase().trim().indexOf(text) > -1) {
+        matches[species] = common
       }
     })
+
     this.setState({resultList: matches})
   }
 
@@ -173,10 +165,8 @@ export default class AutoComplete extends Component {
             </Text>
           </View>
           <KeyboardAvoidingView style={{flex: 1, backgroundColor: '#f7f7f7'}}
-                                behavior={Platform.OS === 'android' ? 'height' : 'padding'}>
-            <ScrollView style={{flex: 1}}
-                        contentContainerStyle={{flex: 1}}
-                        keyboardDismissMode={Platform.OS === 'android' ? 'none' : 'on-drag'}>
+                                behavior={Platform.OS === 'android' ? undefined : 'padding'}>
+            <ScrollView style={{flex: 1}} keyboardDismissMode={'on-drag'} keyboardShouldPersistTaps={'never'}>
               {this.renderResults()}
             </ScrollView>
             <View style={[styles.textInputContainer, {paddingBottom: this.state.textFieldBottomSpacing}]}>
@@ -263,7 +253,7 @@ const styles = StyleSheet.create({
   },
 
   textField: {
-    height         : 35,
+    height         : 40,
     borderWidth    : 1,
     borderColor    : '#ddd',
     borderRadius   : 2,
@@ -282,15 +272,6 @@ const styles = StyleSheet.create({
     backgroundColor  : '#fff',
     borderBottomWidth: 1,
     borderBottomColor: '#ddd'
-  },
-
-  searchBox: {
-    flex             : 1,
-    paddingHorizontal: 10,
-    maxHeight        : 500,
-    minHeight        : 300,
-    backgroundColor  : '#f9f9f9',
-    flexDirection    : 'column'
   },
 
   searchText: {
@@ -318,19 +299,10 @@ const styles = StyleSheet.create({
     color     : Colors.primary,
     fontWeight: '500'
   },
+
   submitText: {
     textAlign : 'center',
     color     : Colors.primary,
     fontWeight: '500'
   }
-
-
 })
-
-//The styles currently being passed in:
-// picker: {
-//   flex         : 0,
-//     flexDirection: 'row',
-//     alignItems   : 'center',
-//     width        : undefined
-// },

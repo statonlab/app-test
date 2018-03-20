@@ -276,7 +276,9 @@ class Observation {
    */
   async downloadImages() {
     let observations = realm.objects('Submission')
-    await this.fs.download(observations[key])
+    for (let i = 0; i < observations.length; i++) {
+      await this.fs.download(observations[i])
+    }
   }
 }
 

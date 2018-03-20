@@ -11,7 +11,8 @@ import {
   Alert,
   Platform,
   TouchableOpacity,
-  BackHandler
+  BackHandler,
+  Share
 } from 'react-native'
 import Header from '../components/Header'
 import Colors from '../helpers/Colors'
@@ -24,13 +25,11 @@ import axios from '../helpers/Axios'
 import Icon from 'react-native-vector-icons/Ionicons'
 import File from '../helpers/File'
 import Elevation from '../helpers/Elevation'
-import ImageZoom from 'react-native-image-pan-zoom'
 import {ifIphoneX} from 'react-native-iphone-x-helper'
 import Errors from '../helpers/Errors'
 import ImageModal from '../components/ImageModal'
-import ImageSlider from '../components/ImageSlider'
+import Analytics from '../helpers/Analytics'
 
-const trash   = (<Icon name="ios-trash" size={24} color="#fff"/>)
 const android = Platform.OS === 'android'
 
 export default class ObservationScreen extends Screen {
@@ -401,49 +400,139 @@ export default class ObservationScreen extends Screen {
   }
 
   /**
+   * Get the share button
+   * @private
+   */
+  _renderShareButton() {
+    const observation = this.state.entry
+    if (!observation.synced && observation.needs_update) {
+      return null
+    }
+
+    if (this.state.images.length < 1) {
+      return null
+    }
+
+    const imageHeight = 200
+    const width       = 60
+    const height      = 60
+
+    return (
+      <TouchableOpacity
+        activeOpacity={.8}
+        onPress={this.share.bind(this)}
+        style={{
+          position       : 'absolute',
+          alignItems     : 'center',
+          justifyContent : 'center',
+          top            : imageHeight - (width / 2),
+          right          : 10,
+          width,
+          height,
+          borderRadius   : width / 2,
+          backgroundColor: Colors.warning,
+          ...(new Elevation(5)),
+          zIndex         : 99000
+        }}>
+        <Icon name={android ? 'md-share' : 'ios-share-outline'} size={22} color={Colors.warningText}/>
+        <Text style={{fontSize: 9, color: Colors.warningText, textAlign: 'center'}}>Share</Text>
+      </TouchableOpacity>
+
+    )
+  }
+
+  /**
+   * Check whether a string begins with a vowel.
+   *
+   * @param str
+   * @return {boolean}
+   * @private
+   */
+  _beginsWithVowel(str) {
+    return ['a', 'e', 'i', 'o', 'u'].indexOf(str.trim().charAt(0).toLowerCase()) > -1
+  }
+
+  /**
+   * Perform the share request.
+   */
+  share() {
+    const observation = this.state.entry
+    const meta        = JSON.parse(observation.meta_data)
+    const url         = `https://treesnap.org/observation/${observation.serverID}`
+    const title       = observation.name === 'Other' ? meta.otherLabel : observation.name
+    const message     = 'I found' + (this._beginsWithVowel(title) ? ' an ' : ' a ') + `${title}. Check it out on TreeSnap ${url}`
+    Share.share({title, message}, {url}).then(share => {
+      if (share.action && share.action === Share.sharedAction()) {
+        const analytics = new Analytics()
+        analytics.shared(observation)
+      }
+    }).catch(error => {
+      console.log('share error', error)
+    })
+  }
+
+  /**
    * Render Scene.
    *
    * @returns {{XML}}
    */
   render() {
-    let entry = this.state.entry
+    const entry = this.state.entry
 
     if (entry === null) {
       return null
     }
 
-    let width = Dimensions.get('window').width
+    const meta  = JSON.parse(entry.meta_data)
+    const trash = (<Icon name={android ? 'md-trash' : 'ios-trash'} size={24} color="#fff"/>)
+    const width = Dimensions.get('window').width
+
     return (
       <View style={styles.container}>
         <Spinner ref="spinner"/>
         <SnackBarNotice ref="snackbar" noticeText={this.state.noticeText}/>
 
-        <Header navigator={this.navigator} title={entry.name} rightIcon={trash}
+        <Header navigator={this.navigator}
+                title={entry.name === 'Other' ? `Other (${meta.otherLabel})` : entry.name}
+                rightIcon={trash}
                 onRightPress={() => {
                   this.deleteAlert.call(this, entry)
                 }}/>
 
         <ScrollView style={styles.contentContainer} bounces={false}>
-          {this.state.images.length > 0 ?
-            <ImageModal images={this.state.images} style={{flexDirection: 'row'}}>
-              {this.state.images.map((image, i) => {
-                return <View key={i} style={{flex: 1, height: 200, ...(i > 0 ? {borderLeftWidth:1, borderLeftColor: '#eee'} : null)}}>
-                  <Image style={{width, height: 200, resizeMode: 'cover'}} source={{uri: image}}/>
-                </View>
-              })}
-            </ImageModal>
-            : null}
-          <View style={styles.card}>
-            {this._renderUploadButton(entry)}
-            <View style={styles.field}>
-              <Text style={styles.label}>Unique ID</Text>
-              <Text style={styles.dataText}>{entry.id}</Text>
+          <View style={{position: 'relative'}}>
+            {this.state.images.length > 0 ?
+              <ImageModal images={this.state.images} style={{flexDirection: 'row'}}>
+                {this.state.images.map((image, i) => {
+                  return <View key={i}
+                               style={{
+                                 flex  : 1,
+                                 height: 200,
+                                 ...(i > 0 ? {
+                                   borderLeftWidth: 1,
+                                   borderLeftColor: '#eee'
+                                 } : null)
+                               }}>
+                    <Image style={{width: width / this.state.images.length, height: 200, resizeMode: 'cover'}}
+                           source={{uri: image}}/>
+                  </View>
+                })}
+              </ImageModal>
+              : null}
+
+            {this._renderShareButton()}
+            <View style={styles.card}>
+              {this._renderUploadButton(entry)}
+              <View style={styles.field}>
+                <Text style={styles.label}>Unique ID</Text>
+                <Text style={styles.dataText}>{entry.id}</Text>
+              </View>
+              <View style={styles.field}>
+                <Text style={styles.label}>Date Collected</Text>
+                <Text style={styles.dataText}>{entry.date}</Text>
+              </View>
+              {this._renderMetaData(entry.meta_data)}
             </View>
-            <View style={styles.field}>
-              <Text style={styles.label}>Date Collected</Text>
-              <Text style={styles.dataText}>{entry.date}</Text>
-            </View>
-            {this._renderMetaData(entry.meta_data)}
           </View>
         </ScrollView>
         <View style={styles.multiButtonField}>

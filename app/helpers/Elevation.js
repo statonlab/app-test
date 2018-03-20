@@ -1,7 +1,7 @@
 import {Platform} from 'react-native'
 
 export default class Elevation {
-  constructor(level) {
+  constructor(level, shadowColor) {
     if (level === 0) {
       return {}
     }
@@ -11,6 +11,7 @@ export default class Elevation {
     }
 
     this.level = level
+    this.shadowColor = shadowColor
     return this.get()
   }
 
@@ -75,7 +76,7 @@ export default class Elevation {
     }
 
     iosShadowElevation.zIndex = 5
-    iosShadowElevation.shadowColor = '#000'
+    iosShadowElevation.shadowColor = this.shadowColor || '#000'
 
     return iosShadowElevation
   }
