@@ -13,7 +13,7 @@ export default class UploadButton extends Component {
 
     this.state = {
       show        : false,
-      observations: []
+      observations: [],
     }
   }
 
@@ -45,8 +45,15 @@ export default class UploadButton extends Component {
   async upload() {
     this.setState({
       show     : false,
-      uploading: true
     })
+
+    let step = 0
+    if (this.props.spinner) {
+      this.props.spinner.setTitle('Uploading Observations')
+        .setProgressTotal(this.state.observations.length)
+        .setProgress(step)
+        .open()
+    }
 
     for (let i in this.state.observations) {
       let observation = this.state.observations[i]
@@ -59,11 +66,17 @@ export default class UploadButton extends Component {
             observation.needs_update = false
           })
         }
-        this.done()
+        step++
+        if (this.props.spinner) {
+          this.props.spinner.setProgress(step)
+        }
       } catch (error) {
+        if (this.props.spinner) {
+          this.props.spinner.close()
+        }
         console.log(error)
         const errors = new Errors(error)
-        this.setState({uploading: false, show: true})
+        this.setState({show: true})
         if (errors.has('general')) {
           this.props.onError(errors.first('general'))
         } else {
@@ -74,31 +87,30 @@ export default class UploadButton extends Component {
         return
       }
     }
+    this.done()
   }
 
   done() {
-    this.setState({uploading: false})
+    if (this.props.spinner) {
+      this.props.spinner.close()
+    }
     this.props.onUploadDone()
   }
 
   render() {
+    console.log(this.state)
+    if (!this.state.show || this.state.observations.length === 0) {
+      return null
+    }
+
     return (
       <View>
-        {!this.state.show || this.state.observations.length === 0 ? null :
-          <TouchableOpacity
-            style={styles.button}
-            onPress={this.upload.bind(this)}
-          >
-            <Text style={styles.buttonText}>{this.props.label} ({this.state.observations.length})</Text>
-          </TouchableOpacity>
-        }
-
-        {!this.state.uploading ? null :
-          <ActivityIndicator
-            animating={true}
-            style={[styles.centering, {height: 47}]}
-          />
-        }
+        <TouchableOpacity
+          style={styles.button}
+          onPress={this.upload.bind(this)}
+        >
+          <Text style={styles.buttonText}>{this.props.label} ({this.state.observations.length})</Text>
+        </TouchableOpacity>
       </View>
     )
   }
@@ -107,7 +119,8 @@ export default class UploadButton extends Component {
 UploadButton.propTypes = {
   label       : PropTypes.string,
   onUploadDone: PropTypes.func,
-  onError     : PropTypes.func
+  onError     : PropTypes.func,
+  spinner     : PropTypes.object
 }
 
 UploadButton.defaultProps = {
@@ -115,7 +128,8 @@ UploadButton.defaultProps = {
   onUploadDone: () => {
   },
   onError     : () => {
-  }
+  },
+  spinner     : null
 }
 
 const styles = new StyleSheet.create({

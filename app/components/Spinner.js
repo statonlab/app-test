@@ -1,35 +1,130 @@
 import React, {Component} from 'react'
-import {View, StyleSheet} from 'react-native'
-import {MKSpinner} from 'react-native-material-kit'
+import {View, StyleSheet, Text} from 'react-native'
+import {MKSpinner, MKProgress} from 'react-native-material-kit'
 import Elevation from '../helpers/Elevation'
+
+const CONTENT_PADDING = 20
 
 export default class Spinner extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      show: false
+      show         : false,
+      message      : '',
+      total        : 0,
+      step         : 0,
+      title        : '',
+      progressWidth: 50
     }
   }
 
+  /**
+   * Open the spinner
+   */
   open() {
     this.setState({show: true})
+    return this
   }
 
+  /**
+   * Close the spinner
+   */
   close() {
-    this.setState({show: false})
+    this.setState({show: false, total: 0, message: '', step: 0})
+    return this
   }
 
+  /**
+   * Set a title
+   *
+   * @param title
+   * @return {Spinner}
+   */
+  setTitle(title) {
+    this.setState({title})
+    return this
+  }
+
+  /**
+   * Set a message.
+   *
+   * @param message
+   * @return {Spinner}
+   */
+  setMessage(message) {
+    this.setState({message})
+    return this
+  }
+
+  /**
+   * Set the total number of steps.
+   *
+   * @param total
+   * @return {Spinner}
+   */
+  setProgressTotal(total) {
+    this.setState({total})
+    return this
+  }
+
+  /**
+   * Set the current step.
+   *
+   * @param step
+   * @return {Spinner}
+   */
+  setProgress(step) {
+    this.setState({step})
+    return this
+  }
+
+  renderProgressBar() {
+    const computed = Math.round((this.state.step / this.state.total) * 10) / 10
+
+    return (
+      <View style={styles.progress} onLayout={({nativeEvent}) => {
+        this.setState({progressWidth: nativeEvent.layout.width - CONTENT_PADDING * 2})
+      }}>
+        {this.state.title ?
+          <Text style={{fontSize: 14, fontWeight: '500', marginBottom: 10}}>{this.state.title}</Text>
+          :
+          null}
+        <MKProgress
+          style={{width: this.state.progressWidth, marginBottom: 10}}
+          progress={computed}/>
+        <Text style={{
+          color   : '#444',
+          fontSize: 12
+        }}>
+          {this.state.message.length > 0 ? this.state.message : `${this.state.step} out of ${this.state.total}`}
+        </Text>
+      </View>
+    )
+  }
+
+  renderSpinner() {
+    return (
+      <View style={styles.spinner}>
+        <MKSpinner prgress={.5} buffer={.5}/>
+      </View>
+    )
+  }
+
+  /**
+   * Render the spinner.
+   *
+   * @return {*}
+   */
   render() {
     let hidden = !this.state.show ? {
       width: 0,
       left : -99999
     } : {}
+
     return (
       <View style={[styles.container, hidden]}>
-        <View style={styles.spinner}>
-          <MKSpinner prgress={.5} buffer={.5}/>
-        </View>
+        {this.state.total !== 0 ? this.renderProgressBar() : this.renderSpinner()}
       </View>
     )
   }
@@ -60,5 +155,14 @@ const styles = StyleSheet.create({
     borderRadius   : 3,
     justifyContent : 'center',
     alignItems     : 'center'
+  },
+
+  progress: {
+    ...(new Elevation(5)),
+    backgroundColor: '#fff',
+    borderRadius   : 3,
+    justifyContent : 'center',
+    alignItems     : 'center',
+    padding        : CONTENT_PADDING
   }
 })

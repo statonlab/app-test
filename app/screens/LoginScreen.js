@@ -79,15 +79,17 @@ export default class LoginScreen extends Screen {
     this.spinner.open()
 
     User.login(this.state.email, this.state.password).then(response => {
-      this.spinner.close()
+      if (this.spinner) {
+        this.spinner.close()
+      }
 
       if (!this.props.onLogin()) {
         this.navigator.goBack()
       }
-      }).catch(error => {
-        console.log(error)
-      const errors = new Errors(error)
+    }).catch(error => {
+      console.log(error)
       this.spinner.close()
+      const errors = new Errors(error)
       if (errors.has('general')) {
         alert(errors.first('general'))
         return

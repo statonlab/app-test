@@ -71,8 +71,8 @@ export default class Header extends Component {
       icon    = this.props.rightIcon
       onPress = this.props.onRightPress
 
-      if(icon === 'help') {
-        icon = <Icon name={"help-circle"} size={23} color={"#fff"}/>
+      if (icon === 'help') {
+        icon = <Icon name={'help-circle'} size={23} color={'#fff'}/>
       }
     }
 
@@ -95,13 +95,14 @@ export default class Header extends Component {
 
   render() {
     return (
-      <View style={[style.wrapper, {...new Elevation(this.props.elevation)}]}
-            ref="header">
+      <View style={[style.wrapper, {...new Elevation(this.props.elevation)}]}>
         {this.getLeftIcon()}
 
         <View
-          style={[style.titleContainer, {alignItems: this.props.showLeftIcon ? 'flex-start' : 'center'}]}>
-          <Text style={[style.text, style.title]}>{this.props.title}</Text>
+          style={[style.titleContainer, {
+              alignItems: this.props.showLeftIcon ? 'flex-start' : 'center'
+            }]}>
+          <Text style={[style.text, style.title]} numberOfLines={1}>{this.props.title}</Text>
         </View>
 
         {this.getRightIcon()}

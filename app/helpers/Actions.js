@@ -27,7 +27,7 @@ export default class Actions {
 
       this._loaded = true
     } catch (error) {
-      console.log('loading error', error)
+      console.log('actions loading error', error)
       this._loaded = true
       throw new Error(error)
     }
