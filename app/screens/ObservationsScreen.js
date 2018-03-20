@@ -545,7 +545,7 @@ export default class ObservationsScreen extends Screen {
     }
 
     Share.share({title, message}, {url}).then(share => {
-      if (share.action && share.action === Share.sharedAction()) {
+      if (share.action && share.action === Share.sharedAction) {
         const analytics = new Analytics()
         analytics.shared(observation)
       }
