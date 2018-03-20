@@ -458,9 +458,15 @@ export default class ObservationScreen extends Screen {
   share() {
     const observation = this.state.entry
     const meta        = JSON.parse(observation.meta_data)
-    const url         = `https://treesnap.org/observation/${observation.serverID}`
     const title       = observation.name === 'Other' ? meta.otherLabel : observation.name
-    const message     = 'I found' + (this._beginsWithVowel(title) ? ' an ' : ' a ') + `${title}. Check it out on TreeSnap ${url}`
+    const url         = `https://treesnap.org/observation/${observation.serverID}`
+    const prefix      = this._beginsWithVowel(title) ? 'an' : 'a'
+
+    let message = `I shared ${prefix} ${title} with science partners on TreeSnap!`
+    if (android) {
+      message += ` ${url}`
+    }
+
     Share.share({title, message}, {url}).then(share => {
       if (share.action && share.action === Share.sharedAction()) {
         const analytics = new Analytics()
