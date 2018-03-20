@@ -401,7 +401,7 @@ export default class ObservationsScreen extends Screen {
     observations     = JSON.parse(JSON.stringify(observations))
     const total      = Object.keys(observations).length
     if (total > 0) {
-      let step = 1
+      let step = 0
       this.spinner
         .setTitle('Uploading Observations')
         .setProgressTotal(total)
@@ -517,7 +517,10 @@ export default class ObservationsScreen extends Screen {
    * Close the popover dropdown.
    */
   closePopover() {
-    this.setState({popoverVisible: false, selectedObservation: {}})
+    this.setState({popoverVisible: false})
+    setTimeout(() => {
+      this.setState({selectedObservation: {}})
+    }, 250)
   }
 
   /**
@@ -639,7 +642,7 @@ const styles = StyleSheet.create({
 
   popoverText: {
     color   : '#444',
-    fontSize: 12
+    fontSize: 14
   },
 
   popoverItem: {

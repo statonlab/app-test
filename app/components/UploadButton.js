@@ -50,7 +50,7 @@ export default class UploadButton extends Component {
       show: false
     })
 
-    let step = 1
+    let step = 0
     if (this.props.spinner) {
       this.props.spinner.setTitle('Uploading Observations')
         .setProgressTotal(total)
