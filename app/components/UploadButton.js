@@ -13,7 +13,7 @@ export default class UploadButton extends Component {
 
     this.state = {
       show        : false,
-      observations: [],
+      observations: []
     }
   }
 
@@ -43,27 +43,35 @@ export default class UploadButton extends Component {
    * Upload observations to the server.
    */
   async upload() {
+    // Have to use json to do a deep copy of the objects
+    const observations = JSON.parse(JSON.stringify(this.state.observations))
+    const total = Object.keys(observations).length
     this.setState({
-      show     : false,
+      show: false
     })
 
-    let step = 0
+    let step = 1
     if (this.props.spinner) {
       this.props.spinner.setTitle('Uploading Observations')
-        .setProgressTotal(this.state.observations.length)
+        .setProgressTotal(total)
         .setProgress(step)
         .open()
     }
 
-    for (let i in this.state.observations) {
-      let observation = this.state.observations[i]
+    for (let i in observations) {
+      if(!observations.hasOwnProperty(i)) {
+        continue
+      }
+
       try {
+        let observation = observations[i]
         if (!observation.needs_update) {
           await Observation.upload(observation)
         } else {
           await Observation.update(observation)
+          let updatedObservation = realm.objects('Submission').filtered(`id = ${observation.id}`)[0]
           realm.write(() => {
-            observation.needs_update = false
+            updatedObservation.needs_update = false
           })
         }
         step++
@@ -74,7 +82,6 @@ export default class UploadButton extends Component {
         if (this.props.spinner) {
           this.props.spinner.close()
         }
-        console.log(error)
         const errors = new Errors(error)
         this.setState({show: true})
         if (errors.has('general')) {
@@ -84,9 +91,10 @@ export default class UploadButton extends Component {
           this.props.onError(errors.first(field))
         }
 
-        return
+        break
       }
     }
+
     this.done()
   }
 
@@ -98,7 +106,6 @@ export default class UploadButton extends Component {
   }
 
   render() {
-    console.log(this.state)
     if (!this.state.show || this.state.observations.length === 0) {
       return null
     }

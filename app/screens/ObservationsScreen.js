@@ -11,7 +11,8 @@ import {
   SectionList,
   TextInput,
   Platform,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  Share
 } from 'react-native'
 import Header from '../components/Header'
 import Colors from '../helpers/Colors'
@@ -26,6 +27,10 @@ import SnackBar from '../components/SnackBarNotice'
 import {ifIphoneX} from 'react-native-iphone-x-helper'
 import Guide from '../components/Guide'
 import Errors from '../helpers/Errors'
+import Popover, {PopoverItem} from '../components/Popover'
+import Analytics from '../helpers/Analytics'
+
+const android = Platform.OS === 'android'
 
 export default class ObservationsScreen extends Screen {
   static navigationOptions = {
@@ -39,18 +44,24 @@ export default class ObservationsScreen extends Screen {
     super(props)
 
     this.state = {
-      hasData    : realm.objects('Submission').length > 0,
-      submissions: [],
-      isLoggedIn : false,
-      noticeText : '',
-      search     : '',
-      searchFocused: false
+      hasData            : realm.objects('Submission').length > 0,
+      submissions        : [],
+      isLoggedIn         : false,
+      noticeText         : '',
+      search             : '',
+      searchFocused      : false,
+      popoverVisible     : false,
+      buttonRect         : {},
+      selectedObservation: {}
     }
+
 
     this.events   = []
     this.snackbar = {}
+    this.buttons  = {}
 
-    this.fs = new File()
+    this.fs  = new File()
+    this.tmp = realm.objects('Submission').sorted('id', true)[0].id
   }
 
   /**
@@ -167,22 +178,35 @@ export default class ObservationsScreen extends Screen {
     }
 
     return (
-      <TouchableOpacity style={styles.row} key={item.id}
-                        onPress={() => this._goToEntryScene(item)}>
-        {thumbnail ?
-          <Image source={{uri: thumbnail}} style={styles.image}/>
-          : null}
-        <View style={styles.textContainer}>
-          <Text style={styles.title}>{category}</Text>
-          <Text style={styles.body}>{moment(item.date, 'MM-DD-YYYY HH:mm:ss')
-            .format('MMMM Do YYYY')}</Text>
-          <Text
-            style={styles.body}>Near {item.location.latitude.toFixed(4)}, {item.location.longitude.toFixed(4)}</Text>
+      <View style={{
+        flexDirection    : 'row',
+        backgroundColor  : '#fff',
+        borderBottomWidth: 1,
+        borderBottomColor: '#eee'
+      }}>
+        <TouchableOpacity style={[styles.row, {flex: 1}]} key={item.id}
+                          onPress={() => this._goToEntryScene(item)}>
+          {thumbnail ?
+            <Image source={{uri: thumbnail}} style={styles.image}/>
+            : null}
+          <View style={styles.textContainer}>
+            <Text style={styles.title}>{category}</Text>
+            <Text style={styles.body}>
+              {moment(item.date, 'MM-DD-YYYY HH:mm:ss').format('MMMM Do YYYY')}
+            </Text>
+            <Text
+              style={styles.body}>
+              Near {item.location.latitude.toFixed(4)}, {item.location.longitude.toFixed(4)}
+            </Text>
+          </View>
+        </TouchableOpacity>
+        <View style={{position: 'relative'}}>
+          <TouchableOpacity ref={ref => this.buttons[item.id] = ref} onPress={() => this.showPopover(item)}
+                            style={[styles.textContainer, styles.rightElement, {flex: 1}]}>
+            <Icon name="md-more" size={30} color="#aaa"/>
+          </TouchableOpacity>
         </View>
-        <Text style={[styles.textContainer, styles.rightElement]}>
-          <Icon name="md-more" size={30} color="#aaa"/>
-        </Text>
-      </TouchableOpacity>
+      </View>
     )
   }
 
@@ -298,9 +322,9 @@ export default class ObservationsScreen extends Screen {
             backgroundColor  : this.state.searchFocused ? '#fff' : '#eee',
             paddingHorizontal: 10,
             borderRadius     : 15,
-            borderWidth: 1,
-            borderColor: '#ececec',
-            color: '#444'
+            borderWidth      : 1,
+            borderColor      : '#ececec',
+            color            : '#444'
           }}
           value={this.state.search}
           onChangeText={search => {
@@ -363,24 +387,41 @@ export default class ObservationsScreen extends Screen {
   }
 
   /**
-   * Upload new observations.
+   * Upload new or edited observations.
    *
    * @return {Promise<void>}
    * @private
    */
-  async _uploadUnsynced() {
-    let observations = realm.objects('Submission').filtered('synced == false')
-    let unsynced     = observations.length
-    if (unsynced > 0) {
-      this.refs.spinner.open()
+  async _uploadAll() {
+    let observations = realm.objects('Submission').filtered('synced == false OR needs_update == true')
+    observations     = JSON.parse(JSON.stringify(observations))
+    const total      = Object.keys(observations).length
+    if (total > 0) {
+      let step = 1
+      this.spinner
+        .setTitle('Uploading Observations')
+        .setProgressTotal(total)
+        .setProgress(step)
+        .open()
 
       for (let i in observations) {
-        let observation = observations[i]
+        if (!observations.hasOwnProperty(i)) {
+          continue
+        }
 
+        let observation = observations[i]
         try {
-          await Observation.upload(observation)
-          DeviceEventEmitter.emit('observationUploaded')
-          this._resetDataSource()
+          if (observation.needs_update) {
+            await Observation.update(observation)
+            let realmObservation = realm.objects('Submission').filtered(`id = ${observation.id}`)[0]
+            realm.write(() => {
+              realmObservation.needs_update = false
+            })
+          } else {
+            await Observation.upload(observation)
+          }
+          step++
+          this.spinner.setProgress(step)
         } catch (error) {
           const errors = new Errors(error)
 
@@ -392,67 +433,20 @@ export default class ObservationsScreen extends Screen {
             message   = errors.first(field)
           }
 
-          this.refs.spinner.close()
+          this.spinner.close()
           this.setState({noticeText: message})
           this.snackbar.showBar()
 
           break
         }
       }
+
+      DeviceEventEmitter.emit('observationUploaded')
+      this._resetDataSource()
+      this.spinner.close()
+      this.setState({noticeText: 'Observations uploaded successfully!'})
+      this.snackbar.showBar()
     }
-  }
-
-  /**
-   * Upload edited observations.
-   *
-   * @return {Promise<void>}
-   * @private
-   */
-  async _uploadUpdated() {
-    let toSync  = realm.objects('Submission').filtered('needs_update == true')
-    let updated = toSync.length
-    if (updated > 0) {
-      this.refs.spinner.open()
-
-      for (let i in toSync) {
-        let observation = toSync[i]
-        try {
-          await Observation.update(observation)
-          realm.write(() => {
-            observation.needs_update = false
-            this._resetDataSource()
-            this.refs.spinner.close()
-            DeviceEventEmitter.emit('observationUploaded')
-          })
-        } catch (error) {
-          const errors = new Errors(error)
-
-          let message
-          if (errors.has('general')) {
-            message = errors.first('general')
-          } else {
-            let field = Object.keys(errors.all())[0]
-            message   = errors.first(field)
-          }
-
-          this.refs.spinner.close()
-          this.setState({noticeText: message})
-          this.snackbar.showBar()
-
-          return
-        }
-      }
-    }
-  }
-
-  /**
-   * Upload all entries.
-   *
-   * @private
-   */
-  _uploadAll() {
-    this._uploadUnsynced()
-    this._uploadUpdated()
   }
 
   /**
@@ -497,6 +491,82 @@ export default class ObservationsScreen extends Screen {
     )
   }
 
+  /**
+   * Show the popover dropdown.
+   * @param observation
+   */
+  showPopover(observation) {
+    if (!this.buttons[observation.id]) {
+      return
+    }
+
+    this.buttons[observation.id].measure((ox, oy, width, height, px, py) => {
+      this.setState({
+        selectedObservation: observation,
+        popoverVisible     : true,
+        buttonRect         : {x: px, y: py, width: width, height: height}
+      })
+    })
+  }
+
+  /**
+   * Close the popover dropdown.
+   */
+  closePopover() {
+    this.setState({popoverVisible: false})
+  }
+
+  /**
+   * Check whether a string begins with a vowel.
+   *
+   * @param str
+   * @return {boolean}
+   * @private
+   */
+  _beginsWithVowel(str) {
+    return ['a', 'e', 'i', 'o', 'u'].indexOf(str.trim().charAt(0).toLowerCase()) > -1
+  }
+
+  /**
+   * Share an observation.
+   */
+  share() {
+    this.closePopover()
+
+    const observation = this.state.selectedObservation
+    const meta        = JSON.parse(observation.meta_data)
+    const title       = observation.name === 'Other' ? meta.otherLabel : observation.name
+    const url         = `https://treesnap.org/observation/${observation.serverID}`
+    const prefix      = this._beginsWithVowel(title) ? 'an' : 'a'
+
+    let message = `I shared ${prefix} ${title} with science partners on TreeSnap!`
+    if (android) {
+      message += ` ${url}`
+    }
+
+    Share.share({title, message}, {url}).then(share => {
+      if (share.action && share.action === Share.sharedAction()) {
+        const analytics = new Analytics()
+        analytics.shared(observation)
+      }
+    }).catch(error => {
+      console.log('share error', error)
+    })
+  }
+
+  /**
+   * Navigate to the observation screen.
+   */
+  viewObservation() {
+    this.closePopover()
+    this._goToEntryScene(this.state.selectedObservation)
+  }
+
+  /**
+   * Render the screen.
+   *
+   * @return {*}
+   */
   render() {
     return (
       <View style={styles.container}>
@@ -516,12 +586,35 @@ export default class ObservationsScreen extends Screen {
         />
         <KeyboardAvoidingView
           style={{flex: 1}}
-          behavior={Platform.os === 'android' ? 'height' : 'padding'}>
+          behavior={android ? 'height' : 'padding'}>
           {this._renderSearchBox()}
           {this._renderList()}
         </KeyboardAvoidingView>
         <SnackBar ref={ref => this.snackbar = ref} noticeText={this.state.noticeText}/>
-        <Spinner ref="spinner"/>
+        <Spinner ref={spinner => this.spinner = spinner}/>
+        <Popover
+          onCloseRequest={this.closePopover.bind(this)}
+          visible={this.state.popoverVisible}
+          triggerMeasurements={this.state.buttonRect}>
+          <PopoverItem onPress={this.viewObservation.bind(this)}
+                       style={styles.popoverItem}>
+            <Icon name={android ? 'md-eye' : 'ios-eye'}
+                  size={15}
+                  color={Colors.warningText}
+                  style={{width: 20}}/>
+            <Text style={styles.popoverText}>View</Text>
+          </PopoverItem>
+          {this.state.selectedObservation.synced ?
+            <PopoverItem onPress={this.share.bind(this)}
+                         style={styles.popoverItem}>
+              <Icon name={android ? 'md-share' : 'ios-share-outline'}
+                    size={15}
+                    color={Colors.warningText}
+                    style={{width: 20}}/>
+              <Text style={styles.popoverText}>Share</Text>
+            </PopoverItem>
+            : null}
+        </Popover>
       </View>
     )
   }
@@ -540,13 +633,21 @@ const styles = StyleSheet.create({
     })
   },
 
+  popoverText: {
+    color   : '#444',
+    fontSize: 12
+  },
+
+  popoverItem: {
+    flexDirection: 'row',
+    alignItems   : 'center'
+  },
+
   row: {
-    flexDirection    : 'row',
-    alignItems       : 'center',
-    backgroundColor  : '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
-    padding          : 10
+    flexDirection  : 'row',
+    alignItems     : 'center',
+    backgroundColor: '#fff',
+    padding        : 10
   },
 
   image: {
@@ -580,7 +681,7 @@ const styles = StyleSheet.create({
 
   rightElement: {
     flex          : 0,
-    width         : 50,
+    width         : 60,
     alignItems    : 'center',
     justifyContent: 'center'
   },
@@ -634,5 +735,11 @@ const styles = StyleSheet.create({
     paddingVertical  : 10,
     paddingHorizontal: 15,
     borderRadius     : 2
+  },
+
+  dropdownItem: {
+    padding          : 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee'
   }
 })

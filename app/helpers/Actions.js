@@ -52,7 +52,7 @@ export default class Actions {
       }
     }
 
-    for (let i in this._actions) {
+    for (let i = 0; i < this._actions.length; i++) {
       try {
         await this._actions[i].run()
       } catch (error) {
