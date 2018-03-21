@@ -1,4 +1,4 @@
-package com.treesnap;
+package com.treesource;
 
 import android.app.Application;
 
