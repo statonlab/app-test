@@ -19,72 +19,9 @@ PODS:
     - nanopb/encode (= 0.3.8)
   - nanopb/decode (0.3.8)
   - nanopb/encode (0.3.8)
-  - React/ART (0.53.3):
-    - React/Core
-  - React/BatchedBridge (0.53.3):
-    - React/Core
-    - React/cxxreact_legacy
-  - React/Core (0.53.3):
-    - yoga (= 0.53.3.React)
-  - React/cxxreact_legacy (0.53.3):
-    - React/jschelpers_legacy
-    - React/jsinspector_legacy
-  - React/DevSupport (0.53.3):
-    - React/Core
-    - React/RCTWebSocket
-  - React/fishhook (0.53.3)
-  - React/jschelpers_legacy (0.53.3)
-  - React/jsinspector_legacy (0.53.3)
-  - React/RCTActionSheet (0.53.3):
-    - React/Core
-  - React/RCTAnimation (0.53.3):
-    - React/Core
-  - React/RCTBlob (0.53.3):
-    - React/Core
-  - React/RCTGeolocation (0.53.3):
-    - React/Core
-  - React/RCTImage (0.53.3):
-    - React/Core
-    - React/RCTNetwork
-  - React/RCTLinkingIOS (0.53.3):
-    - React/Core
-  - React/RCTNetwork (0.53.3):
-    - React/Core
-  - React/RCTSettings (0.53.3):
-    - React/Core
-  - React/RCTText (0.53.3):
-    - React/Core
-  - React/RCTVibration (0.53.3):
-    - React/Core
-  - React/RCTWebSocket (0.53.3):
-    - React/Core
-    - React/fishhook
-    - React/RCTBlob
-  - yoga (0.53.3.React)
 
 DEPENDENCIES:
   - Firebase/Core
-  - React/ART (from `../node_modules/react-native`)
-  - React/BatchedBridge (from `../node_modules/react-native`)
-  - React/Core (from `../node_modules/react-native`)
-  - React/DevSupport (from `../node_modules/react-native`)
-  - React/RCTActionSheet (from `../node_modules/react-native`)
-  - React/RCTAnimation (from `../node_modules/react-native`)
-  - React/RCTGeolocation (from `../node_modules/react-native`)
-  - React/RCTImage (from `../node_modules/react-native`)
-  - React/RCTLinkingIOS (from `../node_modules/react-native`)
-  - React/RCTNetwork (from `../node_modules/react-native`)
-  - React/RCTSettings (from `../node_modules/react-native`)
-  - React/RCTText (from `../node_modules/react-native`)
-  - React/RCTVibration (from `../node_modules/react-native`)
-  - React/RCTWebSocket (from `../node_modules/react-native`)
-  - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
-
-EXTERNAL SOURCES:
-  React:
-    :path: ../node_modules/react-native
-  yoga:
-    :path: ../node_modules/react-native/ReactCommon/yoga
 
 SPEC CHECKSUMS:
   Firebase: 92c6ba593e32db0defde464a9adc981d5cb49f97
@@ -93,9 +30,7 @@ SPEC CHECKSUMS:
   FirebaseInstanceID: d2058a35e9bebda1b6dd42486b84917bde552a9d
   GoogleToolboxForMac: 2501e2ad72a52eb3dfe7bd9aee7dad11b858bd20
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
-  React: af66244a7d630be2aef03b4ddfe3570e4eff39fc
-  yoga: 55da126afc384965b96bff46652464373b330add
 
-PODFILE CHECKSUM: 0351a5c0e40a7465709aa039925f95972ee92c82
+PODFILE CHECKSUM: e25bb81d25c487c816963b74ac63ab02ceb7e20a
 
 COCOAPODS: 1.4.0
