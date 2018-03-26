@@ -47,7 +47,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>This app needs to access your camera</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Location services must be allowed while using the app</string>
+	<string>Location services are need to collect each observation's location</string>
 	<key>NSMainNibFile</key>
 	<string>LaunchScreen</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
