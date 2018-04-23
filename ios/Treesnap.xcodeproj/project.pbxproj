@@ -38,7 +38,7 @@
 		2D02E4C81E0B4AEC006451C7 /* libRCTWebSocket-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAD3E991DF850E9000B6D8A /* libRCTWebSocket-tvOS.a */; };
 		2D16E6881FA4F8E400B85C8A /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D16E6891FA4F8E400B85C8A /* libReact.a */; };
 		2DCD954D1E0B4F2C00145EB5 /* TreeSnapTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* TreeSnapTests.m */; };
-		49B8B616205B17D400D16114 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 49B8B615205B17D400D16114 /* GoogleService-Info.plist */; };
+		493394F5208E647300421CDB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 493394F4208E647300421CDB /* GoogleService-Info.plist */; };
 		49CFDE8C1FADF45600C9D650 /* libAirMaps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 49CFDE641FADF43300C9D650 /* libAirMaps.a */; };
 		5020B13667AE47C1AE2D2854 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 260C3B7D394C4D67B1A25507 /* MaterialCommunityIcons.ttf */; };
 		502886D8D1474100B3C9CD9C /* libRCTImageResizer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F0C1E926ADC0432AA1C4409C /* libRCTImageResizer.a */; };
@@ -436,8 +436,8 @@
 		37BB3F82A0EEDE4F17579C5B /* libPods-TreeSnap-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TreeSnap-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B32D295D6AA4EF2971603BA /* libRNFetchBlob.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNFetchBlob.a; sourceTree = "<group>"; };
 		46F5808D0EC5403D846D1419 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
+		493394F4208E647300421CDB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Treesnap/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		4989C66BE3DC43DB973F759E /* RNFirebase.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNFirebase.xcodeproj; path = "../node_modules/react-native-firebase/ios/RNFirebase.xcodeproj"; sourceTree = "<group>"; };
-		49B8B615205B17D400D16114 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Desktop/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		49B8B8A2205C0B2000D16114 /* FirebaseAnalytics */ = {isa = PBXFileReference; lastKnownFileType = folder; name = FirebaseAnalytics; path = Pods/FirebaseAnalytics; sourceTree = "<group>"; };
 		49B8B8D1205C0B8100D16114 /* FirebaseCoreDiagnostics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseCoreDiagnostics.framework; path = Pods/FirebaseAnalytics/Frameworks/FirebaseCoreDiagnostics.framework; sourceTree = "<group>"; };
 		49B8B8D2205C0B8100D16114 /* FirebaseAnalytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseAnalytics.framework; path = Pods/FirebaseAnalytics/Frameworks/FirebaseAnalytics.framework; sourceTree = "<group>"; };
@@ -642,7 +642,7 @@
 		13B07FAE1A68108700A75B9A /* TreeSnap */ = {
 			isa = PBXGroup;
 			children = (
-				49B8B615205B17D400D16114 /* GoogleService-Info.plist */,
+				493394F4208E647300421CDB /* GoogleService-Info.plist */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -918,8 +918,6 @@
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				04F01DFC5709C719D7913B81 /* [CP] Embed Pods Frameworks */,
-				241DA146408465898F94CECD /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1454,7 +1452,7 @@
 				C2BF64E4C6744C2CA07063B9 /* Octicons.ttf in Resources */,
 				045B145A8EDC46909ED2CD99 /* SimpleLineIcons.ttf in Resources */,
 				E54E9BD66ABE4C6EBF98CEC9 /* Zocial.ttf in Resources */,
-				49B8B616205B17D400D16114 /* GoogleService-Info.plist in Resources */,
+				493394F5208E647300421CDB /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1489,36 +1487,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
-		};
-		04F01DFC5709C719D7913B81 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TreeSnap/Pods-TreeSnap-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		241DA146408465898F94CECD /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TreeSnap/Pods-TreeSnap-resources.sh\"\n";
-			showEnvVarsInLog = 0;
 		};
 		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
 			isa = PBXShellScriptBuildPhase;
