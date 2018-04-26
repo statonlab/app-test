@@ -61,7 +61,6 @@ export default class ObservationsScreen extends Screen {
     this.buttons  = {}
 
     this.fs  = new File()
-    this.tmp = realm.objects('Submission').sorted('id', true)[0].id
   }
 
   /**
@@ -203,7 +202,7 @@ export default class ObservationsScreen extends Screen {
         <View style={{position: 'relative'}}>
           <TouchableOpacity ref={ref => this.buttons[item.id] = ref} onPress={() => this.showPopover(item)}
                             style={[styles.textContainer, styles.rightElement, {
-                              flex: 1,
+                              flex           : 1,
                               backgroundColor: this.state.selectedObservation.id === item.id ? '#eee' : 'transparent'
                             }]}>
             <Icon name="md-more" size={30} color="#aaa"/>
