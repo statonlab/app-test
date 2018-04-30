@@ -10,6 +10,9 @@ const styles = StyleSheet.create({
     paddingRight   : 5,
     color          : '#444',
     lineHeight     : 21
+  },
+  bold     : {
+    fontWeight: 'bold'
   }
 })
 
@@ -326,7 +329,7 @@ export const Plants = {
     }
   },
 
-  'American Elm': {
+  'American Elm'   : {
     image           : require('../img/elm.jpg'),
     latinName       : 'Ulmus americana',
     maps            : [require('../img/maps/elm_map.png')],
@@ -377,6 +380,90 @@ export const Plants = {
       crownHealth            : true,
       diameterNumeric        : true
     }
+  },
+  'Florida Torreya': {
+    image           : require('../img/torreya/Three_Rivers_SP_11282010_034_Torreya_taxifolia_group_campground.jpg'),
+    latinName       : 'Torreya taxifolia',
+    maps            : [
+      require('../img/maps/torreya_usa.png'),
+      require('../img/maps/torreya_little.png')
+    ],
+    images          : [
+      require('../img/torreya/fnai_illustrations.jpg'),
+      require('../img/torreya/top_leaves.jpg'),
+      require('../img/torreya/Torreya_taxifolia_at_Torreya_State_Park_04012018_Diana_Picklesimer_IMG_7421.png'),
+      require('../img/torreya/Gholson_Nature_Park,_Florida_Torreya_and_Helen_Roth_02102018.jpg'),
+      require('../img/torreya/Three_Rivers_SP_11282010_034_Torreya_taxifolia_group_campground.jpg'),
+      require('../img/torreya/torreya_male.jpg'),
+      require('../img/torreya/Three_Rivers_SP_11282010_031_Torreya_taxifolia_male_cones_group_campground.jpg'),
+      require('../img/torreya/Torreya_seed.jpg'),
+      require('../img/torreya/Torreya_taxifolia4.jpg'),
+      require('../img/torreya/Torreya_taxifolia5.jpg'),
+      require('../img/torreya/torreya1_mark_schwartz_lg.jpg'),
+      require('../img/torreya/torreya2_mark_schwartz_lg.jpg'),
+      require('../img/torreya/2004-canker.jpg'),
+      require('../img/torreya/fl-disease-x.jpg')
+    ],
+    captions        : ['Illustrations of Florida Torreya leaves, male and female cones, and underside of leaf.  Image credit: Field Guide to the Rare Plants of Florida, Florida Natural Areas Inventory, 2000.',
+      'Top side of Florida Torreya leaves.  Photo credit: Leigh Brooks.',
+      'Florida Torreya caged root sprout at Torreya State Park.  Photo credit: Diana Picklesimer.',
+      'Helen Roth with Florida Torreya root sprout at Angus K. Gholson, Jr. Nature Park in Chattahoochee.  Photo credit: Leigh Brooks.',
+      'Healthy Florida Torreya tree planted at Three Rivers State Park near Sneads.  Photo credit: Leigh Brooks.',
+      'Under side of Florida Torreya leaves showing male sporangia in cone-like structures.  Photo credit: Dr. Loran C. Anderson.',
+      'Under side of Florida Torreya leaves and buds of male cones.  Photo credit: Leigh Brooks.',
+      'Seed of female Florida Torreya.  Photo credit: Dr. Loran C. Anderson',
+      'Seed of female Florida Torreya.  Photo credit: Guy Anglin, Atlas of Florida Plants, Institute for Systematic Botany, University of South Florida, Tampa.',
+      'Female Florida Torreya branches with seeds.  Photo credit: Guy Anglin, Atlas of Florida Plants, Institute for Systematic Botany, University of South Florida, Tampa.',
+      'Close up of diseased needles on Florida Torreya.  Photo credit: Mark Schwartz, USDA USFS web page “Why Are Some Plants Rare?”',
+      'Diseased Florida Torreya tree.  Photo credit: Mark Schwartz, USDA USFS web page “Why Are Some Plants Rare?”',
+      'Close up of stem cankers on Florida Torreya.  Photo credit: Connie Barlow, Torreya Guardians web site',
+      'Close up of diseased stem of Florida Torreya.  Photo credit: Connie Barlow, Torreya Guardians web site'
+    ],
+    descriptionCards: [
+      {
+        title: 'Overview',
+        body : [<Text style={styles.paragraph}> Florida Torreya; Gopherwood; Stinking Cedar; Florida nutmeg</Text>,
+          <Text style={styles.paragraph}>Florida Torreya is one of the rarest tree species in the US, with distribution limited to a very narrow area of the upper Apalachicola River basin in Florida and just into Georgia. It used to be the dominant mid-story tree in the Apalachicola bluffs and ravines region, but in the 1950s the trees began dying off from a fungal blight and now only a fraction of trees remain. Help us by providing locations and measurements of trees on private property, and especially to find disease-free trees.</Text>
+        ]
+      },
+      {
+        title: 'Description',
+        body : [
+          <Text style={styles.paragraph}>Florida Torreya is an evergreen conifer. Its needle-like leaves are glossy dark green above, 0.5 to 1.5 inches long, stiff, <Text
+            style={styles.bold}>prickly at the tips</Text>, arranged in flat sprays along the branch when fully developed. Disease-free trees can grow up to 60 feet tall in a conical shape with a trunk diameter of 1 foot or more and luxuriant whorled branches, but most trees in wild native habitat are root sprouts just a few feet tall, or if taller they lack lower branches or leaves on lower branches and the trunk may be less than 1 inch diameter. Seeds on female trees are roundish green drupes about the size of a large olive, tiny cones on male trees grow along branches, but these features are rarely seen in the wild.</Text>
+        ]
+      },
+      {
+        title: 'Fusarium torreyae',
+        body : [
+          <Text style={styles.paragraph}>
+            The deadly fungus has been identified as Fusarium torreyae, thought to be imported from Asia, and appears to be ubiquitous in the ravines area. Root sprouts die before reaching maturity and producing fruit, so the species will go extinct in the wild without intervention. Researchers will coordinate with you to take cuttings of your trees which will be grown offsite to save the most genetic diversity possible. Of utmost importance is finding trees that do not exhibit cankers or other signs of disease stress so that genes for disease resistance can be found and used in a breeding program.</Text>,
+
+
+          <Text style ={styles.paragraph}> More information can be found at:</Text>,
+
+            <Text style={styles.paragraph}>{'\u2022'} <Atext url="www.torreyatreeoflife.com">
+              Torreya Tree Of Life
+            </Atext>  </Text>,
+          <Text style={styles.paragraph}>{'\u2022'}<Atext url="explorer.natureserve.org/"> NatureServe Explorer </Atext> </Text>,
+          <Text style={styles.paragraph}>{'\u2022'}<Atext url="www.fnai.org/FieldGuide/pdf/Torreya_taxifolia.PDF"> Florida Natural Areas Inventory  </Atext> </Text>,
+          <Text style={styles.paragraph}>{'\u2022'}<Atext url="www.fws.gov/panamacity/listedplants.html#Torreya"> U.S. Fish and Wildlife: Panama City Field Office  </Atext> </Text>,
+
+
+        ]
+      }
+    ],
+    formProps       : {
+      heightNumeric      : true,
+      diameterNumeric    : true,
+      numberRootSprouts  : true,
+      seedsBinary        : true,
+      conesMaleFemale    : true,
+      deerRub            : true,
+      torreyaFungalBlight: true
+    }
   }
+
+
 }
 
