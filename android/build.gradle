@@ -5,7 +5,6 @@
 * https://medium.com/@andr3wjack/versioning-react-native-apps-407469707661
 **/
 
-
 buildscript {
     repositories {
         jcenter()

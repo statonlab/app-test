@@ -165,10 +165,10 @@ dependencies {
         force = true
     }
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:26.0.1'
+    implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.facebook.react:react-native:+'
     implementation 'com.google.android.gms:play-services-maps:11.8.0'
-    implementation 'com.android.support:exifinterface:26.0.1'
+    implementation 'com.android.support:exifinterface:26.1.0'
     implementation ('com.google.firebase:firebase-core:11.8.0') {
         force = true
     }
