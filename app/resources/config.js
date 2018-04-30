@@ -231,6 +231,32 @@ const DCP = {
     selectChoices: ["Present", "Absent", "Unknown"],
     placeHolder  : "Please select",
   },
+
+  //Torreya questions
+  numberRootSprouts: {
+    label : 'Root Sprouts',
+    description: 'How many root sprouts are present?',
+    numeric: true,
+    units: 'sprouts',
+  },
+  deerRub: {
+    label: "Deer Rub",
+    description : 'Is there evidence of deer rub on the trunk?',
+    selectChoices: ['Present', 'Absent', 'Not sure'],
+    placeHolder : 'Please select'
+  },
+  torreyaFungalBlight: {
+    label : "Fungal Blight",
+    description: 'Do you see disease symptoms? Needles could be lighter in color, yellow, or absent. Cankers can be on trunk or branches.',
+    selectChoices: ['Present', 'Absent', 'Not sure']
+
+  },
+  conesMaleFemale : {
+    label : 'Cones',
+    description: 'Are cones present?',
+    selectChoices: ['Absent', 'Male present', 'Female present', 'Not sure']
+  }
+
 }
 
 
