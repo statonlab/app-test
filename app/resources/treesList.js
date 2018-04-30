@@ -57,7 +57,6 @@ const treesList = [
     locations: {
       alwaysShow: true
     }
-
   },
   {
     title    : 'Other',

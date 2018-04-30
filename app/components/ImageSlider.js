@@ -85,6 +85,11 @@ export default class ImageSlider extends Component {
     let width = Dimensions.get('window').width
     let x     = event.nativeEvent.contentOffset.x
 
+    if(Platform.OS === 'android') {
+      x = Math.round(x)
+      width = Math.round(width)
+    }
+
     if (x % width === 0) {
       this.setState({position: x / width})
     }
