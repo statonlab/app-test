@@ -5,7 +5,13 @@ const DCP = {
       'White ash', 'Green ash', 'Blue ash', 'Black ash', 'Uncertain'
     ],
     description  : 'Which species of ash tree is this?  If you aren\'t sure, select "Uncertain"',
-    placeHolder  : 'Uncertain'
+    placeHolder  : 'Uncertain',
+    images          : [
+      require('../img/ash_id/ash_bark.jpg'),
+      require('../img/ash_id/ash_buds.jpg'),
+      require('../img/ash_id/ash_leaves.jpg'),
+      require('../img/ash_id/ash_seeds.jpg')
+    ],
   },
   seedsBinary        : {
     label        : 'Seeds',
