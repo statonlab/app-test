@@ -382,7 +382,7 @@ export const Plants = {
     }
   },
   'Florida Torreya': {
-    image           : require('../img/torreya/Three Rivers SP_11282010 034 Torreya taxifolia group campground.jpg'),
+    image           : require('../img/torreya/Three_Rivers_SP_11282010_034_Torreya_taxifolia_group_campground.jpg'),
     latinName       : 'Torreya taxifolia',
     maps            : [
       require('../img/maps/torreya_usa.png'),
@@ -391,12 +391,12 @@ export const Plants = {
     images          : [
       require('../img/torreya/fnai_illustrations.jpg'),
       require('../img/torreya/top_leaves.jpg'),
-      require('../img/torreya/Torreya_taxifolia_at_Torreya_State_Park_04012018_Diana_Picklesimer_IMG_7421.JPG'),
-      require('../img/torreya/Gholson Nature Park, Florida Torreya and Helen Roth 02102018.jpg'),
-      require('../img/torreya/Three Rivers SP_11282010 034 Torreya taxifolia group campground.jpg'),
-      require('../img/torreya/torreya male.jpg'),
-      require('../img/torreya/Three Rivers SP_11282010 031 Torreya taxifolia male cones group campground.jpg'),
-      require('../img/torreya/Torreya seed.jpg'),
+      require('../img/torreya/Torreya_taxifolia_at_Torreya_State_Park_04012018_Diana_Picklesimer_IMG_7421.png'),
+      require('../img/torreya/Gholson_Nature_Park,_Florida_Torreya_and_Helen_Roth_02102018.jpg'),
+      require('../img/torreya/Three_Rivers_SP_11282010_034_Torreya_taxifolia_group_campground.jpg'),
+      require('../img/torreya/torreya_male.jpg'),
+      require('../img/torreya/Three_Rivers_SP_11282010_031_Torreya_taxifolia_male_cones_group_campground.jpg'),
+      require('../img/torreya/Torreya_seed.jpg'),
       require('../img/torreya/Torreya_taxifolia4.jpg'),
       require('../img/torreya/Torreya_taxifolia5.jpg'),
       require('../img/torreya/torreya1_mark_schwartz_lg.jpg'),
@@ -437,13 +437,19 @@ export const Plants = {
         title: 'Fusarium torreyae',
         body : [
           <Text style={styles.paragraph}>
-            The deadly fungus has been identified as Fusarium torreyae, thought to be imported from Asia, and appears to be ubiquitous in the ravines area. Root sprouts die before reaching maturity and producing fruit, so the species will go extinct in the wild without intervention. Researchers will coordinate with you to take cuttings of your trees which will be grown offsite to save the most genetic diversity possible. Of utmost importance is finding trees that do not exhibit cankers or other signs of disease stress so that genes for disease resistance can be found and used in a breeding program.
-            More information can be found at:
-            <Atext style={styles.paragraph}
-                   url="www.torreyatreeoflife.com">
-              Learn more at www.torreyatreeoflife.com.
-            </Atext>
-          </Text>
+            The deadly fungus has been identified as Fusarium torreyae, thought to be imported from Asia, and appears to be ubiquitous in the ravines area. Root sprouts die before reaching maturity and producing fruit, so the species will go extinct in the wild without intervention. Researchers will coordinate with you to take cuttings of your trees which will be grown offsite to save the most genetic diversity possible. Of utmost importance is finding trees that do not exhibit cankers or other signs of disease stress so that genes for disease resistance can be found and used in a breeding program.</Text>,
+
+
+          <Text style ={styles.paragraph}> More information can be found at:</Text>,
+
+            <Text style={styles.paragraph}>{'\u2022'} <Atext url="www.torreyatreeoflife.com">
+              Torreya Tree Of Life
+            </Atext>  </Text>,
+          <Text style={styles.paragraph}>{'\u2022'}<Atext url="explorer.natureserve.org/"> NatureServe Explorer </Atext> </Text>,
+          <Text style={styles.paragraph}>{'\u2022'}<Atext url="www.fnai.org/FieldGuide/pdf/Torreya_taxifolia.PDF"> Florida Natural Areas Inventory  </Atext> </Text>,
+          <Text style={styles.paragraph}>{'\u2022'}<Atext url="www.fws.gov/panamacity/listedplants.html#Torreya"> U.S. Fish and Wildlife: Panama City Field Office  </Atext> </Text>,
+
+
         ]
       }
     ],

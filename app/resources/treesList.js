@@ -51,6 +51,15 @@ const treesList = [
     }
   },
   {
+    title : 'Florida Torreya',
+    image           : require('../img/torreya/top_leaves.jpg'),
+    latinName       : 'Torreya taxifolia',
+    locations: {
+      alwaysShow: true
+    }
+
+  },
+  {
     title    : 'Other',
     latinName: 'Other trees that aren\'t listed above',
     image    : require('../img/forest.jpg'),

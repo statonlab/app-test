@@ -4,7 +4,9 @@ import DCP from '../resources/config'
 //TO DO: validate to a list of the choices instead
 
 const DCPrules = {
-  seedsBinary            : t.enums.of(DCP.seedsBinary.selectChoices, 'seed'),
+//  seedsBinary            : t.enums.of(DCP.seedsBinary.selectChoices, 'seed'),
+  seedsBinary: t.enums.of(DCP.seedsBinary.selectChoices),
+
   flowersBinary          : t.enums.of(DCP.flowersBinary.selectChoices, 'flowers'),
   woollyAdesPres         : t.Boolean,
   woollyAdesCoverage     : t.enums.of(DCP.woollyAdesCoverage.selectChoices, 'woollyAdesCoverage'),
@@ -26,7 +28,12 @@ const DCPrules = {
   nearbyTrees            : t.String,
   emeraldAshBorer        : t.maybe(t.String),
   oakHealthProblems      : t.maybe(t.String),
-  chestnutBlightSigns    : t.maybe(t.String)
+  chestnutBlightSigns    : t.maybe(t.String),
+  numberRootSprouts      : t.String,
+  deerRub                : t.enums.of(DCP.deerRub.selectChoices),
+  conesMaleFemale        : t.enums.of(DCP.conesMaleFemale.selectChoices),
+  torreyaFungalBlight    : t.enums.of(DCP.torreyaFungalBlight.selectChoices)
+
   //Deprecated choices
   // surroundings           : t.enums.of(DCP.surroundings.selectChoices)
   // nearbySmall            : t.enums.of(DCP.nearbySmall.selectChoices),
