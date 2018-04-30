@@ -8,7 +8,8 @@ import {
   TouchableOpacity,
   Dimensions,
   Text,
-  Image
+  Image,
+  Platform
 } from 'react-native'
 import Colors from '../helpers/Colors'
 import PhotoView from 'react-native-photo-view'
@@ -91,6 +92,7 @@ export default class ImageSlider extends Component {
 
   render() {
     const width  = this.state.width
+    const height = Dimensions.get('window').height
     if (this.props.images.length === 0) {
       return null
     }
@@ -112,7 +114,7 @@ export default class ImageSlider extends Component {
           style={{flex: 1}}
         >
           {this.props.images.map((image, index) => {
-            const imageObject = typeof image === 'string' ? {uri: 'file://'+image.replace('file://', '')} : image
+            const imageObject = typeof image === 'string' ? {uri: 'file://' + image.replace('file://', '')} : image
             if (this.props.enableZoom === true) {
               return (
                 <View key={index}
@@ -124,13 +126,12 @@ export default class ImageSlider extends Component {
                     source={imageObject}
                     showsHorizontalScrollIndicator={false}
                     showsVerticalScrollIndicator={false}
-                    minimumZoomScale={1}
                     maximumZoomScale={3}
                     style={{
-                      flex  : 1,
                       width,
-                      height: undefined
+                      height
                     }}
+                    resizeMode={'contain'}
                   />
                   {this.props.captions ? this.renderCaption(index) : null}
                 </View>
