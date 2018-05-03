@@ -10,7 +10,7 @@ export default class NumericModal extends Component {
       animationType: 'fade',
       modalVisible : false,
       cancelText   : 'OK',
-      setValue     : null,
+      setValue     : null
     }
   }
 
@@ -51,9 +51,11 @@ export default class NumericModal extends Component {
                 </Text>
               </View>
               <View style={styles.choiceContainer}>
-                <TextInput style={styles.textField} keyboardType={'numeric'}
-                  value={this.state.setValue}
-                  onChangeText={(text) => this.setState({setValue: text})}/>
+                <TextInput style={styles.textField}
+                           keyboardType={'numeric'}
+                           value={this.state.setValue}
+                           underlineColorAndroid={'transparent'}
+                           onChangeText={(text) => this.setState({setValue: text})}/>
               </View>
               <TouchableOpacity style={styles.button} onPress={() => this.submit(this.state.setValue)}>
                 <Text style={styles.buttonText}>
@@ -191,5 +193,5 @@ const styles = StyleSheet.create({
     paddingVertical  : 5,
     paddingHorizontal: 5,
     alignItems       : 'center'
-  },
+  }
 })
