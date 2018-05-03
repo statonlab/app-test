@@ -85,8 +85,8 @@ export default class ImageSlider extends Component {
     let width = Dimensions.get('window').width
     let x     = event.nativeEvent.contentOffset.x
 
-    if(Platform.OS === 'android') {
-      x = Math.round(x)
+    if (Platform.OS === 'android') {
+      x     = Math.round(x)
       width = Math.round(width)
     }
 
@@ -98,6 +98,7 @@ export default class ImageSlider extends Component {
   render() {
     const width  = this.state.width
     const height = Dimensions.get('window').height
+
     if (this.props.images.length === 0) {
       return null
     }
@@ -134,7 +135,7 @@ export default class ImageSlider extends Component {
                     maximumZoomScale={3}
                     style={{
                       width,
-                      height
+                      height: height - (isIphoneX() ? 50 : 30)
                     }}
                     resizeMode={'contain'}
                   />
