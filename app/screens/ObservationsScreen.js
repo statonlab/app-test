@@ -398,11 +398,14 @@ export default class ObservationsScreen extends Screen {
   async _uploadAll() {
     let observations = realm.objects('Submission').filtered('synced == false OR needs_update == true')
     observations     = JSON.parse(JSON.stringify(observations))
-    const total      = Object.keys(observations).length
+    let total      = 0
+    Object.keys(observations).forEach(key => {
+      total += Observation.countImages(observations[key].images)
+    })
     if (total > 0) {
       let step = 0
       this.spinner
-        .setTitle('Uploading Observations')
+        .setTitle('Uploading Images')
         .setProgressTotal(total)
         .setProgress(step)
         .open()
@@ -415,16 +418,20 @@ export default class ObservationsScreen extends Screen {
         let observation = observations[i]
         try {
           if (observation.needs_update) {
-            await Observation.update(observation)
+            await Observation.update(observation, () => {
+              step++;
+              this.spinner.setProgress(step)
+            })
             let realmObservation = realm.objects('Submission').filtered(`id = ${observation.id}`)[0]
             realm.write(() => {
               realmObservation.needs_update = false
             })
           } else {
-            await Observation.upload(observation)
+            await Observation.upload(observation, () => {
+              step++;
+              this.spinner.setProgress(step)
+            })
           }
-          step++
-          this.spinner.setProgress(step)
         } catch (error) {
           const errors = new Errors(error)
 

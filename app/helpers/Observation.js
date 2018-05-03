@@ -280,6 +280,26 @@ class Observation {
       await this.fs.download(observations[i])
     }
   }
+
+  /**
+   * Count images object.
+   *
+   * @param images
+   * @return {number} number of all images for an observation.
+   */
+  countImages(images) {
+    if (typeof images === 'string') {
+      images = JSON.parse(images)
+    }
+    let count = 0
+    Object.keys(images).map(key => {
+      if (Array.isArray(images[key])) {
+        count += images[key].length
+      }
+    })
+
+    return count
+  }
 }
 
 /**

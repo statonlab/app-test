@@ -45,37 +45,53 @@ export default class UploadButton extends Component {
   async upload() {
     // Have to use json to do a deep copy of the objects
     const observations = JSON.parse(JSON.stringify(this.state.observations))
-    const total = Object.keys(observations).length
+
+    let total = 0
+    Object.keys(observations).forEach(key => {
+      total += Observation.countImages(observations[key].images)
+    })
+
     this.setState({
       show: false
     })
 
     let step = 0
     if (this.props.spinner) {
-      this.props.spinner.setTitle('Uploading Observations')
+      this.props.spinner.setTitle('Uploading Images')
         .setProgressTotal(total)
         .setProgress(step)
         .open()
     }
 
     for (let i in observations) {
-      if(!observations.hasOwnProperty(i)) {
+      if (!observations.hasOwnProperty(i)) {
         continue
       }
 
       try {
         let observation = observations[i]
         if (!observation.needs_update) {
-          await Observation.upload(observation)
+          await Observation.upload(observation, () => {
+            step++;
+            if (this.props.spinner) {
+              console.log('HERE', 'SETTING STEP TO', step)
+              this.props.spinner.setProgress(step)
+            }
+          })
         } else {
-          await Observation.update(observation)
+          await Observation.update(observation, () => {
+            step++
+            if (this.props.spinner) {
+              this.props.spinner.setProgress(step)
+            }
+          })
           let updatedObservation = realm.objects('Submission').filtered(`id = ${observation.id}`)[0]
           realm.write(() => {
             updatedObservation.needs_update = false
           })
         }
-        step++
         if (this.props.spinner) {
+          console.log('HERE', 'SETTING STEP TO', step)
           this.props.spinner.setProgress(step)
         }
       } catch (error) {
