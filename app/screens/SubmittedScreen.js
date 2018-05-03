@@ -154,7 +154,18 @@ export default class SubmittedScreen extends Screen {
   }
 
   doUpload(observation) {
-    Observation.upload(observation).then(response => {
+    let total = Observation.countImages(observation.images)
+    let step  = 0
+
+    this.spinner.setTitle('Uploading Images')
+      .setProgressTotal(total)
+      .setProgress(step)
+      .open()
+
+    Observation.upload(observation, () => {
+      step++
+      this.spinner.setProgress(step)
+    }).then(response => {
       this.setState({
         uploaded: true
       })
