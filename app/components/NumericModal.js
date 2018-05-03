@@ -29,7 +29,6 @@ export default class NumericModal extends Component {
     this.setState({modalVisible: false})
   }
 
-
   submit = (value) => {
     this.props.onSelect(value)
     this.setState({setValue: value})
