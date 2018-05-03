@@ -59,7 +59,6 @@ export default class Form extends Component {
     }
 
     this.events     = []
-    this.realm      = realm
     this.fs         = new File()
     this.primaryKey = 0
     this.formProps  = this.props.formProps // read in form items to display
@@ -96,7 +95,7 @@ export default class Form extends Component {
       this.primaryKey = this.props.entryInfo.id
     } else {
       // Generate a primary key
-      this.primaryKey = this.realm.objects('Submission')
+      this.primaryKey = realm.objects('Submission')
       if (this.primaryKey.length <= 0) {
         this.primaryKey = parseInt(moment().format('DMMYYH').toString())
       } else {
@@ -308,8 +307,8 @@ export default class Form extends Component {
       meta_data: JSON.stringify(this.state.metadata)
     }
 
-    this.realm.write(() => {
-      this.realm.create('Submission', observation)
+    realm.write(() => {
+      realm.create('Submission', observation)
     })
 
     this.fs.delete({images: this.state.deletedImages}, () => {
@@ -345,7 +344,7 @@ export default class Form extends Component {
    * Update observation in realm.
    */
   saveEdit = () => {
-    this.realm.write(() => {
+    realm.write(() => {
       // true as 3rd argument updates
       realm.create('Submission', {
         id          : this.props.entryInfo.id,
