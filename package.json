@@ -26,7 +26,7 @@
     "react-native-keyboard-aware-scroll-view": "^0.4.4",
     "react-native-maps": "^0.17.1",
     "react-native-material-kit": "github:xinthink/react-native-material-kit#master",
-    "react-native-photo-view": "github:alwx/react-native-photo-view#master",
+    "react-native-photo-view": "github:statonlab/react-native-photo-view#master",
     "react-native-tab-view": "0.0.65",
     "react-native-vector-icons": "^4.6.0",
     "react-navigation": "^1.5.11",
