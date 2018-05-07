@@ -142,8 +142,8 @@ const DCP = {
     images       : [require('../img/DCP/diameter.jpg')],
     selectChoices: ['Measured', 'Estimated'],
     default      : 'Estimated',
-    placeHolder  : 'Diameter'
-
+    placeHolder  : 'Diameter',
+    numberPlaceHolder: 'Tap to enter diameter'
     //  startValue : 25,
   },
   crownHealth            : {
@@ -229,7 +229,8 @@ const DCP = {
     numeric    : true,
     units      : 'Feet',
     default    : 'Estimated',
-    placeHolder: 'Height'
+    placeHolder: 'Height',
+    numberPlaceHolder: 'Tap to enter height'
   },
   burrs          : {
     label        : 'Nuts/burrs',

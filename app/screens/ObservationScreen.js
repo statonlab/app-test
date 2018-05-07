@@ -136,13 +136,22 @@ export default class ObservationScreen extends Screen {
    * @param entry
    */
   async upload(entry) {
-    this.refs.spinner.open()
+    let total = Observation.countImages(entry.images)
+    let step  = 0
+    this.refs.spinner.setTitle('Uploading Images')
+      .setProgressTotal(total)
+      .setProgress(step)
+      .open()
     try {
-      await Observation.upload(entry)
+      await Observation.upload(entry, () => {
+        step++
+        this.refs.spinner.setProgress(step)
+      })
       this.refs.spinner.close()
       this.setState({
-        synced    : true,
-        noticeText: 'Entry synced successfully!'
+        synced      : true,
+        needs_update: false,
+        noticeText  : 'Entry synced successfully!'
       })
       this.refs.snackbar.showBar()
       DeviceEventEmitter.emit('observationUploaded')
@@ -170,9 +179,17 @@ export default class ObservationScreen extends Screen {
    */
   async update(entry) {
     if (this.state.synced) {
-      this.refs.spinner.open()
+      let total = Observation.countImages(entry.images)
+      let step  = 0
+      this.refs.spinner.setTitle('Uploading Images')
+        .setProgressTotal(total)
+        .setProgress(step)
+        .open()
       try {
-        await Observation.update(entry)
+        await Observation.update(entry, () => {
+          step++
+          this.refs.spinner.setProgress(step)
+        })
         let submission = realm.objects('Submission').filtered(`id == ${entry.id}`)
         if (submission.length > 0) {
           let observation = submission[0]
@@ -181,6 +198,7 @@ export default class ObservationScreen extends Screen {
           })
           this.refs.spinner.close()
           this.setState({
+            synced      : true,
             needs_update: false,
             noticeText  : 'Entry synced successfully!'
           })
