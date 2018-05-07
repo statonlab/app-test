@@ -103,11 +103,14 @@ export default class Errors {
       case 422:
         // There are 422 with custom errors, and 422s that are form validation rejections
         let data = errors.response.data
-
         if (data.error) {
           // Its a single error message
-          this.errors = {
-            general: [data.error]
+          if (typeof  data.error === 'string') {
+            this.errors = {
+              general: [data.error]
+            }
+          } else {
+            this.errors = data.error
           }
         }
         else {

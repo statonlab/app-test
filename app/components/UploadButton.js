@@ -45,8 +45,8 @@ export default class UploadButton extends Component {
   async upload() {
     // Have to use json to do a deep copy of the objects
     const observations = JSON.parse(JSON.stringify(this.state.observations))
-
-    let total = 0
+    let foundErrors    = false
+    let total          = 0
     Object.keys(observations).forEach(key => {
       total += Observation.countImages(observations[key].images)
     })
@@ -72,7 +72,7 @@ export default class UploadButton extends Component {
         let observation = observations[i]
         if (!observation.needs_update) {
           await Observation.upload(observation, () => {
-            step++;
+            step++
             if (this.props.spinner) {
               this.props.spinner.setProgress(step)
             }
@@ -93,6 +93,7 @@ export default class UploadButton extends Component {
           this.props.spinner.setProgress(step)
         }
       } catch (error) {
+        foundErrors = true
         if (this.props.spinner) {
           this.props.spinner.close()
         }
@@ -109,7 +110,9 @@ export default class UploadButton extends Component {
       }
     }
 
-    this.done()
+    if (!foundErrors) {
+      this.done()
+    }
   }
 
   done() {
