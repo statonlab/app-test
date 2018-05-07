@@ -247,7 +247,7 @@ const DCP = {
   //Torreya questions
   numberRootSprouts: {
     label      : 'Root sprouts',
-    description: 'How many living root sprouts (green needles) are present?  Root sprouts are stems growing up from the roots of a mature, dead Torreya tree.  There may be some dead stems.',
+    description: 'How many living root sprouts are present?',
     numeric    : true,
     units      : 'sprouts',
     placeHolder: 'Please enter',
@@ -256,7 +256,7 @@ const DCP = {
       require('../img/torreya/Torreya_taxifolia_at_Torreya_State_Park_04012018_Diana_Picklesimer_IMG_7421.png'),
       require('../img/torreya/Gholson_Nature_Park,_Florida_Torreya_and_Helen_Roth_02102018.jpg')
     ],
-    captions   : ['Example of root sprouts.  Photo credit: Trey Fletcher.',
+    captions   : ['Example of root sprouts. Root sprouts are stems growing up from the roots of a mature, dead Torreya tree.  There may be some dead stems.  Photo credit: Trey Fletcher.',
       'Florida Torreya caged root sprout at Torreya State Park.  Photo credit: Diana Picklesimer.',
       'Helen Roth with Florida Torreya root sprout at Angus K. Gholson, Jr. Nature Park in Chattahoochee.  Photo credit: Leigh Brooks.'],
     numberPlaceHolder: 'Tap to enter number'
@@ -265,15 +265,15 @@ const DCP = {
 
   deerRub: {
     label        : 'Deer rub',
-    description  : 'Is there evidence of deer rub on the trunk?  Look for smooth stems with outer bark missing.',
+    description  : 'Is there evidence of deer rub on the trunk?',
     selectChoices: ['Present', 'Absent', 'Not sure'],
     placeHolder  : 'Please select',
     images       : [require('../img/torreya/Deer_rub_on_Torreya_taxifolia_photo_by_Liza_Uzzell.jpg')],
-    captions     : ['Deer rub on Florida Torreya stem.  Photo credit: Liza Uzzell.']
+    captions     : ['Deer rub on Florida Torreya stem.  Look for smooth stems with  bark missing. Photo credit: Liza Uzzell.']
   },
 
   torreyaFungalBlight: {
-    label        : 'Fungal blight',
+    label        : 'Disease symptoms',
     description  : 'Do you see disease symptoms? Needles could be lighter in color, yellow, or absent. Cankers can be on trunk or branches.',
     selectChoices: ['Present', 'Absent', 'Not sure'],
     placeHolder  : 'Please select',
@@ -281,16 +281,17 @@ const DCP = {
       require('../img/torreya/Canker_on_Florida_Torreya_stem_by_Houston_Snead.jpg'),
       require('../img/torreya/20180201_140312_PElliott.jpg'),
       require('../img/torreya/torreya1_mark_schwartz_lg.jpg'),
-      require('../img/torreya/torreya2_mark_schwartz_lg.jpg'),
+    //  require('../img/torreya/torreya2_mark_schwartz_lg.jpg'), //picture unclear, cutting
       require('../img/torreya/2004-canker.jpg'),
-      require('../img/torreya/fl-disease-x.jpg')],
+  //    require('../img/torreya/fl-disease-x.jpg') //redundant, removing
+      ],
 
     captions: ['Canker on Florida Torreya stem.  Photo credit: Houston Snead.',
       'Canker on Florida Torreya stem.  Photo credit: Padraic Elliott.',
       'Close up of diseased needles on Florida Torreya.  Photo credit: Mark Schwartz, USDA USFS web page “Why Are Some Plants Rare?”',
-      'Diseased Florida Torreya tree.  Photo credit: Mark Schwartz, USDA USFS web page “Why Are Some Plants Rare?”',
+     // 'Diseased Florida Torreya tree.  Photo credit: Mark Schwartz, USDA USFS web page “Why Are Some Plants Rare?”',
       'Close up of stem cankers on Florida Torreya.  Photo credit: Connie Barlow, Torreya Guardians web site',
-      'Close up of diseased stem of Florida Torreya.  Photo credit: Connie Barlow, Torreya Guardians web site'
+   //   'Close up of diseased stem of Florida Torreya.  Photo credit: Connie Barlow, Torreya Guardians web site'
     ]
   },
   conesMaleFemale    : {
