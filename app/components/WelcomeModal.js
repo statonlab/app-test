@@ -174,7 +174,7 @@ export default class WelcomeModal extends Component {
                 placeholder="Name"
                 value={this.state.name}
                 onChangeText={name => this.setState({name})}
-                placeholderColor="#aaa"
+                placeholderTextColor="#aaa"
                 blurOnSubmit={true}
                 onSubmitEditing={() => {
                   this.emailInput.focus()
@@ -190,7 +190,7 @@ export default class WelcomeModal extends Component {
                 placeholder="Email Address"
                 value={this.state.email}
                 onChangeText={email => this.setState({email})}
-                placeholderColor="#aaa"
+                placeholderTextColor="#aaa"
                 ref={ref => this.emailInput = ref}
                 blurOnSubmit={true}
                 onSubmitEditing={() => {
