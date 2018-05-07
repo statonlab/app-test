@@ -553,6 +553,7 @@ export default class ObservationsScreen extends Screen {
    * @private
    */
   async _uploadAll() {
+    let foundErrors  = false
     let observations = realm.objects('Submission').filtered('synced == false OR needs_update == true')
     observations     = JSON.parse(JSON.stringify(observations))
     let total        = 0
@@ -590,6 +591,7 @@ export default class ObservationsScreen extends Screen {
             })
           }
         } catch (error) {
+          foundErrors  = true
           const errors = new Errors(error)
 
           let message
@@ -608,11 +610,13 @@ export default class ObservationsScreen extends Screen {
         }
       }
 
-      DeviceEventEmitter.emit('observationUploaded')
-      this._resetDataSource(this.state.search)
-      this.spinner.close()
-      this.setState({noticeText: 'Observations uploaded successfully!'})
-      this.snackbar.showBar()
+      if (!foundErrors) {
+        DeviceEventEmitter.emit('observationUploaded')
+        this._resetDataSource(this.state.search)
+        this.spinner.close()
+        this.setState({noticeText: 'Observations uploaded successfully!'})
+        this.snackbar.showBar()
+      }
     }
   }
 
@@ -621,7 +625,6 @@ export default class ObservationsScreen extends Screen {
    * @private
    */
   _resetDataSource(search) {
-    console.log('HERE', this.state.sort)
     this.setState({
       submissions: this._createMap(search),
       refreshing : false

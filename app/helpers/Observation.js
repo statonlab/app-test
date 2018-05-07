@@ -298,7 +298,7 @@ class Observation {
       }
     })
 
-    return count
+    return parseInt(count)
   }
 }
 

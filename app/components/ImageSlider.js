@@ -96,7 +96,7 @@ export default class ImageSlider extends Component {
   }
 
   render() {
-    const width  = this.state.width
+    const width  = Dimensions.get('window').width
     const height = Dimensions.get('window').height
 
     if (this.props.images.length === 0) {
@@ -135,7 +135,9 @@ export default class ImageSlider extends Component {
                     maximumZoomScale={3}
                     style={{
                       width,
-                      height: height - (isIphoneX() ? 50 : 30)
+                      height: height - (isIphoneX() ? 50 : 30),
+                      justifyContent: 'center',
+                      alignItems: 'center'
                     }}
                     resizeMode={'contain'}
                   />

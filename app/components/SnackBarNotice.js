@@ -4,7 +4,7 @@ import {
   Animated,
   View,
   Text,
-  TouchableHighlight,
+  TouchableOpacity,
   StyleSheet
 } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -106,7 +106,7 @@ export default class SnackBarNotice extends Component {
    */
   getIcon = () => {
     return (
-      <Icon name="message" size={23} color="#fff"/>
+      <Icon name="message" size={23} color="#fff" style={{marginRight: 10}}/>
     )
   }
 
@@ -114,18 +114,18 @@ export default class SnackBarNotice extends Component {
     if (this.state.isVisible) {
       return (
         <Animated.View style={[styles.container, this.props.placement === 'bottom' ? {bottom: this.state.position} : {top: this.state.position}]}>
-          <TouchableHighlight
-            underlayColor={Colors.primary}
+          <TouchableOpacity
             onPress={() => {
               this.closeBar()
             }}
             style={styles.flex1}
           >
             <View style={styles.row}>
-              <Text style={[styles.text]}>{this.state.noticeText}</Text>
               {this.getIcon()}
+
+              <Text style={[styles.text]}>{this.state.noticeText}</Text>
             </View>
-          </TouchableHighlight>
+          </TouchableOpacity>
         </Animated.View>
       )
     } else {
@@ -178,11 +178,13 @@ const styles = StyleSheet.create({
 
   container: {
     ...(new Elevation(2)),
-    position       : 'absolute',
-    left           : 20,
-    right          : 20,
-    backgroundColor: Colors.black,
-    zIndex         : 900000,
-    borderRadius   : 2
+    position         : 'absolute',
+    left             : 0,
+    right            : 0,
+    paddingHorizontal: 10,
+    paddingVertical  : 5,
+    backgroundColor  : Colors.black,
+    zIndex           : 900000
+    // borderRadius   : 2
   }
 })
