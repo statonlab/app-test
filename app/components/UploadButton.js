@@ -74,7 +74,6 @@ export default class UploadButton extends Component {
           await Observation.upload(observation, () => {
             step++;
             if (this.props.spinner) {
-              console.log('HERE', 'SETTING STEP TO', step)
               this.props.spinner.setProgress(step)
             }
           })
@@ -91,7 +90,6 @@ export default class UploadButton extends Component {
           })
         }
         if (this.props.spinner) {
-          console.log('HERE', 'SETTING STEP TO', step)
           this.props.spinner.setProgress(step)
         }
       } catch (error) {
