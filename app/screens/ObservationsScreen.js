@@ -260,7 +260,13 @@ export default class ObservationsScreen extends Screen {
    * @private
    */
   _formatDistance(distance) {
-    return Math.round(distance * 100) / 100 + ' Meters away'
+    let unit = 'meters'
+    if(distance > 1000) {
+      distance /= 1000
+      unit = 'kilometers'
+    }
+
+    return Math.round(distance * 100) / 100 + ' '+unit +' away'
   }
 
   /**
