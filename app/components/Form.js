@@ -457,20 +457,27 @@ export default class Form extends Component {
   /**
    * Extract any conditional items.
    *
-   * @param {object} item DCP[key]
-   * @return {*} Null on empty or the conditional items
+   * @param {object} config DCP[key]
+   * @return {object} The given object with conditional properties assigned.
    */
-  exctractConditional(item) {
-    if(typeof item.conditional !== 'object') {
-      return null
+  extractConditional(config) {
+    if (typeof config.conditional !== 'object') {
+      return config
     }
 
     const tree = this.state.title
-    if(typeof item.conditional[tree] === 'undefined') {
-      return null;
+    if (typeof config.conditional[tree] === 'undefined') {
+      return config
     }
 
-    return item.conditional[tree]
+    // Loop through `conditional` instead of `config` since it'll
+    // most likely have less items compared to the full config
+    const conditional = config.conditional[tree]
+    Object.keys(conditional).map(key => {
+      config[key] = conditional[key]
+    })
+
+    return config
   }
 
   /**
@@ -518,14 +525,14 @@ export default class Form extends Component {
     if (DCP[key].numeric) {
       let key2  = [key] + '_confidence'
       let value = this.state.metadata[key] ? this.state.metadata[key] + ' ' + DCP[key].units : null
-      let conditional = this.exctractConditional(DCP[key])
+      DCP[key]  = this.extractConditional(DCP[key])
       return (
         <View key={key}>
           <View style={styles.formGroup}>
             <PickerModal
               style={styles.picker}
-              images={conditional !== null ? conditional.images : DCP[key].images}
-              captions={conditional !== null ? conditional.captions : DCP[key].captions}
+              images={DCP[key].images}
+              captions={DCP[key].captions}
               multiCheck={DCP[key].multiCheck}
               default={DCP[key].default}
               startingNumeric={[this.state.metadata[key], this.state.metadata[key2]]}
@@ -561,14 +568,14 @@ export default class Form extends Component {
     }
 
     let value = this.getMultiCheckValue(this.state.metadata[key], DCP[key].multiCheck)
-    let conditional = this.exctractConditional(DCP[key])
+    DCP[key]  = this.extractConditional(DCP[key])
     return (
       <View key={key}>
         <View style={styles.formGroup}>
           <PickerModal
             style={styles.picker}
-            images={conditional !== null ? conditional.images : DCP[key].images}
-            captions={conditional !== null ? conditional.captions : DCP[key].captions}
+            images={DCP[key].images}
+            captions={DCP[key].captions}
             multiCheck={DCP[key].multiCheck}
             startingString={this.state.metadata[key]}
             numeric={DCP[key].numeric}
