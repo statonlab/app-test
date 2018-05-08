@@ -455,6 +455,25 @@ export default class Form extends Component {
   }
 
   /**
+   * Extract any conditional items.
+   *
+   * @param {object} item DCP[key]
+   * @return {*} Null on empty or the conditional items
+   */
+  exctractConditional(item) {
+    if(typeof item.conditional !== 'object') {
+      return null
+    }
+
+    const tree = this.state.title
+    if(typeof item.conditional[tree] === 'undefined') {
+      return null;
+    }
+
+    return item.conditional[tree]
+  }
+
+  /**
    * Renders the form item for each key passed via formProps.
    * Form item will default to a picker Modal.
    *
@@ -499,13 +518,14 @@ export default class Form extends Component {
     if (DCP[key].numeric) {
       let key2  = [key] + '_confidence'
       let value = this.state.metadata[key] ? this.state.metadata[key] + ' ' + DCP[key].units : null
+      let conditional = this.exctractConditional(DCP[key])
       return (
         <View key={key}>
           <View style={styles.formGroup}>
             <PickerModal
               style={styles.picker}
-              images={DCP[key].images}
-              captions={DCP[key].captions}
+              images={conditional !== null ? conditional.images : DCP[key].images}
+              captions={conditional !== null ? conditional.captions : DCP[key].captions}
               multiCheck={DCP[key].multiCheck}
               default={DCP[key].default}
               startingNumeric={[this.state.metadata[key], this.state.metadata[key2]]}
@@ -533,20 +553,22 @@ export default class Form extends Component {
               </View>
             </PickerModal>
           </View>
-          {DCP[key].camera && DCP[key].camera.includes(this.state.metadata[key]) ? this.renderCameraItem(DCP[key].label, DCP[key].label)
+          {DCP[key].camera && DCP[key].camera.includes(this.state.metadata[key]) ?
+            this.renderCameraItem(DCP[key].label, DCP[key].label)
             : null}
         </View>
       )
     }
 
     let value = this.getMultiCheckValue(this.state.metadata[key], DCP[key].multiCheck)
+    let conditional = this.exctractConditional(DCP[key])
     return (
       <View key={key}>
         <View style={styles.formGroup}>
           <PickerModal
             style={styles.picker}
-            images={DCP[key].images}
-            captions={DCP[key].captions}
+            images={conditional !== null ? conditional.images : DCP[key].images}
+            captions={conditional !== null ? conditional.captions : DCP[key].captions}
             multiCheck={DCP[key].multiCheck}
             startingString={this.state.metadata[key]}
             numeric={DCP[key].numeric}

@@ -20,7 +20,13 @@ const DCP = {
     ],
     description  : 'Are seeds present?',
     placeHolder  : 'Are seeds present?',
-    camera       : ['Yes']
+    camera       : ['Yes'],
+    conditional: {
+      'Florida Torreya': {
+        images: [],
+        captions: []
+      }
+    }
   },
   flowersBinary      : {
     label        : 'Flowers',
@@ -277,7 +283,6 @@ const DCP = {
       'Diseased Florida Torreya tree.  Photo credit: Mark Schwartz, USDA USFS web page “Why Are Some Plants Rare?”',
       'Close up of stem cankers on Florida Torreya.  Photo credit: Connie Barlow, Torreya Guardians web site',
       'Close up of diseased stem of Florida Torreya.  Photo credit: Connie Barlow, Torreya Guardians web site'
-
     ]
   },
   conesMaleFemale    : {
