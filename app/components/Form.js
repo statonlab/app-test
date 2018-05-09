@@ -455,6 +455,32 @@ export default class Form extends Component {
   }
 
   /**
+   * Extract any conditional items.
+   *
+   * @param {object} config DCP[key]
+   * @return {object} The given object with conditional properties assigned.
+   */
+  extractConditional(config) {
+    if (typeof config.conditional !== 'object') {
+      return config
+    }
+
+    const tree = this.state.title
+    if (typeof config.conditional[tree] === 'undefined') {
+      return config
+    }
+
+    // Loop through `conditional` instead of `config` since it'll
+    // most likely have less items compared to the full config
+    const conditional = config.conditional[tree]
+    Object.keys(conditional).map(key => {
+      config[key] = conditional[key]
+    })
+
+    return config
+  }
+
+  /**
    * Renders the form item for each key passed via formProps.
    * Form item will default to a picker Modal.
    *
@@ -499,6 +525,7 @@ export default class Form extends Component {
     if (DCP[key].numeric) {
       let key2  = [key] + '_confidence'
       let value = this.state.metadata[key] ? this.state.metadata[key] + ' ' + DCP[key].units : null
+      DCP[key]  = this.extractConditional(DCP[key])
       return (
         <View key={key}>
           <View style={styles.formGroup}>
@@ -533,13 +560,15 @@ export default class Form extends Component {
               </View>
             </PickerModal>
           </View>
-          {DCP[key].camera && DCP[key].camera.includes(this.state.metadata[key]) ? this.renderCameraItem(DCP[key].label, DCP[key].label)
+          {DCP[key].camera && DCP[key].camera.includes(this.state.metadata[key]) ?
+            this.renderCameraItem(DCP[key].label, DCP[key].label)
             : null}
         </View>
       )
     }
 
     let value = this.getMultiCheckValue(this.state.metadata[key], DCP[key].multiCheck)
+    DCP[key]  = this.extractConditional(DCP[key])
     return (
       <View key={key}>
         <View style={styles.formGroup}>
