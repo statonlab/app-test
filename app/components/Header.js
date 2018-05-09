@@ -44,7 +44,7 @@ export default class Header extends Component {
 
     if (this.props.initial) {
       return (
-        <TouchableHighlight style={style.touchable} onPress={this.onMenuPress}
+        <TouchableHighlight style={[style.touchable, {paddingLeft: 10}]} onPress={this.onMenuPress}
                             underlayColor={Colors.primary}>
           <Icon name={this.state.menuIcon} style={{fontSize: 25}} color="#fff"/>
         </TouchableHighlight>
@@ -184,7 +184,7 @@ const style = StyleSheet.create({
 
   touchable: {
     flex             : 0,
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
     paddingVertical  : 15,
     marginTop        : 3
   }
