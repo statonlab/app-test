@@ -22,9 +22,15 @@ const DCP = {
     placeHolder  : 'Are seeds present?',
     camera       : ['Yes'],
     conditional : {
-      Torreya: {
-        images: [],
-        captions: []
+      'Florida Torreya': {
+        images: [
+          require('../img/torreya/Torreya_taxifolia4.jpg'),
+          require('../img/torreya/Torreya_taxifolia5.jpg'),
+        ],
+        captions: [
+          'Seed of female Florida Torreya.  Photo credit: Guy Anglin, Atlas of Florida Plants, Institute for Systematic Botany, University of South Florida, Tampa.',
+          'Female Florida Torreya branches with seeds.  Photo credit: Guy Anglin, Atlas of Florida Plants, Institute for Systematic Botany, University of South Florida, Tampa.',
+        ]
       }
     }
   },
@@ -267,7 +273,7 @@ const DCP = {
   deerRub: {
     label        : 'Deer rub',
     description  : 'Is there evidence of deer rub on the trunk?',
-    selectChoices: ['Present', 'Absent', 'Not sure'],
+    selectChoices: ['Present', 'Absent, but caged', 'Absent',  'Not sure'],
     placeHolder  : 'Please select',
     images       : [require('../img/torreya/Deer_rub_on_Torreya_taxifolia_photo_by_Liza_Uzzell.jpg')],
     captions     : ['Deer rub on Florida Torreya stem.  Look for smooth stems with  bark missing. Photo credit: Liza Uzzell.']
@@ -275,24 +281,21 @@ const DCP = {
 
   torreyaFungalBlight: {
     label        : 'Disease symptoms',
-    description  : 'Do you see disease symptoms? Needles could be lighter in color, yellow, or absent. Cankers can be on trunk or branches.',
-    selectChoices: ['Present', 'Absent', 'Not sure'],
+    description  : 'What disease symptoms are present?',
+    selectChoices: ['Cankers', 'Needle lesions or yellowing'],
     placeHolder  : 'Please select',
+    multiCheck : true,
     images       : [
       require('../img/torreya/Canker_on_Florida_Torreya_stem_by_Houston_Snead.jpg'),
       require('../img/torreya/20180201_140312_PElliott.jpg'),
       require('../img/torreya/torreya1_mark_schwartz_lg.jpg'),
-    //  require('../img/torreya/torreya2_mark_schwartz_lg.jpg'), //picture unclear, cutting
       require('../img/torreya/2004-canker.jpg'),
-  //    require('../img/torreya/fl-disease-x.jpg') //redundant, removing
       ],
 
     captions: ['Canker on Florida Torreya stem.  Photo credit: Houston Snead.',
       'Canker on Florida Torreya stem.  Photo credit: Padraic Elliott.',
       'Close up of diseased needles on Florida Torreya.  Photo credit: Mark Schwartz, USDA USFS web page “Why Are Some Plants Rare?”',
-     // 'Diseased Florida Torreya tree.  Photo credit: Mark Schwartz, USDA USFS web page “Why Are Some Plants Rare?”',
       'Close up of stem cankers on Florida Torreya.  Photo credit: Connie Barlow, Torreya Guardians web site',
-   //   'Close up of diseased stem of Florida Torreya.  Photo credit: Connie Barlow, Torreya Guardians web site'
     ]
   },
   conesMaleFemale    : {
@@ -301,11 +304,12 @@ const DCP = {
     selectChoices: ['Absent', 'Male present', 'Female present', 'Not sure'],
     placeHolder  : 'Please select',
     images       : [
-      require('../img/torreya/fnai_illustrations.jpg'),
+      require('../img/torreya/male_cones_torreya.jpg'),
+      require('../img/torreya/female_cones_torreya.jpg'),
       require('../img/torreya/Three_Rivers_SP_11282010_031_Torreya_taxifolia_male_cones_group_campground.jpg')
 
     ],
-    captions     : ['Illustrations of Florida Torreya leaves, male and female cones, and underside of leaf.  Image credit: Field Guide to the Rare Plants of Florida, Florida Natural Areas Inventory, 2000.', 'Under side of Florida Torreya leaves and buds of male cones.  Photo credit: Leigh Brooks.'
+    captions     : [ 'Male cones.', 'Female cones.', 'Under side of Florida Torreya leaves and buds of male cones.  Photo credit: Leigh Brooks.'
     ]
   }
 }
