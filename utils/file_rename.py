@@ -15,8 +15,10 @@ def replace_space_by_underscore(path):
 
 if __name__ == "__main__":
 	import sys
-	path = sys.argv[1]
-	if ! sys.argv[1]:
+
+	if len(sys.argv) > 1:
+		path = sys.argv[1]
+	else: 
 		path = "."
 
-	replace_space_by_underscore(sys.argv[1])
+	replace_space_by_underscore(path)

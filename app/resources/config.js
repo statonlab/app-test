@@ -6,12 +6,12 @@ const DCP = {
     ],
     description  : 'Which species of ash tree is this?  If you aren\'t sure, select "Uncertain"',
     placeHolder  : 'Uncertain',
-    images          : [
+    images       : [
       require('../img/ash_id/ash_bark.jpg'),
       require('../img/ash_id/ash_buds.jpg'),
       require('../img/ash_id/ash_leaves.jpg'),
       require('../img/ash_id/ash_seeds.jpg')
-    ],
+    ]
   },
   seedsBinary        : {
     label        : 'Seeds',
@@ -21,10 +21,17 @@ const DCP = {
     description  : 'Are seeds present?',
     placeHolder  : 'Are seeds present?',
     camera       : ['Yes'],
-    conditional: {
+    conditional : {
       'Florida Torreya': {
-        images: [],
-        captions: []
+        images: [
+          require('../img/torreya/Torreya_taxifolia4.jpg'),
+          require('../img/torreya/Torreya_taxifolia5.jpg'),
+        ],
+        captions: [
+          'Seed of female Florida Torreya.  Photo credit: Guy Anglin, Atlas of Florida Plants, Institute for Systematic Botany, University of South Florida, Tampa.',
+          'Female Florida Torreya branches with seeds.  Photo credit: Guy Anglin, Atlas of Florida Plants, Institute for Systematic Botany, University of South Florida, Tampa.',
+        ]
+
       }
     }
   },
@@ -247,42 +254,49 @@ const DCP = {
 
   //Torreya questions
   numberRootSprouts: {
-    label      : 'Root Sprouts',
-    description: 'How many root sprouts are present?',
+    label      : 'Root sprouts',
+    description: 'How many living root sprouts are present?',
     numeric    : true,
     units      : 'sprouts',
-    images     : [require('../img/torreya/Torreya_taxifolia_at_Torreya_State_Park_04012018_Diana_Picklesimer_IMG_7421.png'),
+    placeHolder: 'Please enter',
+    images     : [
+      require('../img/torreya/Torreya_taxifolia_root_sprouts_by_Trey_Fletcher.jpg'),
+      require('../img/torreya/Torreya_taxifolia_at_Torreya_State_Park_04012018_Diana_Picklesimer_IMG_7421.png'),
       require('../img/torreya/Gholson_Nature_Park,_Florida_Torreya_and_Helen_Roth_02102018.jpg')
     ],
-    captions   : ['Florida Torreya caged root sprout at Torreya State Park.  Photo credit: Diana Picklesimer.',
+    captions   : ['Example of root sprouts. Root sprouts are stems growing up from the roots of a mature, dead Torreya tree.  There may be some dead stems.  Photo credit: Trey Fletcher.',
+      'Florida Torreya caged root sprout at Torreya State Park.  Photo credit: Diana Picklesimer.',
       'Helen Roth with Florida Torreya root sprout at Angus K. Gholson, Jr. Nature Park in Chattahoochee.  Photo credit: Leigh Brooks.'],
-    placeHolder: 'Quantity',
-    numberPlaceHolder: 'Tap to enter quantity'
+    numberPlaceHolder: 'Tap to enter number'
+
   },
 
-
-  deerRub            : {
-    label        : 'Deer Rub',
+  deerRub: {
+    label        : 'Deer rub',
     description  : 'Is there evidence of deer rub on the trunk?',
-    selectChoices: ['Present', 'Absent', 'Not sure'],
-    placeHolder  : 'Please select'
-  },
-  torreyaFungalBlight: {
-    label        : 'Fungal Blight',
-    description  : 'Do you see disease symptoms? Needles could be lighter in color, yellow, or absent. Cankers can be on trunk or branches.',
-    selectChoices: ['Present', 'Absent', 'Not sure'],
+    selectChoices: ['Present', 'Absent, but caged', 'Absent',  'Not sure'],
     placeHolder  : 'Please select',
-    images       : [
-      require('../img/torreya/torreya1_mark_schwartz_lg.jpg'),
-      require('../img/torreya/torreya2_mark_schwartz_lg.jpg'),
-      require('../img/torreya/2004-canker.jpg'),
-      require('../img/torreya/fl-disease-x.jpg')],
+    images       : [require('../img/torreya/Deer_rub_on_Torreya_taxifolia_photo_by_Liza_Uzzell.jpg')],
+    captions     : ['Deer rub on Florida Torreya stem.  Look for smooth stems with  bark missing. Photo credit: Liza Uzzell.']
+  },
 
-    captions: [
+  torreyaFungalBlight: {
+    label        : 'Disease symptoms',
+    description  : 'What disease symptoms are present?',
+    selectChoices: ['Cankers', 'Needle lesions or yellowing'],
+    placeHolder  : 'Please select',
+    multiCheck : true,
+    images       : [
+      require('../img/torreya/Canker_on_Florida_Torreya_stem_by_Houston_Snead.jpg'),
+      require('../img/torreya/20180201_140312_PElliott.jpg'),
+      require('../img/torreya/torreya1_mark_schwartz_lg.jpg'),
+      require('../img/torreya/2004-canker.jpg'),
+      ],
+
+    captions: ['Canker on Florida Torreya stem.  Photo credit: Houston Snead.',
+      'Canker on Florida Torreya stem.  Photo credit: Padraic Elliott.',
       'Close up of diseased needles on Florida Torreya.  Photo credit: Mark Schwartz, USDA USFS web page “Why Are Some Plants Rare?”',
-      'Diseased Florida Torreya tree.  Photo credit: Mark Schwartz, USDA USFS web page “Why Are Some Plants Rare?”',
       'Close up of stem cankers on Florida Torreya.  Photo credit: Connie Barlow, Torreya Guardians web site',
-      'Close up of diseased stem of Florida Torreya.  Photo credit: Connie Barlow, Torreya Guardians web site'
     ]
   },
   conesMaleFemale    : {
@@ -290,13 +304,14 @@ const DCP = {
     description  : 'Are cones present?',
     selectChoices: ['Absent', 'Male present', 'Female present', 'Not sure'],
     placeHolder  : 'Please select',
-    image        : [
-      require('../img/torreya/fnai_illustrations.jpg')
-    ],
+    images       : [
+      require('../img/torreya/male_cones_torreya.jpg'),
+      require('../img/torreya/female_cones_torreya.jpg'),
+      require('../img/torreya/Three_Rivers_SP_11282010_031_Torreya_taxifolia_male_cones_group_campground.jpg')
 
-    captions: ['Illustrations of Florida Torreya leaves, male and female cones, and underside of leaf.  Image credit: Field Guide to the Rare Plants of Florida, Florida Natural Areas Inventory, 2000.',
-      'Top side of Florida Torreya leaves.  Photo credit: Leigh Brooks.',
-      'Florida Torreya caged root sprout at Torreya State Park.  Photo credit: Diana Picklesimer.']
+    ],
+    captions     : [ 'Male cones.', 'Female cones.', 'Under side of Florida Torreya leaves and buds of male cones.  Photo credit: Leigh Brooks.'
+    ]
   }
 }
 

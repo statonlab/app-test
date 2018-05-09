@@ -55,7 +55,7 @@ const treesList = [
     image           : require('../img/torreya/top_leaves.jpg'),
     latinName       : 'Torreya taxifolia',
     locations: {
-      alwaysShow: true
+      only: ['Florida']
     }
   },
   {

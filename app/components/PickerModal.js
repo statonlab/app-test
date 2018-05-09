@@ -19,7 +19,7 @@ export default class PickerModal extends Component {
       selectedMulti: [],
       choices      : this.props.choices,
       numberVal    : {value: null}, //expect {value: int, confidence: string},
-      numberPlaceHolder: 'Tap to enter diameter'
+      numberPlaceHolder: null
     }
   }
 
@@ -30,6 +30,9 @@ export default class PickerModal extends Component {
     }
     if (this.props.specialText) {
       this.setState({cancelText: 'OK'})
+    }
+    if (this.props.numberPlaceHolder) {
+      this.setState({numberPlaceHolder: this.props.numberPlaceHolder})
     }
     if (this.props.freeText) {
       this.fetchSelections()
@@ -323,7 +326,7 @@ PickerModal.propTypes = {
 
 PickerModal.defaultProps = {
   choices      : [],
-  numberPlaceHolder: 'Tap to enter diameter',
+  numberPlaceHolder: 'Tap to enter',
   header       : 'default header',
   onSelect     : () => {
   },
