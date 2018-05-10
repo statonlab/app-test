@@ -35,7 +35,7 @@ class Observation {
     let form             = this._setUpForm(observation)
     let response         = null
     try {
-      response = await axios.post('observations', form)
+      response = await axios.post('/observations', form)
       let id   = response.data.data.observation_id
       await this.uploadImages(observation, id, callback)
 
@@ -111,6 +111,8 @@ class Observation {
    * @returns {Promise.<*>}
    */
   async update(observation, callback) {
+    console.log('HERE', observation)
+
     this._setApiToken()
 
     if (this.api_token === false) {

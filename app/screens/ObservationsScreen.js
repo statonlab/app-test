@@ -261,12 +261,12 @@ export default class ObservationsScreen extends Screen {
    */
   _formatDistance(distance) {
     let unit = 'meters'
-    if(distance > 1000) {
+    if (distance > 1000) {
       distance /= 1000
       unit = 'kilometers'
     }
 
-    return Math.round(distance * 100) / 100 + ' '+unit +' away'
+    return Math.round(distance * 100) / 100 + ' ' + unit + ' away'
   }
 
   /**
@@ -581,13 +581,14 @@ export default class ObservationsScreen extends Screen {
 
         let observation = observations[i]
         try {
-          if (observation.needs_update) {
+          if (observation.synced && observation.needs_update) {
             await Observation.update(observation, () => {
               step++
               this.spinner.setProgress(step)
             })
             let realmObservation = realm.objects('Submission').filtered(`id = ${observation.id}`)[0]
             realm.write(() => {
+              realmObservation.synced       = true
               realmObservation.needs_update = false
             })
           } else {
@@ -644,17 +645,18 @@ export default class ObservationsScreen extends Screen {
    */
   renderGuideMessage() {
     return (
-      [<View>
-        <Text style={Guide.style.headerText}>
-          Browse Your Observations
-        </Text>
-        <Text style={Guide.style.bodyText}>
-          Your observations list will be shown here.
-        </Text>
-        <Text style={[Guide.style.bodyText, {marginBottom: 0}]}>
-          Tap an observation to view more information, edit, or delete it.
-        </Text>
-      </View>,
+      [
+        <View>
+          <Text style={Guide.style.headerText}>
+            Browse Your Observations
+          </Text>
+          <Text style={Guide.style.bodyText}>
+            Your observations list will be shown here.
+          </Text>
+          <Text style={[Guide.style.bodyText, {marginBottom: 0}]}>
+            Tap an observation to view more information, edit, or delete it.
+          </Text>
+        </View>,
         <View>
           <Text style={Guide.style.headerText}>
             Submit Your Observations to TreeSnap
@@ -665,7 +667,8 @@ export default class ObservationsScreen extends Screen {
           <Text style={Guide.style.bodyText}>
             You can tap the "Sync All" button to submit all observations, or submit individual observations by tapping on that observation.
           </Text>
-        </View>]
+        </View>
+      ]
     )
   }
 

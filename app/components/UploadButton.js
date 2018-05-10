@@ -70,7 +70,7 @@ export default class UploadButton extends Component {
 
       try {
         let observation = observations[i]
-        if (!observation.needs_update) {
+        if (!observation.synced) {
           await Observation.upload(observation, () => {
             step++
             if (this.props.spinner) {
