@@ -229,7 +229,9 @@ export default class LandingScreen extends Screen {
                 this.navigator.navigate('Tree', {title: tree.title})
               }}
               onReady={() => {
-                this.spinner.close()
+                if (this.spinner) {
+                  this.spinner.close()
+                }
               }}
             />
           </View>
