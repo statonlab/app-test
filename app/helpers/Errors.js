@@ -14,7 +14,7 @@ const code_responses = {
   '500': 'Server error 500: Please try again later',
   '404': 'Request could not be completed. 404 Not found',
   '422': 'Validation errors. Please review submission.',
-  '401': 'You are not logged in!Please log in to upload to the server.',
+  '401': 'You are not logged in! Please log in to upload to the server.',
   '403': 'Authorization error: You don\'t have permission to access that observation.'
 }
 
@@ -25,7 +25,6 @@ export default class Errors {
    * @param error
    */
   constructor(error) {
-    console.log('HERE', error)
     this.errors = {}
 
     this.responses = code_responses

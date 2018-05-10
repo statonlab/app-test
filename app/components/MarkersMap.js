@@ -98,7 +98,6 @@ export default class MarkersMap extends Component {
    * @returns {{XML}}
    */
   renderCallout(marker) {
-    console.log('MARKER', marker)
     return (
       <MapView.Callout
         style={{width: 165}}
@@ -125,7 +124,6 @@ export default class MarkersMap extends Component {
    * @returns {{XML}}
    */
   renderMarker(marker, index) {
-    console.log('NOT CALLOUT', marker)
     return (
       <MapView.Marker
         key={index}

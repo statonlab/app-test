@@ -111,8 +111,6 @@ class Observation {
    * @returns {Promise.<*>}
    */
   async update(observation, callback) {
-    console.log('HERE', observation)
-
     this._setApiToken()
 
     if (this.api_token === false) {
@@ -174,6 +172,7 @@ class Observation {
    */
   _setApiToken() {
     let user = realm.objects('User')
+
     if (user.length > 0) {
       this.api_token = user[0].api_token
     } else {
@@ -200,6 +199,7 @@ class Observation {
     form.append('is_private', observation.is_private ? '1' : '0')
     form.append('api_token', this.api_token)
     form.append('mobile_id', observation.id)
+    form.append('has_private_comments', observation.has_private_comments ? 1 : 0)
 
     return form
   }
