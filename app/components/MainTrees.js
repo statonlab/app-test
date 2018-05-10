@@ -54,7 +54,8 @@ export default class MainTrees extends Component {
                 {this.state.showAll ? 'SHOW LESS' : 'SHOW ALL'}
               </Text>
             </TouchableOpacity>
-            <Text style={styles.helpText}>
+            <Text style={[styles.helpText, {flex: 1, marginLeft: 10, textAlign: 'right'}]}
+                  numberOfLines={2}>
               {this.state.showAll ? 'Showing all available trees' : 'Showing trees based on current location'}
             </Text>
           </View>
@@ -82,7 +83,7 @@ export default class MainTrees extends Component {
         <View style={[styles.flexHorizontal]}>
           <Image source={tree.image} style={styles.cardImage}/>
           <View style={[styles.cardBody, styles.flexHorizontal, styles.flexSpace]}>
-            <View>
+            <View style={{flex: 1}}>
               <Text style={styles.cardTitle}>
                 {tree.title}
               </Text>
@@ -282,7 +283,7 @@ const styles = StyleSheet.create({
   cardImage: {
     resizeMode: 'cover',
     flex      : 0,
-    height    : 70,
+    height    : undefined,
     width     : 70
   },
 
