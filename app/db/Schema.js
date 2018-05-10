@@ -52,7 +52,8 @@ const SubmissionSchema = {
     meta_data   : {type: 'string', default: ''},
     // The observation id returned by the server upon uploading
     serverID    : {type: 'int', default: -1},
-    needs_update: {type: 'bool', default: false}
+    needs_update: {type: 'bool', default: false},
+    has_private_comments: {type: 'bool', default: false}
   }
 }
 
@@ -87,7 +88,7 @@ export default new Realm({
     SubmissionSchema,
     GuideSchema
   ],
-  schemaVersion: 7,
+  schemaVersion: 8,
   migration    : function (oldRealm, newRealm) {
     if (oldRealm.schemaVersion < 2) {
       let newUser = newRealm.objects('User')
@@ -122,6 +123,14 @@ export default new Realm({
       if (user.length > 0) {
         user[0].auto_sync = true
       }
+    }
+
+    // Mark old observations comments as private
+    if(oldRealm.schemaVersion < 7) {
+      let observations = newRealm.objects('Submission')
+      observations.map(observation => {
+        observation.has_private_comments = true
+      })
     }
   }
 })

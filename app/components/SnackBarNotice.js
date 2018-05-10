@@ -122,8 +122,10 @@ export default class SnackBarNotice extends Component {
           >
             <View style={styles.row}>
               {this.getIcon()}
-
-              <Text style={[styles.text]}>{this.state.noticeText}</Text>
+              <Text
+                style={[styles.text, {flex: 1}]}>
+                {this.state.noticeText}
+                </Text>
             </View>
           </TouchableOpacity>
         </Animated.View>

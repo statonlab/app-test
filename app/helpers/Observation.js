@@ -35,7 +35,7 @@ class Observation {
     let form             = this._setUpForm(observation)
     let response         = null
     try {
-      response = await axios.post('observations', form)
+      response = await axios.post('/observations', form)
       let id   = response.data.data.observation_id
       await this.uploadImages(observation, id, callback)
 
@@ -172,6 +172,7 @@ class Observation {
    */
   _setApiToken() {
     let user = realm.objects('User')
+
     if (user.length > 0) {
       this.api_token = user[0].api_token
     } else {
@@ -198,6 +199,7 @@ class Observation {
     form.append('is_private', observation.is_private ? '1' : '0')
     form.append('api_token', this.api_token)
     form.append('mobile_id', observation.id)
+    form.append('has_private_comments', observation.has_private_comments ? 1 : 0)
 
     return form
   }

@@ -18,6 +18,7 @@ import {
 } from 'react-native'
 import moment from 'moment'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import IonIcon from 'react-native-vector-icons/Ionicons'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
 import realm from '../db/Schema'
@@ -43,19 +44,20 @@ export default class Form extends Component {
     super(props)
 
     this.state = {
-      images           : {},
-      title            : this.props.title,
-      location         : {
+      images            : {},
+      title             : this.props.title,
+      location          : {
         latitude : 0,
         longitude: 0,
         accuracy : -1
       },
-      metadata         : {},
-      id               : '',
-      warnings         : {},
-      bottomMargin     : new Animated.Value(0),
-      deletedImages    : [],
-      showCommentsModal: false
+      metadata          : {},
+      id                : '',
+      warnings          : {},
+      bottomMargin      : new Animated.Value(0),
+      deletedImages     : [],
+      showCommentsModal : false,
+      hasPrivateComments: false
     }
 
     this.events     = []
@@ -87,6 +89,11 @@ export default class Form extends Component {
 
         if (key === 'images') {
           this.setState({images: JSON.parse(this.props.entryInfo[key])})
+          return
+        }
+
+        if (key === 'has_private_comments') {
+          this.setState({hasPrivateComments: this.props.entryInfo[key]})
           return
         }
 
@@ -298,13 +305,14 @@ export default class Form extends Component {
    */
   save = () => {
     let observation = {
-      id       : this.primaryKey,
-      name     : this.state.title.toString(),
-      images   : JSON.stringify(this.getRemainingImages()),
-      location : this.state.location,
-      date     : moment().format('MM-DD-YYYY HH:mm:ss').toString(),
-      synced   : false,
-      meta_data: JSON.stringify(this.state.metadata)
+      id                  : this.primaryKey,
+      name                : this.state.title.toString(),
+      images              : JSON.stringify(this.getRemainingImages()),
+      location            : this.state.location,
+      date                : moment().format('MM-DD-YYYY HH:mm:ss').toString(),
+      synced              : false,
+      meta_data           : JSON.stringify(this.state.metadata),
+      has_private_comments: this.state.hasPrivateComments
     }
 
     realm.write(() => {
@@ -347,14 +355,15 @@ export default class Form extends Component {
     realm.write(() => {
       // true as 3rd argument updates
       realm.create('Submission', {
-        id          : this.props.entryInfo.id,
-        name        : this.state.title.toString(),
-        images      : JSON.stringify(this.getRemainingImages()),
-        location    : this.props.entryInfo.location,
-        date        : this.props.entryInfo.date,
-        synced      : this.props.entryInfo.synced,
-        meta_data   : JSON.stringify(this.state.metadata),
-        needs_update: true
+        id                  : this.props.entryInfo.id,
+        name                : this.state.title.toString(),
+        images              : JSON.stringify(this.getRemainingImages()),
+        location            : this.props.entryInfo.location,
+        date                : this.props.entryInfo.date,
+        synced              : this.props.entryInfo.synced,
+        meta_data           : JSON.stringify(this.state.metadata),
+        needs_update        : true,
+        has_private_comments: this.state.hasPrivateComments
       }, true)
     })
 
@@ -726,6 +735,12 @@ export default class Form extends Component {
   }
 
   render() {
+    let commentsPrivacyCheckbox
+    if (this.state.hasPrivateComments) {
+      commentsPrivacyCheckbox = <IonIcon name={'md-checkbox'} size={20} color={Colors.primary}/>
+    } else {
+      commentsPrivacyCheckbox = <IonIcon name={'md-square-outline'} size={20} color={'#aaa'}/>
+    }
     return (
       <View style={styles.container}>
         <Spinner ref="spinner"/>
@@ -750,6 +765,32 @@ export default class Form extends Component {
                 flex       : 1,
                 color      : this.state.metadata.comment ? '#444' : '#aaa'
               }}>{this.state.metadata.comment || 'Add comment'}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.formGroup, {flex: 0, alignItems: 'center'}]}
+                              activeOpacity={1}
+                              onPress={() => {
+                                this.setState({hasPrivateComments: !this.state.hasPrivateComments})
+                              }}>
+              <View style={{flex: 1, paddingVertical: 5}}>
+                <Text style={[styles.label, {width: undefined, flex: 1}]}>
+                  Mark comments as private
+                </Text>
+                <Text style={{
+                  flex : 1,
+                  color: '#999'
+                }}>
+                  {this.state.hasPrivateComments ?
+                    'Your comments will only be visible to you'
+                    : 'Your comments will be shared publicly'}
+                </Text>
+              </View>
+              <Text style={{
+                flex        : 0,
+                color       : this.state.metadata.comment ? '#444' : '#aaa',
+                paddingRight: 10
+              }}>
+                {commentsPrivacyCheckbox}
+              </Text>
             </TouchableOpacity>
             <View style={[styles.formGroup, {flex: 0}]}>
               <Text style={[styles.label, {width: 60}]}>Location</Text>

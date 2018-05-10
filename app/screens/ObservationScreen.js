@@ -225,11 +225,12 @@ export default class ObservationScreen extends Screen {
   /**
    * Render meta data as list items.
    *
-   * @param data
+   * @param {object} entry
    * @returns {*}
    * @private
    */
-  _renderMetaData = (data) => {
+  _renderMetaData = (entry) => {
+    let data = entry.meta_data
     if (typeof data === 'string' && data !== '') {
       data = JSON.parse(data)
     }
@@ -259,6 +260,31 @@ export default class ObservationScreen extends Screen {
 
       if (typeof text !== 'string' || text === '' || text === null) {
         return null
+      }
+
+      if (key === 'comment') {
+        return (
+          <View key={key + '_' + index}>
+            <View style={[styles.field, {borderBottomWidth: 0}]}>
+              <Text style={styles.label}>Comment</Text>
+              <Text style={styles.dataText}>{text}</Text>
+            </View>
+            <View style={[styles.field, {flexDirection: 'row'}]}>
+              <Text style={{paddingLeft: 10}}>
+                {entry.has_private_comments ?
+                  <Icon name={'md-lock'} size={14} color={'#666'}/>
+                  :
+                  <Icon name={'md-globe'} size={14} color={'#666'}/>
+                }
+              </Text>
+              <Text style={[styles.dataText, {flex: 1, fontSize: 12, paddingLeft: 5}]}>
+                {entry.has_private_comments ?
+                  'Only visible to you'
+                  : 'Visible publicly'}
+              </Text>
+            </View>
+          </View>
+        )
       }
 
       return (
@@ -552,10 +578,10 @@ export default class ObservationScreen extends Screen {
                 <Text style={styles.dataText}>{entry.id}</Text>
               </View>
               <View style={styles.field}>
-                <Text style={styles.label}>Date Collected</Text>
+                <Text style={styles.label}>Date collected</Text>
                 <Text style={styles.dataText}>{entry.date}</Text>
               </View>
-              {this._renderMetaData(entry.meta_data)}
+              {this._renderMetaData(entry)}
             </View>
           </View>
         </ScrollView>
@@ -619,10 +645,9 @@ const styles = StyleSheet.create({
   },
 
   dataText: {
-    color        : '#777',
-    paddingLeft  : 20,
-    paddingRight : 10,
-    paddingBottom: 10
+    color            : '#555',
+    paddingHorizontal: 10,
+    paddingBottom    : 10
   },
 
   image: {
