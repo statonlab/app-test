@@ -41,19 +41,20 @@ const SubmissionSchema = {
   name      : 'Submission',
   primaryKey: 'id',
   properties: {
-    id          : {type: 'int', default: 1},
-    name        : {type: 'string', default: 'Tree'},
-    images      : {type: 'string', default: ''},
+    id                  : {type: 'int', default: 1},
+    name                : {type: 'string', default: 'Tree'},
+    images              : {type: 'string', default: ''},
     // Example, {longitude: 'int', latitude: 'int'}
-    location    : {type: 'Coordinate'},
-    date        : {type: 'string', default: ''},
-    synced      : {type: 'bool', default: false},
+    location            : {type: 'Coordinate'},
+    date                : {type: 'string', default: ''},
+    synced              : {type: 'bool', default: false},
     // JSON String
-    meta_data   : {type: 'string', default: ''},
+    meta_data           : {type: 'string', default: ''},
     // The observation id returned by the server upon uploading
-    serverID    : {type: 'int', default: -1},
-    needs_update: {type: 'bool', default: false},
-    has_private_comments: {type: 'bool', default: false}
+    serverID            : {type: 'int', default: -1},
+    needs_update        : {type: 'bool', default: false},
+    has_private_comments: {type: 'bool', default: false},
+    custom_id           : {type: 'string', default: ''}
   }
 }
 
@@ -88,7 +89,7 @@ export default new Realm({
     SubmissionSchema,
     GuideSchema
   ],
-  schemaVersion: 8,
+  schemaVersion: 9,
   migration    : function (oldRealm, newRealm) {
     if (oldRealm.schemaVersion < 2) {
       let newUser = newRealm.objects('User')
@@ -126,10 +127,18 @@ export default new Realm({
     }
 
     // Mark old observations comments as private
-    if(oldRealm.schemaVersion < 7) {
+    if (oldRealm.schemaVersion < 7) {
       let observations = newRealm.objects('Submission')
       observations.map(observation => {
         observation.has_private_comments = true
+      })
+    }
+
+    // Make old observations custom_id = empty string
+    if (oldRealm.schemaVersion < 8) {
+      let observations = newRealm.objects('Submission')
+      observations.map(observation => {
+        observation.custom_id = ''
       })
     }
   }
