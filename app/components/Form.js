@@ -802,13 +802,14 @@ export default class Form extends Component {
               <Text style={{
                 paddingLeft: 5,
                 flex       : 1,
-                color      : this.state.custom_id  ? '#444' : '#aaa'
+                color      : this.state.custom_id ? '#444' : '#aaa'
               }}>{this.state.custom_id || 'Optional'}</Text>
             </TouchableOpacity>
             <View style={[styles.formGroup, {flex: 0}]}>
               <Text style={[styles.label, {width: 60}]}>Location</Text>
               {this.props.edit ?
-                <Location edit={this.props.edit} coordinates={this.props.entryInfo.location}
+                <Location edit={this.props.edit}
+                          coordinates={this.props.entryInfo.location}
                           onChange={(location) => this.setState({location})}/> :
                 <Location onChange={(location) => this.setState({location})}/>
               }
