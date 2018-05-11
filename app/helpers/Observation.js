@@ -200,6 +200,7 @@ class Observation {
     form.append('api_token', this.api_token)
     form.append('mobile_id', observation.id)
     form.append('has_private_comments', observation.has_private_comments ? 1 : 0)
+    form.append('custom_id', observation.custom_id)
 
     return form
   }

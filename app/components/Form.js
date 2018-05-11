@@ -57,7 +57,9 @@ export default class Form extends Component {
       bottomMargin      : new Animated.Value(0),
       deletedImages     : [],
       showCommentsModal : false,
-      hasPrivateComments: false
+      hasPrivateComments: false,
+      custom_id         : '',
+      showCustomIDModal : false
     }
 
     this.events     = []
@@ -312,7 +314,8 @@ export default class Form extends Component {
       date                : moment().format('MM-DD-YYYY HH:mm:ss').toString(),
       synced              : false,
       meta_data           : JSON.stringify(this.state.metadata),
-      has_private_comments: this.state.hasPrivateComments
+      has_private_comments: this.state.hasPrivateComments,
+      custom_id           : this.state.custom_id
     }
 
     realm.write(() => {
@@ -363,7 +366,8 @@ export default class Form extends Component {
         synced              : this.props.entryInfo.synced,
         meta_data           : JSON.stringify(this.state.metadata),
         needs_update        : true,
-        has_private_comments: this.state.hasPrivateComments
+        has_private_comments: this.state.hasPrivateComments,
+        custom_id           : this.state.custom_id
       }, true)
     })
 
@@ -792,6 +796,15 @@ export default class Form extends Component {
                 {commentsPrivacyCheckbox}
               </Text>
             </TouchableOpacity>
+            <TouchableOpacity style={[styles.formGroup]}
+                              onPress={() => this.setState({showCustomIDModal: true})}>
+              <Text style={[styles.label]}>Tree Identifier</Text>
+              <Text style={{
+                paddingLeft: 5,
+                flex       : 1,
+                color      : this.state.metadata.comment ? '#444' : '#aaa'
+              }}>{this.state.custom_id || 'Optional'}</Text>
+            </TouchableOpacity>
             <View style={[styles.formGroup, {flex: 0}]}>
               <Text style={[styles.label, {width: 60}]}>Location</Text>
               {this.props.edit ?
@@ -804,6 +817,7 @@ export default class Form extends Component {
         </ScrollView>
 
         {this._renderCommentsModal()}
+        {this._renderCustomIDModal()}
 
         <View style={styles.footer}>
           <TouchableOpacity style={[styles.button, styles.flex1]}
@@ -867,6 +881,71 @@ export default class Form extends Component {
                               onPress={() => {
                                 this.setState({showCommentsModal: false})
                               }}>
+              <Text style={{
+                color    : Colors.primary,
+                fontSize : 14,
+                textAlign: 'right'
+              }}>DONE</Text>
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
+    )
+  }
+
+  _renderCustomIDModal() {
+    return (
+      <Modal
+        animationType="slide"
+        onRequestClose={() => {
+          this.setState({showCustomIDModal: false})
+        }}
+        visible={this.state.showCustomIDModal}
+      >
+        <View style={styles.modalHeader}>
+          <Text style={styles.modalHeaderText}>Custom Tree Identifier</Text>
+        </View>
+        <KeyboardAvoidingView style={{flex: 1}}
+                              {...(isAndroid ? null : {behavior: 'padding'})}>
+          <View style={{flex: 1, padding: 10, backgroundColor: '#f7f7f7'}}>
+            <Text style={styles.text}>
+              You can assign a name to the tree for this observation.
+              The tree may have an ID tag as part of a study, or, you
+              may pick your own name so that you can observe it over time.
+            </Text>
+            <TextInput
+              style={[{
+                flex             : 0,
+                height           : 40,
+                width            : undefined,
+                borderWidth      : 1,
+                borderColor      : '#ddd',
+                backgroundColor  : '#fff',
+                borderRadius     : 4,
+                paddingHorizontal: 5
+              }]}
+              placeholder="Enter custom ID"
+              placeholderTextColor="#aaa"
+              value={this.state.custom_id}
+              onChangeText={(custom_id) => this.setState({
+                custom_id
+              })}
+              underlineColorAndroid="transparent"
+              onEndEditing={() => this.setState({showCustomIDModal: false})}
+              autoFocus={true}
+            />
+          </View>
+          <View style={{flex: 0, justifyContent: 'flex-end', borderTopWidth: 1, borderTopColor: '#ddd'}}>
+            <TouchableOpacity
+              style={[{
+                backgroundColor  : '#eee',
+                flex             : 0,
+                paddingVertical  : 10,
+                paddingHorizontal: 15
+              }]}
+              onPress={() => {
+                this.setState({showCommentsModal: false})
+              }}>
               <Text style={{
                 color    : Colors.primary,
                 fontSize : 14,
@@ -1104,6 +1183,12 @@ const styles = StyleSheet.create({
 
   placeholder: {
     color: '#aaa'
+  },
+
+  text: {
+    color       : '#444',
+    fontSize    : 14,
+    marginBottom: 10
   }
 })
 
