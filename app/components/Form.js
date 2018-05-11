@@ -802,7 +802,7 @@ export default class Form extends Component {
               <Text style={{
                 paddingLeft: 5,
                 flex       : 1,
-                color      : this.state.metadata.comment ? '#444' : '#aaa'
+                color      : this.state.custom_id  ? '#444' : '#aaa'
               }}>{this.state.custom_id || 'Optional'}</Text>
             </TouchableOpacity>
             <View style={[styles.formGroup, {flex: 0}]}>
