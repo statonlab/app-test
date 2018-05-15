@@ -75,7 +75,8 @@ import com.android.build.OutputFile
 
 project.ext.react = [
         nodeExecutableAndArgs: ["/usr/local/bin/node"],
-        entryFile            : "index.js"
+        entryFile            : "index.js",
+        supportLibVersion    : "26.1.0"
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
@@ -158,10 +159,10 @@ dependencies {
     implementation project(':react-native-image-resizer')
     implementation project(':react-native-fetch-blob')
     implementation project(':react-native-maps')
-    implementation (project(':react-native-camera')) {
+    implementation(project(':react-native-camera')) {
         exclude group: "com.google.android.gms"
     }
-    implementation ("com.google.android.gms:play-services-vision:11.8.0") {
+    implementation("com.google.android.gms:play-services-vision:11.8.0") {
         force = true
     }
     implementation fileTree(include: ['*.jar'], dir: 'libs')
@@ -169,10 +170,10 @@ dependencies {
     implementation 'com.facebook.react:react-native:+'
     implementation 'com.google.android.gms:play-services-maps:11.8.0'
     implementation 'com.android.support:exifinterface:26.1.0'
-    implementation ('com.google.firebase:firebase-core:11.8.0') {
+    implementation('com.google.firebase:firebase-core:11.8.0') {
         force = true
     }
-    implementation ('com.google.firebase:firebase-analytics:11.8.0') {
+    implementation('com.google.firebase:firebase-analytics:11.8.0') {
         force = true
     }
 }

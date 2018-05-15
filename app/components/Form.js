@@ -101,14 +101,14 @@ export default class Form extends Component {
 
         this.setState({[key]: this.props.entryInfo[key]})
       })
+
       this.primaryKey = this.props.entryInfo.id
     } else {
-      // Generate a primary key
-      this.primaryKey = realm.objects('Submission')
-      if (this.primaryKey.length <= 0) {
-        this.primaryKey = parseInt(moment().format('DMMYYH').toString())
-      } else {
-        this.primaryKey = this.primaryKey.sorted('id', true)[0].id + 1
+      try {
+        this.primaryKey = this.generatePrimaryKey()
+      } catch (e) {
+        this.primaryKey = 1
+        console.log(e)
       }
     }
     // Add image resize event listener
@@ -118,6 +118,25 @@ export default class Form extends Component {
       this.cancel()
       return true
     })
+  }
+
+  /**
+   * Generate a primary key.
+   *
+   * @return {number}
+   */
+  generatePrimaryKey() {
+    // Generate a primary key
+    let observations = realm.objects('Submission').sorted('id', true)
+    let primaryKey
+    if (observations.length <= 0) {
+      primaryKey = parseInt(moment().format('DMMYYH').toString())
+    } else {
+      primaryKey = observations[0]
+      primaryKey = (parseInt(primaryKey.id) || 1) + 1
+    }
+
+    return primaryKey
   }
 
   componentDidMount() {
