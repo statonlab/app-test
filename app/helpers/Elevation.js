@@ -17,9 +17,14 @@ export default class Elevation {
 
   get() {
 
-    if (Platform.OS == 'android') {
+    if (Platform.OS === 'android' && Platform.Version > 20) {
       return {
         elevation: this.level
+      }
+    } else if (Platform.OS === 'android' && Platform.Version <= 20) {
+      return {
+        borderWidth: 1,
+        borderColor: this.shadowColor || '#ddd'
       }
     }
 
