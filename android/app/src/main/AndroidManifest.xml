@@ -8,7 +8,6 @@
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
   <uses-permission android:name="android.permission.CAMERA"/>
-
   <uses-feature android:name="android.hardware.camera"/>
   <uses-feature android:name="android.hardware.camera.autofocus"/>
 
@@ -41,5 +40,4 @@
             android:name="io.fabric.ApiKey"
             android:value="67aa77586088af8ee6b0f7ddd416c99290fbfe70" />
     </application>
-
 </manifest>

@@ -2,7 +2,6 @@ apply plugin: "com.android.application"
 
 import com.android.build.OutputFile
 
-
 /**
  * The react.gradle file registers a task for each build variant (e.g. bundleDebugJsAndAssets
  * and bundleReleaseJsAndAssets).
@@ -75,8 +74,7 @@ import com.android.build.OutputFile
 
 project.ext.react = [
         nodeExecutableAndArgs: ["/usr/local/bin/node"],
-        entryFile            : "index.js",
-        supportLibVersion    : "26.1.0"
+        entryFile            : "index.js"
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
@@ -108,13 +106,13 @@ android {
         }
     }
     compileSdkVersion 26
-    buildToolsVersion '26.0.2'
+    //buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "com.treesource"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 1039
-        versionName "1.1.2"
+        versionCode 1052
+        versionName "1.2.1"
         multiDexEnabled true
         ndk {
             abiFilters "armeabi-v7a", "x86"
@@ -151,29 +149,45 @@ android {
 }
 
 dependencies {
-    implementation project(':react-native-firebase')
+    def supportLibVersion = rootProject.hasProperty('supportLibVersion') ? rootProject.supportLibVersion : "27.1.0"
+    def googlePlayServicesVersion = rootProject.hasProperty('googlePlayServicesVersion') ? rootProject.googlePlayServicesVersion : "11.8.0"
+
+    implementation(project(':react-native-firebase')) {
+        exclude group: "com.android.support"
+        exclude group: "com.google.android.gms"
+    }
     implementation project(':react-native-photo-view')
     implementation project(':realm')
     implementation project(':react-native-vector-icons')
     implementation project(':react-native-material-kit')
     implementation project(':react-native-image-resizer')
     implementation project(':react-native-fetch-blob')
-    implementation project(':react-native-maps')
-    implementation(project(':react-native-camera')) {
-        exclude group: "com.google.android.gms"
+    implementation(project(':react-native-maps')) {
+        exclude group: 'com.google.android.gms'
     }
-    implementation("com.google.android.gms:play-services-vision:11.8.0") {
-        force = true
+    implementation(project(':react-native-camera')) {
+//        exclude group: 'com.facebook.react'
+        exclude group: 'com.facebook.infer.annotation'
+        exclude group: 'com.android.support'
+        exclude group: 'com.google.android.gms'
     }
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation 'com.facebook.react:react-native:+'
-    implementation 'com.google.android.gms:play-services-maps:11.8.0'
-    implementation 'com.android.support:exifinterface:26.1.0'
-    implementation('com.google.firebase:firebase-core:11.8.0') {
+    implementation 'com.google.gms:google-services:3.3.1'
+    implementation("com.google.android.gms:play-services-vision:$googlePlayServicesVersion") {
         force = true
     }
-    implementation('com.google.firebase:firebase-analytics:11.8.0') {
+    implementation("com.android.support:appcompat-v7:$supportLibVersion") {
+        force = true
+    }
+    implementation 'com.facebook.react:react-native:0.55.4'
+    implementation "com.google.android.gms:play-services-maps:$googlePlayServicesVersion"
+    implementation("com.android.support:exifinterface:$supportLibVersion") {
+        force = true
+    }
+    implementation("com.google.firebase:firebase-core:$googlePlayServicesVersion") {
+        force = true
+    }
+    implementation("com.google.firebase:firebase-analytics:$googlePlayServicesVersion") {
         force = true
     }
 }
