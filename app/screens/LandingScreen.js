@@ -25,15 +25,22 @@ export default class LandingScreen extends Screen {
   constructor(props) {
     super(props)
 
+    let readyToRender = realm.objects('Guide').filtered('screen == "WelcomeModal"').length > 0
+
     this.state = {
       userLoggedIn: false,
       noticeText  : 'Success!',
-      // Wait for welcome modal to finish
-      showGuide   : false
+      // Wait for all events to execute before asking user
+      // for location permissions and displaying Guide
+      readyToRender
     }
 
     // Hold all events so we can remove them later and prevent memory leaks
-    this.events  = []
+    this.events = []
+    // It's important that we call `registerEvents()` in the constructor
+    // If it's not called in the constructor, the readyToRender may never get set
+    this.registerEvents()
+
     this.fs      = new File()
     this.android = Platform.OS === 'android'
   }
@@ -47,7 +54,12 @@ export default class LandingScreen extends Screen {
     this.setState({
       userLoggedIn: this.isLoggedIn()
     })
+  }
 
+  /**
+   * Register event listeners and handlers.
+   */
+  registerEvents() {
     this.events.push(DeviceEventEmitter.addListener('userLoggedOut', () => {
       if (this.refs.uploadButton) {
         this.refs.uploadButton.getObservations()
@@ -81,14 +93,23 @@ export default class LandingScreen extends Screen {
 
     this.events.push(DeviceEventEmitter.addListener('userRegistered', () => {
       this.setState({
-        userLoggedIn: true,
-        noticeText  : 'Successfully registered membership!'
+        userLoggedIn : true,
+        noticeText   : 'Successfully registered membership!',
+        readyToRender: true
       })
-      this.refs.snackbar.showBar()
+
+      if (this.refs.snackbar) {
+        this.refs.snackbar.showBar()
+      }
     }))
 
-    this.events.push(DeviceEventEmitter.addListener('welcomeModalDone', () => this.setState({showGuide: true})))
-    this.events.push(DeviceEventEmitter.addListener('loginRequest', () => this.navigator.navigate('Login')))
+    this.events.push(DeviceEventEmitter.addListener('welcomeModalDone', () => {
+      this.setState({readyToRender: true})
+    }))
+
+    this.events.push(DeviceEventEmitter.addListener('loginRequest', () => {
+      this.navigator.navigate('Login')
+    }))
   }
 
   /**
@@ -186,8 +207,12 @@ export default class LandingScreen extends Screen {
   }
 
   render() {
+    if (!this.state.readyToRender) {
+      return null
+    }
+
     return (
-      <View style={styles.container} {...(this.sidebar ? this.sidebar.getPan() : {})}>
+      <View style={styles.container}>
         <Header
           title="Observe"
           navigator={this.navigator}
@@ -206,14 +231,12 @@ export default class LandingScreen extends Screen {
           onMenuPress={this.toggleMenu.bind(this)}
         />
         <Spinner ref={ref => this.spinner = ref}/>
-        {this.state.showGuide ?
-          <Guide
-            ref={ref => this.guide = ref}
-            screen="LandingScreen"
-            message={this.renderGuideMessage()}
-            version={1}
-          />
-          : null}
+        <Guide
+          ref={ref => this.guide = ref}
+          screen="LandingScreen"
+          message={this.renderGuideMessage()}
+          version={1}
+        />
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.plantsContainer}>
             {this.state.userLoggedIn ?

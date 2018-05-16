@@ -155,6 +155,7 @@ class User {
           if (!response.zipcode) {
             response.zipcode = ''
           }
+
           realm.create('User', {
             name      : response.name.toString(),
             email     : response.email.toString(),
@@ -164,9 +165,6 @@ class User {
             birth_year: response.birth_year
           })
         })
-
-        const analytics = new Analytics()
-        analytics.registered(response.data.data.id)
 
         // Broadcast that the user has registered
         DeviceEventEmitter.emit('userRegistered')

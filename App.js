@@ -27,7 +27,7 @@ export default class App extends Component {
     this.initApp()
 
     this.events.push(DeviceEventEmitter.addListener('userLoggedIn', () => {
-      if(this.snackbar) {
+      if (this.snackbar) {
         this.setState({snackMessage: 'Logged in successfully!'})
         this.snackbar.showBar()
       }
@@ -35,7 +35,7 @@ export default class App extends Component {
     }))
 
     this.events.push(DeviceEventEmitter.addListener('userLoggedOut', () => {
-      if(this.snackbar) {
+      if (this.snackbar) {
         this.setState({snackMessage: 'Logged out successfully!'})
         this.snackbar.showBar()
       }
@@ -71,7 +71,7 @@ export default class App extends Component {
           onLoginRequest={() => {
             DeviceEventEmitter.emit('loginRequest')
           }}
-          onDone={() =>{
+          onDone={() => {
             DeviceEventEmitter.emit('welcomeModalDone')
           }}
         />

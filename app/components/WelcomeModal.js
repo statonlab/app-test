@@ -23,6 +23,7 @@ import AText from './Atext'
 import User from '../db/User'
 import Elevation from '../helpers/Elevation'
 import Spinner from '../components/Spinner'
+import Errors from '../helpers/Errors'
 
 export default class WelcomeModal extends Component {
   constructor(props) {
@@ -41,10 +42,11 @@ export default class WelcomeModal extends Component {
     }
   }
 
-  componentWillMount() {
+  componentDidMount() {
     let shown = realm.objects('Guide').filtered('screen == "WelcomeModal"').length
 
-    if (shown) {
+    if (shown > 0) {
+      this.props.onDone()
       return
     }
 
@@ -125,22 +127,28 @@ export default class WelcomeModal extends Component {
       email     : this.state.email,
       password  : this.state.password,
       birth_year: this.state.dateOfBirth
-    }).then(response => {
-      this.spinner.close()
+    }).then(() => {
+      if (this.spinner) {
+        this.spinner.close()
+      }
 
       this.close()
     }).catch(error => {
-      this.spinner.close()
+      if (this.spinner) {
+        this.spinner.close()
+      }
 
       const errors = new Errors(error)
       if (errors.has('general')) {
-        Alert.alert('Invalid', errors.first('general'))
+        Alert.alert('Error', errors.first('general'))
         return
       }
 
       // Display one field at a time
-      let field = Object.keys(errors.all())[0]
-      Alert.alert('Error', errors.first(field))
+      let fields = Object.keys(errors.all())
+      if (fields.length > 0) {
+        Alert.alert('Error', errors.first(fields[0]))
+      }
     })
   }
 
