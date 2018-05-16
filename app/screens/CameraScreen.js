@@ -68,20 +68,25 @@ export default class CameraScreen extends Screen {
   async requestCameraPermission() {
     if (android) {
       try {
-        const granted = await PermissionsAndroid.request(
+        const cameraPermission = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.CAMERA,
           {
             title  : 'Camera Permission',
             message: 'We need permission to access the camera'
           })
 
-        const granted2 = await PermissionsAndroid.request(
+        const storagePermission = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
           {
             title  : 'Storage Permission',
             message: 'We need permission to write to your storage file system'
           })
-        if (granted === PermissionsAndroid.RESULTS.GRANTED && granted2 === PermissionsAndroid.RESULTS.GRANTED) {
+
+        // Android 4.4 returns true while all other devices return `PermissionsAndroid.RESULTS.GRANTED`
+        let granted = cameraPermission === PermissionsAndroid.RESULTS.GRANTED
+        granted = granted && storagePermission === PermissionsAndroid.RESULTS.GRANTED
+        granted = granted || (cameraPermission === true && storagePermission === true)
+        if (granted) {
           this.setState({hasPermission: true})
         } else {
           this.alertPermissionDenied()

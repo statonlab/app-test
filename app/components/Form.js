@@ -214,7 +214,10 @@ export default class Form extends Component {
    * @returns {boolean}
    */
   cancel = () => {
-    if (this.state.images['images'] || Object.keys(this.state.metadata)[0]) { //TO DO: we complain if there are keys set without values IE if the user clicked something but didnt select.  Would be better to test if the keys have values or to have a  value in the state that checks if its OK to cancel.
+    let keys = Object.keys(this.state.metadata)
+    // TODO: we complain if there are keys set without values IE if the user clicked something but didnt select.
+    // Would be better to test if the keys have values or to have a  value in the state that checks if its OK to cancel.
+    if (this.state.images['images'] || keys.length > 0) {
       Alert.alert('Abandon Entry',
         'Data will be permanently lost if you leave. Are you sure?', [
           {

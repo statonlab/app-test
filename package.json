@@ -1,7 +1,7 @@
 {
   "name": "TreeSnap",
-  "version": "1.2.1",
-  "buildNum": "1051",
+  "version": "1.3.0",
+  "buildNum": "1060",
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
@@ -31,7 +31,7 @@
     "react-native-tab-view": "0.0.65",
     "react-native-vector-icons": "^4.6.0",
     "react-navigation": "^1.5.11",
-    "realm": "^2.5.0",
+    "realm": "^2.6.0",
     "tcomb": "^3.2.25",
     "tcomb-validation": "^3.4.1"
   },

@@ -84,10 +84,12 @@ export default class UploadButton extends Component {
               this.props.spinner.setProgress(step)
             }
           })
-          let updatedObservation = realm.objects('Submission').filtered(`id = ${observation.id}`)[0]
-          realm.write(() => {
-            updatedObservation.needs_update = false
-          })
+          let updatedObservation = realm.objects('Submission').filtered(`id = ${observation.id}`)
+          if(updatedObservation.length > 0) {
+            realm.write(() => {
+              updatedObservation[0].needs_update = false
+            })
+          }
         }
         if (this.props.spinner) {
           this.props.spinner.setProgress(step)
