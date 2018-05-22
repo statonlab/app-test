@@ -147,6 +147,7 @@ const DCP = {
     // maxValue: 40,
     units        : 'Inches',
     images       : [require('../img/DCP/diameter.jpg')],
+    captions : ['Note: if the tree is less than 4 feet tall, please take the stem diameter at the height of the first branch.'],
     selectChoices: ['Measured', 'Estimated'],
     default      : 'Estimated',
     placeHolder  : 'Diameter',
