@@ -147,6 +147,7 @@ const DCP = {
     // maxValue: 40,
     units        : 'Inches',
     images       : [require('../img/DCP/diameter.jpg')],
+    captions : ['Note: if the tree is less than 4 feet tall, please take the stem diameter at the height of the first branch.'],
     selectChoices: ['Measured', 'Estimated'],
     default      : 'Estimated',
     placeHolder  : 'Diameter',
@@ -284,7 +285,7 @@ const DCP = {
     label        : 'Disease symptoms',
     description  : 'What disease symptoms are present?',
     selectChoices: ['Cankers', 'Needle lesions or yellowing'],
-    placeHolder  : 'Please select',
+    placeHolder  : 'No disease symptoms',
     multiCheck : true,
     images       : [
       require('../img/torreya/Canker_on_Florida_Torreya_stem_by_Houston_Snead.jpg'),

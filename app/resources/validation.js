@@ -3,6 +3,12 @@ import DCP from '../resources/config'
 
 //TO DO: validate to a list of the choices instead
 
+//Instructions:
+// SINGLE CHOICE shoul dbe t.enums.of().
+// MULTIPLE CHOICE must be t.string.
+//OPTIONAL choices should be wrapped in t.maybe().
+
+
 const DCPrules = {
 //  seedsBinary            : t.enums.of(DCP.seedsBinary.selectChoices, 'seed'),
   seedsBinary: t.enums.of(DCP.seedsBinary.selectChoices),
@@ -32,7 +38,7 @@ const DCPrules = {
   numberRootSprouts      : t.String,
   deerRub                : t.enums.of(DCP.deerRub.selectChoices),
   conesMaleFemale        : t.enums.of(DCP.conesMaleFemale.selectChoices),
-  torreyaFungalBlight    : t.enums.of(DCP.torreyaFungalBlight.selectChoices)
+  torreyaFungalBlight    : t.maybe(t.String)
 
   //Deprecated choices
   // surroundings           : t.enums.of(DCP.surroundings.selectChoices)
