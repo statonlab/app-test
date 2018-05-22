@@ -32,7 +32,7 @@ const DCPrules = {
   numberRootSprouts      : t.String,
   deerRub                : t.enums.of(DCP.deerRub.selectChoices),
   conesMaleFemale        : t.enums.of(DCP.conesMaleFemale.selectChoices),
-  torreyaFungalBlight    : t.enums.of(DCP.torreyaFungalBlight.selectChoices)
+  torreyaFungalBlight    : t.maybe(t.String)
 
   //Deprecated choices
   // surroundings           : t.enums.of(DCP.surroundings.selectChoices)

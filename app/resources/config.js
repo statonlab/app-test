@@ -284,7 +284,7 @@ const DCP = {
     label        : 'Disease symptoms',
     description  : 'What disease symptoms are present?',
     selectChoices: ['Cankers', 'Needle lesions or yellowing'],
-    placeHolder  : 'Please select',
+    placeHolder  : 'No disease symptoms',
     multiCheck : true,
     images       : [
       require('../img/torreya/Canker_on_Florida_Torreya_stem_by_Houston_Snead.jpg'),
