@@ -10,8 +10,8 @@
 /// 36 characters long. The "firebase_", "google_", and "ga_" prefixes are reserved and should not
 /// be used.
 
-#import <Foundation/Foundation.h>
+#import "FIRAnalyticsSwiftNameSupport.h"
 
 /// The method used to sign in. For example, "google", "facebook" or "twitter".
 static NSString *const kFIRUserPropertySignUpMethod
-    NS_SWIFT_NAME(AnalyticsUserPropertySignUpMethod) = @"sign_up_method";
+    FIR_SWIFT_NAME(AnalyticsUserPropertySignUpMethod) = @"sign_up_method";
