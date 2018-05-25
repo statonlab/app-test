@@ -3,15 +3,15 @@ This application makes use of the following third party libraries:
 
 ## Firebase
 
-Copyright 2018 Google
+Copyright 2017 Google
 
 ## FirebaseAnalytics
 
-Copyright 2018 Google
+Copyright 2017 Google
 
 ## FirebaseCore
 
-Copyright 2018 Google
+Copyright 2017 Google
 
 ## FirebaseInstanceID
 
