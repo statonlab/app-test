@@ -419,34 +419,34 @@ export default class AccountScreen extends Screen {
               </DateModal>
             </View>
 
-            <Text style={styles.title}>AUTO SYNCHRONIZE</Text>
-            <View style={styles.card}>
-              <PickerModal
-                style={[styles.formGroup, styles.noBorder]}
-                onSelect={(auto_sync) => this.setState({
-                  auto_sync  : auto_sync === 'Yes' ? true : false,
-                  userChanges: true
-                })}
-                initialSelect={this.user.auto_sync ? 'Yes' : 'No'}
-                choices={['Yes', 'No']}
-                header="Auto sync allows TreeSnap to upload observations as soon as you reach a WiFi enabled area. Would you like to activate auto sync?"
-              >
-                <View style={styles.row}>
-                  <Text style={styles.label}>Activated</Text>
-                  <TextInput
-                    style={styles.textField}
-                    autoCapitalize={'words'}
-                    placeholder={'No'}
-                    placeholderTextColor="#aaa"
-                    returnKeyType={'done'}
-                    value={this.user.auto_sync ? 'Yes' : 'No'}
-                    underlineColorAndroid="transparent"
-                    editable={false}
-                    readOnly={true}
-                  />
-                </View>
-              </PickerModal>
-            </View>
+            {/*<Text style={styles.title}>AUTO SYNCHRONIZE</Text>*/}
+            {/*<View style={styles.card}>*/}
+              {/*<PickerModal*/}
+                {/*style={[styles.formGroup, styles.noBorder]}*/}
+                {/*onSelect={(auto_sync) => this.setState({*/}
+                  {/*auto_sync  : auto_sync === 'Yes' ? true : false,*/}
+                  {/*userChanges: true*/}
+                {/*})}*/}
+                {/*initialSelect={this.user.auto_sync ? 'Yes' : 'No'}*/}
+                {/*choices={['Yes', 'No']}*/}
+                {/*header="Auto sync allows TreeSnap to upload observations as soon as you reach a WiFi enabled area. Would you like to activate auto sync?"*/}
+              {/*>*/}
+                {/*<View style={styles.row}>*/}
+                  {/*<Text style={styles.label}>Activated</Text>*/}
+                  {/*<TextInput*/}
+                    {/*style={styles.textField}*/}
+                    {/*autoCapitalize={'words'}*/}
+                    {/*placeholder={'No'}*/}
+                    {/*placeholderTextColor="#aaa"*/}
+                    {/*returnKeyType={'done'}*/}
+                    {/*value={this.user.auto_sync ? 'Yes' : 'No'}*/}
+                    {/*underlineColorAndroid="transparent"*/}
+                    {/*editable={false}*/}
+                    {/*readOnly={true}*/}
+                  {/*/>*/}
+                {/*</View>*/}
+              {/*</PickerModal>*/}
+            {/*</View>*/}
 
             <Text style={styles.title}>PASSWORD</Text>
             <View style={styles.card}>
