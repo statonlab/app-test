@@ -7,9 +7,9 @@ import {
   DeviceEventEmitter
 } from 'react-native'
 import {
-  StackNavigator,
-  TabNavigator,
-  DrawerNavigator,
+  createStackNavigator,
+  createBottomTabNavigator,
+  createDrawerNavigator,
   DrawerItems
 } from 'react-navigation'
 import LandingScreen from '../screens/LandingScreen'
@@ -68,7 +68,7 @@ export default class Navigator extends Component {
    * @return {*}
    */
   observationStack() {
-    return new StackNavigator({
+    return new createStackNavigator({
       Landing  : {
         screen           : LandingScreen,
         navigationOptions: {
@@ -108,7 +108,7 @@ export default class Navigator extends Component {
    * @return {*}
    */
   tabs() {
-    return new TabNavigator({
+    return new createBottomTabNavigator({
       Landing              : {
         screen           : this.observationStack(),
         navigationOptions: {
@@ -297,7 +297,7 @@ export default class Navigator extends Component {
    * @return {{XML}}
    */
   ios() {
-    const Nav = new DrawerNavigator({
+    const Nav = new createDrawerNavigator({
       Landing: {
         screen           : this.tabs(),
         navigationOptions: {
@@ -319,7 +319,7 @@ export default class Navigator extends Component {
    * @return {{XML}}
    */
   android() {
-    const Nav = new DrawerNavigator({
+    const Nav = new createDrawerNavigator({
       Landing              : {
         screen           : this.observationStack(),
         navigationOptions: {
@@ -364,7 +364,7 @@ export default class Navigator extends Component {
   }
 
   render() {
-    return this.create()
+    return this.android()
   }
 }
 

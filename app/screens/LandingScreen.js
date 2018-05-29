@@ -134,7 +134,7 @@ export default class LandingScreen extends Screen {
    * Toggle sidebar menu (show/hide)
    */
   toggleMenu() {
-    this.navigator.navigate('DrawerToggle')
+    this.navigator.toggleDrawer()
   }
 
   /**

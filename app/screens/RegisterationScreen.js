@@ -206,7 +206,7 @@ export default class RegistrationScreen extends Screen {
                 navigator={this.navigator}
                 showRightIcon={false}
                 initial={true}
-                onMenuPress={() => this.navigator.navigate('DrawerToggle')}/>
+                onMenuPress={() => this.navigator.toggleDrawer()}/>
         <KeyboardAwareScrollView
           keyboardDismissMode={isAndroid ? 'none' : 'on-drag'}
           showsVerticalScrollIndicator={false}

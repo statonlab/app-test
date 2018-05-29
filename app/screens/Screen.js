@@ -8,20 +8,20 @@ export default class Screen extends Component {
 
     this.navigator          = Object.assign({}, props.navigation)
     // Prevent navigator from double navigating with multi clicks
-    this.navigator.navigate = (routeName, params) => {
-      if (this._isNavigating) {
-        return
-      }
-
-      this._isNavigating = true
-      props.navigation.navigate(routeName, params)
-      setTimeout(() => {
-        this._isNavigating = false
-      }, 500)
-    }
+    // this.navigator.navigate = (routeName, params) => {
+    //   if (this._isNavigating) {
+    //     return
+    //   }
+    //
+    //   this._isNavigating = true
+    //   props.navigation.navigate(routeName, params)
+    //   setTimeout(() => {
+    //     this._isNavigating = false
+    //   }, 500)
+    // }
     this.navigator.reset    = this.resetNavigationState
     this.params             = props.navigation.state.params
-    this._isNavigating      = false
+    // this._isNavigating      = false
 
     // Initialize an analytics object
     this.analytics = new Analytics()

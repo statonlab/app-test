@@ -34,7 +34,7 @@ export default class PrivacyPolicyScreen extends Screen {
           elevation={2}
           showRightIcon={false}
           initial={true}
-          onMenuPress={() => this.navigator.navigate('DrawerToggle')}
+          onMenuPress={() => this.navigator.toggleDrawer()}
         />
         <ScrollView style={styles.scrollView}>
           <View style={styles.card}>

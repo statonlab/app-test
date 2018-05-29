@@ -7,9 +7,9 @@ import LoginScreen from './LoginScreen'
 
 export default class IntermediateAccountScreen extends Screen {
   static navigationOptions = {
-    tabBarOnPress: ({scene, jumpToIndex}) => {
+    tabBarOnPress: (nav) => {
       DeviceEventEmitter.emit('IntermediateAccountScreen.loaded')
-      jumpToIndex(scene.index)
+      nav.navigation.navigate('Account')
     }
   }
 

@@ -1,9 +1,9 @@
 import React from 'react'
 import ObservationsScreen from '../screens/ObservationsScreen'
 import ObservationScreen from '../screens/ObservationScreen'
-import {StackNavigator} from 'react-navigation'
+import {createStackNavigator} from 'react-navigation'
 
-const Nav = new StackNavigator({
+const Nav = new createStackNavigator({
   Observations: {
     screen           : ObservationsScreen,
     navigationOptions: {}

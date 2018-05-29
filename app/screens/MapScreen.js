@@ -3,7 +3,6 @@ import Screen from './Screen'
 import {
   View,
   StyleSheet,
-  Alert,
   BackHandler,
   Text
 } from 'react-native'
@@ -97,7 +96,7 @@ export default class MapScreen extends Screen {
                 rightIcon="help"
                 onRightPress={() => this.guide.show()}
                 initial={true}
-                onMenuPress={() => this.navigator.navigate('DrawerToggle')}/>
+                onMenuPress={() => this.navigator.toggleDrawer()}/>
         <Guide
           ref={ref => this.guide = ref}
           screen={'MapScreen'}
@@ -121,6 +120,7 @@ export default class MapScreen extends Screen {
       }
       let plant = realm.objects('Submission').filtered(`id == "${marker.id}"`)[0]
       this.navigator.navigate('Observation', {
+        // Deep copy the object
         plant    : JSON.parse(JSON.stringify(plant)),
         onUnmount: () => {
           this.setState({shouldNavigate: true})
