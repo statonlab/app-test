@@ -903,7 +903,7 @@ export default class ObservationsScreen extends Screen {
                 rightIcon="help"
                 onRightPress={() => this.guide.show()}
                 initial={true}
-                onMenuPress={() => this.navigator.navigate('DrawerToggle')}/>
+                onMenuPress={() => this.navigator.toggleDrawer()}/>
         <Guide
           ref={ref => this.guide = ref}
           screen="ObservationsScreen"

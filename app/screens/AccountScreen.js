@@ -311,7 +311,7 @@ export default class AccountScreen extends Screen {
                 elevation={4}
                 showRightIcon={false}
                 initial={true}
-                onMenuPress={() => this.navigator.navigate('DrawerToggle')}
+                onMenuPress={() => this.navigator.toggleDrawer()}
         />
         <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.innerContainer}>

@@ -29,7 +29,7 @@ export default class AboutScreen extends Screen {
           navigator={this.navigator}
           elevation={2}
           initial={true}
-          onMenuPress={() => this.navigator.navigate('DrawerToggle')}
+          onMenuPress={() => this.navigator.toggleDrawer()}
         />
         <ScrollView style={styles.scrollView}>
           <View style={styles.card}>

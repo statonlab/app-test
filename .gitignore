@@ -24,13 +24,12 @@ project.xcworkspace
 
 # Android/IntelliJ
 #
-**/*/build/
 .idea
 .gradle
 android/.gradle
 local.properties
 *.iml
-
+android/app/src/main/assets/crashlytics-build.properties
 # node.js
 #
 node_modules/

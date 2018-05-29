@@ -83,8 +83,10 @@ export default class LoginScreen extends Screen {
         this.spinner.close()
       }
 
-      if (!this.props.onLogin()) {
+      if (typeof this.props.onLogin !== 'function') {
         this.navigator.goBack()
+      } else {
+        this.props.onLogin()
       }
     }).catch(error => {
       console.log(error)
@@ -139,7 +141,7 @@ export default class LoginScreen extends Screen {
                 navigator={this.navigator}
                 showRightIcon={false}
                 initial={true}
-                onMenuPress={() => this.navigator.navigate('DrawerToggle')}/>
+                onMenuPress={() => this.navigator.toggleDrawer()}/>
         <ScrollView keyboardDismissMode={'on-drag'}
                     showsVerticalScrollIndicator={false}
                     keyboardShouldPersistTaps="handled">
