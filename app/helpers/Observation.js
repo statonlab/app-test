@@ -35,8 +35,9 @@ class Observation {
     let form             = this._setUpForm(observation)
     let response         = null
     try {
+      console.log('HERE', observation.serverID)
       let id
-      if (observation.serverID === -1) {
+      if (realmObservation.serverID === -1) {
         response = await axios.post('/observations', form)
         id       = response.data.data.observation_id
       } else {
