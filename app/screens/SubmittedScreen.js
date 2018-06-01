@@ -46,7 +46,7 @@ export default class SubmittedScreen extends Screen {
     this.analytics.visitScreen('SubmittedScreen')
 
     this.backEvent = BackHandler.addEventListener('hardwareBackPress', () => {
-      this.navigator.reset()
+      this.navigator.navigate('Home')
       return true
     })
   }
@@ -190,7 +190,7 @@ export default class SubmittedScreen extends Screen {
         <View style={[styles.row, styles.bottomRow]}>
           <TouchableOpacity style={{padding: 10}}
                             onPress={() => {
-                              this.navigator.reset()
+                              this.navigator.navigate('Home')
                             }}>
             <Text style={{color: '#fff'}}>Upload Later</Text>
           </TouchableOpacity>
@@ -208,7 +208,7 @@ export default class SubmittedScreen extends Screen {
           <View style={[styles.row, styles.bottomRow]}>
             <TouchableOpacity style={{padding: 10}}
                               onPress={() => {
-                                this.navigator.reset()
+                                this.navigator.navigate('Home')
                               }}>
               <Text style={{color: '#fff'}}>Upload Later</Text>
             </TouchableOpacity>
@@ -224,7 +224,7 @@ export default class SubmittedScreen extends Screen {
             <TouchableOpacity style={[styles.uploadButton, {
               backgroundColor: Colors.primary,
               borderColor    : Colors.primary
-            }]} onPress={() => this.navigator.reset()}>
+            }]} onPress={() => this.navigator.navigate('Home')}>
               <Text style={[styles.uploadText, {color: Colors.primaryText}]}>Continue</Text>
             </TouchableOpacity>
           </View>
