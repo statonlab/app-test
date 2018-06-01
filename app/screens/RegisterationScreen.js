@@ -89,7 +89,9 @@ export default class RegistrationScreen extends Screen {
     this.spinner.open()
 
     User.register(request).then(response => {
-      this.spinner.close()
+      if (this.spinner) {
+        this.spinner.close()
+      }
       // Transition to Landing Scene.
       this.navigator.navigate('Home')
     }).catch(error => {
