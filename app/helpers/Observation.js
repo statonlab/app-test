@@ -35,8 +35,14 @@ class Observation {
     let form             = this._setUpForm(observation)
     let response         = null
     try {
-      response = await axios.post('/observations', form)
-      let id   = response.data.data.observation_id
+      console.log('HERE', observation.serverID)
+      let id
+      if (realmObservation.serverID === -1) {
+        response = await axios.post('/observations', form)
+        id       = response.data.data.observation_id
+      } else {
+        id = observation.serverID
+      }
       await this.uploadImages(observation, id, callback)
 
       realm.write(() => {
