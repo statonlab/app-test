@@ -145,6 +145,7 @@ class Observation {
 
   /**
    * Incrementally upload images of a given observation.
+   *
    * @param {Object} observation
    * @param {Number} id Observation Server ID
    * @param {Function} onSuccess
