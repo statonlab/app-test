@@ -26,12 +26,12 @@ class Observation {
       throw new Error('User not signed in')
     }
 
+    let realmObservation = realm.objects('Submission').filtered(`id == ${observation.id}`)[0]
     // Don't sync already synced record
-    if (observation.synced) {
+    if (realmObservation.synced || realmObservation.serverID !== -1) {
       return this.update(observation, callback)
     }
 
-    let realmObservation = realm.objects('Submission').filtered(`id == ${observation.id}`)[0]
     let form             = this._setUpForm(observation)
     let response         = null
     try {
