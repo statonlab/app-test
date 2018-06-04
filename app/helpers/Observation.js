@@ -26,16 +26,15 @@ class Observation {
       throw new Error('User not signed in')
     }
 
+    let realmObservation = realm.objects('Submission').filtered(`id == ${observation.id}`)[0]
     // Don't sync already synced record
-    if (observation.synced) {
-      return
+    if (realmObservation.synced || realmObservation.serverID !== -1) {
+      return this.update(observation, callback)
     }
 
-    let realmObservation = realm.objects('Submission').filtered(`id == ${observation.id}`)[0]
     let form             = this._setUpForm(observation)
     let response         = null
     try {
-      console.log('HERE', observation.serverID)
       let id
       if (realmObservation.serverID === -1) {
         response = await axios.post('/observations', form)
@@ -43,11 +42,15 @@ class Observation {
       } else {
         id = observation.serverID
       }
+
+      realm.write(() => {
+        realmObservation.serverID = id
+      })
+
       await this.uploadImages(observation, id, callback)
 
       realm.write(() => {
         realmObservation.synced   = true
-        realmObservation.serverID = id
       })
 
       return response
