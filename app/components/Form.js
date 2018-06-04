@@ -44,6 +44,7 @@ export default class Form extends Component {
     super(props)
 
     this.state = {
+      isPrivate         : false,
       images            : {},
       title             : this.props.title,
       location          : {
@@ -337,7 +338,8 @@ export default class Form extends Component {
       synced              : false,
       meta_data           : JSON.stringify(this.state.metadata),
       has_private_comments: this.state.hasPrivateComments,
-      custom_id           : this.state.custom_id
+      custom_id           : this.state.custom_id,
+      is_private          : this.state.isPrivate
     }
 
     realm.write(() => {
@@ -389,7 +391,8 @@ export default class Form extends Component {
         meta_data           : JSON.stringify(this.state.metadata),
         needs_update        : true,
         has_private_comments: this.state.hasPrivateComments,
-        custom_id           : this.state.custom_id
+        custom_id           : this.state.custom_id,
+        is_private          : this.state.is_private
       }, true)
     })
 
@@ -767,6 +770,13 @@ export default class Form extends Component {
     } else {
       commentsPrivacyCheckbox = <IonIcon name={'md-square-outline'} size={20} color={'#aaa'}/>
     }
+
+    let isPrivateCheckbox
+    if (this.state.isPrivate) {
+      isPrivateCheckbox = <IonIcon name={'md-checkbox'} size={20} color={Colors.primary}/>
+    } else {
+      isPrivateCheckbox = <IonIcon name={'md-square-outline'} size={20} color={'#aaa'}/>
+    }
     return (
       <View style={styles.container}>
         <Spinner ref="spinner"/>
@@ -818,6 +828,7 @@ export default class Form extends Component {
                 {commentsPrivacyCheckbox}
               </Text>
             </TouchableOpacity>
+
             <TouchableOpacity style={[styles.formGroup]}
                               onPress={() => this.setState({showCustomIDModal: true})}>
               <Text style={[styles.label]}>Tree Identifier</Text>
@@ -827,6 +838,34 @@ export default class Form extends Component {
                 color      : this.state.custom_id ? '#444' : '#aaa'
               }}>{this.state.custom_id || 'Optional'}</Text>
             </TouchableOpacity>
+
+            <TouchableOpacity style={[styles.formGroup, {flex: 0, alignItems: 'center'}]}
+                              activeOpacity={1}
+                              onPress={() => {
+                                this.setState({isPrivate: !this.state.isPrivate})
+                              }}>
+              <View style={{flex: 1, paddingVertical: 5}}>
+                <Text style={[styles.label, {width: undefined, flex: 1}]}>
+                  Mark observation as private
+                </Text>
+                <Text style={{
+                  flex : 1,
+                  color: '#999'
+                }}>
+                  {this.state.isPrivate ?
+                    'This observation will be visible only to you and our partners'
+                    : 'This observation will be shared publicly'}
+                </Text>
+              </View>
+              <Text style={{
+                flex        : 0,
+                color       : this.state.metadata.comment ? '#444' : '#aaa',
+                paddingRight: 10
+              }}>
+                {isPrivateCheckbox}
+              </Text>
+            </TouchableOpacity>
+
             <View style={[styles.formGroup, {flex: 0}]}>
               <Text style={[styles.label, {width: 60}]}>Location</Text>
               {this.props.edit ?
