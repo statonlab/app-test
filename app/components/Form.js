@@ -808,7 +808,7 @@ export default class Form extends Component {
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={[styles.formGroup, {flex: 0, alignItems: 'center'}]}
+              style={[styles.formGroup, {flex: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}]}
               onPress={() => {
                 this.setState({showAdvancedSettingsModal: true})
               }}>
@@ -818,6 +818,11 @@ export default class Form extends Component {
                 fontSize  : 14
               }}>
                 Advanced Options
+              </Text>
+              <Text style={{
+                paddingRight: 10
+              }}>
+                <IonIcon name={'ios-apps-outline'} size={20} color={'#777'}/>
               </Text>
             </TouchableOpacity>
 
