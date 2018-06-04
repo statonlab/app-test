@@ -32,8 +32,8 @@ class Observation {
       return this.update(observation, callback)
     }
 
-    let form             = this._setUpForm(observation)
-    let response         = null
+    let form     = this._setUpForm(observation)
+    let response = null
     try {
       let id
       if (realmObservation.serverID === -1) {
@@ -50,7 +50,7 @@ class Observation {
       await this.uploadImages(observation, id, callback)
 
       realm.write(() => {
-        realmObservation.synced   = true
+        realmObservation.synced = true
       })
 
       return response
@@ -145,6 +145,7 @@ class Observation {
 
   /**
    * Incrementally upload images of a given observation.
+   *
    * @param {Object} observation
    * @param {Number} id Observation Server ID
    * @param {Function} onSuccess
@@ -210,6 +211,7 @@ class Observation {
     form.append('mobile_id', observation.id)
     form.append('has_private_comments', observation.has_private_comments ? 1 : 0)
     form.append('custom_id', observation.custom_id)
+    form.append('is_private', observation.is_private ? 1 : 0)
 
     return form
   }

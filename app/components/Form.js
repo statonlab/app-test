@@ -33,6 +33,7 @@ import {ACFCollection} from '../resources/descriptions'
 import DCPrules from '../resources/validation'
 import {ifIphoneX, isIphoneX} from 'react-native-iphone-x-helper'
 import Analytics from '../helpers/Analytics'
+import AdvancedSettingsModal from './AdvancedSettingsModal'
 
 const isAndroid = Platform.OS === 'android'
 
@@ -44,22 +45,24 @@ export default class Form extends Component {
     super(props)
 
     this.state = {
-      images            : {},
-      title             : this.props.title,
-      location          : {
+      isPrivate                : false,
+      images                   : {},
+      title                    : this.props.title,
+      location                 : {
         latitude : 0,
         longitude: 0,
         accuracy : -1
       },
-      metadata          : {},
-      id                : '',
-      warnings          : {},
-      bottomMargin      : new Animated.Value(0),
-      deletedImages     : [],
-      showCommentsModal : false,
-      hasPrivateComments: false,
-      custom_id         : '',
-      showCustomIDModal : false
+      metadata                 : {},
+      id                       : '',
+      warnings                 : {},
+      bottomMargin             : new Animated.Value(0),
+      deletedImages            : [],
+      showCommentsModal        : false,
+      hasPrivateComments       : false,
+      custom_id                : '',
+      showCustomIDModal        : false,
+      showAdvancedSettingsModal: false
     }
 
     this.events     = []
@@ -96,6 +99,11 @@ export default class Form extends Component {
 
         if (key === 'has_private_comments') {
           this.setState({hasPrivateComments: this.props.entryInfo[key]})
+          return
+        }
+
+        if (key === 'is_private') {
+          this.setState({isPrivate: this.props.entryInfo[key]})
           return
         }
 
@@ -337,7 +345,8 @@ export default class Form extends Component {
       synced              : false,
       meta_data           : JSON.stringify(this.state.metadata),
       has_private_comments: this.state.hasPrivateComments,
-      custom_id           : this.state.custom_id
+      custom_id           : this.state.custom_id,
+      is_private          : this.state.isPrivate
     }
 
     realm.write(() => {
@@ -389,7 +398,8 @@ export default class Form extends Component {
         meta_data           : JSON.stringify(this.state.metadata),
         needs_update        : true,
         has_private_comments: this.state.hasPrivateComments,
-        custom_id           : this.state.custom_id
+        custom_id           : this.state.custom_id,
+        is_private          : this.state.isPrivate
       }, true)
     })
 
@@ -761,12 +771,6 @@ export default class Form extends Component {
   }
 
   render() {
-    let commentsPrivacyCheckbox
-    if (this.state.hasPrivateComments) {
-      commentsPrivacyCheckbox = <IonIcon name={'md-checkbox'} size={20} color={Colors.primary}/>
-    } else {
-      commentsPrivacyCheckbox = <IonIcon name={'md-square-outline'} size={20} color={'#aaa'}/>
-    }
     return (
       <View style={styles.container}>
         <Spinner ref="spinner"/>
@@ -792,32 +796,7 @@ export default class Form extends Component {
                 color      : this.state.metadata.comment ? '#444' : '#aaa'
               }}>{this.state.metadata.comment || 'Add comment'}</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.formGroup, {flex: 0, alignItems: 'center'}]}
-                              activeOpacity={1}
-                              onPress={() => {
-                                this.setState({hasPrivateComments: !this.state.hasPrivateComments})
-                              }}>
-              <View style={{flex: 1, paddingVertical: 5}}>
-                <Text style={[styles.label, {width: undefined, flex: 1}]}>
-                  Mark comments as private
-                </Text>
-                <Text style={{
-                  flex : 1,
-                  color: '#999'
-                }}>
-                  {this.state.hasPrivateComments ?
-                    'Your comments will only be visible to you'
-                    : 'Your comments will be shared publicly'}
-                </Text>
-              </View>
-              <Text style={{
-                flex        : 0,
-                color       : this.state.metadata.comment ? '#444' : '#aaa',
-                paddingRight: 10
-              }}>
-                {commentsPrivacyCheckbox}
-              </Text>
-            </TouchableOpacity>
+
             <TouchableOpacity style={[styles.formGroup]}
                               onPress={() => this.setState({showCustomIDModal: true})}>
               <Text style={[styles.label]}>Tree Identifier</Text>
@@ -827,6 +806,26 @@ export default class Form extends Component {
                 color      : this.state.custom_id ? '#444' : '#aaa'
               }}>{this.state.custom_id || 'Optional'}</Text>
             </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[styles.formGroup, {flex: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}]}
+              onPress={() => {
+                this.setState({showAdvancedSettingsModal: true})
+              }}>
+              <Text style={{
+                color     : Colors.primary,
+                fontWeight: '500',
+                fontSize  : 14
+              }}>
+                Advanced Options
+              </Text>
+              <Text style={{
+                paddingRight: 10
+              }}>
+                <IonIcon name={'ios-apps-outline'} size={20} color={'#777'}/>
+              </Text>
+            </TouchableOpacity>
+
             <View style={[styles.formGroup, {flex: 0}]}>
               <Text style={[styles.label, {width: 60}]}>Location</Text>
               {this.props.edit ?
@@ -841,6 +840,7 @@ export default class Form extends Component {
 
         {this._renderCommentsModal()}
         {this._renderCustomIDModal()}
+        {this._renderAdvancedSettingsModal()}
 
         <View style={styles.footer}>
           <TouchableOpacity style={[styles.button, styles.flex1]}
@@ -858,6 +858,26 @@ export default class Form extends Component {
           </TouchableOpacity>
         </View>
       </View>
+    )
+  }
+
+  _renderAdvancedSettingsModal() {
+    return (
+      <AdvancedSettingsModal
+        initialValues={{
+          hasPrivateComments: this.state.hasPrivateComments,
+          isPrivate         : this.state.isPrivate
+        }}
+        onChange={values => {
+          this.setState({
+            hasPrivateComments: values.hasPrivateComments,
+            isPrivate         : values.isPrivate
+          })
+        }}
+        onRequestClose={() => {
+          this.setState({showAdvancedSettingsModal: false})
+        }}
+        visible={this.state.showAdvancedSettingsModal}/>
     )
   }
 
@@ -937,16 +957,7 @@ export default class Form extends Component {
               may pick your own name so that you can observe it over time.
             </Text>
             <TextInput
-              style={[{
-                flex             : 0,
-                height           : 40,
-                width            : undefined,
-                borderWidth      : 1,
-                borderColor      : '#ddd',
-                backgroundColor  : '#fff',
-                borderRadius     : 4,
-                paddingHorizontal: 5
-              }]}
+              style={styles.customIDInput}
               placeholder="Enter custom ID"
               placeholderTextColor="#aaa"
               value={this.state.custom_id}
@@ -1212,6 +1223,17 @@ const styles = StyleSheet.create({
     color       : '#444',
     fontSize    : 14,
     marginBottom: 10
+  },
+
+  customIDInput: {
+    flex             : 0,
+    height           : 40,
+    width            : undefined,
+    borderWidth      : 1,
+    borderColor      : '#ddd',
+    backgroundColor  : '#fff',
+    borderRadius     : 4,
+    paddingHorizontal: 5
   }
 })
 

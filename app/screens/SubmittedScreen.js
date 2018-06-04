@@ -224,7 +224,7 @@ export default class SubmittedScreen extends Screen {
             <TouchableOpacity style={[styles.uploadButton, {
               backgroundColor: Colors.primary,
               borderColor    : Colors.primary
-            }]} onPress={() => this.navigator.navigate('Home')}>
+            }]} onPress={() => this.navigator.popToTop()}>
               <Text style={[styles.uploadText, {color: Colors.primaryText}]}>Continue</Text>
             </TouchableOpacity>
           </View>

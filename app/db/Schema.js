@@ -54,7 +54,8 @@ const SubmissionSchema = {
     serverID            : {type: 'int', default: -1},
     needs_update        : {type: 'bool', default: false},
     has_private_comments: {type: 'bool', default: false},
-    custom_id           : {type: 'string', default: ''}
+    custom_id           : {type: 'string', default: ''},
+    is_private          : {type: 'bool', default: false}
   }
 }
 
@@ -89,7 +90,7 @@ export default new Realm({
     SubmissionSchema,
     GuideSchema
   ],
-  schemaVersion: 9,
+  schemaVersion: 10,
   migration    : function (oldRealm, newRealm) {
     if (oldRealm.schemaVersion < 2) {
       let newUser = newRealm.objects('User')
@@ -139,6 +140,13 @@ export default new Realm({
       let observations = newRealm.objects('Submission')
       observations.map(observation => {
         observation.custom_id = ''
+      })
+    }
+
+    if(oldRealm.schemaVersion < 9) {
+      let observations = newRealm.objects('Submission')
+      observations.map(observation => {
+        observation.is_private = false
       })
     }
   }
