@@ -269,8 +269,9 @@ export const Plants = {
       }
     ],
     formProps       : {
-      diameterNumeric: true,
-      otherLabel     : true
+      diameterNumeric        : true,
+      otherLabel             : true,
+      locationCharacteristics: true
     }
   }
   ,
@@ -394,30 +395,30 @@ export const Plants = {
       // require('../img/torreya/Torreya_taxifolia_at_Torreya_State_Park_04012018_Diana_Picklesimer_IMG_7421.png'),
       // require('../img/torreya/Gholson_Nature_Park,_Florida_Torreya_and_Helen_Roth_02102018.jpg'),
       require('../img/torreya/Three_Rivers_SP_11282010_034_Torreya_taxifolia_group_campground.jpg'),
-     // require('../img/torreya/torreya_male.jpg'),
+      // require('../img/torreya/torreya_male.jpg'),
       require('../img/torreya/Three_Rivers_SP_11282010_031_Torreya_taxifolia_male_cones_group_campground.jpg'),
-   //   require('../img/torreya/Torreya_seed.jpg'),
+      //   require('../img/torreya/Torreya_seed.jpg'),
       require('../img/torreya/Torreya_taxifolia4.jpg'),
-      require('../img/torreya/Torreya_taxifolia5.jpg'),
-   //   require('../img/torreya/torreya1_mark_schwartz_lg.jpg'),
-   //   require('../img/torreya/torreya2_mark_schwartz_lg.jpg'),
-   //   require('../img/torreya/2004-canker.jpg'),
-    //  require('../img/torreya/fl-disease-x.jpg')
+      require('../img/torreya/Torreya_taxifolia5.jpg')
+      //   require('../img/torreya/torreya1_mark_schwartz_lg.jpg'),
+      //   require('../img/torreya/torreya2_mark_schwartz_lg.jpg'),
+      //   require('../img/torreya/2004-canker.jpg'),
+      //  require('../img/torreya/fl-disease-x.jpg')
     ],
     captions        : ['Illustrations of Florida Torreya leaves, male and female cones, and underside of leaf.  Image credit: Field Guide to the Rare Plants of Florida, Florida Natural Areas Inventory, 2000.',
       'Top side of Florida Torreya leaves.  Photo credit: Leigh Brooks.',
       // 'Florida Torreya caged root sprout at Torreya State Park.  Photo credit: Diana Picklesimer.',
       // 'Helen Roth with Florida Torreya root sprout at Angus K. Gholson, Jr. Nature Park in Chattahoochee.  Photo credit: Leigh Brooks.',
       'Healthy Florida Torreya tree planted at Three Rivers State Park near Sneads.  Photo credit: Leigh Brooks.',
-   //   'Under side of Florida Torreya leaves showing male sporangia in cone-like structures.  Photo credit: Dr. Loran C. Anderson.',
+      //   'Under side of Florida Torreya leaves showing male sporangia in cone-like structures.  Photo credit: Dr. Loran C. Anderson.',
       'Under side of Florida Torreya leaves and buds of male cones.  Photo credit: Leigh Brooks.',
-     // 'Seed of female Florida Torreya.  Photo credit: Dr. Loran C. Anderson',
+      // 'Seed of female Florida Torreya.  Photo credit: Dr. Loran C. Anderson',
       'Seed of female Florida Torreya.  Photo credit: Guy Anglin, Atlas of Florida Plants, Institute for Systematic Botany, University of South Florida, Tampa.',
-      'Female Florida Torreya branches with seeds.  Photo credit: Guy Anglin, Atlas of Florida Plants, Institute for Systematic Botany, University of South Florida, Tampa.',
-  //    'Close up of diseased needles on Florida Torreya.  Photo credit: Mark Schwartz, USDA USFS web page “Why Are Some Plants Rare?”',
-  //    'Diseased Florida Torreya tree.  Photo credit: Mark Schwartz, USDA USFS web page “Why Are Some Plants Rare?”',
-   //   'Close up of stem cankers on Florida Torreya.  Photo credit: Connie Barlow, Torreya Guardians web site',
-    //  'Close up of diseased stem of Florida Torreya.  Photo credit: Connie Barlow, Torreya Guardians web site'
+      'Female Florida Torreya branches with seeds.  Photo credit: Guy Anglin, Atlas of Florida Plants, Institute for Systematic Botany, University of South Florida, Tampa.'
+      //    'Close up of diseased needles on Florida Torreya.  Photo credit: Mark Schwartz, USDA USFS web page “Why Are Some Plants Rare?”',
+      //    'Diseased Florida Torreya tree.  Photo credit: Mark Schwartz, USDA USFS web page “Why Are Some Plants Rare?”',
+      //   'Close up of stem cankers on Florida Torreya.  Photo credit: Connie Barlow, Torreya Guardians web site',
+      //  'Close up of diseased stem of Florida Torreya.  Photo credit: Connie Barlow, Torreya Guardians web site'
     ],
     descriptionCards: [
       {
@@ -440,14 +441,17 @@ export const Plants = {
             The deadly fungus has been identified as Fusarium torreyae, thought to be imported from Asia, and appears to be ubiquitous in the ravines area. Root sprouts die before reaching maturity and producing fruit, so the species will go extinct in the wild without intervention. Researchers will coordinate with you to take cuttings of your trees which will be grown offsite to save the most genetic diversity possible. Of utmost importance is finding trees that do not exhibit cankers or other signs of disease stress so that genes for disease resistance can be found and used in a breeding program.</Text>,
 
 
-          <Text style ={styles.paragraph}> More information can be found at:</Text>,
+          <Text style={styles.paragraph}> More information can be found at:</Text>,
 
-            <Text style={styles.paragraph}>{'\u2022'} <Atext url="www.torreyatreeoflife.com">
-              Torreya Tree Of Life
-            </Atext>  </Text>,
-          <Text style={styles.paragraph}>{'\u2022'}<Atext url="explorer.natureserve.org/"> NatureServe Explorer </Atext> </Text>,
-          <Text style={styles.paragraph}>{'\u2022'}<Atext url="www.fnai.org/FieldGuide/pdf/Torreya_taxifolia.PDF"> Florida Natural Areas Inventory  </Atext> </Text>,
-          <Text style={styles.paragraph}>{'\u2022'}<Atext url="www.fws.gov/panamacity/listedplants.html#Torreya"> U.S. Fish and Wildlife: Panama City Field Office  </Atext> </Text>,
+          <Text style={styles.paragraph}>{'\u2022'} <Atext url="www.torreyatreeoflife.com">
+            Torreya Tree Of Life
+          </Atext> </Text>,
+          <Text style={styles.paragraph}>{'\u2022'}<Atext url="explorer.natureserve.org/"> NatureServe Explorer </Atext>
+          </Text>,
+          <Text style={styles.paragraph}>{'\u2022'}<Atext url="www.fnai.org/FieldGuide/pdf/Torreya_taxifolia.PDF"> Florida Natural Areas Inventory </Atext>
+          </Text>,
+          <Text style={styles.paragraph}>{'\u2022'}<Atext url="www.fws.gov/panamacity/listedplants.html#Torreya"> U.S. Fish and Wildlife: Panama City Field Office </Atext>
+          </Text>
 
 
         ]

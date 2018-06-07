@@ -52,7 +52,7 @@ export default class SnackBarNotice extends Component {
       isVisible : true
     })
 
-    let move = 20
+    let move = 0
     if (this.props.placement === 'top') {
       move = 50
     }
@@ -100,13 +100,14 @@ export default class SnackBarNotice extends Component {
   }
 
   /**
-   * For now will only get message icon.  In the future other icons could be displayed.
+   * For now will only get message icon.
+   * In the future other icons could be displayed.
    *
    * @returns {{XML}}
    */
   getIcon = () => {
     return (
-      <Icon name="message" size={23} color="#fff" style={{marginRight: 10}}/>
+      <Icon name="message" size={16} color="#fff" style={{marginRight: 10}}/>
     )
   }
 
@@ -121,7 +122,6 @@ export default class SnackBarNotice extends Component {
             style={styles.flex1}
           >
             <View style={styles.row}>
-              {this.getIcon()}
               <Text
                 style={[styles.text, {flex: 1}]}>
                 {this.state.noticeText}
@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
   text: {
     color     : Colors.primaryText,
     fontSize  : 14,
-    fontWeight: 'bold'
+    fontWeight: '400'
   },
 
   right: {
