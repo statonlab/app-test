@@ -190,7 +190,7 @@ export default class SubmittedScreen extends Screen {
         <View style={[styles.row, styles.bottomRow]}>
           <TouchableOpacity style={{padding: 10}}
                             onPress={() => {
-                              this.navigator.navigate('Home')
+                              this.navigator.popToTop()
                             }}>
             <Text style={{color: '#fff'}}>Upload Later</Text>
           </TouchableOpacity>
@@ -208,7 +208,7 @@ export default class SubmittedScreen extends Screen {
           <View style={[styles.row, styles.bottomRow]}>
             <TouchableOpacity style={{padding: 10}}
                               onPress={() => {
-                                this.navigator.navigate('Home')
+                                this.navigator.popToTop()
                               }}>
               <Text style={{color: '#fff'}}>Upload Later</Text>
             </TouchableOpacity>
