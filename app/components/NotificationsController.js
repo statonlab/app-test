@@ -11,6 +11,20 @@ export default class NotificationsController extends Component {
 
   componentDidMount() {
     AppState.addEventListener('change', this._handleAppStateChange.bind(this))
+
+    this._configure()
+
+    setTimeout(() => {
+      // Clear all notifications if any was set
+      Notifications.clearAllNotifications()
+    }, 1000)
+  }
+
+  componentWillUnmount() {
+    AppState.removeEventListener('change', this._handleAppStateChange.bind(this))
+  }
+
+  _configure() {
     Notifications.configure({
       onRegister: (token) => {
 
@@ -40,17 +54,13 @@ export default class NotificationsController extends Component {
     })
   }
 
-  componentWillUnmount() {
-    AppState.removeEventListener('change', this._handleAppStateChange.bind(this))
-  }
-
   _handleAppStateChange(nextState) {
     console.log('HERE', nextState)
     if (nextState === 'background') {
       const hasUnsynced = realm.objects('Submission').filtered('needs_update = true OR synced = false').length > 0
       if (hasUnsynced) {
-        // 4 hours after the app goes into the background
-        const date     = new Date(Date.now() + (4 * 60 * 60 * 1000))
+        // 24 hours after the app goes into the background
+        const date     = new Date(Date.now() + (24 * 60 * 60 * 1000))
         // In a dev environment display in 1 second
         const date_dev = new Date(Date.now() + (1000))
         Notifications.cancelAllLocalNotifications()
