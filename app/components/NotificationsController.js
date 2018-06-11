@@ -31,36 +31,38 @@ export default class NotificationsController extends Component {
       },
 
       onNotification: (notification) => {
-        Alert.alert(
-          'Sync Observations',
-          'Would you like to upload your observations now?',
-          [
-            {
-              text   : 'Cancel',
-              onPress: () => {
+        if (notification.message === 'You have unsynced observations. Would you like to upload your observations?') {
+          Alert.alert(
+            'Sync Observations',
+            'Would you like to upload your observations now?',
+            [
+              {
+                text   : 'Cancel',
+                onPress: () => {
+                },
+                style  : 'cancel'
               },
-              style  : 'cancel'
-            },
-            {
-              text   : 'OK',
-              onPress: () => {
-                this.props.onUploadRequest()
+              {
+                text   : 'OK',
+                onPress: () => {
+                  this.props.onUploadRequest()
+                }
               }
-            }
-          ],
-          {cancelable: false}
-        )
+            ],
+            {cancelable: false}
+          )
+        }
       }
     })
   }
 
   _handleAppStateChange(nextState) {
-    console.log('HERE', nextState)
     if (nextState === 'background') {
+      // In a dev environment display in 1 second
+      const date_dev = new Date(Date.now() + (1000))
+
       const hasUnsynced = realm.objects('Submission').filtered('needs_update = true OR synced = false').length > 0
       if (hasUnsynced) {
-        // In a dev environment display in 1 second
-        const date_dev = new Date(Date.now() + (1000))
         Notifications.cancelAllLocalNotifications()
         Notifications.localNotificationSchedule({
           message: 'You have unsynced observations. Would you like to upload your observations?',
