@@ -11,6 +11,7 @@ import SnackBarNotice from './app/components/SnackBarNotice'
 import Navigator from './app/routes/Navigator'
 import Observation from './app/helpers/Observation'
 import WelcomeModal from './app/components/WelcomeModal'
+import NotificationsController from './app/components/NotificationsController'
 
 export default class App extends Component {
   constructor(props) {
@@ -23,7 +24,7 @@ export default class App extends Component {
     this.events = []
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.initApp()
 
     this.events.push(DeviceEventEmitter.addListener('userLoggedIn', () => {
@@ -77,6 +78,9 @@ export default class App extends Component {
         />
         <Navigator/>
         <SnackBarNotice ref={(ref) => this.snackbar = ref} noticeText={this.state.snackMessage}/>
+        <NotificationsController onUploadRequest={() => {
+          DeviceEventEmitter.emit('uploadRequested')
+        }}/>
       </View>
     )
   }

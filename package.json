@@ -28,6 +28,7 @@
     "react-native-maps": "^0.20.0",
     "react-native-material-kit": "github:xinthink/react-native-material-kit#master",
     "react-native-photo-view": "github:statonlab/react-native-photo-view#master",
+    "react-native-push-notification": "^3.0.2",
     "react-native-tab-view": "0.0.65",
     "react-native-vector-icons": "^4.6.0",
     "react-navigation": "2.0.4",

@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
-import {View, Text, StyleSheet, ActivityIndicator, TouchableOpacity} from 'react-native'
+import {View, Text, StyleSheet, DeviceEventEmitter, TouchableOpacity} from 'react-native'
 import realm from '../db/Schema'
 import Observation from '../helpers/Observation'
 import Colors from '../helpers/Colors'
@@ -22,6 +22,15 @@ export default class UploadButton extends Component {
    */
   componentDidMount() {
     this.getObservations()
+    this.events = [
+      DeviceEventEmitter.addListener('uploadRequested', () => {
+        this.upload()
+      })
+    ]
+  }
+
+  componentWillUnmount() {
+    this.events.map(e => e.remove())
   }
 
   /**
@@ -85,7 +94,7 @@ export default class UploadButton extends Component {
             }
           })
           let updatedObservation = realm.objects('Submission').filtered(`id = ${observation.id}`)
-          if(updatedObservation.length > 0) {
+          if (updatedObservation.length > 0) {
             realm.write(() => {
               updatedObservation[0].needs_update = false
             })
