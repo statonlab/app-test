@@ -59,17 +59,21 @@ export default class NotificationsController extends Component {
     if (nextState === 'background') {
       const hasUnsynced = realm.objects('Submission').filtered('needs_update = true OR synced = false').length > 0
       if (hasUnsynced) {
-        // 24 hours after the app goes into the background
-        const date     = new Date(Date.now() + (24 * 60 * 60 * 1000))
         // In a dev environment display in 1 second
         const date_dev = new Date(Date.now() + (1000))
         Notifications.cancelAllLocalNotifications()
         Notifications.localNotificationSchedule({
-          title  : 'TreeSnap',
           message: 'You have unsynced observations. Would you like to upload your observations?',
-          date   : __DEV__ ? date_dev : date
+          // 24 hours (1 second in dev)
+          date   : __DEV__ ? date_dev : new Date(Date.now() + (24 * 60 * 60 * 1000))
         })
       }
+
+      Notifications.localNotificationSchedule({
+        message: 'It’s been a while since you last used TreeSnap. Take us on your next hike!',
+        // 30 days (1 second in dev)
+        date   : __DEV__ ? date_dev : new Date(Date.now() + (30 * 24 * 60 * 60 * 1000))
+      })
     }
   }
 
