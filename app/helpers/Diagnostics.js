@@ -11,9 +11,9 @@ class Diagnostics {
   /**
    * Fix all observations.
    */
-   async run() {
+  async run() {
     const observations = realm.objects('Submission')
-    for(let i = 0; i < observations.length; i++) {
+    for (let i = 0; i < observations.length; i++) {
       try {
         await this._fixObservation(observations[i])
       } catch (error) {
@@ -61,7 +61,7 @@ class Diagnostics {
             try {
               image = await this._fixPath(image)
             } catch (error) {
-              throw Error(error)
+              throw error
             }
 
             // Make sure a thumbnail is created
@@ -70,11 +70,11 @@ class Diagnostics {
             return image
           }))
         } catch (error) {
-          throw new Error(error)
+          throw error
         }
       }))
     } catch (error) {
-      throw new Error(error)
+      throw error
     }
 
     return fixed

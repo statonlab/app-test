@@ -6,9 +6,12 @@ import android.support.multidex.MultiDex;
 
 import com.crashlytics.android.Crashlytics;
 import com.facebook.react.ReactApplication;
+import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
+
 import io.fabric.sdk.android.Fabric;
 import io.invertase.firebase.RNFirebasePackage;
 import io.invertase.firebase.analytics.RNFirebaseAnalyticsPackage;
+
 import com.reactnative.photoview.PhotoViewPackage;
 
 import org.reactnative.camera.RNCameraPackage;
@@ -44,6 +47,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+          new ReactNativePushNotificationPackage(),
           new RNFirebasePackage(),
           new RNFirebaseAnalyticsPackage(),
           new PhotoViewPackage(),
