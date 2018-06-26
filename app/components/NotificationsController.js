@@ -16,7 +16,7 @@ export default class NotificationsController extends Component {
 
     setTimeout(() => {
       // Clear all notifications if any was set
-      Notifications.clearAllNotifications()
+      Notifications.cancelAllLocalNotifications()
     }, 1000)
   }
 
@@ -27,7 +27,7 @@ export default class NotificationsController extends Component {
   _configure() {
     Notifications.configure({
       onRegister: (token) => {
-
+        alert(token)
       },
 
       onNotification: (notification) => {
