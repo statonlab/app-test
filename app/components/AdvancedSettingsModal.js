@@ -28,9 +28,9 @@ export default class AdvancedSettingsModal extends Component {
 
   componentDidMount() {
     let {
-      isPrivate,
-      hasPrivateComments
-    } = this.props.initialValues
+          isPrivate,
+          hasPrivateComments
+        } = this.props.initialValues
 
     this.setState({
       isPrivate,
@@ -214,13 +214,14 @@ const styles = StyleSheet.create({
   },
 
   footer: {
-    height           : 40,
+    height           : isIphoneX() ? 60 : 40,
     borderTopWidth   : 1,
     borderTopColor   : '#dedede',
     backgroundColor  : '#eee',
     alignItems       : 'flex-end',
     justifyContent   : 'center',
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
+    paddingBottom    : isIphoneX() ? 20 : 0
   },
 
   doneText: {

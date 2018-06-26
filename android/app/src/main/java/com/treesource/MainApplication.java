@@ -76,7 +76,7 @@ public class MainApplication extends Application implements ReactApplication {
   public void onCreate() {
     super.onCreate();
     Fabric.with(this, new Crashlytics());
-    SoLoader.init(this, /* native exopackage */ false);
+    SoLoader.init(this, false);
   }
 
   @Override
