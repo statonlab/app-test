@@ -1,4 +1,5 @@
 apply plugin: "com.android.application"
+apply plugin: 'io.fabric'
 
 import com.android.build.OutputFile
 
@@ -191,6 +192,7 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics:$googlePlayServicesVersion") {
         force = true
     }
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.3'
     implementation 'com.android.support:multidex:1.0.3'
 }
 
