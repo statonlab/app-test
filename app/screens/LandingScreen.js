@@ -20,6 +20,7 @@ import File from '../helpers/File'
 import User from '../db/User'
 import Guide from '../components/Guide'
 import MainTrees from '../components/MainTrees'
+import Observation from '../helpers/Observation'
 
 export default class LandingScreen extends Screen {
   constructor(props) {
@@ -73,11 +74,7 @@ export default class LandingScreen extends Screen {
       this.refs.snackbar.showBar()
     }))
 
-    this.events.push(DeviceEventEmitter.addListener('newSubmission', () => {
-      if (this.refs.uploadButton) {
-        this.refs.uploadButton.getObservations()
-      }
-    }))
+    this.events.push(DeviceEventEmitter.addListener('newSubmission', this._handleNewSubmission.bind(this)))
 
     this.events.push(DeviceEventEmitter.addListener('ObservationDeleted', () => {
       if (this.refs.uploadButton) {
@@ -119,6 +116,17 @@ export default class LandingScreen extends Screen {
     this.events.forEach(event => {
       event.remove()
     })
+  }
+
+  _handleNewSubmission(observation) {
+    if (this.refs.uploadButton) {
+      this.refs.uploadButton.getObservations()
+    }
+
+    let realmObservation = realm.objects('Submission').filtered(`id == ${observation.id}`)
+    if (realmObservation.length > 0) {
+      Observation.compressImages(realmObservation[0])
+    }
   }
 
   /**

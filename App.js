@@ -51,7 +51,7 @@ export default class App extends Component {
     try {
       await Diagnostics.run()
     } catch (error) {
-      console.log(error)
+      console.log('Unable to run diagnostics', error)
     }
     try {
       const actions = new Actions()

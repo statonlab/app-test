@@ -2,6 +2,7 @@ import axios from './Axios'
 import realm from '../db/Schema'
 import File from './File'
 import moment from 'moment'
+import Images from './Images'
 
 class Observation {
   static navigationOptions = {
@@ -313,6 +314,64 @@ class Observation {
     })
 
     return parseInt(count)
+  }
+
+  /**
+   * Compress all images for a given observation.
+   *
+   * @param observation
+   * @return {Promise<void>}
+   */
+  async compressImages(observation) {
+    let compressor = new Images()
+    let images     = {}
+    let oldImages  = observation.images
+    if (typeof oldImages === 'string') {
+      oldImages = JSON.parse(oldImages)
+    }
+    let keys = Object.keys(oldImages)
+
+    // For each list of images, extract paths.
+    for (let key in keys) {
+      if (!observation.images.hasOwnProperty(key)) {
+        continue
+      }
+
+      let list    = oldImages[keys[key]]
+      let newList = []
+      if (Array.isArray(list)) {
+        // For each image in the current list, compress the image
+        // and add it to the new list
+        for (let image in list) {
+          if (!list.hasOwnProperty(image)) {
+            continue
+          }
+
+          // Add compressed image to the new list
+          try {
+            let compressedImage = await compressor.compress(list[image])
+            newList.push(compressedImage)
+          } catch (e) {
+            console.log('Could not compress observation image', e)
+            // Hit an error! Save the old image as is
+            newList.push(list[image])
+          }
+        }
+      } else {
+        // We've hit an unknown type so let's just copy it over
+        // to the new list
+        newList = list
+      }
+
+      images[keys[key]] = newList
+    }
+
+    let realmObservation = realm.objects('Submission').filtered(`id == ${observation.id}`)
+    realm.write(() => {
+      if (realmObservation.length > 0) {
+        realmObservation[0].images = JSON.stringify(images)
+      }
+    })
   }
 }
 
