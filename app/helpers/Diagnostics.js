@@ -1,6 +1,7 @@
 import {Platform} from 'react-native'
 import realm from '../db/Schema'
 import File from '../helpers/File'
+import Observation from './Observation'
 
 class Diagnostics {
   constructor() {
@@ -13,12 +14,34 @@ class Diagnostics {
    */
   async run() {
     const observations = realm.objects('Submission')
-    for (let i = 0; i < observations.length; i++) {
+    for (let i in observations) {
+      if (!observations.hasOwnProperty(i)) {
+        continue
+      }
+
       try {
-        await this._fixObservation(observations[i])
+        let observation = observations[i]
+        await this._fixObservation(observation)
+        await this._compressObservation(observation)
       } catch (error) {
         console.log(error)
       }
+    }
+  }
+
+  /**
+   * Compress observation images.
+   *
+   * @param observation
+   * @return {Promise<void>}
+   * @private
+   */
+  async _compressObservation(observation) {
+    if (!observation.compressed) {
+      await Observation.compressImages(observation)
+      realm.write(() => {
+        observation.compressed = true
+      })
     }
   }
 

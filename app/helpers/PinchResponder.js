@@ -1,5 +1,5 @@
 import React from 'react'
-import moment from 'moment'
+// import moment from 'moment'
 
 export default class PinchResponder {
   constructor(callback, scaleMin = 0, scaleMax = 1, scaleStep = .01, startValue = 0) {
@@ -10,7 +10,7 @@ export default class PinchResponder {
       step: scaleStep
     }
     this.value    = startValue
-    this.time     = moment()
+    // this.time     = moment()
     this.distance = null
   }
 
@@ -32,7 +32,7 @@ export default class PinchResponder {
    * @return {boolean}
    */
   onMoveShouldSetResponder(event) {
-    this.time = moment()
+    // this.time = moment()
     return event.nativeEvent.touches.length > 1
   }
 
@@ -71,7 +71,7 @@ export default class PinchResponder {
     //   return
     // }
 
-    this.time = moment()
+    // this.time = moment()
 
     const x = [
       Math.min(touches[0].pageX, touches[1].pageX),

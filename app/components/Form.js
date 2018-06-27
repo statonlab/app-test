@@ -35,8 +35,7 @@ import {ifIphoneX, isIphoneX} from 'react-native-iphone-x-helper'
 import Analytics from '../helpers/Analytics'
 import AdvancedSettingsModal from './AdvancedSettingsModal'
 
-const isAndroid = Platform.OS === 'android'
-
+const isAndroid  = Platform.OS === 'android'
 const Coordinate = t.refinement(t.Number, (n) => n !== 0, 'Coordinate')
 const LocationT  = t.dict(t.String, Coordinate)
 
@@ -311,7 +310,7 @@ export default class Form extends Component {
    * Generate resized images and thumbnails.
    */
   generateImages = () => {
-    // Pass all the images as param 1, and the set that we know already has been processed as a 2nd param
+    // Pass all the images as param 1, and then set that we know already has been processed as a 2nd param
     this.fs.resizeImages(this.state.images, this.props.edit ? JSON.parse(this.props.entryInfo.images) : {})
 
     this.refs.spinner.open()
@@ -346,7 +345,8 @@ export default class Form extends Component {
       meta_data           : JSON.stringify(this.state.metadata),
       has_private_comments: this.state.hasPrivateComments,
       custom_id           : this.state.custom_id,
-      is_private          : this.state.isPrivate
+      is_private          : this.state.isPrivate,
+      compressed          : false
     }
 
     realm.write(() => {
@@ -358,7 +358,7 @@ export default class Form extends Component {
       this.props.navigator.navigate('Submitted', {
         plant: observation
       })
-      DeviceEventEmitter.emit('newSubmission')
+      DeviceEventEmitter.emit('newSubmission', observation)
     })
 
     const analytics = new Analytics()
@@ -373,6 +373,7 @@ export default class Form extends Component {
       this.notifyIncomplete(this.validateState())
       return
     }
+
     if (!this.validateMeta().isValid()) {
       this.notifyIncomplete(this.validateMeta())
       return
@@ -399,11 +400,12 @@ export default class Form extends Component {
         needs_update        : true,
         has_private_comments: this.state.hasPrivateComments,
         custom_id           : this.state.custom_id,
-        is_private          : this.state.isPrivate
+        is_private          : this.state.isPrivate,
+        compressed          : false
       }, true)
     })
 
-    DeviceEventEmitter.emit('newSubmission')
+    DeviceEventEmitter.emit('newSubmission', observation)
 
     this.fs.delete({images: this.state.deletedImages}, () => {
       this.props.navigator.goBack()
@@ -808,7 +810,12 @@ export default class Form extends Component {
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={[styles.formGroup, {flex: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}]}
+              style={[styles.formGroup, {
+                flex          : 0,
+                flexDirection : 'row',
+                alignItems    : 'center',
+                justifyContent: 'space-between'
+              }]}
               onPress={() => {
                 this.setState({showAdvancedSettingsModal: true})
               }}>

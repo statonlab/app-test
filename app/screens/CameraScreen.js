@@ -84,8 +84,8 @@ export default class CameraScreen extends Screen {
 
         // Android 4.4 returns true while all other devices return `PermissionsAndroid.RESULTS.GRANTED`
         let granted = cameraPermission === PermissionsAndroid.RESULTS.GRANTED
-        granted = granted && storagePermission === PermissionsAndroid.RESULTS.GRANTED
-        granted = granted || (cameraPermission === true && storagePermission === true)
+        granted     = granted && storagePermission === PermissionsAndroid.RESULTS.GRANTED
+        granted     = granted || (cameraPermission === true && storagePermission === true)
         if (granted) {
           this.setState({hasPermission: true})
         } else {
@@ -107,7 +107,7 @@ export default class CameraScreen extends Screen {
       [
         {
           text: 'Ok', onPress: () => {
-            this.navigator.goBack()
+            this.navigator.goBack(null)
           }
         }
       ]
@@ -564,7 +564,7 @@ export default class CameraScreen extends Screen {
       const data = await this.camera.takePictureAsync({
         quality           : .8,
         // Specify a max width to avoid extra large images
-        width             : 1700,
+        width             : 1000,
         // Want an actual file rather than an base64 string
         base64            : false,
         mirrorImage       : false,
@@ -619,7 +619,7 @@ export default class CameraScreen extends Screen {
    */
   _cancel = () => {
     this.fs.delete({images: this.state.newImages}, () => {
-      this.navigator.goBack()
+      this.navigator.goBack(null)
     })
   }
 }
