@@ -224,6 +224,9 @@ export default class CameraScreen extends Screen {
               captureAudio={false}
               type={this.state.camera.type}
               zoom={this.state.zoom}
+              onBarCodeRead={(data) => {
+                console.log('HERE', data)
+              }}
             />
             :
             <View style={[styles.preview, {backgroundColor: '#000'}]}/>
