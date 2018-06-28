@@ -10,10 +10,12 @@ class Diagnostics {
   }
 
   /**
-   * Fix all observations.
+   * Compress all uncompressed observations and
+   * fix images for observations that may have
+   * their images still in cache.
    */
   async run() {
-    const observations = realm.objects('Submission')
+    const observations = realm.objects('Submission').filtered('imagesFixed = false OR compressed = false')
     for (let i in observations) {
       if (!observations.hasOwnProperty(i)) {
         continue
@@ -53,13 +55,16 @@ class Diagnostics {
    * @private
    */
   async _fixObservation(observation) {
+    if (observation.imagesFixed) {
+      return
+    }
+
     let images = JSON.parse(observation.images)
     try {
       let fixed = await this._fixBrokenImages(images)
       realm.write(() => {
         observation.images = JSON.stringify(fixed)
       })
-      return null
     } catch (error) {
       console.log(error)
     }

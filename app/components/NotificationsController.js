@@ -52,7 +52,9 @@ export default class NotificationsController extends Component {
             {cancelable: false}
           )
         }
-      }
+      },
+
+      requestPermissions: true
     })
   }
 

@@ -3,7 +3,6 @@ package com.treesource;
 import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
-
 import com.crashlytics.android.Crashlytics;
 import com.facebook.react.ReactApplication;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
