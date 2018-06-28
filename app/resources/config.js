@@ -1,5 +1,5 @@
 const DCP = {
-  ashSpecies         : {
+  ashSpecies: {
     label        : 'Species',
     selectChoices: [
       'White ash', 'Green ash', 'Blue ash', 'Black ash', 'Uncertain'
@@ -13,7 +13,8 @@ const DCP = {
       require('../img/ash_id/ash_seeds.jpg')
     ]
   },
-  seedsBinary        : {
+
+  seedsBinary: {
     label        : 'Seeds',
     selectChoices: [
       'Yes', 'No', 'I\'m not sure'
@@ -21,21 +22,22 @@ const DCP = {
     description  : 'Are seeds present?',
     placeHolder  : 'Are seeds present?',
     camera       : ['Yes'],
-    conditional : {
+    conditional  : {
       'Florida Torreya': {
-        images: [
+        images  : [
           require('../img/torreya/Torreya_taxifolia4.jpg'),
-          require('../img/torreya/Torreya_taxifolia5.jpg'),
+          require('../img/torreya/Torreya_taxifolia5.jpg')
         ],
         captions: [
           'Seed of female Florida Torreya.  Photo credit: Guy Anglin, Atlas of Florida Plants, Institute for Systematic Botany, University of South Florida, Tampa.',
-          'Female Florida Torreya branches with seeds.  Photo credit: Guy Anglin, Atlas of Florida Plants, Institute for Systematic Botany, University of South Florida, Tampa.',
+          'Female Florida Torreya branches with seeds.  Photo credit: Guy Anglin, Atlas of Florida Plants, Institute for Systematic Botany, University of South Florida, Tampa.'
         ]
 
       }
     }
   },
-  flowersBinary      : {
+
+  flowersBinary: {
     label        : 'Flowers',
     selectChoices: [
       'Yes', 'No'
@@ -45,7 +47,8 @@ const DCP = {
     camera       : ['Yes']
 
   },
-  emeraldAshBorer    : {
+
+  emeraldAshBorer: {
     label        : 'Ash borer',
     selectChoices: [
       'D-shaped adult exit holes', 'Bark coming off with tunneling underneath', 'Bark splitting',
@@ -67,7 +70,8 @@ const DCP = {
       'Stump sprouting or epicormic growth, where new sprouts emerge from the stump of a tree or the trunk, are a common sign of tree distress. Photo credit: Joseph OBrien, USDA Forest Service, Bugwood.org'
     ]
   },
-  woollyAdesCoverage : {
+
+  woollyAdesCoverage: {
     label        : 'Woolly adelgids',
     selectChoices: [
       '0%', '1-24%', '25-49%', '50-74%', '75-100%', 'I\'m not sure'
@@ -80,6 +84,20 @@ const DCP = {
     ],
     camera       : ['1-24%', '25-49%', '50-74%', '75-100%']
   },
+
+  hemlockSpecies: {
+    label        : 'Species',
+    description  : 'Which species of Hemlock is this tree? If you are\'t sure, select I\'m not sure.',
+    placeHolder  : 'Select one',
+    selectChoices: [
+      'Eastern hemlock (Tsuga canadensis)',
+      'Carolina hemlock (Tsuga caroliniana)',
+      'Other hemlock species',
+      'I\'m not sure'
+    ],
+    multiCheck   : false
+  },
+
   chestnutBlightSigns: {
     label        : 'Chestnut blight',
     selectChoices: [
@@ -100,7 +118,8 @@ const DCP = {
       ''
     ]
   },
-  acorns             : {
+
+  acorns: {
     label        : 'Acorns',
     selectChoices: [
       'None', 'Some', 'Lots', 'I\'m not sure'
@@ -108,7 +127,8 @@ const DCP = {
     description  : 'Are there acorns on the tree?  Don\'t include fallen acorns on the ground in your estimate.',
     placeHolder  : 'Number of acorns'
   },
-  cones              : {
+
+  cones: {
     label        : 'Cones',
     description  : 'Are cones present?  Please take a close-up photo if possible.',
     selectChoices: [
@@ -118,7 +138,7 @@ const DCP = {
     camera       : ['Yes']
   },
 
-  heightFirstBranch      : {
+  heightFirstBranch: {
     label            : 'Height of first branch',
     description      : 'Approximately (no need to measure) how high up is the first main branch of the tree?',
     // slider     : true,
@@ -128,7 +148,8 @@ const DCP = {
     default          : 'Estimated',
     numberPlaceHolder: 'Tap to enter height'
   },
-  oakHealthProblems      : {
+
+  oakHealthProblems: {
     label        : 'Health problems',
     selectChoices: [
       'Dieback in canopy', 'Defoliation', 'Cankers', 'Bark damage', 'Signs of rot at base',
@@ -138,23 +159,25 @@ const DCP = {
     placeHolder  : 'No health problems',
     multiCheck   : true
   },
-  diameterNumeric        : {
-    label        : 'Tree diameter',
+
+  diameterNumeric: {
+    label            : 'Tree diameter',
     // slider  : true,
-    numeric      : true,
-    description  : 'Please enter the diameter, in inches, of this tree below.  Is this a rough estimate or a precise measurement?',
+    numeric          : true,
+    description      : 'Please enter the diameter, in inches, of this tree below.  Is this a rough estimate or a precise measurement?',
     // minValue: 0,
     // maxValue: 40,
-    units        : 'Inches',
-    images       : [require('../img/DCP/diameter.jpg')],
-    captions : ['Note: if the tree is less than 4 feet tall, please take the stem diameter at the height of the first branch.'],
-    selectChoices: ['Measured', 'Estimated'],
-    default      : 'Estimated',
-    placeHolder  : 'Diameter',
+    units            : 'Inches',
+    images           : [require('../img/DCP/diameter.jpg')],
+    captions         : ['Note: if the tree is less than 4 feet tall, please take the stem diameter at the height of the first branch.'],
+    selectChoices    : ['Measured', 'Estimated'],
+    default          : 'Estimated',
+    placeHolder      : 'Diameter',
     numberPlaceHolder: 'Tap to enter diameter'
     //  startValue : 25,
   },
-  crownHealth            : {
+
+  crownHealth: {
     label        : 'Canopy health',
     description  : 'What is the health of this tree\'s canopy?',
     selectChoices: ['1 - Healthy',
@@ -171,7 +194,8 @@ const DCP = {
       require('../img/DCP/canopy/canopy5.jpg')
     ]
   },
-  crownClassification    : {
+
+  crownClassification: {
     label        : 'Crown classification',
     description  : 'What is the height of the crown of this tree relative to others in the stand?',
     selectChoices: ['Dominant. This tree\'s crown extends above others in the area.',
@@ -181,12 +205,14 @@ const DCP = {
       'I\'m not sure.'],
     placeHolder  : 'Please select'
   },
-  otherLabel             : {
+
+  otherLabel: {
     label        : 'Tree type',
     description  : 'Please create a name to associate this entry with.  (ie Birch)',
     modalFreeText: true,
     placeHolder  : 'name (required)'
   },
+
   locationCharacteristics: {
     label        : 'Habitat',
     description  : 'How would you characterize the habitat where the tree is located?',
@@ -214,12 +240,13 @@ const DCP = {
   //   placeHolder  : "Please select"
   // },
 
-  treated    : {
+  treated: {
     label        : 'Treated',
     description  : 'Has this tree been treated with Fungicides or pesticides?',
     selectChoices: ['Yes', 'No', 'Don\'t know'],
     placeHolder  : 'Please select'
   },
+
   partOfStudy: {
     label        : 'Study',
     description  : 'Is this tree already part of an existing study that you are aware of?  For example, there may a tag on the tree.',
@@ -230,23 +257,26 @@ const DCP = {
   locationComment: {
     comment: true
   },
-  heightNumeric  : {
-    label      : 'Tree height',
-    description: 'Approximately how many feet tall is the tree?',
+
+  heightNumeric: {
+    label            : 'Tree height',
+    description      : 'Approximately how many feet tall is the tree?',
     //  slider     : true,
-    numeric    : true,
-    units      : 'Feet',
-    default    : 'Estimated',
-    placeHolder: 'Height',
+    numeric          : true,
+    units            : 'Feet',
+    default          : 'Estimated',
+    placeHolder      : 'Height',
     numberPlaceHolder: 'Tap to enter height'
   },
-  burrs          : {
+
+  burrs: {
     label        : 'Nuts/burrs',
     description  : 'Approximately how many nuts/burrs are present?',
     selectChoices: ['None', 'Few', 'Many', 'Unknown'],
     placeHolder  : 'Please select'
   },
-  catkins        : {
+
+  catkins: {
     label        : 'Catkins',
     description  : 'Are catkins present?',
     selectChoices: ['Present', 'Absent', 'Unknown'],
@@ -255,17 +285,17 @@ const DCP = {
 
   //Torreya questions
   numberRootSprouts: {
-    label      : 'Root sprouts',
-    description: 'How many living root sprouts are present?',
-    numeric    : true,
-    units      : 'sprouts',
-    placeHolder: 'Please enter',
-    images     : [
+    label            : 'Root sprouts',
+    description      : 'How many living root sprouts are present?',
+    numeric          : true,
+    units            : 'sprouts',
+    placeHolder      : 'Please enter',
+    images           : [
       require('../img/torreya/Torreya_taxifolia_root_sprouts_by_Trey_Fletcher.jpg'),
       require('../img/torreya/Torreya_taxifolia_at_Torreya_State_Park_04012018_Diana_Picklesimer_IMG_7421.png'),
       require('../img/torreya/Gholson_Nature_Park,_Florida_Torreya_and_Helen_Roth_02102018.jpg')
     ],
-    captions   : ['Example of root sprouts. Root sprouts are stems growing up from the roots of a mature, dead Torreya tree.  There may be some dead stems.  Photo credit: Trey Fletcher.',
+    captions         : ['Example of root sprouts. Root sprouts are stems growing up from the roots of a mature, dead Torreya tree.  There may be some dead stems.  Photo credit: Trey Fletcher.',
       'Florida Torreya caged root sprout at Torreya State Park.  Photo credit: Diana Picklesimer.',
       'Helen Roth with Florida Torreya root sprout at Angus K. Gholson, Jr. Nature Park in Chattahoochee.  Photo credit: Leigh Brooks.'],
     numberPlaceHolder: 'Tap to enter number'
@@ -275,7 +305,7 @@ const DCP = {
   deerRub: {
     label        : 'Deer rub',
     description  : 'Is there evidence of deer rub on the trunk?',
-    selectChoices: ['Present', 'Absent, but caged', 'Absent',  'Not sure'],
+    selectChoices: ['Present', 'Absent, but caged', 'Absent', 'Not sure'],
     placeHolder  : 'Please select',
     images       : [require('../img/torreya/Deer_rub_on_Torreya_taxifolia_photo_by_Liza_Uzzell.jpg')],
     captions     : ['Deer rub on Florida Torreya stem.  Look for smooth stems with  bark missing. Photo credit: Liza Uzzell.']
@@ -286,21 +316,22 @@ const DCP = {
     description  : 'What disease symptoms are present?',
     selectChoices: ['Cankers', 'Needle lesions or yellowing'],
     placeHolder  : 'No disease symptoms',
-    multiCheck : true,
+    multiCheck   : true,
     images       : [
       require('../img/torreya/Canker_on_Florida_Torreya_stem_by_Houston_Snead.jpg'),
       require('../img/torreya/20180201_140312_PElliott.jpg'),
       require('../img/torreya/torreya1_mark_schwartz_lg.jpg'),
-      require('../img/torreya/2004-canker.jpg'),
-      ],
+      require('../img/torreya/2004-canker.jpg')
+    ],
 
     captions: ['Canker on Florida Torreya stem.  Photo credit: Houston Snead.',
       'Canker on Florida Torreya stem.  Photo credit: Padraic Elliott.',
       'Close up of diseased needles on Florida Torreya.  Photo credit: Mark Schwartz, USDA USFS web page “Why Are Some Plants Rare?”',
-      'Close up of stem cankers on Florida Torreya.  Photo credit: Connie Barlow, Torreya Guardians web site',
+      'Close up of stem cankers on Florida Torreya.  Photo credit: Connie Barlow, Torreya Guardians web site'
     ]
   },
-  conesMaleFemale    : {
+
+  conesMaleFemale: {
     label        : 'Cones',
     description  : 'Are cones present?',
     selectChoices: ['Absent', 'Male present', 'Female present', 'Not sure'],
@@ -311,7 +342,7 @@ const DCP = {
       require('../img/torreya/Three_Rivers_SP_11282010_031_Torreya_taxifolia_male_cones_group_campground.jpg')
 
     ],
-    captions     : [ 'Male cones.', 'Female cones.', 'Under side of Florida Torreya leaves and buds of male cones.  Photo credit: Leigh Brooks.'
+    captions     : ['Male cones.', 'Female cones.', 'Under side of Florida Torreya leaves and buds of male cones.  Photo credit: Leigh Brooks.'
     ]
   }
 }

@@ -16,6 +16,7 @@ const DCPrules = {
   flowersBinary          : t.enums.of(DCP.flowersBinary.selectChoices, 'flowers'),
   woollyAdesPres         : t.Boolean,
   woollyAdesCoverage     : t.enums.of(DCP.woollyAdesCoverage.selectChoices, 'woollyAdesCoverage'),
+  hemlockSpecies         : t.enums.of(DCP.hemlockSpecies.selectChoices, 'hemlockSpecies'),
   acorns                 : t.enums.of(DCP.acorns.selectChoices, 'acorns'),
   heightFirstBranch      : t.String,
   diameterNumeric        : t.String,
