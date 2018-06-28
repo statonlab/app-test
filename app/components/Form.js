@@ -34,6 +34,7 @@ import DCPrules from '../resources/validation'
 import {ifIphoneX, isIphoneX} from 'react-native-iphone-x-helper'
 import Analytics from '../helpers/Analytics'
 import AdvancedSettingsModal from './AdvancedSettingsModal'
+import CustomIDModal from './CustomIDModal'
 
 const isAndroid  = Platform.OS === 'android'
 const Coordinate = t.refinement(t.Number, (n) => n !== 0, 'Coordinate')
@@ -945,57 +946,15 @@ export default class Form extends Component {
 
   _renderCustomIDModal() {
     return (
-      <Modal
-        animationType="slide"
+      <CustomIDModal
+        onChange={custom_id => {
+          this.setState({custom_id})
+        }}
         onRequestClose={() => {
           this.setState({showCustomIDModal: false})
         }}
         visible={this.state.showCustomIDModal}
-      >
-        <View style={styles.modalHeader}>
-          <Text style={styles.modalHeaderText}>Custom Tree Identifier</Text>
-        </View>
-        <KeyboardAvoidingView style={{flex: 1}}
-                              {...(isAndroid ? null : {behavior: 'padding'})}>
-          <View style={{flex: 1, padding: 10, backgroundColor: '#f7f7f7'}}>
-            <Text style={styles.text}>
-              You can assign a name to the tree for this observation.
-              The tree may have an ID tag as part of a study, or, you
-              may pick your own name so that you can observe it over time.
-            </Text>
-            <TextInput
-              style={styles.customIDInput}
-              placeholder="Enter custom ID"
-              placeholderTextColor="#aaa"
-              value={this.state.custom_id}
-              onChangeText={(custom_id) => this.setState({
-                custom_id
-              })}
-              underlineColorAndroid="transparent"
-              onEndEditing={() => this.setState({showCustomIDModal: false})}
-              autoFocus={true}
-            />
-          </View>
-          <View style={{flex: 0, justifyContent: 'flex-end', borderTopWidth: 1, borderTopColor: '#ddd'}}>
-            <TouchableOpacity
-              style={[{
-                backgroundColor  : '#eee',
-                flex             : 0,
-                paddingVertical  : 10,
-                paddingHorizontal: 15
-              }]}
-              onPress={() => {
-                this.setState({showCommentsModal: false})
-              }}>
-              <Text style={{
-                color    : Colors.primary,
-                fontSize : 14,
-                textAlign: 'right'
-              }}>DONE</Text>
-            </TouchableOpacity>
-          </View>
-        </KeyboardAvoidingView>
-      </Modal>
+      />
     )
   }
 
@@ -1230,17 +1189,6 @@ const styles = StyleSheet.create({
     color       : '#444',
     fontSize    : 14,
     marginBottom: 10
-  },
-
-  customIDInput: {
-    flex             : 0,
-    height           : 40,
-    width            : undefined,
-    borderWidth      : 1,
-    borderColor      : '#ddd',
-    backgroundColor  : '#fff',
-    borderRadius     : 4,
-    paddingHorizontal: 5
   }
 })
 
