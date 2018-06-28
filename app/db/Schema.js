@@ -56,7 +56,8 @@ const SubmissionSchema = {
     has_private_comments: {type: 'bool', default: false},
     custom_id           : {type: 'string', default: ''},
     is_private          : {type: 'bool', default: false},
-    compressed          : {type: 'bool', default: false}
+    compressed          : {type: 'bool', default: false},
+    imagesFixed         : {type: 'bool', default: false}
   }
 }
 
@@ -91,7 +92,7 @@ export default new Realm({
     SubmissionSchema,
     GuideSchema
   ],
-  schemaVersion: 11,
+  schemaVersion: 12,
   migration    : function (oldRealm, newRealm) {
     if (oldRealm.schemaVersion < 2) {
       let newUser = newRealm.objects('User')
@@ -151,13 +152,6 @@ export default new Realm({
       let observations = newRealm.objects('Submission')
       observations.map(observation => {
         observation.is_private = false
-      })
-    }
-
-    if (oldRealm.schemaVersion < 11) {
-      let observations = newRealm.objects('Submission')
-      observations.map(observation => {
-        observation.compressed = false
       })
     }
   }

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "axios": "^0.17.1",
+    "babel-plugin-transform-remove-console": "^6.9.4",
     "camelcase": "^4.1.0",
     "geolib": "^2.0.24",
     "moment": "^2.22.2",
@@ -28,7 +29,7 @@
     "react-native-maps": "^0.20.0",
     "react-native-material-kit": "github:xinthink/react-native-material-kit#master",
     "react-native-photo-view": "github:statonlab/react-native-photo-view#master",
-    "react-native-push-notification": "^3.0.2",
+    "react-native-push-notification": "github:statonlab/react-native-push-notification#master",
     "react-native-tab-view": "0.0.65",
     "react-native-vector-icons": "^4.6.0",
     "react-navigation": "2.0.4",
