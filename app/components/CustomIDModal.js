@@ -165,6 +165,5 @@ const styles = StyleSheet.create({
     backgroundColor  : 'transparent',//Colors.primary,
     alignItems       : 'center',
     justifyContent   : 'center',
-    ...(new Elevation(1))
   }
 })
