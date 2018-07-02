@@ -262,7 +262,7 @@ export default class SubmittedScreen extends Screen {
             </View>
             : null}
 
-          <View style={[styles.card, {marginBottom: observation.name === 'American Chestnut' ? 0 : undefined}]}>
+          <View style={[styles.card, {marginBottom: observation.name === 'American Chestnut' ? 10 : undefined}]}>
             {this.renderMap(observation)}
             <Text style={styles.title}>
               {observation.name === 'Other' ? `${observation.name} (${data.otherLabel})` : observation.name}

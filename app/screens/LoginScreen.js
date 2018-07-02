@@ -8,7 +8,8 @@ import {
   TextInput,
   Text,
   TouchableOpacity,
-  BackHandler
+  BackHandler,
+  Platform
 } from 'react-native'
 import Header from '../components/Header'
 import Elevation from '../helpers/Elevation'
@@ -19,6 +20,8 @@ import Spinner from '../components/Spinner'
 import AText from '../components/Atext'
 import User from '../db/User'
 import Errors from '../helpers/Errors'
+
+const isAndroid = Platform.OS === 'android'
 
 export default class LoginScreen extends Screen {
   static navigationOptions = {
@@ -140,7 +143,7 @@ export default class LoginScreen extends Screen {
         <Header title="Login"
                 navigator={this.navigator}
                 showRightIcon={false}
-                initial={true}
+                initial={isAndroid}
                 onMenuPress={() => this.navigator.toggleDrawer()}/>
         <ScrollView keyboardDismissMode={'on-drag'}
                     showsVerticalScrollIndicator={false}

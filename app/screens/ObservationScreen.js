@@ -449,7 +449,7 @@ export default class ObservationScreen extends Screen {
    */
   _renderShareButton() {
     const observation = this.state.entry
-    if (!observation.synced && observation.needs_update) {
+    if (!observation.synced || observation.needs_update) {
       return null
     }
 

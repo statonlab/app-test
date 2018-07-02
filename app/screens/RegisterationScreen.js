@@ -6,7 +6,6 @@ import {
   StyleSheet,
   TextInput,
   Text,
-  DeviceEventEmitter,
   Platform,
   TouchableOpacity,
   BackHandler
@@ -207,7 +206,7 @@ export default class RegistrationScreen extends Screen {
         <Header title="Register"
                 navigator={this.navigator}
                 showRightIcon={false}
-                initial={true}
+                initial={isAndroid}
                 onMenuPress={() => this.navigator.toggleDrawer()}/>
         <KeyboardAwareScrollView
           keyboardDismissMode={isAndroid ? 'none' : 'on-drag'}

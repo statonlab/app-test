@@ -1,12 +1,12 @@
 import React from 'react'
 import Screen from './Screen'
 import PropTypes from 'prop-types'
-import {View, ScrollView, StyleSheet, Text, BackHandler} from 'react-native'
+import {View, ScrollView, StyleSheet, Text, BackHandler, Platform} from 'react-native'
 import Header from '../components/Header'
 import Elevation from '../helpers/Elevation'
 import Atext from '../components/Atext'
 import PackageJSON from '../../package.json'
-
+const isAndroid = Platform.OS === 'android'
 export default class AboutScreen extends Screen {
   static navigationOptions = {
     tabBarVisible: false
@@ -28,7 +28,7 @@ export default class AboutScreen extends Screen {
           title="About Us"
           navigator={this.navigator}
           elevation={2}
-          initial={true}
+          initial={isAndroid}
           onMenuPress={() => this.navigator.toggleDrawer()}
         />
         <ScrollView style={styles.scrollView}>

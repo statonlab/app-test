@@ -6,10 +6,13 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  BackHandler
+  BackHandler,
+Platform
 } from 'react-native'
 import Header from '../components/Header'
 import Elevation from '../helpers/Elevation'
+
+const isAndroid = Platform.OS === 'android'
 
 export default class HealthSafetyScreen extends Screen {
   static navigationOptions = {
@@ -31,7 +34,7 @@ export default class HealthSafetyScreen extends Screen {
         <Header title="Health and Safety"
                 navigator={this.navigator}
                 elevation={2}
-                initial={true}
+                initial={isAndroid}
                 onMenuPress={() => this.navigator.toggleDrawer()}/>
         <ScrollView style={styles.scrollView}>
 
