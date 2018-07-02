@@ -1,5 +1,13 @@
 import React, {Component} from 'react'
-import {View, Modal, StyleSheet, TouchableOpacity, Text, Dimensions} from 'react-native'
+import {
+  View,
+  Modal,
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+  Dimensions,
+  Alert
+} from 'react-native'
 import PropTypes from 'prop-types'
 import {RNCamera} from 'react-native-camera'
 import Colors from '../helpers/Colors'
@@ -10,6 +18,7 @@ export default class BarcodeReader extends Component {
     super(props)
 
     this.state = {}
+    this.blockScan = false
   }
 
   render() {
@@ -21,27 +30,55 @@ export default class BarcodeReader extends Component {
         visible={this.props.visible}
         onRequestClose={this.props.onRequestClose}>
         <View style={styles.container}>
+          <View style={[styles.clip, {width, height: (height / 2) - 170}]}>
+            <Text style={{color: '#fff', fontSize: 16, marginBottom: 5}}>Contain the barcode within this area</Text>
+          </View>
           <RNCamera
             style={{
               flex          : 1,
               justifyContent: 'space-between'
             }}
-            onBarCodeRead={(data) => {
-              console.log('HERE', data)
-              this.props.onChange(data.data)
-              this.props.onRequestClose()
-            }}
+            onBarCodeRead={this.onBarcodeRead.bind(this)}
           >
-            <View style={[styles.clip, {width, height: (height / 2) - 140}]}>
-              <Text style={{color: '#fff', fontSize: 16, marginBottom: 5}}>Contain the barcode within this area</Text>
-            </View>
-            <View style={[styles.clip, {width, height: (height / 2) - 140}]}/>
           </RNCamera>
+          <View style={[styles.clip, {width, height: (height / 2) - 170}]}/>
           <TouchableOpacity style={styles.cancelBtn} onPress={this.props.onRequestClose}>
             <Text style={styles.cancelText}>Cancel</Text>
           </TouchableOpacity>
         </View>
       </Modal>
+    )
+  }
+
+  onBarcodeRead(data) {
+    if(this.blockScan) {
+      return
+    }
+    this.blockScan = true
+
+    Alert.alert(
+      'Barcode Found',
+      `Accept barcode value of ${data.data}?`,
+      [
+        {
+          text   : 'Scan Again',
+          onPress: () => {
+            this.blockScan = false
+          },
+          style  : 'cancel'
+        },
+        {
+          text   : 'Accept',
+          onPress: () => {
+            this.props.onChange(data.data)
+            this.props.onRequestClose()
+            setTimeout(() => {
+              this.blockScan = false
+            }, 200)
+          }
+        }
+      ],
+      {cancelable: false}
     )
   }
 }
@@ -72,7 +109,7 @@ const styles = StyleSheet.create({
   },
 
   clip: {
-    backgroundColor: 'rgba(0, 0, 0, .7)',
+    backgroundColor: 'rgba(0, 0, 0, 1)',
     justifyContent : 'flex-end',
     alignItems     : 'center'
   }
