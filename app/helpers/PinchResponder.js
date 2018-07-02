@@ -1,17 +1,17 @@
 import React from 'react'
-// import moment from 'moment'
 
 export default class PinchResponder {
-  constructor(callback, scaleMin = 0, scaleMax = 1, scaleStep = .01, startValue = 0) {
+  constructor(callback, scaleMin = 0, scaleMax = 1, scaleStep = .001, startValue = 0) {
     this.callback = callback
     this.scale    = {
       min : scaleMin,
       max : scaleMax,
       step: scaleStep
     }
+
     this.value    = startValue
-    // this.time     = moment()
     this.distance = null
+    this.time     = null
   }
 
   /**
@@ -32,7 +32,6 @@ export default class PinchResponder {
    * @return {boolean}
    */
   onMoveShouldSetResponder(event) {
-    // this.time = moment()
     return event.nativeEvent.touches.length > 1
   }
 
@@ -58,20 +57,14 @@ export default class PinchResponder {
    * Determine whether it's a zoom-out or a zoom-in movement
    * and update the scale accordingly.
    *
-   * @param {Object} nativeEvent
+   * @param {Object} event
    */
-  onResponderMove({nativeEvent}) {
-    const touches = nativeEvent.changedTouches
+  onResponderMove(event) {
+    const touches = event.nativeEvent.changedTouches
 
     if (touches.length < 2) {
       return
     }
-
-    // if (moment().subtract(10, 'ms').isBefore(this.time)) {
-    //   return
-    // }
-
-    // this.time = moment()
 
     const x = [
       Math.min(touches[0].pageX, touches[1].pageX),
@@ -85,25 +78,44 @@ export default class PinchResponder {
 
     const yDistance = y[1] - y[0]
     const xDistance = x[1] - x[0]
+    const time      = touches[1].timestamp
 
-    if (this.distance === null) {
+    if (this.distance === null || this.time == null) {
       this.distance = [xDistance, yDistance]
+      this.time     = time
       return
     }
 
+    const dY       = this.velocity(yDistance, this.distance[1], time, this.time)
+    const dX       = this.velocity(xDistance, this.distance[0], time, this.time)
+    const velocity = Math.max(dY, dX)
+
     if (xDistance > this.distance[0] && yDistance > this.distance[1]) {
       if (this.value < this.scale.max) {
-        this.value += this.scale.step
-        this.callback(this.value)
+        this.value += this.scale.step * velocity
       }
     }
 
     if (xDistance < this.distance[0] && yDistance < this.distance[1]) {
       if (this.value > this.scale.min) {
-        this.value -= this.scale.step
-        this.callback(this.value)
+        this.value -= this.scale.step * velocity
       }
     }
+
+    if (this.value < this.scale.min) {
+      this.value = this.scale.min
+    }
+    if (this.value > this.scale.max) {
+      this.value = this.scale.max
+    }
+
+    this.callback(this.value)
+  }
+
+  velocity(x1, x2, t1, t2) {
+    const dX = (x2 - x1)
+    const dY = (t2 - t1)
+    return !isNaN(dX / dY) ? Math.abs(dX / dY) : 1
   }
 
   /**
@@ -113,6 +125,7 @@ export default class PinchResponder {
    */
   onResponderRelease(event) {
     this.distance = null
+    this.time     = null
   }
 
   /**

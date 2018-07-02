@@ -71,13 +71,13 @@ export default class TreeScreen extends Screen {
                   return this.form.cancel()
                 }}/>
         <Tabs
-        onSwitch={title => {
-          if(this.shouldLogInfoTabAnalytics && title === 'INFORMATION') {
-            this.shouldLogInfoTabAnalytics = false
-            const screen = `InformationTab_${title}`
-            this.analytics.visitScreen(screen)
-          }
-        }}>
+          onSwitch={title => {
+            if (this.shouldLogInfoTabAnalytics && title === 'INFORMATION') {
+              this.shouldLogInfoTabAnalytics = false
+              const screen                   = `InformationTab_${title}`
+              this.analytics.visitScreen(screen)
+            }
+          }}>
           <Tab title="ADD ENTRY">
             <Form
               ref={ref => this.form = ref}
