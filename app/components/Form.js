@@ -48,6 +48,7 @@ export default class Form extends Component {
       isPrivate                : false,
       images                   : {},
       title                    : this.props.title,
+      units                    : 'US',
       location                 : {
         latitude : 0,
         longitude: 0,
@@ -571,8 +572,14 @@ export default class Form extends Component {
     }
 
     if (DCP[key].numeric) {
-      let key2  = [key] + '_confidence'
-      let value = this.state.metadata[key] ? this.state.metadata[key] + ' ' + DCP[key].units : null
+      let key2       = [key] + '_confidence'
+      let unitsKey   = [key] + '_units'
+      let unitsType  = this.state.units
+      let unitsValue = DCP[key].units
+      if (typeof unitsValue === 'object') {
+        unitsValue = DCP[key].units[unitsType]
+      }
+      let value = this.state.metadata[key] ? this.state.metadata[key] + ' ' + unitsValue : null
       DCP[key]  = this.extractConditional(DCP[key])
       return (
         <View key={key}>
@@ -585,14 +592,15 @@ export default class Form extends Component {
               default={DCP[key].default}
               startingNumeric={[this.state.metadata[key], this.state.metadata[key2]]}
               numeric={DCP[key].numeric}
-              units={DCP[key].units}
+              units={DCP[key].units[unitsType]}
               header={DCP[key].description}
               choices={DCP[key].selectChoices}
               numberPlaceHolder={DCP[key].numberPlaceHolder}
               onSelect={(number, string) => {
-                let newData   = this.state.metadata
-                newData[key]  = number
-                newData[key2] = string
+                let newData       = this.state.metadata
+                newData[key]      = number
+                newData[key2]     = string
+                newData[unitsKey] = unitsValue
                 this.setState({metadata: newData})
               }}
             >
