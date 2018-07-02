@@ -28,7 +28,7 @@ const android = Platform.OS === 'android'
 
 export default class CameraScreen extends Screen {
   static navigationOptions = {
-    tabBarVisible: false
+    tabBarVisible: false,
   }
 
   /**
@@ -545,10 +545,7 @@ export default class CameraScreen extends Screen {
     })
   }
 
-  zoom(value) {
-    let zoom = Math.round(value * 100) / 100
-    zoom     = Math.max(zoom, 0)
-    zoom     = Math.min(zoom, 1)
+  zoom(zoom) {
     this.setState({zoom})
   }
 

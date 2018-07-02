@@ -27,6 +27,7 @@ export default class BarcodeReader extends Component {
               justifyContent: 'space-between'
             }}
             onBarCodeRead={(data) => {
+              console.log('HERE', data)
               this.props.onChange(data.data)
               this.props.onRequestClose()
             }}

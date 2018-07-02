@@ -11,11 +11,22 @@ const Nav = new createStackNavigator({
   Observation : {
     screen           : ObservationScreen,
     navigationOptions: {
-      drawerLockMode : 'locked-closed'
+      drawerLockMode: 'locked-closed'
     }
   }
 }, {
-  headerMode      : 'none'
+  headerMode: 'none'
 })
+
+Nav.navigationOptions = ({navigation}) => {
+  let drawerLockMode = 'unlocked'
+  if (navigation.state.index > 0) {
+    drawerLockMode = 'locked-closed'
+  }
+
+  return {
+    drawerLockMode
+  }
+}
 
 export default Nav
