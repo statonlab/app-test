@@ -24,12 +24,6 @@ export default class Images {
 
     try {
       let quality = 100
-      Image.getSize(this.file.image(path), (width, height) => {
-        if (height > 200) {
-          quality = 80
-        }
-      })
-
       let {uri}   = await ImageResizer.createResizedImage(path, maxWidth, maxHeight, 'JPEG', quality, 0, this._thumbnailsDir)
       let name    = this.makeName(path)
       let newPath = `${this.file._imagesDir}/${name}`

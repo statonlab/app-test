@@ -68,7 +68,7 @@ export default class Navigator extends Component {
    * @return {*}
    */
   observationStack() {
-    return new createStackNavigator({
+    let nav = new createStackNavigator({
       Landing  : {
         screen           : LandingScreen,
         navigationOptions: {
@@ -100,6 +100,19 @@ export default class Navigator extends Component {
       initialRouteName: 'Landing',
       headerMode      : 'none'
     })
+
+    nav.navigationOptions = ({navigation}) => {
+      let drawerLockMode = 'unlocked'
+      if (navigation.state.index > 0) {
+        drawerLockMode = 'locked-closed'
+      }
+
+      return {
+        drawerLockMode
+      }
+    }
+
+    return nav
   }
 
   /**
@@ -192,14 +205,12 @@ export default class Navigator extends Component {
   sharedRoutes() {
     return {
       // Needed to add this here since it needs to go right after the observations item
-      ...(Platform.OS === 'android' ? {
-        Map: {
-          screen           : MapScreen,
-          navigationOptions: {
-            ...(this.navigationOptions('My Observations Map', 'md-map', 25))
-          }
+      Map: {
+        screen           : MapScreen,
+        navigationOptions: {
+          ...(this.navigationOptions('My Observations Map', 'md-map', 25))
         }
-      } : null),
+      },
 
       // Get registration routes
       ...this.getRegistrationRoutes(),
