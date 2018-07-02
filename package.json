@@ -33,7 +33,7 @@
     "react-native-tab-view": "0.0.65",
     "react-native-vector-icons": "^4.6.0",
     "react-navigation": "2.0.4",
-    "realm": "^2.10.0",
+    "realm": "^2.11.0",
     "tcomb": "^3.2.25",
     "tcomb-validation": "^3.4.1"
   },

@@ -243,16 +243,17 @@ export const Plants = {
       }
     ],
     formProps       : {
+      hemlockSpecies         : true,
       woollyAdesCoverage     : true,
       cones                  : true,
       crownClassification    : true,
       locationCharacteristics: true,
       nearbyTrees            : true,
+      crownHealth            : true,
+      diameterNumeric        : true
       // partOfStudy            : true,
       // treated                : true,
       // accessibility          : true,
-      crownHealth            : true,
-      diameterNumeric        : true
       //locationComment        : true
     }
   }
