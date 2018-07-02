@@ -1,18 +1,17 @@
 import t from 'tcomb-validation'
 import DCP from '../resources/config'
 
-//TO DO: validate to a list of the choices instead
+// TODO: validate to a list of the choices instead
 
-//Instructions:
-// SINGLE CHOICE shoul dbe t.enums.of().
+// Instructions:
+// SINGLE CHOICE should be t.enums.of().
 // MULTIPLE CHOICE must be t.string.
-//OPTIONAL choices should be wrapped in t.maybe().
+// OPTIONAL choices should be wrapped in t.maybe().
 
 
 const DCPrules = {
 //  seedsBinary            : t.enums.of(DCP.seedsBinary.selectChoices, 'seed'),
-  seedsBinary: t.enums.of(DCP.seedsBinary.selectChoices),
-
+  seedsBinary            : t.enums.of(DCP.seedsBinary.selectChoices),
   flowersBinary          : t.enums.of(DCP.flowersBinary.selectChoices, 'flowers'),
   woollyAdesPres         : t.Boolean,
   woollyAdesCoverage     : t.enums.of(DCP.woollyAdesCoverage.selectChoices, 'woollyAdesCoverage'),

@@ -28,7 +28,7 @@ const android = Platform.OS === 'android'
 
 export default class CameraScreen extends Screen {
   static navigationOptions = {
-    tabBarVisible: false,
+    tabBarVisible: false
   }
 
   /**
@@ -126,16 +126,17 @@ export default class CameraScreen extends Screen {
       return true
     })
 
-    let length = this.params.images.length
     this.setState({
       pageWidth : Dimensions.get('window').width,
       pageHeight: Dimensions.get('window').height,
       images    : this.params.images
     })
 
+
+    let length = this.params.images.length
     if (length > 0) {
-      let selectedIndex = this.params.images[length - 1]
-      let selectedImage = this.fs.image(selectedIndex)
+      let selectedIndex = length - 1
+      let selectedImage = this.fs.image(this.params.images[selectedIndex])
 
       this.setState({selectedImage, selectedIndex})
     }
@@ -224,9 +225,6 @@ export default class CameraScreen extends Screen {
               captureAudio={false}
               type={this.state.camera.type}
               zoom={this.state.zoom}
-              onBarCodeRead={(data) => {
-                console.log('HERE', data)
-              }}
             />
             :
             <View style={[styles.preview, {backgroundColor: '#000'}]}/>
@@ -562,7 +560,7 @@ export default class CameraScreen extends Screen {
 
     try {
       const data = await this.camera.takePictureAsync({
-        quality           : .8,
+        quality           : 1,
         // Specify a max width to avoid extra large images
         width             : 1000,
         // Want an actual file rather than an base64 string

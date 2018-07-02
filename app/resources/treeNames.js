@@ -94,7 +94,8 @@ const Latin = {
   'Ulmus americana'        : 'American or white elm',
   'Ulmus rubra'            : 'Slippery elm',
   'Ulmus thomasii'         : 'Rock elm',
-  'Zanthoxylum americanum' : 'Prickly ash'
+  'Zanthoxylum americanum' : 'Prickly ash',
+  'Vitis rotundifolia': ''
 }
 export default Latin
 
