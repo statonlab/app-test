@@ -536,16 +536,18 @@ export default class AccountScreen extends Screen {
               <Text style={styles.buttonText}>Update</Text>
             </TouchableOpacity>
           </View>
-          <View style={styles.column}>
-            <TouchableOpacity
-              style={[styles.button, styles.buttonLink]}
-              onPress={() => {
-                this.navigator.goBack()
-              }}
-            >
-              <Text style={[styles.buttonText, styles.buttonLinkText]}>Cancel</Text>
-            </TouchableOpacity>
-          </View>
+          {isAndroid ? null :
+            <View style={styles.column}>
+              <TouchableOpacity
+                style={[styles.button, styles.buttonLink]}
+                onPress={() => {
+                  this.navigator.goBack(null)
+                }}
+              >
+                <Text style={[styles.buttonText, styles.buttonLinkText]}>Cancel</Text>
+              </TouchableOpacity>
+            </View>
+          }
         </View>
 
         <SnackBar ref="snackbar" noticeText={this.state.snackMessage}/>

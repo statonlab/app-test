@@ -272,21 +272,21 @@ export default class Navigator extends Component {
           ...(this.navigationOptions('Observe', 'md-aperture', 25))
         }
       },
-      // Show AccountScreen if user is logged in
-      ...(this.state.loggedIn ? {
-        Account: {
-          screen           : IntermediateAccountScreen,
-          navigationOptions: {
-            ...(this.navigationOptions('My Account', 'md-settings', 25))
-          }
-        }
-      } : null),
       ObservationsNavigator: {
         screen           : ObservationsNavigator,
         navigationOptions: {
           ...(this.navigationOptions('My Observations', 'ios-leaf', 25))
         }
       },
+      // Show AccountScreen if user is logged in
+      ...(this.state.loggedIn ? {
+        Account: {
+          screen           : IntermediateAccountScreen,
+          navigationOptions: {
+            ...(this.navigationOptions('Account Settings', 'md-settings', 25))
+          }
+        }
+      } : null),
       ...(this.sharedRoutes())
     }, {
       initialRouteName: 'Landing',

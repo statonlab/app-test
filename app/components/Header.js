@@ -102,7 +102,7 @@ export default class Header extends Component {
   render() {
     let alignItems = 'center'
     if (Platform.OS === 'android') {
-      alignItems = (this.props.showLeftIcon && !this.props.initial ? 'flex-start' : 'center')
+      alignItems = (this.props.showLeftIcon ? 'flex-start' : 'center')
     }
 
     return (
