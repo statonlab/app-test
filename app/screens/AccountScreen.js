@@ -590,7 +590,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#ddd',
     paddingVertical  : 5,
-    paddingLeft      : 5,
+    paddingLeft      : 0,
     marginHorizontal : 5
   },
 
@@ -603,7 +603,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize  : 14,
     color     : '#222',
-    fontWeight: 'bold',
+    fontWeight: 'normal',
     width     : 100
   },
 
