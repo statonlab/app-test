@@ -95,6 +95,9 @@ const DCP = {
       'Other hemlock species',
       'I\'m not sure'
     ],
+    images: [
+      require('../img/hemlock_id/hemlock_species.jpg')
+    ],
     multiCheck   : false
   },
 
@@ -110,7 +113,6 @@ const DCP = {
       require('../img/DCP/ChestnutBlight/Chestnut_blight.jpg'),
       require('../img/DCP/ChestnutBlight/cankers.jpg'),
       require('../img/DCP/ChestnutBlight/stumpsprouting.jpg')
-
     ],
     captions     : ['The chestnut blight fungus can produce orange pustules on bark.  Photo credit: USDA Forest Service - Region 8 - Southern, USDA Forest Service, Bugwood.org',
       'An old dead trunk, previously killed by chestnut blight. Photo credit: Joseph OBrien, USDA Forest Service, Bugwood.org',
