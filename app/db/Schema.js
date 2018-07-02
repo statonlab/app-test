@@ -81,7 +81,8 @@ const UserSchema = {
     api_token : {type: 'string', default: ''},
     zipcode   : {type: 'string', default: ''},
     birth_year: {type: 'int', default: 1980},
-    auto_sync : {type: 'bool', default: true}
+    auto_sync : {type: 'bool', default: true},
+    units     : {type: 'string', default: 'US'}
   }
 }
 
@@ -92,7 +93,7 @@ export default new Realm({
     SubmissionSchema,
     GuideSchema
   ],
-  schemaVersion: 12,
+  schemaVersion: 13,
   migration    : function (oldRealm, newRealm) {
     if (oldRealm.schemaVersion < 2) {
       let newUser = newRealm.objects('User')
@@ -153,6 +154,12 @@ export default new Realm({
       observations.map(observation => {
         observation.is_private = false
       })
+    }
+    if (oldRealm.schemaVersion < 13) {
+      let user = newRealm.objects('User')
+      if (user.length > 0) {
+        user[0].units = 'US'
+      }
     }
   }
 })

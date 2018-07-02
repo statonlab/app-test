@@ -112,7 +112,8 @@ class User {
             zipcode   : data.zipcode,
             api_token : data.api_token,
             birth_year: data.birth_year,
-            is_private: data.is_private
+            is_private: data.is_private,
+            units     : data.units
           })
         })
 
@@ -162,7 +163,8 @@ class User {
             anonymous : response.is_anonymous,
             zipcode   : response.zipcode,
             api_token : response.api_token,
-            birth_year: response.birth_year
+            birth_year: response.birth_year,
+            units     : response.units
           })
         })
 

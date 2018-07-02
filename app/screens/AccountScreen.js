@@ -40,6 +40,7 @@ export default class AccountScreen extends Screen {
       old_password             : '',
       new_password             : '',
       new_password_confirmation: '',
+      units                    : 'US',
       errors                   : {
         name                     : false,
         anonymous                : false,
@@ -81,7 +82,8 @@ export default class AccountScreen extends Screen {
       email     : this.user.email,
       zipcode   : this.user.zipcode,
       anonymous : this.user.anonymous ? 'Yes' : 'No',
-      birth_year: this.user.birth_year
+      birth_year: this.user.birth_year,
+      units     : this.user.units
     })
 
     this.analytics.visitScreen('AccountScreen')
@@ -199,6 +201,7 @@ export default class AccountScreen extends Screen {
       zipcode     : this.state.zipcode,
       is_anonymous: this.state.anonymous.trim() === 'Yes',
       birth_year  : this.state.birth_year,
+      units       : this.state.units,
       snackMessage: 'Profile updated successfully'
     }).then(response => {
       this.refs.snackbar.showBar()
@@ -307,6 +310,7 @@ export default class AccountScreen extends Screen {
         this.user.anonymous  = response.is_anonymous
         this.user.birth_year = response.birth_year
         this.user.zipcode    = response.zipcode === null ? '' : response.zipcode
+        this.user.units      = response.units
         this.user.auto_sync  = this.state.auto_sync
       })
     } catch (error) {
@@ -408,6 +412,33 @@ export default class AccountScreen extends Screen {
                 </View>
                 {this.state.errors.anonymous ? <Text style={styles.warning}>{this.state.errors.anonymous}</Text> : null}
               </PickerModal>
+
+              <Text style={styles.title}>UNITS</Text>
+              <View style={styles.card}>
+                <PickerModal
+                  style={[styles.formGroup]}
+                  onSelect={(anonymous) => this.setState({units, userChanges: true})}
+                  initialSelect={this.user.units ? this.user.units : 'US'}
+                  choices={['US', 'metric']}
+                  header="Should measurements be taken in US (inches, feet) or metric?"
+                >
+                  <View style={styles.row}>
+                    <Text style={styles.label}>Units</Text>
+                    <TextInput
+                      style={styles.textField}
+                      autoCapitalize={'words'}
+                      placeholder={'No'}
+                      placeholderTextColor="#aaa"
+                      returnKeyType={'done'}
+                      value={this.state.anonymous}
+                      underlineColorAndroid="transparent"
+                      editable={false}
+                    />
+                  </View>
+                  {this.state.errors.anonymous ?
+                    <Text style={styles.warning}>{this.state.errors.anonymous}</Text> : null}
+                </PickerModal>
+              </View>
 
               <DateModal
                 style={[styles.formGroup, styles.noBorder]}
