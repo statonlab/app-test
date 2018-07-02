@@ -7,27 +7,24 @@ import {
   DeviceEventEmitter
 } from 'react-native'
 import {
-  createStackNavigator,
   createBottomTabNavigator,
   createDrawerNavigator,
   DrawerItems
 } from 'react-navigation'
-import LandingScreen from '../screens/LandingScreen'
 import MapScreen from '../screens/MapScreen'
-import CameraScreen from '../screens/CameraScreen'
-import SubmittedScreen from '../screens/SubmittedScreen'
 import AboutScreen from '../screens/AboutScreen'
 import PrivacyPolicyScreen from '../screens/PrivacyPolicySreen'
 import HealthSafetyScreen from '../screens/HealthSafetyScreen'
 import LoginScreen from '../screens/LoginScreen'
 import RegistrationScreen from '../screens/RegisterationScreen'
-import TreeScreen from '../screens/TreeScreen'
 import Icon from 'react-native-vector-icons/Ionicons'
 import Colors from '../helpers/Colors'
 import IntermediateAccountScreen from '../screens/IntermediateAccountScreen'
 import ObservationsNavigator from './ObservationsNavigator'
 import User from '../db/User'
 import {ifIphoneX} from 'react-native-iphone-x-helper'
+import MoreStackNavigator from './MoreStackNavigator'
+import ObserveStackNavigator from './ObserveStackNavigator'
 
 /**
  * Implementation of react-navigation.
@@ -62,88 +59,37 @@ export default class Navigator extends Component {
   }
 
   /**
-   * The observe navigation stack. contains the landing page and all screens
-   * to submit an observation.
-   *
-   * @return {*}
-   */
-  observationStack() {
-    let nav = new createStackNavigator({
-      Landing  : {
-        screen           : LandingScreen,
-        navigationOptions: {
-          ...(this.navigationOptions('My Observations', 'md-home', 25))
-        }
-      },
-      Tree     : {
-        screen           : TreeScreen,
-        navigationOptions: {
-          gesturesEnabled: false,
-          drawerLockMode : 'locked-closed'
-        }
-      },
-      Camera   : {
-        screen           : CameraScreen,
-        navigationOptions: {
-          gesturesEnabled: false,
-          drawerLockMode : 'locked-closed'
-        }
-      },
-      Submitted: {
-        screen           : SubmittedScreen,
-        navigationOptions: {
-          gesturesEnabled: false,
-          drawerLockMode : 'locked-closed'
-        }
-      }
-    }, {
-      initialRouteName: 'Landing',
-      headerMode      : 'none'
-    })
-
-    nav.navigationOptions = ({navigation}) => {
-      let drawerLockMode = 'unlocked'
-      if (navigation.state.index > 0) {
-        drawerLockMode = 'locked-closed'
-      }
-
-      return {
-        drawerLockMode
-      }
-    }
-
-    return nav
-  }
-
-  /**
    * IOS Bottom Tabs.
    *
    * @return {*}
    */
   tabs() {
     return new createBottomTabNavigator({
-      Landing              : {
-        screen           : this.observationStack(),
+      Landing: {
+        screen           : ObserveStackNavigator,
         navigationOptions: {
           ...(this.navigationOptions('Observe', 'md-aperture'))
         }
       },
+
       ObservationsNavigator: {
         screen           : ObservationsNavigator,
         navigationOptions: {
           ...(this.navigationOptions('Observations', 'ios-leaf'))
         }
       },
-      Map                  : {
+
+      Map: {
         screen           : MapScreen,
         navigationOptions: {
           ...(this.navigationOptions('Map', 'md-map'))
         }
       },
-      Account              : {
-        screen           : IntermediateAccountScreen,
+
+      More: {
+        screen           : MoreStackNavigator,
         navigationOptions: {
-          ...(this.navigationOptions('Settings', 'md-settings'))
+          ...(this.navigationOptions('More', 'ios-more'))
         }
       }
     }, {
@@ -308,18 +254,7 @@ export default class Navigator extends Component {
    * @return {{XML}}
    */
   ios() {
-    const Nav = new createDrawerNavigator({
-      Landing: {
-        screen           : this.tabs(),
-        navigationOptions: {
-          ...(this.navigationOptions('Home', 'md-home', 25))
-        }
-      },
-      ...(this.sharedRoutes())
-    }, {
-      initialRouteName: 'Landing',
-      ...(this.drawerOptions())
-    })
+    const Nav = this.tabs()
 
     return (<Nav/>)
   }
@@ -332,9 +267,15 @@ export default class Navigator extends Component {
   android() {
     const Nav = new createDrawerNavigator({
       Landing              : {
-        screen           : this.observationStack(),
+        screen           : ObserveStackNavigator,
         navigationOptions: {
           ...(this.navigationOptions('Observe', 'md-aperture', 25))
+        }
+      },
+      ObservationsNavigator: {
+        screen           : ObservationsNavigator,
+        navigationOptions: {
+          ...(this.navigationOptions('My Observations', 'ios-leaf', 25))
         }
       },
       // Show AccountScreen if user is logged in
@@ -342,16 +283,10 @@ export default class Navigator extends Component {
         Account: {
           screen           : IntermediateAccountScreen,
           navigationOptions: {
-            ...(this.navigationOptions('My Account', 'md-settings', 25))
+            ...(this.navigationOptions('Account Settings', 'md-settings', 25))
           }
         }
       } : null),
-      ObservationsNavigator: {
-        screen           : ObservationsNavigator,
-        navigationOptions: {
-          ...(this.navigationOptions('My Observations', 'ios-leaf', 25))
-        }
-      },
       ...(this.sharedRoutes())
     }, {
       initialRouteName: 'Landing',
@@ -361,21 +296,8 @@ export default class Navigator extends Component {
     return (<Nav/>)
   }
 
-  /**
-   * Main method to create the navigator.
-   *
-   * @return {{XML}}
-   */
-  create() {
-    if (Platform.OS === 'android') {
-      return this.android()
-    } else {
-      return this.ios()
-    }
-  }
-
   render() {
-    return this.android()
+    return Platform.select({android: this.android(), ios: this.ios()})
   }
 }
 

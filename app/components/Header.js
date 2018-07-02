@@ -39,17 +39,22 @@ export default class Header extends Component {
 
   getLeftIcon = () => {
     if (!this.props.showLeftIcon) {
-      return
+      return <View style={[style.touchable, {width: 50}]}/>
     }
 
-    if (this.props.initial) {
+    if (this.props.initial && Platform.OS !== 'android') {
+      return <View style={[style.touchable, {width: 50}]}/>
+    }
+
+    if (this.props.initial && Platform.OS === 'android') {
       return (
-        <TouchableHighlight style={[style.touchable, {paddingLeft: 10}]} onPress={this.onMenuPress}
+        <TouchableHighlight style={[style.touchable, {paddingLeft: 10}]}
+                            onPress={this.onMenuPress}
                             underlayColor={Colors.primary}>
           <Icon name={this.state.menuIcon} style={{fontSize: 25}} color="#fff"/>
         </TouchableHighlight>
       )
-    } else {
+    } else if (!this.props.initial) {
       return (
         <TouchableHighlight style={style.touchable} onPress={this.back}
                             underlayColor={Colors.primary}>
@@ -60,11 +65,12 @@ export default class Header extends Component {
   }
 
   getRightIcon = () => {
+    let icon    = (<View style={{width: 50, height: 30}}/>)
+
     if (!this.props.showRightIcon) {
-      return
+      return icon
     }
 
-    let icon    = (<Icon name="map-marker-multiple" size={23} color="#fff"/>)
     let onPress = this.navigateToMap
 
     if (this.props.rightIcon !== null) {
@@ -94,14 +100,19 @@ export default class Header extends Component {
   }
 
   render() {
+    let alignItems = 'center'
+    if (Platform.OS === 'android') {
+      alignItems = (this.props.showLeftIcon ? 'flex-start' : 'center')
+    }
+
     return (
       <View style={[style.wrapper, {...new Elevation(this.props.elevation)}]}>
         {this.getLeftIcon()}
 
         <View
           style={[style.titleContainer, {
-              alignItems: this.props.showLeftIcon ? 'flex-start' : 'center'
-            }]}>
+            alignItems
+          }]}>
           <Text style={[style.text, style.title]} numberOfLines={1}>{this.props.title}</Text>
         </View>
 

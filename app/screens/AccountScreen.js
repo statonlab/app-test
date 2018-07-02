@@ -1,7 +1,17 @@
 import React from 'react'
 import Screen from './Screen'
 import PropTypes from 'prop-types'
-import {View, StyleSheet, Text, TextInput, TouchableOpacity, BackHandler, DeviceEventEmitter, Alert} from 'react-native'
+import {
+  View,
+  StyleSheet,
+  Platform,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  BackHandler,
+  DeviceEventEmitter,
+  Alert
+} from 'react-native'
 import Header from '../components/Header'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
@@ -13,6 +23,8 @@ import Spinner from '../components/Spinner'
 import DateModal from '../components/DateModal'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
 import User from '../db/User'
+
+const isAndroid = Platform.OS === 'android'
 
 export default class AccountScreen extends Screen {
   constructor(props) {
@@ -60,7 +72,7 @@ export default class AccountScreen extends Screen {
       return true
     })
 
-    this.events    = [
+    this.events = [
       DeviceEventEmitter.addListener('userLoggedOut', this.props.onLogout)
     ]
 
@@ -310,7 +322,7 @@ export default class AccountScreen extends Screen {
                 navigator={this.navigator}
                 elevation={4}
                 showRightIcon={false}
-                initial={true}
+                initial={isAndroid}
                 onMenuPress={() => this.navigator.toggleDrawer()}
         />
         <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
@@ -421,31 +433,31 @@ export default class AccountScreen extends Screen {
 
             {/*<Text style={styles.title}>AUTO SYNCHRONIZE</Text>*/}
             {/*<View style={styles.card}>*/}
-              {/*<PickerModal*/}
-                {/*style={[styles.formGroup, styles.noBorder]}*/}
-                {/*onSelect={(auto_sync) => this.setState({*/}
-                  {/*auto_sync  : auto_sync === 'Yes' ? true : false,*/}
-                  {/*userChanges: true*/}
-                {/*})}*/}
-                {/*initialSelect={this.user.auto_sync ? 'Yes' : 'No'}*/}
-                {/*choices={['Yes', 'No']}*/}
-                {/*header="Auto sync allows TreeSnap to upload observations as soon as you reach a WiFi enabled area. Would you like to activate auto sync?"*/}
-              {/*>*/}
-                {/*<View style={styles.row}>*/}
-                  {/*<Text style={styles.label}>Activated</Text>*/}
-                  {/*<TextInput*/}
-                    {/*style={styles.textField}*/}
-                    {/*autoCapitalize={'words'}*/}
-                    {/*placeholder={'No'}*/}
-                    {/*placeholderTextColor="#aaa"*/}
-                    {/*returnKeyType={'done'}*/}
-                    {/*value={this.user.auto_sync ? 'Yes' : 'No'}*/}
-                    {/*underlineColorAndroid="transparent"*/}
-                    {/*editable={false}*/}
-                    {/*readOnly={true}*/}
-                  {/*/>*/}
-                {/*</View>*/}
-              {/*</PickerModal>*/}
+            {/*<PickerModal*/}
+            {/*style={[styles.formGroup, styles.noBorder]}*/}
+            {/*onSelect={(auto_sync) => this.setState({*/}
+            {/*auto_sync  : auto_sync === 'Yes' ? true : false,*/}
+            {/*userChanges: true*/}
+            {/*})}*/}
+            {/*initialSelect={this.user.auto_sync ? 'Yes' : 'No'}*/}
+            {/*choices={['Yes', 'No']}*/}
+            {/*header="Auto sync allows TreeSnap to upload observations as soon as you reach a WiFi enabled area. Would you like to activate auto sync?"*/}
+            {/*>*/}
+            {/*<View style={styles.row}>*/}
+            {/*<Text style={styles.label}>Activated</Text>*/}
+            {/*<TextInput*/}
+            {/*style={styles.textField}*/}
+            {/*autoCapitalize={'words'}*/}
+            {/*placeholder={'No'}*/}
+            {/*placeholderTextColor="#aaa"*/}
+            {/*returnKeyType={'done'}*/}
+            {/*value={this.user.auto_sync ? 'Yes' : 'No'}*/}
+            {/*underlineColorAndroid="transparent"*/}
+            {/*editable={false}*/}
+            {/*readOnly={true}*/}
+            {/*/>*/}
+            {/*</View>*/}
+            {/*</PickerModal>*/}
             {/*</View>*/}
 
             <Text style={styles.title}>PASSWORD</Text>
@@ -524,16 +536,18 @@ export default class AccountScreen extends Screen {
               <Text style={styles.buttonText}>Update</Text>
             </TouchableOpacity>
           </View>
-          <View style={styles.column}>
-            <TouchableOpacity
-              style={[styles.button, styles.buttonLink]}
-              onPress={() => {
-                this.navigator.goBack()
-              }}
-            >
-              <Text style={[styles.buttonText, styles.buttonLinkText]}>Cancel</Text>
-            </TouchableOpacity>
-          </View>
+          {isAndroid ? null :
+            <View style={styles.column}>
+              <TouchableOpacity
+                style={[styles.button, styles.buttonLink]}
+                onPress={() => {
+                  this.navigator.goBack(null)
+                }}
+              >
+                <Text style={[styles.buttonText, styles.buttonLinkText]}>Cancel</Text>
+              </TouchableOpacity>
+            </View>
+          }
         </View>
 
         <SnackBar ref="snackbar" noticeText={this.state.snackMessage}/>
