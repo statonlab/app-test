@@ -35,6 +35,7 @@ import {ifIphoneX, isIphoneX} from 'react-native-iphone-x-helper'
 import Analytics from '../helpers/Analytics'
 import AdvancedSettingsModal from './AdvancedSettingsModal'
 import CustomIDModal from './CustomIDModal'
+import User from '../db/User'
 
 const isAndroid  = Platform.OS === 'android'
 const Coordinate = t.refinement(t.Number, (n) => n !== 0, 'Coordinate')
@@ -64,8 +65,9 @@ export default class Form extends Component {
       custom_id                : '',
       showCustomIDModal        : false,
       showAdvancedSettingsModal: false
-    }
 
+    }
+    this.user = User.user()
     this.events     = []
     this.fs         = new File()
     this.primaryKey = 0
@@ -120,6 +122,13 @@ export default class Form extends Component {
         console.log(e)
       }
     }
+
+    // get user preferences
+
+    this.setState({
+      units     : this.user.units
+    })
+
     // Add image resize event listener
     this.events.push(DeviceEventEmitter.addListener('imagesResized', this._handleResizedImages))
 

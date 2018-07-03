@@ -90,6 +90,7 @@ class User {
    * @return {Promise}
    */
   login(email, password) {
+    console.log('needle')
     return new Promise((resolve, onFail) => {
       axios.post('user/login', {email, password}).then(response => {
         realm.write(() => {
@@ -104,6 +105,9 @@ class User {
           }
 
           let data = response.data.data
+          if (!data.units) {
+            data.units = 'US'
+          }
 
           realm.create('User', {
             name      : data.name,
