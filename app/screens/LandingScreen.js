@@ -21,6 +21,7 @@ import User from '../db/User'
 import Guide from '../components/Guide'
 import MainTrees from '../components/MainTrees'
 import Observation from '../helpers/Observation'
+import Diagnostics from '../helpers/Diagnostics'
 
 export default class LandingScreen extends Screen {
   constructor(props) {
@@ -118,14 +119,10 @@ export default class LandingScreen extends Screen {
     })
   }
 
-  _handleNewSubmission(observation) {
+  async _handleNewSubmission(observation) {
+    await Diagnostics._fixObservation(observation)
     if (this.refs.uploadButton) {
       this.refs.uploadButton.getObservations()
-    }
-
-    let realmObservation = realm.objects('Submission').filtered(`id == ${observation.id}`)
-    if (realmObservation.length > 0) {
-      Observation.compressImages(realmObservation[0])
     }
   }
 

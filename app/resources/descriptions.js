@@ -195,7 +195,8 @@ export const Plants = {
       emeraldAshBorer        : true,
       nearbyTrees            : true,
       crownHealth            : true,
-      diameterNumeric        : true
+      diameterNumeric        : true,
+      treated                : true
     }
   },
   'Hemlock'          : {
@@ -250,7 +251,8 @@ export const Plants = {
       locationCharacteristics: true,
       nearbyTrees            : true,
       crownHealth            : true,
-      diameterNumeric        : true
+      diameterNumeric        : true,
+      treated                : true
       // partOfStudy            : true,
       // treated                : true,
       // accessibility          : true,

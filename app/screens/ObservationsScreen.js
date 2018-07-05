@@ -35,13 +35,6 @@ import geolib from 'geolib'
 const android = Platform.OS === 'android'
 
 export default class ObservationsScreen extends Screen {
-  static navigationOptions = {
-    tabBarOnPress: ({scene, jumpToIndex}) => {
-      DeviceEventEmitter.emit('observationsScreenRequested')
-      jumpToIndex(scene.index)
-    }
-  }
-
   constructor(props) {
     super(props)
 
@@ -585,11 +578,6 @@ export default class ObservationsScreen extends Screen {
             await Observation.update(observation, () => {
               step++
               this.spinner.setProgress(step)
-            })
-            let realmObservation = realm.objects('Submission').filtered(`id = ${observation.id}`)[0]
-            realm.write(() => {
-              realmObservation.synced       = true
-              realmObservation.needs_update = false
             })
           } else {
             await Observation.upload(observation, () => {

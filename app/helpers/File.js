@@ -386,27 +386,13 @@ export default class File {
 
     let path = `${this._imagesDir}/${name}`
 
-    // On android, copy the image to permanent storage
-    // if (this._android) {
-      this.copy(image.replace('file://', ''), path, () => {
-        this._setupThumbnail(path)
+    this.copy(image.replace('file://', ''), path, () => {
+      this._setupThumbnail(path)
 
-        if (typeof  callback !== 'undefined') {
-          callback(path)
-        }
-      })
-
-      // return
-    //}
-
-    // On iOS, move the image to permanent storage
-    // this.move(image, path, () => {
-    //   this._setupThumbnail(path)
-    //
-    //   if (typeof  callback !== 'undefined') {
-    //     callback(path)
-    //   }
-    // })
+      if (typeof  callback !== 'undefined') {
+        callback(path)
+      }
+    })
   }
 
   /**
