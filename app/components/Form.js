@@ -401,7 +401,7 @@ export default class Form extends Component {
   saveEdit = () => {
     realm.write(() => {
       // true as 3rd argument updates
-      realm.create('Submission', {
+      const observation = realm.create('Submission', {
         id                  : this.props.entryInfo.id,
         name                : this.state.title.toString(),
         images              : JSON.stringify(this.getRemainingImages()),
@@ -415,9 +415,10 @@ export default class Form extends Component {
         is_private          : this.state.isPrivate,
         compressed          : false
       }, true)
+
+      DeviceEventEmitter.emit('newSubmission', observation)
     })
 
-    DeviceEventEmitter.emit('newSubmission', observation)
 
     this.fs.delete({images: this.state.deletedImages}, () => {
       this.props.navigator.goBack()
