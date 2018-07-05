@@ -120,7 +120,7 @@ export default class PrivacyPolicyScreen extends Screen {
               have not opted out of email notifications.
             </Text>
           </View>
-          <View style={styles.card}>
+          <View style={[styles.card, {marginBottom: 10}]}>
             <Text style={styles.title}>Terms of Use</Text>
             <Text style={styles.textBody}> By using this app you agree that you will not collect
               observations for trees on private land without permission. Observations may only be
@@ -139,7 +139,6 @@ export default class PrivacyPolicyScreen extends Screen {
               will be made available via our API according to our data licensing policy.
             </Text>
           </View>
-
         </ScrollView>
       </View>
     )

@@ -80,12 +80,12 @@ export default class IOSMoreScreen extends Screen {
                 showLeftIcon={false}
                 showRightIcon={false}/>
         <ScrollView style={styles.body}>
-          <Text style={styles.title}>Membership</Text>
+          <Text style={styles.title}>MEMBERSHIP</Text>
           <View style={styles.card}>
             {User.loggedIn() ? this.renderLoggedInMenu() : this.renderLoggedOutMenu()}
           </View>
 
-          <Text style={styles.title}>Information</Text>
+          <Text style={styles.title}>INFORMATION</Text>
           <View style={styles.card}>
             <View
               style={[styles.formItem]}>
@@ -143,11 +143,12 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontSize         : 14,
-    color            : '#222',
+    fontSize         : 12,
+    color            : '#777',
     paddingHorizontal: 5,
     fontWeight       : 'bold',
-    marginTop        : 10
+    marginTop        : 10,
+    marginBottom     : 5
   },
 
   card: {
