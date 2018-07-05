@@ -651,10 +651,12 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    color     : '#777',
-    fontSize  : 12,
-    fontWeight: 'bold',
-    padding   : 10
+    color            : '#222',
+    fontSize         : 12,
+    fontWeight       : 'bold',
+    paddingTop       : 10,
+    paddingBottom    : 5,
+    paddingHorizontal: 5
   },
 
   footer: {
