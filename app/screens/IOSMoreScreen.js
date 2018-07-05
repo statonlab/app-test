@@ -75,7 +75,6 @@ export default class IOSMoreScreen extends Screen {
     return (
       <View style={styles.container}>
         <Header title={'More'}
-                elevation={2}
                 navigator={this.navigator}
                 showLeftIcon={false}
                 showRightIcon={false}/>
@@ -144,7 +143,7 @@ const styles = StyleSheet.create({
 
   title: {
     fontSize         : 12,
-    color            : '#777',
+    color            : '#222',
     paddingHorizontal: 5,
     fontWeight       : 'bold',
     marginTop        : 10,

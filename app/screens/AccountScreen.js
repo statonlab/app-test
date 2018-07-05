@@ -447,7 +447,7 @@ export default class AccountScreen extends Screen {
               header="Should measurements be taken in US (inches, feet) or metric?"
             >
               <View style={styles.row}>
-                <Text style={styles.label}>Units</Text>
+                <Text style={[styles.label]}>Units</Text>
                 <TextInput
                   style={styles.textField}
                   autoCapitalize={'words'}
