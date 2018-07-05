@@ -39,7 +39,7 @@ export default class Header extends Component {
 
   getLeftIcon = () => {
     if (!this.props.showLeftIcon) {
-      return <View style={[style.touchable, {width: 50}]}/>
+      return <View style={[style.touchable, {width: 50, height: 55}]}/>
     }
 
     if (this.props.initial && Platform.OS !== 'android') {
@@ -65,7 +65,7 @@ export default class Header extends Component {
   }
 
   getRightIcon = () => {
-    let icon    = (<View style={{width: 50, height: 30}}/>)
+    let icon    = (<View style={{width: 50}}/>)
 
     if (!this.props.showRightIcon) {
       return icon

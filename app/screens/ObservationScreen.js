@@ -244,6 +244,10 @@ export default class ObservationScreen extends Screen {
       let text      = data[key]
       let label     = DCP[label_key] ? DCP[label_key].label : key
 
+      if (key.indexOf('_units') > -1 || key.indexOf('_confidence', '') > -1) {
+        return null
+      }
+
       if (typeof text === 'object') {
         if (typeof text.value === 'undefined') {
           return null
@@ -285,6 +289,14 @@ export default class ObservationScreen extends Screen {
             </View>
           </View>
         )
+      }
+
+      if (typeof data[`${key}_units`] !== 'undefined') {
+        text += ' ' + data[`${key}_units`]
+      }
+
+      if (typeof data[`${key}_confidence`] !== 'undefined') {
+        text += ' ' + data[`${key}_confidence`]
       }
 
       return (
@@ -543,7 +555,7 @@ export default class ObservationScreen extends Screen {
         <SnackBarNotice ref="snackbar" noticeText={this.state.noticeText}/>
 
         <Header navigator={this.navigator}
-                title={entry.name === 'Other' ? `Other (${meta.otherLabel})` : entry.name}
+                title={typeof meta.otherLabel !== 'undefined' ? `${entry.name} (${meta.otherLabel.trim()})` : entry.name}
                 rightIcon={trash}
                 onRightPress={() => {
                   this.deleteAlert.call(this, entry)

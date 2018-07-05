@@ -40,6 +40,7 @@ export default class AccountScreen extends Screen {
       old_password             : '',
       new_password             : '',
       new_password_confirmation: '',
+      units                    : 'US',
       errors                   : {
         name                     : false,
         anonymous                : false,
@@ -81,7 +82,8 @@ export default class AccountScreen extends Screen {
       email     : this.user.email,
       zipcode   : this.user.zipcode,
       anonymous : this.user.anonymous ? 'Yes' : 'No',
-      birth_year: this.user.birth_year
+      birth_year: this.user.birth_year,
+      units     : this.user.units
     })
 
     this.analytics.visitScreen('AccountScreen')
@@ -199,6 +201,7 @@ export default class AccountScreen extends Screen {
       zipcode     : this.state.zipcode,
       is_anonymous: this.state.anonymous.trim() === 'Yes',
       birth_year  : this.state.birth_year,
+      units       : this.state.units,
       snackMessage: 'Profile updated successfully'
     }).then(response => {
       this.refs.snackbar.showBar()
@@ -307,6 +310,7 @@ export default class AccountScreen extends Screen {
         this.user.anonymous  = response.is_anonymous
         this.user.birth_year = response.birth_year
         this.user.zipcode    = response.zipcode === null ? '' : response.zipcode
+        this.user.units      = response.units
         this.user.auto_sync  = this.state.auto_sync
       })
     } catch (error) {
@@ -365,7 +369,7 @@ export default class AccountScreen extends Screen {
                 </View>
                 {this.state.errors.email ? <Text style={styles.warning}>{this.state.errors.email}</Text> : null}
               </View>
-              <View style={[styles.formGroup, styles.noBorder]}>
+              <View style={[styles.formGroup]}>
                 <View style={styles.row}>
                   <Text style={styles.label}>Zip Code</Text>
                   <TextInput
@@ -382,33 +386,6 @@ export default class AccountScreen extends Screen {
                 </View>
                 {this.state.errors.zipcode ? <Text style={styles.warning}>{this.state.errors.zipcode}</Text> : null}
               </View>
-            </View>
-
-            <Text style={styles.title}>PRIVACY</Text>
-            <View style={styles.card}>
-              <PickerModal
-                style={[styles.formGroup]}
-                onSelect={(anonymous) => this.setState({anonymous, userChanges: true})}
-                initialSelect={this.user.anonymous ? 'Yes' : 'No'}
-                choices={['Yes', 'No']}
-                header="Anonymous users have their information hidden from other users. Would you like to be anonymous?"
-              >
-                <View style={styles.row}>
-                  <Text style={styles.label}>Anonymous</Text>
-                  <TextInput
-                    style={styles.textField}
-                    autoCapitalize={'words'}
-                    placeholder={'No'}
-                    placeholderTextColor="#aaa"
-                    returnKeyType={'done'}
-                    value={this.state.anonymous}
-                    underlineColorAndroid="transparent"
-                    editable={false}
-                  />
-                </View>
-                {this.state.errors.anonymous ? <Text style={styles.warning}>{this.state.errors.anonymous}</Text> : null}
-              </PickerModal>
-
               <DateModal
                 style={[styles.formGroup, styles.noBorder]}
                 onSelect={(year) => this.setState({birth_year: year, userChanges: true})}
@@ -430,107 +407,157 @@ export default class AccountScreen extends Screen {
                   <Text style={styles.warning}>{this.state.errors.birth_year}</Text> : null}
               </DateModal>
             </View>
+          </View>
 
-            {/*<Text style={styles.title}>AUTO SYNCHRONIZE</Text>*/}
-            {/*<View style={styles.card}>*/}
-            {/*<PickerModal*/}
-            {/*style={[styles.formGroup, styles.noBorder]}*/}
-            {/*onSelect={(auto_sync) => this.setState({*/}
-            {/*auto_sync  : auto_sync === 'Yes' ? true : false,*/}
-            {/*userChanges: true*/}
-            {/*})}*/}
-            {/*initialSelect={this.user.auto_sync ? 'Yes' : 'No'}*/}
-            {/*choices={['Yes', 'No']}*/}
-            {/*header="Auto sync allows TreeSnap to upload observations as soon as you reach a WiFi enabled area. Would you like to activate auto sync?"*/}
-            {/*>*/}
-            {/*<View style={styles.row}>*/}
-            {/*<Text style={styles.label}>Activated</Text>*/}
-            {/*<TextInput*/}
-            {/*style={styles.textField}*/}
-            {/*autoCapitalize={'words'}*/}
-            {/*placeholder={'No'}*/}
-            {/*placeholderTextColor="#aaa"*/}
-            {/*returnKeyType={'done'}*/}
-            {/*value={this.user.auto_sync ? 'Yes' : 'No'}*/}
-            {/*underlineColorAndroid="transparent"*/}
-            {/*editable={false}*/}
-            {/*readOnly={true}*/}
-            {/*/>*/}
-            {/*</View>*/}
-            {/*</PickerModal>*/}
-            {/*</View>*/}
+          <Text style={styles.title}>PRIVACY</Text>
+          <View style={styles.card}>
+            <PickerModal
+              style={[styles.formGroup, styles.noBorder]}
+              onSelect={(anonymous) => this.setState({anonymous, userChanges: true})}
+              initialSelect={this.user.anonymous ? 'Yes' : 'No'}
+              choices={['Yes', 'No']}
+              header="Anonymous users have their information hidden from other users. Would you like to be anonymous?"
+            >
+              <View style={styles.row}>
+                <Text style={styles.label}>Anonymous</Text>
+                <TextInput
+                  style={styles.textField}
+                  autoCapitalize={'words'}
+                  placeholder={'No'}
+                  placeholderTextColor="#aaa"
+                  returnKeyType={'done'}
+                  value={this.state.anonymous}
+                  underlineColorAndroid="transparent"
+                  editable={false}
+                />
+              </View>
+              {this.state.errors.anonymous ? <Text style={styles.warning}>{this.state.errors.anonymous}</Text> : null}
+            </PickerModal>
+          </View>
 
-            <Text style={styles.title}>PASSWORD</Text>
-            <View style={styles.card}>
-              <View style={styles.formGroup}>
-                <View style={styles.row}>
-                  <Text style={[styles.label, styles.labelLg]}>Old Password</Text>
-                  <TextInput
-                    secureTextEntry={true}
-                    style={styles.textField}
-                    placeholderTextColor="#aaa"
-                    onChangeText={(old_password) => this.setState({old_password, passwordChanges: true})}
-                    placeholder={'Old Password'}
-                    underlineColorAndroid="transparent"
-                  />
-                </View>
-                {this.state.errors.old_password ?
-                  <Text style={styles.warning}>{this.state.errors.old_password}</Text> : null}
+          <Text style={styles.title}>PREFERENCES</Text>
+          <View style={styles.card}>
+            <PickerModal
+              style={[styles.formGroup, styles.noBorder]}
+              onSelect={(units) => this.setState({units, userChanges: true})}
+              initialSelect={this.user.units ? this.user.units : 'US'}
+              choices={['US', 'metric']}
+              header="Should measurements be taken in US (inches, feet) or metric?"
+            >
+              <View style={styles.row}>
+                <Text style={[styles.label]}>Units</Text>
+                <TextInput
+                  style={styles.textField}
+                  autoCapitalize={'words'}
+                  placeholder={'US'}
+                  placeholderTextColor="#aaa"
+                  value={this.state.units}
+                  underlineColorAndroid="transparent"
+                  editable={false}
+                />
               </View>
-              <View style={styles.formGroup}>
-                <View style={styles.row}>
-                  <Text style={[styles.label, styles.labelLg]}>New Password</Text>
-                  <TextInput
-                    secureTextEntry={true}
-                    style={styles.textField}
-                    placeholderTextColor="#aaa"
-                    placeholder={'New Password'}
-                    onChangeText={(new_password) => this.setState({new_password, passwordChanges: true})}
-                    underlineColorAndroid="transparent"
-                  />
-                </View>
-                {this.state.errors.new_password ?
-                  <Text style={styles.warning}>{this.state.errors.new_password}</Text> : null}
+              {this.state.errors.units ?
+                <Text style={styles.warning}>{this.state.errors.units}</Text> : null}
+            </PickerModal>
+          </View>
+
+          {/*<Text style={styles.title}>AUTO SYNCHRONIZE</Text>*/}
+          {/*<View style={styles.card}>*/}
+          {/*<PickerModal*/}
+          {/*style={[styles.formGroup, styles.noBorder]}*/}
+          {/*onSelect={(auto_sync) => this.setState({*/}
+          {/*auto_sync  : auto_sync === 'Yes' ? true : false,*/}
+          {/*userChanges: true*/}
+          {/*})}*/}
+          {/*initialSelect={this.user.auto_sync ? 'Yes' : 'No'}*/}
+          {/*choices={['Yes', 'No']}*/}
+          {/*header="Auto sync allows TreeSnap to upload observations as soon as you reach a WiFi enabled area. Would you like to activate auto sync?"*/}
+          {/*>*/}
+          {/*<View style={styles.row}>*/}
+          {/*<Text style={styles.label}>Activated</Text>*/}
+          {/*<TextInput*/}
+          {/*style={styles.textField}*/}
+          {/*autoCapitalize={'words'}*/}
+          {/*placeholder={'No'}*/}
+          {/*placeholderTextColor="#aaa"*/}
+          {/*returnKeyType={'done'}*/}
+          {/*value={this.user.auto_sync ? 'Yes' : 'No'}*/}
+          {/*underlineColorAndroid="transparent"*/}
+          {/*editable={false}*/}
+          {/*readOnly={true}*/}
+          {/*/>*/}
+          {/*</View>*/}
+          {/*</PickerModal>*/}
+          {/*</View>*/}
+
+          <Text style={styles.title}>PASSWORD</Text>
+          <View style={styles.card}>
+            <View style={styles.formGroup}>
+              <View style={styles.row}>
+                <Text style={[styles.label, styles.labelLg]}>Old Password</Text>
+                <TextInput
+                  secureTextEntry={true}
+                  style={styles.textField}
+                  placeholderTextColor="#aaa"
+                  onChangeText={(old_password) => this.setState({old_password, passwordChanges: true})}
+                  placeholder={'Old Password'}
+                  underlineColorAndroid="transparent"
+                />
               </View>
-              <View style={[styles.formGroup, styles.noBorder]}>
-                <View style={styles.row}>
-                  <Text style={[styles.label, styles.labelLg]}>Repeat Password</Text>
-                  <TextInput
-                    secureTextEntry={true}
-                    style={styles.textField}
-                    placeholderTextColor="#aaa"
-                    placeholder={'Repeat New Password'}
-                    onChangeText={(new_password_confirmation) => this.setState({
-                      new_password_confirmation,
-                      passwordChanges: true
-                    })}
-                    underlineColorAndroid="transparent"
-                  />
-                </View>
-                {this.state.errors.new_password_confirmation ?
-                  <Text style={styles.warning}>{this.state.errors.new_password_confirmation}</Text> : null}
-              </View>
+              {this.state.errors.old_password ?
+                <Text style={styles.warning}>{this.state.errors.old_password}</Text> : null}
             </View>
-
-            <Text style={styles.title}>LOG OUT</Text>
-            <View style={styles.card}>
-              <View style={[styles.formGroup, styles.row, styles.noBorder]}>
-                <TouchableOpacity
-                  style={[{height: 40, justifyContent: 'center'}]}
-                  onPress={() => {
-                    User.logout()
-                  }}
-                >
-                  <Text style={[{color: Colors.danger}]}>Press to log out</Text>
-                </TouchableOpacity>
+            <View style={styles.formGroup}>
+              <View style={styles.row}>
+                <Text style={[styles.label, styles.labelLg]}>New Password</Text>
+                <TextInput
+                  secureTextEntry={true}
+                  style={styles.textField}
+                  placeholderTextColor="#aaa"
+                  placeholder={'New Password'}
+                  onChangeText={(new_password) => this.setState({new_password, passwordChanges: true})}
+                  underlineColorAndroid="transparent"
+                />
               </View>
+              {this.state.errors.new_password ?
+                <Text style={styles.warning}>{this.state.errors.new_password}</Text> : null}
+            </View>
+            <View style={[styles.formGroup, styles.noBorder]}>
+              <View style={styles.row}>
+                <Text style={[styles.label, styles.labelLg]}>Repeat Password</Text>
+                <TextInput
+                  secureTextEntry={true}
+                  style={styles.textField}
+                  placeholderTextColor="#aaa"
+                  placeholder={'Repeat New Password'}
+                  onChangeText={(new_password_confirmation) => this.setState({
+                    new_password_confirmation,
+                    passwordChanges: true
+                  })}
+                  underlineColorAndroid="transparent"
+                />
+              </View>
+              {this.state.errors.new_password_confirmation ?
+                <Text style={styles.warning}>{this.state.errors.new_password_confirmation}</Text> : null}
             </View>
           </View>
 
-
+          <Text style={styles.title}>LOG OUT</Text>
+          <View style={styles.card}>
+            <View style={[styles.formGroup, styles.row, styles.noBorder]}>
+              <TouchableOpacity
+                style={[{height: 40, justifyContent: 'center'}]}
+                onPress={() => {
+                  User.logout()
+                }}
+              >
+                <Text style={[{color: Colors.danger}]}>Press to log out</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         </KeyboardAwareScrollView>
 
-        <View style={styles.footer}>
+        {this.state.userChanges || this.state.passwordChanges ? <View style={styles.footer}>
           <View style={styles.column}>
             <TouchableOpacity style={styles.button} onPress={this.submit.bind(this)}>
               <Text style={styles.buttonText}>Update</Text>
@@ -548,7 +575,7 @@ export default class AccountScreen extends Screen {
               </TouchableOpacity>
             </View>
           }
-        </View>
+        </View> : null}
 
         <SnackBar ref="snackbar" noticeText={this.state.snackMessage}/>
       </View>
@@ -621,10 +648,12 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    color     : '#777',
-    fontSize  : 12,
-    fontWeight: 'bold',
-    padding   : 10
+    color            : '#222',
+    fontSize         : 12,
+    fontWeight       : 'bold',
+    paddingTop       : 10,
+    paddingBottom    : 5,
+    paddingHorizontal: 5
   },
 
   footer: {

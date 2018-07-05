@@ -95,7 +95,7 @@ const DCP = {
       'Other hemlock species',
       'I\'m not sure'
     ],
-    images: [
+    images       : [
       require('../img/hemlock_id/hemlock_species.jpg')
     ],
     multiCheck   : false
@@ -142,9 +142,8 @@ const DCP = {
 
   heightFirstBranch: {
     label            : 'Height of first branch',
-    description      : 'Approximately (no need to measure) how high up is the first main branch of the tree?',
-    // slider     : true,
-    units            : 'Feet',
+    description      : 'Approximately how high up is the first main branch of the tree?',
+    units            : {'US': 'Feet', 'metric': 'Meters'},
     numeric          : true,
     placeHolder      : 'Height',
     default          : 'Estimated',
@@ -169,7 +168,7 @@ const DCP = {
     description      : 'Please enter the diameter, in inches, of this tree below.  Is this a rough estimate or a precise measurement?',
     // minValue: 0,
     // maxValue: 40,
-    units            : 'Inches',
+    units            : {'US': 'Inches', 'metric': 'cm'},
     images           : [require('../img/DCP/diameter.jpg')],
     captions         : ['Note: if the tree is less than 4 feet tall, please take the stem diameter at the height of the first branch.'],
     selectChoices    : ['Measured', 'Estimated'],
@@ -233,14 +232,6 @@ const DCP = {
     placeHolder  : 'Please select',
     multiCheck   : true
   },
-  // nearByHemlock          : {
-  //   label        : "Nearby hemlocks",
-  //   description  : "are there other hemlock trees nearby (within one mile?)",
-  //   selectChoices: ["Yes, including healthy hemlocks",
-  //     "Yes, but they are dead or dying",
-  //     "No"],
-  //   placeHolder  : "Please select"
-  // },
 
   treated: {
     label        : 'Treated',
@@ -262,10 +253,9 @@ const DCP = {
 
   heightNumeric: {
     label            : 'Tree height',
-    description      : 'Approximately how many feet tall is the tree?',
-    //  slider     : true,
+    description      : 'Approximately how tall is the tree?',
     numeric          : true,
-    units            : 'Feet',
+    units            : {'US': 'Feet', 'metric': 'Meters'},
     default          : 'Estimated',
     placeHolder      : 'Height',
     numberPlaceHolder: 'Tap to enter height'

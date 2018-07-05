@@ -31,7 +31,7 @@ export default class Atext extends Component {
 
 Atext.propTypes = {
   url  : PropTypes.string.isRequired,
-  style: PropTypes.object
+  style: PropTypes.any
 }
 
 Atext.defaultProps = {

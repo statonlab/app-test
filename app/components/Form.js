@@ -35,6 +35,7 @@ import {ifIphoneX, isIphoneX} from 'react-native-iphone-x-helper'
 import Analytics from '../helpers/Analytics'
 import AdvancedSettingsModal from './AdvancedSettingsModal'
 import CustomIDModal from './CustomIDModal'
+import User from '../db/User'
 
 const isAndroid  = Platform.OS === 'android'
 const Coordinate = t.refinement(t.Number, (n) => n !== 0, 'Coordinate')
@@ -48,6 +49,7 @@ export default class Form extends Component {
       isPrivate                : false,
       images                   : {},
       title                    : this.props.title,
+      units                    : 'US',
       location                 : {
         latitude : 0,
         longitude: 0,
@@ -63,8 +65,10 @@ export default class Form extends Component {
       custom_id                : '',
       showCustomIDModal        : false,
       showAdvancedSettingsModal: false
+
     }
 
+    this.user       = User.user()
     this.events     = []
     this.fs         = new File()
     this.primaryKey = 0
@@ -119,6 +123,12 @@ export default class Form extends Component {
         console.log(e)
       }
     }
+
+    // Get user preferences
+    this.setState({
+      units: this.user ? this.user.units : 'US'
+    })
+
     // Add image resize event listener
     this.events.push(DeviceEventEmitter.addListener('imagesResized', this._handleResizedImages))
 
@@ -352,6 +362,7 @@ export default class Form extends Component {
 
     realm.write(() => {
       realm.create('Submission', observation)
+      console.log('HERE', observation)
     })
 
     this.fs.delete({images: this.state.deletedImages}, () => {
@@ -571,8 +582,14 @@ export default class Form extends Component {
     }
 
     if (DCP[key].numeric) {
-      let key2  = [key] + '_confidence'
-      let value = this.state.metadata[key] ? this.state.metadata[key] + ' ' + DCP[key].units : null
+      let key2       = [key] + '_confidence'
+      let unitsKey   = [key] + '_units'
+      let unitsType  = this.state.units
+      let unitsValue = DCP[key].units
+      if (typeof unitsValue === 'object') {
+        unitsValue = DCP[key].units[unitsType]
+      }
+      let value = this.state.metadata[key] ? this.state.metadata[key] + ' ' + unitsValue : null
       DCP[key]  = this.extractConditional(DCP[key])
       return (
         <View key={key}>
@@ -585,14 +602,15 @@ export default class Form extends Component {
               default={DCP[key].default}
               startingNumeric={[this.state.metadata[key], this.state.metadata[key2]]}
               numeric={DCP[key].numeric}
-              units={DCP[key].units}
+              units={DCP[key].units[unitsType]}
               header={DCP[key].description}
               choices={DCP[key].selectChoices}
               numberPlaceHolder={DCP[key].numberPlaceHolder}
               onSelect={(number, string) => {
-                let newData   = this.state.metadata
-                newData[key]  = number
-                newData[key2] = string
+                let newData       = this.state.metadata
+                newData[key]      = number
+                newData[key2]     = string
+                newData[unitsKey] = unitsValue
                 this.setState({metadata: newData})
               }}
             >
