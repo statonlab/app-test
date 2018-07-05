@@ -48,7 +48,7 @@ export default class IOSMoreScreen extends Screen {
       <View>
         <TouchableOpacity
           onPress={() => {
-            this.navigator.navigate('Register')
+            this.navigator.navigate('Registration')
           }}
           style={[styles.formItem]}>
           <Text style={styles.formLabel}>

@@ -67,7 +67,8 @@ export default class Form extends Component {
       showAdvancedSettingsModal: false
 
     }
-    this.user = User.user()
+
+    this.user       = User.user()
     this.events     = []
     this.fs         = new File()
     this.primaryKey = 0
@@ -123,10 +124,9 @@ export default class Form extends Component {
       }
     }
 
-    // get user preferences
-
+    // Get user preferences
     this.setState({
-      units     : this.user.units
+      units: this.user ? this.user.units : 'US'
     })
 
     // Add image resize event listener

@@ -26,7 +26,7 @@ const Nav = new createStackNavigator({
   Login        : {
     screen: LoginScreen
   },
-  Register     : {
+  Registration : {
     screen: RegistrationScreen
   }
 }, {
