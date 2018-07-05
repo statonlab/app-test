@@ -194,7 +194,6 @@ export default class AccountScreen extends Screen {
 
     this.spinner.open()
 
-
     axios.put('user', {
       api_token   : this.user.api_token,
       name        : this.state.name,
@@ -205,7 +204,6 @@ export default class AccountScreen extends Screen {
       units       : this.state.units,
       snackMessage: 'Profile updated successfully'
     }).then(response => {
-      console.log(response)
       this.refs.snackbar.showBar()
       this.setState({userChanges: false})
       this.updateRealmUser(response.data.data)
@@ -453,7 +451,6 @@ export default class AccountScreen extends Screen {
                   autoCapitalize={'words'}
                   placeholder={'US'}
                   placeholderTextColor="#aaa"
-                  returnKeyType={'done'}
                   value={this.state.units}
                   underlineColorAndroid="transparent"
                   editable={false}
@@ -560,7 +557,7 @@ export default class AccountScreen extends Screen {
           </View>
         </KeyboardAwareScrollView>
 
-        <View style={styles.footer}>
+        {this.state.userChanges || this.state.passwordChanges ? <View style={styles.footer}>
           <View style={styles.column}>
             <TouchableOpacity style={styles.button} onPress={this.submit.bind(this)}>
               <Text style={styles.buttonText}>Update</Text>
@@ -578,7 +575,7 @@ export default class AccountScreen extends Screen {
               </TouchableOpacity>
             </View>
           }
-        </View>
+        </View> : null}
 
         <SnackBar ref="snackbar" noticeText={this.state.snackMessage}/>
       </View>

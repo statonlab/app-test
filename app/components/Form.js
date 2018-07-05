@@ -362,6 +362,7 @@ export default class Form extends Component {
 
     realm.write(() => {
       realm.create('Submission', observation)
+      console.log('HERE', observation)
     })
 
     this.fs.delete({images: this.state.deletedImages}, () => {

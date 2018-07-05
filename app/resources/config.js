@@ -95,7 +95,7 @@ const DCP = {
       'Other hemlock species',
       'I\'m not sure'
     ],
-    images: [
+    images       : [
       require('../img/hemlock_id/hemlock_species.jpg')
     ],
     multiCheck   : false
@@ -143,7 +143,7 @@ const DCP = {
   heightFirstBranch: {
     label            : 'Height of first branch',
     description      : 'Approximately how high up is the first main branch of the tree?',
-    units: {'US': 'Feet', 'metric': 'Meters'},
+    units            : {'US': 'Feet', 'metric': 'Meters'},
     numeric          : true,
     placeHolder      : 'Height',
     default          : 'Estimated',
@@ -255,7 +255,7 @@ const DCP = {
     label            : 'Tree height',
     description      : 'Approximately how tall is the tree?',
     numeric          : true,
-    units            : { 'US': 'Feet', 'metric': 'Meters'},
+    units            : {'US': 'Feet', 'metric': 'Meters'},
     default          : 'Estimated',
     placeHolder      : 'Height',
     numberPlaceHolder: 'Tap to enter height'
