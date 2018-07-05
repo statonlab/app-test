@@ -36,6 +36,7 @@ import Analytics from '../helpers/Analytics'
 import AdvancedSettingsModal from './AdvancedSettingsModal'
 import CustomIDModal from './CustomIDModal'
 import User from '../db/User'
+import Images from '../helpers/Images'
 
 const isAndroid  = Platform.OS === 'android'
 const Coordinate = t.refinement(t.Number, (n) => n !== 0, 'Coordinate')
@@ -130,7 +131,7 @@ export default class Form extends Component {
     })
 
     // Add image resize event listener
-    this.events.push(DeviceEventEmitter.addListener('imagesResized', this._handleResizedImages))
+    this.events.push(DeviceEventEmitter.addListener('imagesResized', this._handleResizedImages.bind(this)))
 
     this.backEvent = BackHandler.addEventListener('hardwareBackPress', () => {
       this.cancel()
@@ -169,17 +170,41 @@ export default class Form extends Component {
    * @param images
    * @private
    */
-  _handleResizedImages = (images) => {
-    this.refs.spinner.close()
-    this.setState({images})
+  async _handleResizedImages(images) {
+    let Compressor = new Images()
+    let newImages  = {}
 
-    if (this.props.edit) {
-      DeviceEventEmitter.emit('editSubmission')
-      this.saveEdit()
-      return
+    for (let i in images) {
+      if (!images.hasOwnProperty(i)) {
+        continue
+      }
+
+      newImages[i] = []
+
+      for (let j in images[i]) {
+        if (!images[i].hasOwnProperty(j)) {
+          continue
+        }
+
+        console.log('HERE updating image', i, j)
+
+        let img = await Compressor.compress(images[i][j])
+        newImages[i].push(img)
+        console.log('HERE', newImages[i])
+      }
     }
 
-    this.save()
+    this.setState({images: newImages}, () => {
+      this.refs.spinner.close()
+
+      if (this.props.edit) {
+        DeviceEventEmitter.emit('editSubmission')
+        this.saveEdit()
+        return
+      }
+
+      this.save()
+    })
   }
 
   /**
@@ -357,7 +382,7 @@ export default class Form extends Component {
       has_private_comments: this.state.hasPrivateComments,
       custom_id           : this.state.custom_id,
       is_private          : this.state.isPrivate,
-      compressed          : false
+      compressed          : true
     }
 
     realm.write(() => {
@@ -391,7 +416,6 @@ export default class Form extends Component {
       return
     }
 
-
     this.generateImages()
   }
 
@@ -413,12 +437,11 @@ export default class Form extends Component {
         has_private_comments: this.state.hasPrivateComments,
         custom_id           : this.state.custom_id,
         is_private          : this.state.isPrivate,
-        compressed          : false
+        compressed          : true
       }, true)
 
       DeviceEventEmitter.emit('newSubmission', observation)
     })
-
 
     this.fs.delete({images: this.state.deletedImages}, () => {
       this.props.navigator.goBack()
@@ -439,7 +462,6 @@ export default class Form extends Component {
    *
    * @returns {*}
    */
-
   validateMeta = () => {
     return t.validate(this.state.metadata, this.formTMeta)
   }
@@ -468,7 +490,7 @@ export default class Form extends Component {
 
     // Add error for no location
     if (this.state.location.latitude === 0 && this.state.location.longitude === 0 && this.state.location.accuracy === -1) {
-      errorList.push('Cannot get location.  Please wait for GPS signal and try again.')
+      errorList.push('Cannot get location. Please wait for GPS signal and try again.')
     }
     this.setState({warnings})
 

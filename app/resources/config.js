@@ -235,7 +235,7 @@ const DCP = {
 
   treated: {
     label        : 'Treated',
-    description  : 'Has this tree been treated with Fungicides or pesticides?',
+    description  : 'Has this tree been treated with fungicides or pesticides?',
     selectChoices: ['Yes', 'No', 'Don\'t know'],
     placeHolder  : 'Please select'
   },

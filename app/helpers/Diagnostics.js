@@ -64,7 +64,6 @@ class Diagnostics {
       let fixed = await this._fixBrokenImages(images)
       realm.write(() => {
         observation.images     = JSON.stringify(fixed)
-        observation.compressed = true
       })
     } catch (error) {
       console.log(error)

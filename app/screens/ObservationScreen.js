@@ -73,6 +73,7 @@ export default class ObservationScreen extends Screen {
     let parsed = JSON.parse(entry.images)
     let images = []
     Object.keys(parsed).map(key => {
+      console.log('HERE parsed', parsed)
       parsed[key].map(image => {
         images.push(this.fs.image(image))
       })
@@ -192,10 +193,6 @@ export default class ObservationScreen extends Screen {
         })
         let submission = realm.objects('Submission').filtered(`id == ${entry.id}`)
         if (submission.length > 0) {
-          let observation = submission[0]
-          realm.write(() => {
-            observation.needs_update = false
-          })
           this.refs.spinner.close()
           this.setState({
             synced      : true,

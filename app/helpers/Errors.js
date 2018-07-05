@@ -36,6 +36,10 @@ export default class Errors {
 
     if (typeof error === 'object') {
       this.errorCode = error.response ? error.response.status : -1
+      if(error.toString().indexOf('TypeError') > -1) {
+        this.errors = {general: [error.toString()]}
+        return
+      }
     }
 
     this._extractErrors(error)

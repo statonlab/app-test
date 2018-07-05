@@ -28,6 +28,7 @@ class Observation {
     }
 
     let realmObservation = realm.objects('Submission').filtered(`id == ${observation.id}`)[0]
+
     // Don't sync already synced record
     if (realmObservation.synced || realmObservation.serverID !== -1) {
       return this.update(observation, callback)
@@ -127,12 +128,8 @@ class Observation {
       throw new Error('User not signed in')
     }
 
-    if (!observation.needs_update) {
-      return
-    }
-
     if (!observation.serverID) {
-      console.log('warning: Updating observation with no server ID. Local only.')
+      console.warn('warning: Updating observation with no server ID. Local only.')
       return
     }
 
@@ -140,6 +137,13 @@ class Observation {
 
     let response = await axios.post(`observation/${observation.serverID}`, form)
     await this.uploadImages(observation, observation.serverID, callback)
+
+    let updatedObservation = realm.objects('Submission').filtered(`id = ${observation.id}`)
+    if (updatedObservation.length > 0) {
+      realm.write(() => {
+        updatedObservation[0].needs_update = false
+      })
+    }
 
     return response
   }
