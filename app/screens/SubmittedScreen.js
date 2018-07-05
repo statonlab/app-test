@@ -25,6 +25,7 @@ import {ACFCollection} from '../resources/descriptions'
 import Spinner from '../components/Spinner'
 import User from '../db/User'
 import Errors from '../helpers/Errors'
+import realm from '../db/Schema'
 
 export default class SubmittedScreen extends Screen {
   static navigationOptions = {
@@ -153,7 +154,14 @@ export default class SubmittedScreen extends Screen {
     })
   }
 
-  doUpload(observation) {
+  doUpload(observationParam) {
+    let observation = realm.objects('Submission').filtered(`id == ${observationParam.id}`)
+    if(observation.length <= 0) {
+      Alert.alert('Error', 'An error occurred while uploading your observation. Please try again later.')
+      return
+    }
+    observation = observation[0]
+
     let total = Observation.countImages(observation.images)
     let step  = 0
 
