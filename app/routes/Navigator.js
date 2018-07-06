@@ -25,6 +25,8 @@ import {ifIphoneX} from 'react-native-iphone-x-helper'
 import MoreStackNavigator from './MoreStackNavigator'
 import ObserveStackNavigator from './ObserveStackNavigator'
 import MapStackNavigator from './MapStackNavigator'
+import PersonalInformationScreen from '../screens/PersonalInformationScreen'
+import AccountStackNavigator from './AccountStackNavigator'
 
 /**
  * Implementation of react-navigation.
@@ -242,7 +244,7 @@ export default class Navigator extends Component {
       // Show AccountScreen if user is logged in
       ...(this.state.loggedIn ? {
         Account: {
-          screen           : IntermediateAccountScreen,
+          screen           : AccountStackNavigator,
           navigationOptions: {
             ...(this.navigationOptions('Account Settings', 'md-settings', 25))
           }
