@@ -1,7 +1,6 @@
 import React from 'react'
 import Screen from './Screen'
 import PropTypes from 'prop-types'
-import DeviceInfo from 'react-native-device-info'
 import {
   View,
   StyleSheet,
@@ -62,15 +61,6 @@ export default class RegistrationScreen extends Screen {
 
     let currentYear = new Date().getFullYear()
     this.setState({currentYear: currentYear})
-
-    let locale = DeviceInfo.getDeviceCountry()
-    console.log(locale)
-
-    let units  = 'metric'
-    if (locale === 'en-us') {
-      units = 'US'
-    }
-    this.setState({units: units})
 
 
     this.backEvent = BackHandler.addEventListener('hardwareBackPress', () => {

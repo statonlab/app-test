@@ -4,6 +4,8 @@ import realm from './Schema'
 import File from '../helpers/File'
 import axios from '../helpers/Axios'
 import Analytics from '../helpers/Analytics'
+import DeviceInfo from 'react-native-device-info'
+
 
 class User {
   /**
@@ -147,6 +149,15 @@ class User {
    */
   register(requestParams) {
     return new Promise((resolve, onFail) => {
+
+
+      let locale = DeviceInfo.getDeviceCountry()
+      let units  = 'metric'
+      if (locale === 'US') {
+        units = 'US'
+      }
+      requestParams.units = units
+
       axios.post('users', requestParams).then(responseFull => {
         // write to realm
         realm.write(() => {

@@ -18,6 +18,7 @@ import org.reactnative.camera.RNCameraPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
+import com.learnium.RNDeviceInfo.RNDeviceInfo;
 
 import io.fabric.sdk.android.Fabric;
 import io.invertase.firebase.RNFirebasePackage;
@@ -58,6 +59,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+          new RNDeviceInfo(),
             new RealmReactPackage(),
             new VectorIconsPackage(),
             new ReactNativePushNotificationPackage(),
