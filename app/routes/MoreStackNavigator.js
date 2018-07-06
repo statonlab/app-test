@@ -6,13 +6,24 @@ import HealthSafetyScreen from '../screens/HealthSafetyScreen'
 import PrivacyPolicyScreen from '../screens/PrivacyPolicySreen'
 import LoginScreen from '../screens/LoginScreen'
 import RegistrationScreen from '../screens/RegisterationScreen'
+import PersonalInformationScreen from '../screens/PersonalInformationScreen'
+import ChangePasswordScreen from '../screens/ChangePasswordScreen'
 
+/**
+ * IOS ONLY
+ */
 const MoreStackNavigator = new createStackNavigator({
   More         : {
     screen: IOSMoreScreen
   },
   Account      : {
     screen: IntermediateAccountScreen
+  },
+  PersonalInformation: {
+    screen: PersonalInformationScreen
+  },
+  ChangePassword: {
+    screen: ChangePasswordScreen
   },
   About        : {
     screen: AboutScreen
