@@ -186,11 +186,8 @@ export default class Form extends Component {
           continue
         }
 
-        console.log('HERE updating image', i, j)
-
         let img = await Compressor.compress(images[i][j])
         newImages[i].push(img)
-        console.log('HERE', newImages[i])
       }
     }
 
@@ -387,7 +384,6 @@ export default class Form extends Component {
 
     realm.write(() => {
       realm.create('Submission', observation)
-      console.log('HERE', observation)
     })
 
     this.fs.delete({images: this.state.deletedImages}, () => {
@@ -605,15 +601,19 @@ export default class Form extends Component {
     }
 
     if (DCP[key].numeric) {
-      let key2       = [key] + '_confidence'
-      let unitsKey   = [key] + '_units'
-      let unitsType  = this.state.units
-      let unitsValue = DCP[key].units
-      if (typeof unitsValue === 'object') {
-        unitsValue = DCP[key].units[unitsType]
+      let confidenceKey = [key] + '_confidence'
+      let unitsKey      = [key] + '_units'
+      let userUnit      = this.state.units
+      let questionUnit  = null
+
+      if (typeof DCP[key].units !== 'undefined') {
+        questionUnit = typeof DCP[key].units === 'string' ? DCP[key].units : DCP[key].units[userUnit]
       }
-      let value = this.state.metadata[key] ? this.state.metadata[key] + ' ' + unitsValue : null
-      DCP[key]  = this.extractConditional(DCP[key])
+
+      let selectedUnit = this.state.metadata[unitsKey] ? this.state.metadata[unitsKey] : questionUnit
+      let value        = this.state.metadata[key] ? this.state.metadata[key] + ` ${selectedUnit}` : null
+
+      DCP[key] = this.extractConditional(DCP[key])
       return (
         <View key={key}>
           <View style={styles.formGroup}>
@@ -623,17 +623,18 @@ export default class Form extends Component {
               captions={DCP[key].captions}
               multiCheck={DCP[key].multiCheck}
               default={DCP[key].default}
-              startingNumeric={[this.state.metadata[key], this.state.metadata[key2]]}
+              startingNumeric={[this.state.metadata[key], this.state.metadata[confidenceKey]]}
               numeric={DCP[key].numeric}
-              units={DCP[key].units[unitsType]}
+              units={DCP[key].units}
+              selectedUnit={selectedUnit}
               header={DCP[key].description}
               choices={DCP[key].selectChoices}
               numberPlaceHolder={DCP[key].numberPlaceHolder}
-              onSelect={(number, string) => {
-                let newData       = this.state.metadata
-                newData[key]      = number
-                newData[key2]     = string
-                newData[unitsKey] = unitsValue
+              onSelect={(value, confidence, unit) => {
+                let newData            = this.state.metadata
+                newData[key]           = value
+                newData[confidenceKey] = confidence
+                newData[unitsKey]      = unit
                 this.setState({metadata: newData})
               }}
             >

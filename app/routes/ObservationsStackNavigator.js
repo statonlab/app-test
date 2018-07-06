@@ -12,7 +12,6 @@ const Nav = new createStackNavigator({
         tabBarOnPress: ({scene, jumpToIndex}) => {
           DeviceEventEmitter.emit('observationsScreenRequested')
           jumpToIndex(scene.index)
-          console.log('HERE VISITED OBSERVATIONS SCREEN')
         }
       }
     }
