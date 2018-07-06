@@ -3,18 +3,25 @@ package com.treesource;
 import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
+
 import com.crashlytics.android.Crashlytics;
 import com.facebook.react.ReactApplication;
+
 import io.realm.react.RealmReactPackage;
+
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.reactnative.photoview.PhotoViewPackage;
 import com.github.xinthink.rnmk.ReactMaterialKitPackage;
 import com.airbnb.android.react.maps.MapsPackage;
+
 import fr.bamlab.rnimageresizer.ImageResizerPackage;
 import io.invertase.firebase.RNFirebasePackage;
+
 import com.RNFetchBlob.RNFetchBlobPackage;
+
 import org.reactnative.camera.RNCameraPackage;
+
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
@@ -60,18 +67,7 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
           new RNDeviceInfo(),
-            new RealmReactPackage(),
-            new VectorIconsPackage(),
-            new ReactNativePushNotificationPackage(),
-            new PhotoViewPackage(),
-            new ReactMaterialKitPackage(),
-            new MapsPackage(),
-            new ImageResizerPackage(),
-            new RNFirebasePackage(),
-            new RNFetchBlobPackage(),
-            new RNCameraPackage(),
-            new RNDeviceInfo(),
-            new RNI18nPackage(),
+          new RNI18nPackage(),
           new ReactNativePushNotificationPackage(),
           new RNFirebasePackage(),
           new RNFirebaseAnalyticsPackage(),

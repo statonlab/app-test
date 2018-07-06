@@ -12,6 +12,7 @@ import Navigator from './app/routes/Navigator'
 import Observation from './app/helpers/Observation'
 import WelcomeModal from './app/components/WelcomeModal'
 import NotificationsController from './app/components/NotificationsController'
+import DeviceInfo from 'react-native-device-info'
 
 export default class App extends Component {
   constructor(props) {
@@ -41,6 +42,8 @@ export default class App extends Component {
         this.snackbar.showBar()
       }
     }))
+
+    alert(DeviceInfo.getDeviceCountry())
   }
 
   componentWillUnmount() {
