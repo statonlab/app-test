@@ -16,6 +16,7 @@ import Guide from '../components/Guide'
 
 export default class MapScreen extends Screen {
   static navigationOptions = {
+    headerMode: 'none',
     tabBarOptions: {
       activeTintColor: Colors.primary
     }
@@ -28,7 +29,7 @@ export default class MapScreen extends Screen {
 
     this.state = {
       shouldNavigate: true,
-      markers: []
+      markers       : []
     }
   }
 
@@ -118,8 +119,9 @@ export default class MapScreen extends Screen {
       if (marker.id === undefined) {
         return
       }
+
       let plant = realm.objects('Submission').filtered(`id == "${marker.id}"`)[0]
-      this.navigator.navigate('Observation', {
+      this.navigator.navigate('ObservationFromMap', {
         // Deep copy the object
         plant    : JSON.parse(JSON.stringify(plant)),
         onUnmount: () => {

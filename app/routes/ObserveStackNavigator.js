@@ -20,27 +20,30 @@ function navigationOptions(label, icon, size) {
   }
 }
 
-let Nav = new createStackNavigator({
-  Landing  : {
+let ObserveStackNavigator = new createStackNavigator({
+  Landing: {
     screen           : LandingScreen,
     navigationOptions: {
       ...(navigationOptions('My Observations', 'md-home', 25))
     }
   },
-  Tree     : {
+
+  Tree: {
     screen           : TreeScreen,
     navigationOptions: {
       gesturesEnabled: false,
       drawerLockMode : 'locked-closed'
     }
   },
-  Camera   : {
+
+  Camera: {
     screen           : CameraScreen,
     navigationOptions: {
       gesturesEnabled: false,
       drawerLockMode : 'locked-closed'
     }
   },
+
   Submitted: {
     screen           : SubmittedScreen,
     navigationOptions: {
@@ -53,7 +56,7 @@ let Nav = new createStackNavigator({
   headerMode      : 'none'
 })
 
-Nav.navigationOptions = ({navigation}) => {
+ObserveStackNavigator.navigationOptions = ({navigation}) => {
   let drawerLockMode = 'unlocked'
   let tabBarVisible  = true
   if (navigation.state.index > 0) {
@@ -67,4 +70,4 @@ Nav.navigationOptions = ({navigation}) => {
   }
 }
 
-export default Nav
+export default ObserveStackNavigator
