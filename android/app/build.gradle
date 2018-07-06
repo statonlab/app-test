@@ -150,6 +150,20 @@ android {
 }
 
 dependencies {
+    compile project(':realm')
+    compile project(':react-native-vector-icons')
+    compile project(':react-native-push-notification')
+    compile project(':react-native-photo-view')
+    compile project(':react-native-material-kit')
+    compile project(':react-native-maps')
+    compile project(':react-native-image-resizer')
+    compile(project(':react-native-firebase')) {
+        transitive = false
+    }
+    compile project(':react-native-fetch-blob')
+    compile project(':react-native-camera')
+    compile project(':react-native-device-info')
+    compile project(':react-native-i18n')
     def supportLibVersion = rootProject.hasProperty('supportLibVersion') ? rootProject.supportLibVersion : "27.1.0"
     def googlePlayServicesVersion = rootProject.hasProperty('googlePlayServicesVersion') ? rootProject.googlePlayServicesVersion : "11.8.0"
 
