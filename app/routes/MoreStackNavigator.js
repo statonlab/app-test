@@ -7,7 +7,7 @@ import PrivacyPolicyScreen from '../screens/PrivacyPolicySreen'
 import LoginScreen from '../screens/LoginScreen'
 import RegistrationScreen from '../screens/RegisterationScreen'
 
-const Nav = new createStackNavigator({
+const MoreStackNavigator = new createStackNavigator({
   More         : {
     screen: IOSMoreScreen
   },
@@ -34,7 +34,7 @@ const Nav = new createStackNavigator({
   headerMode      : 'none'
 })
 
-Nav.navigationOptions = ({navigation}) => {
+MoreStackNavigator.navigationOptions = ({navigation}) => {
   let drawerLockMode = 'unlocked'
   let tabBarVisible  = true
   if (navigation.state.index > 0) {
@@ -48,4 +48,4 @@ Nav.navigationOptions = ({navigation}) => {
   }
 }
 
-export default Nav
+export default MoreStackNavigator

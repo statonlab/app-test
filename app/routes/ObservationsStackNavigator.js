@@ -17,7 +17,8 @@ const Nav = new createStackNavigator({
       }
     }
   },
-  Observation : {
+
+  Observation: {
     screen           : ObservationScreen,
     navigationOptions: {
       drawerLockMode: 'locked-closed',

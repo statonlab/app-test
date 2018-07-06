@@ -11,7 +11,6 @@ import {
   createDrawerNavigator,
   DrawerItems
 } from 'react-navigation'
-import MapScreen from '../screens/MapScreen'
 import AboutScreen from '../screens/AboutScreen'
 import PrivacyPolicyScreen from '../screens/PrivacyPolicySreen'
 import HealthSafetyScreen from '../screens/HealthSafetyScreen'
@@ -20,11 +19,12 @@ import RegistrationScreen from '../screens/RegisterationScreen'
 import Icon from 'react-native-vector-icons/Ionicons'
 import Colors from '../helpers/Colors'
 import IntermediateAccountScreen from '../screens/IntermediateAccountScreen'
-import ObservationsNavigator from './ObservationsNavigator'
+import ObservationsStackNavigator from './ObservationsStackNavigator'
 import User from '../db/User'
 import {ifIphoneX} from 'react-native-iphone-x-helper'
 import MoreStackNavigator from './MoreStackNavigator'
 import ObserveStackNavigator from './ObserveStackNavigator'
+import MapStackNavigator from './MapStackNavigator'
 
 /**
  * Implementation of react-navigation.
@@ -73,14 +73,14 @@ export default class Navigator extends Component {
       },
 
       ObservationsNavigator: {
-        screen           : ObservationsNavigator,
+        screen           : ObservationsStackNavigator,
         navigationOptions: {
           ...(this.navigationOptions('Observations', 'ios-leaf'))
         }
       },
 
-      Map: {
-        screen           : MapScreen,
+      MapStack: {
+        screen           : MapStackNavigator,
         navigationOptions: {
           ...(this.navigationOptions('Map', 'md-map'))
         }
@@ -96,6 +96,7 @@ export default class Navigator extends Component {
       initialRouteName: 'Landing',
       animationEnabled: false,
       lazy            : true,
+      headerMode      : 'none',
       tabBarOptions   : {
         activeTintColor: Colors.primary
       }
@@ -141,48 +142,6 @@ export default class Navigator extends Component {
     }
 
     return null
-  }
-
-  /**
-   * Routes shared between IOS and Android.
-   *
-   * @return {Object}
-   */
-  sharedRoutes() {
-    return {
-      // Needed to add this here since it needs to go right after the observations item
-      Map: {
-        screen           : MapScreen,
-        navigationOptions: {
-          ...(this.navigationOptions('My Observations Map', 'md-map', 25))
-        }
-      },
-
-      // Get registration routes
-      ...this.getRegistrationRoutes(),
-
-      About        : {
-        screen           : AboutScreen,
-        navigationOptions: {
-          ...(this.navigationOptions('About Us', 'md-contacts', 25))
-        }
-      },
-      PrivacyPolicy: {
-        screen           : PrivacyPolicyScreen,
-        navigationOptions: {
-          ...(this.navigationOptions('Privacy Policy', 'md-lock', 25))
-        }
-      },
-      HealthSafety : {
-        screen           : HealthSafetyScreen,
-        navigationOptions: {
-          ...(this.navigationOptions('Health and Safety', 'md-heart', 25))
-        }
-      },
-
-      // Get logout route
-      ...(this.getLogoutRoute())
-    }
   }
 
   /**
@@ -266,18 +225,20 @@ export default class Navigator extends Component {
    */
   android() {
     const Nav = new createDrawerNavigator({
-      Landing              : {
+      Landing: {
         screen           : ObserveStackNavigator,
         navigationOptions: {
           ...(this.navigationOptions('Observe', 'md-aperture', 25))
         }
       },
+
       ObservationsNavigator: {
-        screen           : ObservationsNavigator,
+        screen           : ObservationsStackNavigator,
         navigationOptions: {
           ...(this.navigationOptions('My Observations', 'ios-leaf', 25))
         }
       },
+
       // Show AccountScreen if user is logged in
       ...(this.state.loggedIn ? {
         Account: {
@@ -287,7 +248,41 @@ export default class Navigator extends Component {
           }
         }
       } : null),
-      ...(this.sharedRoutes())
+
+      // Needed to add this here since it needs to go right after the observations item
+      MapStack: {
+        screen           : MapStackNavigator,
+        navigationOptions: {
+          ...(this.navigationOptions('My Observations Map', 'md-map', 25))
+        }
+      },
+
+      // Get registration routes
+      ...this.getRegistrationRoutes(),
+
+      About: {
+        screen           : AboutScreen,
+        navigationOptions: {
+          ...(this.navigationOptions('About Us', 'md-contacts', 25))
+        }
+      },
+
+      PrivacyPolicy: {
+        screen           : PrivacyPolicyScreen,
+        navigationOptions: {
+          ...(this.navigationOptions('Privacy Policy', 'md-lock', 25))
+        }
+      },
+
+      HealthSafety: {
+        screen           : HealthSafetyScreen,
+        navigationOptions: {
+          ...(this.navigationOptions('Health and Safety', 'md-heart', 25))
+        }
+      },
+
+      // Get logout route
+      ...(this.getLogoutRoute())
     }, {
       initialRouteName: 'Landing',
       ...(this.drawerOptions())
