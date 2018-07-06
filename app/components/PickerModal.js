@@ -1,44 +1,72 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
-import {View, Text, ScrollView, TextInput, StyleSheet, Modal, TouchableOpacity} from 'react-native'
+import {
+  View,
+  Text,
+  ScrollView,
+  TextInput,
+  StyleSheet,
+  Modal,
+  TouchableOpacity,
+  Picker,
+  Platform,
+  Dimensions
+} from 'react-native'
 import Colors from '../helpers/Colors'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import IonIcon from 'react-native-vector-icons/Ionicons'
 import realm from '../db/Schema'
 import ImageModal from './ImageModal'
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
+import User from '../db/User'
 
 export default class PickerModal extends Component {
 
   constructor(props) {
     super(props)
+
+    let user = User.user()
+
     this.state = {
-      animationType: 'fade',
-      modalVisible : false,
-      cancelText   : 'CANCEL',
-      selected     : 'not set',
-      selectedMulti: [],
-      choices      : this.props.choices,
-      numberVal    : {value: null}, //expect {value: int, confidence: string},
-      numberPlaceHolder: null
+      animationType    : 'fade',
+      modalVisible     : false,
+      cancelText       : 'CANCEL',
+      selected         : 'not set',
+      selectedMulti    : [],
+      choices          : this.props.choices,
+      numberVal        : {value: null}, //expect {value: int, confidence: string},
+      numberPlaceHolder: null,
+      userUnit         : user ? user.units : 'US',
+      selectedUnit     : 'US',
+      showUnitsPicker  : false
     }
   }
 
   componentDidMount() {
     this.setState({selected: this.props.initialSelect})
+
     if (this.props.multiCheck || this.props.freeText || this.props.numeric) {
       this.setState({cancelText: 'CONFIRM'})
     }
+
     if (this.props.specialText) {
       this.setState({cancelText: 'OK'})
     }
+
     if (this.props.numberPlaceHolder) {
       this.setState({numberPlaceHolder: this.props.numberPlaceHolder})
     }
+
     if (this.props.freeText) {
       this.fetchSelections()
     }
+
     if (this.props.default) {
       this.onChange(this.props.default)
+    }
+
+    if (this.props.selectedUnit) {
+      this.setState({selectedUnit: this.props.selectedUnit})
     }
 
     // load in entry values if editing
@@ -63,8 +91,6 @@ export default class PickerModal extends Component {
     if (this.props.numberPlaceHolder) {
       this.setState({numberPlaceHolder: this.props.numberPlaceHolder})
     }
-
-
   }
 
   onChange = (item) => {
@@ -150,7 +176,8 @@ export default class PickerModal extends Component {
     if (this.props.numeric) {
       let number     = this.state.numberVal.value
       let confidence = this.state.numberVal.confidence
-      this.props.onSelect(number, confidence)
+      let unit       = this.state.selectedUnit
+      this.props.onSelect(number, confidence, unit)
     }
 
     this.setState({modalVisible: false})
@@ -162,7 +189,7 @@ export default class PickerModal extends Component {
    * Use AutoComplete modal instead
    * @returns {{XML}}
    */
-  renderNumeric = () => {
+  renderNumeric() {
     return (
       <View style={styles.choiceContainer}>
         <View style={[styles.choiceItem]}>
@@ -172,9 +199,90 @@ export default class PickerModal extends Component {
                      value={this.state.numberVal.value}
                      placeholder={this.state.numberPlaceHolder}
                      onChangeText={(number) => this.handleNumber(number)}/>
-          <Text style={{paddingLeft: 30, paddingRight: 30}}>{this.props.units}</Text>
+          {this.renderUnitsSelect()}
         </View>
       </View>
+    )
+  }
+
+  renderUnitsSelect() {
+    let units = this.props.units
+
+    if (typeof units === 'string') {
+      return (<Text style={{paddingLeft: 30, paddingRight: 30}}>{this.state.selectedUnit}</Text>)
+    }
+
+    if (Platform.OS === 'android') {
+      return this.renderPicker()
+    }
+
+    return (
+      <View>
+        <TouchableOpacity
+          onPress={() => {
+            this.setState({showUnitsPicker: true})
+          }}
+          style={{
+            flexDirection : 'row',
+            justifyContent: 'space-between',
+            alignItems    : 'center'
+          }}>
+          <Text style={{paddingLeft: 30, paddingRight: 30}}>{this.state.selectedUnit}</Text>
+          <IonIcon name={'ios-arrow-dropdown'} size={18} color={'#777'}/>
+        </TouchableOpacity>
+        <Modal
+          transparent={true}
+          visible={this.state.showUnitsPicker}
+          onRequestClose={() => this.setState({showUnitsPicker: false})}
+          animationType={'fade'}
+        >
+          <View style={{
+            flex           : 1,
+            backgroundColor: 'rgba(0,0,0,.8)',
+            justifyContent : 'center',
+            alignItems     : 'center'
+          }}>
+            <View style={{
+              backgroundColor: '#f4f4f4',
+              borderRadius   : 2,
+              padding        : 10,
+              flexDirection  : 'row',
+              justifyContent : 'center',
+              alignItems     : 'center'
+            }}>
+              {this.renderPicker()}
+              <TouchableOpacity
+                style={[styles.button, {marginLeft: 10}]}
+                onPress={() => this.setState({showUnitsPicker: false})}>
+                <Text style={styles.buttonText}>OK</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+      </View>
+    )
+  }
+
+  renderPicker() {
+    let units = this.props.units
+
+    return (
+      <Picker
+        selectedValue={this.state.selectedUnit}
+        style={{
+          height    : Platform.select({android: 50, ios: undefined}),
+          width     : Platform.select({android: 120, ios: 120}),
+          marginLeft: Platform.select({android: 10, ios: 0})
+        }}
+        itemStyle={{
+          fontSize: 14,
+          height: 90
+        }}
+        onValueChange={unit => this.setState({selectedUnit: unit})}>
+        {Object.keys(units).map(key => {
+          return (<Picker.Item key={key} label={units[key]} value={units[key]}/>)
+        })}
+      </Picker>
     )
   }
 
@@ -247,7 +355,9 @@ export default class PickerModal extends Component {
           visible={this.state.modalVisible}
           onRequestClose={this.close}
           animationType={this.state.animationType}>
-          <KeyboardAwareScrollView contentContainerStyle={styles.mainContainer} bounces={false} keyboardShouldPersistTaps="handled">
+          <KeyboardAwareScrollView contentContainerStyle={styles.mainContainer}
+                                   bounces={false}
+                                   keyboardShouldPersistTaps="handled">
             <TouchableOpacity
               style={styles.overlay}
               onPress={this.close.bind(this)}
@@ -305,36 +415,36 @@ export default class PickerModal extends Component {
 
 PickerModal.propTypes = {
   ...View.propTypes,
-  choices        : PropTypes.array,
-  header         : PropTypes.string,
-  onSelect       : PropTypes.func,
-  // style          : PropTypes.style,
-  initialSelect  : PropTypes.string,
-  multiCheck     : PropTypes.bool,
-  numeric        : PropTypes.bool,
-  units          : PropTypes.string, //units to display for numeric input
-  numberPlaceHolder : PropTypes.string,
-  freeText       : PropTypes.bool,
-  images         : PropTypes.array,
-  captions       : PropTypes.array,
-  specialText    : PropTypes.array,
-  default        : PropTypes.string,
+  choices          : PropTypes.array,
+  header           : PropTypes.string,
+  onSelect         : PropTypes.func,
+  initialSelect    : PropTypes.string,
+  multiCheck       : PropTypes.bool,
+  numeric          : PropTypes.bool,
+  units            : PropTypes.any,    // Could be an object or a string
+  selectedUnit     : PropTypes.string, // units to display for numeric input
+  numberPlaceHolder: PropTypes.string,
+  freeText         : PropTypes.bool,
+  images           : PropTypes.array,
+  captions         : PropTypes.array,
+  specialText      : PropTypes.array,
+  default          : PropTypes.string,
   //The following 3 props allow pre-existing values (IE from edit) to be passed into the modal.
-  startingNumeric: PropTypes.array,
-  startingString : PropTypes.string
+  startingNumeric  : PropTypes.array,
+  startingString   : PropTypes.string
 }
 
 PickerModal.defaultProps = {
-  choices      : [],
+  choices          : [],
   numberPlaceHolder: 'Tap to enter',
-  header       : 'default header',
-  onSelect     : () => {
+  header           : 'default header',
+  onSelect         : () => {
   },
-  initialSelect: '',
-  multiCheck   : false,
-  freeText     : false,
-  images       : [],
-  numeric      : false
+  initialSelect    : '',
+  multiCheck       : false,
+  freeText         : false,
+  images           : [],
+  numeric          : false
 }
 
 const styles = StyleSheet.create({
@@ -391,9 +501,10 @@ const styles = StyleSheet.create({
   },
 
   choiceItem: {
-    flex         : 0,
-    flexDirection: 'row',
-    alignItems   : 'center'
+    flex          : 0,
+    flexDirection : 'row',
+    alignItems    : 'center',
+    justifyContent: 'space-between'
   },
 
   choiceText: {
@@ -416,7 +527,7 @@ const styles = StyleSheet.create({
   buttonText: {
     textAlign : 'right',
     color     : Colors.primary,
-    fontWeight: '500'
+    fontWeight: 'bold'
   },
 
   icon: {

@@ -73,7 +73,6 @@ export default class ObservationScreen extends Screen {
     let parsed = JSON.parse(entry.images)
     let images = []
     Object.keys(parsed).map(key => {
-      console.log('HERE parsed', parsed)
       parsed[key].map(image => {
         images.push(this.fs.image(image))
       })
