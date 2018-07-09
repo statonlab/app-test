@@ -28,6 +28,7 @@ project.xcworkspace
 .gradle
 android/.gradle
 local.properties
+android/app/release
 *.iml
 android/app/src/main/assets/crashlytics-build.properties
 # node.js
