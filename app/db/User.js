@@ -149,8 +149,6 @@ class User {
    */
   register(requestParams) {
     return new Promise((resolve, onFail) => {
-
-
       let locale = DeviceInfo.getDeviceCountry()
       let units  = 'metric'
       if (locale === 'US') {
