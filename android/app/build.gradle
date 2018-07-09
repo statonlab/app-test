@@ -153,6 +153,8 @@ dependencies {
     def supportLibVersion = rootProject.hasProperty('supportLibVersion') ? rootProject.supportLibVersion : "27.1.0"
     def googlePlayServicesVersion = rootProject.hasProperty('googlePlayServicesVersion') ? rootProject.googlePlayServicesVersion : "11.8.0"
 
+    implementation project(':react-native-device-info')
+    implementation project(':react-native-i18n')
     implementation(project(':react-native-firebase')) {
         exclude group: "com.android.support"
         exclude group: "com.google.android.gms"

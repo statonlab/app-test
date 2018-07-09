@@ -40,7 +40,8 @@ export default class RegistrationScreen extends Screen {
       warnings       : {},
       terms          : null,
       minorConsent   : null,
-      currentYear    : null
+      currentYear    : null,
+      units          : null
     }
 
     this.registrationRules = t.struct({
@@ -60,6 +61,7 @@ export default class RegistrationScreen extends Screen {
 
     let currentYear = new Date().getFullYear()
     this.setState({currentYear: currentYear})
+
 
     this.backEvent = BackHandler.addEventListener('hardwareBackPress', () => {
       this.navigator.goBack()
