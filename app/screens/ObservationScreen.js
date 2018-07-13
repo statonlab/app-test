@@ -514,7 +514,7 @@ export default class ObservationScreen extends Screen {
     const url         = `https://treesnap.org/observation/${observation.serverID}`
     const prefix      = this._beginsWithVowel(title) ? 'an' : 'a'
 
-    let message = `I shared ${prefix} ${title} observation with science partners on TreeSnap!`
+    let message = `I shared ${prefix} ${title} observation with science partners using @TreeSnapApp!`
     if (android) {
       message += ` ${url}`
     }
