@@ -179,7 +179,7 @@ export const Plants = {
           <Text style={styles.paragraph}>The reason we are looking for health ash trees is that an invasive insect, the emerald ash borer, is currently moving through North America and killing ash trees. The larvae of this beetle feed on the inner bark of ash trees, cutting off the tree’s flow of water and nutrients and eventually killing the tree. All American ash species are susceptible to the Emerald Ash Borer and so far there is very little natural resistance to the insect in our trees. </Text>,
           <Text style={styles.paragraph}>Our hope is that this reporting app will let members of the public identify ash trees that are lingering after the emerald ash borer’s arrival and which may have some natural resistance. We will then collect seeds from these trees and add them to tree breeding programs to try and propagate resistant trees that are not killed by the emerald ash borer to use in forest restoration.</Text>,
           <Atext style={styles.paragraph}
-                 url=": http://www.hungrypests.com/the-threat/emerald-ash-borer.php">Read more about the emerald ash borer here</Atext>
+                 url="http://www.hungrypests.com/the-threat/emerald-ash-borer.php">Read more about the emerald ash borer here</Atext>
         ],
         images: [
           require('../img/DCP/EmAshBorer/EAB_tunneling.jpg'),
@@ -224,7 +224,7 @@ export const Plants = {
         title : 'Overview',
         images: [],
         body  : [
-          <Text style={styles.paragraph}>American hemlock trees are being killed by hemlock woolly adelgids. Help fight these invasive insects by tagging health hemlock trees.</Text>]
+          <Text style={styles.paragraph}>American hemlock trees are being killed by hemlock woolly adelgids. Help fight these invasive insects by tagging healthy hemlock trees.</Text>]
       }, {
         title : 'Description',
         images: [],
