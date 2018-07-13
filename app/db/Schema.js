@@ -155,6 +155,7 @@ export default new Realm({
         observation.is_private = false
       })
     }
+
     if (oldRealm.schemaVersion < 13) {
       let user = newRealm.objects('User')
       if (user.length > 0) {

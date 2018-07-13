@@ -23,6 +23,7 @@ import PhotoView from 'react-native-photo-view'
 import AndroidStatusBar from '../components/AndroidStatusBar'
 import PinchResponder from '../helpers/PinchResponder'
 import {isIphoneX, ifIphoneX} from 'react-native-iphone-x-helper'
+import DeviceInfo from 'react-native-device-info'
 
 const android = Platform.OS === 'android'
 
@@ -558,18 +559,27 @@ export default class CameraScreen extends Screen {
 
     this.isCapturing = true
 
+    let fixOrientation     = true
+    let forceUpOrientation = true
+
+    // Mitigate our of memory error for android devices that have less than 1300MB memory
+    if (android && DeviceInfo.getTotalMemory() < (1300 * 1024 * 1024)) {
+      fixOrientation     = false
+      forceUpOrientation = false
+    }
+
     try {
       const data = await this.camera.takePictureAsync({
-        quality           : 1,
+        quality    : 1,
         // Specify a max width to avoid extra large images
-        width             : 1000,
+        width      : 1000,
         // Want an actual file rather than an base64 string
-        base64            : false,
-        mirrorImage       : false,
+        base64     : false,
+        mirrorImage: false,
         // We don't want metadata, let the camera module handle orientations
-        exif              : false,
-        fixOrientation    : true,
-        forceUpOrientation: true
+        exif       : false,
+        fixOrientation,
+        forceUpOrientation
       })
 
       let image  = data.uri
