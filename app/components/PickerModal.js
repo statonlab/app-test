@@ -194,7 +194,7 @@ export default class PickerModal extends Component {
       <View style={styles.choiceContainer}>
         <View style={[styles.choiceItem]}>
           <TextInput style={styles.textField}
-                     keyboardType={'numeric'}
+                     keyboardType={'decimal-pad'}
                      underlineColorAndroid={'transparent'}
                      value={this.state.numberVal.value}
                      placeholder={this.state.numberPlaceHolder}

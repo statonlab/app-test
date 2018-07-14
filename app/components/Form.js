@@ -1138,7 +1138,7 @@ const styles = StyleSheet.create({
     borderRadius     : 2,
     backgroundColor  : Colors.primary,
     paddingHorizontal: 10,
-    paddingVertical  : 15
+    paddingVertical  : 10
   },
 
   flex1: {

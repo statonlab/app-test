@@ -52,7 +52,7 @@ export default class NumericModal extends Component {
               </View>
               <View style={styles.choiceContainer}>
                 <TextInput style={styles.textField}
-                           keyboardType={'numeric'}
+                           keyboardType={'decimal-pad'}
                            value={this.state.setValue}
                            underlineColorAndroid={'transparent'}
                            onChangeText={(text) => this.setState({setValue: text})}/>
