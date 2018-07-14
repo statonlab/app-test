@@ -165,7 +165,7 @@ const DCP = {
     label            : 'Tree diameter',
     // slider  : true,
     numeric          : true,
-    description      : 'Please enter the diameter, in inches, of this tree below.  Is this a rough estimate or a precise measurement?',
+    description      : 'Please enter the diameter, in inches, of this tree below. Choose the largest stem if there are multiple. Is this a rough estimate or a precise measurement?',
     // minValue: 0,
     // maxValue: 40,
     units            : {'US': 'Inches', 'metric': 'cm'},
