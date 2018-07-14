@@ -93,6 +93,7 @@ export default class MapScreen extends Screen {
     return (
       <View style={styles.container}>
         <Header title="Map"
+                elevation={0}
                 navigator={this.navigator}
                 rightIcon="help"
                 onRightPress={() => this.guide.show()}
@@ -137,6 +138,7 @@ export default class MapScreen extends Screen {
   renderMap() {
     return (
       <MarkersMap
+        showsUserLocation={true}
         initialRegion={{
           latitude      : 40.354388,
           longitude     : -95.998237,

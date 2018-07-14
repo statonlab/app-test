@@ -4,15 +4,34 @@ import {
   StyleSheet,
   View,
   Text,
-  Image
+  Image,
+  Platform,
+  TouchableOpacity
 } from 'react-native'
 import MapView from 'react-native-maps'
 import Colors from '../helpers/Colors'
+import Elevation from '../helpers/Elevation'
+import Icon from 'react-native-vector-icons/Ionicons'
 
 export default class MarkersMap extends Component {
   constructor(props) {
     super(props)
     this.fitted = false
+
+    this.state = {
+      type          : 'standard',
+      types         : {
+        'standard': 'Map',
+        'hybrid'  : 'Satellite',
+        ...Platform.select({
+          ios    : {},
+          android: {
+            'terrain': 'Topographic'
+          }
+        })
+      },
+      typeDimensions: {}
+    }
   }
 
   /**
@@ -69,21 +88,84 @@ export default class MarkersMap extends Component {
    * @returns {{XML}}
    */
   render() {
+    const types = this.state.types
     return (
-      <MapView
-        {...this.props}
-        style={styles.map}
-        ref="map"
-        onMapReady={() => {
-          if (this.props.markers.length && !this.fitted) {
-            this.fitted = true
-            this.refs.map.fitToElements(true)
-          }
-        }}
-      >
-        {this.props.markers.map(this.renderMarker.bind(this))}
-        {this.props.startingMarker !== null ? this.renderStartingMarker(this.props.startingMarker) : null}
-      </MapView>
+      <View style={{flex: 1}}>
+        <View style={{
+          backgroundColor: '#f7f7f7',
+          flexDirection  : 'row',
+          ...(new Elevation(2))
+        }}>
+          {Object.keys(types).map(key => {
+            return (
+              <TouchableOpacity
+                style={{
+                  flex           : 1,
+                  backgroundColor: '#fff',
+                  height         : 40,
+                  justifyContent : 'center',
+                  alignItems     : 'center'
+                }}
+                key={key}
+                onPress={() => {
+                  this.setState({type: key})
+                }}>
+                <Text style={{
+                  fontSize: 12,
+                  color   : '#444',
+                  ...(this.state.type === key ? {color: Colors.primary, fontWeight: 'bold'} : {})
+                }}>{types[key]}</Text>
+              </TouchableOpacity>
+            )
+          })}
+        </View>
+        <MapView
+          {...this.props}
+          mapType={this.state.type}
+          style={styles.map}
+          ref="map"
+          onMapReady={() => {
+            if (this.props.markers.length && !this.fitted) {
+              this.fitted = true
+              this.refs.map.fitToElements(true)
+            }
+          }}
+        >
+          {this.props.markers.map(this.renderMarker.bind(this))}
+          {this.props.startingMarker !== null ? this.renderStartingMarker(this.props.startingMarker) : null}
+        </MapView>
+        <TouchableOpacity
+          onPress={() => {
+            navigator.geolocation.getCurrentPosition(
+              ({coords}) => {
+                if (this.refs.map) {
+                  this.refs.map.animateToRegion({
+                    latitude      : coords.latitude,
+                    longitude     : coords.longitude,
+                    latitudeDelta : 0.009,
+                    longitudeDelta: 0.009
+                  })
+                }
+              },
+              (error) => alert('Error: Are location services on?'),
+              {enableHighAccuracy: true}
+            )
+          }}
+          style={{
+            position       : 'absolute',
+            bottom         : 10,
+            right          : 10,
+            backgroundColor: '#fff',
+            borderRadius   : 5,
+            height         : 40,
+            width          : 40,
+            alignItems     : 'center',
+            justifyContent : 'center',
+            ...(new Elevation(4))
+          }}>
+          <Icon name={Platform.select({ios: 'ios-locate-outline', android: 'md-locate'})} color={'#222'} size={24}/>
+        </TouchableOpacity>
+      </View>
     )
   }
 
