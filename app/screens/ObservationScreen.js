@@ -529,6 +529,15 @@ export default class ObservationScreen extends Screen {
     })
   }
 
+  renderField(label, data) {
+    return (
+      <View style={styles.field}>
+        <Text style={styles.label}>{label}</Text>
+        <Text style={styles.dataText}>{data}</Text>
+      </View>
+    )
+  }
+
   /**
    * Render Scene.
    *
@@ -581,14 +590,9 @@ export default class ObservationScreen extends Screen {
             {this._renderShareButton()}
             <View style={styles.card}>
               {this._renderUploadButton(entry)}
-              <View style={styles.field}>
-                <Text style={styles.label}>Unique ID</Text>
-                <Text style={styles.dataText}>{entry.id}</Text>
-              </View>
-              <View style={styles.field}>
-                <Text style={styles.label}>Date collected</Text>
-                <Text style={styles.dataText}>{entry.date}</Text>
-              </View>
+              {entry.custom_id ? this.renderField('Custom Tree Identifier', entry.custom_id) : null}
+              {this.renderField('Unique ID', entry.id)}
+              {this.renderField('Date collected', entry.date)}
               {this._renderMetaData(entry)}
             </View>
           </View>
