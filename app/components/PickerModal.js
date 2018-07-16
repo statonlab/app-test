@@ -9,8 +9,7 @@ import {
   Modal,
   TouchableOpacity,
   Picker,
-  Platform,
-  Dimensions
+  Platform
 } from 'react-native'
 import Colors from '../helpers/Colors'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -38,7 +37,8 @@ export default class PickerModal extends Component {
       numberPlaceHolder: null,
       userUnit         : user ? user.units : 'US',
       selectedUnit     : 'US',
-      showUnitsPicker  : false
+      showUnitsPicker  : false,
+      requiresConfidence: false,
     }
   }
 
@@ -276,7 +276,7 @@ export default class PickerModal extends Component {
         }}
         itemStyle={{
           fontSize: 14,
-          height: 90
+          height  : 90
         }}
         onValueChange={unit => this.setState({selectedUnit: unit})}>
         {Object.keys(units).map(key => {

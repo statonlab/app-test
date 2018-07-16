@@ -93,7 +93,7 @@ export default class Form extends Component {
       // For every key, set the state
       Object.keys(this.props.entryInfo).map(key => {
         if (key === 'meta_data') {
-          this.setState({'metadata': JSON.parse(this.props.entryInfo[key])})
+          this.setState({metadata: JSON.parse(this.props.entryInfo[key])})
           return
         }
 
@@ -240,6 +240,7 @@ export default class Form extends Component {
       images[key].map(image => {
         let index = this.state.deletedImages.indexOf(image)
         if (index > -1) {
+          // Found a deleted image, remove from the images list
           images[key].splice(index, 1)
         }
       })
@@ -353,7 +354,7 @@ export default class Form extends Component {
    * Submit button method.  Validate the primary and meta data with tcomb.
    */
   submit = () => {
-    if (!this.state.images['images'] || !this.validateState().isValid()) {
+    if (!this.state.images.images || !this.validateState().isValid()) {
       this.notifyIncomplete(this.validateMeta())
       return
     }
@@ -761,10 +762,10 @@ export default class Form extends Component {
    * @returns {{XML}}
    */
   renderCameraItem = (id, label) => {
-    let description = 'optional'
-    if (id === 'images') {
-      description = 'Add photos'
-    }
+    let description = 'Add photos'
+    // if (id === 'images') {
+    //   description = 'Add photos'
+    // }
 
     return (
       <View style={[styles.formGroup]}>
