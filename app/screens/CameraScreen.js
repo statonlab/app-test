@@ -145,6 +145,31 @@ export default class CameraScreen extends Screen {
     this.analytics.visitScreen('CameraScreen')
   }
 
+  renderEmptyImagesView() {
+    return (
+      <View style={{
+        flex           : 1,
+        justifyContent : 'center',
+        alignItems     : 'center',
+        padding        : 10,
+        backgroundColor: '#fff'
+      }}>
+        <TouchableOpacity
+          onPress={() => {
+            this._back()
+          }}
+          style={{marginBottom: 20}}>
+          <IonIcon name={'ios-image-outline'} size={120} color={'#777'}/>
+        </TouchableOpacity>
+        <Text style={{
+          fontSize: 14,
+          color   : '#222'
+        }}>
+          Add images using the plus button at the bottom.
+        </Text>
+      </View>
+    )
+  }
 
   render() {
     let flashIcon
@@ -234,17 +259,19 @@ export default class CameraScreen extends Screen {
                 {...this.pinchResponder.getResponderProps()}/>
           <View style={[styles.topToolsContainer, {width: this.state.pageWidth, zIndex: 1000}]}>
             {flashIcon}
+
             <TouchableOpacity
-              style={[styles.toolTouchable, {
-                alignItems : 'flex-end',
-                marginRight: 15
-              }]}
-              onPress={this.switchType}>
-              <IonIcon name="ios-reverse-camera-outline"
-                       size={42}
-                       color={'#fff'}
-                       style={textShadow}
+              style={[styles.toolTouchable, styles.flashTouchable]}
+              onPress={this._done.bind(this)}
+            >
+              <IonIcon name="ios-checkmark"
+                       color={Colors.success}
+                       size={35}
+                       style={styles.flash}
               />
+              <Text style={[styles.toolText, styles.iconText]}>
+                Done
+              </Text>
             </TouchableOpacity>
           </View>
           <View style={[
@@ -289,7 +316,7 @@ export default class CameraScreen extends Screen {
             </View>
             <View style={{flex: 1}}>
               {this.state.images.length === 0 ?
-                <View style={{flex: 1}}/>
+                this.renderEmptyImagesView()
                 :
                 <ScrollView
                   ref={ref => this.imagesScrollView = ref}
@@ -329,7 +356,7 @@ export default class CameraScreen extends Screen {
 
   _renderPagedImages(image, key) {
     image = this.fs.image(image)
-    image = 'file://'+image.replace('file://')
+    image = 'file://' + image.replace('file://')
 
     return (
       <View key={key}
@@ -473,7 +500,7 @@ export default class CameraScreen extends Screen {
         newImages    : []
       })
 
-      this._back()
+      // this._back()
     } else {
       let newSelectedIndex = 0
 
@@ -814,7 +841,8 @@ const styles = StyleSheet.create({
     paddingLeft    : 0,
     ...ifIphoneX({
       paddingBottom: 30
-    })
+    }),
+    ...(android ? {paddingBottom: 10} : {})
   },
 
   thumbnail: {
