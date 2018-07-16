@@ -93,7 +93,7 @@ export default new Realm({
     SubmissionSchema,
     GuideSchema
   ],
-  schemaVersion: 13,
+  schemaVersion: 14,
   migration    : function (oldRealm, newRealm) {
     if (oldRealm.schemaVersion < 2) {
       let newUser = newRealm.objects('User')
@@ -161,6 +161,18 @@ export default new Realm({
       if (user.length > 0) {
         user[0].units = 'US'
       }
+    }
+
+    // Remove confidence from sprouts
+    if (oldRealm.schemaVersion < 14) {
+      let observations = newRealm.objects('Submission')
+      observations.map(observation => {
+        let meta = JSON.parse(observation.meta_data)
+        if (typeof meta.numberRootSprouts_confidence !== 'undefined') {
+          delete meta.numberRootSprouts_confidence
+          observation.meta_data = JSON.stringify(meta)
+        }
+      })
     }
   }
 })

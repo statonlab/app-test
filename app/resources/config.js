@@ -143,7 +143,7 @@ const DCP = {
   heightFirstBranch: {
     label            : 'Height of first branch',
     description      : 'Approximately how high up is the first main branch of the tree?',
-    units            : {'US': 'Feet', 'metric': 'Meters'},
+    units            : {US: 'Feet', metric: 'Meters'},
     numeric          : true,
     placeHolder      : 'Height',
     default          : 'Estimated',
@@ -168,7 +168,7 @@ const DCP = {
     description      : 'Please enter the diameter, in inches, of this tree below. Choose the largest stem if there are multiple. Is this a rough estimate or a precise measurement?',
     // minValue: 0,
     // maxValue: 40,
-    units            : {'US': 'Inches', 'metric': 'cm'},
+    units            : {US: 'Inches', metric: 'cm'},
     images           : [require('../img/DCP/diameter.jpg')],
     captions         : ['Note: if the tree is less than 4 feet tall, please take the stem diameter at the height of the first branch.'],
     selectChoices    : ['Measured', 'Estimated'],
@@ -255,7 +255,7 @@ const DCP = {
     label            : 'Tree height',
     description      : 'Approximately how tall is the tree?',
     numeric          : true,
-    units            : {'US': 'Feet', 'metric': 'Meters'},
+    units            : {US: 'Feet', metric: 'Meters'},
     default          : 'Estimated',
     placeHolder      : 'Height',
     numberPlaceHolder: 'Tap to enter height'
