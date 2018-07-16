@@ -9,7 +9,8 @@ import {
   Modal,
   TouchableOpacity,
   Picker,
-  Platform
+  Platform,
+  Dimensions
 } from 'react-native'
 import Colors from '../helpers/Colors'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -246,9 +247,10 @@ export default class PickerModal extends Component {
               backgroundColor: '#f4f4f4',
               borderRadius   : 2,
               padding        : 10,
-              flexDirection  : 'row',
-              justifyContent : 'center',
-              alignItems     : 'center'
+              flexDirection  : Platform.select({android: 'row', ios: 'column'}),
+              marginBottom: Platform.select({android: 0, ios: 10}),
+              justifyContent : Platform.select({android: 'center', ios: 'flex-start'}),
+              alignItems     : Platform.select({android: 'center', ios: 'flex-end'}),
             }}>
               {this.renderPicker()}
               <TouchableOpacity
@@ -265,18 +267,18 @@ export default class PickerModal extends Component {
 
   renderPicker() {
     let units = this.props.units
-
+    let {width} = Dimensions.get('window')
     return (
       <Picker
         selectedValue={this.state.selectedUnit}
         style={{
           height    : Platform.select({android: 50, ios: undefined}),
-          width     : Platform.select({android: 120, ios: 120}),
+          width     : Platform.select({android: 120, ios: width - 130}),
           marginLeft: Platform.select({android: 10, ios: 0})
         }}
         itemStyle={{
-          fontSize: 14,
-          height  : 90
+          // fontSize: 14,
+          // height  : 90
         }}
         onValueChange={unit => this.setState({selectedUnit: unit})}>
         {Object.keys(units).map(key => {
