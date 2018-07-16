@@ -3,7 +3,8 @@ import {
   StatusBar,
   View,
   StyleSheet,
-  DeviceEventEmitter
+  DeviceEventEmitter,
+  AsyncStorage
 } from 'react-native'
 import Diagnostics from './app/helpers/Diagnostics'
 import Actions from './app/helpers/Actions'
@@ -12,6 +13,7 @@ import Navigator from './app/routes/Navigator'
 import Observation from './app/helpers/Observation'
 import WelcomeModal from './app/components/WelcomeModal'
 import NotificationsController from './app/components/NotificationsController'
+import Permissions from './app/helpers/Permissions'
 
 export default class App extends Component {
   constructor(props) {
@@ -53,9 +55,26 @@ export default class App extends Component {
     } catch (error) {
       console.log('Unable to run diagnostics', error)
     }
+
     try {
       const actions = new Actions()
       await actions.run()
+    } catch (error) {
+      console.log(error)
+    }
+
+    await this.setAppOpenState()
+  }
+
+  async setAppOpenState() {
+    try {
+      let firstOpen = await AsyncStorage.getItem('@appState:firstOpen')
+      if(firstOpen !== 'yes') {
+        await AsyncStorage.setItem('@appState:firstOpen', 'yes')
+        return
+      }
+
+      Permissions.notifyUserOfPermissionIssues()
     } catch (error) {
       console.log(error)
     }
