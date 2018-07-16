@@ -12,7 +12,7 @@ import {
 } from 'react-native'
 import Colors from '../helpers/Colors'
 import Elevation from '../helpers/Elevation'
-import {isIphoneX} from 'react-native-iphone-x-helper'
+import {isIphoneX, ifIphoneX} from 'react-native-iphone-x-helper'
 import Icon from 'react-native-vector-icons/Ionicons'
 import BarcodeReader from './BarcodeReader'
 
@@ -61,7 +61,10 @@ export default class CustomIDModal extends Component {
               <TouchableOpacity
                 onPress={() => this.setState({showBarcodeReader: true})}
                 style={styles.cameraIcon}>
-                <Icon name={'ios-camera-outline'} color={Colors.primary} size={34} style={{paddingRight: 10}}/>
+                <Icon name={'ios-camera-outline'}
+                      color={Colors.primary}
+                      size={34}
+                      style={{paddingRight: 10}}/>
               </TouchableOpacity>
               <View>
                 <Text style={[styles.text, {marginTop: 5}]}>
@@ -70,7 +73,13 @@ export default class CustomIDModal extends Component {
               </View>
             </View>
           </View>
-          <View style={{flex: 0, justifyContent: 'flex-end', borderTopWidth: 1, borderTopColor: '#ddd'}}>
+          <View style={{
+            flex          : 0,
+            justifyContent: 'flex-end',
+            borderTopWidth: 1,
+            borderTopColor: '#ddd',
+            ...ifIphoneX({paddingBottom: 20, backgroundColor: '#eee'})
+          }}>
             <TouchableOpacity
               style={[{
                 backgroundColor  : '#eee',
@@ -155,15 +164,15 @@ const styles = StyleSheet.create({
   },
 
   cameraIcon: {
-    position         : 'absolute',
-    right            : 0,
-    top              : 0,
-    height           : 40,
-    borderRadius     : 3,
-    paddingRight: 5,
-    paddingLeft: 30,
-    backgroundColor  : 'transparent',//Colors.primary,
-    alignItems       : 'center',
-    justifyContent   : 'center',
+    position       : 'absolute',
+    right          : 0,
+    top            : 0,
+    height         : 40,
+    borderRadius   : 3,
+    paddingRight   : 5,
+    paddingLeft    : 30,
+    backgroundColor: 'transparent',//Colors.primary,
+    alignItems     : 'center',
+    justifyContent : 'center'
   }
 })

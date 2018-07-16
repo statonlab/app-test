@@ -821,7 +821,7 @@ export default class Form extends Component {
       <View style={styles.container}>
         <Spinner ref="spinner"/>
         <ScrollView
-          showsVerticalScrollIndicator={false}
+          showsVerticalScrollIndicator={true}
           extraScrollHeight={60}
           enableResetScrollToCoords={true}
           keyboardShouldPersistTaps="always">

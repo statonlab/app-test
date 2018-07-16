@@ -297,7 +297,7 @@ export default class ObservationsScreen extends Screen {
           <View style={styles.textContainer}>
             <Text style={styles.title}>{category}</Text>
             <Text style={styles.body}>
-              {moment(item.date, 'MM-DD-YYYY HH:mm:ss').format('MMMM Do YYYY')}
+              {item.custom_id ? item.custom_id : moment(item.date, 'MM-DD-YYYY HH:mm:ss').format('MMMM Do YYYY')}
             </Text>
             {item.distance !== false ?
               <Text
