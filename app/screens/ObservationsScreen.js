@@ -31,6 +31,7 @@ import Errors from '../helpers/Errors'
 import Popover, {PopoverItem} from '../components/Popover'
 import Analytics from '../helpers/Analytics'
 import geolib from 'geolib'
+import User from '../db/User'
 
 const android = Platform.OS === 'android'
 
@@ -72,6 +73,7 @@ export default class ObservationsScreen extends Screen {
    * Listen to logged in event
    */
   componentDidMount() {
+    this._isMounted = true
     this.analytics.visitScreen('ObservationsScreen')
 
     this._isLoggedIn()
@@ -98,28 +100,32 @@ export default class ObservationsScreen extends Screen {
   componentWillUnmount() {
     this.backEvent.remove()
     this.events.map(event => event.remove())
+    this._isMounted = false
   }
 
   getLocation() {
     this.setState({refreshing: true})
-    navigator.geolocation.getCurrentPosition(this.updateLocation.bind(this), this.handleLocationError.bind(this), {
-      enableHighAccuracy: !this.showedLocationError,
-      timeout           : 20000,
-      maximumAge        : 1000
-    })
+    navigator.geolocation.getCurrentPosition(
+      this.updateLocation.bind(this),
+      this.handleLocationError.bind(this), {
+        enableHighAccuracy: !this.showedLocationError,
+        timeout           : 20000,
+        maximumAge        : 1000
+      }
+    )
   }
 
   /**
+   * Save location in state
    *
    * @param position
    */
   updateLocation(position) {
     let location = position.coords
 
-    this.setState({location})
-    setTimeout(() => {
+    this.setState({location}, () => {
       DeviceEventEmitter.emit('observations.location.changed', location)
-    }, 100)
+    })
   }
 
   /**
@@ -144,8 +150,8 @@ export default class ObservationsScreen extends Screen {
   /**
    * Compute distance from location 1 to location 2
    *
-   * @param latitude
-   * @param longitude
+   * @param {number} latitude The observation latitude
+   * @param {number} longitude The observation longitude
    * @return {number} meters
    */
   distance(latitude, longitude) {
@@ -231,7 +237,7 @@ export default class ObservationsScreen extends Screen {
    * @private
    */
   _isLoggedIn() {
-    let isLoggedIn = realm.objects('User').length > 0
+    let isLoggedIn = User.loggedIn()
     this.setState({isLoggedIn})
   }
 
@@ -254,10 +260,22 @@ export default class ObservationsScreen extends Screen {
    * @private
    */
   _formatDistance(distance) {
+    let defaultUnit = User.loggedIn() ? User.user().units : 'US'
+
     let unit = 'meters'
+    if(defaultUnit === 'US') {
+      unit = 'yards'
+      distance *= 1.09361
+    }
+
     if (distance > 1000) {
-      distance /= 1000
-      unit = 'kilometers'
+      if(defaultUnit === 'US') {
+        distance *= 0.00056818010454545
+        unit = 'miles'
+      } else {
+        distance /= 1000
+        unit = 'kilometers'
+      }
     }
 
     return Math.round(distance * 100) / 100 + ' ' + unit + ' away'
@@ -622,6 +640,10 @@ export default class ObservationsScreen extends Screen {
    * @private
    */
   _resetDataSource(search) {
+    if (!this._isMounted) {
+      return
+    }
+
     this.setState({
       submissions: this._createMap(search),
       refreshing : false

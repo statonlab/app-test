@@ -965,7 +965,13 @@ export default class Form extends Component {
               autoFocus={true}
             />
           </View>
-          <View style={{flex: 0, justifyContent: 'flex-end', borderTopWidth: 1, borderTopColor: '#eee'}}>
+          <View style={{
+            flex          : 0,
+            justifyContent: 'flex-end',
+            borderTopWidth: 1,
+            borderTopColor: '#eee',
+            ...ifIphoneX({paddingBottom: 20, backgroundColor: '#eee'})
+          }}>
             <TouchableOpacity style={[{
               backgroundColor  : '#f7f7f7',
               flex             : 0,
