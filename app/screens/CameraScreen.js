@@ -329,6 +329,8 @@ export default class CameraScreen extends Screen {
 
   _renderPagedImages(image, key) {
     image = this.fs.image(image)
+    image = 'file://'+image.replace('file://')
+
     return (
       <View key={key}
             style={{

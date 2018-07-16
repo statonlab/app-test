@@ -291,7 +291,6 @@ const DCP = {
       'Florida Torreya caged root sprout at Torreya State Park.  Photo credit: Diana Picklesimer.',
       'Helen Roth with Florida Torreya root sprout at Angus K. Gholson, Jr. Nature Park in Chattahoochee.  Photo credit: Leigh Brooks.'],
     numberPlaceHolder: 'Tap to enter number'
-
   },
 
   deerRub: {
