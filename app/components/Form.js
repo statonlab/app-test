@@ -633,10 +633,16 @@ export default class Form extends Component {
               choices={DCP[key].selectChoices}
               numberPlaceHolder={DCP[key].numberPlaceHolder}
               onSelect={(value, confidence, unit) => {
-                let newData            = this.state.metadata
-                newData[key]           = value
-                newData[confidenceKey] = confidence
-                newData[unitsKey]      = unit
+                let newData  = this.state.metadata
+                newData[key] = value
+
+                if (typeof DCP[key].selectChoices !== 'undefined') {
+                  newData[confidenceKey] = confidence
+                }
+
+                if (typeof DCP[key].units !== 'undefined') {
+                  newData[unitsKey] = unit
+                }
                 this.setState({metadata: newData})
               }}
             >
