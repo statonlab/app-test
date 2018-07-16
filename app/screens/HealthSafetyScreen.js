@@ -7,7 +7,7 @@ import {
   StyleSheet,
   Text,
   BackHandler,
-Platform
+  Platform
 } from 'react-native'
 import Header from '../components/Header'
 import Elevation from '../helpers/Elevation'
@@ -21,11 +21,15 @@ export default class HealthSafetyScreen extends Screen {
 
   componentDidMount() {
     this.backEvent = BackHandler.addEventListener('hardwareBackPress', () => {
-      this.navigator.goBack()
+      isAndroid ? this.navigator.navigate('Landing') : this.navigator.goBack()
       return true
     })
 
     this.analytics.visitScreen('HealthSafetyScreen')
+  }
+
+  componentWillUnmount() {
+    this.backEvent.remove()
   }
 
   render() {

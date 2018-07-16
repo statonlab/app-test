@@ -4,7 +4,8 @@ import {
   View,
   StyleSheet,
   BackHandler,
-  Text
+  Text,
+  Platform
 } from 'react-native'
 import MarkersMap from '../components/MarkersMap'
 import Header from '../components/Header'
@@ -16,7 +17,7 @@ import Guide from '../components/Guide'
 
 export default class MapScreen extends Screen {
   static navigationOptions = {
-    headerMode: 'none',
+    headerMode   : 'none',
     tabBarOptions: {
       activeTintColor: Colors.primary
     }
@@ -62,9 +63,13 @@ export default class MapScreen extends Screen {
     this.setState({markers})
 
     this.backEvent = BackHandler.addEventListener('hardwareBackPress', () => {
-      this.navigator.goBack()
+      Platform.OS === 'android' ? this.navigator.navigate('Landing') : null
       return true
     })
+  }
+
+  componentWillUnmount() {
+    this.backEvent.remove()
   }
 
   renderGuideMessage() {

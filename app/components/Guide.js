@@ -221,22 +221,24 @@ const style = StyleSheet.create({
     zIndex  : 9999999,
     ...Platform.select({
       android: {
-        elevation: 5
-      }
+        elevation      : 5,
+        backgroundColor: 'rgba(0,0,0,.7)'
+      },
+      ios    : {}
     })
   },
 
   skip: {
-    position: 'absolute',
-    top: 5,
-    right: 5,
+    position       : 'absolute',
+    top            : 5,
+    right          : 5,
     backgroundColor: '#f5f5f5',
-    width: 24,
-    height: 24,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 12,
-    zIndex  : 19999999,
+    width          : 24,
+    height         : 24,
+    justifyContent : 'center',
+    alignItems     : 'center',
+    borderRadius   : 12,
+    zIndex         : 19999999,
     ...Platform.select({
       android: {
         elevation: 5

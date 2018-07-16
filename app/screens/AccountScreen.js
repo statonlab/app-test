@@ -53,7 +53,7 @@ export default class AccountScreen extends Screen {
    */
   componentDidMount() {
     this.backEvent = BackHandler.addEventListener('hardwareBackPress', () => {
-      this.navigator.goBack()
+      isAndroid ? this.navigator.navigate('Landing') : this.navigator.goBack()
       return true
     })
 

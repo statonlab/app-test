@@ -86,7 +86,7 @@ export default class ObservationsScreen extends Screen {
     }))
 
     this.backEvent = BackHandler.addEventListener('hardwareBackPress', () => {
-      this.navigator.goBack()
+      android ? this.navigator.navigate('Landing') : this.navigator.goBack()
       return true
     })
     this.getLocation()
@@ -96,6 +96,7 @@ export default class ObservationsScreen extends Screen {
    * Remove events.
    */
   componentWillUnmount() {
+    this.backEvent.remove()
     this.events.map(event => event.remove())
   }
 
@@ -278,6 +279,7 @@ export default class ObservationsScreen extends Screen {
 
     if (key) {
       thumbnail = this.fs.thumbnail(images[key][0])
+      console.log('HERE', category, thumbnail)
     }
 
     return (

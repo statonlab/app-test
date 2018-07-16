@@ -1,11 +1,19 @@
 import React from 'react'
 import Screen from './Screen'
 import PropTypes from 'prop-types'
-import {View, ScrollView, StyleSheet, Text, BackHandler, Platform} from 'react-native'
+import {
+  View,
+  ScrollView,
+  StyleSheet,
+  Text,
+  BackHandler,
+  Platform
+} from 'react-native'
 import Header from '../components/Header'
 import Elevation from '../helpers/Elevation'
 import Atext from '../components/Atext'
 import PackageJSON from '../../package.json'
+
 const isAndroid = Platform.OS === 'android'
 export default class AboutScreen extends Screen {
   static navigationOptions = {
@@ -14,11 +22,15 @@ export default class AboutScreen extends Screen {
 
   componentDidMount() {
     this.backEvent = BackHandler.addEventListener('hardwareBackPress', () => {
-      this.navigator.goBack()
+      isAndroid ? this.navigator.navigate('Landing') : this.navigator.goBack()
       return true
     })
 
     this.analytics.visitScreen('AboutScreen')
+  }
+
+  componentWillUnmount() {
+    this.backEvent.remove()
   }
 
   render() {

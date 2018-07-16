@@ -7,7 +7,8 @@ import {
   ScrollView,
   StyleSheet,
   DeviceEventEmitter,
-  TouchableOpacity
+  TouchableOpacity,
+  BackHandler
 } from 'react-native'
 import Spinner from '../components/Spinner'
 import realm from '../db/Schema'
@@ -107,6 +108,12 @@ export default class LandingScreen extends Screen {
 
     this.events.push(DeviceEventEmitter.addListener('loginRequest', () => {
       this.navigator.navigate('Login')
+    }))
+
+    this.events.push(BackHandler.addEventListener('hardwareBackPress', () => {
+       let android = Platform.OS === 'android'
+      android ? BackHandler.exitApp() : null
+      return true
     }))
   }
 

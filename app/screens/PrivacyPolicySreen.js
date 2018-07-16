@@ -23,9 +23,13 @@ export default class PrivacyPolicyScreen extends Screen {
     this.analytics.visitScreen('PrivacyPolicy')
 
     this.backEvent = BackHandler.addEventListener('hardwareBackPress', () => {
-      this.navigator.goBack()
+      isAndroid ? this.navigator.navigate('Landing') : this.navigator.goBack()
       return true
     })
+  }
+
+  componentWillUnmount() {
+    this.backEvent.remove()
   }
 
   render() {
