@@ -58,7 +58,6 @@ export default class CameraScreen extends Screen {
       deletedImages: [],
       zoom         : 0,
       activeScale  : 1,
-      cameraReady  : false
     }
 
     this.isCapturing = false
@@ -252,9 +251,6 @@ export default class CameraScreen extends Screen {
               captureAudio={false}
               type={this.state.camera.type}
               zoom={this.state.zoom}
-              onCameraReady={() => {
-                this.setState({cameraReady: true})
-              }}
             />
             :
             <View style={[styles.preview, {backgroundColor: '#000'}]}/>
@@ -590,8 +586,8 @@ export default class CameraScreen extends Screen {
       return
     }
 
-    if (!this.state.cameraReady) {
-      return
+    if(!this.camera) {
+      return;
     }
 
     this.isCapturing = true
