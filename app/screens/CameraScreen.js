@@ -259,17 +259,19 @@ export default class CameraScreen extends Screen {
                 {...this.pinchResponder.getResponderProps()}/>
           <View style={[styles.topToolsContainer, {width: this.state.pageWidth, zIndex: 1000}]}>
             {flashIcon}
+
             <TouchableOpacity
-              style={[styles.toolTouchable, {
-                alignItems : 'flex-end',
-                marginRight: 15
-              }]}
-              onPress={this.switchType}>
-              <IonIcon name="ios-reverse-camera-outline"
-                       size={42}
-                       color={'#fff'}
-                       style={textShadow}
+              style={[styles.toolTouchable, styles.flashTouchable]}
+              onPress={this._done.bind(this)}
+            >
+              <IonIcon name="ios-checkmark"
+                       color={Colors.success}
+                       size={35}
+                       style={styles.flash}
               />
+              <Text style={[styles.toolText, styles.iconText]}>
+                Done
+              </Text>
             </TouchableOpacity>
           </View>
           <View style={[
