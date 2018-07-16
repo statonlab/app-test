@@ -159,7 +159,7 @@ export default class CameraScreen extends Screen {
             this._back()
           }}
           style={{marginBottom: 20}}>
-          <IonIcon name={'ios-camera-outline'} size={120} color={'#777'}/>
+          <IonIcon name={'ios-image-outline'} size={120} color={'#777'}/>
         </TouchableOpacity>
         <Text style={{
           fontSize: 14,
