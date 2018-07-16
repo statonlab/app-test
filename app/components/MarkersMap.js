@@ -142,8 +142,8 @@ export default class MarkersMap extends Component {
                   this.refs.map.animateToRegion({
                     latitude      : coords.latitude,
                     longitude     : coords.longitude,
-                    latitudeDelta : 0.009,
-                    longitudeDelta: 0.009
+                    latitudeDelta : 0.059,
+                    longitudeDelta: 0.059
                   })
                 }
               },
@@ -163,7 +163,13 @@ export default class MarkersMap extends Component {
             justifyContent : 'center',
             ...(new Elevation(4))
           }}>
-          <Icon name={Platform.select({ios: 'ios-locate-outline', android: 'md-locate'})} color={'#222'} size={24}/>
+          <Icon name={Platform.select({ios: 'ios-locate-outline', android: 'md-locate'})}
+                color={'#222'}
+                size={24}
+                style={{
+                  marginTop: Platform.select({ios: 2, android: 0})
+                }}
+          />
         </TouchableOpacity>
       </View>
     )
