@@ -31,7 +31,7 @@ class Permissions {
 
       return rejected
     } catch (e) {
-      console.log('HERE permissions error, ', e)
+      console.log('permissions error, ', e)
 
       return []
     }

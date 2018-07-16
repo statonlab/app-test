@@ -514,6 +514,7 @@ export default class Form extends Component {
    * Remove any registered events
    */
   componentWillUnmount() {
+    this.backEvent.remove()
     this.events.map(event => {
       event.remove()
     })

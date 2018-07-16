@@ -126,7 +126,6 @@ export default class MainTrees extends Component {
     navigator
       .geolocation
       .getCurrentPosition(this._locationChanged.bind(this), error => {
-        console.log('HERE found error', error)
         this._setTrees(null)
       }, {
         // Set a timeout of 1 second

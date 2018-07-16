@@ -52,6 +52,10 @@ export default class SubmittedScreen extends Screen {
     })
   }
 
+  componentWillUnmount() {
+    this.backEvent.remove()
+  }
+
   renderImage(observation, android) {
     let images = JSON.parse(observation.images)
     let keys   = Object.keys(images)
@@ -156,7 +160,7 @@ export default class SubmittedScreen extends Screen {
 
   doUpload(observationParam) {
     let observation = realm.objects('Submission').filtered(`id == ${observationParam.id}`)
-    if(observation.length <= 0) {
+    if (observation.length <= 0) {
       Alert.alert('Error', 'An error occurred while uploading your observation. Please try again later.')
       return
     }

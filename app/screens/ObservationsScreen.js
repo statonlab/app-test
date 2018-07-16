@@ -297,7 +297,6 @@ export default class ObservationsScreen extends Screen {
 
     if (key) {
       thumbnail = this.fs.thumbnail(images[key][0])
-      console.log('HERE', category, thumbnail)
     }
 
     return (

@@ -111,9 +111,9 @@ export default class LandingScreen extends Screen {
     }))
 
     this.events.push(BackHandler.addEventListener('hardwareBackPress', () => {
-       let android = Platform.OS === 'android'
-      android ? BackHandler.exitApp() : null
-      return true
+      // let android = Platform.OS === 'android'
+      //android ? BackHandler.exitApp() : null
+      //return true
     }))
   }
 
