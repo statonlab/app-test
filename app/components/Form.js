@@ -165,43 +165,32 @@ export default class Form extends Component {
   }
 
   /**
-   * Handle resized images.
+   * Finish the submission process
    *
    * @param images
    * @private
    */
-  async _handleResizedImages(images) {
-    let Compressor = new Images()
-    let newImages  = {}
+  _handleResizedImages(images) {
+    this.refs.spinner.close()
 
-    for (let i in images) {
-      if (!images.hasOwnProperty(i)) {
-        continue
-      }
-
-      newImages[i] = []
-
-      for (let j in images[i]) {
-        if (!images[i].hasOwnProperty(j)) {
-          continue
-        }
-
-        let img = await Compressor.compress(images[i][j])
-        newImages[i].push(img)
-      }
+    if (this.props.edit) {
+      DeviceEventEmitter.emit('editSubmission')
+      this.saveEdit()
+      return
     }
 
-    this.setState({images: newImages}, () => {
-      this.refs.spinner.close()
+    this.save()
+  }
 
-      if (this.props.edit) {
-        DeviceEventEmitter.emit('editSubmission')
-        this.saveEdit()
-        return
-      }
-
-      this.save()
-    })
+  /**
+   * Compress images once they are ready for processing.
+   *
+   * @param {{Object}} images
+   * @return {Promise<*>}
+   */
+  async compressImages(images) {
+    let Compressor = new Images()
+    return await Compressor.compressAll(images)
   }
 
   /**
@@ -341,27 +330,51 @@ export default class Form extends Component {
   }
 
   /**
-   * Generate resized images and thumbnails.
+   * Generate compressed images and thumbnails.
+   * Then, finish the submission by saving all new data
    */
-  generateImages = () => {
-    // Pass all the images as param 1, and then set that we know already has been processed as a 2nd param
-    this.fs.resizeImages(this.state.images, this.props.edit ? JSON.parse(this.props.entryInfo.images) : {})
+  async generateImages() {
+    if (this.refs.spinner) {
+      this.refs.spinner.open()
+    }
 
-    this.refs.spinner.open()
+    let images = await this.compressImages(this.state.images)
+
+    // Pass all the images as param 1, and then set what we know has already been processed as a 2nd param
+    await this.fs.generateThumbnail(images)
+
+    this.setState({images}, () => {
+      if (this.refs.spinner) {
+        this.refs.spinner.close()
+      }
+
+      if (this.props.edit) {
+        DeviceEventEmitter.emit('editSubmission')
+        this.saveEdit()
+        return
+      }
+
+      this.save()
+    })
+
+    // this.fs.resizeImages(newImages, this.props.edit ? JSON.parse(this.props.entryInfo.images) : {})
   }
 
   /**
-   * Submit button method.  Validate the primary and meta data with tcomb.
+   * Submit button method.
+   * Validate the primary and meta data with tcomb.
    */
-  submit = () => {
+  submit() {
     if (!this.state.images.images || !this.validateState().isValid()) {
       this.notifyIncomplete(this.validateMeta())
       return
     }
+
     if (!this.validateMeta().isValid()) {
       this.notifyIncomplete(this.validateMeta())
       return
     }
+
     this.generateImages()
   }
 
@@ -397,23 +410,6 @@ export default class Form extends Component {
 
     const analytics = new Analytics()
     analytics.submittedObservation(observation, this.timeStarted, moment())
-  }
-
-  /**
-   * Update existing observation.
-   */
-  submitEdit = () => {
-    if (!this.validateState().isValid()) {
-      this.notifyIncomplete(this.validateState())
-      return
-    }
-
-    if (!this.validateMeta().isValid()) {
-      this.notifyIncomplete(this.validateMeta())
-      return
-    }
-
-    this.generateImages()
   }
 
   /**
@@ -478,6 +474,7 @@ export default class Form extends Component {
       warnings.images = true
       errorList.push('A photo is required')
     }
+
     errors.map((error) => {
       warnings[error.path[0]] = true
       if (typeof DCP[error.path[0]] !== 'undefined') {
@@ -489,6 +486,7 @@ export default class Form extends Component {
     if (this.state.location.latitude === 0 && this.state.location.longitude === 0 && this.state.location.accuracy === -1) {
       errorList.push('Cannot get location. Please wait for GPS signal and try again.')
     }
+
     this.setState({warnings})
 
     if (errorList) {
@@ -902,7 +900,7 @@ export default class Form extends Component {
 
         <View style={styles.footer}>
           <TouchableOpacity style={[styles.button, styles.flex1]}
-                            onPress={this.props.edit ? this.submitEdit : this.submit}
+                            onPress={this.submit.bind(this)}
                             rippleColor="rgba(0,0,0,0.5)">
             <Text style={styles.buttonText}>
               {this.props.edit ? 'Confirm Edit' : 'Submit Entry'}

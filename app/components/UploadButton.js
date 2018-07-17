@@ -92,7 +92,7 @@ export default class UploadButton extends Component {
             if (this.props.spinner) {
               this.props.spinner.setProgress(step)
             }
-          })
+          }, )
         }
         if (this.props.spinner) {
           this.props.spinner.setProgress(step)
