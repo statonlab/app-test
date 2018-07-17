@@ -15,7 +15,7 @@ class Diagnostics {
    * their images still in cache.
    */
   async run() {
-    const observations = realm.objects('Submission').filtered('imagesFixed = false OR compressed = false')
+    const observations = realm.objects('Submission')//.filtered('imagesFixed = false OR compressed = false')
     for (let i in observations) {
       if (!observations.hasOwnProperty(i)) {
         continue
@@ -24,7 +24,7 @@ class Diagnostics {
       try {
         let observation = observations[i]
         await this._fixObservation(observation)
-        await this._compressObservation(observation)
+        // await this._compressObservation(observation)
       } catch (error) {
         console.log(error)
       }

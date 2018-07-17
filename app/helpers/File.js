@@ -85,6 +85,18 @@ export default class File {
   }
 
   /**
+   * Copy files with a Promise.
+   *
+   * @param from original file path
+   * @param to new copy path
+   *
+   * @return {Promise<*>}
+   */
+  async copyAsync(from, to) {
+    return await this._system.cp(from, to)
+  }
+
+  /**
    * Delete file.
    *
    * @param {string|array|object} file File path to delete
@@ -151,6 +163,15 @@ export default class File {
     }
   }
 
+  async deleteAsync(file) {
+    let exists = await this.exists(file)
+    if(!exists) {
+      return;
+    }
+
+    return await this._system.unlink(file)
+  }
+
   /**
    * Delete thumbnail.
    *
@@ -196,6 +217,14 @@ export default class File {
     }).catch(error => {
       console.log(error)
     })
+  }
+
+  async moveAsync(from, to) {
+    let exists = this.exists(from)
+    if (!exists) {
+      throw new Error(`Failed to move file from ${from}. File does not exist`)
+    }
+    return this._system.mv(from, to)
   }
 
   /**
@@ -398,25 +427,56 @@ export default class File {
   /**
    * Resize thumbnail.
    *
-   * @param image
+   * @param {string} image
+   * @param {function} callback
    * @private
    */
-  _setupThumbnail(image) {
+  _setupThumbnail(image, callback) {
     // Get image name
     let name = image.split('/')
     name     = name[name.length - 1]
 
-    if (this._android) {
-      //image = 'file:/' + image
-    }
+    // if (this._android) {
+    //image = 'file:/' + image
+    // }
 
     ImageResizer.createResizedImage(image, 160, 160, 'JPEG', 100, 0, this._thumbnailsDir)
       .then(({uri}) => {
         // Let it have the same name of the original image
-        this.move(uri.replace('file:', ''), `${this._thumbnailsDir}/${name}`)
+        this.move(uri.replace('file:', ''), `${this._thumbnailsDir}/${name}`, callback)
       })
       .catch((error) => {
         console.log('Unable to create thumbnail: ', error, image)
       })
+  }
+
+
+  async generateThumbnail(images) {
+    let keys = Object.keys(images)
+    if (keys.length < 1) {
+      return false
+    }
+
+    let key = keys.indexOf('images') > -1 ? 'images' : keys[0]
+
+    if (images[key].length < 1) {
+      return false
+    }
+
+    let image = images[key][0]
+
+    // Get image name
+    let name = image.split('/')
+    name     = name[name.length - 1]
+
+    try {
+      let {uri} = await ImageResizer.createResizedImage(image, 160, 160, 'JPEG', 100, 0, this._thumbnailsDir)
+      let newPath = `${this._thumbnailsDir}/${name}`
+      await this.moveAsync(uri.replace('file:', ''), newPath)
+
+      return uri
+    } catch (e) {
+      console.log('Unable to create thumbnail: ', e, image)
+    }
   }
 }

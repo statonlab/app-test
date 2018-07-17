@@ -6,7 +6,8 @@ import {
   Text,
   Image,
   Platform,
-  TouchableOpacity
+  TouchableOpacity,
+  Alert
 } from 'react-native'
 import MapView from 'react-native-maps'
 import Colors from '../helpers/Colors'
@@ -147,7 +148,7 @@ export default class MarkersMap extends Component {
                   })
                 }
               },
-              (error) => alert('Error: Are location services on?'),
+              (error) => Alert.alert('Location Error', 'Are location services on?'),
               {enableHighAccuracy: true}
             )
           }}
