@@ -6,7 +6,7 @@ import {
   DeviceEventEmitter,
   AsyncStorage
 } from 'react-native'
-import Diagnostics from './app/helpers/Diagnostics'
+// import Diagnostics from './app/helpers/Diagnostics'
 import Actions from './app/helpers/Actions'
 import SnackBarNotice from './app/components/SnackBarNotice'
 import Navigator from './app/routes/Navigator'
@@ -14,6 +14,7 @@ import Observation from './app/helpers/Observation'
 import WelcomeModal from './app/components/WelcomeModal'
 import NotificationsController from './app/components/NotificationsController'
 import Permissions from './app/helpers/Permissions'
+import ObservationLostImagesFixer from './app/components/ObservationLostImagesFixer'
 
 export default class App extends Component {
   constructor(props) {
@@ -50,11 +51,11 @@ export default class App extends Component {
   }
 
   async initApp() {
-    try {
-      await Diagnostics.run()
-    } catch (error) {
-      console.log('Unable to run diagnostics', error)
-    }
+    // try {
+    //   await Diagnostics.run()
+    // } catch (error) {
+    //   console.log('Unable to run diagnostics', error)
+    // }
 
     try {
       const actions = new Actions()
@@ -95,6 +96,7 @@ export default class App extends Component {
             DeviceEventEmitter.emit('welcomeModalDone')
           }}
         />
+        <ObservationLostImagesFixer/>
         <Navigator/>
         <SnackBarNotice ref={(ref) => this.snackbar = ref} noticeText={this.state.snackMessage}/>
         <NotificationsController onUploadRequest={() => {

@@ -339,9 +339,7 @@ export default class Form extends Component {
     }
 
     let images = await this.compressImages(this.state.images)
-
-    // Pass all the images as param 1, and then set what we know has already been processed as a 2nd param
-    await this.fs.generateThumbnail(images)
+    await this.fs.generateThumbnails(images)
 
     this.setState({images}, () => {
       if (this.refs.spinner) {

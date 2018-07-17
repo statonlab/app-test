@@ -294,14 +294,19 @@ class Observation {
 
       realm.write(() => {
         realm.create('Submission', {
-          id       : primaryKey,
-          name     : record.observation_category,
-          images   : JSON.stringify(record.images),
-          location : record.location,
-          date     : moment(record.date.date).format('MM-DD-YYYY HH:mm:ss').toString(),
-          synced   : true,
-          meta_data: JSON.stringify(record.meta_data),
-          serverID : parseInt(record.observation_id)
+          id                  : primaryKey,
+          name                : record.observation_category,
+          images              : JSON.stringify(record.images),
+          location            : record.location,
+          date                : moment(record.date.date).format('MM-DD-YYYY HH:mm:ss').toString(),
+          synced              : true,
+          meta_data           : JSON.stringify(record.meta_data),
+          serverID            : parseInt(record.observation_id),
+          has_private_comments: record.has_private_comments,
+          custom_id           : record.custom_id,
+          is_private          : record.is_private,
+          compressed          : true,
+          imagesFixed         : true
         })
       })
     })

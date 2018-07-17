@@ -165,8 +165,8 @@ export default class File {
 
   async deleteAsync(file) {
     let exists = await this.exists(file)
-    if(!exists) {
-      return;
+    if (!exists) {
+      return
     }
 
     return await this._system.unlink(file)
@@ -422,6 +422,8 @@ export default class File {
         callback(path)
       }
     })
+
+    return path
   }
 
   /**
@@ -451,30 +453,32 @@ export default class File {
   }
 
 
-  async generateThumbnail(images) {
+  async generateThumbnails(images) {
     let keys = Object.keys(images)
     if (keys.length < 1) {
       return false
     }
 
-    let key = keys.indexOf('images') > -1 ? 'images' : keys[0]
-
-    if (images[key].length < 1) {
-      return false
-    }
-
-    let image = images[key][0]
-
-    // Get image name
-    let name = image.split('/')
-    name     = name[name.length - 1]
-
     try {
-      let {uri} = await ImageResizer.createResizedImage(image, 160, 160, 'JPEG', 100, 0, this._thumbnailsDir)
-      let newPath = `${this._thumbnailsDir}/${name}`
-      await this.moveAsync(uri.replace('file:', ''), newPath)
+      for (let key in keys) {
+        for (let i in images[key]) {
+          if (!images[key].hasOwnProperty(i)) {
+            continue
+          }
 
-      return uri
+          let image = images[key][i]
+
+          // Get image name
+          let name = image.split('/')
+          name     = name[name.length - 1]
+
+          let {uri}   = await ImageResizer.createResizedImage(image, 160, 160, 'JPEG', 100, 0, this._thumbnailsDir)
+          let newPath = `${this._thumbnailsDir}/${name}`
+          await this.moveAsync(uri.replace('file:', ''), newPath)
+        }
+      }
+
+      return true
     } catch (e) {
       console.log('Unable to create thumbnail: ', e, image)
     }

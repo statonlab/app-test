@@ -93,7 +93,7 @@ export default new Realm({
     SubmissionSchema,
     GuideSchema
   ],
-  schemaVersion: 14,
+  schemaVersion: 15,
   migration    : function (oldRealm, newRealm) {
     if (oldRealm.schemaVersion < 2) {
       let newUser = newRealm.objects('User')
@@ -172,6 +172,13 @@ export default new Realm({
           delete meta.numberRootSprouts_confidence
           observation.meta_data = JSON.stringify(meta)
         }
+      })
+    }
+
+    if(oldRealm.schemaVersion < 15) {
+      let observations = newRealm.objects('Submission')
+      observations.map(observation => {
+        observation.imagesFixed = false
       })
     }
   }

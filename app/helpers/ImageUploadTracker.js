@@ -45,7 +45,6 @@ class ImageUploadTracker {
 const globalErrorHandler = new ImageUploadTracker()
 
 export default function handler(error) {
-  console.log('HERE' + error.success ? ' success' : ' actual error', error)
   if (!error.success) {
     globalErrorHandler.unableToUploadImage(error.response, error.total)
   }
