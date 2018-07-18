@@ -90,7 +90,7 @@ describe('Errors checking error codes', () => {
 
   it('should handle a basic string', () => {
     let handler = new Errors(errorString)
-    let errors  = handler.getErrors()
+    let errors  = handler.all()
     let codes   = handler.fetchCodes()
     let message = errors['general']
     expect(message).toBeDefined()
@@ -100,7 +100,7 @@ describe('Errors checking error codes', () => {
 
   it('should handle error 500', () => {
     let handler = new Errors(error500)
-    let errors  = handler.getErrors()
+    let errors  = handler.all()
     let codes   = handler.fetchCodes()
     let message = errors['general']
     expect(message).toBeDefined()
@@ -110,7 +110,7 @@ describe('Errors checking error codes', () => {
 
   it('should handle error 404', () => {
     let handler = new Errors(error404)
-    let errors  = handler.getErrors()
+    let errors  = handler.all()
     let codes   = handler.fetchCodes()
     let message = errors['general']
     expect(message).toBeDefined()
@@ -120,7 +120,7 @@ describe('Errors checking error codes', () => {
 
   it('should handle error 422 with array', () => {
     let handler = new Errors(error422)
-    let errors  = handler.getErrors()
+    let errors  = handler.all()
     let codes   = handler.fetchCodes()
 
     let message = errors['general']//this is a different case, so no general key
@@ -137,7 +137,7 @@ describe('Errors checking error codes', () => {
 
   it('should handle error 422 with custom message', () => {
     let handler = new Errors(error422_2)
-    let errors  = handler.getErrors()
+    let errors  = handler.all()
     let codes   = handler.fetchCodes()
     let message = errors['general']
     expect(message[0]).toBeDefined()
@@ -148,7 +148,7 @@ describe('Errors checking error codes', () => {
   it ('should handle an error object with other keys as network error', () => {
 
     let handler = new Errors(errorObject)
-    let errors  = handler.getErrors()
+    let errors  = handler.all()
 
     let message = errors['general']
     expect(message[0]).toBeDefined()
@@ -159,7 +159,7 @@ describe('Errors checking error codes', () => {
 
   it('should handle error 401', () => {
     let handler = new Errors(error401)
-    let errors  = handler.getErrors()
+    let errors  = handler.all()
     let codes   = handler.fetchCodes()
     let message = errors['general']
     expect(message).toBeDefined()
@@ -169,7 +169,7 @@ describe('Errors checking error codes', () => {
 
   it('should handle error 403', () => {
     let handler = new Errors(error403)
-    let errors  = handler.getErrors()
+    let errors  = handler.all()
     let codes   = handler.fetchCodes()
     let message = errors['general']
     expect(message).toBeDefined()
