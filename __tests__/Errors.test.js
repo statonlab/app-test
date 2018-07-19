@@ -153,7 +153,7 @@ describe('Errors checking error codes', () => {
     let message = errors['general']
     expect(message[0]).toBeDefined()
 
-    expect(message[0]).toBe("Network error!  Please check your internet connection and try again.")
+    expect(message[0]).toBe("Network error! Please check your internet connection and try again.")
 
   })
 

@@ -40,7 +40,6 @@ export default class Errors {
         this.errors = {general: ['Network error! Please check your internet connection and try again']}
         return
       } else {
-        console.error(error.toString())
         this.error = {general: ['Internal Error! Please contact us to fix this issue.']}
       }
     }
