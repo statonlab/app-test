@@ -39,8 +39,6 @@ export default class Errors {
       if (error.toString().indexOf('Network Error') > -1) {
         this.errors = {general: ['Network error! Please check your internet connection and try again']}
         return
-      } else {
-        this.error = {general: ['Internal Error! Please contact us to fix this issue.']}
       }
     }
 
