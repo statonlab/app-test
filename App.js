@@ -14,13 +14,15 @@ import Observation from './app/helpers/Observation'
 import WelcomeModal from './app/components/WelcomeModal'
 import NotificationsController from './app/components/NotificationsController'
 import Permissions from './app/helpers/Permissions'
+import ObservationLostImagesFixer from './app/components/ObservationLostImagesFixer'
 
 export default class App extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      snackMessage: ''
+      snackMessage: '',
+      appReady    : false
     }
 
     this.events = []
@@ -53,7 +55,7 @@ export default class App extends Component {
     try {
       await Diagnostics.run()
     } catch (error) {
-      console.log('Unable to run diagnostics', error)
+      console.log('HERE Unable to run diagnostics', error)
     }
 
     try {
@@ -64,12 +66,14 @@ export default class App extends Component {
     }
 
     await this.setAppOpenState()
+
+    this.setState({appReady: true})
   }
 
   async setAppOpenState() {
     try {
       let firstOpen = await AsyncStorage.getItem('@appState:firstOpen')
-      if(firstOpen !== 'yes') {
+      if (firstOpen !== 'yes') {
         await AsyncStorage.setItem('@appState:firstOpen', 'yes')
         return
       }
@@ -95,6 +99,9 @@ export default class App extends Component {
             DeviceEventEmitter.emit('welcomeModalDone')
           }}
         />
+        {this.state.appReady ?
+          <ObservationLostImagesFixer/>
+          : null}
         <Navigator/>
         <SnackBarNotice ref={(ref) => this.snackbar = ref} noticeText={this.state.snackMessage}/>
         <NotificationsController onUploadRequest={() => {

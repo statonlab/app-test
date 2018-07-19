@@ -6,7 +6,7 @@
  *      alert(error.first('general'))
  *      return
  *    }
- *    this.setState({formErrors: errors.all()})
+ *    this.setState({formErrors: errors})
  * })
  */
 
@@ -25,8 +25,8 @@ export default class Errors {
    * @param error
    */
   constructor(error) {
-    this.errors = {}
-
+    this.errors    = {}
+    this.errorCode = -1
     this.responses = code_responses
 
     if (typeof error === 'string') {
@@ -36,8 +36,8 @@ export default class Errors {
 
     if (typeof error === 'object') {
       this.errorCode = error.response ? error.response.status : -1
-      if(error.toString().indexOf('TypeError') > -1) {
-        this.errors = {general: [error.toString()]}
+      if (error.toString().indexOf('Network Error') > -1) {
+        this.errors = {general: ['Network error! Please check your internet connection and try again']}
         return
       }
     }
@@ -125,7 +125,7 @@ export default class Errors {
       default:
         // No error code or error code was -1
         this.errors = {
-          general: ['Network error!  Please check your internet connection and try again.']
+          general: ['Network error! Please check your internet connection and try again.']
         }
         break
     }

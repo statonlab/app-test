@@ -24,7 +24,7 @@ class Diagnostics {
       try {
         let observation = observations[i]
         await this._fixObservation(observation)
-        // await this._compressObservation(observation)
+        await this._compressObservation(observation)
       } catch (error) {
         console.log(error)
       }
@@ -55,15 +55,11 @@ class Diagnostics {
    * @private
    */
   async _fixObservation(observation) {
-    if (observation.imagesFixed) {
-      return
-    }
-
     let images = JSON.parse(observation.images)
     try {
       let fixed = await this._fixBrokenImages(images)
       realm.write(() => {
-        observation.images     = JSON.stringify(fixed)
+        observation.images = JSON.stringify(fixed)
       })
     } catch (error) {
       console.log(error)
