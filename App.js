@@ -6,7 +6,7 @@ import {
   DeviceEventEmitter,
   AsyncStorage
 } from 'react-native'
-// import Diagnostics from './app/helpers/Diagnostics'
+import Diagnostics from './app/helpers/Diagnostics'
 import Actions from './app/helpers/Actions'
 import SnackBarNotice from './app/components/SnackBarNotice'
 import Navigator from './app/routes/Navigator'
@@ -21,7 +21,8 @@ export default class App extends Component {
     super(props)
 
     this.state = {
-      snackMessage: ''
+      snackMessage: '',
+      appReady    : false
     }
 
     this.events = []
@@ -51,11 +52,11 @@ export default class App extends Component {
   }
 
   async initApp() {
-    // try {
-    //   await Diagnostics.run()
-    // } catch (error) {
-    //   console.log('Unable to run diagnostics', error)
-    // }
+    try {
+      await Diagnostics.run()
+    } catch (error) {
+      console.log('HERE Unable to run diagnostics', error)
+    }
 
     try {
       const actions = new Actions()
@@ -65,12 +66,14 @@ export default class App extends Component {
     }
 
     await this.setAppOpenState()
+
+    this.setState({appReady: true})
   }
 
   async setAppOpenState() {
     try {
       let firstOpen = await AsyncStorage.getItem('@appState:firstOpen')
-      if(firstOpen !== 'yes') {
+      if (firstOpen !== 'yes') {
         await AsyncStorage.setItem('@appState:firstOpen', 'yes')
         return
       }
@@ -96,7 +99,9 @@ export default class App extends Component {
             DeviceEventEmitter.emit('welcomeModalDone')
           }}
         />
-        <ObservationLostImagesFixer/>
+        {this.state.appReady ?
+          <ObservationLostImagesFixer/>
+          : null}
         <Navigator/>
         <SnackBarNotice ref={(ref) => this.snackbar = ref} noticeText={this.state.snackMessage}/>
         <NotificationsController onUploadRequest={() => {

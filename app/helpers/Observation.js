@@ -303,8 +303,8 @@ class Observation {
           meta_data           : JSON.stringify(record.meta_data),
           serverID            : parseInt(record.observation_id),
           has_private_comments: record.has_private_comments,
-          custom_id           : record.custom_id,
-          is_private          : record.is_private,
+          custom_id           : record.custom_id || '',
+          is_private          : record.is_private === 1,
           compressed          : true,
           imagesFixed         : true
         })

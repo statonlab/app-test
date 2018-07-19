@@ -6,9 +6,7 @@ import {
   TouchableOpacity,
   AsyncStorage
 } from 'react-native'
-import Observation from '../helpers/Observation'
 import realm from '../db/Schema'
-import Diagnostics from '../helpers/Diagnostics'
 import File from '../helpers/File'
 import Colors from '../helpers/Colors'
 import {isIphoneX} from 'react-native-iphone-x-helper'
@@ -24,7 +22,6 @@ export default class ObservationLostImagesFixer extends Component {
     this.state = {
       show          : false,
       doInBackground: false,
-      fixedAll      : false,
       observations  : [],
       updateMessage : '',
       fixing        : false,
@@ -34,18 +31,33 @@ export default class ObservationLostImagesFixer extends Component {
     this.fs = new File()
   }
 
+  /**
+   * Find broken observations
+   */
   componentDidMount() {
     this.api_token = User.loggedIn() ? User.user().api_token : null
 
     this.getBrokenObservations()
   }
 
+  /**
+   * The user doesn't want to see this modal again.
+   * Set the app state to never show this again.
+   *
+   * @return {Promise<void>}
+   */
   async neverShowAgain() {
     await AsyncStorage.setItem('@appState:shouldFixObservations', 'no')
 
     this.setState({show: false})
   }
 
+  /**
+   * Get all synced observations that have not been previously inspected
+   * and check if they have missing images.
+   *
+   * @return {Promise<void>}
+   */
   async getBrokenObservations() {
     if (!User.loggedIn()) {
       return
@@ -59,38 +71,41 @@ export default class ObservationLostImagesFixer extends Component {
 
       let observations = []
 
-      let all = realm.objects('Submission').filtered('synced == true && imagesFixed == false && serverID != -1')
-      for (let i in all) {
-        if (!all.hasOwnProperty(i)) {
-          continue
-        }
-
+      let all    = realm.objects('Submission').filtered('imagesFixed = false AND serverID > 0')
+      let length = all.length
+      for (let i = 0; i < length; i++) {
         let observation = all[i]
 
         if (typeof observation !== 'object') {
           continue
         }
 
-        if (!await this.needsFixing(observation)) {
+        let needsFixing = await this.needsFixing(observation)
+        if (!needsFixing) {
           realm.write(() => {
-            observation.imagesFixed = true
+            //observation.imagesFixed = true
           })
           continue
         }
-
         observations.push(observation)
       }
 
-      if (observations.length === 0) {
-        this.setState({fixedAll: true})
-      } else {
+      if (observations.length > 0) {
         this.setState({observations, show: true})
       }
     } catch (e) {
-      console.log('HERE Observation Could Not Get Fixed', e)
+      console.error('Unable to detect if observation needs fixing', e)
     }
   }
 
+  /**
+   * Check if an observation needs fixing.
+   * An observation needs to be fixed if one or more images
+   * are missing for the disk.
+   *
+   * @param {Object} observation
+   * @return {Promise<boolean>}
+   */
   async needsFixing(observation) {
     let images = JSON.parse(observation.images)
     for (let i in images) {
@@ -104,6 +119,9 @@ export default class ObservationLostImagesFixer extends Component {
         }
 
         let image = this.fs.image(images[i][j])
+        if (image.indexOf('http') === 0) {
+          continue
+        }
 
         let exists = await this.fs.exists(image)
         if (!exists) {
@@ -115,6 +133,11 @@ export default class ObservationLostImagesFixer extends Component {
     return false
   }
 
+  /**
+   * Run through the state observations and start fixing them.
+   *
+   * @return {Promise<void>}
+   */
   async fixAll() {
     let i            = 1
     let total        = this.state.observations.length
@@ -128,29 +151,43 @@ export default class ObservationLostImagesFixer extends Component {
         await this.fix(observation)
         i++
       } catch (e) {
-        console.log('HERE 2 Unable to download', e)
+        console.error('Unable to download', e)
       }
     }
 
-    this.setState({done: true})
+    this.setState({done: true, fixing: false})
   }
 
+  /**
+   * Fix an individual observation by getting
+   * its images from the server.
+   *
+   * @param observation
+   * @return {Promise<void>}
+   */
   async fix(observation) {
     try {
-      let response         = await axios.get(`/observation/${observation.serverID}?api_token=${this.api_token}`)
-      let data             = response.data.data
-      let images           = data.images
-      let downloadedImages = await this.downloadImages(images)
-      await this.deleteImages(JSON.parse(observation.images))
+      let response          = await axios.get(`/observation/${observation.serverID}?api_token=${this.api_token}`)
+      let data              = response.data.data
+      let images            = data.images
+      let observationImages = JSON.parse(observation.images)
+      let downloadedImages  = await this.downloadImages(images)
+      await this.deleteImages(observationImages, downloadedImages)
       realm.write(() => {
         observation.images      = JSON.stringify(downloadedImages)
         observation.imagesFixed = true
       })
     } catch (e) {
-      console.log('HERE Unable to fix this observation', e, e.response)
+      console.error('HERE Unable to fix this observation', e, e.response)
     }
   }
 
+  /**
+   * Do the downloading of an image.
+   *
+   * @param {Object} images
+   * @return {Promise<void>}
+   */
   async downloadImages(images) {
     let downloadedImages = {}
 
@@ -159,6 +196,7 @@ export default class ObservationLostImagesFixer extends Component {
         continue
       }
 
+      downloadedImages[i] = []
       for (let j in images[i]) {
         if (!images[i].hasOwnProperty(j)) {
           continue
@@ -172,7 +210,6 @@ export default class ObservationLostImagesFixer extends Component {
           downloadedImages[i][j] = this.fs._moveImage(path, image)
         } catch (error) {
           downloadedImages[i][j] = image
-          console.log('Download error: ', error, image)
         }
       }
     }
@@ -180,7 +217,38 @@ export default class ObservationLostImagesFixer extends Component {
     return downloadedImages
   }
 
-  async deleteImages(images) {
+  /**
+   * Recursively flatten an object.
+   *
+   * @param {Object|Array} o
+   * @returns {Array}
+   */
+  flattenObject(o) {
+    let results = []
+    Object.keys(o).map(key => {
+      let o2 = o[key]
+      if (typeof o2 === 'object' && !Array.isArray(o2)) {
+        o2 = this.flattenObject(o2)
+      }
+      if (Array.isArray(o2)) {
+        o2.map(item => {
+          results.push(this.fs.image(item))
+        })
+      }
+    })
+    return results
+  }
+
+  /**
+   * Delete a list of images
+   *
+   * @param {Object<Object>} images
+   * @param {Object<Object>} except
+   * @return {Promise<void>}
+   */
+  async deleteImages(images, except) {
+    except = this.flattenObject(except)
+
     for (let i in images) {
       if (!images.hasOwnProperty(i)) {
         continue
@@ -190,7 +258,13 @@ export default class ObservationLostImagesFixer extends Component {
         if (!images[i].hasOwnProperty(j)) {
           continue
         }
+
         let image = images[i][j]
+
+        if (except.indexOf(image) > -1) {
+          continue
+        }
+
         if (await this.fs.exists(image)) {
           await this.fs.deleteAsync(image)
         }
@@ -199,10 +273,20 @@ export default class ObservationLostImagesFixer extends Component {
         if (await this.fs.exists(image)) {
           await this.fs.deleteAsync(image)
         }
+
+        let thumbnail = this.fs.thumbnail(image)
+        if (await this.fs.exists(thumbnail)) {
+          await this.fs.deleteAsync(thumbnail)
+        }
       }
     }
   }
 
+  /**
+   * Show the message that tells the user we found issues.
+   *
+   * @return {*}
+   */
   renderInitialMessage() {
     return (
       <View style={{
@@ -219,7 +303,7 @@ export default class ObservationLostImagesFixer extends Component {
           fontWeight  : 'bold',
           marginBottom: 5
         }}>
-          We found an issue with your observations!
+          We found an issue with {this.state.observations.length} observations!
         </Text>
         <Text style={{
           color       : '#222',
@@ -239,6 +323,11 @@ export default class ObservationLostImagesFixer extends Component {
     )
   }
 
+  /**
+   * Show the progress.
+   *
+   * @return {*}
+   */
   renderFixingProgress() {
     return (
       <View style={{
@@ -261,6 +350,11 @@ export default class ObservationLostImagesFixer extends Component {
     )
   }
 
+  /**
+   * Render the three options footer.
+   *
+   * @return {*}
+   */
   renderOptionsFooter() {
     return (
       <View style={{height: 40, backgroundColor: '#222', flexDirection: 'row'}}>
@@ -313,6 +407,11 @@ export default class ObservationLostImagesFixer extends Component {
     )
   }
 
+  /**
+   * Render the run in background button.
+   *
+   * @return {*}
+   */
   renderFixingFooter() {
     return (
       <View style={{height: 40, backgroundColor: '#222', flexDirection: 'row'}}>
@@ -335,19 +434,43 @@ export default class ObservationLostImagesFixer extends Component {
     )
   }
 
+  /**
+   * Render all views.
+   *
+   * @return {*}
+   */
   renderFixViews() {
-    if(this.state.done) {
+    if (this.state.done) {
       return (
         <View style={{
-          flex: 1,
+          flex          : 1,
           justifyContent: 'center',
-          alignItems: 'center',
-          padding: 10,
+          alignItems    : 'center',
+          padding       : 10
         }}>
-          <TouchableOpacity onPress={() => {
-            this.setState({show: false})
+          <Text style={{
+            fontSize: 14,
+            color   : '#222'
           }}>
-            <Text>Done</Text>
+            All observations have been fixed successfully.
+          </Text>
+          <TouchableOpacity
+            style={{
+              backgroundColor: Colors.primary,
+              padding        : 10,
+              marginTop      : 20,
+              borderRadius   : 2
+            }}
+            onPress={() => {
+              this.setState({show: false})
+            }}>
+            <Text style={{
+              fontSize  : 14,
+              color     : Colors.primaryText,
+              fontWeight: 'bold'
+            }}>
+              Done
+            </Text>
           </TouchableOpacity>
         </View>
       )
@@ -364,12 +487,19 @@ export default class ObservationLostImagesFixer extends Component {
     )
   }
 
+  /**
+   * Create the modal.
+   *
+   * @return {*}
+   */
   render() {
     return (
-      <Modal visible={this.state.show}
-             onRequestClose={() => {
-               this.setState({show: false})
-             }}
+      <Modal
+        animationType={'slide'}
+        visible={this.state.show}
+        onRequestClose={() => {
+          this.setState({show: false})
+        }}
       >
         {this.renderFixViews()}
       </Modal>

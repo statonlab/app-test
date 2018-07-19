@@ -68,11 +68,12 @@ export default class Images {
     let name = path.split('/')
     name     = name[name.length - 1]
 
-    let extension = name.split('.')
+    let file      = name.split('.')
+    let extension = file[file.length - 1].toLowerCase()
+    if (['jpg', 'jpeg', 'png'].indexOf(extension) === -1) {
+      extension = 'jpeg'
+    }
 
-    name      = extension[0]
-    extension = extension[extension.length - 1]
-
-    return `${name}.min.${extension}`
+    return `${file[0]}.min.${extension}`
   }
 }

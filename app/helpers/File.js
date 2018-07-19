@@ -418,7 +418,7 @@ export default class File {
     this.copy(image.replace('file://', ''), path, () => {
       this._setupThumbnail(path)
 
-      if (typeof  callback !== 'undefined') {
+      if (typeof  callback === 'function') {
         callback(path)
       }
     })

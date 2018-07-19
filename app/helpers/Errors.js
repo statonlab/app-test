@@ -25,8 +25,8 @@ export default class Errors {
    * @param error
    */
   constructor(error) {
-    this.errors = {}
-
+    this.errors    = {}
+    this.errorCode = -1
     this.responses = code_responses
 
     if (typeof error === 'string') {
@@ -37,7 +37,8 @@ export default class Errors {
     if (typeof error === 'object') {
       this.errorCode = error.response ? error.response.status : -1
       if (error.toString().indexOf('TypeError') > -1) {
-        this.errors = {general: [error.toString()]}
+        console.error(error.toString())
+        this.errors = {general: ['Internal error. Please contact us to fix this issue!']}
         return
       }
     }
