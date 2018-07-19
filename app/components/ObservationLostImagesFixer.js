@@ -25,7 +25,8 @@ export default class ObservationLostImagesFixer extends Component {
       observations  : [],
       updateMessage : '',
       fixing        : false,
-      done          : false
+      done          : false,
+      lost          : 0
     }
 
     this.fs = new File()
@@ -71,7 +72,7 @@ export default class ObservationLostImagesFixer extends Component {
 
       let observations = []
 
-      let all    = realm.objects('Submission').filtered('imagesFixed = false AND serverID > 0')
+      let all    = realm.objects('Submission').filtered('serverID > 0')
       let length = all.length
       for (let i = 0; i < length; i++) {
         let observation = all[i]
@@ -168,17 +169,90 @@ export default class ObservationLostImagesFixer extends Component {
   async fix(observation) {
     try {
       let response          = await axios.get(`/observation/${observation.serverID}?api_token=${this.api_token}`)
-      let data              = response.data.data
-      let images            = data.images
+      let images            = response.data.data.images
+      let lost              = 0
       let observationImages = JSON.parse(observation.images)
       let downloadedImages  = await this.downloadImages(images)
-      await this.deleteImages(observationImages, downloadedImages)
+      let downloadedCount   = this.flattenObject(downloadedImages).length
+      const oldImagesCount  = this.flattenObject(observationImages).length
+      let finalImages       = {}
+
+      // If the counts are not the same, we found lost our un-uploaded images
+      if (downloadedCount !== oldImagesCount) {
+        let removed       = await this.removeDeleted(observationImages)
+        observationImages = removed.images
+        lost              = removed.lost
+        finalImages       = this.mergeObjects(observationImages, downloadedImages)
+      } else {
+        finalImages = downloadedImages
+      }
+
+      await this.deleteImages(observationImages, finalImages)
       realm.write(() => {
-        observation.images      = JSON.stringify(downloadedImages)
-        observation.imagesFixed = true
+        observation.images = JSON.stringify(downloadedImages)
+        // observation.imagesFixed = true
       })
+      this.setState({lost: lost + this.state.lost})
     } catch (e) {
       console.error('HERE Unable to fix this observation', e, e.response)
+    }
+  }
+
+  mergeObjects(o1, o2) {
+    for (let i in o2) {
+      if (!o2.hasOwnProperty(i)) {
+        continue
+      }
+
+      if (typeof o1[i] === 'undefined') {
+        o1[i] = []
+      }
+
+      for (let j in o2) {
+        if (!o2[i].hasOwnProperty(j)) {
+          continue
+        }
+
+        o1[i][j] = o2[i][j]
+      }
+    }
+
+    return o1
+  }
+
+  /**
+   * Remove images that do not exist in the disk
+   * anymore and therefore permanently lost.
+   * @param images
+   * @return {Promise<{images, lost: number}>}
+   */
+  async removeDeleted(images) {
+    let list = {}
+    let lost = 0
+    for (let i in images) {
+      if (!images.hasOwnProperty(i)) {
+        continue
+      }
+
+      list[i] = []
+      for (let j in images[i]) {
+        if (!images[i].hasOwnProperty(j)) {
+          continue
+        }
+
+        let image  = images[i][j]
+        let exists = await this.fs.exists(this.fs.image(image))
+        if (exists) {
+          list[i].push(image)
+        } else {
+          lost++
+        }
+      }
+    }
+
+    return {
+      images: list,
+      lost  : lost
     }
   }
 
@@ -301,24 +375,36 @@ export default class ObservationLostImagesFixer extends Component {
           color       : '#222',
           fontSize    : 14,
           fontWeight  : 'bold',
-          marginBottom: 5
+          marginBottom: 10
         }}>
           We found an issue with {this.state.observations.length} observations!
         </Text>
-        <Text style={{
-          color       : '#222',
-          fontSize    : 14,
-          marginBottom: 5
+        <View style={{
+          justifyContent: 'flex-start',
+          alignItems    : 'flex-start'
         }}>
-          It looks like some observation pictures are missing. They were either accidentally deleted due
-          to a previous bug or removed by your operating system to clear space.
-        </Text>
-        <Text style={{
-          color   : '#222',
-          fontSize: 14
-        }}>
-          By clicking fix now, you can restore missing pictures by downloading synced images from the TreeSnap server.
-        </Text>
+          <Text style={{
+            color       : '#222',
+            fontSize    : 14,
+            marginBottom: 10
+          }}>
+            It looks like some observation pictures are missing. They were either accidentally deleted due
+            to a previous bug or removed by your operating system to clear space.
+          </Text>
+          <Text style={{
+            color       : '#222',
+            fontSize    : 14,
+            marginBottom: 10
+          }}>
+            By clicking fix now, you can restore missing pictures by downloading synced images from the TreeSnap server.
+          </Text>
+          <Text style={{
+            color   : Colors.danger,
+            fontSize: 14
+          }}>
+            Notice! This operation will discard permanently lost images.
+          </Text>
+        </View>
       </View>
     )
   }
@@ -449,16 +535,27 @@ export default class ObservationLostImagesFixer extends Component {
           padding       : 10
         }}>
           <Text style={{
-            fontSize: 14,
-            color   : '#222'
+            fontSize    : 14,
+            color       : '#222',
+            marginBottom: 10
           }}>
-            All observations have been fixed successfully.
+            All observations have been updated successfully.
+          </Text>
+          <Text style={{
+            fontSize    : 14,
+            color       : '#222',
+            marginBottom: 20
+          }}>
+            {this.state.lost === 0 ?
+              <Text style={{color: Colors.primary}}>No images have been lost!</Text>
+              :
+              <Text style={{color: Colors.danger}}>{this.state.lost} images have been permanently lost!</Text>
+            }
           </Text>
           <TouchableOpacity
             style={{
               backgroundColor: Colors.primary,
               padding        : 10,
-              marginTop      : 20,
               borderRadius   : 2
             }}
             onPress={() => {

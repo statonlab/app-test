@@ -78,6 +78,8 @@ export default class ObservationScreen extends Screen {
       })
     })
 
+    console.log('HERE', parsed)
+
     this.setState({
       entry,
       images,

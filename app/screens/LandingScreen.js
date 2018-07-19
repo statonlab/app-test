@@ -21,7 +21,6 @@ import File from '../helpers/File'
 import User from '../db/User'
 import Guide from '../components/Guide'
 import MainTrees from '../components/MainTrees'
-// import Observation from '../helpers/Observation'
 import Diagnostics from '../helpers/Diagnostics'
 
 export default class LandingScreen extends Screen {
