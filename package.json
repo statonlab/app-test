@@ -1,7 +1,7 @@
 {
     "name": "TreeSnap",
     "version": "1.4.1",
-    "buildNum": "1071",
+    "buildNum": "1072",
     "private": true,
     "scripts": {
         "start": "node node_modules/react-native/local-cli/cli.js start",
@@ -30,7 +30,6 @@
         "react-native-keyboard-aware-scroll-view": "^0.4.4",
         "react-native-maps": "^0.20.0",
         "react-native-material-kit": "github:xinthink/react-native-material-kit#master",
-        "react-native-permissions": "^1.1.1",
         "react-native-photo-view": "github:statonlab/react-native-photo-view#master",
         "react-native-push-notification": "github:statonlab/react-native-push-notification#master",
         "react-native-tab-view": "0.0.65",

@@ -112,7 +112,7 @@ android {
         applicationId "com.treesource"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1071
+        versionCode 1072
         versionName "1.4.1"
         multiDexEnabled true
         ndk {

@@ -21,7 +21,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1071</string>
+	<string>1073</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
@@ -45,15 +45,15 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>This app needs to access your camera</string>
+	<string>Camera access is needed to pictures of observations</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Location services are need to collect each observation's location</string>
+	<string>Location services are needed to collect each observation's location</string>
 	<key>NSMainNibFile</key>
 	<string>LaunchScreen</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>This app needs write-only access to your photo library</string>
+	<string>This app needs write-only access to your photo library to save observations photos</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>The app needs to access your photo library</string>
+	<string>Access to your photo library is needed to save new observation photos</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Entypo.ttf</string>

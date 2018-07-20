@@ -13,7 +13,7 @@ import Navigator from './app/routes/Navigator'
 import Observation from './app/helpers/Observation'
 import WelcomeModal from './app/components/WelcomeModal'
 import NotificationsController from './app/components/NotificationsController'
-import Permissions from './app/helpers/Permissions'
+// import Permissions from './app/helpers/Permissions'
 import ObservationLostImagesFixer from './app/components/ObservationLostImagesFixer'
 
 export default class App extends Component {
@@ -78,7 +78,7 @@ export default class App extends Component {
         return
       }
 
-      Permissions.notifyUserOfPermissionIssues()
+      // Permissions.notifyUserOfPermissionIssues()
     } catch (error) {
       console.log(error)
     }
