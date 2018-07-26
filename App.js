@@ -4,7 +4,8 @@ import {
   View,
   StyleSheet,
   DeviceEventEmitter,
-  AsyncStorage
+  AsyncStorage,
+  Platform
 } from 'react-native'
 import Diagnostics from './app/helpers/Diagnostics'
 import Actions from './app/helpers/Actions'
@@ -85,6 +86,11 @@ export default class App extends Component {
   }
 
   render() {
+    const prefix = Platform.select({
+      ios    : 'treesnap://',
+      android: 'treesnap://treesnap/'
+    })
+
     return (
       <View style={styles.container}>
         <StatusBar
@@ -102,7 +108,7 @@ export default class App extends Component {
         {this.state.appReady ?
           <ObservationLostImagesFixer/>
           : null}
-        <Navigator/>
+        <Navigator uriPrefix={prefix}/>
         <SnackBarNotice ref={(ref) => this.snackbar = ref} noticeText={this.state.snackMessage}/>
         <NotificationsController onUploadRequest={() => {
           DeviceEventEmitter.emit('uploadRequested')

@@ -131,6 +131,20 @@ export default class AccountScreen extends Screen {
         />
         <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.innerContainer}>
+            {this.user.provider !== 'treesnap' ?
+              <View style={styles.card}>
+                <View style={[styles.formGroup, styles.noBorder]}>
+                  <View style={styles.row}>
+                    <View
+                      style={styles.touchableRow}>
+                      <Text style={[styles.label, styles.labelFullWidth]}>You are logged in using {this.user.provider === 'google' ? 'Google' : null}</Text>
+                      <Icon name={this.user.provider === 'google' ? 'logo-google' : ''} size={22} color={this.user.provider === 'google' ? '#d34836' : '#777'}/>
+                    </View>
+                  </View>
+                </View>
+              </View>
+              : null}
+
             <Text style={styles.title}>PERSONAL</Text>
             <View style={styles.card}>
               <View style={styles.formGroup}>

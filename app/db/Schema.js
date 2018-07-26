@@ -82,7 +82,8 @@ const UserSchema = {
     zipcode   : {type: 'string', default: ''},
     birth_year: {type: 'int', default: 1980},
     auto_sync : {type: 'bool', default: true},
-    units     : {type: 'string', default: 'US'}
+    units     : {type: 'string', default: 'US'},
+    provider  : {type: 'string', default: 'treesnap'}
   }
 }
 
@@ -93,7 +94,7 @@ export default new Realm({
     SubmissionSchema,
     GuideSchema
   ],
-  schemaVersion: 15,
+  schemaVersion: 16,
   migration    : function (oldRealm, newRealm) {
     if (oldRealm.schemaVersion < 2) {
       let newUser = newRealm.objects('User')
@@ -175,10 +176,16 @@ export default new Realm({
       })
     }
 
-    if(oldRealm.schemaVersion < 15) {
+    if (oldRealm.schemaVersion < 15) {
       let observations = newRealm.objects('Submission')
       observations.map(observation => {
         observation.imagesFixed = false
+      })
+    }
+
+    if (oldRealm.schemaVersion < 16) {
+      newRealm.objects('User').map(user => {
+        user.provider = 'treesnap'
       })
     }
   }
