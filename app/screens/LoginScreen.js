@@ -294,22 +294,24 @@ export default class LoginScreen extends Screen {
               </TouchableOpacity>
             </View>
 
-            <View style={styles.formGroup}>
-              <TouchableOpacity
-                style={[styles.button, {
-                  backgroundColor: '#d34836',
-                  flexDirection  : 'row',
-                  justifyContent : 'center',
-                  alignItems     : 'center',
-                  paddingVertical: 5
-                }]}
-                onPress={this.loginWithGoogle.bind(this)}>
-                <Icon name={'logo-google'} size={24} color={'#fff'} style={{marginRight: 7, marginLeft: 5}}/>
-                <Text style={[styles.buttonText, {fontWeight: 'bold', color: '#fff'}]}>
-                  Login with Google
-                </Text>
-              </TouchableOpacity>
-            </View>
+            {isAndroid && Platform.Version <= 22 ? null :
+              <View style={styles.formGroup}>
+                <TouchableOpacity
+                  style={[styles.button, {
+                    backgroundColor: '#d34836',
+                    flexDirection  : 'row',
+                    justifyContent : 'center',
+                    alignItems     : 'center',
+                    paddingVertical: 5
+                  }]}
+                  onPress={this.loginWithGoogle.bind(this)}>
+                  <Icon name={'logo-google'} size={24} color={'#fff'} style={{marginRight: 7, marginLeft: 5}}/>
+                  <Text style={[styles.buttonText, {fontWeight: 'bold', color: '#fff'}]}>
+                    Login with Google
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            }
           </View>
         </ScrollView>
       </View>
