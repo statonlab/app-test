@@ -37,7 +37,10 @@ const Colors = {
   transparentDark: 'rgba(0,0,0,.5)',
 
   sidebarBackground: '#f7f7f7',
-  sidebarText      : '#595959'
+  sidebarText      : '#595959',
+
+  googleRed: '#d34836',
+  googleRedText: '#fff'
 }
 
 export default Colors

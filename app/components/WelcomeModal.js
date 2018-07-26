@@ -13,7 +13,8 @@ import {
   TextInput,
   Platform,
   KeyboardAvoidingView,
-  Alert
+  Alert,
+  Linking
 } from 'react-native'
 import realm from '../db/Schema'
 import Colors from '../helpers/Colors'
@@ -24,6 +25,7 @@ import User from '../db/User'
 import Elevation from '../helpers/Elevation'
 import Spinner from '../components/Spinner'
 import Errors from '../helpers/Errors'
+import Icon from 'react-native-vector-icons/Ionicons'
 
 export default class WelcomeModal extends Component {
   constructor(props) {
@@ -40,6 +42,8 @@ export default class WelcomeModal extends Component {
       dateOfBirth  : new Date().getFullYear() - 13,
       showPassword : false
     }
+
+    this.loggingIn = false
   }
 
   componentDidMount() {
@@ -61,6 +65,12 @@ export default class WelcomeModal extends Component {
       show         : true,
       lastPageIndex: this.getPages().length - 1
     })
+
+    Linking.addEventListener('url', this._handleOpenURL.bind(this))
+  }
+
+  componentWillUnmount() {
+    Linking.removeEventListener('url', this._handleOpenURL.bind(this))
   }
 
   getPages() {
@@ -266,9 +276,63 @@ export default class WelcomeModal extends Component {
               </Text>
             </TouchableOpacity>
           </View>
+
+          <View style={[style.row, {marginTop: 15}]}>
+            <TouchableOpacity
+              style={[style.button, style.isGoogle, {
+                flexDirection: 'row',
+                alignItems   : 'center'
+              }]}
+              onPress={User.loginWithGoogle.bind(this)}>
+              <Icon name={'logo-google'} size={20} color={Colors.googleRedText} style={{marginRight: 10}}/>
+              <Text style={style.googleText}>
+                Sign In With Google
+              </Text>
+            </TouchableOpacity>
+          </View>
         </ScrollView>
       </KeyboardAvoidingView>
     )
+  }
+
+  _handleOpenURL(url) {
+    let link = url.url
+    if (link && link.indexOf('social-login') > -1) {
+      let api_token = this.extractAPIToken(link)
+
+      this.handleSocialLoginCallback(api_token)
+    }
+  }
+
+  extractAPIToken(link) {
+    let sub   = 'social-login/'
+    let start = link.indexOf(sub)
+    return link.substr(start + sub.length)
+  }
+
+  async handleSocialLoginCallback(api_token) {
+    if (this.loggingIn || User.loggedIn()) {
+      return
+    }
+
+    this.loggingIn = true
+
+    if (this.spinner) {
+      this.spinner.open()
+    }
+
+    let user = await User.socialLogin(api_token)
+
+    if (this.spinner) {
+      this.spinner.close()
+    }
+
+    if (!user) {
+      Alert.alert('Login Error', 'Unable to login using other platforms. Please use email and password instead.')
+      return
+    }
+
+    this.close()
   }
 
   next() {
@@ -349,7 +413,7 @@ export default class WelcomeModal extends Component {
             keyboardShouldPersistTaps="always"
             keyboardDismissMode={Platform.OS === 'android' ? 'none' : 'on-drag'}
           >
-            {this.getPages.call(this)}
+            {this.getPages()}
           </ScrollView>
           {this.state.showFooter ?
             <View style={[style.footer]}>
@@ -509,5 +573,15 @@ const style = StyleSheet.create({
     color             : '#666',
     textDecorationLine: 'underline',
     fontSize          : 14
+  },
+
+  isGoogle: {
+    backgroundColor: Colors.googleRed
+  },
+
+  googleText: {
+    color     : Colors.googleRedText,
+    fontSize  : 14,
+    fontWeight: 'bold'
   }
 })

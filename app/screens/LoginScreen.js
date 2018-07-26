@@ -190,29 +190,6 @@ export default class LoginScreen extends Screen {
     }
   }
 
-  async loginWithGoogle() {
-    let platform = Platform.select({ios: 'ios', android: 'android'})
-    let url      = `https://treesnap.org/login/google?redirect_to=https://treesnap.org/mobile/login/${platform}`
-
-    if (__DEV__) {
-      // We have to use .app here instead of .test because it needs to be
-      // SSL enabled for social networks to accept the connection
-      url = `https://treesnap.app/login/google?redirect_to=https://treesnap.app/mobile/login/${platform}`
-    }
-
-    try {
-      let supported = await Linking.canOpenURL(url)
-      if (!supported) {
-        Alert.alert('Error', 'Unable to link to Google. Please use Email login instead.')
-        return
-      }
-
-      return Linking.openURL(url)
-    } catch (e) {
-      console.log(e)
-    }
-  }
-
   render() {
     return (
       <View style={styles.container}>
@@ -298,14 +275,14 @@ export default class LoginScreen extends Screen {
               <View style={styles.formGroup}>
                 <TouchableOpacity
                   style={[styles.button, {
-                    backgroundColor: '#d34836',
+                    backgroundColor: Colors.googleRed,
                     flexDirection  : 'row',
                     justifyContent : 'center',
                     alignItems     : 'center',
                     paddingVertical: 5
                   }]}
-                  onPress={this.loginWithGoogle.bind(this)}>
-                  <Icon name={'logo-google'} size={24} color={'#fff'} style={{marginRight: 7, marginLeft: 5}}/>
+                  onPress={User.loginWithGoogle.bind(this)}>
+                  <Icon name={'logo-google'} size={24} color={Colors.googleRedText} style={{marginRight: 7, marginLeft: 5}}/>
                   <Text style={[styles.buttonText, {fontWeight: 'bold', color: '#fff'}]}>
                     Login with Google
                   </Text>
