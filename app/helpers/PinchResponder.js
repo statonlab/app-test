@@ -1,4 +1,5 @@
 import React from 'react'
+import {Platform} from 'react-native'
 
 export default class PinchResponder {
   constructor(callback, scaleMin = 0, scaleMax = 1, scaleStep = .001, startValue = 0) {
@@ -6,7 +7,7 @@ export default class PinchResponder {
     this.scale    = {
       min : scaleMin,
       max : scaleMax,
-      step: scaleStep
+      step: Platform.select({ios: scaleStep, android: 0.1})
     }
 
     this.value    = startValue
@@ -108,6 +109,8 @@ export default class PinchResponder {
     if (this.value > this.scale.max) {
       this.value = this.scale.max
     }
+
+    console.log('HERE setting value', this.value)
 
     this.callback(this.value)
   }
