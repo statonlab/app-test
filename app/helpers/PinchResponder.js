@@ -110,8 +110,6 @@ export default class PinchResponder {
       this.value = this.scale.max
     }
 
-    console.log('HERE setting value', this.value)
-
     this.callback(this.value)
   }
 
