@@ -6,7 +6,7 @@ export default class Screen extends Component {
     super(props)
 
     this.navigator = Object.assign({}, props.navigation)
-    this.params    = props.navigation.state.params
+    this.params    = props.navigation.state.params || {}
 
     // Initialize an analytics object
     this.analytics = new Analytics()

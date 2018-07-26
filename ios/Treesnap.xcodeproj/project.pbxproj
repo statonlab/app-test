@@ -479,6 +479,7 @@
 		3B32D295D6AA4EF2971603BA /* libRNFetchBlob.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNFetchBlob.a; sourceTree = "<group>"; };
 		46F5808D0EC5403D846D1419 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
 		493394F4208E647300421CDB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Treesnap/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		494268922108E76F0049A67D /* TreeSnap.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = TreeSnap.entitlements; path = TreeSnap/TreeSnap.entitlements; sourceTree = "<group>"; };
 		4972942320C9A8E200E7583E /* RCTPushNotification.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTPushNotification.xcodeproj; path = "../node_modules/react-native/Libraries/PushNotificationIOS/RCTPushNotification.xcodeproj"; sourceTree = "<group>"; };
 		4989C66BE3DC43DB973F759E /* RNFirebase.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNFirebase.xcodeproj; path = "../node_modules/react-native-firebase/ios/RNFirebase.xcodeproj"; sourceTree = "<group>"; };
 		49B8B8A2205C0B2000D16114 /* FirebaseAnalytics */ = {isa = PBXFileReference; lastKnownFileType = folder; name = FirebaseAnalytics; path = Pods/FirebaseAnalytics; sourceTree = "<group>"; };
@@ -690,6 +691,7 @@
 		13B07FAE1A68108700A75B9A /* TreeSnap */ = {
 			isa = PBXGroup;
 			children = (
+				494268922108E76F0049A67D /* TreeSnap.entitlements */,
 				7B0346F920EFF5C900DAD361 /* RNDeviceInfo.xcodeproj */,
 				493394F4208E647300421CDB /* GoogleService-Info.plist */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
@@ -1060,6 +1062,11 @@
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = ZGGV6E3YS4;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.SafariKeychain = {
+								enabled = 1;
+							};
+						};
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -1806,6 +1813,7 @@
 			baseConfigurationReference = 92F02BC5E218E285433E3ABD /* Pods-TreeSnap.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = TreeSnap/TreeSnap.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1853,6 +1861,7 @@
 			baseConfigurationReference = 89F3D5EF94B41DE3D8A40247 /* Pods-TreeSnap.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = TreeSnap/TreeSnap.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;

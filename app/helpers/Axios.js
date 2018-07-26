@@ -2,15 +2,13 @@ import {Platform} from 'react-native'
 import axios from 'axios'
 
 // Set url based on environment
-let url
+let url = 'https://treesnap.org/api/v1/'
 if (__DEV__) {
   if (Platform.OS === 'android') {
     url = 'http://10.0.2.2:3000/api/v1/'
   } else {
     url = 'http://treesnap.test/api/v1/'
   }
-} else {
-  url = 'https://treesnap.org/api/v1/'
 }
 
 /**

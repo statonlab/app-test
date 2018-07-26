@@ -18,14 +18,12 @@ import LoginScreen from '../screens/LoginScreen'
 import RegistrationScreen from '../screens/RegisterationScreen'
 import Icon from 'react-native-vector-icons/Ionicons'
 import Colors from '../helpers/Colors'
-import IntermediateAccountScreen from '../screens/IntermediateAccountScreen'
 import ObservationsStackNavigator from './ObservationsStackNavigator'
 import User from '../db/User'
 import {ifIphoneX} from 'react-native-iphone-x-helper'
 import MoreStackNavigator from './MoreStackNavigator'
 import ObserveStackNavigator from './ObserveStackNavigator'
 import MapStackNavigator from './MapStackNavigator'
-import PersonalInformationScreen from '../screens/PersonalInformationScreen'
 import AccountStackNavigator from './AccountStackNavigator'
 
 /**
@@ -121,10 +119,11 @@ export default class Navigator extends Component {
         },
         Login       : {
           screen           : LoginScreen,
+          path: 'social-login/:api_token',
           navigationOptions: {
             ...(this.navigationOptions('Login', 'md-person', 25))
           }
-        }
+        },
       }
     }
 

@@ -13,31 +13,31 @@ import ChangePasswordScreen from '../screens/ChangePasswordScreen'
  * IOS ONLY
  */
 const MoreStackNavigator = new createStackNavigator({
-  More         : {
+  More               : {
     screen: IOSMoreScreen
   },
-  Account      : {
+  Account            : {
     screen: IntermediateAccountScreen
   },
   PersonalInformation: {
     screen: PersonalInformationScreen
   },
-  ChangePassword: {
+  ChangePassword     : {
     screen: ChangePasswordScreen
   },
-  About        : {
+  About              : {
     screen: AboutScreen
   },
-  HealthSafety : {
+  HealthSafety       : {
     screen: HealthSafetyScreen
   },
-  PrivacyPolicy: {
+  PrivacyPolicy      : {
     screen: PrivacyPolicyScreen
   },
-  Login        : {
-    screen: LoginScreen
+  Login              : {
+    screen: LoginScreen,
   },
-  Registration : {
+  Registration       : {
     screen: RegistrationScreen
   }
 }, {

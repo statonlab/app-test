@@ -6,7 +6,6 @@ import axios from '../helpers/Axios'
 import Analytics from '../helpers/Analytics'
 import DeviceInfo from 'react-native-device-info'
 
-
 class User {
   /**
    * Create file handler.
@@ -94,33 +93,7 @@ class User {
   login(email, password) {
     return new Promise((resolve, onFail) => {
       axios.post('user/login', {email, password}).then(response => {
-        realm.write(() => {
-          let user = realm.objects('User')
-          if (user.length > 0) {
-            // Delete existing users first
-            realm.delete(user)
-          }
-
-          if (!response.data.data.zipcode) {
-            response.data.data.zipcode = ''
-          }
-
-          let data = response.data.data
-          if (!data.units) {
-            data.units = 'US'
-          }
-
-          realm.create('User', {
-            name      : data.name,
-            email     : data.email,
-            anonymous : data.is_anonymous,
-            zipcode   : data.zipcode,
-            api_token : data.api_token,
-            birth_year: data.birth_year,
-            is_private: data.is_private,
-            units     : data.units
-          })
-        })
+        this.createRealmUser(response.data.data)
 
         const analytics = new Analytics()
         analytics.loggedIn(response.data.data.id)
@@ -156,36 +129,15 @@ class User {
       }
       requestParams.units = units
 
-      axios.post('users', requestParams).then(responseFull => {
-        // write to realm
-        realm.write(() => {
-          // Delete existing users first
-          let old_users = realm.objects('User')
-          realm.delete(old_users)
-
-          let response = responseFull.data.data
-
-          if (!response.zipcode) {
-            response.zipcode = ''
-          }
-
-          realm.create('User', {
-            name      : response.name.toString(),
-            email     : response.email.toString(),
-            anonymous : response.is_anonymous,
-            zipcode   : response.zipcode,
-            api_token : response.api_token,
-            birth_year: response.birth_year,
-            units     : response.units
-          })
-        })
+      axios.post('users', requestParams).then(response => {
+        this.createRealmUser(response.data.data)
 
         // Broadcast that the user has registered
         DeviceEventEmitter.emit('userRegistered')
 
         // Call user function
         if (typeof resolve === 'function') {
-          resolve(responseFull)
+          resolve(response)
         }
       }).catch((error) => {
         if (typeof onFail === 'function') {
@@ -195,6 +147,46 @@ class User {
         }
       })
     })
+  }
+
+  createRealmUser(response) {
+    // write to realm
+    realm.write(() => {
+      // Delete existing users first
+      let old_users = realm.objects('User')
+      realm.delete(old_users)
+
+      if (!response.zipcode) {
+        response.zipcode = ''
+      }
+
+      realm.create('User', {
+        name      : response.name.toString(),
+        email     : response.email.toString(),
+        anonymous : response.is_anonymous,
+        zipcode   : response.zipcode,
+        api_token : response.api_token,
+        birth_year: response.birth_year,
+        units     : response.units,
+        provider  : response.provider || 'treesnap'
+      })
+    })
+  }
+
+  async socialLogin(api_token) {
+    if (typeof api_token !== 'string' || api_token.length < 1) {
+      return false
+    }
+
+    try {
+      let response = await axios.get(`/user?api_token=${api_token}`)
+      this.createRealmUser(response.data.data)
+      DeviceEventEmitter.emit('userLoggedIn')
+      return this.user()
+    } catch (e) {
+      console.log('HERE social login error', e)
+      return false
+    }
   }
 }
 

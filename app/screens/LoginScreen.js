@@ -2,6 +2,7 @@ import React from 'react'
 import Screen from './Screen'
 import PropTypes from 'prop-types'
 import {
+  Alert,
   View,
   ScrollView,
   StyleSheet,
@@ -9,7 +10,8 @@ import {
   Text,
   TouchableOpacity,
   BackHandler,
-  Platform
+  Platform,
+  Linking
 } from 'react-native'
 import Header from '../components/Header'
 import Elevation from '../helpers/Elevation'
@@ -20,6 +22,7 @@ import Spinner from '../components/Spinner'
 import AText from '../components/Atext'
 import User from '../db/User'
 import Errors from '../helpers/Errors'
+import Icon from 'react-native-vector-icons/Ionicons'
 
 const isAndroid = Platform.OS === 'android'
 
@@ -43,6 +46,8 @@ export default class LoginScreen extends Screen {
       email   : t.String,
       password: t.refinement(t.String, (pw) => pw.length >= 6, 'pw')
     })
+
+    this.loggingIn = false
   }
 
   componentDidMount() {
@@ -51,6 +56,56 @@ export default class LoginScreen extends Screen {
       this.navigator.goBack()
       return true
     })
+
+    Linking.addEventListener('url', this._handleOpenURL.bind(this))
+  }
+
+  componentWillUnmount() {
+    Linking.removeEventListener('url', this._handleOpenURL.bind(this))
+  }
+
+  _handleOpenURL(url) {
+    let link = url.url
+    if (link && link.indexOf('social-login') > -1) {
+      this.params.api_token = this.extractAPIToken(link)
+
+      this.handleSocialLoginCallback()
+    }
+  }
+
+  extractAPIToken(link) {
+    let sub   = 'social-login/'
+    let start = link.indexOf(sub)
+    return link.substr(start + sub.length)
+  }
+
+  async handleSocialLoginCallback() {
+    if (this.loggingIn || User.loggedIn()) {
+      return
+    }
+
+    this.loggingIn = true
+
+    if (this.spinner) {
+      this.spinner.open()
+    }
+
+    let user = await User.socialLogin(this.params.api_token)
+
+    if (this.spinner) {
+      this.spinner.close()
+    }
+
+    if (!user) {
+      Alert.alert('Login Error', 'Unable to login using other platforms. Please use email and password instead.')
+      return
+    }
+
+    if (typeof this.props.onLogin !== 'function') {
+      this.navigator.goBack()
+    } else {
+      this.props.onLogin()
+    }
   }
 
   /**
@@ -135,6 +190,28 @@ export default class LoginScreen extends Screen {
     }
   }
 
+  async loginWithGoogle() {
+    let platform = Platform.select({ios: 'ios', android: 'android'})
+    let url      = `https://treesnap.org/login/google?redirect_to=https://treesnap.org/mobile/login/${platform}`
+
+    if (__DEV__) {
+      // We have to use .app here instead of .test because it needs to be
+      // SSL enabled for social networks to accept the connection
+      url = `https://treesnap.app/login/google?redirect_to=https://treesnap.app/mobile/login/${platform}`
+    }
+
+    try {
+      let supported = await Linking.canOpenURL(url)
+      if (!supported) {
+        Alert.alert('Error', 'Unable to link to Google. Please use Email login instead.')
+        return
+      }
+
+      return Linking.openURL(url)
+    } catch (e) {
+      console.log(e)
+    }
+  }
 
   render() {
     return (
@@ -216,6 +293,25 @@ export default class LoginScreen extends Screen {
                 <Text style={[styles.link]}>Register</Text>
               </TouchableOpacity>
             </View>
+
+            {isAndroid && Platform.Version <= 22 ? null :
+              <View style={styles.formGroup}>
+                <TouchableOpacity
+                  style={[styles.button, {
+                    backgroundColor: '#d34836',
+                    flexDirection  : 'row',
+                    justifyContent : 'center',
+                    alignItems     : 'center',
+                    paddingVertical: 5
+                  }]}
+                  onPress={this.loginWithGoogle.bind(this)}>
+                  <Icon name={'logo-google'} size={24} color={'#fff'} style={{marginRight: 7, marginLeft: 5}}/>
+                  <Text style={[styles.buttonText, {fontWeight: 'bold', color: '#fff'}]}>
+                    Login with Google
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            }
           </View>
         </ScrollView>
       </View>
@@ -251,11 +347,10 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontSize    : 20,
-    textAlign   : 'center',
-    marginBottom: 20,
-    fontWeight  : 'bold',
-    color       : '#222'
+    fontSize  : 20,
+    textAlign : 'center',
+    fontWeight: 'bold',
+    color     : '#222'
   },
 
   formGroup: {
