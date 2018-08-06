@@ -383,7 +383,7 @@ const DCP = {
     captions     : [
       'Full',
       'Falling',
-      'Sparse',
+      'Sparse. The Mary T. and Frank L. Hoffman Family Foundation (2001)',
       'Bare'
     ]
   }
