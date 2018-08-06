@@ -1,4 +1,4 @@
-const Latin = {
+export default {
   'Abies balsamea'         : 'Balsam fir',
   'Acer nigrum'            : 'Black maple',
   'Acer pensylvanicum'     : 'Striped maple',
@@ -95,7 +95,10 @@ const Latin = {
   'Ulmus rubra'            : 'Slippery elm',
   'Ulmus thomasii'         : 'Rock elm',
   'Zanthoxylum americanum' : 'Prickly ash',
-  'Vitis rotundifolia': ''
+  'Vitis rotundifolia'     : 'Muscadine',
+  'Vitis aestivalis'       : 'Summer grape',
+  'Vitis riparia'          : 'Frost grape',
+  'Vitis labrusca'         : 'Fox grape',
+  'Vitis mustangensis'     : 'Mustang grape',
+  'Vitis rupestris'        : 'Sand grape'
 }
-export default Latin
-
