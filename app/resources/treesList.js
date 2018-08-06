@@ -51,11 +51,39 @@ const treesList = [
     }
   },
   {
-    title : 'Florida Torreya',
-    image           : require('../img/torreya/top_leaves.jpg'),
-    latinName       : 'Torreya taxifolia',
+    title    : 'Florida Torreya',
+    image    : require('../img/torreya/top_leaves.jpg'),
+    latinName: 'Torreya taxifolia',
     locations: {
       only: ['Florida']
+    }
+  },
+  {
+    title    : 'Eastern Larch',
+    latinName: 'Larix laricina',
+    image    : require('../img/eastern_larch/id.png'),
+    locations: {
+      only: [
+        'Minnesota',
+        'Michigan',
+        'Wisconsin',
+        'Iowa',
+        'Indiana',
+        'Illinois',
+        'Ohio',
+        'West Virginia',
+        'Maryland',
+        'Pennsylvania',
+        'New Jersey',
+        'New York',
+        'Maine',
+        'Vermont',
+        'New Hampshire',
+        'Massachusetts',
+        'Rhode Island',
+        'Connecticut',
+        'Alaska'
+      ]
     }
   },
   {
