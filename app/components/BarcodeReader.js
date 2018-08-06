@@ -34,6 +34,7 @@ export default class BarcodeReader extends Component {
             <Text style={{color: '#fff', fontSize: 16, marginBottom: 5}}>Contain the barcode within this area</Text>
           </View>
           <RNCamera
+            autoFocus={RNCamera.Constants.AutoFocus.on}
             style={{
               flex          : 1,
               justifyContent: 'space-between'
