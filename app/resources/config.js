@@ -381,10 +381,10 @@ const DCP = {
       require('../img/eastern_larch/bare-needle-presense.png')
     ],
     captions     : [
-      'Full',
-      'Falling',
+      'Full. Johnson’s Nursery (2018).',
+      'Falling. Dave’s Garden (2012).',
       'Sparse. The Mary T. and Frank L. Hoffman Family Foundation (2001)',
-      'Bare'
+      'Bare. Volo Bog State Natural Area (April 2017).'
     ]
   }
 }
