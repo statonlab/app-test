@@ -333,7 +333,58 @@ const DCP = {
       require('../img/torreya/Three_Rivers_SP_11282010_031_Torreya_taxifolia_male_cones_group_campground.jpg')
 
     ],
-    captions     : ['Male cones.', 'Female cones.', 'Under side of Florida Torreya leaves and buds of male cones.  Photo credit: Leigh Brooks.'
+    captions     : [
+      'Male cones.',
+      'Female cones.',
+      'Under side of Florida Torreya leaves and buds of male cones. Photo credit: Leigh Brooks.'
+    ]
+  },
+
+  needleColor: {
+    label        : 'Needles Color',
+    description  : 'What color ar the needles?',
+    selectChoices: [
+      'Green',
+      'Green Blue',
+      'Green Yellow',
+      'Golden Yellow'
+    ],
+    placeHolder  : 'Please select',
+    images       : [
+      require('../img/eastern_larch/needle-green.png'),
+      require('../img/eastern_larch/needle-green-blue.png'),
+      require('../img/eastern_larch/needle-green-yellow.png'),
+      require('../img/eastern_larch/needle-golden-yellow.png')
+    ],
+    captions     : [
+      'Green. Tamaracks on Barnum Bog at the Paul Smiths VIC (12 July 2012).',
+      'Green Blue. Jean Baxter, New England Tree Directory (2018).',
+      'Green Yellow. Tamaracks on Barnum Bog at the Paul Smiths VIC (12 July 2012).',
+      'Golden Yellow. Jonathan Schechter, Vermont County Blog (November 2016).'
+    ]
+  },
+
+  needleAmount: {
+    label        : 'Amount of Needles',
+    description  : 'Describe needle presence on the tree.',
+    selectChoices: [
+      'Full',
+      'Falling',
+      'Sparse',
+      'Bare'
+    ],
+    placeHolder  : 'Please select',
+    images       : [
+      require('../img/eastern_larch/full-needle-presence.png'),
+      require('../img/eastern_larch/falling-needle-presence.png'),
+      require('../img/eastern_larch/sparse-needle-presence.png'),
+      require('../img/eastern_larch/bare-needle-presense.png')
+    ],
+    captions     : [
+      'Full. Johnson’s Nursery (2018).',
+      'Falling. Dave’s Garden (2012).',
+      'Sparse. The Mary T. and Frank L. Hoffman Family Foundation (2001)',
+      'Bare. Volo Bog State Natural Area (April 2017).'
     ]
   }
 }
