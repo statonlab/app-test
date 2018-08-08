@@ -493,21 +493,19 @@ export const Plants = {
       {
         title: 'Overview',
         body : [
-          <Text style={styles.paragraph}>The Eastern Larch is a deciduous conifer tree, meaning that it drops its needles every Autumn.</Text>,
-          <Text style={styles.paragraph}>The Eastern Larch is one of the only gymnosperms that experience this Autumn leaf senescence, so it is important to better understand the mechanisms and patterns of this phenomenon.</Text>
+          <Text style={styles.paragraph}>
+            Eastern larch (Larix laricina) is common in New England, the upper Midwest, and much of Canada. It often goes by the alternative common names of Tamarack and American Larch. Eastern larch is one of the few evergreens that loses its leaves in the fall. The reason for this, and process, in Eastern larch is not well understood. Researchers are aiming to investigate this by collecting samples throughout the annual cycle of individual trees, to study both their physical and genetic characteristics.
+          </Text>,
+          <Text style={styles.paragraph}>
+            The needle dropping period occurs very soon after the needles change color from green-blue to golden-yellow. The specific timing of this period can vary due to changes in temperatures and daylight patterns. Needle samples will be collected in the Fall for sequencing and it is important to document the color changes and needle drop to further our understanding of this phenomenon.
+          </Text>
         ]
       },
       {
         title: 'Description',
         body : [
-          <Text style={styles.paragraph}>The Eastern Larch grows to be about 20 meters tall with a tall, slender, straight trunk while the bark on young trees tend to be gray and smooth and older trees adopt a more gray-brown hue with flakes. The 1” needles are bound in groups of 10-20 on short shoots, and change from a pale green-blue to a golden-yellow in the fall. Seed cones are 0.5” long and form in clusters about the shoots.</Text>
-        ]
-      },
-      {
-        title: 'Challenges',
-        body : [
+          <Text style={styles.paragraph}>The Eastern Larch grows to be about 20 meters tall with a tall, slender, straight trunk while the bark on young trees tend to be gray and smooth and older trees adopt a more gray-brown hue with flakes. The 1” needles are bound in groups of 10-20 on short shoots, and change from a pale green-blue to a golden-yellow in the fall. Seed cones are 0.5” long and form in clusters about the shoots.</Text>,
           <Text style={styles.paragraph}>The process of Autumn leaf senescence in eastern larches are not well understood. Researchers are aiming to investigate this by collecting samples throughout the annual cycle of individual trees, then to study both their physical and genetic characteristics.</Text>,
-          <Text style={styles.paragraph}>The needle dropping period occurs very soon after the needles change color from green-blue to golden-yellow, but the actual timing of this period is not easily predictable due to changes in temperatures and daylight patterns. Since samples will be collected during the fall needle changes, it is important to the research that the pattern associated with needle dropping is well documented. People who visit the same eastern larches frequently can help with this work!</Text>,
           <Text style={styles.paragraph}>More information can be found at:</Text>,
           <Text style={styles.paragraph}>{'\u2022'}<Atext url="http://curiousnature.info/A1-Larch.htm">A Conifer That Thinks It's a Broadleaf</Atext></Text>,
           <Text style={styles.paragraph}>{'\u2022'}<Atext url="https://www.lakeforest.edu/academics/programs/environmental/courses/es204/larix_laricina.php">Larix laricina (Tamarack, American Larch) Pinaceae</Atext></Text>
