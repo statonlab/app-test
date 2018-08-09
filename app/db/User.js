@@ -41,23 +41,23 @@ class User {
    * Logs the user out after confirming the click.
    */
   logout = () => {
-    //Set alert text
-    // let observations = realm.objects('Submission').filtered('synced == false')
+    // Set alert text
+    let observations = realm.objects('Submission').filtered('synced == false')
     let alertText    = {
       label    : 'Log out',
       labelText: 'Are you sure you would like to log out?',
       cancel   : 'Cancel',
       confirm  : 'Log out'
     }
-    // if (observations.length > 0) {
-    //   alertText = {
-    //     label    : 'Warning',
-    //     labelText: 'You have observations that are not uploaded. If you log out, these observations will be deleted permanently.',
-    //     cancel   : 'Cancel',
-    //     confirm  : 'Log out'
-    //   }
-    // }
-    // let that = this
+    if (observations.length > 0) {
+      alertText = {
+        label    : 'Warning',
+        labelText: 'You have observations that are not uploaded. If you log out, these observations will be deleted permanently.',
+        cancel   : 'Cancel',
+        confirm  : 'Log out'
+      }
+    }
+    let that = this
     Alert.alert(
       alertText.label,
       alertText.labelText, [
@@ -69,12 +69,12 @@ class User {
               let user = realm.objects('User')
               realm.delete(user)
 
-              // let submissions = realm.objects('Submission')
-              // submissions.map((submission) => {
-              //   let images = JSON.parse(submission.images)
-              //   that.fs.delete(images)
-              // })
-              // realm.delete(submissions)
+              let submissions = realm.objects('Submission')
+              submissions.map((submission) => {
+                let images = JSON.parse(submission.images)
+                that.fs.delete(images)
+              })
+              realm.delete(submissions)
             })
             DeviceEventEmitter.emit('userLoggedOut')
           }

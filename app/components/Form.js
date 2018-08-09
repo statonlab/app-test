@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import {
   View,
@@ -29,9 +29,9 @@ import Location from '../components/Location'
 import File from '../helpers/File'
 import Spinner from '../components/Spinner'
 import AutoComplete from '../components/AutoComplete'
-import {ACFCollection} from '../resources/descriptions'
+import { ACFCollection } from '../resources/descriptions'
 import DCPrules from '../resources/validation'
-import {ifIphoneX, isIphoneX} from 'react-native-iphone-x-helper'
+import { ifIphoneX, isIphoneX } from 'react-native-iphone-x-helper'
 import Analytics from '../helpers/Analytics'
 import AdvancedSettingsModal from './AdvancedSettingsModal'
 import CustomIDModal from './CustomIDModal'
@@ -121,7 +121,7 @@ export default class Form extends Component {
         this.primaryKey = this.generatePrimaryKey()
       } catch (e) {
         this.primaryKey = 1
-        console.log(e)
+        console.error(e)
       }
     }
 
@@ -146,16 +146,13 @@ export default class Form extends Component {
    */
   generatePrimaryKey() {
     // Generate a primary key
-    let observations = realm.objects('Submission').sorted('id', true)
-    let primaryKey
-    if (observations.length <= 0) {
-      primaryKey = parseInt(moment().format('DMMYYH').toString())
-    } else {
-      primaryKey = observations[0]
-      primaryKey = (parseInt(primaryKey.id) || 1) + 1
+    let id = parseInt(Date.now().toString().slice(5) + Math.random().toString(10).slice(2, 4))
+
+    while(realm.objects('Submission').filtered(`id = ${id}`).length > 0) {
+      id = parseInt(Date.now().toString().slice(5) + Math.random().toString(10).slice(2, 4))
     }
 
-    return primaryKey
+    return id
   }
 
   componentDidMount() {
