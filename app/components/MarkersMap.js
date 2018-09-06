@@ -120,7 +120,7 @@ export default class MarkersMap extends Component {
           flexDirection  : 'row',
           bottom         : 10,
           right          : 60,
-          width          : Platform.select({ios: 200, android: 250}),
+          width          : Platform.select({ios: 200, android: 270}),
           borderRadius   : 20,
           ...(new Elevation(5))
         }}>

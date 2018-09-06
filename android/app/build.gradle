@@ -112,8 +112,8 @@ android {
         applicationId "com.treesource"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1078
-        versionName "1.4.4"
+        versionCode 1101
+        versionName "1.5.0"
         multiDexEnabled true
         ndk {
             abiFilters "armeabi-v7a", "x86"

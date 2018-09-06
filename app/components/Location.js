@@ -227,7 +227,7 @@ export default class Location extends Component {
     // Nested set state to make sure the done param is true before
     // Setting the position. This prevents the auto GPS coordinates
     // from getting overridden
-    this.setState({done: true}, () => {
+    this.setState({done: true, currentPosition: {coords: position}}, () => {
       // Inform others of location changes
       this.props.onChange(position)
 
@@ -365,7 +365,7 @@ export default class Location extends Component {
 
   render() {
     let position = this.state.currentPosition
-    let accuracy = position.coords ? parseInt(position.coords.accuracy) : null
+    let accuracy = typeof position === 'object' && position.coords ? parseInt(position.coords.accuracy) : null
     return (
       <View style={styles.container}>
         <View style={styles.coordsContainer}>
@@ -373,7 +373,7 @@ export default class Location extends Component {
             <Text style={[styles.text, {color: '#aaa'}]}>Acquiring Location...</Text>
             : null}
 
-          {this.state.done ?
+          {this.state.done && typeof position === 'object' && position.coords ?
             <Text style={[styles.text]}>
               {position.coords.latitude.toFixed(5)}, {position.coords.longitude.toFixed(5)}
             </Text>
@@ -495,7 +495,8 @@ const styles = StyleSheet.create({
   },
 
   touchableField: {
-    padding      : 10,
+    paddingHorizontal: 10,
+    height: 50,
     flexDirection: 'row',
     alignItems   : 'center'
   },
