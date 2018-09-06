@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import {
   StyleSheet,
@@ -7,7 +7,8 @@ import {
   Image,
   Platform,
   TouchableOpacity,
-  Alert
+  Alert,
+  Dimensions
 } from 'react-native'
 import MapView from 'react-native-maps'
 import Colors from '../helpers/Colors'
@@ -90,36 +91,14 @@ export default class MarkersMap extends Component {
    */
   render() {
     const types = this.state.types
+    const width = Dimensions.get('window').width
+    const lastItemStyle = {
+      borderTopRightRadius   : 20,
+      borderBottomRightRadius: 20,
+      borderRightWidth       : 0
+    }
     return (
       <View style={{flex: 1}}>
-        <View style={{
-          backgroundColor: '#f7f7f7',
-          flexDirection  : 'row',
-          ...(new Elevation(2))
-        }}>
-          {Object.keys(types).map(key => {
-            return (
-              <TouchableOpacity
-                style={{
-                  flex           : 1,
-                  backgroundColor: '#fff',
-                  height         : 40,
-                  justifyContent : 'center',
-                  alignItems     : 'center'
-                }}
-                key={key}
-                onPress={() => {
-                  this.setState({type: key})
-                }}>
-                <Text style={{
-                  fontSize: 12,
-                  color   : '#444',
-                  ...(this.state.type === key ? {color: Colors.primary, fontWeight: 'bold'} : {})
-                }}>{types[key]}</Text>
-              </TouchableOpacity>
-            )
-          })}
-        </View>
         <MapView
           {...this.props}
           mapType={this.state.type}
@@ -135,6 +114,49 @@ export default class MarkersMap extends Component {
           {this.props.markers.map(this.renderMarker.bind(this))}
           {this.props.startingMarker !== null ? this.renderStartingMarker(this.props.startingMarker) : null}
         </MapView>
+        <View style={{
+          position       : 'absolute',
+          backgroundColor: '#f7f7f7',
+          flexDirection  : 'row',
+          bottom         : 10,
+          right          : 60,
+          width          : Platform.select({ios: 200, android: 250}),
+          borderRadius   : 20,
+          ...(new Elevation(5))
+        }}>
+          {Object.keys(types).map((key, i) => {
+            return (
+              <TouchableOpacity
+                style={{
+                  flex            : 1,
+                  backgroundColor : '#fff',
+                  height          : 40,
+                  justifyContent  : 'center',
+                  alignItems      : 'center',
+                  borderRightWidth: 1,
+                  borderColor     : '#eee',
+                  ...(i === 0 ? {
+                    borderTopLeftRadius   : 20,
+                    borderBottomLeftRadius: 20
+                  } : null),
+                  ...Platform.select({
+                    ios    : i === 1 ? lastItemStyle : null,
+                    android: i === 2 ? lastItemStyle: null
+                  })
+                }}
+                key={key}
+                onPress={() => {
+                  this.setState({type: key})
+                }}>
+                <Text style={{
+                  fontSize: 12,
+                  color   : '#444',
+                  ...(this.state.type === key ? {color: Colors.primary, fontWeight: 'bold'} : {})
+                }}>{types[key]}</Text>
+              </TouchableOpacity>
+            )
+          })}
+        </View>
         <TouchableOpacity
           onPress={() => {
             navigator.geolocation.getCurrentPosition(
@@ -157,18 +179,19 @@ export default class MarkersMap extends Component {
             bottom         : 10,
             right          : 10,
             backgroundColor: '#fff',
-            borderRadius   : 5,
+            borderRadius   : 20,
             height         : 40,
             width          : 40,
             alignItems     : 'center',
             justifyContent : 'center',
-            ...(new Elevation(4))
+            ...(new Elevation(5))
           }}>
           <Icon name={Platform.select({ios: 'ios-locate-outline', android: 'md-locate'})}
                 color={'#222'}
                 size={24}
                 style={{
-                  marginTop: Platform.select({ios: 2, android: 0})
+                  marginTop: Platform.select({ios: 2, android: 0}),
+                  ...(new Elevation(2))
                 }}
           />
         </TouchableOpacity>

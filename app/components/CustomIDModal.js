@@ -126,7 +126,7 @@ function getVerticalPadding() {
     if (isIphoneX()) {
       return 30
     }
-    return 15
+    return 20
   }
 }
 
