@@ -417,7 +417,7 @@ export default class Form extends Component {
         id                  : this.props.entryInfo.id,
         name                : this.state.title.toString(),
         images              : JSON.stringify(this.getRemainingImages()),
-        location            : this.props.entryInfo.location,
+        location            : this.state.location,
         date                : this.props.entryInfo.date,
         synced              : this.props.entryInfo.synced,
         meta_data           : JSON.stringify(this.state.metadata),
