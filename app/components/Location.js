@@ -268,7 +268,7 @@ export default class Location extends Component {
                 <Text style={styles.label}>Latitude</Text>
                 <TextInput
                   style={styles.input}
-                  placeholder="Example: -83.123456"
+                  placeholder="Example: 34.123456"
                   placeholderTextColor="#aaa"
                   value={this.state.manualLatitude}
                   onChangeText={manualLatitude => this.setState({manualLatitude})}
@@ -282,7 +282,7 @@ export default class Location extends Component {
                 <Text style={styles.label}>Longitude</Text>
                 <TextInput
                   style={styles.input}
-                  placeholder="Example: 34.123456"
+                  placeholder="Example: -83.123456"
                   placeholderTextColor="#aaa"
                   value={this.state.manualLongitude}
                   onChangeText={manualLongitude => this.setState({manualLongitude})}
