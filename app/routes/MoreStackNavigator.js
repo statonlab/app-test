@@ -8,6 +8,7 @@ import LoginScreen from '../screens/LoginScreen'
 import RegistrationScreen from '../screens/RegisterationScreen'
 import PersonalInformationScreen from '../screens/PersonalInformationScreen'
 import ChangePasswordScreen from '../screens/ChangePasswordScreen'
+import AuthScreen from '../screens/AuthScreen'
 
 /**
  * IOS ONLY
@@ -39,6 +40,9 @@ const MoreStackNavigator = new createStackNavigator({
   },
   Registration       : {
     screen: RegistrationScreen
+  },
+  Auth               : {
+    screen: AuthScreen
   }
 }, {
   initialRouteName: 'More',
