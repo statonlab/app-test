@@ -386,7 +386,46 @@ const DCP = {
       'Sparse. The Mary T. and Frank L. Hoffman Family Foundation (2001)',
       'Bare. Volo Bog State Natural Area (April 2017).'
     ]
+  },
+
+  standDiversity: {
+    label        : 'Stand diversity',
+    description  : 'What types of trees do you see in the stand where the tree is found?',
+    selectChoices: ['Pure stand of this species', 'Mixed stand (this species and others)', 'Tree is standing alone', 'Not sure'],
+    placeHolder  : 'Please select'
+  },
+
+  crownAssessment: {
+    label        : 'Tree Crown Assessment',
+    description  : 'What percentage of the tree crown looks unhealthy or appears damaged?',
+    selectChoices: ['< 10%', '10% to 20%', '20% to 50%', '50% to 75%', '> 75%'],
+    placeHolder  : 'Please select'
+  },
+
+  disease: {
+    label        : 'Disease',
+    description  : 'Do you see any disease symptoms on the leaves, branches, or trunk?',
+    selectChoices: ['Wilting leaves', 'Leaf spots', 'Rust', 'Blight', 'Defoliation', 'Lesions', 'Cankers'],
+    placeHolder  : 'Please select',
+    multiCheck   : true,
+    images       : [
+      require('../img/madrone/ARME_wilt-min.jpg'),
+      require('../img/madrone/ARME_blight-min.jpg'),
+      require('../img/madrone/ARME_dieback-min.jpg'),
+      require('../img/madrone/ARME_defoliated-min.jpg'),
+      require('../img/madrone/ARME_P_canker-min.jpg'),
+      require('../img/madrone/ARME_cankers-min.jpg'),
+    ],
+    captions    : [
+      'Wilting leaves. Marianne Elliott, WSU',
+      'Leaf blight (Whole leaf appears dry and dead, brown in color). Marianne Elliott, WSU',
+      'Botryosphaeria blight (Leaves that appear grey/black or "burnt"). Marianne Elliott, WSU',
+      'Multi-stemmed trunk and/or peeling bark. Michael Yadrick, City of Seattle',
+      'Dark, smooth, discolored lesions on trunk. Marianne Elliott, WSU',
+      'Raised bumpy cankers on trunk or branches. Michael Yadrick, City of Seattle',
+    ]
   }
+
 }
 
 

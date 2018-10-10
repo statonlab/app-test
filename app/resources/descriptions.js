@@ -469,6 +469,78 @@ export const Plants = {
     }
   },
 
+
+  'Pacific Madrone': {
+    image           : require('../img/madrone/ARME_flowers-min.jpg'),
+    latinName       : 'Arbutus menziesii',
+    maps            : [
+      require('../img/madrone/madrone_map.jpg')
+    ],
+    images          : [
+      require('../img/madrone/ARME_bark-min.jpg'),
+      require('../img/madrone/ARME_berries_01-min.jpg'),
+      require('../img/madrone/ARME_berries_02-min.jpg'),
+      require('../img/madrone/ARME_blight-min.jpg'),
+      require('../img/madrone/ARME_cankers-min.jpg'),
+      require('../img/madrone/ARME_crown-min.jpg'),
+      require('../img/madrone/ARME_defoliated-min.jpg'),
+      require('../img/madrone/ARME_dieback-min.jpg'),
+      require('../img/madrone/ARME_flowers-min.jpg'),
+      require('../img/madrone/ARME_foliage-min.jpg'),
+      require('../img/madrone/ARME_P_canker-min.jpg'),
+      require('../img/madrone/ARME_wilt-min.jpg')
+    ],
+    captions        : [
+      'Multi-stemmed trunk and/or peeling bark. Michael Yadrick, City of Seattle',
+      'Red berries, fruits on terminal clusters. Marianne Elliott, WSU (01); Michael Yadrick, City of Seattle (02)',
+      'Red berries, fruits on terminal clusters. Marianne Elliott, WSU (01); Michael Yadrick, City of Seattle (02)',
+      'Leaf blight (Whole leaf appears dry and dead, brown in color). Marianne Elliott, WSU',
+      'Raised bumpy cankers on trunk or branches. Michael Yadrick, City of Seattle',
+      'Growth structure rounded, spreading crown. Michael Yadrick, City of Seattle',
+      'Shoots or branches partially defoliated or completely dead. Marianne Elliott, WSU',
+      'Botryosphaeria blight (Leaves that appear grey/black or "burnt"). Marianne Elliott, WSU',
+      'White urn-shaped flowers. Michael Yadrick, City of Seattle',
+      'Ovular, leathery leaves retained throughout the year (evergreen). Michael Yadrick, City of Seattle',
+      'Dark, smooth, discolored lesions on trunk. Marianne Elliott, WSU',
+      'Wilting leaves. Marianne Elliott, WSU'
+
+    ],
+    descriptionCards: [
+      {
+        title: 'Overview',
+        body : [
+          <Text style={styles.paragraph}> Arbutus menziesii Pursh (Ericaceae) Pacific madrone, madrone, madrona, arbutus</Text>,
+          <Text style={styles.paragraph}>The Pacific madrone (Arbutus menziesii Pursh) tree is the largest member of the family Ericaceae. It is the most distinctive hardwood tree native to the West Coast of North America, ranging from southwestern British Columbia to southern California. In natural forest ecosystems, the tree is rarely dominant, but it is diagnostic of unique plant communities found on drier, lower elevation sites as well as on coastal bluffs and mountains. The tree is relatively drought tolerant and fast growing, but does not tolerate extreme temperature changes.</Text>
+        ]
+      },
+      {
+        title: 'Description',
+        body : [
+          <Text style={styles.paragraph}>Madrone stem(s) twist and lean, and its bark can display a range of colors (orange, green, red to deep-brown cinnamon), peeling with age. Madrones have ovular, leathery leaves that are retained throughout the year and rounded, spreading crowns. White flowers appear in April to May on terminal clusters. Certain birds feed on the largish red berries that mature in late fall.</Text>
+        ]
+      },
+      {
+        title: 'Challenges',
+        body : [
+          <Text style={styles.paragraph}>Thinning stands, soil loss and compaction, fire suppression and other urban impacts increase susceptibility of this species to diseases, leaving it vulnerable to heart rot, butt rot, leaf diseases and cankers. Increased disease may also be connected to more frequent extended drought periods and a higher frequency of warmer, wetter spring weather. TreeSnap data will help with conservation and restoration of this species by classifying individual tree health to understand disease tolerance while also identifying a true range for the species.</Text>,
+          <Text style={styles.paragraph}>Elliott, M. (1999). Diseases of Pacific madrone. In: Adams, A. B.; Hamilton, Clement W., eds. The Decline of Pacific Madrone (Arbutus Menziesii Pursh): Current Theory and Research Directions: Proceedings of the April 28, 1995 Symposium Held at the Center for Urban Horticulture, University of Washington, Seattle, Washington & Subsequent Research Papers (p. 140). Save Magnolia's Madrones. <Atext
+            url="http://depts.washington.edu/hortlib/collections/madrone/ch07_el.pdf">http://depts.washington.edu/hortlib/collections/madrone/ch07_el.pdf</Atext></Text>,
+          <Text style={styles.paragraph}>Reeves, Sonja L. "Arbutus menziesii". Fire Effects Information System. U.S. Department of Agriculture, Forest Service, Rocky Mountain Research Station, Fire Sciences Laboratory. Retrieved September 22, 2012. <Atext
+            url="https://www.fs.fed.us/database/feis/plants/tree/arbmen/all.html">https://www.fs.fed.us/database/feis/plants/tree/arbmen/all.html</Atext></Text>,
+          <Text style={styles.paragraph}>Washington State University Extension Pacific Madrone Research <Atext url="https://ppo.puyallup.wsu.edu/pmr">https://ppo.puyallup.wsu.edu/pmr</Atext></Text>
+        ]
+      }
+    ],
+    formProps       : {
+      heightNumeric  : true,
+      diameterNumeric: true,
+      standDiversity : true,
+      crownAssessment: true,
+      disease:         true
+    }
+  },
+
+
   'Eastern Larch': {
     image           : require('../img/eastern_larch/id.png'),
     latinName       : 'Larix laricina',
