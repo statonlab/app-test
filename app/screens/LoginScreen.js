@@ -203,12 +203,6 @@ export default class LoginScreen extends Screen {
                     showsVerticalScrollIndicator={false}
                     keyboardShouldPersistTaps="handled">
           <View style={styles.form}>
-            <View style={[styles.formGroup, {marginBottom: 0}]}>
-              <Text style={styles.title}>
-                Tree<Text style={{fontWeight: '200'}}>Snap</Text>
-              </Text>
-            </View>
-
             <View style={styles.formGroup}>
               <Text
                 style={this.state.warnings.emailWarning ? [styles.label, styles.labelWarning] : styles.label}>Email</Text>

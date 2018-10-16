@@ -156,7 +156,7 @@ export default class LandingScreen extends Screen {
   loginButton() {
     return (
       <TouchableOpacity style={[styles.button, {marginHorizontal: 5}]}
-                        onPress={() => this.navigator.navigate('Login')}>
+                        onPress={() => this.navigator.navigate('Auth')}>
         <Text style={styles.buttonText}>Login to upload your entries</Text>
       </TouchableOpacity>
     )

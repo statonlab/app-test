@@ -218,12 +218,6 @@ export default class RegistrationScreen extends Screen {
           keyboardShouldPersistTaps="handled"
         >
           <View style={styles.form}>
-            <View style={[styles.formGroup, {marginBottom: 0}]}>
-              <Text style={styles.title}>
-                Tree<Text style={{fontWeight: '200'}}>Snap</Text>
-              </Text>
-            </View>
-
             <View style={styles.formGroup}>
               <Text
                 style={this.state.warnings.name ? [styles.label, styles.labelWarning] : styles.label}>Name</Text>

@@ -165,7 +165,7 @@ dependencies {
     implementation project(':react-native-vector-icons')
     implementation project(':react-native-material-kit')
     implementation project(':react-native-image-resizer')
-    implementation project(':react-native-fetch-blob')
+    implementation project(':rn-fetch-blob')
     implementation(project(':react-native-maps')) {
         exclude group: 'com.google.android.gms'
     }

@@ -87,6 +87,18 @@ const treesList = [
     }
   },
   {
+    title    : 'Pacific Madrone',
+    image    : require('../img/madrone/madrone.jpg'),
+    latinName: 'Arbutus menziesii',
+    locations: {
+      only: [
+        'California',
+        'Oregon',
+        'Washington'
+      ]
+    }
+  },
+  {
     title    : 'Other',
     latinName: 'Other trees that aren\'t listed above',
     image    : require('../img/forest.jpg'),

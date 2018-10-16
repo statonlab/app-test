@@ -1,7 +1,7 @@
 import React from 'react'
 import {DeviceEventEmitter, Platform} from 'react-native'
 import ImageResizer from 'react-native-image-resizer'
-import FS from 'react-native-fetch-blob'
+import FS from 'rn-fetch-blob'
 import realm from '../db/Schema'
 
 export default class File {

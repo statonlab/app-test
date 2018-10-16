@@ -9,13 +9,15 @@ import {
 import {
   createBottomTabNavigator,
   createDrawerNavigator,
-  DrawerItems
+  DrawerItems,
+  createStackNavigator
 } from 'react-navigation'
 import AboutScreen from '../screens/AboutScreen'
 import PrivacyPolicyScreen from '../screens/PrivacyPolicySreen'
 import HealthSafetyScreen from '../screens/HealthSafetyScreen'
 import LoginScreen from '../screens/LoginScreen'
 import RegistrationScreen from '../screens/RegisterationScreen'
+import AuthScreen from '../screens/AuthScreen'
 import Icon from 'react-native-vector-icons/Ionicons'
 import Colors from '../helpers/Colors'
 import ObservationsStackNavigator from './ObservationsStackNavigator'
@@ -25,6 +27,7 @@ import MoreStackNavigator from './MoreStackNavigator'
 import ObserveStackNavigator from './ObserveStackNavigator'
 import MapStackNavigator from './MapStackNavigator'
 import AccountStackNavigator from './AccountStackNavigator'
+
 
 /**
  * Implementation of react-navigation.
@@ -289,7 +292,17 @@ export default class Navigator extends Component {
       ...(this.drawerOptions())
     })
 
-    return (<Nav/>)
+    const Stack = createStackNavigator({
+      HomeStack: Nav,
+      Auth: {
+        screen: AuthScreen
+      }
+    }, {
+      initialRouteName: 'HomeStack',
+      headerMode      : 'none'
+    })
+
+    return (<Stack/>)
   }
 
   render() {
