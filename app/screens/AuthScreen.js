@@ -6,8 +6,8 @@ import {
   TouchableOpacity,
   View,
   Image,
-  Dimensions,
-  StatusBar
+  StatusBar,
+  BackHandler
 } from 'react-native'
 import Header from '../components/Header'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
@@ -22,6 +22,17 @@ export default class AuthScreen extends Screen {
 
   constructor(props) {
     super(props)
+  }
+
+  componentDidMount() {
+    this.backEvent = BackHandler.addEventListener('hardwareBackPress', () => {
+      this.navigator.goBack()
+      return true
+    })
+  }
+
+  componentWillUnmount() {
+    this.backEvent.remove()
   }
 
   render() {
