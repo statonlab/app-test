@@ -9,8 +9,6 @@ import {
   StatusBar,
   BackHandler
 } from 'react-native'
-import Header from '../components/Header'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import React from 'react'
 import Colors from '../helpers/Colors'
 import Elevation from '../helpers/Elevation'

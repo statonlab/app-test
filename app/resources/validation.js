@@ -43,7 +43,7 @@ const DCPrules = {
   needleAmount           : t.enums.of(DCP.needleAmount.selectChoices),
   standDiversity         : t.enums.of(DCP.standDiversity.selectChoices),
   crownAssessment        : t.enums.of(DCP.crownAssessment.selectChoices),
-  disease                : t.enums.of(DCP.disease.selectChoices)
+  madroneDisease         : t.String
 
 
   //Deprecated choices

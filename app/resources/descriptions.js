@@ -406,7 +406,7 @@ export const Plants = {
       //   require('../img/torreya/torreya1_mark_schwartz_lg.jpg'),
       //   require('../img/torreya/torreya2_mark_schwartz_lg.jpg'),
       //   require('../img/torreya/2004-canker.jpg'),
-      //  require('../img/torreya/fl-disease-x.jpg')
+      //  require('../img/torreya/fl-madroneDisease-x.jpg')
     ],
     captions        : ['Illustrations of Florida Torreya leaves, male and female cones, and underside of leaf.  Image credit: Field Guide to the Rare Plants of Florida, Florida Natural Areas Inventory, 2000.',
       'Top side of Florida Torreya leaves.  Photo credit: Leigh Brooks.',
@@ -536,7 +536,7 @@ export const Plants = {
       diameterNumeric: true,
       standDiversity : true,
       crownAssessment: true,
-      disease:         true
+      madroneDisease :         true
     }
   },
 

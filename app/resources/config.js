@@ -304,9 +304,9 @@ const DCP = {
 
   torreyaFungalBlight: {
     label        : 'Disease symptoms',
-    description  : 'What disease symptoms are present?',
+    description  : 'What madroneDisease symptoms are present?',
     selectChoices: ['Cankers', 'Needle lesions or yellowing'],
-    placeHolder  : 'No disease symptoms',
+    placeHolder  : 'No madroneDisease symptoms',
     multiCheck   : true,
     images       : [
       require('../img/torreya/Canker_on_Florida_Torreya_stem_by_Houston_Snead.jpg'),
@@ -402,9 +402,9 @@ const DCP = {
     placeHolder  : 'Please select'
   },
 
-  disease: {
+  madroneDisease: {
     label        : 'Disease',
-    description  : 'Do you see any disease symptoms on the leaves, branches, or trunk?',
+    description  : 'Do you see any madroneDisease symptoms on the leaves, branches, or trunk?',
     selectChoices: ['Wilting leaves', 'Leaf spots', 'Rust', 'Blight', 'Defoliation', 'Lesions', 'Cankers'],
     placeHolder  : 'Please select',
     multiCheck   : true,
