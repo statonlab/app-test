@@ -1,11 +1,20 @@
 import Screen from './Screen'
-import { Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import Spinner from '../components/Spinner'
+import {
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Image,
+  Dimensions,
+  StatusBar
+} from 'react-native'
 import Header from '../components/Header'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import React from 'react'
 import Colors from '../helpers/Colors'
 import Elevation from '../helpers/Elevation'
+import Icon from 'react-native-vector-icons/Feather'
 
 const isAndroid = Platform.OS === 'android'
 
@@ -18,42 +27,56 @@ export default class AuthScreen extends Screen {
   render() {
     return (
       <View style={styles.container}>
-        <Spinner ref={ref => this.spinner = ref}/>
-        <Header title="Authentification"
-                navigator={this.navigator}
-                showRightIcon={false}
-                initial={isAndroid}
-                onMenuPress={() => this.navigator.toggleDrawer()}/>
-        <KeyboardAwareScrollView
-          keyboardDismissMode={isAndroid ? 'none' : 'on-drag'}
-          showsVerticalScrollIndicator={false}
-          extraScrollHeight={20}
-          enableResetScrollToCoords={false}
-          keyboardShouldPersistTaps="handled"
-        >
-          <View style={styles.form}>
-            <View style={[styles.formGroup, {marginBottom: 0}]}>
-              <Text style={styles.title}>
-                I'd like to
-              </Text>
-            </View>
+        <View style={{flexDirection: 'row'}}>
+          <TouchableOpacity
+            style={{
+              flexDirection   : 'row',
+              justifyContent  : 'flex-start',
+              alignItems      : 'center',
+              marginHorizontal: 10,
+              marginTop       : isAndroid ? 10 : 30,
+              height          : 50,
+              borderRadius    : 20,
+              flex            : 0
+            }}
+            onPress={() => this.navigator.goBack()}
+          >
+            <Icon name={'arrow-left'} color={Colors.black} size={24}/>
+            <Text style={{fontSize: 16, marginLeft: 10, color: Colors.black}}>Back</Text>
+          </TouchableOpacity>
+        </View>
 
-            <View style={styles.formGroup}>
-              <TouchableOpacity style={styles.button}
-                                onPress={() => this.navigator.navigate('Login')}>
-                <Text style={styles.buttonText}>Login</Text>
-              </TouchableOpacity>
+        <View style={{flex: 1}}>
+          {isAndroid ? null : <StatusBar barStyle={'dark-content'}/>}
+          <View style={{marginHorizontal: 10, alignItems: 'center', justifyContent: 'center'}}>
+            <View style={{
+              backgroundColor: '#fff',
+              borderRadius   : 20,
+              padding        : 7,
+              marginBottom   : 20
+            }}>
+              <Image source={require('../img/logo.png')} style={[styles.img]}/>
             </View>
-
-            <View style={styles.formGroup}>
-              <TouchableOpacity style={styles.button}
-                                onPress={() => this.navigator.navigate('Registration')}>
-                <Text style={styles.buttonText}>Create a New Account</Text>
-              </TouchableOpacity>
-            </View>
-
           </View>
-        </KeyboardAwareScrollView>
+
+          <View style={[styles.formGroup, {alignItems: 'center', justifyContent: 'center', marginBottom: 20}]}>
+            <Text style={[{fontSize: 16, fontWeight: 'bold', color: Colors.black}]}>
+              I would like to
+            </Text>
+          </View>
+
+          <TouchableOpacity style={styles.button}
+                            onPress={() => this.navigator.navigate('Login')}>
+            <Icon name={'user'} color={Colors.primary} size={22}/>
+            <Text style={styles.buttonText}>Login</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.button}
+                            onPress={() => this.navigator.navigate('Registration')}>
+            <Icon name={'user-plus'} color={Colors.primary} size={22}/>
+            <Text style={styles.buttonText}>Create a New Account</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     )
   }
@@ -71,9 +94,9 @@ const styles = StyleSheet.create({
   },
 
   form: {
-    flex      : 1,
-    marginTop : 20,
-    alignItems: 'center'
+    flex     : 1,
+    marginTop: 20
+    // alignItems: 'center'
   },
 
   title: {
@@ -84,9 +107,11 @@ const styles = StyleSheet.create({
   },
 
   formGroup: {
-    flex  : 0,
-    margin: 10,
-    width : 300
+    flex            : 0,
+    marginBottom    : 10,
+    marginHorizontal: 10
+    // height: 50,
+    // width : 300
   },
 
   label: {
@@ -115,21 +140,33 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    ...(new Elevation(1)),
-    flex           : 0,
-    borderRadius   : 2,
-    backgroundColor: Colors.primary,
-    padding        : 10
+    ...(new Elevation(2)),
+    borderRadius     : 25,
+    alignItems       : 'center',
+    justifyContent   : 'flex-start',
+    height           : 50,
+    backgroundColor  : '#fff',
+    flexDirection    : 'row',
+    paddingHorizontal: 20,
+    marginBottom     : 10,
+    marginHorizontal : 10
   },
 
   buttonText: {
-    color     : Colors.primaryText,
+    color     : Colors.black,
     textAlign : 'center',
     fontSize  : 14,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    marginLeft: 20
   },
 
   link: {
     color: '#666'
+  },
+
+  img: {
+    resizeMode: 'contain',
+    width     : 100,
+    height    : 100
   }
 })
