@@ -218,10 +218,6 @@ export default class LandingScreen extends Screen {
   }
 
   render() {
-    if (!this.state.readyToRender) {
-      return null
-    }
-
     return (
       <View style={styles.container}>
         <Header

@@ -67,7 +67,7 @@ export default class Navigator extends Component {
    * @return {*}
    */
   tabs() {
-    return new createBottomTabNavigator({
+    return createBottomTabNavigator({
       Landing: {
         screen           : ObserveStackNavigator,
         navigationOptions: {
@@ -228,7 +228,7 @@ export default class Navigator extends Component {
    * @return {{XML}}
    */
   android() {
-    const Nav = new createDrawerNavigator({
+    const Nav = createDrawerNavigator({
       Landing: {
         screen           : ObserveStackNavigator,
         navigationOptions: {

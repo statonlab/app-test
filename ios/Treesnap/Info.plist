@@ -17,7 +17,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.6.0</string>
+	<string>1.6.1</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -32,7 +32,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1200</string>
+	<string>1201</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
@@ -56,11 +56,11 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Camera access is needed to pictures of observations</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Location services are needed to collect each observation's location</string>
+	<string>Camera access is needed to take  pictures of observations</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Location services are needed to collect each observation's location</string>
+	<string>Location services are needed to collect each observation&apos;s location</string>
+	<key>NSLocationUsageDescription</key>
+	<string>Location services are needed to collect each observation&apos;s location</string>
 	<key>NSMainNibFile</key>
 	<string>LaunchScreen</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
