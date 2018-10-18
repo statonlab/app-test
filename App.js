@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import {
   StatusBar,
   View,
@@ -14,16 +14,18 @@ import Navigator from './app/routes/Navigator'
 import Observation from './app/helpers/Observation'
 import WelcomeModal from './app/components/WelcomeModal'
 import NotificationsController from './app/components/NotificationsController'
-// import Permissions from './app/helpers/Permissions'
 import ObservationLostImagesFixer from './app/components/ObservationLostImagesFixer'
 
 export default class App extends Component {
   constructor(props) {
     super(props)
 
+    navigator.geolocation.setRNConfiguration({skipPermissionRequests: false})
+
     this.state = {
-      snackMessage: '',
-      appReady    : false
+      snackMessage        : '',
+      appReady            : false,
+      requestNotifications: false
     }
 
     this.events = []
@@ -76,10 +78,7 @@ export default class App extends Component {
       let firstOpen = await AsyncStorage.getItem('@appState:firstOpen')
       if (firstOpen !== 'yes') {
         await AsyncStorage.setItem('@appState:firstOpen', 'yes')
-        return
       }
-
-      // Permissions.notifyUserOfPermissionIssues()
     } catch (error) {
       console.log(error)
     }
@@ -103,6 +102,7 @@ export default class App extends Component {
           }}
           onDone={() => {
             DeviceEventEmitter.emit('welcomeModalDone')
+            this.setState({requestNotifications: true})
           }}
         />
         {this.state.appReady ?
@@ -110,9 +110,10 @@ export default class App extends Component {
           : null}
         <Navigator uriPrefix={prefix}/>
         <SnackBarNotice ref={(ref) => this.snackbar = ref} noticeText={this.state.snackMessage}/>
-        <NotificationsController onUploadRequest={() => {
-          DeviceEventEmitter.emit('uploadRequested')
-        }}/>
+        {this.state.requestNotifications ?
+          <NotificationsController onUploadRequest={() => {
+            DeviceEventEmitter.emit('uploadRequested')
+          }}/> : null}
       </View>
     )
   }
