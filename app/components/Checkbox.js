@@ -1,6 +1,6 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import {TouchableOpacity, Text, StyleSheet} from 'react-native'
+import { TouchableOpacity, Text, StyleSheet } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import Colors from '../helpers/Colors'
 
@@ -9,7 +9,7 @@ export default class Checkbox extends Component {
     super(props)
 
     this.state = {
-      checked: false,
+      checked: false
     }
   }
 
@@ -27,7 +27,8 @@ export default class Checkbox extends Component {
   render() {
     return (
       <TouchableOpacity style={styles.container} onPress={this.changed.bind(this)}>
-        <Icon name={this.state.checked ? 'checkbox-marked' : 'checkbox-blank-outline'} style={[styles.checkboxIcon, {color: this.state.checked ? Colors.primary : '#aaa'}]}/>
+        <Icon name={this.state.checked ? 'checkbox-marked' : 'checkbox-blank-outline'}
+              style={[styles.checkboxIcon, {color: this.state.checked ? Colors.primary : '#aaa'}]}/>
         <Text style={this.props.warning ? [styles.label, styles.labelWarning] : styles.label}>{this.props.label}</Text>
       </TouchableOpacity>
     )
@@ -47,7 +48,7 @@ Checkbox.propTypes = {
 
 Checkbox.defaultProps = {
   checked: false,
-  warning : false
+  warning: false
 }
 
 const styles = new StyleSheet.create({
@@ -62,10 +63,11 @@ const styles = new StyleSheet.create({
     width   : 30
   },
 
-  label: {
-    fontWeight: 'bold'
+  label       : {
+    fontWeight: 'bold',
+    color     : '#222'
   },
-  labelWarning    : {
+  labelWarning: {
     color: Colors.danger
   }
- })
+})
