@@ -480,30 +480,17 @@ export const Plants = {
       require('../img/madrone/ARME_bark-min.jpg'),
       require('../img/madrone/ARME_berries_01-min.jpg'),
       require('../img/madrone/ARME_berries_02-min.jpg'),
-      require('../img/madrone/ARME_blight-min.jpg'),
-      require('../img/madrone/ARME_cankers-min.jpg'),
       require('../img/madrone/ARME_crown-min.jpg'),
-      require('../img/madrone/ARME_defoliated-min.jpg'),
-      require('../img/madrone/ARME_dieback-min.jpg'),
       require('../img/madrone/ARME_flowers-min.jpg'),
       require('../img/madrone/ARME_foliage-min.jpg'),
-      require('../img/madrone/ARME_P_canker-min.jpg'),
-      require('../img/madrone/ARME_wilt-min.jpg')
     ],
     captions        : [
       'Multi-stemmed trunk and/or peeling bark. Michael Yadrick, City of Seattle',
       'Red berries, fruits on terminal clusters. Marianne Elliott, WSU (01); Michael Yadrick, City of Seattle (02)',
       'Red berries, fruits on terminal clusters. Marianne Elliott, WSU (01); Michael Yadrick, City of Seattle (02)',
-      'Leaf blight (Whole leaf appears dry and dead, brown in color). Marianne Elliott, WSU',
-      'Raised bumpy cankers on trunk or branches. Michael Yadrick, City of Seattle',
       'Growth structure rounded, spreading crown. Michael Yadrick, City of Seattle',
-      'Shoots or branches partially defoliated or completely dead. Marianne Elliott, WSU',
-      'Botryosphaeria blight (Leaves that appear grey/black or "burnt"). Marianne Elliott, WSU',
       'White urn-shaped flowers. Michael Yadrick, City of Seattle',
       'Ovular, leathery leaves retained throughout the year (evergreen). Michael Yadrick, City of Seattle',
-      'Dark, smooth, discolored lesions on trunk. Marianne Elliott, WSU',
-      'Wilting leaves. Marianne Elliott, WSU'
-
     ],
     descriptionCards: [
       {
