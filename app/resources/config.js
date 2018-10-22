@@ -404,7 +404,7 @@ const DCP = {
 
   madroneDisease: {
     label        : 'Disease',
-    description  : 'Do you see any madroneDisease symptoms on the leaves, branches, or trunk?',
+    description  : 'Do you see any disease symptoms on the leaves, branches, or trunk?',
     selectChoices: ['Wilting leaves', 'Leaf spots', 'Rust', 'Blight', 'Defoliation', 'Lesions', 'Cankers'],
     placeHolder  : 'Please select',
     multiCheck   : true,
