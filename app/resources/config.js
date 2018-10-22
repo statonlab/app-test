@@ -420,7 +420,7 @@ const DCP = {
       'Wilting leaves. Marianne Elliott, WSU',
       'Leaf blight (Whole leaf appears dry and dead, brown in color). Marianne Elliott, WSU',
       'Botryosphaeria blight (Leaves that appear grey/black or "burnt"). Marianne Elliott, WSU',
-      'Multi-stemmed trunk and/or peeling bark. Michael Yadrick, City of Seattle',
+      'Shoots or branches partially defoliated or completely dead. Marianne Elliott, WSU',
       'Dark, smooth, discolored lesions on trunk. Marianne Elliott, WSU',
       'Raised bumpy cankers on trunk or branches. Michael Yadrick, City of Seattle',
     ]
