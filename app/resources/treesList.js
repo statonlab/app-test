@@ -106,6 +106,7 @@ const treesList = [
       only: [
         'California',
         'Oregon',
+        'Washington',
       ]
     }
   },
