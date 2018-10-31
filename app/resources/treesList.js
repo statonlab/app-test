@@ -99,6 +99,17 @@ const treesList = [
     }
   },
   {
+    title    : 'Tan Oak',
+    image    : require('../img/tanoak/tanoak.jpg'),
+    latinName: 'Notholithocarpus densiflorus',
+    locations: {
+      only: [
+        'California',
+        'Oregon',
+      ]
+    }
+  },
+  {
     title    : 'Other',
     latinName: 'Other trees that aren\'t listed above',
     image    : require('../img/forest.jpg'),

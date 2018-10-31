@@ -577,6 +577,65 @@ export const Plants = {
       needleColor    : true,
       needleAmount   : true
     }
-  }
+  },
+
+  'Tan Oak': {
+    image           : require('../img/tanoak/Healthytanoak_Sarah_Navarro-min.JPG'),
+    latinName       : 'Notholithocarpus densiflorus',
+    maps            : [
+      require('../img/tanoak/distributionmap.jpg')
+    ],
+    images          : [
+      require('../img/tanoak/Closeupacorns_PatBreen-min.jpg'),
+      require('../img/tanoak/ealryacornandcatkinclose_PatBreen-min.JPG'),
+      require('../img/tanoak/Earlyacornsandcatkins_PatBreenOSU-min.jpg'),
+      require('../img/tanoak/HealthySpringTanoakLeaves_SarahNavarro-min.jpg'),
+      require('../img/tanoak/Healthytanoak_Sarah_Navarro-min.JPG'),
+      require('../img/tanoak/Leafcloseup_PatBreenOSU-min.jpg'),
+      require('../img/tanoak/Seedandflower_PatBreenOSU-min.jpg'),
+    ],
+    captions        : [
+      'Close up of acorns. Photo by Pat Breen@OSU',
+      'Early acorn and catkin close up. Photo by Pat Breen@OSU',
+      'Early acorn and catkins. Photo by Pat Breen@OSU',
+      'Healthy spring tanoak leaves.  Photo by Sarah Navarro, ODF',
+      'Healthy Tanoak. Photo by Sarah Navarro, ODF',
+      'Leaf close up showing wavy toothed margins and straight parallel sunken veins. Photo by Pat Breen@OSU',
+      'Seed and flower. Photo by Pat Breen@OSU',
+    ],
+    descriptionCards: [
+      {
+        title: 'Overview',
+        body : [
+          <Text style={styles.paragraph}>Notholithocarpus densiflorus, tanoak, tanbark oak</Text>,
+          <Text style={styles.paragraph}>Tanoak trees are being killed by sudden oak death.  Help fight this introduced disease by tagging healthy tanoak trees.</Text>,
+          <Text style={styles.paragraph}>We are asking citizen scientists to identify and record locations of healthy mature tanoaks in areas impacted by Sudden Oak Death in Curry County, Oregon. Identifying healthy mature tanoaks in areas with prolonged pathogen infestation is the first step in identifying trees that may have natural resistance to the disease.</Text>
+        ]
+      },
+      {
+        title: 'Description',
+        body : [
+          <Text style={styles.paragraph}>Tanoak is a broadleaf evergreen tree most commonly found in coastal locations in southern Oregon, its range extends east to the Siskiyou and Klamath mountains.</Text>,
+          <Text style={styles.paragraph}>Oblong leaves are thick and leathery with a wavy-toothed border, shiny light green above, whitish beneath, 6-13 cm long, 2-6 cm wide.  Flowers are unisexual, male flowers are in catkins 5-10 cm long, white but turning rust colored, with an unpleasant odor; greenish-yellow female flowers are found at the base of catkins.  Acorns are egg-shaped, 2-3 cm long, shallow saucer-shaped cup, covered with dense bristles; mature in the second year. From OSU landscape plants; <Atext url="https://landscapeplants.oregonstate.edu/plants/notholithocarpus-densiflorus">https://landscapeplants.oregonstate.edu/plants/notholithocarpus-densiflorus</Atext></Text>
+        ]
+      },
+      {
+        title: 'Challenges',
+        body : [
+          <Text style={styles.paragraph}>Tanoak is an important native hardwood species in southern Oregon, with significant ecological and cultural values.  This species is suffering significant mortality from Phytophthora ramorum, the introduced pathogen that causes Sudden Oak Death.</Text>,
+          <Text style={styles.paragraph}>Healthy mature tanoaks identified in this program will be assessed for acorn collection. Acorns will be grown in seedling trials to determine genetic resistance to Sudden Oak Death with the goal of propagating resistant trees to use in forest restoration.</Text>,
+          <Text style={styles.paragraph}>For additional information refer to Sudden Oak Death: Prevention, Recognition, Restoration (EM 9216) <AText url="https://catalog.extension.oregonstate.edu/em9216">https://catalog.extension.oregonstate.edu/em9216</AText></Text>
+        ]
+      }
+    ],
+    formProps       : {
+      // heightNumeric  : true,
+      diameterNumeric: true,
+      crownClassification : true,
+      canopyHealth: true,
+      acorns: true,
+      treated: true,
+    }
+  },
 }
 
