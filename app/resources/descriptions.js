@@ -580,17 +580,17 @@ export const Plants = {
   },
 
   'Tan Oak': {
-    image           : require('../img/tanoak/Healthytanoak_Sarah_Navarro-min.JPG'),
+    image           : require('../img/tanoak/Healthytanoak_Sarah_Navarro-min.png'),
     latinName       : 'Notholithocarpus densiflorus',
     maps            : [
       require('../img/tanoak/distributionmap.jpg')
     ],
     images          : [
       require('../img/tanoak/Closeupacorns_PatBreen-min.jpg'),
-      require('../img/tanoak/ealryacornandcatkinclose_PatBreen-min.JPG'),
+      require('../img/tanoak/earlyacornandcatkinclose_PatBreen-min.png'),
       require('../img/tanoak/Earlyacornsandcatkins_PatBreenOSU-min.jpg'),
       require('../img/tanoak/HealthySpringTanoakLeaves_SarahNavarro-min.jpg'),
-      require('../img/tanoak/Healthytanoak_Sarah_Navarro-min.JPG'),
+      require('../img/tanoak/Healthytanoak_Sarah_Navarro-min.png'),
       require('../img/tanoak/Leafcloseup_PatBreenOSU-min.jpg'),
       require('../img/tanoak/Seedandflower_PatBreenOSU-min.jpg'),
     ],
@@ -624,7 +624,7 @@ export const Plants = {
         body : [
           <Text style={styles.paragraph}>Tanoak is an important native hardwood species in southern Oregon, with significant ecological and cultural values.  This species is suffering significant mortality from Phytophthora ramorum, the introduced pathogen that causes Sudden Oak Death.</Text>,
           <Text style={styles.paragraph}>Healthy mature tanoaks identified in this program will be assessed for acorn collection. Acorns will be grown in seedling trials to determine genetic resistance to Sudden Oak Death with the goal of propagating resistant trees to use in forest restoration.</Text>,
-          <Text style={styles.paragraph}>For additional information refer to Sudden Oak Death: Prevention, Recognition, Restoration (EM 9216) <AText url="https://catalog.extension.oregonstate.edu/em9216">https://catalog.extension.oregonstate.edu/em9216</AText></Text>
+          <Text style={styles.paragraph}>For additional information refer to Sudden Oak Death: Prevention, Recognition, Restoration (EM 9216) <Atext url="https://catalog.extension.oregonstate.edu/em9216">https://catalog.extension.oregonstate.edu/em9216</Atext></Text>
         ]
       }
     ],
