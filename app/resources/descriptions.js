@@ -583,7 +583,8 @@ export const Plants = {
     image           : require('../img/tanoak/Healthytanoak_Sarah_Navarro-min.png'),
     latinName       : 'Notholithocarpus densiflorus',
     maps            : [
-      require('../img/tanoak/distributionmap.jpg')
+      require('../img/tanoak/distributionmap.jpg'),
+      require('../img/tanoak/distribution_map_close.png'),
     ],
     images          : [
       require('../img/tanoak/Closeupacorns_PatBreen-min.jpg'),
