@@ -99,7 +99,7 @@ const treesList = [
     }
   },
   {
-    title    : 'Tan Oak',
+    title    : 'Tanoak',
     image    : require('../img/tanoak/tanoak.jpg'),
     latinName: 'Notholithocarpus densiflorus',
     locations: {

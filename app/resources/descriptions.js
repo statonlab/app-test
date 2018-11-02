@@ -579,7 +579,7 @@ export const Plants = {
     }
   },
 
-  'Tan Oak': {
+  'Tanoak': {
     image           : require('../img/tanoak/Healthytanoak_Sarah_Navarro-min.png'),
     latinName       : 'Notholithocarpus densiflorus',
     maps            : [
