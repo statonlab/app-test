@@ -424,7 +424,14 @@ const DCP = {
       'Dark, smooth, discolored lesions on trunk. Marianne Elliott, WSU',
       'Raised bumpy cankers on trunk or branches. Michael Yadrick, City of Seattle',
     ]
-  }
+  },
+
+  canopyHealth: {
+    label        : 'Canopy Health Assessment',
+    description  : 'What is the health of this tree’s canopy?',
+    selectChoices: ['Healthy (no dead leaves)', 'Some dead leaves (less than 10%)', 'Many dead leaves (more than 10%)', 'Completely dead', 'I’m not sure'],
+    placeHolder  : 'Please select'
+  },
 
 }
 
