@@ -5,7 +5,8 @@
     "private": true,
     "scripts": {
         "start": "node node_modules/react-native/local-cli/cli.js start",
-        "test": "jest --watchAll",
+        "test": "jest",
+        "test-watch": "jest --watchAll",
         "postinstall": "./post-install.sh"
     },
     "dependencies": {
