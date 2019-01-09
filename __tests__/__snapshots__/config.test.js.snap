@@ -1,0 +1,623 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`it returns the correct config should match the config snapshot 1`] = `
+Object {
+  "acorns": Object {
+    "description": "Are there acorns on the tree?  Don't include fallen acorns on the ground in your estimate.",
+    "label": "Acorns",
+    "placeHolder": "Number of acorns",
+    "selectChoices": Array [
+      "None",
+      "Some",
+      "Lots",
+      "I'm not sure",
+    ],
+  },
+  "ashSpecies": Object {
+    "description": "Which species of ash tree is this?  If you aren't sure, select \\"Uncertain\\"",
+    "images": Array [
+      Object {
+        "testUri": "../../../app/img/ash_id/ash_bark.jpg",
+      },
+      Object {
+        "testUri": "../../../app/img/ash_id/ash_buds.jpg",
+      },
+      Object {
+        "testUri": "../../../app/img/ash_id/ash_leaves.jpg",
+      },
+      Object {
+        "testUri": "../../../app/img/ash_id/ash_seeds.jpg",
+      },
+    ],
+    "label": "Species",
+    "placeHolder": "Uncertain",
+    "selectChoices": Array [
+      "White ash",
+      "Green ash",
+      "Blue ash",
+      "Black ash",
+      "Uncertain",
+    ],
+  },
+  "burrs": Object {
+    "description": "Approximately how many nuts/burrs are present?",
+    "label": "Nuts/burrs",
+    "placeHolder": "Please select",
+    "selectChoices": Array [
+      "None",
+      "Few",
+      "Many",
+      "Unknown",
+    ],
+  },
+  "canopyHealth": Object {
+    "description": "What is the health of this tree’s canopy?",
+    "label": "Canopy Health Assessment",
+    "placeHolder": "Please select",
+    "selectChoices": Array [
+      "Healthy (no dead leaves)",
+      "Some dead leaves (less than 10%)",
+      "Many dead leaves (more than 10%)",
+      "Completely dead",
+      "I’m not sure",
+    ],
+  },
+  "catkins": Object {
+    "description": "Are catkins present?",
+    "label": "Catkins",
+    "placeHolder": "Please select",
+    "selectChoices": Array [
+      "Present",
+      "Absent",
+      "Unknown",
+    ],
+  },
+  "chestnutBlightSigns": Object {
+    "captions": Array [
+      "The chestnut blight fungus can produce orange pustules on bark.  Photo credit: USDA Forest Service - Region 8 - Southern, USDA Forest Service, Bugwood.org",
+      "An old dead trunk, previously killed by chestnut blight. Photo credit: Joseph OBrien, USDA Forest Service, Bugwood.org",
+      "Stump sprouting, where new sprouts emerge from the stump of a tree, whether this tree is living or dead, are a common sign of tree distress.  Photo credit: Norbert Frank, University of West Hungary, Bugwood.org",
+      "",
+    ],
+    "description": "Do you see any of these signs of chestnut blight?  Check all that apply.",
+    "images": Array [
+      Object {
+        "testUri": "../../../app/img/DCP/ChestnutBlight/Chestnut_blight.jpg",
+      },
+      Object {
+        "testUri": "../../../app/img/DCP/ChestnutBlight/cankers.jpg",
+      },
+      Object {
+        "testUri": "../../../app/img/DCP/ChestnutBlight/stumpsprouting.jpg",
+      },
+    ],
+    "label": "Chestnut blight",
+    "multiCheck": true,
+    "placeHolder": "No blight symptoms",
+    "selectChoices": Array [
+      "Cankers and cracked bark",
+      "Tan to orange-colored patches or pustules on bark",
+      "Evidence of old dead trunk",
+      "Stump sprouting",
+    ],
+  },
+  "cones": Object {
+    "camera": Array [
+      "Yes",
+    ],
+    "description": "Are cones present?  Please take a close-up photo if possible.",
+    "label": "Cones",
+    "placeHolder": "Please select",
+    "selectChoices": Array [
+      "Yes",
+      "No",
+      "I'm not sure",
+    ],
+  },
+  "conesMaleFemale": Object {
+    "captions": Array [
+      "Male cones.",
+      "Female cones.",
+      "Under side of Florida Torreya leaves and buds of male cones. Photo credit: Leigh Brooks.",
+    ],
+    "description": "Are cones present?",
+    "images": Array [
+      Object {
+        "testUri": "../../../app/img/torreya/male_cones_torreya.jpg",
+      },
+      Object {
+        "testUri": "../../../app/img/torreya/female_cones_torreya.jpg",
+      },
+      Object {
+        "testUri": "../../../app/img/torreya/Three_Rivers_SP_11282010_031_Torreya_taxifolia_male_cones_group_campground.jpg",
+      },
+    ],
+    "label": "Cones",
+    "placeHolder": "Please select",
+    "selectChoices": Array [
+      "Absent",
+      "Male present",
+      "Female present",
+      "Not sure",
+    ],
+  },
+  "crownAssessment": Object {
+    "description": "What percentage of the tree crown looks unhealthy or appears damaged?",
+    "label": "Tree Crown Assessment",
+    "placeHolder": "Please select",
+    "selectChoices": Array [
+      "< 10%",
+      "10% to 20%",
+      "20% to 50%",
+      "50% to 75%",
+      "> 75%",
+    ],
+  },
+  "crownClassification": Object {
+    "description": "What is the height of the crown of this tree relative to others in the stand?",
+    "label": "Crown classification",
+    "placeHolder": "Please select",
+    "selectChoices": Array [
+      "Dominant. This tree's crown extends above others in the area.",
+      "Codominant. This tree's crown is level with or slightly below other nearby trees.",
+      "Overtopped. This tree's crown is entirely below other trees nearby.",
+      "Not applicable (Tree is isolated)",
+      "I'm not sure.",
+    ],
+  },
+  "crownHealth": Object {
+    "description": "What is the health of this tree's canopy?",
+    "images": Array [
+      Object {
+        "testUri": "../../../app/img/DCP/canopy/canopy1.jpg",
+      },
+      Object {
+        "testUri": "../../../app/img/DCP/canopy/canopy2.jpg",
+      },
+      Object {
+        "testUri": "../../../app/img/DCP/canopy/canopy3.jpg",
+      },
+      Object {
+        "testUri": "../../../app/img/DCP/canopy/canopy4.jpg",
+      },
+      Object {
+        "testUri": "../../../app/img/DCP/canopy/canopy5.jpg",
+      },
+    ],
+    "label": "Canopy health",
+    "placeHolder": "Please select",
+    "selectChoices": Array [
+      "1 - Healthy",
+      "2 - Thinning",
+      "3 - Some dead branches (less than 50%)",
+      "4 - Many dead branches (more than 50%)",
+      "5 - Completely dead",
+      "I'm not sure",
+    ],
+  },
+  "deerRub": Object {
+    "captions": Array [
+      "Deer rub on Florida Torreya stem.  Look for smooth stems with  bark missing. Photo credit: Liza Uzzell.",
+    ],
+    "description": "Is there evidence of deer rub on the trunk?",
+    "images": Array [
+      Object {
+        "testUri": "../../../app/img/torreya/Deer_rub_on_Torreya_taxifolia_photo_by_Liza_Uzzell.jpg",
+      },
+    ],
+    "label": "Deer rub",
+    "placeHolder": "Please select",
+    "selectChoices": Array [
+      "Present",
+      "Absent, but caged",
+      "Absent",
+      "Not sure",
+    ],
+  },
+  "diameterNumeric": Object {
+    "captions": Array [
+      "Note: if the tree is less than 4 feet tall, please take the stem diameter at the height of the first branch.",
+    ],
+    "default": "Estimated",
+    "description": "Please enter the diameter, in inches, of this tree below. Choose the largest stem if there are multiple. Is this a rough estimate or a precise measurement?",
+    "images": Array [
+      Object {
+        "testUri": "../../../app/img/DCP/diameter.jpg",
+      },
+    ],
+    "label": "Tree diameter",
+    "numberPlaceHolder": "Tap to enter diameter",
+    "numeric": true,
+    "placeHolder": "Diameter",
+    "selectChoices": Array [
+      "Measured",
+      "Estimated",
+    ],
+    "units": Object {
+      "US": "Inches",
+      "metric": "cm",
+    },
+  },
+  "emeraldAshBorer": Object {
+    "captions": Array [
+      "Tunneling under bark by EAB larvae. Photo credit: Eric R. Day, Virginia Polytechnic Institute and State University, Bugwood.org",
+      "Adult EAB. Photo credit: David Cappaert, Bugwood.org",
+      "D-shaped exit holes of adult EAB.  Photo credit: David R. McKay, USDA APHIS PPQ, Bugwood.org",
+      "Stump sprouting or epicormic growth, where new sprouts emerge from the stump of a tree or the trunk, are a common sign of tree distress. Photo credit: Joseph OBrien, USDA Forest Service, Bugwood.org",
+    ],
+    "description": "Do you see any of these signs of emerald ash borers?  Check all that apply.",
+    "images": Array [
+      Object {
+        "testUri": "../../../app/img/DCP/EmAshBorer/EAB_tunneling.jpg",
+      },
+      Object {
+        "testUri": "../../../app/img/DCP/EmAshBorer/Emerald_ash_borer_adult.jpg",
+      },
+      Object {
+        "testUri": "../../../app/img/DCP/EmAshBorer/D-shaped_holes.jpg",
+      },
+      Object {
+        "testUri": "../../../app/img/DCP/EmAshBorer/epicormic_ash.jpg",
+      },
+    ],
+    "label": "Ash borer",
+    "multiCheck": true,
+    "placeHolder": "No signs of pest",
+    "selectChoices": Array [
+      "D-shaped adult exit holes",
+      "Bark coming off with tunneling underneath",
+      "Bark splitting",
+      "Emerald ash borer beetles/larvae",
+      "Stump sprouting or epicormic growth",
+      "Woodpecker feeding holes",
+    ],
+  },
+  "flowersBinary": Object {
+    "camera": Array [
+      "Yes",
+    ],
+    "description": "Is this tree flowering?",
+    "label": "Flowers",
+    "placeHolder": "Are flowers present?",
+    "selectChoices": Array [
+      "Yes",
+      "No",
+    ],
+  },
+  "heightFirstBranch": Object {
+    "default": "Estimated",
+    "description": "Approximately how high up is the first main branch of the tree?",
+    "label": "Height of first branch",
+    "numberPlaceHolder": "Tap to enter height",
+    "numeric": true,
+    "placeHolder": "Height",
+    "units": Object {
+      "US": "Feet",
+      "metric": "Meters",
+    },
+  },
+  "heightNumeric": Object {
+    "default": "Estimated",
+    "description": "Approximately how tall is the tree?",
+    "label": "Tree height",
+    "numberPlaceHolder": "Tap to enter height",
+    "numeric": true,
+    "placeHolder": "Height",
+    "units": Object {
+      "US": "Feet",
+      "metric": "Meters",
+    },
+  },
+  "hemlockSpecies": Object {
+    "description": "Which species of Hemlock is this tree? If you are't sure, select I'm not sure.",
+    "images": Array [
+      Object {
+        "testUri": "../../../app/img/hemlock_id/hemlock_species.jpg",
+      },
+    ],
+    "label": "Species",
+    "multiCheck": false,
+    "placeHolder": "Select one",
+    "selectChoices": Array [
+      "Eastern hemlock (Tsuga canadensis)",
+      "Carolina hemlock (Tsuga caroliniana)",
+      "Other hemlock species",
+      "I'm not sure",
+    ],
+  },
+  "locationCharacteristics": Object {
+    "description": "How would you characterize the habitat where the tree is located?",
+    "label": "Habitat",
+    "multiCheck": true,
+    "placeHolder": "Please select",
+    "selectChoices": Array [
+      "Forest",
+      "Wetland",
+      "Field",
+      "Roadside, urban, suburban, or park",
+    ],
+  },
+  "locationComment": Object {
+    "comment": true,
+  },
+  "madroneDisease": Object {
+    "captions": Array [
+      "Wilting leaves. Marianne Elliott, WSU",
+      "Leaf blight (Whole leaf appears dry and dead, brown in color). Marianne Elliott, WSU",
+      "Botryosphaeria blight (Leaves that appear grey/black or \\"burnt\\"). Marianne Elliott, WSU",
+      "Shoots or branches partially defoliated or completely dead. Marianne Elliott, WSU",
+      "Dark, smooth, discolored lesions on trunk. Marianne Elliott, WSU",
+      "Raised bumpy cankers on trunk or branches. Michael Yadrick, City of Seattle",
+    ],
+    "description": "Do you see any disease symptoms on the leaves, branches, or trunk?",
+    "images": Array [
+      Object {
+        "testUri": "../../../app/img/madrone/ARME_wilt-min.jpg",
+      },
+      Object {
+        "testUri": "../../../app/img/madrone/ARME_blight-min.jpg",
+      },
+      Object {
+        "testUri": "../../../app/img/madrone/ARME_dieback-min.jpg",
+      },
+      Object {
+        "testUri": "../../../app/img/madrone/ARME_defoliated-min.jpg",
+      },
+      Object {
+        "testUri": "../../../app/img/madrone/ARME_P_canker-min.jpg",
+      },
+      Object {
+        "testUri": "../../../app/img/madrone/ARME_cankers-min.jpg",
+      },
+    ],
+    "label": "Disease",
+    "multiCheck": true,
+    "placeHolder": "Please select",
+    "selectChoices": Array [
+      "Wilting leaves",
+      "Leaf spots",
+      "Rust",
+      "Blight",
+      "Defoliation",
+      "Lesions",
+      "Cankers",
+    ],
+  },
+  "nearbyTrees": Object {
+    "description": "If there are trees of the same species nearby, what state are they in?  Check all that apply.",
+    "label": "Trees nearby",
+    "multiCheck": true,
+    "placeHolder": "Please select",
+    "selectChoices": Array [
+      "Dead and/or dying",
+      "Healthy and large",
+      "Healthy and small",
+      "No trees of this species nearby",
+      "I'm not sure",
+    ],
+  },
+  "needleAmount": Object {
+    "captions": Array [
+      "Full. Johnson’s Nursery (2018).",
+      "Falling. Dave’s Garden (2012).",
+      "Sparse. The Mary T. and Frank L. Hoffman Family Foundation (2001)",
+      "Bare. Volo Bog State Natural Area (April 2017).",
+    ],
+    "description": "Describe needle presence on the tree.",
+    "images": Array [
+      Object {
+        "testUri": "../../../app/img/eastern_larch/full-needle-presence.png",
+      },
+      Object {
+        "testUri": "../../../app/img/eastern_larch/falling-needle-presence.png",
+      },
+      Object {
+        "testUri": "../../../app/img/eastern_larch/sparse-needle-presence.png",
+      },
+      Object {
+        "testUri": "../../../app/img/eastern_larch/bare-needle-presense.png",
+      },
+    ],
+    "label": "Amount of Needles",
+    "placeHolder": "Please select",
+    "selectChoices": Array [
+      "Full",
+      "Falling",
+      "Sparse",
+      "Bare",
+    ],
+  },
+  "needleColor": Object {
+    "captions": Array [
+      "Green. Tamaracks on Barnum Bog at the Paul Smiths VIC (12 July 2012).",
+      "Green Blue. Jean Baxter, New England Tree Directory (2018).",
+      "Green Yellow. Tamaracks on Barnum Bog at the Paul Smiths VIC (12 July 2012).",
+      "Golden Yellow. Jonathan Schechter, Vermont County Blog (November 2016).",
+    ],
+    "description": "What color ar the needles?",
+    "images": Array [
+      Object {
+        "testUri": "../../../app/img/eastern_larch/needle-green.png",
+      },
+      Object {
+        "testUri": "../../../app/img/eastern_larch/needle-green-blue.png",
+      },
+      Object {
+        "testUri": "../../../app/img/eastern_larch/needle-green-yellow.png",
+      },
+      Object {
+        "testUri": "../../../app/img/eastern_larch/needle-golden-yellow.png",
+      },
+    ],
+    "label": "Needles Color",
+    "placeHolder": "Please select",
+    "selectChoices": Array [
+      "Green",
+      "Green Blue",
+      "Green Yellow",
+      "Golden Yellow",
+    ],
+  },
+  "numberRootSprouts": Object {
+    "captions": Array [
+      "Example of root sprouts. Root sprouts are stems growing up from the roots of a mature, dead Torreya tree.  There may be some dead stems.  Photo credit: Trey Fletcher.",
+      "Florida Torreya caged root sprout at Torreya State Park.  Photo credit: Diana Picklesimer.",
+      "Helen Roth with Florida Torreya root sprout at Angus K. Gholson, Jr. Nature Park in Chattahoochee.  Photo credit: Leigh Brooks.",
+    ],
+    "description": "How many living root sprouts are present?",
+    "images": Array [
+      Object {
+        "testUri": "../../../app/img/torreya/Torreya_taxifolia_root_sprouts_by_Trey_Fletcher.jpg",
+      },
+      Object {
+        "testUri": "../../../app/img/torreya/Torreya_taxifolia_at_Torreya_State_Park_04012018_Diana_Picklesimer_IMG_7421.png",
+      },
+      Object {
+        "testUri": "../../../app/img/torreya/Gholson_Nature_Park,_Florida_Torreya_and_Helen_Roth_02102018.jpg",
+      },
+    ],
+    "label": "Root sprouts",
+    "numberPlaceHolder": "Tap to enter number",
+    "numeric": true,
+    "placeHolder": "Please enter",
+    "units": "sprouts",
+  },
+  "oakHealthProblems": Object {
+    "description": "Do you see any of the following potential health problems?  Check all that apply.  If you check Other, please describe in comments.",
+    "label": "Health problems",
+    "multiCheck": true,
+    "placeHolder": "No health problems",
+    "selectChoices": Array [
+      "Dieback in canopy",
+      "Defoliation",
+      "Cankers",
+      "Bark damage",
+      "Signs of rot at base",
+      "Other",
+    ],
+  },
+  "otherLabel": Object {
+    "description": "Please create a name to associate this entry with.  (ie Birch)",
+    "label": "Tree type",
+    "modalFreeText": true,
+    "placeHolder": "name (required)",
+  },
+  "partOfStudy": Object {
+    "description": "Is this tree already part of an existing study that you are aware of?  For example, there may a tag on the tree.",
+    "label": "Study",
+    "placeHolder": "Please select",
+    "selectChoices": Array [
+      "Yes",
+      "No",
+      "Don't know",
+    ],
+  },
+  "seedsBinary": Object {
+    "camera": Array [
+      "Yes",
+    ],
+    "conditional": Object {
+      "Florida Torreya": Object {
+        "captions": Array [
+          "Seed of female Florida Torreya.  Photo credit: Guy Anglin, Atlas of Florida Plants, Institute for Systematic Botany, University of South Florida, Tampa.",
+          "Female Florida Torreya branches with seeds.  Photo credit: Guy Anglin, Atlas of Florida Plants, Institute for Systematic Botany, University of South Florida, Tampa.",
+        ],
+        "images": Array [
+          Object {
+            "testUri": "../../../app/img/torreya/Torreya_taxifolia4.jpg",
+          },
+          Object {
+            "testUri": "../../../app/img/torreya/Torreya_taxifolia5.jpg",
+          },
+        ],
+      },
+    },
+    "description": "Are seeds present?",
+    "label": "Seeds",
+    "placeHolder": "Are seeds present?",
+    "selectChoices": Array [
+      "Yes",
+      "No",
+      "I'm not sure",
+    ],
+  },
+  "standDiversity": Object {
+    "description": "What types of trees do you see in the stand where the tree is found?",
+    "label": "Stand diversity",
+    "placeHolder": "Please select",
+    "selectChoices": Array [
+      "Pure stand of this species",
+      "Mixed stand (this species and others)",
+      "Tree is standing alone",
+      "Not sure",
+    ],
+  },
+  "torreyaFungalBlight": Object {
+    "captions": Array [
+      "Canker on Florida Torreya stem.  Photo credit: Houston Snead.",
+      "Canker on Florida Torreya stem.  Photo credit: Padraic Elliott.",
+      "Close up of diseased needles on Florida Torreya.  Photo credit: Mark Schwartz, USDA USFS web page “Why Are Some Plants Rare?”",
+      "Close up of stem cankers on Florida Torreya.  Photo credit: Connie Barlow, Torreya Guardians web site",
+    ],
+    "description": "What madroneDisease symptoms are present?",
+    "images": Array [
+      Object {
+        "testUri": "../../../app/img/torreya/Canker_on_Florida_Torreya_stem_by_Houston_Snead.jpg",
+      },
+      Object {
+        "testUri": "../../../app/img/torreya/20180201_140312_PElliott.jpg",
+      },
+      Object {
+        "testUri": "../../../app/img/torreya/torreya1_mark_schwartz_lg.jpg",
+      },
+      Object {
+        "testUri": "../../../app/img/torreya/2004-canker.jpg",
+      },
+    ],
+    "label": "Disease symptoms",
+    "multiCheck": true,
+    "placeHolder": "No madroneDisease symptoms",
+    "selectChoices": Array [
+      "Cankers",
+      "Needle lesions or yellowing",
+    ],
+  },
+  "treated": Object {
+    "description": "Has this tree been treated with fungicides or pesticides?",
+    "label": "Treated",
+    "placeHolder": "Please select",
+    "selectChoices": Array [
+      "Yes",
+      "No",
+      "Don't know",
+    ],
+  },
+  "woollyAdesCoverage": Object {
+    "camera": Array [
+      "1-24%",
+      "25-49%",
+      "50-74%",
+      "75-100%",
+    ],
+    "description": "What percentage of the branches you see have hemlock Woolly adelgids?",
+    "images": Array [
+      Object {
+        "testUri": "../../../app/img/DCP/HemWoolly/HWA_photo_1.jpg",
+      },
+      Object {
+        "testUri": "../../../app/img/DCP/HemWoolly/HWA_photo_2.jpg",
+      },
+    ],
+    "label": "Woolly adelgids",
+    "placeHolder": "% Adelgid coverage",
+    "selectChoices": Array [
+      "0%",
+      "1-24%",
+      "25-49%",
+      "50-74%",
+      "75-100%",
+      "I'm not sure",
+    ],
+  },
+}
+`;

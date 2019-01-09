@@ -414,15 +414,15 @@ const DCP = {
       require('../img/madrone/ARME_dieback-min.jpg'),
       require('../img/madrone/ARME_defoliated-min.jpg'),
       require('../img/madrone/ARME_P_canker-min.jpg'),
-      require('../img/madrone/ARME_cankers-min.jpg'),
+      require('../img/madrone/ARME_cankers-min.jpg')
     ],
-    captions    : [
+    captions     : [
       'Wilting leaves. Marianne Elliott, WSU',
       'Leaf blight (Whole leaf appears dry and dead, brown in color). Marianne Elliott, WSU',
       'Botryosphaeria blight (Leaves that appear grey/black or "burnt"). Marianne Elliott, WSU',
       'Shoots or branches partially defoliated or completely dead. Marianne Elliott, WSU',
       'Dark, smooth, discolored lesions on trunk. Marianne Elliott, WSU',
-      'Raised bumpy cankers on trunk or branches. Michael Yadrick, City of Seattle',
+      'Raised bumpy cankers on trunk or branches. Michael Yadrick, City of Seattle'
     ]
   },
 
@@ -431,9 +431,7 @@ const DCP = {
     description  : 'What is the health of this tree’s canopy?',
     selectChoices: ['Healthy (no dead leaves)', 'Some dead leaves (less than 10%)', 'Many dead leaves (more than 10%)', 'Completely dead', 'I’m not sure'],
     placeHolder  : 'Please select'
-  },
-
+  }
 }
-
 
 export default DCP
