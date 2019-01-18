@@ -1,12 +1,12 @@
-import {Dimensions, Platform} from 'react-native'
-import PropTypes from 'prop-types'
+import { Dimensions, Platform } from 'react-native'
+
 class AndroidStatusBar {
   constructor() {
     this.width = Dimensions.get('window').width
   }
 
   get() {
-    if(Platform.OS !== 'android') {
+    if (Platform.OS !== 'android') {
       return 0
     }
 
