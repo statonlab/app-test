@@ -73,6 +73,7 @@ exports[`it renders correctly should match an AutoComplete snapshot 1`] = `
                 "fontStyle": "normal",
                 "fontWeight": "normal",
               },
+              Object {},
             ]
           }
         >
