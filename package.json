@@ -10,7 +10,7 @@
         "postinstall": "./post-install.sh"
     },
     "dependencies": {
-        "axios": "^0.17.1",
+        "axios": "^0.18.0",
         "babel-plugin-transform-remove-console": "^6.9.4",
         "babel-preset-react-native": "^4.0.1",
         "camelcase": "^4.1.0",
@@ -21,7 +21,7 @@
         "react-addons-update": "^15.6.2",
         "react-native": "0.57.8",
         "react-native-camera": "github:react-native-community/react-native-camera#master",
-        "react-native-device-info": "^0.21.5",
+        "react-native-device-info": "^0.25.1",
         "react-native-firebase": "^3.3.1",
         "react-native-i18n": "^2.0.15",
         "react-native-image-pan-zoom": "^2.1.11",
