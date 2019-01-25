@@ -19,6 +19,8 @@ export default {
   'Betula lenta'           : 'Cherry birch',
   'Betula papyrifera'      : 'Paper birch',
   'Betula pumila'          : 'Dwarf birch',
+  'Betula pendula'         : 'Silver Birch',
+  'Betula pubescens'       : 'Downy Birch',
   'Carpinus caroliniana'   : 'American hornbeam',
   'Carya cordiformis'      : 'Bitternut hickory',
   'Carya glabra'           : 'Pignut hickory',
