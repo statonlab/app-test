@@ -1,6 +1,6 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import {View, TouchableOpacity, StyleSheet, Image, Text} from 'react-native'
+import { View, TouchableOpacity, StyleSheet, Image, Text } from 'react-native'
 import TreesList from '../resources/treesList'
 import States from '../resources/states'
 import Elevation from '../helpers/Elevation'
@@ -18,6 +18,8 @@ export default class MainTrees extends Component {
 
     this.cached = null
 
+    this._mounted = false
+
     this.state = {
       trees       : TreesList,
       filteredData: false,
@@ -29,7 +31,12 @@ export default class MainTrees extends Component {
    * Get the location when the component mounts.
    */
   componentDidMount() {
+    this._mounted = true
     this._getLocation()
+  }
+
+  componentWillUnmount() {
+    this._mounted = false
   }
 
   /**
@@ -154,6 +161,10 @@ export default class MainTrees extends Component {
    * @private
    */
   _setTrees(location) {
+    if (!this._mounted) {
+      return
+    }
+
     if (location === null) {
       this.setState({
         trees       : TreesList,
@@ -222,7 +233,7 @@ export default class MainTrees extends Component {
    */
   _toggle() {
     // Do nothing if we don't have a cache yet
-    if (this.cached === null) {
+    if (this.cached === null || !this._mounted) {
       return
     }
 

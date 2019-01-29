@@ -25,7 +25,6 @@ export default class AutoComplete extends Component {
     this.state = {
       resultList            : TreeNames,
       selected              : null,
-      animationType         : 'fade',
       modalVisible          : false,
       searchText            : '',
       textFieldBottomSpacing: 0
@@ -132,15 +131,13 @@ export default class AutoComplete extends Component {
   }
 
   render() {
-    const offset = (Platform.OS === 'android') ? -200 : 0
     return (
       <View style={styles.mainContainer}>
         <Modal
           transparent={false}
           visible={this.state.modalVisible}
           onRequestClose={this.close}
-          animationType={this.state.animationType}>
-          <StatusBar hidden={true}/>
+          animationType={'fade'}>
           <View style={[{
             paddingVertical: 10,
             backgroundColor: Colors.primary,

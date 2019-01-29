@@ -167,7 +167,6 @@ exports[`it renders correctly should match an AdvancedSettingsModal snapshot 1`]
                     "fontStyle": "normal",
                     "fontWeight": "normal",
                   },
-                  Object {},
                 ]
               }
             >
@@ -260,7 +259,6 @@ exports[`it renders correctly should match an AdvancedSettingsModal snapshot 1`]
                     "fontStyle": "normal",
                     "fontWeight": "normal",
                   },
-                  Object {},
                 ]
               }
             >

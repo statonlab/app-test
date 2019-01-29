@@ -10,6 +10,9 @@ target 'TreeSnap' do
   pod 'Crashlytics', '~> 3.10.2'
 
   # Add new pods below this line
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
+
 #  pod 'RNDeviceInfo', :path => '../node_modules/react-native-device-info'
 #  pod 'RNI18n', :path => '../node_modules/react-native-i18n'
 end
