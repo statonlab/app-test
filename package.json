@@ -1,7 +1,7 @@
 {
     "name": "TreeSnap",
-    "version": "1.7.0",
-    "buildNum": "1300",
+    "version": "1.8.0",
+    "buildNum": "1400",
     "private": true,
     "scripts": {
         "start": "node node_modules/react-native/local-cli/cli.js start",
@@ -33,7 +33,7 @@
         "react-native-material-kit": "github:xinthink/react-native-material-kit#master",
         "react-native-photo-view": "github:statonlab/react-native-photo-view#master",
         "react-native-push-notification": "github:statonlab/react-native-push-notification#master",
-        "react-native-vector-icons": "^6.2.0",
+        "react-native-vector-icons": "^4.6.0",
         "react-navigation": "^2.18.3",
         "realm": "^2.22.0",
         "rn-fetch-blob": "github:joltup/rn-fetch-blob#v0.10.13",
