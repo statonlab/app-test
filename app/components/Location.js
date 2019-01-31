@@ -12,11 +12,11 @@ import {
   TextInput,
   KeyboardAvoidingView
 } from 'react-native'
-import { MKSpinner } from 'react-native-material-kit'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import Colors from '../helpers/Colors'
 import Elevation from '../helpers/Elevation'
 import { isIphoneX } from 'react-native-iphone-x-helper'
+import {CircleSnail} from 'react-native-progress'
 
 const isAndroid = Platform.OS === 'android'
 
@@ -392,7 +392,7 @@ export default class Location extends Component {
 
         {this.state.done ?
           <Icon name="check" style={[styles.icon, {color: Colors.primary}]}/> :
-          <MKSpinner style={{width: 30, height: 30}}/>
+          <CircleSnail size={30} color={[Colors.primary, Colors.danger, Colors.warning]}/>
         }
 
         <Modal

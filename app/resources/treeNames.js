@@ -86,6 +86,8 @@ export default {
   'Quercus rubra'          : 'Red oak',
   'Quercus shumardii'      : 'Shumard oak',
   'Quercus velutina'       : 'Black oak',
+  'Quercus robur'          : 'English oak',
+  'Quercus petraea'        : 'Sessile oak',
   'Salix amygdaloides'     : 'Peachleaf willow',
   'Salix petiolaris'       : 'Slender willow',
   'Sassafras albidum'      : 'Sassafras',

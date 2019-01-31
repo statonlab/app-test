@@ -32,7 +32,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1400</string>
+	<string>1401</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
@@ -63,6 +63,8 @@
 	<string>Location services are needed to collect each observation's location</string>
 	<key>NSMainNibFile</key>
 	<string>LaunchScreen</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Microphone access might be needed to take videos of observations</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>This app needs write-only access to your photo library to save observations photos</string>
 	<key>NSPhotoLibraryUsageDescription</key>

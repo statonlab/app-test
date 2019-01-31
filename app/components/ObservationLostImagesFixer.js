@@ -13,7 +13,7 @@ import {isIphoneX} from 'react-native-iphone-x-helper'
 import Icon from 'react-native-vector-icons/Ionicons'
 import User from '../db/User'
 import axios from '../helpers/Axios'
-import {MKSpinner} from 'react-native-material-kit'
+import {CircleSnail} from 'react-native-progress'
 
 export default class ObservationLostImagesFixer extends Component {
   constructor(props) {
@@ -423,7 +423,7 @@ export default class ObservationLostImagesFixer extends Component {
         backgroundColor  : '#f7f7f7',
         paddingHorizontal: 10
       }}>
-        <MKSpinner style={{marginBottom: 15}}/>
+        <CircleSnail size={40} style={{marginBottom: 15}} color={[Colors.primary, Colors.danger, Colors.warning]}/>
         <Text style={{
           color       : '#222',
           fontSize    : 14,

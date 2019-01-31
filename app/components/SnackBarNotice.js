@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import {
   Animated,
@@ -10,6 +10,7 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
+import { isIphoneX } from 'react-native-iphone-x-helper'
 
 export default class SnackBarNotice extends Component {
   constructor(props) {
@@ -125,7 +126,7 @@ export default class SnackBarNotice extends Component {
               <Text
                 style={[styles.text, {flex: 1}]}>
                 {this.state.noticeText}
-                </Text>
+              </Text>
             </View>
           </TouchableOpacity>
         </Animated.View>
@@ -186,7 +187,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical  : 5,
     backgroundColor  : Colors.black,
-    zIndex           : 900000
-    // borderRadius   : 2
+    zIndex           : 900000,
+    // borderRadius   : 2,
+    ...(isIphoneX() ? {paddingBottom: 25} : {})
   }
 })
