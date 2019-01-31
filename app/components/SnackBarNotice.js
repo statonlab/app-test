@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import {
   Animated,
@@ -10,6 +10,7 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
+import { isIphoneX } from 'react-native-iphone-x-helper'
 
 export default class SnackBarNotice extends Component {
   constructor(props) {
@@ -114,7 +115,11 @@ export default class SnackBarNotice extends Component {
   render() {
     if (this.state.isVisible) {
       return (
-        <Animated.View style={[styles.container, this.props.placement === 'bottom' ? {bottom: this.state.position} : {top: this.state.position}]}>
+        <Animated.View style={[
+          styles.container,
+          this.props.placement === 'bottom' ? {bottom: this.state.position} : {top: this.state.position},
+          isIphoneX() && this.props.topLevel ? {paddingBottom: 25} : {}
+        ]}>
           <TouchableOpacity
             onPress={() => {
               this.closeBar()
@@ -125,7 +130,7 @@ export default class SnackBarNotice extends Component {
               <Text
                 style={[styles.text, {flex: 1}]}>
                 {this.state.noticeText}
-                </Text>
+              </Text>
             </View>
           </TouchableOpacity>
         </Animated.View>
@@ -142,7 +147,8 @@ SnackBarNotice.propTypes = {
   noticeText: PropTypes.string,
   timeout   : PropTypes.number,
   icon      : PropTypes.string,
-  placement : PropTypes.string
+  placement : PropTypes.string,
+  topLevel  : PropTypes.bool
 }
 
 SnackBarNotice.defaultProps = {
@@ -151,7 +157,8 @@ SnackBarNotice.defaultProps = {
   noticeText: 'SnackBar notice text!',
   timeout   : 3000,
   icon      : 'message',
-  placement : 'bottom'
+  placement : 'bottom',
+  topLevel  : false
 }
 
 
@@ -187,6 +194,6 @@ const styles = StyleSheet.create({
     paddingVertical  : 5,
     backgroundColor  : Colors.black,
     zIndex           : 900000
-    // borderRadius   : 2
+    // borderRadius   : 2,
   }
 })

@@ -1,7 +1,8 @@
 import React, {Component} from 'react'
 import {View, StyleSheet, Text} from 'react-native'
-import {MKSpinner, MKProgress} from 'react-native-material-kit'
 import Elevation from '../helpers/Elevation'
+import {CircleSnail, Bar} from 'react-native-progress'
+import Colors from '../helpers/Colors'
 
 const CONTENT_PADDING = 20
 
@@ -90,8 +91,12 @@ export default class Spinner extends Component {
           <Text style={{fontSize: 14, fontWeight: '500', marginBottom: 10}}>{this.state.title}</Text>
           :
           null}
-        <MKProgress
-          style={{width: this.state.progressWidth, marginBottom: 10}}
+        <Bar
+          useNativeDriver={true}
+          width={this.state.progressWidth}
+          style={{marginBottom: 10}}
+          borderColor={Colors.info}
+          color={Colors.info}
           progress={computed}/>
         <Text style={{
           color   : '#444',
@@ -106,7 +111,7 @@ export default class Spinner extends Component {
   renderSpinner() {
     return (
       <View style={styles.spinner}>
-        <MKSpinner prgress={.5} buffer={.5}/>
+        <CircleSnail size={40} color={[Colors.primary, Colors.danger, Colors.warning]}/>
       </View>
     )
   }
