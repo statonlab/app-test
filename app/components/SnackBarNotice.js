@@ -115,7 +115,11 @@ export default class SnackBarNotice extends Component {
   render() {
     if (this.state.isVisible) {
       return (
-        <Animated.View style={[styles.container, this.props.placement === 'bottom' ? {bottom: this.state.position} : {top: this.state.position}]}>
+        <Animated.View style={[
+          styles.container,
+          this.props.placement === 'bottom' ? {bottom: this.state.position} : {top: this.state.position},
+          isIphoneX() && this.props.topLevel ? {paddingBottom: 25} : {}
+        ]}>
           <TouchableOpacity
             onPress={() => {
               this.closeBar()
@@ -143,7 +147,8 @@ SnackBarNotice.propTypes = {
   noticeText: PropTypes.string,
   timeout   : PropTypes.number,
   icon      : PropTypes.string,
-  placement : PropTypes.string
+  placement : PropTypes.string,
+  topLevel  : PropTypes.bool
 }
 
 SnackBarNotice.defaultProps = {
@@ -152,7 +157,8 @@ SnackBarNotice.defaultProps = {
   noticeText: 'SnackBar notice text!',
   timeout   : 3000,
   icon      : 'message',
-  placement : 'bottom'
+  placement : 'bottom',
+  topLevel  : false
 }
 
 
@@ -187,8 +193,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical  : 5,
     backgroundColor  : Colors.black,
-    zIndex           : 900000,
+    zIndex           : 900000
     // borderRadius   : 2,
-    ...(isIphoneX() ? {paddingBottom: 25} : {})
   }
 })

@@ -112,7 +112,9 @@ export default class App extends Component {
           <ObservationLostImagesFixer/>
           : null}
         <Navigator uriPrefix={prefix}/>
-        <SnackBarNotice ref={(ref) => this.snackbar = ref} noticeText={this.state.snackMessage}/>
+        <SnackBarNotice
+          topLevel={true}
+          ref={(ref) => this.snackbar = ref} noticeText={this.state.snackMessage}/>
         {this.state.requestNotifications ?
           <NotificationsController onUploadRequest={() => {
             DeviceEventEmitter.emit('uploadRequested')
