@@ -64,17 +64,25 @@ export default class AutoComplete extends Component {
 
   renderResults = () => {
     let results = this.state.resultList
-    let keys    = Object.keys(results)
+
+    let sorted = {}
+    Object.keys(results).sort().forEach(key => {
+      sorted[key] = results[key];
+    });
+
+    let keys    = Object.keys(sorted)
     if (keys.length > 0) {
       return keys.map(species => {
-          let common = results[species]
+          let common = sorted[species]
 
           return (
             <TouchableOpacity
               key={species}
               onPress={() => this.submit(common)}>
               <View style={styles.rowView}>
-                  {common.map(name => { return <View><Text>{name}</Text></View> })}
+                <Text style={styles.searchText}>
+                  {Array.isArray(common) ? common[0] : common}
+                </Text>
                 <Text style={[styles.searchText, styles.species]}>
                   {species}
                 </Text>
@@ -112,29 +120,29 @@ export default class AutoComplete extends Component {
   search = (text) => {
     text = text.toLowerCase().trim()
 
+    // return to the default search case
+    if (!text) {
+      this.setState({resultList: TreeNames})
+      return
+    }
+
     let matches = {}
 
     for (const [species, common] of Object.entries(TreeNames)) {
       if (species.toLowerCase().trim().indexOf(text) > -1) {
-        matches[species] = common
+        matches[species] = common.join(', ')
         continue
       }
 
       for (const name of common) {
         if (name.toLowerCase().trim().indexOf(text) > -1) {
-          matches[species] = common
+          matches[species] = name
           break
         }
       }
     }
 
-    let sorted_matches = {}
-
-    Object.keys(matches).sort().forEach(key => {
-      sorted_matches[key] = matches[key];
-    });
-
-    this.setState({resultList: sorted_matches})
+    this.setState({resultList: matches})
   }
 
   setBottomSpacing(keyboardIsOpen) {
