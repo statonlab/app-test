@@ -14,7 +14,6 @@ import io.realm.react.RealmReactPackage;
 
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.reactnative.photoview.PhotoViewPackage;
-import com.github.xinthink.rnmk.ReactMaterialKitPackage;
 import com.airbnb.android.react.maps.MapsPackage;
 
 import fr.bamlab.rnimageresizer.ImageResizerPackage;
@@ -58,7 +57,6 @@ public class MainApplication extends Application implements ReactApplication {
           new RNCameraPackage(),
           new RealmReactPackage(),
           new VectorIconsPackage(),
-          new ReactMaterialKitPackage(),
           new ImageResizerPackage(),
           new RNFetchBlobPackage(),
           new MapsPackage()
