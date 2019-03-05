@@ -150,10 +150,10 @@ android {
 }
 
 dependencies {
-    compile project(':react-native-localize')
     def supportLibVersion = rootProject.hasProperty('supportLibVersion') ? rootProject.supportLibVersion : "27.1.0"
     def googlePlayServicesVersion = rootProject.hasProperty('googlePlayServicesVersion') ? rootProject.googlePlayServicesVersion : "11.8.0"
 
+    implementation project(':react-native-localize')
     implementation project(':react-native-device-info')
     implementation project(':react-native-i18n')
     implementation(project(':react-native-firebase')) {
@@ -164,7 +164,6 @@ dependencies {
     implementation project(':react-native-photo-view')
     implementation project(':realm')
     implementation project(':react-native-vector-icons')
-    implementation project(':react-native-material-kit')
     implementation project(':react-native-image-resizer')
     implementation project(':rn-fetch-blob')
     implementation(project(':react-native-maps')) {
