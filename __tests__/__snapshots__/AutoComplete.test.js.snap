@@ -4632,6 +4632,60 @@ exports[`it renders correctly should match an AutoComplete snapshot 1`] = `
                   }
                 }
               >
+                Sessile oak
+              </Text>
+              <Text
+                style={
+                  Array [
+                    Object {
+                      "color": "#444",
+                    },
+                    Object {
+                      "color": "#777",
+                      "fontStyle": "italic",
+                      "marginLeft": 10,
+                    },
+                  ]
+                }
+              >
+                Quercus petraea
+              </Text>
+            </View>
+          </View>
+          <View
+            accessible={true}
+            isTVSelectable={true}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              Object {
+                "opacity": 1,
+              }
+            }
+          >
+            <View
+              style={
+                Object {
+                  "backgroundColor": "#fff",
+                  "borderBottomColor": "#ddd",
+                  "borderBottomWidth": 1,
+                  "flexDirection": "column",
+                  "paddingHorizontal": 15,
+                  "paddingVertical": 10,
+                }
+              }
+            >
+              <Text
+                style={
+                  Object {
+                    "color": "#444",
+                  }
+                }
+              >
                 Dwarf chinkapin oak
               </Text>
               <Text
@@ -4649,6 +4703,60 @@ exports[`it renders correctly should match an AutoComplete snapshot 1`] = `
                 }
               >
                 Quercus prinoides
+              </Text>
+            </View>
+          </View>
+          <View
+            accessible={true}
+            isTVSelectable={true}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              Object {
+                "opacity": 1,
+              }
+            }
+          >
+            <View
+              style={
+                Object {
+                  "backgroundColor": "#fff",
+                  "borderBottomColor": "#ddd",
+                  "borderBottomWidth": 1,
+                  "flexDirection": "column",
+                  "paddingHorizontal": 15,
+                  "paddingVertical": 10,
+                }
+              }
+            >
+              <Text
+                style={
+                  Object {
+                    "color": "#444",
+                  }
+                }
+              >
+                English oak
+              </Text>
+              <Text
+                style={
+                  Array [
+                    Object {
+                      "color": "#444",
+                    },
+                    Object {
+                      "color": "#777",
+                      "fontStyle": "italic",
+                      "marginLeft": 10,
+                    },
+                  ]
+                }
+              >
+                Quercus robur
               </Text>
             </View>
           </View>
