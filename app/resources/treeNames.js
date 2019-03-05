@@ -84,6 +84,8 @@ export default {
   'Quercus palustris'      : ['Pin Oak'],
   'Quercus prinoides'      : ['Dwarf chinkapin oak'],
   'Quercus rubra'          : ['Red oak'],
+  'Quercus robur'          : ['English oak', 'pedunculate oak', 'common oak', 'European oak'],
+  'Quercus petraea'        : ['Sessile oak', 'Cornish oak', 'durmast oak'],
   'Quercus shumardii'      : ['Shumard oak'],
   'Quercus velutina'       : ['Black oak'],
   'Salix amygdaloides'     : ['Peachleaf willow'],

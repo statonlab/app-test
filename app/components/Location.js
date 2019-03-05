@@ -10,7 +10,8 @@ import {
   Modal,
   Platform,
   TextInput,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  SafeAreaView
 } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import Colors from '../helpers/Colors'
@@ -349,9 +350,10 @@ export default class Location extends Component {
             backgroundColor: '#eee',
             borderTopWidth : 1,
             borderTopColor : '#ccc',
-            height         : 40,
+            height         : isIphoneX() ? 60: 40,
             alignItems     : 'flex-end',
-            justifyContent : 'center'
+            justifyContent : 'center',
+          ...(isIphoneX() ? {paddingHorizontal: 10}: {})
           }}>
             <TouchableOpacity style={{flex: 1, paddingHorizontal: 10, justifyContent: 'center'}}
                               onPress={() => this.setState({showOptionsModal: false})}>

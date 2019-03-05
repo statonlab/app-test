@@ -1,7 +1,7 @@
 {
     "name": "TreeSnap",
-    "version": "1.8.0",
-    "buildNum": "1400",
+    "version": "1.9.0",
+    "buildNum": "1500",
     "private": true,
     "scripts": {
         "start": "node node_modules/react-native/local-cli/cli.js start",
