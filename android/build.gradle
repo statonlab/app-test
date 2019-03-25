@@ -11,14 +11,13 @@ buildscript {
         minSdkVersion = 16
         compileSdkVersion = 27
         targetSdkVersion = 26
-        supportLibVersion = "27.1.1"
+        supportLibVersion = "26.1.0"
     }
     repositories {
+        maven { url 'https://maven.google.com' }
         google()
         jcenter()
-        maven { url 'https://maven.google.com' }
         maven { url 'https://maven.fabric.io/public' }
-        google()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.1.4'
@@ -32,16 +31,15 @@ buildscript {
 
 allprojects {
     repositories {
-        mavenLocal()
+        maven { url 'https://maven.google.com/' }
         google()
+        mavenLocal()
         jcenter()
         maven {
             // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
             url "$rootDir/../node_modules/react-native/android"
         }
         maven { url "https://jitpack.io" }
-        google()
-        maven { url 'https://maven.google.com/' }
     }
 
     subprojects {
@@ -49,7 +47,7 @@ allprojects {
             resolutionStrategy.eachDependency { details ->
                 if (details.requested.group == 'com.google.android.gms'
                         && !details.requested.name.contains('multidex') ) {
-                    details.useVersion "11.8.0"
+                    details.useVersion "15.0.0"
                 }
             }
         }
@@ -62,7 +60,7 @@ ext {
     compileSdkVersion = 26
     targetSdkVersion = 26
     supportLibVersion = "26.1.0"
-    firebaseVersion = '11.8.0'
+    firebaseVersion = '15.0.0'
 }
 
 task wrapper(type: Wrapper) {

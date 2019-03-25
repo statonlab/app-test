@@ -114,6 +114,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1500
         versionName "1.9.0"
+        missingDimensionStrategy 'react-native-camera', 'general'
         multiDexEnabled true
         ndk {
             abiFilters "armeabi-v7a", "x86"
@@ -151,7 +152,7 @@ android {
 
 dependencies {
     def supportLibVersion = rootProject.hasProperty('supportLibVersion') ? rootProject.supportLibVersion : "27.1.0"
-    def googlePlayServicesVersion = rootProject.hasProperty('googlePlayServicesVersion') ? rootProject.googlePlayServicesVersion : "11.8.0"
+    def googlePlayServicesVersion = rootProject.hasProperty('googlePlayServicesVersion') ? rootProject.googlePlayServicesVersion : "15.0.0"
 
     implementation project(':react-native-localize')
     implementation project(':react-native-device-info')
@@ -175,11 +176,8 @@ dependencies {
         exclude group: 'com.android.support'
         exclude group: 'com.google.android.gms'
     }
-    implementation 'com.google.gms:google-services:3.3.1'
+    implementation 'com.google.gms:google-services:3.2.1'
     implementation "com.google.android.gms:play-services-vision:$googlePlayServicesVersion"
-//    implementation("com.android.support:appcompat-v7:$supportLibVersion") {
-//        force = true
-//    }
     implementation "com.google.android.gms:play-services-maps:$googlePlayServicesVersion"
     implementation("com.android.support:exifinterface:$supportLibVersion") {
         force = true
