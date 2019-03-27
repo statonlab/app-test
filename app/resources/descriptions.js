@@ -328,6 +328,7 @@ export const Plants = {
       acorns           : true,
       heightFirstBranch: true,
       crownHealth      : true,
+      nearbyTrees      : true,
       diameterNumeric  : true,
       oakHealthProblems: true
     }
