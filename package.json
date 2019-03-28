@@ -34,7 +34,7 @@
         "react-native-maps": "^0.23.0",
         "react-native-material-kit": "^0.5.1",
         "react-native-photo-view": "github:statonlab/react-native-photo-view#master",
-        "react-native-progress": "^3.5.0",
+        "react-native-progress": "^3.6.0",
         "react-native-push-notification": "github:statonlab/react-native-push-notification#master",
         "react-native-vector-icons": "^4.6.0",
         "react-navigation": "^2.18.3",
@@ -44,11 +44,11 @@
         "tcomb-validation": "^3.4.1"
     },
     "devDependencies": {
-        "@babel/core": "^7.2.2",
+        "@babel/core": "^7.4.0",
         "babel-jest": "^23.6.0",
         "extract-zip": "^1.6.7",
         "jest": "^23.6.0",
-        "react-test-renderer": "^16.7.0"
+        "react-test-renderer": "^16.8.5"
     },
     "jest": {
         "preset": "react-native",
