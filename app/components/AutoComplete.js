@@ -74,6 +74,7 @@ export default class AutoComplete extends Component {
     if (keys.length > 0) {
       return keys.map(species => {
           let common = sorted[species]
+          common = Array.isArray(common) ? common[0] : common
 
           return (
             <TouchableOpacity
@@ -81,7 +82,7 @@ export default class AutoComplete extends Component {
               onPress={() => this.submit(common)}>
               <View style={styles.rowView}>
                 <Text style={styles.searchText}>
-                  {Array.isArray(common) ? common[0] : common}
+                  {common}
                 </Text>
                 <Text style={[styles.searchText, styles.species]}>
                   {species}
