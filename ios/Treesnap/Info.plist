@@ -32,7 +32,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1501</string>
+	<string>1502</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
@@ -57,6 +57,8 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>Camera access is needed to take pictures of observations</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Location services are needed to collect observation's GPS location</string>
 	<key>NSLocationUsageDescription</key>
 	<string>Location services are needed to collect each observation's location</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
