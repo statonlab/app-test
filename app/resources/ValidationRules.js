@@ -1,5 +1,5 @@
 import t from 'tcomb-validation'
-import DCP from '../resources/config'
+import DCP from './FormElements'
 
 // TODO: validate to a list of the choices instead
 
@@ -9,7 +9,7 @@ import DCP from '../resources/config'
 // OPTIONAL choices should be wrapped in t.maybe().
 
 
-const DCPrules = {
+const ValidationRules = {
 //  seedsBinary            : t.enums.of(DCP.seedsBinary.selectChoices, 'seed'),
   seedsBinary            : t.enums.of(DCP.seedsBinary.selectChoices),
   flowersBinary          : t.enums.of(DCP.flowersBinary.selectChoices, 'flowers'),
@@ -54,4 +54,4 @@ const DCPrules = {
   // accessibility          : t.enums.of(DCP.accessibility.selectChoices),
   // nearByHemlock          : t.enums.of(DCP.nearByHemlock.selectChoices),
 }
-export default DCPrules
+export default ValidationRules

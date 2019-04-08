@@ -16,7 +16,7 @@ import {
 } from 'react-native'
 import Header from '../components/Header'
 import Colors from '../helpers/Colors'
-import DCP from '../resources/config.js'
+import DCP from '../resources/FormElements.js'
 import Observation from '../helpers/Observation'
 import Spinner from '../components/Spinner'
 import realm from '../db/Schema'

@@ -13,7 +13,7 @@ import {
   Platform,
   Keyboard
 } from 'react-native'
-import TreeNames from '../resources/treeNames.js'
+import TreeNames from '../resources/TreeLatinNames.js'
 import Colors from '../helpers/Colors'
 import Elevation from '../helpers/Elevation'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'

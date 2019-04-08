@@ -9,7 +9,7 @@ import {
 } from 'react-native'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
-import {Plants} from '../resources/descriptions'
+import {Plants} from '../resources/Descriptions'
 import ImageModal from '../components/ImageModal'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import {ifIphoneX} from 'react-native-iphone-x-helper'

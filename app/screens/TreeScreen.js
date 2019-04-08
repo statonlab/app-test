@@ -5,7 +5,7 @@ import Header from '../components/Header'
 import {Tabs, Tab} from '../components/Tabs'
 import TreeDescription from '../components/TreeDescription'
 import Form from '../components/Form'
-import {Plants} from '../resources/descriptions'
+import {Plants} from '../resources/Descriptions'
 import Guide from '../components/Guide'
 
 export default class TreeScreen extends Screen {
