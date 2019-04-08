@@ -14,7 +14,7 @@ import {
   BackHandler,
   PermissionsAndroid
 } from 'react-native'
-import {RNCamera} from 'react-native-camera'
+import { RNCamera } from 'react-native-camera'
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import Colors from '../helpers/Colors'
 import Elevation from '../helpers/Elevation'
@@ -22,7 +22,7 @@ import File from '../helpers/File'
 import PhotoView from 'react-native-photo-view'
 import AndroidStatusBar from '../components/AndroidStatusBar'
 import PinchResponder from '../helpers/PinchResponder'
-import {isIphoneX, ifIphoneX} from 'react-native-iphone-x-helper'
+import { isIphoneX, ifIphoneX } from 'react-native-iphone-x-helper'
 import DeviceInfo from 'react-native-device-info'
 
 const android = Platform.OS === 'android'
@@ -57,7 +57,7 @@ export default class CameraScreen extends Screen {
       hasPermission: false,
       deletedImages: [],
       zoom         : 0,
-      activeScale  : 1,
+      activeScale  : 1
     }
 
     this.isCapturing = false
@@ -193,8 +193,7 @@ export default class CameraScreen extends Screen {
           </Text>
         </TouchableOpacity>
       )
-    }
-    else if (this.state.camera.flash === off) {
+    } else if (this.state.camera.flash === off) {
       flashIcon = (
         <TouchableOpacity
           style={[styles.toolTouchable, styles.flashTouchable]}
@@ -301,13 +300,13 @@ export default class CameraScreen extends Screen {
         }]}>
           <View style={{flex: 1}}>
             <View style={styles.header}>
-              <TouchableOpacity style={styles.headerButton} onPress={this._delete}>
+              <TouchableOpacity style={styles.headerButton} onPress={this._delete.bind(this)}>
                 <IonIcon name="md-trash"
                          style={[styles.headerText, {width: 20, marginTop: 2}]}
                          size={20}/>
                 <Text style={styles.headerText}>Delete</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.headerButton} onPress={this._done}>
+              <TouchableOpacity style={styles.headerButton} onPress={this._done.bind(this)}>
                 <IonIcon name="md-checkmark"
                          style={[styles.headerText, {width: 20, marginTop: 2}]}
                          size={20}/>
@@ -479,7 +478,7 @@ export default class CameraScreen extends Screen {
    *
    * @private
    */
-  _delete = () => {
+  _delete() {
     let selectedIndex = this.state.selectedIndex
     let imageToDelete = this.state.images[selectedIndex]
 
@@ -541,7 +540,12 @@ export default class CameraScreen extends Screen {
    *
    * @private
    */
-  _done = () => {
+  _done() {
+    // Don't allow any interaction if the camera is capturing
+    if (this.isCapturing) {
+      return
+    }
+
     if (this.state.deletedImages.length > 0) {
       this.params.onDelete(this.state.deletedImages)
     }
@@ -586,8 +590,8 @@ export default class CameraScreen extends Screen {
       return
     }
 
-    if(!this.camera) {
-      return;
+    if (!this.camera) {
+      return
     }
 
     this.isCapturing = true
@@ -624,11 +628,11 @@ export default class CameraScreen extends Screen {
         newImages    : this.state.newImages.concat(image)
       })
 
-      this._forward()
+      // this._forward()
       this.isCapturing = false
     } catch (error) {
       this.isCapturing = false
-      alert(error)
+      Alert.alert('Error', error)
     }
   }
 
