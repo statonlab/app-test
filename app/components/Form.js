@@ -14,7 +14,8 @@ import {
   BackHandler,
   Modal,
   KeyboardAvoidingView,
-  ScrollView
+  ScrollView,
+  Dimensions
 } from 'react-native'
 import moment from 'moment'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -24,13 +25,13 @@ import Colors from '../helpers/Colors'
 import realm from '../db/Schema'
 import t from 'tcomb-validation'
 import PickerModal from '../components/PickerModal'
-import DCP from '../resources/config.js'
+import DCP from '../resources/FormElements.js'
 import Location from '../components/Location'
 import File from '../helpers/File'
 import Spinner from '../components/Spinner'
 import AutoComplete from '../components/AutoComplete'
-import { ACFCollection } from '../resources/descriptions'
-import DCPrules from '../resources/validation'
+import { ACFCollection } from '../resources/Descriptions'
+import ValidationRules from '../resources/ValidationRules'
 import { ifIphoneX, isIphoneX } from 'react-native-iphone-x-helper'
 import Analytics from '../helpers/Analytics'
 import AdvancedSettingsModal from './AdvancedSettingsModal'
@@ -66,7 +67,6 @@ export default class Form extends Component {
       custom_id                : '',
       showCustomIDModal        : false,
       showAdvancedSettingsModal: false
-
     }
 
     this.user       = User.user()
@@ -148,7 +148,7 @@ export default class Form extends Component {
     // Generate a primary key
     let id = parseInt(Date.now().toString().slice(5) + Math.random().toString(10).slice(2, 4))
 
-    while(realm.objects('Submission').filtered(`id = ${id}`).length > 0) {
+    while (realm.objects('Submission').filtered(`id = ${id}`).length > 0) {
       id = parseInt(Date.now().toString().slice(5) + Math.random().toString(10).slice(2, 4))
     }
 
@@ -196,7 +196,7 @@ export default class Form extends Component {
    * @param images
    * @param id
    */
-  handleImages = (images, id) => {
+  handleImages(images, id) {
     let _images = this.state.images
     _images[id] = images
     this.setState({images: _images})
@@ -208,14 +208,14 @@ export default class Form extends Component {
    *
    * @param deletedImages
    */
-  handleDeletedImages = (deletedImages) => {
+  handleDeletedImages(deletedImages) {
     this.setState({deletedImages})
   }
 
   /**
    * Remove deleted images from the state.
    */
-  getRemainingImages = () => {
+  getRemainingImages() {
     let images = this.state.images
 
     if (this.state.deletedImages.length === 0) {
@@ -240,7 +240,7 @@ export default class Form extends Component {
    *
    * @returns {boolean}
    */
-  cancel = () => {
+  cancel() {
     let keys = Object.keys(this.state.metadata)
     // TODO: we complain if there are keys set without values IE if the user clicked something but didnt select.
     // Would be better to test if the keys have values or to have a  value in the state that checks if its OK to cancel.
@@ -249,7 +249,7 @@ export default class Form extends Component {
         'Data will be permanently lost if you leave. Are you sure?', [
           {
             text   : 'Leave',
-            onPress: this.doCancel,
+            onPress: this.doCancel.bind(this),
             style  : 'destructive'
           },
           {
@@ -273,7 +273,7 @@ export default class Form extends Component {
    * @param o
    * @returns {Array}
    */
-  flattenObject = (o) => {
+  flattenObject(o) {
     let results = []
     Object.keys(o).map(key => {
       let o2 = o[key]
@@ -293,7 +293,7 @@ export default class Form extends Component {
    *  Do the actual cancellation.
    *  Deals with image deletion.
    */
-  doCancel = () => {
+  doCancel() {
     if (this.props.edit === true) {
       // Extract new images only
       let oldImages = this.flattenObject(JSON.parse(this.props.entryInfo.images))
@@ -376,7 +376,7 @@ export default class Form extends Component {
   /**
    * Write the observation to Realm, leave the scene.
    */
-  save = () => {
+  save() {
     let observation = {
       id                  : this.primaryKey,
       name                : this.state.title.toString(),
@@ -410,7 +410,7 @@ export default class Form extends Component {
   /**
    * Update observation in realm.
    */
-  saveEdit = () => {
+  saveEdit() {
     realm.write(() => {
       // true as 3rd argument updates
       const observation = realm.create('Submission', {
@@ -441,7 +441,7 @@ export default class Form extends Component {
    *
    * @returns {*}
    */
-  validateState = () => {
+  validateState() {
     return t.validate(this.state, this.formT)
   }
 
@@ -450,7 +450,7 @@ export default class Form extends Component {
    *
    * @returns {*}
    */
-  validateMeta = () => {
+  validateMeta() {
     return t.validate(this.state.metadata, this.formTMeta)
   }
 
@@ -460,7 +460,7 @@ export default class Form extends Component {
    *
    * @param validationAttempt
    */
-  notifyIncomplete = (validationAttempt) => {
+  notifyIncomplete(validationAttempt) {
     let errors    = validationAttempt.errors
     let errorList = []
     let warnings  = {}
@@ -494,11 +494,11 @@ export default class Form extends Component {
    *
    * @returns {{}}
    */
-  compileValRules = () => {
+  compileValRules() {
     let formBase = {}
 
     Object.keys(this.formProps).map(propItem => {
-      formBase[propItem] = DCPrules[propItem]
+      formBase[propItem] = ValidationRules[propItem]
     })
     return formBase
   }
@@ -560,7 +560,7 @@ export default class Form extends Component {
    * @param key
    * @returns {{XML}}
    */
-  populateFormItem = (key) => {
+  populateFormItem(key) {
     if (typeof DCP[key] === undefined) {
       return
     }
@@ -701,7 +701,7 @@ export default class Form extends Component {
   /**
    * Form items with starting values need to be set separately here.
    */
-  setDefaultValues = () => {
+  setDefaultValues() {
     let metadata = {}
     Object.keys(this.props.formProps).map(key => {
       if (DCP[key].startValue) {
@@ -721,8 +721,8 @@ export default class Form extends Component {
    *
    * @returns {Array}
    */
-  renderForm = () => {
-    return Object.keys(this.props.formProps).map(this.populateFormItem)
+  renderForm() {
+    return Object.keys(this.props.formProps).map(this.populateFormItem.bind(this))
   }
 
   /**
@@ -730,7 +730,7 @@ export default class Form extends Component {
    *
    * @returns {{XML}}
    */
-  renderBiominder = () => {
+  renderBiominder() {
     let header = 'Mailing Samples to the American Chestnut Foundation'
     return (
       <PickerModal
@@ -761,7 +761,7 @@ export default class Form extends Component {
    * @param label
    * @returns {{XML}}
    */
-  renderCameraItem = (id, label) => {
+  renderCameraItem(id, label) {
     let description = 'Add photos'
     // if (id === 'images') {
     //   description = 'Add photos'
@@ -792,7 +792,7 @@ export default class Form extends Component {
    *
    * @returns {{XML}}
    */
-  renderPhotosField = (id) => {
+  renderPhotosField(id) {
     if (!this.state.images[id]) {
       return null
     }
@@ -817,6 +817,7 @@ export default class Form extends Component {
   }
 
   render() {
+
     return (
       <View style={styles.container}>
         <Spinner ref="spinner"/>
@@ -889,25 +890,25 @@ export default class Form extends Component {
           </View>
         </ScrollView>
 
-        {this._renderCommentsModal()}
-        {this._renderCustomIDModal()}
-        {this._renderAdvancedSettingsModal()}
-
         <View style={styles.footer}>
           <TouchableOpacity style={[styles.button, styles.flex1]}
                             onPress={this.submit.bind(this)}
                             rippleColor="rgba(0,0,0,0.5)">
             <Text style={styles.buttonText}>
-              {this.props.edit ? 'Confirm Edit' : 'Submit Entry'}
+              {this.props.edit ? 'Save' : 'Submit'}
             </Text>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.button, styles.buttonAlt, styles.flex1]}
-                            onPress={this.cancel}>
+                            onPress={this.cancel.bind(this)}>
             <Text style={styles.buttonAltText}>
               Cancel
             </Text>
           </TouchableOpacity>
         </View>
+
+        {this._renderCommentsModal()}
+        {this._renderCustomIDModal()}
+        {this._renderAdvancedSettingsModal()}
       </View>
     )
   }
@@ -1012,7 +1013,7 @@ export default class Form extends Component {
    *
    * @private
    */
-  _goToCamera = (id) => {
+  _goToCamera(id) {
     this.props.navigator.navigate('Camera', {
       navigator: this.props.navigator,
       images   : this.state.images[id] ? this.state.images[id] : [],

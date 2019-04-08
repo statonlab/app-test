@@ -9,7 +9,7 @@
  *    * Example: ['Florida', 'Georgia', 'Tennessee']
  * @type {*[]}
  */
-const treesList = [
+const TreesList = [
   {
     title    : 'American Chestnut',
     latinName: 'Castanea dentata',
@@ -120,4 +120,4 @@ const treesList = [
   }
 ]
 
-export default treesList
+export default TreesList
