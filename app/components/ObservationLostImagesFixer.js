@@ -3,9 +3,9 @@ import {
   View,
   Modal,
   Text,
-  TouchableOpacity,
-  AsyncStorage
+  TouchableOpacity
 } from 'react-native'
+import AsyncStorage from "@react-native-community/async-storage"
 import realm from '../db/Schema'
 import File from '../helpers/File'
 import Colors from '../helpers/Colors'

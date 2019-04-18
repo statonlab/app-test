@@ -6,7 +6,7 @@ import android.support.multidex.MultiDex;
 
 import com.crashlytics.android.Crashlytics;
 import com.facebook.react.ReactApplication;
-import com.reactcommunity.rnlocalize.RNLocalizePackage;
+import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
 
@@ -22,7 +22,6 @@ import io.invertase.firebase.RNFirebasePackage;
 import org.reactnative.camera.RNCameraPackage;
 
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
-import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 
 import io.fabric.sdk.android.Fabric;
 import io.invertase.firebase.analytics.RNFirebaseAnalyticsPackage;
@@ -47,9 +46,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-          new RNLocalizePackage(),
+          new AsyncStoragePackage(),
           new RNDeviceInfo(),
-          new RNI18nPackage(),
           new ReactNativePushNotificationPackage(),
           new RNFirebasePackage(),
           new RNFirebaseAnalyticsPackage(),
