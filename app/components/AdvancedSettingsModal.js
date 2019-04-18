@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import {
   Modal,
@@ -11,7 +11,7 @@ import {
 } from 'react-native'
 import Elevation from '../helpers/Elevation'
 import Colors from '../helpers/Colors'
-import {isIphoneX} from 'react-native-iphone-x-helper'
+import { isIphoneX } from 'react-native-iphone-x-helper'
 import IonIcon from 'react-native-vector-icons/Ionicons'
 
 const isAndroid = Platform.OS === 'android'
