@@ -1,92 +1,92 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.treesource">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+  <uses-permission android:name="android.permission.INTERNET"/>
+  <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+  <uses-permission android:name="android.permission.CAMERA"/>
+  <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
-    <permission
-        android:name="${applicationId}.permission.C2D_MESSAGE"
-        android:protectionLevel="signature"/>
+  <permission
+      android:name="${applicationId}.permission.C2D_MESSAGE"
+      android:protectionLevel="signature"/>
 
-    <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE"/>
-    <uses-permission android:name="android.permission.VIBRATE"/>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+  <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE"/>
+  <uses-permission android:name="android.permission.VIBRATE"/>
+  <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
-    <uses-feature android:name="android.hardware.camera"/>
-    <uses-feature android:name="android.hardware.camera.autofocus"/>
+  <uses-feature android:name="android.hardware.camera"/>
+  <uses-feature android:name="android.hardware.camera.autofocus"/>
 
-    <uses-sdk
-        android:minSdkVersion="16"
-        android:targetSdkVersion="26"/>
+  <uses-sdk
+      android:targetSdkVersion="26"/>
 
-    <application
-        android:name="com.treesource.MainApplication"
-        android:largeHeap="true"
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+  <application
+      android:name="com.treesource.MainApplication"
+      android:largeHeap="true"
+      android:allowBackup="true"
+      android:icon="@mipmap/ic_launcher"
+      android:label="@string/app_name"
+      android:roundIcon="@mipmap/ic_launcher_round"
+      android:theme="@style/AppTheme">
+    <meta-data
+        android:name="com.google.android.geo.API_KEY"
+        android:value="AIzaSyDwCwo9N7qFEzCUb7Z291JYR2niyoNj-QY"/>
+
+    <activity
+        android:name="com.treesource.MainActivity"
+        android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDwCwo9N7qFEzCUb7Z291JYR2niyoNj-QY"/>
+        android:screenOrientation="portrait"
+        android:windowSoftInputMode="adjustPan"
+        android:launchMode="singleTask">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN"/>
+        <category android:name="android.intent.category.LAUNCHER"/>
+        <action android:name="android.intent.action.DOWNLOAD_COMPLETE"/>
+      </intent-filter>
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW"/>
+        <category android:name="android.intent.category.DEFAULT"/>
+        <category android:name="android.intent.category.BROWSABLE"/>
+        <data
+            android:scheme="treesnap"
+            android:host="treesnap"/>
+      </intent-filter>
+    </activity>
+    <activity android:name="com.facebook.react.devsupport.DevSettingsActivity"/>
 
-        <activity
-            android:name="com.treesource.MainActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"
-            android:launchMode="singleTask">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-                <action android:name="android.intent.action.DOWNLOAD_COMPLETE"/>
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <data
-                    android:scheme="treesnap"
-                    android:host="treesnap"/>
-            </intent-filter>
-        </activity>
-        <activity android:name="com.facebook.react.devsupport.DevSettingsActivity"/>
+    <meta-data
+        android:name="io.fabric.ApiKey"
+        android:value="67aa77586088af8ee6b0f7ddd416c99290fbfe70"/>
 
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="67aa77586088af8ee6b0f7ddd416c99290fbfe70"/>
+    <receiver
+        android:name="com.google.android.gms.gcm.GcmReceiver"
+        android:exported="true"
+        android:permission="com.google.android.c2dm.permission.SEND">
+      <intent-filter>
+        <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
+        <category android:name="${applicationId}"/>
+      </intent-filter>
+    </receiver>
 
-        <receiver
-            android:name="com.google.android.gms.gcm.GcmReceiver"
-            android:exported="true"
-            android:permission="com.google.android.c2dm.permission.SEND">
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
-                <category android:name="${applicationId}"/>
-            </intent-filter>
-        </receiver>
+    <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationPublisher"/>
+    <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationBootEventReceiver">
+      <intent-filter>
+        <action android:name="android.intent.action.BOOT_COMPLETED"/>
+      </intent-filter>
+    </receiver>
 
-        <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationPublisher"/>
-        <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationBootEventReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-            </intent-filter>
-        </receiver>
-
-        <service android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationRegistrationService"/>
-        <service
-            android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationListenerService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
-            </intent-filter>
-        </service>
-    </application>
+    <service android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationRegistrationService"/>
+    <service
+        android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationListenerService"
+        android:exported="false">
+      <intent-filter>
+        <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
+      </intent-filter>
+    </service>
+  </application>
 </manifest>
