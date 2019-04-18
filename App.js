@@ -4,9 +4,9 @@ import {
   View,
   StyleSheet,
   DeviceEventEmitter,
-  AsyncStorage,
   Platform
 } from 'react-native'
+import AsyncStorage from "@react-native-community/async-storage"
 import Diagnostics from './app/helpers/Diagnostics'
 import Actions from './app/helpers/Actions'
 import SnackBarNotice from './app/components/SnackBarNotice'
