@@ -40,6 +40,7 @@ export default class PickerModal extends Component {
       selectedUnit     : 'US',
       showUnitsPicker  : false,
       requiresConfidence: false,
+      useCircumference: false,
     }
   }
 
@@ -203,6 +204,35 @@ export default class PickerModal extends Component {
           {this.renderUnitsSelect()}
         </View>
       </View>
+    )
+  }
+
+  renderCircumference() {
+    const uncheckedBox = (<Icon name="checkbox-blank-outline" style={styles.icon}/>)
+    const checkedBox   = (
+        <Icon name="checkbox-marked" style={[styles.icon, {color: Colors.primary}]}/>
+      )
+
+    return (
+      <TouchableOpacity
+        style={styles.choiceContainer}
+        onPress={() => {
+          this.setState({useCircumference: !this.state.useCircumference})
+          this.setState({numberPlaceHolder: this.state.useCircumference ?
+              'Tap to enter diameter' : 'Tap to enter circumference'})
+          if (this.state.numberVal.value) {
+            this.state.useCircumference ?
+              this.handleNumber(String(this.state.numberVal.value * Math.PI)) :
+              this.handleNumber(String(this.state.numberVal.value / Math.PI))
+          }
+        }}>
+        <View style={styles.choiceItem}>
+          {this.state.useCircumference ? checkedBox : uncheckedBox}
+          <Text style={styles.choiceText}>
+            Compute from circumference
+          </Text>
+        </View>
+      </TouchableOpacity>
     )
   }
 
@@ -396,6 +426,7 @@ export default class PickerModal extends Component {
               </View>
               {this.props.specialText ? this.renderJSXText() : null}
               {this.props.numeric ? this.renderNumeric() : null}
+              {this.props.useCircumference ? this.renderCircumference() : null}
               <TouchableOpacity style={styles.button} onPress={this.close}>
                 <Text style={styles.buttonText}>
                   {this.state.cancelText}
@@ -423,6 +454,7 @@ PickerModal.propTypes = {
   initialSelect    : PropTypes.string,
   multiCheck       : PropTypes.bool,
   numeric          : PropTypes.bool,
+  useCircumference : PropTypes.bool,
   units            : PropTypes.any,    // Could be an object or a string
   selectedUnit     : PropTypes.string, // units to display for numeric input
   numberPlaceHolder: PropTypes.string,
@@ -446,7 +478,8 @@ PickerModal.defaultProps = {
   multiCheck       : false,
   freeText         : false,
   images           : [],
-  numeric          : false
+  numeric          : false,
+  useCircumference : false
 }
 
 const styles = StyleSheet.create({
