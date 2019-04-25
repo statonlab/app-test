@@ -200,7 +200,12 @@ export default class PickerModal extends Component {
                      underlineColorAndroid={'transparent'}
                      value={this.state.numberVal.value}
                      placeholder={this.state.numberPlaceHolder}
-                     onChangeText={(number) => this.handleNumber(number)}/>
+                     onChangeText={(number) => this.handleNumber(number)}
+                     onBlur={() => {
+                       if (this.state.useCircumference) {
+                         this.computeDiameter()
+                       }
+                     }}/>
           {this.renderUnitsSelect()}
         </View>
       </View>
@@ -220,11 +225,7 @@ export default class PickerModal extends Component {
           this.setState({useCircumference: !this.state.useCircumference})
           this.setState({numberPlaceHolder: this.state.useCircumference ?
               'Tap to enter diameter' : 'Tap to enter circumference'})
-          if (this.state.numberVal.value) {
-            this.state.useCircumference ?
-              this.handleNumber(String(this.state.numberVal.value * Math.PI)) :
-              this.handleNumber(String(this.state.numberVal.value / Math.PI))
-          }
+          this.state.useCircumference ? this.computeCircumference() : this.computeDiameter()
         }}>
         <View style={styles.choiceItem}>
           {this.state.useCircumference ? checkedBox : uncheckedBox}
@@ -234,6 +235,18 @@ export default class PickerModal extends Component {
         </View>
       </TouchableOpacity>
     )
+  }
+
+  computeDiameter() {
+    if (this.state.numberVal.value) {
+      this.handleNumber(String(this.state.numberVal.value / Math.PI))
+    }
+  }
+
+  computeCircumference() {
+    if (this.state.numberVal.value) {
+      this.handleNumber(String(this.state.numberVal.value * Math.PI))
+    }
   }
 
   renderUnitsSelect() {
