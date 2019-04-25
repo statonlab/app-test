@@ -9,7 +9,6 @@ import {
   Modal,
   KeyboardAvoidingView,
   ScrollView,
-  StatusBar,
   Platform,
   Keyboard
 } from 'react-native'

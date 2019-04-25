@@ -628,7 +628,7 @@ export default class CameraScreen extends Screen {
         newImages    : this.state.newImages.concat(image)
       })
 
-      // this._forward()
+      this._forward()
       this.isCapturing = false
     } catch (error) {
       this.isCapturing = false
