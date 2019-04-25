@@ -7,4 +7,7 @@
    <FileRef
       location = "group:TreeSnap.xcodeproj">
    </FileRef>
+   <FileRef
+      location = "group:Treesnap.xcodeproj">
+   </FileRef>
 </Workspace>
