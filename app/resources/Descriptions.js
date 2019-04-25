@@ -330,7 +330,8 @@ export const Plants = {
       crownHealth      : true,
       nearbyTrees      : true,
       diameterNumeric  : true,
-      oakHealthProblems: true
+      oakHealthProblems: true,
+      standTagging     : true,
     }
   },
 

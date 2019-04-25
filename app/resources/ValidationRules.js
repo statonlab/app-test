@@ -44,7 +44,8 @@ const ValidationRules = {
   standDiversity         : t.enums.of(DCP.standDiversity.selectChoices),
   crownAssessment        : t.enums.of(DCP.crownAssessment.selectChoices),
   madroneDisease         : t.String,
-  canopyHealth    : t.enums.of(DCP.canopyHealth.selectChoices),
+  canopyHealth           : t.enums.of(DCP.canopyHealth.selectChoices),
+  standTagging           : t.enums.of(DCP.standTagging.selectChoices),
 
 
   //Deprecated choices
