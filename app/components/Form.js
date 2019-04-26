@@ -667,8 +667,12 @@ export default class Form extends Component {
       )
     }
 
-    let value = typeof DCP[key].initialSelect !== 'undefined' ? DCP[key].initialSelect :
-      this.getMultiCheckValue(this.state.metadata[key], DCP[key].multiCheck)
+    let value
+    if(!this.state.metadata[key]) {
+      value = typeof DCP[key].initialSelect !== 'undefined' ? DCP[key].initialSelect : DCP[key].placeholder
+    } else {
+      value = this.getMultiCheckValue(this.state.metadata[key], DCP[key].multiCheck)
+    }
 
     DCP[key]  = this.extractConditional(DCP[key])
     return (
