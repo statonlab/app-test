@@ -241,13 +241,13 @@ export default class PickerModal extends Component {
 
   computeDiameter() {
     if (this.state.numberVal.value) {
-      this.handleNumber(String(this.state.numberVal.value / Math.PI))
+      this.handleNumber((this.state.numberVal.value / Math.PI).toFixed(2))
     }
   }
 
   computeCircumference() {
     if (this.state.numberVal.value) {
-      this.handleNumber(String(this.state.numberVal.value * Math.PI))
+      this.handleNumber((this.state.numberVal.value * Math.PI).toFixed(2))
     }
   }
 

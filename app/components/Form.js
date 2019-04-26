@@ -755,9 +755,6 @@ export default class Form extends Component {
         style={styles.picker}
         header={header}
         specialText={ACFCollection}
-        onSelect={(option) => {
-          this.setState({metadata: {...this.state.metadata, [key]: option}})
-        }}
       >
         <View style={[styles.formGroup, {justifyContent: 'center'}]}>
           <Text style={[styles.label]}>
