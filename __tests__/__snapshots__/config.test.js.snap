@@ -513,6 +513,15 @@ Object {
       "Don't know",
     ],
   },
+  "plantedWild": Object {
+    "description": "Is this tree wild or has it been planted?",
+    "label": "Planted vs. Wild",
+    "placeHolder": "Please select",
+    "selectChoices": Array [
+      "Planted",
+      "Wild",
+    ],
+  },
   "seedsBinary": Object {
     "camera": Array [
       "Yes",
