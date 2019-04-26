@@ -237,6 +237,7 @@ Object {
       "US": "Inches",
       "metric": "cm",
     },
+    "useCircumference": true,
   },
   "emeraldAshBorer": Object {
     "captions": Array [
