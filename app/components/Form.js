@@ -629,6 +629,7 @@ export default class Form extends Component {
               default={DCP[key].default}
               startingNumeric={[this.state.metadata[key], this.state.metadata[confidenceKey]]}
               numeric={DCP[key].numeric}
+              useCircumference={DCP[key].useCircumference}
               units={DCP[key].units}
               selectedUnit={selectedUnit}
               header={DCP[key].description}
@@ -682,6 +683,7 @@ export default class Form extends Component {
             startingString={this.state.metadata[key]}
             numeric={DCP[key].numeric}
             initialSelect={DCP[key].initialSelect}
+            useCircumference={DCP[key].useCircumference}
             units={DCP[key].units}
             header={DCP[key].description}
             choices={DCP[key].selectChoices}
