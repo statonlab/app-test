@@ -606,7 +606,15 @@ export default class Form extends Component {
       }
 
       let selectedUnit = this.state.metadata[unitsKey] ? this.state.metadata[unitsKey] : questionUnit
-      let value        = this.state.metadata[key] ? this.state.metadata[key] + ` ${selectedUnit}` : null
+
+      let value = null
+      if (this.state.metadata[key]) {
+        value = this.state.metadata[key] + ` ${selectedUnit}`
+      } else {
+        if (typeof DCP[key].initialSelect !== 'undefined') {
+          value = DCP[key].initialSelect + ` ${selectedUnit}`
+        }
+      }
 
       DCP[key] = this.extractConditional(DCP[key])
       return (
@@ -617,6 +625,7 @@ export default class Form extends Component {
               images={DCP[key].images}
               captions={DCP[key].captions}
               multiCheck={DCP[key].multiCheck}
+              initialSelect={DCP[key].initialSelect}
               default={DCP[key].default}
               startingNumeric={[this.state.metadata[key], this.state.metadata[confidenceKey]]}
               numeric={DCP[key].numeric}
@@ -659,7 +668,13 @@ export default class Form extends Component {
       )
     }
 
-    let value = this.getMultiCheckValue(this.state.metadata[key], DCP[key].multiCheck)
+    let value
+    if(!this.state.metadata[key]) {
+      value = typeof DCP[key].initialSelect !== 'undefined' ? DCP[key].initialSelect : DCP[key].placeholder
+    } else {
+      value = this.getMultiCheckValue(this.state.metadata[key], DCP[key].multiCheck)
+    }
+
     DCP[key]  = this.extractConditional(DCP[key])
     return (
       <View key={key}>
@@ -671,6 +686,7 @@ export default class Form extends Component {
             multiCheck={DCP[key].multiCheck}
             startingString={this.state.metadata[key]}
             numeric={DCP[key].numeric}
+            initialSelect={DCP[key].initialSelect}
             useCircumference={DCP[key].useCircumference}
             units={DCP[key].units}
             header={DCP[key].description}

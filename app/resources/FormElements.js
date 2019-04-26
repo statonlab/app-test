@@ -432,6 +432,14 @@ const DCP = {
     description  : 'What is the health of this tree’s canopy?',
     selectChoices: ['Healthy (no dead leaves)', 'Some dead leaves (less than 10%)', 'Many dead leaves (more than 10%)', 'Completely dead', 'I’m not sure'],
     placeHolder  : 'Please select'
+  },
+
+  standTagging: {
+    label        : 'Stand Tagging',
+    description  : 'Is this tree part of a large stand of trees of the same species that share similar traits?',
+    selectChoices: ['Yes', 'No'],
+    placeHolder  : 'Please select',
+    initialSelect: 'No'
   }
 }
 

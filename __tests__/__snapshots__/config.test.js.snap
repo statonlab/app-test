@@ -553,6 +553,16 @@ Object {
       "Not sure",
     ],
   },
+  "standTagging": Object {
+    "description": "Is this tree part of a large stand of trees of the same species that share similar traits?",
+    "initialSelect": "No",
+    "label": "Stand Tagging",
+    "placeHolder": "Please select",
+    "selectChoices": Array [
+      "Yes",
+      "No",
+    ],
+  },
   "torreyaFungalBlight": Object {
     "captions": Array [
       "Canker on Florida Torreya stem.  Photo credit: Houston Snead.",

@@ -47,6 +47,8 @@ export default class PickerModal extends Component {
   componentDidMount() {
     this.setState({selected: this.props.initialSelect})
 
+    this.props.onSelect(this.props.initialSelect)
+
     if (this.props.multiCheck || this.props.freeText || this.props.numeric) {
       this.setState({cancelText: 'CONFIRM'})
     }
