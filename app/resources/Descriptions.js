@@ -109,6 +109,7 @@ export const Plants = {
       burrs              : true,
       catkins            : true,
       chestnutBlightSigns: true,
+      plantedWild        : true,
       // surroundings       : true,
       // accessibility      : true,
       crownHealth        : true,

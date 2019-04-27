@@ -440,7 +440,14 @@ const DCP = {
     selectChoices: ['Yes', 'No'],
     placeHolder  : 'Please select',
     initialSelect: 'No'
-  }
+  },
+
+  plantedWild: {
+    label        : 'Planted vs. Wild',
+    description  : 'Is this tree wild or has it been planted?',
+    selectChoices: ['Planted', 'Wild'],
+    placeHolder  : 'Please select'
+  },
 }
 
 export default DCP
