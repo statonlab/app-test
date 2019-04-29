@@ -159,7 +159,7 @@ export default class CameraScreen extends Screen {
             this._back()
           }}
           style={{marginBottom: 20}}>
-          <IonIcon name={'ios-image-outline'} size={120} color={'#777'}/>
+          <IonIcon name={'ios-image'} size={120} color={'#777'}/>
         </TouchableOpacity>
         <Text style={{
           fontSize: 14,
@@ -199,7 +199,7 @@ export default class CameraScreen extends Screen {
           style={[styles.toolTouchable, styles.flashTouchable]}
           onPress={this.switchFlash.bind(this)}
         >
-          <IonIcon name="ios-flash-outline"
+          <IonIcon name="ios-flash"
                    color="#fff"
                    size={32}
                    style={styles.flash}
@@ -215,7 +215,7 @@ export default class CameraScreen extends Screen {
           style={[styles.toolTouchable, styles.flashTouchable]}
           onPress={this.switchFlash.bind(this)}
         >
-          <IonIcon name="ios-flash-outline"
+          <IonIcon name="ios-flash"
                    color={Colors.warning}
                    size={32}
                    style={styles.flash}

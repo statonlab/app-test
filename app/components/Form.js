@@ -891,7 +891,7 @@ export default class Form extends Component {
               <Text style={{
                 paddingRight: 10
               }}>
-                <IonIcon name={'ios-apps-outline'} size={20} color={'#777'}/>
+                <IonIcon name={'ios-apps'} size={20} color={'#777'}/>
               </Text>
             </TouchableOpacity>
 

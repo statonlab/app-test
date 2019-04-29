@@ -542,7 +542,7 @@ export default class ObservationsScreen extends Screen {
 
     return (
       <View style={styles.centerContainer}>
-        <Icon name="ios-albums-outline" size={120} style={styles.emptyListIcon}/>
+        <Icon name="ios-albums" size={120} style={styles.emptyListIcon}/>
         <Text style={styles.emptyListText}>
           You have not submitted any entries yet. You can
           start by going back and selecting a plant.

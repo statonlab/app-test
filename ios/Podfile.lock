@@ -32,6 +32,8 @@ PODS:
   - nanopb/encode (0.3.901)
   - React (0.59.6):
     - React/Core (= 0.59.6)
+  - react-native-netinfo (2.0.5):
+    - React
   - React/Core (0.59.6):
     - yoga (= 0.59.6.React)
   - React/CxxBridge (0.59.6):
@@ -74,7 +76,7 @@ PODS:
     - React/RCTBlob
   - RNCAsyncStorage (1.3.3):
     - React
-  - RNVectorIcons (4.6.0):
+  - RNVectorIcons (6.4.2):
     - React
   - yoga (0.59.6.React)
 
@@ -85,6 +87,7 @@ DEPENDENCIES:
   - Firebase/Core (= 4.2.0)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
+  - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - React/Core (from `../node_modules/react-native`)
   - React/CxxBridge (from `../node_modules/react-native`)
   - React/DevSupport (from `../node_modules/react-native`)
@@ -117,6 +120,8 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
   React:
     :path: "../node_modules/react-native"
+  react-native-netinfo:
+    :path: "../node_modules/@react-native-community/netinfo"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-community/async-storage"
   RNVectorIcons:
@@ -138,10 +143,11 @@ SPEC CHECKSUMS:
   GoogleToolboxForMac: ff31605b7d66400dcec09bed5861689aebadda4d
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   React: 0bb58efca577aa4b3c8f03a9fbf0d9a8ebdb5ac4
+  react-native-netinfo: 2cfb4a903d90f1beda31c2990a058c51130b53aa
   RNCAsyncStorage: e71d854855f99b1fc46d468858265608b917bbb8
-  RNVectorIcons: a3c395829c56e2cb054a0730126298bf805a2dca
+  RNVectorIcons: 6607bd3a30291d0edb56f9bbe7ae411ee2b928b0
   yoga: 8dacc3c5977cb8e07c346e203bb5f4ffe01296df
 
-PODFILE CHECKSUM: 9c5ded22d9f54707ce193deb49cd105843d0d3bf
+PODFILE CHECKSUM: 4ed2196d922ade956880c2c02403b68c555eb3e3
 
 COCOAPODS: 1.6.1

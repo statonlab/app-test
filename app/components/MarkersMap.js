@@ -186,7 +186,7 @@ export default class MarkersMap extends Component {
             justifyContent : 'center',
             ...(new Elevation(5))
           }}>
-          <Icon name={Platform.select({ios: 'ios-locate-outline', android: 'md-locate'})}
+          <Icon name={Platform.select({ios: 'ios-locate', android: 'md-locate'})}
                 color={'#222'}
                 size={24}
                 style={{
