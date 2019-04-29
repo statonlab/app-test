@@ -946,7 +946,7 @@ export default class ObservationsScreen extends Screen {
           {this.state.selectedObservation.synced ?
             <PopoverItem onPress={this.share.bind(this)}
                          style={styles.popoverItem}>
-              <Icon name={android ? 'md-share' : 'ios-share-outline'}
+              <Icon name={android ? 'md-share' : 'ios-share'}
                     size={15}
                     color={Colors.warningText}
                     style={{width: 20}}/>

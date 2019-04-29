@@ -486,7 +486,7 @@ export default class ObservationScreen extends Screen {
           ...(new Elevation(5)),
           zIndex         : 99000
         }}>
-        <Icon name={android ? 'md-share' : 'ios-share-outline'} size={22} color={Colors.warningText}/>
+        <Icon name={android ? 'md-share' : 'ios-share'} size={22} color={Colors.warningText}/>
         <Text style={{fontSize: 9, color: Colors.warningText, textAlign: 'center'}}>Share</Text>
       </TouchableOpacity>
 

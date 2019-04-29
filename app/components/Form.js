@@ -14,8 +14,7 @@ import {
   BackHandler,
   Modal,
   KeyboardAvoidingView,
-  ScrollView,
-  Dimensions
+  ScrollView
 } from 'react-native'
 import moment from 'moment'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -725,10 +724,7 @@ export default class Form extends Component {
     let metadata = {}
     Object.keys(this.props.formProps).map(key => {
       if (DCP[key].startValue) {
-        metadata = {
-          ...metadata,
-          [key]: DCP[key].startValue
-        }
+        metadata[key] = DCP[key].startValue
       }
     })
 
