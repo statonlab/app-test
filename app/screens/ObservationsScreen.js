@@ -695,9 +695,9 @@ export default class ObservationsScreen extends Screen {
     this.buttons[observation.id].measure((ox, oy, width, height, px, py) => {
       this.setState({
         selectedObservation: observation,
-        popoverVisible     : true,
         buttonRect         : {x: px, y: py, width: width, height: height}
       })
+      this.popover.open()
     })
   }
 
@@ -705,7 +705,7 @@ export default class ObservationsScreen extends Screen {
    * Close the popover dropdown.
    */
   closePopover() {
-    this.setState({popoverVisible: false})
+    this.popover.close()
     setTimeout(() => {
       this.setState({selectedObservation: {}})
     }, 250)
@@ -933,7 +933,7 @@ export default class ObservationsScreen extends Screen {
         <Spinner ref={spinner => this.spinner = spinner}/>
         <Popover
           onCloseRequest={this.closePopover.bind(this)}
-          visible={this.state.popoverVisible}
+          ref={ref => this.popover = ref}
           triggerMeasurements={this.state.buttonRect}>
           <PopoverItem onPress={this.viewObservation.bind(this)}
                        style={styles.popoverItem}>

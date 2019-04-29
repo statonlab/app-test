@@ -22,7 +22,7 @@ export default class DateModal extends Component {
     }
   }
 
-  componentWillMount() {
+  componentDidMount() {
     let dateChoices = []
     let currentYear = new Date().getFullYear()
     for (let i = 0; i < 100; i++) {

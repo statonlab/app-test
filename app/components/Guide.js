@@ -37,7 +37,7 @@ export default class Guide extends Component {
     }
   }
 
-  componentWillMount() {
+  componentDidMount() {
     let guides = realm.objects('Guide').filtered('screen = $0', this.props.screen)
 
     if (guides.length > 0) {
