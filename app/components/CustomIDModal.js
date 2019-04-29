@@ -61,7 +61,7 @@ export default class CustomIDModal extends Component {
               <TouchableOpacity
                 onPress={() => this.setState({showBarcodeReader: true})}
                 style={styles.cameraIcon}>
-                <Icon name={'ios-camera-outline'}
+                <Icon name={'ios-camera'}
                       color={Colors.primary}
                       size={34}
                       style={{paddingRight: 10}}/>

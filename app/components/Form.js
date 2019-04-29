@@ -14,8 +14,7 @@ import {
   BackHandler,
   Modal,
   KeyboardAvoidingView,
-  ScrollView,
-  Dimensions
+  ScrollView
 } from 'react-native'
 import moment from 'moment'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -88,7 +87,15 @@ export default class Form extends Component {
     this.timeStarted = moment()
   }
 
-  componentWillMount() {
+  componentDidMount() {
+    this.setUpComponent()
+
+    if (!this.props.edit) {
+      this.setDefaultValues()
+    }
+  }
+
+  setUpComponent() {
     if (this.props.edit) {
       // For every key, set the state
       Object.keys(this.props.entryInfo).map(key => {
@@ -153,12 +160,6 @@ export default class Form extends Component {
     }
 
     return id
-  }
-
-  componentDidMount() {
-    if (!this.props.edit) {
-      this.setDefaultValues()
-    }
   }
 
   /**
@@ -669,13 +670,13 @@ export default class Form extends Component {
     }
 
     let value
-    if(!this.state.metadata[key]) {
+    if (!this.state.metadata[key]) {
       value = typeof DCP[key].initialSelect !== 'undefined' ? DCP[key].initialSelect : DCP[key].placeholder
     } else {
       value = this.getMultiCheckValue(this.state.metadata[key], DCP[key].multiCheck)
     }
 
-    DCP[key]  = this.extractConditional(DCP[key])
+    DCP[key] = this.extractConditional(DCP[key])
     return (
       <View key={key}>
         <View style={styles.formGroup}>
@@ -723,10 +724,7 @@ export default class Form extends Component {
     let metadata = {}
     Object.keys(this.props.formProps).map(key => {
       if (DCP[key].startValue) {
-        metadata = {
-          ...metadata,
-          [key]: DCP[key].startValue
-        }
+        metadata[key] = DCP[key].startValue
       }
     })
 
@@ -889,7 +887,7 @@ export default class Form extends Component {
               <Text style={{
                 paddingRight: 10
               }}>
-                <IonIcon name={'ios-apps-outline'} size={20} color={'#777'}/>
+                <IonIcon name={'ios-apps'} size={20} color={'#777'}/>
               </Text>
             </TouchableOpacity>
 

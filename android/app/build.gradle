@@ -117,8 +117,8 @@ android {
         applicationId "com.treesource"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1501
-        versionName "1.9.1"
+        versionCode 1600
+        versionName "1.10.0"
         missingDimensionStrategy 'react-native-camera', 'general'
         multiDexEnabled true
         ndk {
@@ -156,6 +156,7 @@ android {
 }
 
 dependencies {
+    implementation project(':@react-native-community_netinfo')
     implementation project(':@react-native-community_async-storage')
     implementation project(':react-native-device-info')
     implementation project(':react-native-firebase')

@@ -21,7 +21,7 @@ export default class IntermediateAccountScreen extends Screen {
     }
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.events = [
       DeviceEventEmitter.addListener('IntermediateAccountScreen.loaded', () => {
         this.setState({loggedIn: User.loggedIn()})

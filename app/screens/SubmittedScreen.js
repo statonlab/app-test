@@ -10,9 +10,9 @@ import {
   Image,
   Platform,
   Alert,
-  NetInfo,
   DeviceEventEmitter
 } from 'react-native'
+import NetInfo from '@react-native-community/netinfo'
 import Header from '../components/Header'
 import Colors from '../helpers/Colors'
 import Elevation from '../helpers/Elevation'
@@ -20,8 +20,8 @@ import File from '../helpers/File'
 import moment from 'moment'
 import Observation from '../helpers/Observation'
 import MapView from 'react-native-maps'
-import {isIphoneX} from 'react-native-iphone-x-helper'
-import {ACFCollection} from '../resources/Descriptions'
+import { isIphoneX } from 'react-native-iphone-x-helper'
+import { ACFCollection } from '../resources/Descriptions'
 import Spinner from '../components/Spinner'
 import User from '../db/User'
 import Errors from '../helpers/Errors'

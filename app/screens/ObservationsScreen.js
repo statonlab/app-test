@@ -542,7 +542,7 @@ export default class ObservationsScreen extends Screen {
 
     return (
       <View style={styles.centerContainer}>
-        <Icon name="ios-albums-outline" size={120} style={styles.emptyListIcon}/>
+        <Icon name="ios-albums" size={120} style={styles.emptyListIcon}/>
         <Text style={styles.emptyListText}>
           You have not submitted any entries yet. You can
           start by going back and selecting a plant.
@@ -695,9 +695,9 @@ export default class ObservationsScreen extends Screen {
     this.buttons[observation.id].measure((ox, oy, width, height, px, py) => {
       this.setState({
         selectedObservation: observation,
-        popoverVisible     : true,
         buttonRect         : {x: px, y: py, width: width, height: height}
       })
+      this.popover.open()
     })
   }
 
@@ -705,7 +705,7 @@ export default class ObservationsScreen extends Screen {
    * Close the popover dropdown.
    */
   closePopover() {
-    this.setState({popoverVisible: false})
+    this.popover.close()
     setTimeout(() => {
       this.setState({selectedObservation: {}})
     }, 250)
@@ -933,7 +933,7 @@ export default class ObservationsScreen extends Screen {
         <Spinner ref={spinner => this.spinner = spinner}/>
         <Popover
           onCloseRequest={this.closePopover.bind(this)}
-          visible={this.state.popoverVisible}
+          ref={ref => this.popover = ref}
           triggerMeasurements={this.state.buttonRect}>
           <PopoverItem onPress={this.viewObservation.bind(this)}
                        style={styles.popoverItem}>
@@ -946,7 +946,7 @@ export default class ObservationsScreen extends Screen {
           {this.state.selectedObservation.synced ?
             <PopoverItem onPress={this.share.bind(this)}
                          style={styles.popoverItem}>
-              <Icon name={android ? 'md-share' : 'ios-share-outline'}
+              <Icon name={android ? 'md-share' : 'ios-share'}
                     size={15}
                     color={Colors.warningText}
                     style={{width: 20}}/>

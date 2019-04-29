@@ -19,9 +19,7 @@ export default class Header extends Component {
     this.state = {
       menuIcon: 'menu'
     }
-  }
 
-  componentWillMount() {
     this.listeners = []
   }
 

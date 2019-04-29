@@ -17,9 +17,8 @@ export default class SnackBarNotice extends Component {
     super(props)
 
     this.state = {
-      isVisible : false,
-      noticeText: '',
-      position  : new Animated.Value(-60)
+      isVisible: false,
+      position : new Animated.Value(-60)
     }
 
     this.closeTimeOut = null
@@ -27,30 +26,11 @@ export default class SnackBarNotice extends Component {
   }
 
   /**
-   * Initialize the message
-   */
-  componentDidMount() {
-    this.setState({message: this.props.noticeText})
-  }
-
-  /**
-   * Watch for message changes
-   *
-   * @param props
-   */
-  componentWillReceiveProps(props) {
-    if (props.noticeText !== this.state.noticeText) {
-      this.setState({message: props.noticeText})
-    }
-  }
-
-  /**
    * Show the notification bar
    */
   showBar = () => {
     this.setState({
-      noticeText: this.props.noticeText,
-      isVisible : true
+      isVisible: true
     })
 
     let move = 0
@@ -129,7 +109,7 @@ export default class SnackBarNotice extends Component {
             <View style={styles.row}>
               <Text
                 style={[styles.text, {flex: 1}]}>
-                {this.state.noticeText}
+                {this.props.noticeText}
               </Text>
             </View>
           </TouchableOpacity>

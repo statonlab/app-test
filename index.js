@@ -9,7 +9,9 @@ import TreeSnap from './App'
 if (__DEV__) {
   YellowBox.ignoreWarnings([
     'Warning: isMounted(...)',
-    'Module RNFetchBlob requires main queue'
+    'Module RNFetchBlob requires main queue',
+    'Warning: componentWillReceiveProps is',
+    'Warning: componentWillUpdate is'
   ])
 }
 

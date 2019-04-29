@@ -1,5 +1,5 @@
-import React, {Component} from 'react'
-import {Animated, View, StyleSheet, TouchableOpacity, Dimensions} from 'react-native'
+import React, { Component } from 'react'
+import { Animated, View, StyleSheet, TouchableOpacity, Dimensions } from 'react-native'
 import PropTypes from 'prop-types'
 import Elevation from '../helpers/Elevation'
 import PopoverItem from './subcomponents/PopoverItem'
@@ -18,28 +18,28 @@ class Popover extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if(nextProps.visible) {
-      Animated.timing(
-        this.state.opacity,
-        {
-          toValue : 1,
-          duration: 250
-        }
-      ).start()
+  open() {
+    Animated.timing(
+      this.state.opacity,
+      {
+        toValue : 1,
+        duration: 250
+      }
+    ).start()
 
-      this.setState({visible: nextProps.visible})
-    } else {
-      Animated.timing(
-        this.state.opacity,
-        {
-          toValue : 0,
-          duration: 250
-        }
-      ).start(() => {
-        this.setState({visible: nextProps.visible})
-      })
-    }
+    this.setState({visible: true})
+  }
+
+  close() {
+    Animated.timing(
+      this.state.opacity,
+      {
+        toValue : 0,
+        duration: 250
+      }
+    ).start(() => {
+      this.setState({visible: false})
+    })
   }
 
   render() {
@@ -89,7 +89,7 @@ class Popover extends Component {
 }
 
 export default Popover
-export {PopoverItem}
+export { PopoverItem }
 
 Popover.propTypes = {
   visible            : PropTypes.bool,

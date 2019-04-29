@@ -370,7 +370,7 @@ export default class ObservationLostImagesFixer extends Component {
         backgroundColor  : '#f7f7f7',
         paddingHorizontal: 10
       }}>
-        <Icon name={'ios-bug-outline'} size={70} color={'#777'} style={{marginBottom: 10}}/>
+        <Icon name={'ios-bug'} size={70} color={'#777'} style={{marginBottom: 10}}/>
         <Text style={{
           color       : '#222',
           fontSize    : 14,

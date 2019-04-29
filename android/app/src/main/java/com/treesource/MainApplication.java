@@ -6,6 +6,7 @@ import android.support.multidex.MultiDex;
 
 import com.crashlytics.android.Crashlytics;
 import com.facebook.react.ReactApplication;
+import com.reactnativecommunity.netinfo.NetInfoPackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
@@ -57,7 +58,8 @@ public class MainApplication extends Application implements ReactApplication {
           new VectorIconsPackage(),
           new ImageResizerPackage(),
           new RNFetchBlobPackage(),
-          new MapsPackage()
+          new MapsPackage(),
+          new NetInfoPackage()
       );
     }
 
