@@ -361,6 +361,8 @@ export default class Form extends Component {
    * Validate the primary and meta data with tcomb.
    */
   submit() {
+    console.log('HERE', this.state.metadata)
+
     if (!this.state.images.images || !this.validateState().isValid()) {
       this.notifyIncomplete(this.validateMeta())
       return
@@ -637,17 +639,18 @@ export default class Form extends Component {
               choices={DCP[key].selectChoices}
               numberPlaceHolder={DCP[key].numberPlaceHolder}
               onSelect={(value, confidence, unit) => {
-                let newData  = this.state.metadata
-                newData[key] = value
+                let metadata  = this.state.metadata
+                metadata[key] = value
 
                 if (typeof DCP[key].selectChoices !== 'undefined') {
-                  newData[confidenceKey] = confidence
+                  metadata[confidenceKey] = confidence
                 }
 
                 if (typeof DCP[key].units !== 'undefined') {
-                  newData[unitsKey] = unit
+                  metadata[unitsKey] = unit
                 }
-                this.setState({metadata: newData})
+
+                this.setState({metadata})
               }}
             >
               <View style={styles.picker}>
@@ -725,6 +728,8 @@ export default class Form extends Component {
     Object.keys(this.props.formProps).map(key => {
       if (DCP[key].startValue) {
         metadata[key] = DCP[key].startValue
+      } else if (DCP[key].initialSelect) {
+        metadata[key] = DCP[key].initialSelect
       }
     })
 
