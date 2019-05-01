@@ -287,7 +287,7 @@ Object {
   },
   "heightFirstBranch": Object {
     "default": "Estimated",
-    "description": "Approximately how high up is the first main branch of the tree?",
+    "description": "Approximately high high up is the first main branch of the tree? (It's ok to ignore small branches, i.e. suckers, at the base).",
     "label": "Height of first branch",
     "numberPlaceHolder": "Tap to enter height",
     "numeric": true,
