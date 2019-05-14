@@ -913,7 +913,7 @@ export default class Form extends Component {
                             onPress={this.submit.bind(this)}
                             rippleColor="rgba(0,0,0,0.5)">
             <Text style={styles.buttonText}>
-              {this.props.edit ? 'Save' : 'Submit'}
+              Save
             </Text>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.button, styles.buttonAlt, styles.flex1]}
