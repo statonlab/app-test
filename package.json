@@ -19,10 +19,10 @@
         "geolib": "^2.0.24",
         "moment": "^2.24.0",
         "prop-types": "^15.7.2",
-        "react": "16.8.6",
+        "react": "16.8.3",
         "react-addons-update": "^15.6.2",
-        "react-native": "0.59.6",
-        "react-native-camera": "github:react-native-community/react-native-camera#master",
+        "react-native": "0.59.9",
+        "react-native-camera": "^2.10.1",
         "react-native-device-info": "^0.25.1",
         "react-native-firebase": "^5.3.1",
         "react-native-image-resizer": "^1.0.1",
@@ -40,12 +40,12 @@
         "tcomb-validation": "^3.4.1"
     },
     "devDependencies": {
-        "@babel/core": "^7.4.3",
-        "@babel/runtime": "^7.4.3",
-        "babel-jest": "^24.7.1",
+        "@babel/core": "^7.4.4",
+        "@babel/runtime": "^7.4.4",
+        "babel-jest": "^24.8.0",
         "extract-zip": "^1.6.7",
-        "jest": "^24.7.1",
-        "metro-react-native-babel-preset": "^0.53.1",
+        "jest": "^24.8.0",
+        "metro-react-native-babel-preset": "^0.54.0",
         "react-test-renderer": "^16.8.6"
     },
     "jest": {
