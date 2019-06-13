@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import {
   View,
@@ -8,11 +8,11 @@ import {
   Text,
   KeyboardAvoidingView,
   TextInput,
-  TouchableOpacity
+  TouchableOpacity,
 } from 'react-native'
 import Colors from '../helpers/Colors'
 import Elevation from '../helpers/Elevation'
-import {isIphoneX, ifIphoneX} from 'react-native-iphone-x-helper'
+import { isIphoneX, ifIphoneX } from 'react-native-iphone-x-helper'
 import Icon from 'react-native-vector-icons/Ionicons'
 import BarcodeReader from './BarcodeReader'
 
@@ -24,8 +24,84 @@ export default class CustomIDModal extends Component {
 
     this.state = {
       custom_id        : '',
-      showBarcodeReader: false
+      showBarcodeReader: false,
+      selected         : null,
     }
+  }
+
+  renderField(value, index) {
+    const {custom_id}       = this.state
+    const other_identifiers = this.props.otherIdentifiers
+    return (
+      <View style={{flexDirection: 'row', justifyContent: 'center', marginBottom: 10}}
+            key={`field-${index}`}>
+        <View style={{position: 'relative', flex: 1}}>
+          <TextInput
+            style={styles.customIDInput}
+            placeholder="Enter custom ID"
+            placeholderTextColor="#aaa"
+            value={value}
+            onChangeText={(id) => {
+              this.props.onChange(custom_id, other_identifiers.map((v, i) => {
+                if (i === index) {
+                  return id
+                }
+
+                return v
+              }))
+            }}
+            underlineColorAndroid="transparent"
+          />
+          <TouchableOpacity
+            onPress={() => this.setState({showBarcodeReader: true, selected: index})}
+            style={styles.cameraIcon}>
+            <Icon name={'ios-camera'}
+                  color={Colors.primary}
+                  size={34}
+                  style={{paddingRight: 10}}/>
+          </TouchableOpacity>
+        </View>
+
+        {index === other_identifiers.length - 1 ?
+          <TouchableOpacity
+            onPress={() => {
+              const old = other_identifiers.concat([])
+              old.splice(index, 1)
+              this.setState({
+                other_identifiers: old,
+              })
+            }}
+            style={{paddingVertical: 5, paddingLeft: 10}}>
+            <Icon name={'md-remove-circle'} color={Colors.danger} size={24}/>
+          </TouchableOpacity>
+          : null}
+      </View>
+    )
+  }
+
+  renderMoreIDs() {
+    const other_identifiers = this.props.otherIdentifiers
+
+    return (
+      <View style={{paddingVertical: 10}}>
+        {other_identifiers.map(this.renderField.bind(this))}
+
+        <View style={{flexDirection: 'row'}}>
+          <TouchableOpacity
+            onPress={() => {
+              this.props.onChange(this.state.custom_id, other_identifiers.concat(['']))
+            }}
+            style={{
+              backgroundColor: Colors.primary,
+              padding        : 10,
+              borderRadius   : 4,
+              ...(new Elevation(2)),
+            }}>
+            <Text style={{color: Colors.primaryText}}>Add Another ID</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    )
   }
 
   render() {
@@ -54,7 +130,7 @@ export default class CustomIDModal extends Component {
                 value={this.state.custom_id}
                 onChangeText={(custom_id) => {
                   this.setState({custom_id})
-                  this.props.onChange(custom_id)
+                  this.props.onChange(custom_id, this.props.otherIdentifiers)
                 }}
                 underlineColorAndroid="transparent"
               />
@@ -72,28 +148,31 @@ export default class CustomIDModal extends Component {
                 </Text>
               </View>
             </View>
+
+            {this.renderMoreIDs()}
           </View>
           <View style={{
             flex          : 0,
             justifyContent: 'flex-end',
             borderTopWidth: 1,
             borderTopColor: '#ddd',
-            ...ifIphoneX({paddingBottom: 20, backgroundColor: '#eee'})
+            ...ifIphoneX({paddingBottom: 20, backgroundColor: '#eee'}),
           }}>
             <TouchableOpacity
               style={[{
                 backgroundColor  : '#eee',
                 flex             : 0,
                 paddingVertical  : 10,
-                paddingHorizontal: 15
+                paddingHorizontal: 15,
               }]}
               onPress={() => {
                 this.props.onRequestClose()
               }}>
               <Text style={{
-                color    : Colors.primary,
-                fontSize : 14,
-                textAlign: 'right'
+                color     : Colors.primary,
+                fontSize  : 14,
+                textAlign : 'right',
+                fontWeight: '600',
               }}>DONE</Text>
             </TouchableOpacity>
           </View>
@@ -104,8 +183,21 @@ export default class CustomIDModal extends Component {
           }}
           visible={this.state.showBarcodeReader}
           onChange={custom_id => {
-            this.setState({custom_id})
-            this.props.onChange(custom_id)
+            if (this.state.selected === null) {
+              this.setState({custom_id, selected: null})
+              this.props.onChange(custom_id, this.props.otherIdentifiers)
+            } else {
+              this.setState({
+                selected: null,
+              }, () => {
+                this.props.onChange(custom_id, this.props.otherIdentifiers.map((v, i) => {
+                  if (i === this.state.selected) {
+                    return custom_id
+                  }
+                  return v
+                }))
+              })
+            }
           }}/>
       </Modal>
     )
@@ -113,11 +205,15 @@ export default class CustomIDModal extends Component {
 }
 
 CustomIDModal.propTypes = {
-  onRequestClose: PropTypes.func.isRequired,
-  onChange      : PropTypes.func.isRequired,
-  visible       : PropTypes.bool.isRequired
+  onRequestClose  : PropTypes.func.isRequired,
+  onChange        : PropTypes.func.isRequired,
+  visible         : PropTypes.bool.isRequired,
+  otherIdentifiers: PropTypes.array,
 }
 
+CustomIDModal.defaultProps = {
+  otherIdentifiers: [],
+}
 
 function getVerticalPadding() {
   if (Platform.OS === 'android') {
@@ -135,7 +231,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primary,
     paddingTop     : getVerticalPadding(),
     paddingBottom  : 10,
-    ...(new Elevation(2))
+    ...(new Elevation(2)),
   },
 
   modalHeaderText: {
@@ -143,13 +239,13 @@ const styles = StyleSheet.create({
     textAlign      : 'center',
     fontWeight     : 'normal',
     fontSize       : 16,
-    paddingVertical: 5
+    paddingVertical: 5,
   },
 
   text: {
     color       : '#555',
     fontSize    : 14,
-    marginBottom: 10
+    marginBottom: 10,
   },
 
   customIDInput: {
@@ -160,7 +256,7 @@ const styles = StyleSheet.create({
     borderColor      : '#ddd',
     backgroundColor  : '#fff',
     borderRadius     : 4,
-    paddingHorizontal: 5
+    paddingHorizontal: 5,
   },
 
   cameraIcon: {
@@ -173,6 +269,6 @@ const styles = StyleSheet.create({
     paddingLeft    : 30,
     backgroundColor: 'transparent',//Colors.primary,
     alignItems     : 'center',
-    justifyContent : 'center'
-  }
+    justifyContent : 'center',
+  },
 })

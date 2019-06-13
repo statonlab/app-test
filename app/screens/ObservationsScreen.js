@@ -13,7 +13,7 @@ import {
   Platform,
   KeyboardAvoidingView,
   Share,
-  Modal
+  Modal,
 } from 'react-native'
 import Header from '../components/Header'
 import Colors from '../helpers/Colors'
@@ -25,10 +25,10 @@ import Observation from '../helpers/Observation'
 import Spinner from '../components/Spinner'
 import File from '../helpers/File'
 import SnackBar from '../components/SnackBarNotice'
-import {ifIphoneX, isIphoneX} from 'react-native-iphone-x-helper'
+import { ifIphoneX, isIphoneX } from 'react-native-iphone-x-helper'
 import Guide from '../components/Guide'
 import Errors from '../helpers/Errors'
-import Popover, {PopoverItem} from '../components/Popover'
+import Popover, { PopoverItem } from '../components/Popover'
 import Analytics from '../helpers/Analytics'
 import geolib from 'geolib'
 import User from '../db/User'
@@ -52,13 +52,13 @@ export default class ObservationsScreen extends Screen {
       refreshing         : true,
       location           : {
         latitude : false,
-        longitude: false
+        longitude: false,
       },
       sort               : {
         field  : 'id',
-        reverse: true
+        reverse: true,
       },
-      showSortModal      : false
+      showSortModal      : false,
     }
 
     this.events              = []
@@ -110,8 +110,8 @@ export default class ObservationsScreen extends Screen {
       this.handleLocationError.bind(this), {
         enableHighAccuracy: !this.showedLocationError,
         timeout           : 20000,
-        maximumAge        : 1000
-      }
+        maximumAge        : 1000,
+      },
     )
   }
 
@@ -157,7 +157,7 @@ export default class ObservationsScreen extends Screen {
   distance(latitude, longitude) {
     return geolib.getDistance({
       longitude: this.state.location.longitude,
-      latitude : this.state.location.latitude
+      latitude : this.state.location.latitude,
     }, {longitude, latitude})
   }
 
@@ -179,7 +179,7 @@ export default class ObservationsScreen extends Screen {
     } else {
       submissions = realm
         .objects('Submission')
-        .filtered(`name CONTAINS "${search}" OR meta_data CONTAINS "${search}"`)
+        .filtered(`name CONTAINS[c] $0 OR meta_data CONTAINS[c] $1 OR otherIdentifiers.value CONTAINS[c] $2`, search, search, search)
     }
 
     if (this.state.sort.field === 'distance') {
@@ -199,8 +199,7 @@ export default class ObservationsScreen extends Screen {
     submissions.map(submission => {
       if (submission.needs_update) {
         toUpdate.push(submission)
-      }
-      else if (submission.synced) {
+      } else if (submission.synced) {
         synced.push(submission)
       } else {
         unsynced.push(submission)
@@ -210,21 +209,21 @@ export default class ObservationsScreen extends Screen {
     if (toUpdate.length > 0) {
       list.push({
         title: 'Needs Updating',
-        data : toUpdate
+        data : toUpdate,
       })
     }
 
     if (unsynced.length > 0) {
       list.push({
         title: 'Needs Uploading',
-        data : unsynced
+        data : unsynced,
       })
     }
 
     if (synced.length > 0) {
       list.push({
         title: 'Uploaded',
-        data : synced
+        data : synced,
       })
     }
 
@@ -263,13 +262,13 @@ export default class ObservationsScreen extends Screen {
     let defaultUnit = User.loggedIn() ? User.user().units : 'US'
 
     let unit = 'meters'
-    if(defaultUnit === 'US') {
+    if (defaultUnit === 'US') {
       unit = 'yards'
       distance *= 1.09361
     }
 
     if (distance > 1000) {
-      if(defaultUnit === 'US') {
+      if (defaultUnit === 'US') {
         distance *= 0.00056818010454545
         unit = 'miles'
       } else {
@@ -279,6 +278,27 @@ export default class ObservationsScreen extends Screen {
     }
 
     return Math.round(distance * 100) / 100 + ' ' + unit + ' away'
+  }
+
+  _getSecondLine(item) {
+    const {custom_id, otherIdentifiers} = item
+
+    let id    = custom_id
+    let other = Object.keys(otherIdentifiers).map(i => otherIdentifiers[i].value)
+
+    if (id.length > 0 && other.length > 0) {
+      id += ', ' + other.join(', ')
+    }
+
+    if (id.length === 0 && other.length > 0) {
+      id = other.join(', ')
+    }
+
+    if (id.length > 0) {
+      return id
+    }
+
+    return moment(item.date, 'MM-DD-YYYY HH:mm:ss').format('MMMM Do YYYY')
   }
 
   /**
@@ -304,7 +324,7 @@ export default class ObservationsScreen extends Screen {
         flexDirection    : 'row',
         backgroundColor  : '#fff',
         borderBottomWidth: 1,
-        borderBottomColor: '#eee'
+        borderBottomColor: '#eee',
       }}>
         <TouchableOpacity style={[styles.row, {flex: 1}]} key={item.id}
                           onPress={() => this._goToEntryScene(item)}>
@@ -314,7 +334,7 @@ export default class ObservationsScreen extends Screen {
           <View style={styles.textContainer}>
             <Text style={styles.title}>{category}</Text>
             <Text style={styles.body}>
-              {item.custom_id ? item.custom_id : moment(item.date, 'MM-DD-YYYY HH:mm:ss').format('MMMM Do YYYY')}
+              {this._getSecondLine(item)}
             </Text>
             {item.distance !== false ?
               <Text
@@ -333,7 +353,7 @@ export default class ObservationsScreen extends Screen {
           <TouchableOpacity ref={ref => this.buttons[item.id] = ref} onPress={() => this.showPopover(item)}
                             style={[styles.textContainer, styles.rightElement, {
                               flex           : 1,
-                              backgroundColor: this.state.selectedObservation.id === item.id ? '#eee' : 'transparent'
+                              backgroundColor: this.state.selectedObservation.id === item.id ? '#eee' : 'transparent',
                             }]}>
             <Icon name="md-more" size={30} color="#aaa"/>
           </TouchableOpacity>
@@ -453,12 +473,12 @@ export default class ObservationsScreen extends Screen {
         paddingRight     : 10,
         paddingLeft      : 10,
         paddingBottom    : 7,
-        flexDirection    : 'row'
+        flexDirection    : 'row',
       }}>
         <View style={{
           position    : 'relative',
           flex        : 1,
-          paddingRight: 10
+          paddingRight: 10,
         }}>
           <Icon
             style={{
@@ -466,7 +486,7 @@ export default class ObservationsScreen extends Screen {
               left     : 10,
               top      : 9,
               zIndex   : 99999,
-              elevation: 5
+              elevation: 5,
             }}
             name={'md-search'}
             size={25}
@@ -479,7 +499,7 @@ export default class ObservationsScreen extends Screen {
               borderRadius     : 4,
               paddingLeft      : 37,
               color            : '#444',
-              ...(new Elevation(this.state.searchFocused ? 3 : 1))
+              ...(new Elevation(this.state.searchFocused ? 3 : 1)),
             }}
             autoCorrect={false}
             value={this.state.search}
@@ -502,7 +522,7 @@ export default class ObservationsScreen extends Screen {
           height        : 50 - 7,
           alignItems    : 'center',
           justifyContent: 'center',
-          flexDirection : 'column'
+          flexDirection : 'column',
         }} onPress={() => {
           this.setState({showSortModal: true})
         }}>
@@ -514,7 +534,7 @@ export default class ObservationsScreen extends Screen {
             fontWeight    : 'bold',
             flexDirection : 'column',
             alignItems    : 'center',
-            justifyContent: 'center'
+            justifyContent: 'center',
           }}>
             Sort
           </Text>
@@ -560,7 +580,7 @@ export default class ObservationsScreen extends Screen {
   _goToEntryScene = (plant) => {
     this.navigator.navigate('Observation', {
       onUnmount: () => this._resetDataSource(this.state.search),
-      plant
+      plant,
     })
   }
 
@@ -645,7 +665,7 @@ export default class ObservationsScreen extends Screen {
 
     this.setState({
       submissions: this._createMap(search),
-      refreshing : false
+      refreshing : false,
     })
   }
 
@@ -678,7 +698,7 @@ export default class ObservationsScreen extends Screen {
           <Text style={Guide.style.bodyText}>
             You can tap the "Sync All" button to submit all observations, or submit individual observations by tapping on that observation.
           </Text>
-        </View>
+        </View>,
       ]
     )
   }
@@ -695,7 +715,7 @@ export default class ObservationsScreen extends Screen {
     this.buttons[observation.id].measure((ox, oy, width, height, px, py) => {
       this.setState({
         selectedObservation: observation,
-        buttonRect         : {x: px, y: py, width: width, height: height}
+        buttonRect         : {x: px, y: py, width: width, height: height},
       })
       this.popover.open()
     })
@@ -789,20 +809,20 @@ export default class ObservationsScreen extends Screen {
           ...(Platform.OS === 'android' ? {paddingBottom: 15} : {}),
           justifyContent : 'flex-start',
           alignItems     : 'flex-end',
-          backgroundColor: Colors.primary
+          backgroundColor: Colors.primary,
         }}>
           <View style={{
             paddingTop    : 15,
             flexDirection : 'row',
             justifyContent: 'center',
-            alignItems    : 'center'
+            alignItems    : 'center',
           }}>
             <TouchableOpacity
               style={{
                 width         : 40,
                 alignItems    : 'flex-start',
                 justifyContent: 'flex-end',
-                paddingLeft   : 10
+                paddingLeft   : 10,
               }}
               onPress={() => {
                 this.setState({showSortModal: false})
@@ -813,7 +833,7 @@ export default class ObservationsScreen extends Screen {
               color     : Colors.primaryText,
               fontSize  : 18,
               fontWeight: '600',
-              flex      : 1
+              flex      : 1,
             }}>
               Sort By
             </Text>
@@ -821,7 +841,7 @@ export default class ObservationsScreen extends Screen {
         </View>
         <View style={{
           flex           : 1,
-          backgroundColor: '#eee'
+          backgroundColor: '#eee',
         }}>
           <TouchableOpacity style={styles.sortRow} onPress={() => this.sortBy('id', true)}>
             <View style={styles.sortRowInnerWrapper}>
@@ -890,9 +910,9 @@ export default class ObservationsScreen extends Screen {
       showSortModal: false,
       sort         : {
         field,
-        reverse
+        reverse,
       },
-      refreshing   : true
+      refreshing   : true,
     })
 
     setTimeout(() => {
@@ -920,7 +940,7 @@ export default class ObservationsScreen extends Screen {
           screen="ObservationsScreen"
           message={this.renderGuideMessage()}
           version={1}
-          icon="ios-leaf-outline"
+          icon="ios-leaf"
           marginBottom={10}
         />
         <KeyboardAvoidingView
@@ -976,8 +996,8 @@ const styles = StyleSheet.create({
     flex           : 1,
     backgroundColor: '#f7f7f7',
     ...ifIphoneX({
-      paddingBottom: 20
-    })
+      paddingBottom: 20,
+    }),
   },
 
   sortRow: {
@@ -987,75 +1007,75 @@ const styles = StyleSheet.create({
     flexDirection    : 'row',
     justifyContent   : 'space-between',
     alignItems       : 'center',
-    backgroundColor  : '#fff'
+    backgroundColor  : '#fff',
   },
 
   sortRowInnerWrapper: {
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
   },
 
   sortRowText: {
     color   : '#444',
-    fontSize: 14
+    fontSize: 14,
   },
 
   sortRowDescription: {
     color    : '#777',
     marginTop: 5,
-    fontSize : 12
+    fontSize : 12,
   },
 
   popoverText: {
     color   : '#444',
-    fontSize: 14
+    fontSize: 14,
   },
 
   popoverItem: {
     flexDirection: 'row',
-    alignItems   : 'center'
+    alignItems   : 'center',
   },
 
   row: {
     flexDirection  : 'row',
     alignItems     : 'center',
     backgroundColor: '#fff',
-    padding        : 10
+    padding        : 10,
   },
 
   image: {
     flex      : 0,
     width     : 50,
     height    : 50,
-    resizeMode: 'cover'
+    resizeMode: 'cover',
   },
 
   textContainer: {
     flex             : 1,
     paddingHorizontal: 10,
-    justifyContent   : 'space-between'
+    justifyContent   : 'space-between',
   },
 
   title: {
     color     : '#222',
-    fontWeight: '500'
+    fontWeight: '500',
   },
 
   body: {
-    color: '#666'
+    color: '#666',
   },
 
   actionButton: {
     backgroundColor  : Colors.danger,
     borderRadius     : 2,
     paddingHorizontal: 5,
-    paddingVertical  : 10
+    paddingVertical  : 10,
   },
 
   rightElement: {
     flex          : 0,
     width         : 60,
     alignItems    : 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
 
   centerContainer: {
@@ -1065,18 +1085,18 @@ const styles = StyleSheet.create({
     alignItems     : 'center',
     padding        : 10,
     backgroundColor: '#fff',
-    margin         : 10
+    margin         : 10,
   },
 
   emptyListText: {
     fontSize  : 16,
     fontWeight: '500',
-    color     : '#222'
+    color     : '#222',
   },
 
   emptyListIcon: {
     marginBottom: 20,
-    color       : '#444'
+    color       : '#444',
   },
 
   headerContainer: {
@@ -1086,19 +1106,19 @@ const styles = StyleSheet.create({
     borderBottomColor: '#eee',
     flexDirection    : 'row',
     justifyContent   : 'space-between',
-    flex             : 0
+    flex             : 0,
   },
 
   headerRow: {
     flexDirection : 'row',
     alignItems    : 'center',
     justifyContent: 'space-between',
-    flex          : 1
+    flex          : 1,
   },
 
   headerText: {
     color     : '#111',
-    fontWeight: '500'
+    fontWeight: '500',
   },
 
   warningButton: {
@@ -1106,12 +1126,12 @@ const styles = StyleSheet.create({
     backgroundColor  : Colors.warning,
     paddingVertical  : 10,
     paddingHorizontal: 15,
-    borderRadius     : 2
+    borderRadius     : 2,
   },
 
   dropdownItem: {
     padding          : 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#eee'
-  }
+    borderBottomColor: '#eee',
+  },
 })
