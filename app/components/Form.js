@@ -14,7 +14,7 @@ import {
   BackHandler,
   Modal,
   KeyboardAvoidingView,
-  ScrollView
+  ScrollView,
 } from 'react-native'
 import moment from 'moment'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -54,7 +54,7 @@ export default class Form extends Component {
       location                 : {
         latitude : 0,
         longitude: 0,
-        accuracy : -1
+        accuracy : -1,
       },
       metadata                 : {},
       id                       : '',
@@ -65,7 +65,8 @@ export default class Form extends Component {
       hasPrivateComments       : false,
       custom_id                : '',
       showCustomIDModal        : false,
-      showAdvancedSettingsModal: false
+      showAdvancedSettingsModal: false,
+      otherIdentifiers         : [],
     }
 
     this.user       = User.user()
@@ -77,7 +78,7 @@ export default class Form extends Component {
     let formRules = {
       //images  : imageT,
       title   : t.String,
-      location: LocationT
+      location: LocationT,
     }
 
     this.formRulesMeta = this.compileValRules() // build form rules from passed props
@@ -119,6 +120,12 @@ export default class Form extends Component {
           return
         }
 
+        if (key === 'otherIdentifiers') {
+          const observation = realm.objects('Submission').filtered('id = $0', this.props.entryInfo.id)[0]
+          this.setState({otherIdentifiers: observation.otherIdentifiers.map(o => o.value)})
+          return
+        }
+
         this.setState({[key]: this.props.entryInfo[key]})
       })
 
@@ -134,7 +141,7 @@ export default class Form extends Component {
 
     // Get user preferences
     this.setState({
-      units: this.user ? this.user.units : 'US'
+      units: this.user ? this.user.units : 'US',
     })
 
     // Add image resize event listener
@@ -251,15 +258,15 @@ export default class Form extends Component {
           {
             text   : 'Leave',
             onPress: this.doCancel.bind(this),
-            style  : 'destructive'
+            style  : 'destructive',
           },
           {
             text   : 'Stay',
             onPress: () => {
               // On cancel do nothing.
             },
-            style  : 'cancel'
-          }
+            style  : 'cancel',
+          },
         ])
       return false
     }
@@ -361,8 +368,6 @@ export default class Form extends Component {
    * Validate the primary and meta data with tcomb.
    */
   submit() {
-    console.log('HERE', this.state.metadata)
-
     if (!this.state.images.images || !this.validateState().isValid()) {
       this.notifyIncomplete(this.validateMeta())
       return
@@ -391,7 +396,10 @@ export default class Form extends Component {
       has_private_comments: this.state.hasPrivateComments,
       custom_id           : this.state.custom_id,
       is_private          : this.state.isPrivate,
-      compressed          : true
+      compressed          : true,
+      otherIdentifiers    : this.state.otherIdentifiers.map(value => {
+        return {value}
+      }),
     }
 
     realm.write(() => {
@@ -401,7 +409,7 @@ export default class Form extends Component {
     this.fs.delete({images: this.state.deletedImages}, () => {
       // Tell anyone who cares that there is a new submission
       this.props.navigator.navigate('Submitted', {
-        plant: observation
+        plant: observation,
       })
       DeviceEventEmitter.emit('newSubmission', observation)
     })
@@ -428,7 +436,10 @@ export default class Form extends Component {
         has_private_comments: this.state.hasPrivateComments,
         custom_id           : this.state.custom_id,
         is_private          : this.state.isPrivate,
-        compressed          : true
+        compressed          : true,
+        otherIdentifiers    : this.state.otherIdentifiers.map(value => {
+          return {value}
+        }),
       }, true)
 
       DeviceEventEmitter.emit('newSubmission', observation)
@@ -834,8 +845,27 @@ export default class Form extends Component {
     )
   }
 
-  render() {
+  customIDValue() {
+    const {custom_id, otherIdentifiers} = this.state
 
+    if (custom_id.length === 0 && otherIdentifiers.length === 0) {
+      return 'Optional'
+    }
+
+    let id = custom_id
+
+    if (id.length > 0 && otherIdentifiers.length > 0) {
+      id += ', ' + otherIdentifiers.join(', ')
+    }
+
+    if (id.length === 0 && otherIdentifiers.length > 0) {
+      id = otherIdentifiers.join(', ')
+    }
+
+    return id
+  }
+
+  render() {
     return (
       <View style={styles.container}>
         <Spinner ref="spinner"/>
@@ -858,7 +888,7 @@ export default class Form extends Component {
                 paddingTop : 10,
                 paddingLeft: 5,
                 flex       : 1,
-                color      : this.state.metadata.comment ? '#444' : '#aaa'
+                color      : this.state.metadata.comment ? '#444' : '#aaa',
               }}>{this.state.metadata.comment || 'Add comment'}</Text>
             </TouchableOpacity>
 
@@ -868,8 +898,10 @@ export default class Form extends Component {
               <Text style={{
                 paddingLeft: 5,
                 flex       : 1,
-                color      : this.state.custom_id ? '#444' : '#aaa'
-              }}>{this.state.custom_id || 'Optional'}</Text>
+                color      : this.state.custom_id || this.state.otherIdentifiers.length > 0 ? '#444' : '#aaa',
+              }}>
+                {this.customIDValue()}
+              </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -877,7 +909,7 @@ export default class Form extends Component {
                 flex          : 0,
                 flexDirection : 'row',
                 alignItems    : 'center',
-                justifyContent: 'space-between'
+                justifyContent: 'space-between',
               }]}
               onPress={() => {
                 this.setState({showAdvancedSettingsModal: true})
@@ -885,12 +917,12 @@ export default class Form extends Component {
               <Text style={{
                 color     : Colors.primary,
                 fontWeight: '500',
-                fontSize  : 14
+                fontSize  : 14,
               }}>
                 Advanced Options
               </Text>
               <Text style={{
-                paddingRight: 10
+                paddingRight: 10,
               }}>
                 <IonIcon name={'ios-apps'} size={20} color={'#777'}/>
               </Text>
@@ -936,12 +968,12 @@ export default class Form extends Component {
       <AdvancedSettingsModal
         initialValues={{
           hasPrivateComments: this.state.hasPrivateComments,
-          isPrivate         : this.state.isPrivate
+          isPrivate         : this.state.isPrivate,
         }}
         onChange={values => {
           this.setState({
             hasPrivateComments: values.hasPrivateComments,
-            isPrivate         : values.isPrivate
+            isPrivate         : values.isPrivate,
           })
         }}
         onRequestClose={() => {
@@ -974,8 +1006,8 @@ export default class Form extends Component {
               onChangeText={(comment) => this.setState({
                 metadata: {
                   ...this.state.metadata,
-                  comment: comment
-                }
+                  comment: comment,
+                },
               })}
               multiline={true}
               numberOfLines={8}
@@ -989,13 +1021,13 @@ export default class Form extends Component {
             justifyContent: 'flex-end',
             borderTopWidth: 1,
             borderTopColor: '#eee',
-            ...ifIphoneX({paddingBottom: 20, backgroundColor: '#eee'})
+            ...ifIphoneX({paddingBottom: 20, backgroundColor: '#eee'}),
           }}>
             <TouchableOpacity style={[{
               backgroundColor  : '#f7f7f7',
               flex             : 0,
               paddingVertical  : 10,
-              paddingHorizontal: 15
+              paddingHorizontal: 15,
             }]}
                               onPress={() => {
                                 this.setState({showCommentsModal: false})
@@ -1003,7 +1035,7 @@ export default class Form extends Component {
               <Text style={{
                 color    : Colors.primary,
                 fontSize : 14,
-                textAlign: 'right'
+                textAlign: 'right',
               }}>DONE</Text>
             </TouchableOpacity>
           </View>
@@ -1015,8 +1047,9 @@ export default class Form extends Component {
   _renderCustomIDModal() {
     return (
       <CustomIDModal
-        onChange={custom_id => {
-          this.setState({custom_id})
+        otherIdentifiers={this.state.otherIdentifiers}
+        onChange={(custom_id, otherIdentifiers) => {
+          this.setState({custom_id, otherIdentifiers: otherIdentifiers === null ? [] : otherIdentifiers})
         }}
         onRequestClose={() => {
           this.setState({showCustomIDModal: false})
@@ -1037,7 +1070,7 @@ export default class Form extends Component {
       images   : this.state.images[id] ? this.state.images[id] : [],
       onDone   : this.handleImages.bind(this),
       onDelete : this.handleDeletedImages.bind(this),
-      id       : id
+      id       : id,
     })
   }
 }
@@ -1047,7 +1080,7 @@ Form.propTypes = {
   navigator: PropTypes.object.isRequired,
   formProps: PropTypes.object,
   edit     : PropTypes.bool,
-  entryInfo: PropTypes.object
+  entryInfo: PropTypes.object,
 }
 
 function getVerticalPadding() {
@@ -1065,14 +1098,14 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#f5f5f5',
     flex           : 1,
-    flexDirection  : 'column'
+    flexDirection  : 'column',
   },
 
   modalHeader: {
     backgroundColor: Colors.primary,
     paddingTop     : getVerticalPadding(),
     paddingBottom  : 10,
-    ...(new Elevation(2))
+    ...(new Elevation(2)),
   },
 
   modalHeaderText: {
@@ -1080,7 +1113,7 @@ const styles = StyleSheet.create({
     textAlign      : 'center',
     fontWeight     : 'normal',
     fontSize       : 16,
-    paddingVertical: 5
+    paddingVertical: 5,
   },
 
   card: {
@@ -1088,7 +1121,7 @@ const styles = StyleSheet.create({
     flex           : 0,
     flexDirection  : 'column',
     marginBottom   : 10,
-    borderRadius   : 0
+    borderRadius   : 0,
   },
 
   thumbnail: {
@@ -1096,7 +1129,7 @@ const styles = StyleSheet.create({
     width          : 50,
     borderRadius   : 3,
     resizeMode     : 'cover',
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
   },
 
   formGroup: {
@@ -1106,32 +1139,32 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#dedede',
     padding          : 5,
-    minHeight        : 50
+    minHeight        : 50,
   },
 
   picker: {
     flex         : 0,
     flexDirection: 'row',
     alignItems   : 'center',
-    width        : undefined
+    width        : undefined,
   },
 
   label: {
     flex      : 0,
     width     : 110,
     color     : '#444',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
 
   labelWarning: {
-    color: Colors.danger
+    color: Colors.danger,
   },
 
   touchable: {
     flex          : 1,
     height        : 40,
     justifyContent: 'center',
-    alignItems    : 'flex-start'
+    alignItems    : 'flex-start',
   },
 
   touchableText: {
@@ -1140,7 +1173,7 @@ const styles = StyleSheet.create({
     width      : undefined,
     marginTop  : 10,
     textAlign  : 'left',
-    paddingLeft: 15
+    paddingLeft: 15,
   },
 
   textField: {
@@ -1150,12 +1183,12 @@ const styles = StyleSheet.create({
     color            : '#444',
     fontSize         : 14,
     flex             : 1,
-    width            : undefined
+    width            : undefined,
   },
 
   subHeadText: {
     fontSize: 22,
-    flex    : 1
+    flex    : 1,
   },
 
   button: {
@@ -1164,20 +1197,20 @@ const styles = StyleSheet.create({
     borderRadius     : 2,
     backgroundColor  : Colors.primary,
     paddingHorizontal: 10,
-    paddingVertical  : 10
+    paddingVertical  : 10,
   },
 
   flex1: {
-    flex: 1
+    flex: 1,
   },
 
   buttonAlt: {
     backgroundColor: '#fff',
-    marginLeft     : 5
+    marginLeft     : 5,
   },
 
   buttonBiominder: {
-    backgroundColor: Colors.info
+    backgroundColor: Colors.info,
   },
 
   buttonLink: {
@@ -1188,25 +1221,25 @@ const styles = StyleSheet.create({
     justifyContent : 'center',
     flex           : 1,
     alignItems     : 'center',
-    flexDirection  : 'row'
+    flexDirection  : 'row',
   },
 
   buttonText: {
     textAlign : 'center',
     color     : '#fff',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
 
   buttonAltText: {
     textAlign : 'center',
     color     : '#666',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
 
   buttonLinkText: {
     color            : '#666',
     flex             : 1,
-    paddingHorizontal: 5
+    paddingHorizontal: 5,
   },
 
   comment: {
@@ -1214,20 +1247,20 @@ const styles = StyleSheet.create({
     width          : undefined,
     height         : undefined,
     alignItems     : 'flex-start',
-    paddingVertical: 30
+    paddingVertical: 30,
   },
 
   icon: {
     flex    : 0,
     width   : 30,
     fontSize: 20,
-    color   : '#aaa'
+    color   : '#aaa',
   },
 
   image: {
     width     : 50,
     height    : 50,
-    resizeMode: 'cover'
+    resizeMode: 'cover',
   },
 
   footer: {
@@ -1241,23 +1274,27 @@ const styles = StyleSheet.create({
     backgroundColor  : '#f5f5f5',
     ...ifIphoneX({
       paddingBottom    : 25,
-      paddingHorizontal: 10
-    })
+      paddingHorizontal: 10,
+    }),
   },
 
   slider: {
-    width: 200
+    width: 200,
   },
 
   placeholder: {
-    color: '#aaa'
+    color: '#aaa',
   },
 
   text: {
     color       : '#444',
     fontSize    : 14,
-    marginBottom: 10
-  }
+    marginBottom: 10,
+  },
 })
 
-const dropdownIcon = (<Icon name="arrow-down-drop-circle-outline" style={styles.icon}/>)
+const dropdownIcon = (<
+  Icon
+  name="arrow-down-drop-circle-outline"
+  style={styles.icon}
+/>)

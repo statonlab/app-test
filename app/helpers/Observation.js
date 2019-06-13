@@ -7,7 +7,7 @@ import ImageUploadTracker from './ImageUploadTracker'
 
 class Observation {
   static navigationOptions = {
-    tabBarVisible: false
+    tabBarVisible: false,
   }
 
   constructor() {
@@ -109,8 +109,8 @@ class Observation {
 
     return await axios.delete(`observation/${observation.serverID}`, {
       params: {
-        api_token: this.api_token
-      }
+        api_token: this.api_token,
+      },
     })
   }
 
@@ -173,7 +173,7 @@ class Observation {
           completed: i + 1,
           total    : length,
           response : error,
-          success  : false
+          success  : false,
         })
         continue
       }
@@ -184,14 +184,14 @@ class Observation {
         onSuccess({
           completed: i + 1,
           total    : length,
-          response : response
+          response : response,
         })
 
         ImageUploadTracker({
           completed: i + 1,
           total    : length,
           response : response,
-          success  : true
+          success  : true,
         })
       }
     }
@@ -238,6 +238,15 @@ class Observation {
     form.append('has_private_comments', observation.has_private_comments ? 1 : 0)
     form.append('custom_id', observation.custom_id)
     form.append('is_private', observation.is_private ? 1 : 0)
+
+    let other_identifiers
+    if (Array.isArray(observation.otherIdentifiers)) {
+      other_identifiers = observation.otherIdentifiers.map(identifier => identifier.value)
+    } else {
+      const identifiers = observation.otherIdentifiers
+      other_identifiers = Object.keys(observation.otherIdentifiers).map(k => identifiers[k].value)
+    }
+    form.append('other_identifiers', other_identifiers.join(','))
 
     return form
   }
@@ -292,6 +301,8 @@ class Observation {
         return
       }
 
+      console.log('HERE record', record.identifiers)
+
       realm.write(() => {
         realm.create('Submission', {
           id                  : primaryKey,
@@ -306,7 +317,8 @@ class Observation {
           custom_id           : record.custom_id || '',
           is_private          : record.is_private === 1,
           compressed          : true,
-          imagesFixed         : true
+          imagesFixed         : true,
+          otherIdentifiers    : record.identifiers ? record.identifiers.map(id => ({value: id.identifier})) : [],
         })
       })
     })
