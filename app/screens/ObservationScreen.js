@@ -25,10 +25,12 @@ import axios from '../helpers/Axios'
 import Icon from 'react-native-vector-icons/Ionicons'
 import File from '../helpers/File'
 import Elevation from '../helpers/Elevation'
-import {ifIphoneX} from 'react-native-iphone-x-helper'
+import { ifIphoneX } from 'react-native-iphone-x-helper'
 import Errors from '../helpers/Errors'
 import ImageModal from '../components/ImageModal'
+import ShareLinkModal from '../components/ShareLinkModal'
 import Analytics from '../helpers/Analytics'
+import AdvancedSettingsModal from '../components/AdvancedSettingsModal'
 
 const android = Platform.OS === 'android'
 
@@ -41,12 +43,14 @@ export default class ObservationScreen extends Screen {
     super(props)
 
     this.state = {
-      synced      : false,
-      isLoggedIn  : false,
-      needs_update: false,
-      noticeText  : '',
-      entry       : null,
-      images      : []
+      synced        : false,
+      isLoggedIn    : false,
+      needs_update  : false,
+      noticeText    : '',
+      entry         : null,
+      images        : [],
+      showShareModal: false,
+      shareURL      : ''
     }
 
     this.user = realm.objects('User')[0]
@@ -472,7 +476,7 @@ export default class ObservationScreen extends Screen {
     return (
       <TouchableOpacity
         activeOpacity={.8}
-        onPress={this.share.bind(this)}
+        onPress={() => this.setState({showShareModal: true})}
         style={{
           position       : 'absolute',
           alignItems     : 'center',
@@ -490,6 +494,22 @@ export default class ObservationScreen extends Screen {
         <Text style={{fontSize: 9, color: Colors.warningText, textAlign: 'center'}}>Share</Text>
       </TouchableOpacity>
 
+    )
+  }
+
+  _renderShareModal() {
+    return (
+      <ShareLinkModal onRequestClose={() => this.setState({showShareModal: false})}
+                      onChange={values => {
+                        this.setState({
+                          shareURL: values.shareURL
+                        }, () => {
+                          this.share()
+                        })
+                      }}
+                      visible={this.state.showShareModal}
+                      entry={this.state.entry}
+      />
     )
   }
 
@@ -511,8 +531,11 @@ export default class ObservationScreen extends Screen {
     const observation = this.state.entry
     const meta        = JSON.parse(observation.meta_data)
     const title       = observation.name === 'Other' ? meta.otherLabel : observation.name
-    const url         = `https://treesnap.org/observation/${observation.serverID}`
+    const url         = this.state.shareURL // `https://treesnap.org/observation/${observation.serverID}`
     const prefix      = this._beginsWithVowel(title) ? 'an' : 'a'
+    if (!url) {
+      return
+    }
 
     let message = `I shared ${prefix} ${title} observation with science partners using @TreeSnapApp!`
     if (android) {
@@ -602,6 +625,7 @@ export default class ObservationScreen extends Screen {
             <Text style={styles.buttonText}>Edit Entry</Text>
           </TouchableOpacity>
         </View>
+        {this._renderShareModal()}
       </View>
     )
   }
