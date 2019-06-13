@@ -12,8 +12,8 @@ const GuideSchema = {
   name      : 'Guide',
   properties: {
     screen : {type: 'string'},
-    version: {type: 'int'}
-  }
+    version: {type: 'int'},
+  },
 }
 
 /**
@@ -26,8 +26,15 @@ const CoordinateSchema = {
   properties: {
     latitude : {type: 'double', default: 0},
     longitude: {type: 'double', default: 0},
-    accuracy : {type: 'int', default: 0}
-  }
+    accuracy : {type: 'int', default: 0},
+  },
+}
+
+const OtherIdentifiersSchema = {
+  name      : 'OtherIdentifiers',
+  properties: {
+    value: 'string',
+  },
 }
 
 /**
@@ -57,8 +64,9 @@ const SubmissionSchema = {
     custom_id           : {type: 'string', default: ''},
     is_private          : {type: 'bool', default: false},
     compressed          : {type: 'bool', default: false},
-    imagesFixed         : {type: 'bool', default: false}
-  }
+    imagesFixed         : {type: 'bool', default: false},
+    otherIdentifiers    : {type: 'OtherIdentifiers[]', default: []},
+  },
 }
 
 
@@ -83,18 +91,19 @@ const UserSchema = {
     birth_year: {type: 'int', default: 1980},
     auto_sync : {type: 'bool', default: true},
     units     : {type: 'string', default: 'US'},
-    provider  : {type: 'string', default: 'treesnap'}
-  }
+    provider  : {type: 'string', default: 'treesnap'},
+  },
 }
 
 export default new Realm({
   schema       : [
+    OtherIdentifiersSchema,
     UserSchema,
     CoordinateSchema,
     SubmissionSchema,
-    GuideSchema
+    GuideSchema,
   ],
-  schemaVersion: 16,
+  schemaVersion: 17,
   migration    : function (oldRealm, newRealm) {
     if (oldRealm.schemaVersion < 2) {
       let newUser = newRealm.objects('User')
@@ -188,5 +197,11 @@ export default new Realm({
         user.provider = 'treesnap'
       })
     }
-  }
+
+    if (oldRealm.schemaVersion < 17) {
+      newRealm.objects('Submission').map(observation => {
+        observation.otherIdentifiers = []
+      })
+    }
+  },
 })

@@ -15,7 +15,6 @@ import Observation from './app/helpers/Observation'
 import WelcomeModal from './app/components/WelcomeModal'
 import NotificationsController from './app/components/NotificationsController'
 import ObservationLostImagesFixer from './app/components/ObservationLostImagesFixer'
-import T from './app/helpers/Lang'
 
 export default class App extends Component {
   constructor(props) {
@@ -30,8 +29,6 @@ export default class App extends Component {
     }
 
     this.events = []
-
-    T('test')
   }
 
   componentDidMount() {

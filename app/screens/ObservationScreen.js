@@ -12,7 +12,7 @@ import {
   Platform,
   TouchableOpacity,
   BackHandler,
-  Share
+  Share,
 } from 'react-native'
 import Header from '../components/Header'
 import Colors from '../helpers/Colors'
@@ -36,7 +36,7 @@ const android = Platform.OS === 'android'
 
 export default class ObservationScreen extends Screen {
   static navigationOptions = {
-    tabBarVisible: false
+    tabBarVisible: false,
   }
 
   constructor(props) {
@@ -86,7 +86,7 @@ export default class ObservationScreen extends Screen {
       entry,
       images,
       synced      : entry.synced,
-      needs_update: entry.needs_update
+      needs_update: entry.needs_update,
     })
   }
 
@@ -120,7 +120,7 @@ export default class ObservationScreen extends Screen {
     this.setState({
       entry       : observation,
       needs_update: true,
-      pages       : this._generatePages(observation)
+      pages       : this._generatePages(observation),
     })
   }
 
@@ -155,7 +155,7 @@ export default class ObservationScreen extends Screen {
       this.setState({
         synced      : true,
         needs_update: false,
-        noticeText  : 'Entry synced successfully!'
+        noticeText  : 'Entry synced successfully!',
       })
       this.refs.snackbar.showBar()
       DeviceEventEmitter.emit('observationUploaded')
@@ -200,7 +200,7 @@ export default class ObservationScreen extends Screen {
           this.setState({
             synced      : true,
             needs_update: false,
-            noticeText  : 'Entry synced successfully!'
+            noticeText  : 'Entry synced successfully!',
           })
           this.refs.snackbar.showBar()
         }
@@ -410,7 +410,7 @@ export default class ObservationScreen extends Screen {
     this.navigator.navigate('Tree', {
       title    : entry.name,
       entryInfo: entry,
-      edit     : true
+      edit     : true,
     })
   }
 
@@ -425,15 +425,15 @@ export default class ObservationScreen extends Screen {
             text   : 'OK',
             onPress: () => {
               this.navigator.navigate('Login')
-            }
+            },
           },
           {
             text   : 'Back',
             onPress: () => {
               // On cancel do nothing.
             },
-            style  : 'cancel'
-          }
+            style  : 'cancel',
+          },
         ])
       return
     }
@@ -444,14 +444,14 @@ export default class ObservationScreen extends Screen {
           text   : 'Yes',
           onPress: () => {
             this.deleteEntry(entry)
-          }
+          },
         },
         {
           text   : 'Cancel',
           onPress: () => {
           },
-          style  : 'cancel'
-        }
+          style  : 'cancel',
+        },
       ])
   }
 
@@ -488,7 +488,7 @@ export default class ObservationScreen extends Screen {
           borderRadius   : width / 2,
           backgroundColor: Colors.warning,
           ...(new Elevation(5)),
-          zIndex         : 99000
+          zIndex         : 99000,
         }}>
         <Icon name={android ? 'md-share' : 'ios-share'} size={22} color={Colors.warningText}/>
         <Text style={{fontSize: 9, color: Colors.warningText, textAlign: 'center'}}>Share</Text>
@@ -561,6 +561,29 @@ export default class ObservationScreen extends Screen {
     )
   }
 
+  customIDValue() {
+    const observation = realm.objects('Submission').filtered('id = $0', this.state.entry.id)[0]
+    const {custom_id, otherIdentifiers} = observation
+
+    let identifiers = otherIdentifiers.map(({value}) => value)
+
+    if (custom_id.length === 0 && identifiers.length === 0) {
+      return ''
+    }
+
+    let id = custom_id
+
+    if (id.length > 0 && identifiers.length > 0) {
+      id += ', ' + identifiers.join(', ')
+    }
+
+    if (id.length === 0 && identifiers.length > 0) {
+      id = identifiers.join(', ')
+    }
+
+    return id
+  }
+
   /**
    * Render Scene.
    *
@@ -600,8 +623,8 @@ export default class ObservationScreen extends Screen {
                                  height: 200,
                                  ...(i > 0 ? {
                                    borderLeftWidth: 1,
-                                   borderLeftColor: '#eee'
-                                 } : null)
+                                   borderLeftColor: '#eee',
+                                 } : null),
                                }}>
                     <Image style={{width: width / this.state.images.length, height: 200, resizeMode: 'cover'}}
                            source={{uri: image}}/>
@@ -613,7 +636,7 @@ export default class ObservationScreen extends Screen {
             {this._renderShareButton()}
             <View style={styles.card}>
               {this._renderUploadButton(entry)}
-              {entry.custom_id ? this.renderField('Custom Tree Identifier', entry.custom_id) : null}
+              {entry.custom_id || entry.otherIdentifiers.length > 0 ? this.renderField('Custom Tree Identifier', this.customIDValue()) : null}
               {this.renderField('Unique ID', entry.id)}
               {this.renderField('Date collected', entry.date)}
               {this._renderMetaData(entry)}
@@ -648,49 +671,49 @@ const styles = StyleSheet.create({
     flex           : 1,
     backgroundColor: '#f7f7f7',
     ...ifIphoneX({
-      paddingBottom: 20
-    })
+      paddingBottom: 20,
+    }),
   },
 
   contentContainer: {
-    flex: 1
+    flex: 1,
   },
 
   card: {
     flex           : 0,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
   },
 
   field: {
     flex             : 0,
     flexDirection    : 'column',
     borderBottomWidth: 1,
-    borderBottomColor: '#ddd'
+    borderBottomColor: '#ddd',
   },
 
   multiButtonField: {
     flex         : 0,
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
 
   label: {
     fontWeight       : 'bold',
     paddingVertical  : 10,
     paddingHorizontal: 10,
-    color            : '#444'
+    color            : '#444',
   },
 
   dataText: {
     color            : '#555',
     paddingHorizontal: 10,
-    paddingBottom    : 10
+    paddingBottom    : 10,
   },
 
   image: {
     flex      : 1,
     width     : Dimensions.get('window').width,
     height    : 250,
-    resizeMode: 'cover'
+    resizeMode: 'cover',
   },
 
   button: {
@@ -700,17 +723,17 @@ const styles = StyleSheet.create({
     backgroundColor  : Colors.warning,
     borderRadius     : 2,
     marginHorizontal : 5,
-    marginVertical   : 5
+    marginVertical   : 5,
   },
 
   deleteButton: {
-    backgroundColor: Colors.danger
+    backgroundColor: Colors.danger,
   },
 
   buttonText: {
     color     : Colors.warningText,
     fontWeight: 'bold',
-    textAlign : 'center'
+    textAlign : 'center',
   },
 
   circlesContainer: {
@@ -720,11 +743,11 @@ const styles = StyleSheet.create({
     flexDirection : 'row',
     justifyContent: 'center',
     alignItems    : 'center',
-    width         : Dimensions.get('window').width
+    width         : Dimensions.get('window').width,
   },
 
   selectedCircle: {
-    backgroundColor: '#444'
+    backgroundColor: '#444',
   },
 
   circle: {
@@ -735,6 +758,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#eee',
     opacity        : 0.9,
     ...(new Elevation(1)),
-    shadowColor    : 'rgba(255, 255, 255, .8)'
-  }
+    shadowColor    : 'rgba(255, 255, 255, .8)',
+  },
 })
