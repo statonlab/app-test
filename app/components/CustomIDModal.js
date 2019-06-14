@@ -29,7 +29,7 @@ export default class CustomIDModal extends Component {
   }
 
   renderField(value, index) {
-    const custom_id     = this.props.customID
+    const custom_id         = this.props.customID
     const other_identifiers = this.props.otherIdentifiers
     return (
       <View style={{flexDirection: 'row', justifyContent: 'center', marginBottom: 10}}
@@ -65,10 +65,8 @@ export default class CustomIDModal extends Component {
           <TouchableOpacity
             onPress={() => {
               const old = other_identifiers.concat([])
-              old.splice(index, 1)
-              this.setState({
-                other_identifiers: old,
-              })
+              old.pop()
+              this.props.onChange(this.props.customID, old)
             }}
             style={{paddingVertical: 5, paddingLeft: 10}}>
             <Icon name={'md-remove-circle'} color={Colors.danger} size={24}/>
