@@ -50,7 +50,7 @@ export default class ObservationScreen extends Screen {
       entry         : null,
       images        : [],
       showShareModal: false,
-      shareURL      : ''
+      shareURL      : '',
     }
 
     this.user = realm.objects('User')[0]
@@ -500,9 +500,9 @@ export default class ObservationScreen extends Screen {
   _renderShareModal() {
     return (
       <ShareLinkModal onRequestClose={() => this.setState({showShareModal: false})}
-                      onChange={values => {
+                      onChange={shareURL => {
                         this.setState({
-                          shareURL: values.shareURL
+                          shareURL,
                         }, () => {
                           this.share()
                         })
@@ -531,9 +531,12 @@ export default class ObservationScreen extends Screen {
     const observation = this.state.entry
     const meta        = JSON.parse(observation.meta_data)
     const title       = observation.name === 'Other' ? meta.otherLabel : observation.name
-    const url         = this.state.shareURL // `https://treesnap.org/observation/${observation.serverID}`
+    const url         = this.state.shareURL
     const prefix      = this._beginsWithVowel(title) ? 'an' : 'a'
+
     if (!url) {
+      console.log('HERE Invalid URL', url)
+
       return
     }
 
@@ -548,7 +551,7 @@ export default class ObservationScreen extends Screen {
         analytics.shared(observation)
       }
     }).catch(error => {
-      console.log('share error', error)
+      console.log('HERE share error', error)
     })
   }
 
@@ -562,7 +565,7 @@ export default class ObservationScreen extends Screen {
   }
 
   customIDValue() {
-    const observation = realm.objects('Submission').filtered('id = $0', this.state.entry.id)[0]
+    const observation                   = realm.objects('Submission').filtered('id = $0', this.state.entry.id)[0]
     const {custom_id, otherIdentifiers} = observation
 
     let identifiers = otherIdentifiers.map(({value}) => value)
