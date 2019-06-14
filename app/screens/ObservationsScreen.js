@@ -192,7 +192,7 @@ export default class ObservationsScreen extends Screen {
         }
       })
     } else {
-      submissions = submissions.sorted('id', this.state.sort.reverse)
+      submissions = submissions.sorted('id', !this.state.sort.reverse)
       submissions = this._attachDistance(submissions)
     }
 

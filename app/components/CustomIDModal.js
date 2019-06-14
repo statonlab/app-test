@@ -23,14 +23,13 @@ export default class CustomIDModal extends Component {
     super(props)
 
     this.state = {
-      custom_id        : '',
       showBarcodeReader: false,
       selected         : null,
     }
   }
 
   renderField(value, index) {
-    const {custom_id}       = this.state
+    const custom_id     = this.props.customID
     const other_identifiers = this.props.otherIdentifiers
     return (
       <View style={{flexDirection: 'row', justifyContent: 'center', marginBottom: 10}}
@@ -89,7 +88,7 @@ export default class CustomIDModal extends Component {
         <View style={{flexDirection: 'row'}}>
           <TouchableOpacity
             onPress={() => {
-              this.props.onChange(this.state.custom_id, other_identifiers.concat(['']))
+              this.props.onChange(this.props.customID, other_identifiers.concat(['']))
             }}
             style={{
               backgroundColor: Colors.primary,
@@ -127,9 +126,8 @@ export default class CustomIDModal extends Component {
                 style={styles.customIDInput}
                 placeholder="Enter custom ID"
                 placeholderTextColor="#aaa"
-                value={this.state.custom_id}
+                value={this.props.customID}
                 onChangeText={(custom_id) => {
-                  this.setState({custom_id})
                   this.props.onChange(custom_id, this.props.otherIdentifiers)
                 }}
                 underlineColorAndroid="transparent"
@@ -184,7 +182,7 @@ export default class CustomIDModal extends Component {
           visible={this.state.showBarcodeReader}
           onChange={custom_id => {
             if (this.state.selected === null) {
-              this.setState({custom_id, selected: null})
+              this.setState({selected: null})
               this.props.onChange(custom_id, this.props.otherIdentifiers)
             } else {
               this.setState({
@@ -205,6 +203,7 @@ export default class CustomIDModal extends Component {
 }
 
 CustomIDModal.propTypes = {
+  customID        : PropTypes.string.isRequired,
   onRequestClose  : PropTypes.func.isRequired,
   onChange        : PropTypes.func.isRequired,
   visible         : PropTypes.bool.isRequired,
