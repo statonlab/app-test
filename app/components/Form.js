@@ -1047,6 +1047,7 @@ export default class Form extends Component {
   _renderCustomIDModal() {
     return (
       <CustomIDModal
+        customID={this.state.custom_id}
         otherIdentifiers={this.state.otherIdentifiers}
         onChange={(custom_id, otherIdentifiers) => {
           this.setState({custom_id, otherIdentifiers: otherIdentifiers === null ? [] : otherIdentifiers})
