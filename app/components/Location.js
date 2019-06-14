@@ -11,13 +11,12 @@ import {
   Platform,
   TextInput,
   KeyboardAvoidingView,
-  SafeAreaView
 } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import Colors from '../helpers/Colors'
 import Elevation from '../helpers/Elevation'
 import { isIphoneX } from 'react-native-iphone-x-helper'
-import {CircleSnail} from 'react-native-progress'
+import { CircleSnail } from 'react-native-progress'
 
 const isAndroid = Platform.OS === 'android'
 
@@ -32,7 +31,7 @@ export default class Location extends Component {
       showOptionsModal   : false,
       showManualEntryForm: false,
       manualLongitude    : '',
-      manualLatitude     : ''
+      manualLatitude     : '',
     }
   }
 
@@ -45,14 +44,14 @@ export default class Location extends Component {
         coords: {
           latitude : this.props.coordinates.latitude,
           longitude: this.props.coordinates.longitude,
-          accuracy : this.props.coordinates.accuracy
-        }
+          accuracy : this.props.coordinates.accuracy,
+        },
       }
 
       this.setState({
         currentPosition   : currentPosition,
         reachedMaxAccuracy: true,
-        done              : true
+        done              : true,
       })
 
       return
@@ -103,18 +102,19 @@ export default class Location extends Component {
             'Permission to access your location.',
             'Please enable location services from Settings -> TreeSnap -> Location',
             [{
-              text: 'Ok', onPress: () => {
+              text   : 'Ok',
+              onPress: () => {
                 DeviceEventEmitter.emit('LocationDenied')
-              }
-            }]
+              },
+            }],
           )
         }
       },
       {
         enableHighAccuracy: true,
         timeout           : 20000,
-        maximumAge        : 1000
-      }
+        maximumAge        : 1000,
+      },
     )
   }
 
@@ -131,14 +131,14 @@ export default class Location extends Component {
     if (!this.state.done) {
       this.setState({
         currentPosition: position,
-        timeConsumed   : this.state.timeConsumed + 500
+        timeConsumed   : this.state.timeConsumed + 500,
       })
 
       // Inform others of location changes
       this.props.onChange({
         longitude: position.coords.longitude,
         latitude : position.coords.latitude,
-        accuracy : position.coords.accuracy
+        accuracy : position.coords.accuracy,
       })
     }
 
@@ -146,7 +146,7 @@ export default class Location extends Component {
     if (parseInt(position.coords.accuracy) <= 10) {
       this.setState({
         reachedMaxAccuracy: true,
-        done              : true
+        done              : true,
       })
     }
 
@@ -163,7 +163,7 @@ export default class Location extends Component {
     this.setState({
       reachedMaxAccuracy: false,
       done              : false,
-      timeConsumed      : 0
+      timeConsumed      : 0,
     })
     this.getLocation()
     this.updateLocation()
@@ -222,7 +222,7 @@ export default class Location extends Component {
       latitude : manualLatitude,
       longitude: manualLongitude,
       // We can't set it to -1 since that indicates error so let's use -2 instead
-      accuracy : -2
+      accuracy : -2,
     }
 
     // Nested set state to make sure the done param is true before
@@ -235,10 +235,10 @@ export default class Location extends Component {
       this.setState({
         reachedMaxAccuracy : true,
         currentPosition    : {
-          coords: position
+          coords: position,
         },
         showManualEntryForm: false,
-        showOptionsModal   : false
+        showOptionsModal   : false,
       })
     })
   }
@@ -261,7 +261,7 @@ export default class Location extends Component {
               <Text style={[styles.label, {
                 width : undefined,
                 margin: 10,
-                color : '#555'
+                color : '#555',
               }]}>
                 Coordinates must contain numerical values only
               </Text>
@@ -298,28 +298,28 @@ export default class Location extends Component {
               height           : 50,
               flexDirection    : 'row',
               paddingHorizontal: 10,
-              alignItems       : 'center'
+              alignItems       : 'center',
             }}>
               <TouchableOpacity
                 onPress={this.saveManualEntry.bind(this)}
                 style={[styles.formButton, {
                   backgroundColor: Colors.primary,
-                  marginRight    : 5
+                  marginRight    : 5,
                 }]}>
                 <Text style={{
                   color     : Colors.primaryText,
-                  fontWeight: '500'
+                  fontWeight: '500',
                 }}>Save</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => this.setState({showManualEntryForm: false})}
                 style={[styles.formButton, {
                   backgroundColor: '#fff',
-                  marginLeft     : 5
+                  marginLeft     : 5,
                 }]}>
                 <Text style={{
                   color     : '#222',
-                  fontWeight: '500'
+                  fontWeight: '500',
                 }}>Cancel</Text>
               </TouchableOpacity>
             </View>
@@ -350,10 +350,10 @@ export default class Location extends Component {
             backgroundColor: '#eee',
             borderTopWidth : 1,
             borderTopColor : '#ccc',
-            height         : isIphoneX() ? 60: 40,
+            height         : isIphoneX() ? 60 : 40,
             alignItems     : 'flex-end',
             justifyContent : 'center',
-          ...(isIphoneX() ? {paddingHorizontal: 10}: {})
+            ...(isIphoneX() ? {paddingHorizontal: 10} : {}),
           }}>
             <TouchableOpacity style={{flex: 1, paddingHorizontal: 10, justifyContent: 'center'}}
                               onPress={() => this.setState({showOptionsModal: false})}>
@@ -424,7 +424,7 @@ function getVerticalPadding() {
 Location.propTypes = {
   onChange   : PropTypes.func.isRequired,
   edit       : PropTypes.bool,
-  coordinates: PropTypes.object
+  coordinates: PropTypes.object,
 }
 
 const styles = StyleSheet.create({
@@ -432,46 +432,46 @@ const styles = StyleSheet.create({
     flex             : 1,
     paddingHorizontal: 1,
     flexDirection    : 'row',
-    alignItems       : 'center'
+    alignItems       : 'center',
   },
 
   coordsContainer: {
     flex             : 1,
     flexDirection    : 'column',
     paddingHorizontal: 0,
-    alignItems       : 'center'
+    alignItems       : 'center',
   },
 
   textContainer: {
     flex         : 0,
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
 
   text: {
     flex     : 1,
     textAlign: 'left',
     fontSize : 12,
-    color    : '#444'
+    color    : '#444',
   },
 
   icon: {
     flex    : 0,
     width   : 30,
     fontSize: 20,
-    color   : '#aaa'
+    color   : '#aaa',
   },
 
   button: {
     flex             : 0,
     borderRadius     : 2,
     paddingHorizontal: 5,
-    paddingVertical  : 5
+    paddingVertical  : 5,
   },
 
   buttonText: {
     textAlign: 'center',
     color    : Colors.primary,
-    fontSize : 12
+    fontSize : 12,
   },
 
   modalHeader: {
@@ -479,7 +479,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primary,
     paddingTop     : getVerticalPadding(),
     paddingBottom  : 10,
-    ...(new Elevation(2))
+    ...(new Elevation(2)),
   },
 
   modalHeaderText: {
@@ -487,49 +487,49 @@ const styles = StyleSheet.create({
     textAlign      : 'center',
     fontWeight     : 'normal',
     fontSize       : 16,
-    paddingVertical: 5
+    paddingVertical: 5,
   },
 
   field: {
     borderBottomWidth: 1,
     borderColor      : '#ccc',
-    backgroundColor  : '#fff'
+    backgroundColor  : '#fff',
   },
 
   touchableField: {
     paddingHorizontal: 10,
-    height: 50,
-    flexDirection: 'row',
-    alignItems   : 'center'
+    height           : 50,
+    flexDirection    : 'row',
+    alignItems       : 'center',
   },
 
   fieldText: {
     fontSize: 14,
-    color   : '#222'
+    color   : '#222',
   },
 
   fieldIcon: {
     fontSize   : 20,
     marginRight: 10,
-    color      : '#999'
+    color      : '#999',
   },
 
   fieldHorizontal: {
     flexDirection    : 'row',
     paddingHorizontal: 10,
-    alignItems       : 'center'
+    alignItems       : 'center',
   },
 
   label: {
     width   : 90,
     color   : '#222',
-    fontSize: 14
+    fontSize: 14,
   },
 
   input: {
     flex           : 1,
     height         : 40,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
   },
 
   formButton: {
@@ -538,6 +538,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems    : 'center',
     borderRadius  : 2,
-    ...(new Elevation(2))
-  }
+    ...(new Elevation(2)),
+  },
 })
