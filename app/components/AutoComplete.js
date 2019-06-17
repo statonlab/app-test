@@ -206,6 +206,7 @@ export default class AutoComplete extends Component {
                       this.submit(nativeEvent.text)
                     }
                   }}
+                  autoCorrect={false}
                   returnKeyType="done"
                 />
               </View>
