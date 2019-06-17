@@ -105,4 +105,11 @@ export default {
   'Vitis labrusca'         : ['Fox grape'],
   'Vitis mustangensis'     : ['Mustang grape'],
   'Vitis rupestris'        : ['Sand grape'],
+  'Aucoumea klaineana'     : ['Angouma', 'Gaboon', 'Okoume'],
+  'Nauclea diderrichii'    : ['Bilinga', 'Aloma', 'Badi', 'Kusia', 'Opepe'],
+  'Lophira alata'          : ['Azobe', 'Ekki'],
+  'Pterocarpus soyauxii'   : ['African padauk', 'African coralwood'],
+  'Dacryodes buettneri'    : ['Dacryodes buettneri'],
+  'Guibourtia tessmannii'  : ['African rosewood'],
+  'Cylicodiscus gabonensis': ['Cylicodiscus gabonensis'],
 }
