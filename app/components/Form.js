@@ -400,6 +400,7 @@ export default class Form extends Component {
       otherIdentifiers    : this.state.otherIdentifiers.map(value => {
         return {value}
       }),
+      collectedAt         : new Date(),
     }
 
     realm.write(() => {
@@ -440,6 +441,7 @@ export default class Form extends Component {
         otherIdentifiers    : this.state.otherIdentifiers.map(value => {
           return {value}
         }),
+        collectedAt         : this.props.entryInfo.collectedAt,
       }, true)
 
       DeviceEventEmitter.emit('newSubmission', observation)
