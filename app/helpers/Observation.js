@@ -54,6 +54,7 @@ class Observation {
 
       realm.write(() => {
         realmObservation.synced = true
+        realmObservation.needs_update = false
       })
 
       return response
@@ -143,6 +144,7 @@ class Observation {
     if (updatedObservation.length > 0) {
       realm.write(() => {
         updatedObservation[0].needs_update = false
+        updatedObservation[0].synced = true
       })
     }
 
