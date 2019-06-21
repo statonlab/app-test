@@ -1,3 +1,4 @@
+import moment from 'moment'
 import Realm from 'realm'
 
 /**
@@ -66,6 +67,7 @@ const SubmissionSchema = {
     compressed          : {type: 'bool', default: false},
     imagesFixed         : {type: 'bool', default: false},
     otherIdentifiers    : {type: 'OtherIdentifiers[]', default: []},
+    collectedAt         : {type: 'date'},
   },
 }
 
@@ -103,7 +105,7 @@ export default new Realm({
     SubmissionSchema,
     GuideSchema,
   ],
-  schemaVersion: 17,
+  schemaVersion: 18,
   migration    : function (oldRealm, newRealm) {
     if (oldRealm.schemaVersion < 2) {
       let newUser = newRealm.objects('User')
@@ -201,6 +203,12 @@ export default new Realm({
     if (oldRealm.schemaVersion < 17) {
       newRealm.objects('Submission').map(observation => {
         observation.otherIdentifiers = []
+      })
+    }
+
+    if (oldRealm.schemaVersion < 18) {
+      newRealm.objects('Submission').map(observation => {
+        observation.collectedAt = moment(observation.date, 'MM-DD-YYYY HH:mm:ss').toDate()
       })
     }
   },

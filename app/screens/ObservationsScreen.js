@@ -192,7 +192,7 @@ export default class ObservationsScreen extends Screen {
         }
       })
     } else {
-      submissions = submissions.sorted('id', !this.state.sort.reverse)
+      submissions = submissions.sorted('collectedAt', this.state.sort.reverse)
       submissions = this._attachDistance(submissions)
     }
 
@@ -240,6 +240,12 @@ export default class ObservationsScreen extends Screen {
     this.setState({isLoggedIn})
   }
 
+  /**
+   * Add distance to observations from current location.
+   * @param observations
+   * @return {*}
+   * @private
+   */
   _attachDistance(observations) {
     return observations.map(observation => {
       if (this.state.location.latitude !== false) {
