@@ -1,6 +1,8 @@
 package com.treesource;
 
 import android.app.Application;
+import com.facebook.react.PackageList;
+
 import android.content.Context;
 import android.support.multidex.MultiDex;
 
@@ -29,10 +31,8 @@ import io.invertase.firebase.analytics.RNFirebaseAnalyticsPackage;
 
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
-import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class MainApplication extends Application implements ReactApplication {
@@ -45,22 +45,26 @@ public class MainApplication extends Application implements ReactApplication {
 
     @Override
     protected List<ReactPackage> getPackages() {
-      return Arrays.<ReactPackage>asList(
-          new MainReactPackage(),
-          new AsyncStoragePackage(),
-          new RNDeviceInfo(),
-          new ReactNativePushNotificationPackage(),
-          new RNFirebasePackage(),
-          new RNFirebaseAnalyticsPackage(),
-          new PhotoViewPackage(),
-          new RNCameraPackage(),
-          new RealmReactPackage(),
-          new VectorIconsPackage(),
-          new ImageResizerPackage(),
-          new RNFetchBlobPackage(),
-          new MapsPackage(),
-          new NetInfoPackage()
-      );
+//      return Arrays.<ReactPackage>asList(
+//          new AsyncStoragePackage(),
+//          new RNDeviceInfo(),
+//          new ReactNativePushNotificationPackage(),
+//          new RNFirebasePackage(),
+//          new RNFirebaseAnalyticsPackage(),
+//          new PhotoViewPackage(),
+//          new RNCameraPackage(),
+//          new RealmReactPackage(),
+//          new VectorIconsPackage(),
+//          new ImageResizerPackage(),
+//          new RNFetchBlobPackage(),
+//          new MapsPackage(),
+//          new NetInfoPackage()
+//      );
+      @SuppressWarnings("UnnecessaryLocalVariable")
+      List<ReactPackage> packages = new PackageList(this).getPackages();
+      // Packages that cannot be autolinked yet can be added manually here, for example:
+      // packages.add(new MyReactNativePackage());
+      return packages;
     }
 
     @Override
