@@ -25,7 +25,7 @@ target 'TreeSnap' do
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
 
-  pod 'Firebase/Core', '4.2.0'
+  pod 'Firebase/Core', '~> 6.3.0'
   pod 'Fabric', '~> 1.7.7'
   pod 'Crashlytics', '~> 3.10.2'
 
