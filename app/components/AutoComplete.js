@@ -47,7 +47,7 @@ export default class AutoComplete extends Component {
    */
   open = () => {
     this.setState({
-      resultList  : TreeNames,
+      resultList  : this.props.defaultList,
       searchText  : '',
       selected    : null,
       modalVisible: true
@@ -122,7 +122,7 @@ export default class AutoComplete extends Component {
 
     // return to the default search case
     if (!text) {
-      this.setState({resultList: TreeNames})
+      this.setState({resultList: this.props.defaultList})
       return
     }
 

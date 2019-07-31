@@ -37,6 +37,7 @@ import AdvancedSettingsModal from './AdvancedSettingsModal'
 import CustomIDModal from './CustomIDModal'
 import User from '../db/User'
 import Images from '../helpers/Images'
+import TreeNames from '../resources/TreeLatinNames.js'
 
 const isAndroid  = Platform.OS === 'android'
 const Coordinate = t.refinement(t.Number, (n) => n !== 0, 'Coordinate')
@@ -587,6 +588,10 @@ export default class Form extends Component {
 
     if (DCP[key].modalFreeText) {
       let value = this.getMultiCheckValue(this.state.metadata[key], DCP[key].multiCheck)
+      let defaultList = TreeNames;
+      if (this.state.metadata[key] && !(key in TreeNames)) {
+        defaultList[this.state.metadata[key]] = [this.state.metadata[key]]
+      }
       return (
         <AutoComplete
           style={styles.picker}
@@ -594,6 +599,7 @@ export default class Form extends Component {
             this.setState({metadata: {...this.state.metadata, [key]: option}})
           }}
           key={key}
+          defaultList={defaultList}
         >
           <View style={styles.formGroup}>
             <View style={styles.picker}>
