@@ -12,7 +12,6 @@ import {
   Platform,
   Keyboard
 } from 'react-native'
-import TreeNames from '../resources/TreeLatinNames.js'
 import Colors from '../helpers/Colors'
 import Elevation from '../helpers/Elevation'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -22,16 +21,20 @@ export default class AutoComplete extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      resultList            : TreeNames,
-      selected              : null,
+      resultList            : {},
+      selected              : 'test test', // this.props.defaultText, // ? this.props.defaultText : null,
       modalVisible          : false,
-      searchText            : '',
+      searchText            : 'test test', // this.props.defaultText, // ? this.props.defaultText : '',
       textFieldBottomSpacing: 0
     }
 
     this.events = []
     this.events.push(Keyboard.addListener('keyboardDidShow', () => this.setBottomSpacing(true)))
     this.events.push(Keyboard.addListener('keyboardDidHide', () => this.setBottomSpacing(false)))
+  }
+
+  componentDidMount() {
+
   }
 
   /**
@@ -47,9 +50,6 @@ export default class AutoComplete extends Component {
    */
   open = () => {
     this.setState({
-      resultList  : this.props.defaultList,
-      searchText  : '',
-      selected    : null,
       modalVisible: true
     })
   }
@@ -128,7 +128,7 @@ export default class AutoComplete extends Component {
 
     let matches = {}
 
-    for (const [species, common] of Object.entries(TreeNames)) {
+    for (const [species, common] of Object.entries(this.props.defaultList)) {
       if (species.toLowerCase().trim().indexOf(text) > -1) {
         matches[species] = common.join(', ')
         continue
@@ -193,9 +193,10 @@ export default class AutoComplete extends Component {
                   style={[styles.textField]}
                   placeholder={'Search or create your own label'}
                   placeholderTextColor="#aaa"
-                  onChangeText={searchText => {
-                    this.setState({searchText})
-                    this.search(searchText)
+                  onChangeText={text => {
+                    this.setState({searchText: text})
+                    this.setState({selected: text})
+                    this.search(text)
                   }}
                   value={this.state.selected}
                   underlineColorAndroid="transparent"

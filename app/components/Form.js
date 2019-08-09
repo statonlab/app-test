@@ -600,6 +600,7 @@ export default class Form extends Component {
           }}
           key={key}
           defaultList={defaultList}
+          defaultText={this.state.metadata[key]}
         >
           <View style={styles.formGroup}>
             <View style={styles.picker}>
