@@ -197,6 +197,21 @@ const DCP = {
     ]
   },
 
+  crownPortion: {
+    label        : 'Crown portion',
+    description  : 'Which portion of the crown was the majority of seed collected from?',
+    selectChoices: ['Top third', 'Middle third', 'Bottom third', 'Throughout crown'],
+    placeHolder  : 'Please select',
+  },
+
+  ashFrequency: {
+    label        : 'Ash frequency',
+    description  : 'How frequently do other ash trees appear within 100 meters?',
+    selectChoices: ['Not often', 'Somewhat often', 'Fairly often', 'Very often'],
+    placeHolder  : 'Please select',
+
+  },
+
   crownClassification: {
     label        : 'Crown classification',
     description  : 'What is the height of the crown of this tree relative to others in the stand?',

@@ -59,6 +59,18 @@ const TreesList = [
     }
   },
   {
+    title    : 'Oregon Ash',
+    image    : require('../img/oregon_ash/leaves.jpg'),
+    latinName: 'Fraxinus latifolia',
+    locations: {
+      only: [
+        'Washington', 
+        'Oregon', 
+        'California'
+      ]
+    }
+  },
+  {
     title    : 'Eastern Larch',
     latinName: 'Larix laricina',
     image    : require('../img/eastern_larch/id.png'),
