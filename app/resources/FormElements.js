@@ -197,6 +197,34 @@ const DCP = {
     ]
   },
 
+  crownPortion: {
+    label        : 'Crown portion',
+    description  : 'Which portion of the crown was the majority of seed collected from?',
+    selectChoices: ['Top third', 'Middle third', 'Bottom third', 'Throughout crown'],
+    placeHolder  : 'Please select',
+  },
+
+  ashFrequency: {
+    label        : 'Ash frequency',
+    description  : 'Approximately how many ash trees appear within 100 meters?',
+    selectChoices: ['0', '1-5', '6-10', '>10'],
+    placeHolder  : 'Please select',
+  },
+
+  oregonAshHealth: {
+    label        : 'Health',
+    selectChoices: ['Good', 'Fair'],
+    description  : 'What is the overall condition of the tree? (If fair, please leave a photo and a comment describing the condition.)',
+    placeHolder  : 'Please select'
+  },
+
+  seedCollected: {
+    label        : 'Seed collected',
+    selectChoices: ['Yes', 'No'],
+    description  : 'Were seeds collected for this tree?',
+    placeHolder  : 'Please select'
+  },
+
   crownClassification: {
     label        : 'Crown classification',
     description  : 'What is the height of the crown of this tree relative to others in the stand?',

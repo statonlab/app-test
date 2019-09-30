@@ -18,6 +18,20 @@ const TreesList = [
       alwaysShow: true
     }
   },
+
+  {
+    title    : 'Oregon Ash',
+    image    : require('../img/oregon_ash/leaves.jpg'),
+    latinName: 'Fraxinus latifolia',
+    locations: {
+      only: [
+        'Washington', 
+        'Oregon', 
+        'California'
+      ]
+    }
+  },
+  
   {
     title    : 'Ash',
     latinName: 'Fraxinus sp.',

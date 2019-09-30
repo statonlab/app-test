@@ -641,5 +641,74 @@ export const Plants = {
       treated: true,
     }
   },
+
+  'Oregon Ash': {
+    image           : require('../img/oregon_ash/leaves.jpg'),
+    latinName       : 'Fraxinus latifolia',
+    maps            : [
+      require('../img/maps/ash_fraxlati_range.png')
+    ],
+    images          : [
+      require('../img/oregon_ash/habitat.jpg'),
+      require('../img/oregon_ash/trees.jpg'),
+      require('../img/oregon_ash/seed_location.jpg'),
+      require('../img/oregon_ash/leaves.jpg'),
+      require('../img/oregon_ash/leaf.jpg'),
+      require('../img/oregon_ash/leavesfruit.jpg'),
+      require('../img/oregon_ash/seed_closeup.jpg')
+    ],
+    captions        : [
+      'Oregon ash habitat along river in Eugene, Oregon, trees with seed (samara) visible. Photo Credit: Dr. Richard Sniezko',
+      'Oregon ash trees along river – tree form. Photo Credit: Dr. Richard Sniezko',
+      'Oregon ash with leaves showing location of seed (samaras). Photo Credit: Dr. Richard Sniezko',
+      'Oregon ash leaves. Photo Credit: Dr. Richard Sniezko',
+      'Oregon ash leaf. Photo Credit: Dr. Richard Sniezko',
+      'Oregon ash leaves & fruit (samara). Photo Credit: Dr. Richard Sniezko',
+      'Close up of Oregon ash seed (samaras). Photo Credit: Dr. Richard Sniezko'
+    ],
+    descriptionCards: [
+      {
+        title: 'Introduction',
+        body : [
+          <Text style={styles.paragraph}>Oregon Ash</Text>,
+          <Text style={styles.paragraph}>With emerald ash borer (EAB) continuing to move west, there is great concern about the
+          future of Oregon ash and the ecosystems with which it is associated. There is little or no information on
+          the genetic variation of this wide ranging species, and this proactive seed collection (before EAB arrives
+          and kills most trees) will provide baseline information.</Text>
+        ]
+      },
+      {
+        title: 'Description',
+        body : [
+          <Text style={styles.paragraph}>The Oregon ash grows mostly in wet habitats and prefers damp, loose soils such as sloughs,
+          swales, wet meadows, swamps, streams, and bottomlands. It grows from sea level to 900 metres
+          (3,000 ft) in elevation, up to 1,700 metres (5,600 ft) in the south of the range in California. In
+          central Southern California, it integrates with Fraxinus velutina (velvet ash) of southern
+          California east into Arizona.</Text>
+        ]
+      },
+      {
+        title: 'Challenges',
+        body : [
+          <Text style={styles.paragraph}>Emerald ash borer (EAB) is now in Colorado and there is high concern
+          that it will soon reach the West Coast, and that when that happens that F. latifolia will experience
+          extremely high levels of mortality. This project will begin a proactive seed collection that will be used
+          for (1) gene conservation, (2) the first test to examine genetic variation in EAB susceptibility/resistance
+          in this species, (3) establish a genetic field trial in western Oregon to provide (a) first look at adaptive
+          genetic variation, (b) serve as genetic conservation planting, and (c) serve as sentinel trial when exposed
+          to EAB or other biotic or abiotic agents, and (4) have seed available for others scientists to examine
+          variation in Oregon ash.</Text>
+        ]
+      }
+    ],
+    formProps       : {
+      heightNumeric      : true,
+      diameterNumeric    : true,
+      crownPortion       : true,
+      ashFrequency       : true,
+      oregonAshHealth    : true,
+      seedCollected      : true,
+    }
+  },
 }
 
