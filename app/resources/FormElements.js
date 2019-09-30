@@ -206,10 +206,23 @@ const DCP = {
 
   ashFrequency: {
     label        : 'Ash frequency',
-    description  : 'How frequently do other ash trees appear within 100 meters?',
-    selectChoices: ['Not often', 'Somewhat often', 'Fairly often', 'Very often'],
+    description  : 'Approximately how many ash trees appear within 100 meters?',
+    selectChoices: ['0', '1-5', '6-10', '>10'],
     placeHolder  : 'Please select',
+  },
 
+  oregonAshHealth: {
+    label        : 'Health',
+    selectChoices: ['Good', 'Fair'],
+    description  : 'What is the overall condition of the tree? (If fair, please leave a photo and a comment describing the condition.)',
+    placeHolder  : 'Please select'
+  },
+
+  seedCollected: {
+    label        : 'Seed collected',
+    selectChoices: ['Yes', 'No'],
+    description  : 'Were seeds collected for this tree?',
+    placeHolder  : 'Please select'
   },
 
   crownClassification: {

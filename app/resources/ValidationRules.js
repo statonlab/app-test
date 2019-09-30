@@ -22,6 +22,8 @@ const ValidationRules = {
   heightNumeric          : t.String,
   ashSpecies             : t.enums.of(DCP.ashSpecies.selectChoices, 'ashSpecies'),
   ashFrequency           : t.enums.of(DCP.ashFrequency.selectChoices, 'ashFrequency'),
+  oregonAshHealth        : t.enums.of(DCP.oregonAshHealth.selectChoices, 'oregonAshHealth'),
+  seedCollected          : t.enums.of(DCP.seedCollected.selectChoices, 'seedCollected'),
   crownHealth            : t.enums.of(DCP.crownHealth.selectChoices, 'crownHealth'),
   crownPortion           : t.enums.of(DCP.crownPortion.selectChoices, 'crownPortion'),
   otherLabel             : t.String,

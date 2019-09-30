@@ -706,6 +706,8 @@ export const Plants = {
       diameterNumeric    : true,
       crownPortion       : true,
       ashFrequency       : true,
+      oregonAshHealth    : true,
+      seedCollected      : true,
     }
   },
 }
