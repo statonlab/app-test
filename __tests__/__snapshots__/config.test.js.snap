@@ -13,6 +13,17 @@ Object {
       "I'm not sure",
     ],
   },
+  "ashFrequency": Object {
+    "description": "Approximately how many ash trees appear within 100 meters?",
+    "label": "Ash frequency",
+    "placeHolder": "Please select",
+    "selectChoices": Array [
+      "0",
+      "1-5",
+      "6-10",
+      ">10",
+    ],
+  },
   "ashSpecies": Object {
     "description": "Which species of ash tree is this?  If you aren't sure, select \\"Uncertain\\"",
     "images": Array [
@@ -193,6 +204,17 @@ Object {
       "4 - Many dead branches (more than 50%)",
       "5 - Completely dead",
       "I'm not sure",
+    ],
+  },
+  "crownPortion": Object {
+    "description": "Which portion of the crown was the majority of seed collected from?",
+    "label": "Crown portion",
+    "placeHolder": "Please select",
+    "selectChoices": Array [
+      "Top third",
+      "Middle third",
+      "Bottom third",
+      "Throughout crown",
     ],
   },
   "deerRub": Object {
@@ -497,6 +519,15 @@ Object {
       "Other",
     ],
   },
+  "oregonAshHealth": Object {
+    "description": "What is the overall condition of the tree? (If fair, please leave a photo and a comment describing the condition.)",
+    "label": "Health",
+    "placeHolder": "Please select",
+    "selectChoices": Array [
+      "Good",
+      "Fair",
+    ],
+  },
   "otherLabel": Object {
     "description": "Please create a name to associate this entry with.  (ie Birch)",
     "label": "Tree type",
@@ -520,6 +551,15 @@ Object {
     "selectChoices": Array [
       "Planted",
       "Wild",
+    ],
+  },
+  "seedCollected": Object {
+    "description": "Were seeds collected for this tree?",
+    "label": "Seed collected",
+    "placeHolder": "Please select",
+    "selectChoices": Array [
+      "Yes",
+      "No",
     ],
   },
   "seedsBinary": Object {
