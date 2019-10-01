@@ -61,7 +61,7 @@ PODS:
   - nanopb/encode (0.3.901)
   - React (0.59.9):
     - React/Core (= 0.59.9)
-  - react-native-netinfo (2.0.10):
+  - react-native-netinfo (4.1.0):
     - React
   - React/Core (0.59.9):
     - yoga (= 0.59.9.React)
@@ -174,7 +174,7 @@ SPEC CHECKSUMS:
   GoogleUtilities: c7a0b08bda3bf808be823ed151f0e28ac6866e71
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   React: a86b92f00edbe1873a63e4a212c29b7a7ad5224f
-  react-native-netinfo: 39c221d058dca040a69e46a083e692bbd65d5ab5
+  react-native-netinfo: 781f8a5ede77c5f97e6957a9194df8460766ca36
   RNCAsyncStorage: b63d6e83fc629b01df6b624688f17944cea5637f
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   yoga: 03ff42a6f223fb88deeaed60249020d80c3091ee
