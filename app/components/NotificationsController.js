@@ -15,7 +15,7 @@ export default class NotificationsController extends Component {
     // API 23 (Nougat) and under
     this.shouldMount = Platform.select({
       ios    : true,
-      android: !(Platform.Version <= 23 && DeviceInfo.getBrand().toLowerCase().indexOf('samsung') > -1)
+      android: !(Platform.Version <= 23 && DeviceInfo.getBrand().toLowerCase().indexOf('samsung') > -1),
     })
   }
 
@@ -46,7 +46,7 @@ export default class NotificationsController extends Component {
   _configure() {
     Notifications.configure({
       onRegister: (token) => {
-        alert(token)
+
       },
 
       onNotification: (notification) => {
@@ -59,28 +59,28 @@ export default class NotificationsController extends Component {
                 text   : 'Cancel',
                 onPress: () => {
                 },
-                style  : 'cancel'
+                style  : 'cancel',
               },
               {
                 text   : 'OK',
                 onPress: () => {
                   this.props.onUploadRequest()
-                }
-              }
+                },
+              },
             ],
-            {cancelable: false}
+            {cancelable: false},
           )
         }
       },
 
-      requestPermissions: true
+      requestPermissions: true,
     })
   }
 
   _handleAppStateChange(nextState) {
     if (nextState === 'background') {
       // In a dev environment display in 1 second
-      const date_dev = new Date(Date.now() + (1000))
+      const date_dev = new Date(Date.now() + (2000))
 
       const hasUnsynced = realm.objects('Submission').filtered('needs_update = true OR synced = false').length > 0
       if (hasUnsynced) {
@@ -88,14 +88,14 @@ export default class NotificationsController extends Component {
         Notifications.localNotificationSchedule({
           message: 'You have unsynced observations. Would you like to upload your observations?',
           // 24 hours (1 second in dev)
-          date   : __DEV__ ? date_dev : new Date(Date.now() + (24 * 60 * 60 * 1000))
+          date   : __DEV__ ? date_dev : new Date(Date.now() + (24 * 60 * 60 * 1000)),
         })
       }
 
       Notifications.localNotificationSchedule({
         message: 'It’s been a while since you last used TreeSnap. Take us on your next hike!',
         // 30 days (1 second in dev)
-        date   : __DEV__ ? date_dev : new Date(Date.now() + (30 * 24 * 60 * 60 * 1000))
+        date   : __DEV__ ? date_dev : new Date(Date.now() + (30 * 24 * 60 * 60 * 1000)),
       })
     }
   }
@@ -106,5 +106,5 @@ export default class NotificationsController extends Component {
 }
 
 NotificationsController.propTypes = {
-  onUploadRequest: PropTypes.func.isRequired
+  onUploadRequest: PropTypes.func.isRequired,
 }
