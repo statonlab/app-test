@@ -209,6 +209,7 @@ Object {
   "crownPortion": Object {
     "description": "Which portion of the crown was the majority of seed collected from?",
     "label": "Collected seed location",
+    "multiCheck": true,
     "placeHolder": "Please select",
     "selectChoices": Array [
       "Top third",
