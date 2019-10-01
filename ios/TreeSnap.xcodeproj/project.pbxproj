@@ -1830,7 +1830,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1800;
+				CURRENT_PROJECT_VERSION = 1801;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = ZGGV6E3YS4;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1859,7 +1859,7 @@
 				INFOPLIST_FILE = TreeSnap/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.12.0;
+				MARKETING_VERSION = 1.12.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = edu.utk.treesource;
 				PRODUCT_NAME = TreeSnap;
@@ -1879,7 +1879,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1800;
+				CURRENT_PROJECT_VERSION = 1801;
 				DEVELOPMENT_TEAM = ZGGV6E3YS4;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1913,7 +1913,7 @@
 					"\"${PODS_ROOT}/FirebaseCore/Frameworks\"",
 					"\"${PODS_ROOT}/FirebaseInstanceID/Frameworks\"",
 				);
-				MARKETING_VERSION = 1.12.0;
+				MARKETING_VERSION = 1.12.1;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = edu.utk.treesource;
 				PRODUCT_NAME = TreeSnap;

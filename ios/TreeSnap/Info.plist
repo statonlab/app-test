@@ -57,11 +57,11 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>Camera access is needed to take pictures of observations</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Location services are needed to collect each observation's location</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Location services are needed to collect observation's GPS location</string>
 	<key>NSLocationUsageDescription</key>
-	<string>Location services are needed to collect each observation's location</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Location services are needed to collect each observation's location</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Location services are needed to collect each observation's location</string>

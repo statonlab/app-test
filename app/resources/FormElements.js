@@ -198,7 +198,7 @@ const DCP = {
   },
 
   crownPortion: {
-    label        : 'Crown portion',
+    label        : 'Collected seed location',
     description  : 'Which portion of the crown was the majority of seed collected from?',
     selectChoices: ['Top third', 'Middle third', 'Bottom third', 'Throughout crown'],
     placeHolder  : 'Please select',
@@ -213,7 +213,7 @@ const DCP = {
 
   oregonAshHealth: {
     label        : 'Health',
-    selectChoices: ['Good', 'Fair'],
+    selectChoices: ['Good', 'Fair', 'Poor'],
     description  : 'What is the overall condition of the tree? (If fair, please leave a photo and a comment describing the condition.)',
     placeHolder  : 'Please select'
   },
