@@ -25,7 +25,7 @@ const ValidationRules = {
   oregonAshHealth        : t.enums.of(DCP.oregonAshHealth.selectChoices, 'oregonAshHealth'),
   seedCollected          : t.enums.of(DCP.seedCollected.selectChoices, 'seedCollected'),
   crownHealth            : t.enums.of(DCP.crownHealth.selectChoices, 'crownHealth'),
-  crownPortion           : t.enums.of(DCP.crownPortion.selectChoices, 'crownPortion'),
+  crownPortion           : t.maybe(t.enums.of(DCP.crownPortion.selectChoices, 'crownPortion')),
   otherLabel             : t.String,
   treated                : t.enums.of(DCP.treated.selectChoices),
   cones                  : t.enums.of(DCP.cones.selectChoices),
