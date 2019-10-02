@@ -2,7 +2,11 @@ const DCP = {
   ashSpecies: {
     label        : 'Species',
     selectChoices: [
-      'White ash', 'Green ash', 'Blue ash', 'Black ash', 'Uncertain',
+      'White ash',
+      'Green ash',
+      'Blue ash',
+      'Black ash',
+      'Uncertain',
     ],
     description  : 'Which species of ash tree is this?  If you aren\'t sure, select "Uncertain"',
     placeHolder  : 'Uncertain',
@@ -51,8 +55,12 @@ const DCP = {
   emeraldAshBorer: {
     label        : 'Ash borer',
     selectChoices: [
-      'D-shaped adult exit holes', 'Bark coming off with tunneling underneath', 'Bark splitting',
-      'Emerald ash borer beetles/larvae', 'Stump sprouting or epicormic growth', 'Woodpecker feeding holes',
+      'D-shaped adult exit holes',
+      'Bark coming off with tunneling underneath',
+      'Bark splitting',
+      'Emerald ash borer beetles/larvae',
+      'Stump sprouting or epicormic growth',
+      'Woodpecker feeding holes',
     ],
     description  : 'Do you see any of these signs of emerald ash borers?  Check all that apply.',
     placeHolder  : 'No signs of pest',
@@ -74,7 +82,12 @@ const DCP = {
   woollyAdesCoverage: {
     label        : 'Woolly adelgids',
     selectChoices: [
-      '0%', '1-24%', '25-49%', '50-74%', '75-100%', 'I\'m not sure',
+      '0%',
+      '1-24%',
+      '25-49%',
+      '50-74%',
+      '75-100%',
+      'I\'m not sure',
     ],
     description  : 'What percentage of the branches you see have hemlock Woolly adelgids?',
     placeHolder  : '% Adelgid coverage',
@@ -104,7 +117,10 @@ const DCP = {
   chestnutBlightSigns: {
     label        : 'Chestnut blight',
     selectChoices: [
-      'Cankers and cracked bark', 'Tan to orange-colored patches or pustules on bark', 'Evidence of old dead trunk', 'Stump sprouting',
+      'Cankers and cracked bark',
+      'Tan to orange-colored patches or pustules on bark',
+      'Evidence of old dead trunk',
+      'Stump sprouting',
     ],
     description  : 'Do you see any of these signs of chestnut blight?  Check all that apply.',
     placeHolder  : 'No blight symptoms',
@@ -124,7 +140,10 @@ const DCP = {
   acorns: {
     label        : 'Acorns',
     selectChoices: [
-      'None', 'Some', 'Lots', 'I\'m not sure',
+      'None',
+      'Some',
+      'Lots',
+      'I\'m not sure',
     ],
     description  : 'Are there acorns on the tree?  Don\'t include fallen acorns on the ground in your estimate.',
     placeHolder  : 'Number of acorns',
@@ -153,7 +172,11 @@ const DCP = {
   oakHealthProblems: {
     label        : 'Health problems',
     selectChoices: [
-      'Dieback in canopy', 'Defoliation', 'Cankers', 'Bark damage', 'Signs of rot at base',
+      'Dieback in canopy',
+      'Defoliation',
+      'Cankers',
+      'Bark damage',
+      'Signs of rot at base',
       'Other',
     ],
     description  : 'Do you see any of the following potential health problems?  Check all that apply.  If you check Other, please describe in comments.',
@@ -189,7 +212,8 @@ const DCP = {
       '5 - Completely dead',
       'I\'m not sure'],
     placeHolder  : 'Please select',
-    images       : [require('../img/DCP/canopy/canopy1.jpg'),
+    images       : [
+      require('../img/DCP/canopy/canopy1.jpg'),
       require('../img/DCP/canopy/canopy2.jpg'),
       require('../img/DCP/canopy/canopy3.jpg'),
       require('../img/DCP/canopy/canopy4.jpg'),
@@ -229,11 +253,13 @@ const DCP = {
   crownClassification: {
     label        : 'Crown classification',
     description  : 'What is the height of the crown of this tree relative to others in the stand?',
-    selectChoices: ['Dominant. This tree\'s crown extends above others in the area.',
+    selectChoices: [
+      'Dominant. This tree\'s crown extends above others in the area.',
       'Codominant. This tree\'s crown is level with or slightly below other nearby trees.',
       'Overtopped. This tree\'s crown is entirely below other trees nearby.',
       'Not applicable (Tree is isolated)',
-      'I\'m not sure.'],
+      'I\'m not sure.',
+    ],
     placeHolder  : 'Please select',
   },
 

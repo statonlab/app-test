@@ -24,7 +24,7 @@
         "react-native": "0.59.9",
         "react-native-camera": "^2.10.1",
         "react-native-device-info": "^0.25.1",
-        "react-native-firebase": "^5.5.5",
+        "react-native-firebase": "~5.5.5",
         "react-native-image-resizer": "^1.0.1",
         "react-native-iphone-x-helper": "^1.2.0",
         "react-native-keyboard-aware-scroll-view": "^0.4.4",
