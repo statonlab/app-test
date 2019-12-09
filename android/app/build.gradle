@@ -117,8 +117,8 @@ android {
         applicationId "com.treesource"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1805
-        versionName "1.12.2"
+        versionCode 1806
+        versionName "1.12.4"
         missingDimensionStrategy 'react-native-camera', 'general'
         multiDexEnabled true
         ndk {
