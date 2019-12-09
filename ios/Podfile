@@ -30,6 +30,8 @@ target 'TreeSnap' do
   pod 'Crashlytics', '~> 3.10.2'
 
   # Add new pods below this line
+  pod 'RNCPushNotificationIOS', :path => '../node_modules/@react-native-community/push-notification-ios'
+
   pod 'react-native-netinfo', :path => '../node_modules/@react-native-community/netinfo'
 
   pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'

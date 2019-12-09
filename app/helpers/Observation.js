@@ -53,7 +53,7 @@ class Observation {
       await this.uploadImages(observation, id, callback)
 
       realm.write(() => {
-        realmObservation.synced = true
+        realmObservation.synced       = true
         realmObservation.needs_update = false
       })
 
@@ -144,7 +144,7 @@ class Observation {
     if (updatedObservation.length > 0) {
       realm.write(() => {
         updatedObservation[0].needs_update = false
-        updatedObservation[0].synced = true
+        updatedObservation[0].synced       = true
       })
     }
 
@@ -303,8 +303,6 @@ class Observation {
         return
       }
 
-      console.log('HERE record', record.identifiers)
-
       realm.write(() => {
         realm.create('Submission', {
           id                  : primaryKey,
@@ -321,6 +319,7 @@ class Observation {
           compressed          : true,
           imagesFixed         : true,
           otherIdentifiers    : record.identifiers ? record.identifiers.map(id => ({value: id.identifier})) : [],
+          collectedAt         : moment(record.date.date).toDate(),
         })
       })
     })
