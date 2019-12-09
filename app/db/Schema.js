@@ -67,6 +67,9 @@ const SubmissionSchema = {
     compressed          : {type: 'bool', default: false},
     imagesFixed         : {type: 'bool', default: false},
     otherIdentifiers    : {type: 'OtherIdentifiers[]', default: []},
+    // Collected at is a new field that uses `date` instead of strings to
+    // allow for string by collection date. The "date" field is left above
+    // to maintain backwards compatibility
     collectedAt         : {type: 'date'},
   },
 }
