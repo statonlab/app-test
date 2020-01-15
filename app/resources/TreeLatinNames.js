@@ -112,4 +112,10 @@ export default {
   'Dacryodes buettneri'    : ['Dacryodes buettneri'],
   'Guibourtia tessmannii'  : ['African rosewood'],
   'Cylicodiscus gabonensis': ['Cylicodiscus gabonensis'],
+  'Quercus montana'        : ['Chestnut Oak'],
+  'Quercus phellos'        : ['Willow Oak'],
+  'Betula nigra'           : ['River Birch'],
+  'Ilex opaca'             : ['American Holly'],
+  'Acer negundo'           : ['Chestnut Oak'],
+  'Taxodium distichum'     : ['Bald Cypress'],
 }
