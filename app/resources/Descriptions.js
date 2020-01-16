@@ -273,8 +273,8 @@ export const Plants = {
       },
     ],
     formProps       : {
-      diameterNumeric        : true,
       otherLabel             : true,
+      diameterNumeric        : true,
       locationCharacteristics: true,
     },
   }
