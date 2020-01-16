@@ -117,6 +117,7 @@ export const Plants = {
       heightNumeric      : true,
     },
   },
+
   'Ash'              : {
     image           : require('../img/ash.jpg'),
     latinName       : 'Fraxinus sp.',
@@ -200,6 +201,7 @@ export const Plants = {
       treated                : true,
     },
   },
+
   'Hemlock'          : {
     image           : require('../img/hemlock.jpg'),
     latinName       : 'Tsuga sp.',
@@ -259,8 +261,8 @@ export const Plants = {
       // accessibility          : true,
       //locationComment        : true
     },
-  }
-  ,
+  },
+
   'Other'            : {
     image           : require('../img/forest.jpg'),
     images          : [],
@@ -273,13 +275,13 @@ export const Plants = {
       },
     ],
     formProps       : {
-      diameterNumeric        : true,
       otherLabel             : true,
+      diameterNumeric        : true,
       locationCharacteristics: true,
     },
-  }
-  ,
-  'White Oak'        : {
+  },
+
+  'White Oak': {
     image           : require('../img/white_oak.jpg'),
     images          : [
       require('../img/white_oak_id/1.jpg'),
