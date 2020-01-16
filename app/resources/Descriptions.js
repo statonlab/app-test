@@ -117,7 +117,7 @@ export const Plants = {
       heightNumeric      : true,
     },
   },
-  
+
   'Ash'              : {
     image           : require('../img/ash.jpg'),
     latinName       : 'Fraxinus sp.',
