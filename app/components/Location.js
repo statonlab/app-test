@@ -17,6 +17,7 @@ import Colors from '../helpers/Colors'
 import Elevation from '../helpers/Elevation'
 import { isIphoneX } from 'react-native-iphone-x-helper'
 import { CircleSnail } from 'react-native-progress'
+import Geolocation from '@react-native-community/geolocation'
 
 const isAndroid = Platform.OS === 'android'
 
@@ -90,7 +91,7 @@ export default class Location extends Component {
    * Query the geolocation service for the current position
    */
   getLocation() {
-    navigator.geolocation.getCurrentPosition(
+    Geolocation.getCurrentPosition(
       this.setLocation.bind(this),
       (error) => {
         if (error.code === 1 && error.PERMISSION_DENIED) {

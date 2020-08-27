@@ -15,12 +15,13 @@ import Observation from './app/helpers/Observation'
 import WelcomeModal from './app/components/WelcomeModal'
 import NotificationsController from './app/components/NotificationsController'
 import ObservationLostImagesFixer from './app/components/ObservationLostImagesFixer'
+import Geolocation from '@react-native-community/geolocation'
 
 export default class App extends Component {
   constructor(props) {
     super(props)
 
-    navigator.geolocation.setRNConfiguration({skipPermissionRequests: false})
+    Geolocation.setRNConfiguration({skipPermissionRequests: false})
 
     this.state = {
       snackMessage        : '',
