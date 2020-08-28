@@ -1,0 +1,1 @@
+../../../../../node_modules/react-native-photo-view-ex/ios/MWTapDetectingImageView.h

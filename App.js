@@ -4,9 +4,9 @@ import {
   View,
   StyleSheet,
   DeviceEventEmitter,
-  Platform
+  Platform,
 } from 'react-native'
-import AsyncStorage from "@react-native-community/async-storage"
+import AsyncStorage from '@react-native-community/async-storage'
 import Diagnostics from './app/helpers/Diagnostics'
 import Actions from './app/helpers/Actions'
 import SnackBarNotice from './app/components/SnackBarNotice'
@@ -26,7 +26,7 @@ export default class App extends Component {
     this.state = {
       snackMessage        : '',
       appReady            : false,
-      requestNotifications: false
+      requestNotifications: false,
     }
 
     this.events = []
@@ -88,7 +88,7 @@ export default class App extends Component {
   render() {
     const prefix = Platform.select({
       ios    : 'treesnap://',
-      android: 'treesnap://treesnap/'
+      android: 'treesnap://treesnap/',
     })
 
     return (
@@ -124,6 +124,6 @@ export default class App extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
-  }
+    flex: 1,
+  },
 })

@@ -8,26 +8,8 @@ import androidx.multidex.MultiDex;
 import com.crashlytics.android.Crashlytics;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactInstanceManager;
-import com.reactnativecommunity.netinfo.NetInfoPackage;
-import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
-import com.oblador.vectoricons.VectorIconsPackage;
-import com.RNFetchBlob.RNFetchBlobPackage;
-
-import io.realm.react.RealmReactPackage;
-
-import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
-import com.reactnative.photoview.PhotoViewPackage;
-import com.airbnb.android.react.maps.MapsPackage;
-
-import fr.bamlab.rnimageresizer.ImageResizerPackage;
-import io.invertase.firebase.RNFirebasePackage;
-
-import org.reactnative.camera.RNCameraPackage;
-
-import com.learnium.RNDeviceInfo.RNDeviceInfo;
 
 import io.fabric.sdk.android.Fabric;
-import io.invertase.firebase.analytics.RNFirebaseAnalyticsPackage;
 
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;

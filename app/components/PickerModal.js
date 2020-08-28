@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import {
   View,
@@ -8,16 +8,16 @@ import {
   StyleSheet,
   Modal,
   TouchableOpacity,
-  Picker,
   Platform,
-  Dimensions
+  Dimensions,
 } from 'react-native'
+import {Picker} from '@react-native-community/picker'
 import Colors from '../helpers/Colors'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import realm from '../db/Schema'
 import ImageModal from './ImageModal'
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import User from '../db/User'
 
 export default class PickerModal extends Component {
@@ -28,24 +28,24 @@ export default class PickerModal extends Component {
     let user = User.user()
 
     this.state = {
-      animationType    : 'fade',
-      modalVisible     : false,
-      cancelText       : 'CANCEL',
-      selected         : 'not set',
-      selectedMulti    : [],
-      choices          : this.props.choices,
-      numberVal        : {value: null}, //expect {value: int, confidence: string},
-      numberPlaceHolder: null,
-      userUnit         : user ? user.units : 'US',
-      selectedUnit     : 'US',
-      showUnitsPicker  : false,
+      animationType     : 'fade',
+      modalVisible      : false,
+      cancelText        : 'CANCEL',
+      selected          : 'not set',
+      selectedMulti     : [],
+      choices           : this.props.choices,
+      numberVal         : {value: null}, //expect {value: int, confidence: string},
+      numberPlaceHolder : null,
+      userUnit          : user ? user.units : 'US',
+      selectedUnit      : 'US',
+      showUnitsPicker   : false,
       requiresConfidence: false,
-      useCircumference: false,
+      useCircumference  : false,
     }
   }
 
   componentDidMount() {
-    if(this.props.initialSelect) {
+    if (this.props.initialSelect) {
       this.setState({selected: this.props.initialSelect})
 
       this.props.onSelect(this.props.initialSelect)
@@ -83,7 +83,7 @@ export default class PickerModal extends Component {
       }
       let newState = {
         value     : this.props.startingNumeric[0],
-        confidence: confidence
+        confidence: confidence,
       }
       this.setState({numberVal: newState})
     }
@@ -219,16 +219,18 @@ export default class PickerModal extends Component {
   renderCircumference() {
     const uncheckedBox = (<Icon name="checkbox-blank-outline" style={styles.icon}/>)
     const checkedBox   = (
-        <Icon name="checkbox-marked" style={[styles.icon, {color: Colors.primary}]}/>
-      )
+      <Icon name="checkbox-marked" style={[styles.icon, {color: Colors.primary}]}/>
+    )
 
     return (
       <TouchableOpacity
         style={styles.choiceContainer}
         onPress={() => {
           this.setState({useCircumference: !this.state.useCircumference})
-          this.setState({numberPlaceHolder: this.state.useCircumference ?
-              'Tap to enter diameter' : 'Tap to enter circumference'})
+          this.setState({
+            numberPlaceHolder: this.state.useCircumference ?
+              'Tap to enter diameter' : 'Tap to enter circumference',
+          })
           this.state.useCircumference ? this.computeCircumference() : this.computeDiameter()
         }}>
         <View style={styles.choiceItem}>
@@ -273,7 +275,7 @@ export default class PickerModal extends Component {
           style={{
             flexDirection : 'row',
             justifyContent: 'space-between',
-            alignItems    : 'center'
+            alignItems    : 'center',
           }}>
           <Text style={{paddingLeft: 30, paddingRight: 30}}>{this.state.selectedUnit}</Text>
           <IonIcon name={'ios-arrow-dropdown'} size={18} color={'#777'}/>
@@ -288,14 +290,14 @@ export default class PickerModal extends Component {
             flex           : 1,
             backgroundColor: 'rgba(0,0,0,.8)',
             justifyContent : 'center',
-            alignItems     : 'center'
+            alignItems     : 'center',
           }}>
             <View style={{
               backgroundColor: '#f4f4f4',
               borderRadius   : 2,
               padding        : 10,
               flexDirection  : Platform.select({android: 'row', ios: 'column'}),
-              marginBottom: Platform.select({android: 0, ios: 10}),
+              marginBottom   : Platform.select({android: 0, ios: 10}),
               justifyContent : Platform.select({android: 'center', ios: 'flex-start'}),
               alignItems     : Platform.select({android: 'center', ios: 'flex-end'}),
             }}>
@@ -313,24 +315,24 @@ export default class PickerModal extends Component {
   }
 
   renderPicker() {
-    let units = this.props.units
+    let units   = this.props.units
     let {width} = Dimensions.get('window')
+    const items = Object.keys(units).map((key, i) => {
+      return <Picker.Item
+        key={i}
+        label={units[key]}
+        value={units[key]}/>
+    })
     return (
       <Picker
         selectedValue={this.state.selectedUnit}
         style={{
           height    : Platform.select({android: 50, ios: undefined}),
           width     : Platform.select({android: 120, ios: width - 130}),
-          marginLeft: Platform.select({android: 10, ios: 0})
+          marginLeft: Platform.select({android: 10, ios: 0}),
         }}
-        itemStyle={{
-          // fontSize: 14,
-          // height  : 90
-        }}
-        onValueChange={unit => this.setState({selectedUnit: unit})}>
-        {Object.keys(units).map(key => {
-          return (<Picker.Item key={key} label={units[key]} value={units[key]}/>)
-        })}
+        onValueChange={selectedUnit => this.setState({selectedUnit})}>
+        {items}
       </Picker>
     )
   }
@@ -428,7 +430,7 @@ export default class PickerModal extends Component {
                           fontWeight: 'bold',
                           fontSize  : 12,
                           marginLeft: 5,
-                          height    : 16
+                          height    : 16,
                         }}>
                           SHOW EXAMPLES
                         </Text>
@@ -482,7 +484,7 @@ PickerModal.propTypes = {
   default          : PropTypes.string,
   //The following 3 props allow pre-existing values (IE from edit) to be passed into the modal.
   startingNumeric  : PropTypes.array,
-  startingString   : PropTypes.string
+  startingString   : PropTypes.string,
 }
 
 PickerModal.defaultProps = {
@@ -496,7 +498,7 @@ PickerModal.defaultProps = {
   freeText         : false,
   images           : [],
   numeric          : false,
-  useCircumference : false
+  useCircumference : false,
 }
 
 const styles = StyleSheet.create({
@@ -506,13 +508,13 @@ const styles = StyleSheet.create({
     left           : 0,
     right          : 0,
     bottom         : 0,
-    backgroundColor: Colors.transparentDark
+    backgroundColor: Colors.transparentDark,
   },
 
   mainContainer: {
     flex          : 1,
     alignItems    : 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
 
   container: {
@@ -524,12 +526,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     maxHeight        : 500,
     minWidth         : 300,
-    marginHorizontal : 20
+    marginHorizontal : 20,
   },
 
   headTextBox: {
     flex        : 0,
-    marginBottom: 10
+    marginBottom: 10,
   },
 
   headerQuestionText: {
@@ -537,26 +539,26 @@ const styles = StyleSheet.create({
     textAlign : 'left',
     fontWeight: '500',
     fontSize  : 16,
-    color     : '#222'
+    color     : '#222',
   },
 
   modalChoices: {
     flex        : 0,
-    marginBottom: 10
+    marginBottom: 10,
   },
 
   choiceContainer: {
     flex           : 0,
     flexDirection  : 'row',
     alignItems     : 'center',
-    paddingVertical: 5
+    paddingVertical: 5,
   },
 
   choiceItem: {
     flex          : 0,
     flexDirection : 'row',
     alignItems    : 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
 
   choiceText: {
@@ -566,33 +568,33 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     fontWeight : '500',
     fontSize   : 16,
-    flexWrap   : 'wrap'
+    flexWrap   : 'wrap',
 
   },
 
   button: {
     flex        : 0,
     borderRadius: 2,
-    padding     : 10
+    padding     : 10,
   },
 
   buttonText: {
     textAlign : 'right',
     color     : Colors.primary,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
 
   icon: {
     fontSize : 20,
     color    : '#aaa',
-    marginTop: 5
+    marginTop: 5,
   },
 
   iconTI: {
     fontSize  : 20,
     color     : '#aaa',
     marginTop : 5,
-    marginLeft: 15
+    marginLeft: 15,
   },
 
   textField: {
@@ -603,7 +605,7 @@ const styles = StyleSheet.create({
     borderRadius     : 2,
     paddingHorizontal: 10,
     fontSize         : 14,
-    backgroundColor  : '#f9f9f9'
+    backgroundColor  : '#f9f9f9',
   },
 
   buttonAlt: {
@@ -612,11 +614,11 @@ const styles = StyleSheet.create({
     flex           : 1,
     alignItems     : 'center',
     justifyContent : 'center',
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
   },
 
   iconsContainer: {
     paddingTop       : 10,
-    paddingHorizontal: 5
-  }
+    paddingHorizontal: 5,
+  },
 })

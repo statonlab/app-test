@@ -68,7 +68,8 @@ export default class Guide extends Component {
     this.state.opacity.setValue(1)
     Animated.timing(this.state.translate, {
       toValue : 0,
-      duration: 700
+      duration: 700,
+      useNativeDriver: false
     }).start()
   }
 
@@ -77,11 +78,13 @@ export default class Guide extends Component {
     Animated.parallel([
       Animated.timing(this.state.opacity, {
         toValue : 0,
-        duration: 500
+        duration: 500,
+        useNativeDriver: false
       }),
       Animated.timing(this.state.translate, {
         toValue : -50,
-        duration: 500
+        duration: 500,
+        useNativeDriver: false
       })
     ]).start(() => {
       this.setState({show: false, closing: false})

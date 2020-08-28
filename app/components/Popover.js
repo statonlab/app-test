@@ -23,7 +23,8 @@ class Popover extends Component {
       this.state.opacity,
       {
         toValue : 1,
-        duration: 250
+        duration: 250,
+        useNativeDriver: false
       }
     ).start()
 
@@ -35,7 +36,8 @@ class Popover extends Component {
       this.state.opacity,
       {
         toValue : 0,
-        duration: 250
+        duration: 250,
+        useNativeDriver: false
       }
     ).start(() => {
       this.setState({visible: false})

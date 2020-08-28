@@ -3,11 +3,11 @@ import PropTypes from 'prop-types'
 import {
   View,
   Text,
-  Picker,
   StyleSheet,
   Modal,
   TouchableOpacity
 } from 'react-native'
+import {Picker} from '@react-native-community/picker'
 import Colors from '../helpers/Colors'
 
 export default class DateModal extends Component {

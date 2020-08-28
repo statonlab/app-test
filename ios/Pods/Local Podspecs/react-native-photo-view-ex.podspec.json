@@ -1,0 +1,25 @@
+{
+  "name": "react-native-photo-view-ex",
+  "version": "1.1.0",
+  "summary": "Displaying photos with pinch-to-zoom, based on react-native-photo-view",
+  "authors": {
+    "name": "Alexander Pantyukhov",
+    "email": "alwxndr@gmail.com"
+  },
+  "homepage": "https://github.com/aMarCruz/react-native-photo-view-ex",
+  "license": "MIT",
+  "platforms": {
+    "ios": "7.0",
+    "tvos": "9.0"
+  },
+  "source": {
+    "git": "https://github.com/aMarCruz/react-native-photo-view-ex.git",
+    "tag": "v1.1.0"
+  },
+  "source_files": "ios/*.{h,m}",
+  "dependencies": {
+    "React": [
+
+    ]
+  }
+}

@@ -4,14 +4,15 @@ import {
   StyleSheet,
   ScrollView,
   Text,
-  DeviceEventEmitter
+  DeviceEventEmitter,
 } from 'react-native'
+import { createAppContainer } from 'react-navigation'
+import { createStackNavigator } from 'react-navigation-stack'
+import { createBottomTabNavigator } from 'react-navigation-tabs'
 import {
-  createBottomTabNavigator,
   createDrawerNavigator,
-  DrawerItems,
-  createStackNavigator
-} from 'react-navigation'
+  DrawerNavigatorItems as DrawerItems,
+} from 'react-navigation-drawer'
 import AboutScreen from '../screens/AboutScreen'
 import PrivacyPolicyScreen from '../screens/PrivacyPolicySreen'
 import HealthSafetyScreen from '../screens/HealthSafetyScreen'
@@ -39,7 +40,7 @@ export default class Navigator extends Component {
     super(props)
 
     this.state = {
-      loggedIn: User.loggedIn()
+      loggedIn: User.loggedIn(),
     }
 
     this.events = []
@@ -71,38 +72,38 @@ export default class Navigator extends Component {
       Landing: {
         screen           : ObserveStackNavigator,
         navigationOptions: {
-          ...(this.navigationOptions('Observe', 'md-aperture'))
-        }
+          ...(this.navigationOptions('Observe', 'md-aperture')),
+        },
       },
 
       ObservationsNavigator: {
         screen           : ObservationsStackNavigator,
         navigationOptions: {
-          ...(this.navigationOptions('Observations', 'ios-leaf'))
-        }
+          ...(this.navigationOptions('Observations', 'ios-leaf')),
+        },
       },
 
       MapStack: {
         screen           : MapStackNavigator,
         navigationOptions: {
-          ...(this.navigationOptions('Map', 'md-map'))
-        }
+          ...(this.navigationOptions('Map', 'md-map')),
+        },
       },
 
       More: {
         screen           : MoreStackNavigator,
         navigationOptions: {
-          ...(this.navigationOptions('More', 'ios-more'))
-        }
-      }
+          ...(this.navigationOptions('More', 'ios-settings')),
+        },
+      },
     }, {
       initialRouteName: 'Landing',
       animationEnabled: false,
       lazy            : true,
       headerMode      : 'none',
       tabBarOptions   : {
-        activeTintColor: Colors.primary
-      }
+        activeTintColor: Colors.primary,
+      },
     })
   }
 
@@ -117,16 +118,16 @@ export default class Navigator extends Component {
         Registration: {
           screen           : RegistrationScreen,
           navigationOptions: {
-            ...(this.navigationOptions('Register', 'md-person-add', 25))
-          }
+            ...(this.navigationOptions('Register', 'md-person-add', 25)),
+          },
         },
         Login       : {
           screen           : LoginScreen,
           path             : 'social-login/:api_token',
           navigationOptions: {
-            ...(this.navigationOptions('Login', 'md-person', 25))
-          }
-        }
+            ...(this.navigationOptions('Login', 'md-person', 25)),
+          },
+        },
       }
     }
 
@@ -139,9 +140,9 @@ export default class Navigator extends Component {
         Logout: {
           screen           : LoginScreen,
           navigationOptions: {
-            ...(this.navigationOptions('Logout', 'md-log-out', 25))
-          }
-        }
+            ...(this.navigationOptions('Logout', 'md-log-out', 25)),
+          },
+        },
       }
     }
 
@@ -166,7 +167,7 @@ export default class Navigator extends Component {
               return
             }
             props.onItemPress(route)
-          }
+          },
         }}/>
       </ScrollView>
     )
@@ -183,8 +184,8 @@ export default class Navigator extends Component {
       contentOptions  : {
         activeBackgroundColor: '#f7f7f7',
         activeTintColor      : Colors.primary,
-        inactiveTintColor    : '#777777'
-      }
+        inactiveTintColor    : '#777777',
+      },
     }
   }
 
@@ -198,7 +199,7 @@ export default class Navigator extends Component {
    */
   navigationOptions(label, icon, size) {
     if (typeof size === 'undefined') {
-      size = 30
+      size = 22
     }
 
     const renderedIcon = ({tintColor}) => <Icon name={icon} color={tintColor} size={size}/>
@@ -207,7 +208,7 @@ export default class Navigator extends Component {
       drawerLabel: label,
       drawerIcon : renderedIcon,
       tabBarLabel: label,
-      tabBarIcon : renderedIcon
+      tabBarIcon : renderedIcon,
     }
   }
 
@@ -219,7 +220,7 @@ export default class Navigator extends Component {
   ios() {
     const Nav = this.tabs()
 
-    return (<Nav/>)
+    return Nav
   }
 
   /**
@@ -232,15 +233,15 @@ export default class Navigator extends Component {
       Landing: {
         screen           : ObserveStackNavigator,
         navigationOptions: {
-          ...(this.navigationOptions('Observe', 'md-aperture', 25))
-        }
+          ...(this.navigationOptions('Observe', 'md-aperture', 25)),
+        },
       },
 
       ObservationsNavigator: {
         screen           : ObservationsStackNavigator,
         navigationOptions: {
-          ...(this.navigationOptions('My Observations', 'ios-leaf', 25))
-        }
+          ...(this.navigationOptions('My Observations', 'ios-leaf', 25)),
+        },
       },
 
       // Show AccountScreen if user is logged in
@@ -248,17 +249,17 @@ export default class Navigator extends Component {
         Account: {
           screen           : AccountStackNavigator,
           navigationOptions: {
-            ...(this.navigationOptions('Account Settings', 'md-settings', 25))
-          }
-        }
+            ...(this.navigationOptions('Account Settings', 'md-settings', 25)),
+          },
+        },
       } : null),
 
       // Needed to add this here since it needs to go right after the observations item
       MapStack: {
         screen           : MapStackNavigator,
         navigationOptions: {
-          ...(this.navigationOptions('My Observations Map', 'md-map', 25))
-        }
+          ...(this.navigationOptions('My Observations Map', 'md-map', 25)),
+        },
       },
 
       // Get registration routes
@@ -267,46 +268,47 @@ export default class Navigator extends Component {
       About: {
         screen           : AboutScreen,
         navigationOptions: {
-          ...(this.navigationOptions('About Us', 'md-contacts', 25))
-        }
+          ...(this.navigationOptions('About Us', 'md-contacts', 25)),
+        },
       },
 
       PrivacyPolicy: {
         screen           : PrivacyPolicyScreen,
         navigationOptions: {
-          ...(this.navigationOptions('Privacy Policy', 'md-lock', 25))
-        }
+          ...(this.navigationOptions('Privacy Policy', 'md-lock', 25)),
+        },
       },
 
       HealthSafety: {
         screen           : HealthSafetyScreen,
         navigationOptions: {
-          ...(this.navigationOptions('Health and Safety', 'md-heart', 25))
-        }
+          ...(this.navigationOptions('Health and Safety', 'md-heart', 25)),
+        },
       },
 
       // Get logout route
-      ...(this.getLogoutRoute())
+      ...(this.getLogoutRoute()),
     }, {
       initialRouteName: 'Landing',
-      ...(this.drawerOptions())
+      ...(this.drawerOptions()),
     })
 
     const Stack = createStackNavigator({
       HomeStack: Nav,
       Auth     : {
-        screen: AuthScreen
-      }
+        screen: AuthScreen,
+      },
     }, {
       initialRouteName: 'HomeStack',
-      headerMode      : 'none'
+      headerMode      : 'none',
     })
 
-    return (<Stack/>)
+    return Stack
   }
 
   render() {
-    return Platform.select({android: this.android(), ios: this.ios()})
+    const Nav = createAppContainer(Platform.select({android: this.android(), ios: this.ios()}))
+    return <Nav/>
   }
 }
 
@@ -317,6 +319,6 @@ const style = StyleSheet.create({
     fontSize         : 12,
     marginVertical   : Platform.OS === 'android' ? 20 : 0,
     marginTop        : Platform.OS === 'android' ? 20 : 25,
-    paddingHorizontal: 20
-  }
+    paddingHorizontal: 20,
+  },
 })
