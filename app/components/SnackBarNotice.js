@@ -42,7 +42,8 @@ export default class SnackBarNotice extends Component {
       this.state.position,
       {
         toValue : move,
-        duration: 1000
+        duration: 1000,
+        useNativeDriver: false
       }
     ).start()
 
@@ -59,7 +60,8 @@ export default class SnackBarNotice extends Component {
       this.state.position,
       {
         toValue : -60,
-        duration: 500
+        duration: 500,
+        useNativeDriver: false
       }
     ).start()
 

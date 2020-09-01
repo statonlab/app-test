@@ -12,7 +12,7 @@ import {
 import React from 'react'
 import Colors from '../helpers/Colors'
 import Elevation from '../helpers/Elevation'
-import Icon from 'react-native-vector-icons/Feather'
+import Icon from 'react-native-vector-icons/Ionicons'
 
 const isAndroid = Platform.OS === 'android'
 
@@ -50,7 +50,7 @@ export default class AuthScreen extends Screen {
             }}
             onPress={() => this.navigator.goBack()}
           >
-            <Icon name={'arrow-left'} color={Colors.black} size={24}/>
+            <Icon name={'md-arrow-back'} color={Colors.black} size={24}/>
             <Text style={{fontSize: 16, marginLeft: 10, color: Colors.black}}>Back</Text>
           </TouchableOpacity>
         </View>
@@ -76,13 +76,13 @@ export default class AuthScreen extends Screen {
 
           <TouchableOpacity style={styles.button}
                             onPress={() => this.navigator.navigate('Login')}>
-            <Icon name={'user'} color={Colors.primary} size={22}/>
+            <Icon name={'md-person'} color={Colors.primary} size={22}/>
             <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.button}
                             onPress={() => this.navigator.navigate('Registration')}>
-            <Icon name={'user-plus'} color={Colors.primary} size={22}/>
+            <Icon name={'md-person-add'} color={Colors.primary} size={22}/>
             <Text style={styles.buttonText}>Create a New Account</Text>
           </TouchableOpacity>
         </View>

@@ -35,8 +35,8 @@ export default class LoginScreen extends Screen {
     super(props)
 
     this.state = {
-      email   : null,
-      password: null,
+      email   : '',
+      password: '',
       warnings: {}
     }
 

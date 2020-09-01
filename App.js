@@ -4,9 +4,9 @@ import {
   View,
   StyleSheet,
   DeviceEventEmitter,
-  Platform
+  Platform,
 } from 'react-native'
-import AsyncStorage from "@react-native-community/async-storage"
+import AsyncStorage from '@react-native-community/async-storage'
 import Diagnostics from './app/helpers/Diagnostics'
 import Actions from './app/helpers/Actions'
 import SnackBarNotice from './app/components/SnackBarNotice'
@@ -15,17 +15,18 @@ import Observation from './app/helpers/Observation'
 import WelcomeModal from './app/components/WelcomeModal'
 import NotificationsController from './app/components/NotificationsController'
 import ObservationLostImagesFixer from './app/components/ObservationLostImagesFixer'
+import Geolocation from '@react-native-community/geolocation'
 
 export default class App extends Component {
   constructor(props) {
     super(props)
 
-    navigator.geolocation.setRNConfiguration({skipPermissionRequests: false})
+    Geolocation.setRNConfiguration({skipPermissionRequests: false})
 
     this.state = {
       snackMessage        : '',
       appReady            : false,
-      requestNotifications: false
+      requestNotifications: false,
     }
 
     this.events = []
@@ -87,7 +88,7 @@ export default class App extends Component {
   render() {
     const prefix = Platform.select({
       ios    : 'treesnap://',
-      android: 'treesnap://treesnap/'
+      android: 'treesnap://treesnap/',
     })
 
     return (
@@ -123,6 +124,6 @@ export default class App extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
-  }
+    flex: 1,
+  },
 })

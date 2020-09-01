@@ -6,6 +6,7 @@ import States from '../resources/States'
 import Elevation from '../helpers/Elevation'
 import Icon from 'react-native-vector-icons/Ionicons'
 import Colors from '../helpers/Colors'
+import Geolocation from '@react-native-community/geolocation'
 
 export default class MainTrees extends Component {
   /**
@@ -130,8 +131,7 @@ export default class MainTrees extends Component {
       return
     }
 
-    navigator
-      .geolocation
+    Geolocation
       .getCurrentPosition(this._locationChanged.bind(this), error => {
         this._setTrees(null)
       }, {

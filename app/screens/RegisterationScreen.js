@@ -30,12 +30,12 @@ export default class RegistrationScreen extends Screen {
   constructor(props) {
     super(props)
     this.state = {
-      name           : null,
-      email          : null,
+      name           : '',
+      email          : '',
       password       : '',
       confirmPassword: '',
       birth_year     : '',
-      zipcode        : null,
+      zipcode        : '',
       is_anonymous   : true,
       warnings       : {},
       terms          : null,

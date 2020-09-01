@@ -32,6 +32,7 @@ import Popover, { PopoverItem } from '../components/Popover'
 import Analytics from '../helpers/Analytics'
 import geolib from 'geolib'
 import User from '../db/User'
+import Geolocation from '@react-native-community/geolocation'
 
 const android = Platform.OS === 'android'
 
@@ -105,7 +106,7 @@ export default class ObservationsScreen extends Screen {
 
   getLocation() {
     this.setState({refreshing: true})
-    navigator.geolocation.getCurrentPosition(
+    Geolocation.getCurrentPosition(
       this.updateLocation.bind(this),
       this.handleLocationError.bind(this), {
         enableHighAccuracy: !this.showedLocationError,

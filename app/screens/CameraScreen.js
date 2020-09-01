@@ -19,11 +19,10 @@ import IonIcon from 'react-native-vector-icons/Ionicons'
 import Colors from '../helpers/Colors'
 import Elevation from '../helpers/Elevation'
 import File from '../helpers/File'
-import PhotoView from 'react-native-photo-view'
+import PhotoView from 'react-native-photo-view-ex'
 import AndroidStatusBar from '../components/AndroidStatusBar'
 import PinchResponder from '../helpers/PinchResponder'
 import { isIphoneX, ifIphoneX } from 'react-native-iphone-x-helper'
-import DeviceInfo from 'react-native-device-info'
 
 const android = Platform.OS === 'android'
 
@@ -598,12 +597,6 @@ export default class CameraScreen extends Screen {
 
     let fixOrientation     = true
     let forceUpOrientation = true
-
-    // Mitigate our of memory error for android devices that have less than 1300MB memory
-    if (android && DeviceInfo.getTotalMemory() < (1300 * 1024 * 1024)) {
-      fixOrientation     = false
-      forceUpOrientation = false
-    }
 
     try {
       const data = await this.camera.takePictureAsync({

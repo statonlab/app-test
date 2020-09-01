@@ -12,7 +12,7 @@ import {
   Platform
 } from 'react-native'
 import Colors from '../helpers/Colors'
-import PhotoView from 'react-native-photo-view'
+import PhotoView from 'react-native-photo-view-ex'
 import {isIphoneX} from 'react-native-iphone-x-helper'
 
 export default class ImageSlider extends Component {

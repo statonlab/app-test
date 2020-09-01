@@ -8,12 +8,13 @@ import {
   Platform,
   TouchableOpacity,
   Alert,
-  Dimensions
+  Dimensions,
 } from 'react-native'
 import MapView from 'react-native-maps'
 import Colors from '../helpers/Colors'
 import Elevation from '../helpers/Elevation'
 import Icon from 'react-native-vector-icons/Ionicons'
+import Geolocation from '@react-native-community/geolocation'
 
 export default class MarkersMap extends Component {
   constructor(props) {
@@ -28,11 +29,11 @@ export default class MarkersMap extends Component {
         ...Platform.select({
           ios    : {},
           android: {
-            'terrain': 'Topographic'
-          }
-        })
+            'terrain': 'Topographic',
+          },
+        }),
       },
-      typeDimensions: {}
+      typeDimensions: {},
     }
   }
 
@@ -77,7 +78,7 @@ export default class MarkersMap extends Component {
         latitude      : marker.coord.latitude,
         longitude     : marker.coord.longitude,
         latitudeDelta : 0.0322,
-        longitudeDelta: 0.0321
+        longitudeDelta: 0.0321,
       }, 1000)
     }, 500)
 
@@ -90,12 +91,12 @@ export default class MarkersMap extends Component {
    * @returns {{XML}}
    */
   render() {
-    const types = this.state.types
-    const width = Dimensions.get('window').width
+    const types         = this.state.types
+    const width         = Dimensions.get('window').width
     const lastItemStyle = {
       borderTopRightRadius   : 20,
       borderBottomRightRadius: 20,
-      borderRightWidth       : 0
+      borderRightWidth       : 0,
     }
     return (
       <View style={{flex: 1}}>
@@ -122,7 +123,7 @@ export default class MarkersMap extends Component {
           right          : 60,
           width          : Platform.select({ios: 200, android: 270}),
           borderRadius   : 20,
-          ...(new Elevation(5))
+          ...(new Elevation(5)),
         }}>
           {Object.keys(types).map((key, i) => {
             return (
@@ -137,12 +138,12 @@ export default class MarkersMap extends Component {
                   borderColor     : '#eee',
                   ...(i === 0 ? {
                     borderTopLeftRadius   : 20,
-                    borderBottomLeftRadius: 20
+                    borderBottomLeftRadius: 20,
                   } : null),
                   ...Platform.select({
                     ios    : i === 1 ? lastItemStyle : null,
-                    android: i === 2 ? lastItemStyle: null
-                  })
+                    android: i === 2 ? lastItemStyle : null,
+                  }),
                 }}
                 key={key}
                 onPress={() => {
@@ -151,7 +152,7 @@ export default class MarkersMap extends Component {
                 <Text style={{
                   fontSize: 12,
                   color   : '#444',
-                  ...(this.state.type === key ? {color: Colors.primary, fontWeight: 'bold'} : {})
+                  ...(this.state.type === key ? {color: Colors.primary, fontWeight: 'bold'} : {}),
                 }}>{types[key]}</Text>
               </TouchableOpacity>
             )
@@ -159,19 +160,19 @@ export default class MarkersMap extends Component {
         </View>
         <TouchableOpacity
           onPress={() => {
-            navigator.geolocation.getCurrentPosition(
+            Geolocation.getCurrentPosition(
               ({coords}) => {
                 if (this.refs.map) {
                   this.refs.map.animateToRegion({
                     latitude      : coords.latitude,
                     longitude     : coords.longitude,
                     latitudeDelta : 0.059,
-                    longitudeDelta: 0.059
+                    longitudeDelta: 0.059,
                   })
                 }
               },
               (error) => Alert.alert('Location Error', 'Are location services on?'),
-              {enableHighAccuracy: true}
+              {enableHighAccuracy: true},
             )
           }}
           style={{
@@ -184,14 +185,14 @@ export default class MarkersMap extends Component {
             width          : 40,
             alignItems     : 'center',
             justifyContent : 'center',
-            ...(new Elevation(5))
+            ...(new Elevation(5)),
           }}>
           <Icon name={Platform.select({ios: 'ios-locate', android: 'md-locate'})}
                 color={'#222'}
                 size={24}
                 style={{
                   marginTop: Platform.select({ios: 2, android: 0}),
-                  ...(new Elevation(2))
+                  ...(new Elevation(2)),
                 }}
           />
         </TouchableOpacity>
@@ -277,7 +278,7 @@ MarkersMap.propTypes = {
   startingMarker: PropTypes.object,
   zoom          : PropTypes.bool,
   onCalloutPress: PropTypes.func,
-  onUnmount     : PropTypes.func
+  onUnmount     : PropTypes.func,
 }
 
 MarkersMap.defaultProps = {
@@ -287,23 +288,23 @@ MarkersMap.defaultProps = {
   onCalloutPress: () => {
   },
   onUnmount     : () => {
-  }
+  },
 }
 
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
 
   map: {
     width: undefined,
-    flex : 1
+    flex : 1,
   },
 
   calloutText: {
     fontSize: 12,
-    color   : '#444'
+    color   : '#444',
   },
 
   footer: {
@@ -312,7 +313,7 @@ const styles = StyleSheet.create({
     justifyContent : 'space-between',
     alignItems     : 'center',
     padding        : 10,
-    backgroundColor: '#24292e'
+    backgroundColor: '#24292e',
   },
 
   button: {
@@ -320,16 +321,16 @@ const styles = StyleSheet.create({
     paddingVertical  : 10,
     paddingHorizontal: 15,
     borderRadius     : 2,
-    marginLeft       : 15
+    marginLeft       : 15,
   },
 
   buttonText: {
     color    : Colors.warningText,
-    textAlign: 'center'
+    textAlign: 'center',
   },
 
   text: {
     color     : '#eee',
-    fontWeight: '500'
-  }
+    fontWeight: '500',
+  },
 })
