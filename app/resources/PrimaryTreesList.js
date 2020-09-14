@@ -125,6 +125,32 @@ const TreesList = [
     }
   },
   {
+    title    : 'Butternut',
+    image    : require('../img/butternut/fig2.jpg'),
+    latinName: 'Juglans cinerea',
+    locations: {
+      alwaysShow: true,
+    }
+  },
+  {
+    title    : 'Pinyon Pine',
+    image    : require('../img/pinyon/male_cones.jpg'),
+    latinName: 'Pinus edulis',
+    locations: {
+      only: [
+        'California',
+        'Arizona',
+        'Nevada',
+        'New Mexico',
+        'Colorado',
+        'Utah',
+        'Texas',
+        'Oklahoma',
+        'Wyoming',
+      ]
+    }
+  },
+  {
     title    : 'Other',
     latinName: 'Other trees that aren\'t listed above',
     image    : require('../img/forest.jpg'),

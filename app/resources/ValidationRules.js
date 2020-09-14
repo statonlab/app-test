@@ -51,6 +51,15 @@ const ValidationRules = {
   canopyHealth           : t.enums.of(DCP.canopyHealth.selectChoices),
   standTagging           : t.enums.of(DCP.standTagging.selectChoices),
   plantedWild            : t.enums.of(DCP.plantedWild.selectChoices),
+  bearingFruit           : t.enums.of(DCP.bearingFruit.selectChoices),
+  crownDieback           : t.enums.of(DCP.crownDieback.selectChoices),
+  hybridAttributes       : t.enums.of(DCP.hybridAttributes.selectChoices),
+  hybridTraits           : t.maybe(t.String),
+  breastNumeric          : t.String,
+  canopyCones            : t.enums.of(DCP.canopyCones.selectChoices),
+  conesOpenClosed        : t.enums.of(DCP.conesOpenClosed.selectChoices),
+  neighborCones          : t.enums.of(DCP.neighborCones.selectChoices),
+  neighborHealth         : t.enums.of(DCP.neighborHealth.selectChoices),
 
 
   //Deprecated choices

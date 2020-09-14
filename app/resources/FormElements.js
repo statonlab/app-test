@@ -503,6 +503,102 @@ const DCP = {
     selectChoices: ['Planted', 'Wild'],
     placeHolder  : 'Please select',
   },
+
+  bearingFruit: {
+    label        : 'Bearing Fruit',
+    description  : 'Is this tree bearing fruit?',
+    selectChoices: ['Yes - Bumper crop', 'Yes - A lot', 'Yes - A few', 'No'],
+    placeHolder  : 'Please select',
+  },
+
+  crownDieback: {
+    label        : 'Crown Dieback',
+    description  : 'What is the percentage of crown dieback?',
+    selectChoices: [
+      'No dieback / dead branches', 
+      '25% crown dieback',
+      '50% crown dieback', 
+      '75% crown dieback', 
+      'near 100% crown dieback', 
+      'putatively dead'
+    ],
+    placeHolder  : 'Please select',
+  },
+
+  hybridAttributes: {
+    label        : 'Hybrid Attributes',
+    description  : 'Are there any apparent hybrid attributes?',
+    selectChoices: ['Has apparent hybrid attributes', 'No hybrid attributes'],
+    placeHolder  : 'Please select',
+  },
+
+  hybridTraits: {
+    label        : 'Hybrid Traits',
+    description  : 'Do you see any hybrid traits? Check all that apply.',
+    selectChoices: ['Leaves', 'Nuts', 'Leaf Scars', 'Lenticels'],
+    placeHolder  : 'No hybrid traits',
+    multiCheck   : true,
+  },
+
+  breastNumeric: {
+    label            : 'Breast Diameter',
+    numeric          : true,
+    useCircumference : true,
+    description      : 'Please enter the diameter, in inches, at breast height (4-1/2 feet from the ground) of this tree below. Choose the largest stem if there are multiple. Is this a rough estimate or a precise measurement?',
+    units            : {US: 'Inches', metric: 'cm'},
+    images           : [require('../img/DCP/diameter.jpg')],
+    captions         : ['Note: if the tree is less than 4 feet tall, please take the stem diameter at the height of the first branch.'],
+    selectChoices    : ['Measured', 'Estimated'],
+    default          : 'Estimated',
+    placeHolder      : 'Diameter',
+    numberPlaceHolder: 'Tap to enter diameter',
+  },
+
+  canopyCones: {
+    label            : 'Canopy Cones',
+    description      : 'Approximately what percentage of your tree\'s canopy has cones?',
+    selectChoices    : ['< 25%', '25-50%', '50-75%', '> 75%'],
+    placeHolder      : 'Please select',
+  },
+
+  conesOpenClosed: {
+    label        : 'Tree Cones',
+    description  : 'Select the option that best describes the cones on your tree.',
+    selectChoices: [
+      '100% brown and open', 
+      '75% brown and open, 25% green/purple and closed',
+      '50% brown and open, 50% green/purple and closed',
+      '25% brown and open, 75% green/purple and closed',
+      '100% green/purple and closed',
+    ],
+    placeHolder  : 'Please select',
+    images       : [
+      require('../img/pinyon/closed_cone.jpg'),
+      require('../img/pinyon/small_closed_cone.jpg'),
+      require('../img/pinyon/open_cone.jpg'),
+      require('../img/pinyon/open_cone_with_seeds.jpg'),
+    ],
+    captions     : [
+      'Closed cone',
+      'Small closed cone',
+      'Open cone',
+      'Open cone with seeds',
+    ],
+  },
+
+  neighborCones: {
+    label        : 'Neighbor Cones',
+    description  : 'Do you see other neighboring trees with cones (within 100 yards of your tree)?',
+    selectChoices: ['Yes', 'No'],
+    placeHolder  : 'Please select',
+  },
+
+  neighborHealth: {
+    label        : 'Neighbor Health',
+    description  : 'Do your tree and neighboring trees appear to be green and healthy?',
+    selectChoices: ['Yes', 'No'],
+    placeHolder  : 'Please select',
+  }
 }
 
 export default DCP
