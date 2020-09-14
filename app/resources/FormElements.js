@@ -541,7 +541,7 @@ const DCP = {
   },
 
   breastNumeric: {
-    label            : 'Breast Diameter',
+    label            : 'Tree Diameter',
     numeric          : true,
     useCircumference : true,
     description      : 'Please enter the diameter, in inches, at breast height (4-1/2 feet from the ground) of this tree below. Choose the largest stem if there are multiple. Is this a rough estimate or a precise measurement?',
