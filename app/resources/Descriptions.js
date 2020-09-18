@@ -714,5 +714,139 @@ export const Plants = {
       oregonAshHealth: true,
     },
   },
+
+  'Butternut': {
+    image           : require('../img/butternut/fig2.jpg'),
+    latinName       : 'Juglans cinerea',
+    maps            : [
+      require('../img/butternut/map.jpg'),
+    ],
+    images          : [
+      require('../img/butternut/fig1.jpg'),
+      require('../img/butternut/fig2.jpg'),
+      require('../img/butternut/fig3.jpg'),
+      require('../img/butternut/fig4.jpg'),
+      require('../img/butternut/fig5.jpg'),
+      require('../img/butternut/fig6.jpg'),
+    ],
+    captions        : [
+      'Bark on lower bole in Hoosier National Forest. Photo credit: Lenny Farlee.',
+      'Butternut fruit hanging on tree branch. Photo credit: Martin Williams.',
+      'Butternut fruit decaying on the ground. Photo credit: Sean Hoban.',
+      'Heavily diseased butternut bole. Photo credit: Lenny Farlee.',
+      'Leaf of butternut. Photo credit: Andrea Brennan.',
+      'Butternut leaf scar. Photo credit: Lenny Farlee.',
+    ],
+    descriptionCards: [
+      {
+        title: 'Introduction',
+        body : [
+          <Text style={styles.paragraph}>Butternut</Text>,
+          <Text style={styles.paragraph}>Butternut is relatively uncommon, and it readily hybridizes with Juglans ailantifolia, or Japanese
+              walnut. We are seeking out butternut trees that closely resemble the native species for future
+              conservation efforts. We realize that it can be hard to distinguish J cinerea from hybrids with J
+              ailantifolia, and the hybrids may resemble either parent or contain traits of each. We will accept
+              trees that have hybrid characteristics.</Text>,
+        ],
+      },
+      {
+        title: 'Description',
+        body : [
+          <Text style={styles.paragraph}>Butternut belongs to the same genus as black walnut and has a compound leaf with 9-17 leaflets
+              per leaf. Bark of a mature tree is platy and ash-gray with dark gray fissures between the platy
+              ridges. On small twigs, lenticels are round (hybrids are elongated); leaf scar is not notched
+              (hybrids may have a notch on the ‘forehead’ of the ‘monkey face’); leaves are glossy (hybrids
+              tend to be hairy); nuts have sharp ridges (hybrids tend to be smoother and have a prominent
+              suture along its center).</Text>,
+        ],
+      },
+      {
+        title: 'Challenges',
+        body : [
+          <Text style={styles.paragraph}>Butternut is disappearing from a pathogen known as Ophiognomonia clavigignenti-
+              juglandacearum (Oc-j). We are interested in the location of survivor trees for future seed
+              collection and grafting.</Text>,
+        ],
+      },
+    ],
+    formProps       : {
+      heightNumeric          : true,
+      breastNumeric          : true,
+      locationCharacteristics: true,
+      bearingFruit           : true,
+      crownDieback           : true,
+      hybridAttributes       : true,
+      hybridTraits           : true,
+    },
+  },
+
+  'Pinyon Pine': {
+    image           : require('../img/pinyon/male_cones.jpg'),
+    latinName       : 'Pinus edulis',
+    maps            : [
+      require('../img/pinyon/map.jpg'),
+    ],
+    images          : [
+      require('../img/pinyon/bark.jpg'),
+      require('../img/pinyon/closed_cone.jpg'),
+      require('../img/pinyon/male_cones.jpg'),
+      require('../img/pinyon/needles.jpg'),
+      require('../img/pinyon/open_cone.jpg'),
+      require('../img/pinyon/open_cone_with_seeds.jpg'),
+      require('../img/pinyon/pinyon_juniper_woodland.jpg'),
+      require('../img/pinyon/pinyon_tree.jpg'),
+      require('../img/pinyon/small_closed_cone.jpg'),
+      require('../img/pinyon/stages.jpg'),
+    ],
+    captions        : [
+      'Bark',
+      'Closed cone',
+      'Male cones',
+      'Needles',
+      'Open cone',
+      'Open cone with seeds',
+      'Pinyon juniper woodland',
+      'Pinyon tree',
+      'Small closed cone',
+      'Stages of pinus cone development',
+    ],
+    descriptionCards: [
+      {
+        title: 'Introduction',
+        body : [
+          <Text style={styles.paragraph}>Pinyon Pine</Text>,
+          <Text style={styles.paragraph}>We need pinyon pine seed for a reforestation project in the area burned by the Las Conchas Fire. 
+              Tracking cone availability and readiness for harvest will help us gather the needed seed, and we need help in determining when 
+              and where trees have cones with ripe seed. Pinyon pine seed is valuable to both wildlife and people, so we would only 
+              collect a small amount of seed in any area, leaving enough seed for others to enjoy.</Text>,
+        ],
+      },
+      {
+        title: 'Description',
+        body : [
+          <Text style={styles.paragraph}>Pinyon pine is a short bushy evergreen tree with two needles in a sheath or bundle. The needles are
+            a half inch to two inches long. It often grows with juniper in lower elevation mountain foothills environments.</Text>,
+        ],
+      },
+      {
+        title: 'Challenges',
+        body : [
+          <Text style={styles.paragraph}>A significant limitation to reforesting the Las Conchas Fire area is the lack of good local seed. 
+            It is critical to find and collect tree seeds for the purpose of growing seedlings from them in a forest nursery and then planting 
+            them to restore these post-fire landscapes. Pinyon pine cone and seed crops vary by year and by place, with good crops of seeds 
+            only available every 3-7 years. This makes it hard to count on collecting seeds in a particular location, so extensive seed 
+            scouting is necessary to support collection efforts.</Text>,
+        ],
+      },
+    ],
+    formProps       : {
+      heightNumeric          : true,
+      breastNumeric          : true,
+      canopyCones            : true,
+      conesOpenClosed        : true,
+      neighborCones          : true,
+      neighborHealth         : true,
+    },
+  },
 }
 
