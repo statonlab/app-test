@@ -59,14 +59,14 @@ class Observation {
 
       return response
     } catch (error) {
-      console.log('TreeSnap Error', error)
+      console.error('TreeSnap Error', error)
       // If the observation got uploaded but images failed
       // Request to delete the observation from the server
       if (response !== null) {
         try {
           await this.delete(observation)
         } catch (error) {
-          console.log('TreeSnap Error', error)
+          console.error('TreeSnap Error', error)
           // Ignore error here since we are notifying the user of the error below
         }
       }

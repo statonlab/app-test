@@ -1,6 +1,6 @@
 {
   "name": "RealmJS",
-  "version": "6.1.0",
+  "version": "6.1.2",
   "summary": "Realm is a mobile database: an alternative to SQLite and key-value stores",
   "license": "See the actual license in the file LICENSE",
   "authors": {
@@ -18,7 +18,7 @@
   "prepare_command": "node ./scripts/download-realm.js ios --sync",
   "script_phases": {
     "name": "Download Realm Core & Sync",
-    "script": "echo \"Using Node.js $(node --version)\" && node ${PODS_TARGET_SRCROOT}/scripts/download-realm.js ios --sync",
+    "script": "echo \"Using Node.js $(node --version)\" && node \"${PODS_TARGET_SRCROOT}/scripts/download-realm.js\" ios --sync",
     "execution_position": "before_compile"
   },
   "source_files": [
@@ -51,13 +51,13 @@
     "CLANG_CXX_LIBRARY": "libc++",
     "CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF": "NO",
     "CLANG_WARN_DOCUMENTATION_COMMENTS": "NO",
-    "CURRENT_PROJECT_VERSION": "6.1.0",
+    "CURRENT_PROJECT_VERSION": "6.1.2",
     "VERSIONING_SYSTEM": "apple-generic",
     "HEADER_SEARCH_PATHS": "\"$(PODS_TARGET_SRCROOT)/src/\" \"$(PODS_TARGET_SRCROOT)/src/jsc/\" \"$(PODS_TARGET_SRCROOT)/src/object-store/src/\" \"$(PODS_TARGET_SRCROOT)/src/object-store/external/json/\" \"$(PODS_TARGET_SRCROOT)/vendor/\" \"$(PODS_TARGET_SRCROOT)/vendor/realm-ios/include/\" \"$(PODS_TARGET_SRCROOT)/react-native/ios/RealmReact/\" \"$(PODS_ROOT)/Headers/Public/React-Core/\""
   },
   "ios": {
     "vendored_libraries": [
-      "vendor/realm-ios/librealm-ios.a",
+      "vendor/realm-ios/librealm-sync-ios.a",
       "vendor/realm-ios/librealm-parser-ios.a"
     ]
   },
