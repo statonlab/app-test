@@ -1,0 +1,23 @@
+{
+  "name": "React-runtimeexecutor",
+  "version": "1000.0.0",
+  "summary": "-",
+  "homepage": "https://reactnative.dev/",
+  "license": "MIT",
+  "authors": "Facebook, Inc. and its affiliates",
+  "platforms": {
+    "ios": "10.0",
+    "tvos": "10.0"
+  },
+  "source": {
+    "git": "https://github.com/facebook/react-native.git",
+    "commit": "fcb4eacd325b7aef573622b041fbbe7c379b5ed2"
+  },
+  "source_files": "**/*.{cpp,h}",
+  "header_dir": "ReactCommon",
+  "dependencies": {
+    "React-jsi": [
+      "1000.0.0"
+    ]
+  }
+}

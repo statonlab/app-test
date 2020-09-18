@@ -140,8 +140,8 @@ android {
         applicationId "com.treesource"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1901
-        versionName "1.14.0"
+        versionCode 2000
+        versionName "1.15.0"
         missingDimensionStrategy 'react-native-camera', 'general'
         multiDexEnabled true
         ndk {
@@ -220,14 +220,14 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation "com.facebook.react:react-native:+"  // From node_modules
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
-    debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
+    implementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
         exclude group:'com.facebook.fbjni'
     }
-    debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {
+    implementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {
         exclude group:'com.facebook.flipper'
         exclude group:'com.squareup.okhttp3', module:'okhttp'
     }
-    debugImplementation("com.facebook.flipper:flipper-fresco-plugin:${FLIPPER_VERSION}") {
+    implementation("com.facebook.flipper:flipper-fresco-plugin:${FLIPPER_VERSION}") {
         exclude group:'com.facebook.flipper'
     }
 
