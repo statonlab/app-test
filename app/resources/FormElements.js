@@ -528,7 +528,7 @@ const DCP = {
   hybridAttributes: {
     label        : 'Hybrid Attributes',
     description  : 'Are there any apparent hybrid attributes?',
-    selectChoices: ['Has apparent hybrid attributes', 'No hybrid attributes'],
+    selectChoices: ['Has apparent hybrid attributes', 'No hybrid attributes', 'Not sure'],
     placeHolder  : 'Please select',
   },
 
