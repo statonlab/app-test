@@ -193,16 +193,39 @@ class User {
     let platform = Platform.select({ios: 'ios', android: 'android'})
     let url      = `https://treesnap.org/login/google?redirect_to=https://treesnap.org/mobile/login/${platform}`
 
-    if (__DEV__) {
-      // We have to use .app here instead of .test because it needs to be
-      // SSL enabled for social networks to accept the connection
-      url = `https://treesnap.app/login/google?redirect_to=https://treesnap.app/mobile/login/${platform}`
-    }
+    // if (__DEV__) {
+    //   // We have to use .app here instead of .test because it needs to be
+    //   // SSL enabled for social networks to accept the connection
+    //   url = `https://treesnap.test/login/google?redirect_to=https://treesnap.app/mobile/login/${platform}`
+    // }
 
     try {
       let supported = await Linking.canOpenURL(url)
       if (!supported) {
         Alert.alert('Error', 'Unable to link to Google. Please use Email login instead.')
+        return
+      }
+
+      return Linking.openURL(url)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  async loginWithApple() {
+    let platform = Platform.select({ios: 'ios', android: 'android'})
+    let url      = `https://treesnap.org/login/apple?redirect_to=https://treesnap.org/mobile/login/${platform}`
+
+    // if (__DEV__) {
+    //   // We have to use .app here instead of .test because it needs to be
+    //   // SSL enabled for social networks to accept the connection
+    //   url = `https://treesnap.app/login/apple?redirect_to=https://treesnap.app/mobile/login/${platform}`
+    // }
+
+    try {
+      let supported = await Linking.canOpenURL(url)
+      if (!supported) {
+        Alert.alert('Error', 'Unable to link to Apple. Please use Email login instead.')
         return
       }
 

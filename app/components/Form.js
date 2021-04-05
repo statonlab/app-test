@@ -99,37 +99,45 @@ export default class Form extends Component {
   setUpComponent() {
     if (this.props.edit) {
       // For every key, set the state
+      const state = {}
       Object.keys(this.props.entryInfo).map(key => {
         if (key === 'meta_data') {
-          this.setState({metadata: JSON.parse(this.props.entryInfo[key])})
+          state.metadata = JSON.parse(this.props.entryInfo[key])
+          // this.setState({metadata: JSON.parse(this.props.entryInfo[key])})
           return
         }
 
         if (key === 'images') {
-          this.setState({images: JSON.parse(this.props.entryInfo[key])})
+          state.images = JSON.parse(this.props.entryInfo[key])
+          // this.setState({images: JSON.parse(this.props.entryInfo[key])})
           return
         }
 
         if (key === 'has_private_comments') {
-          this.setState({hasPrivateComments: this.props.entryInfo[key]})
+          state.hasPrivateComments = this.props.entryInfo[key]
+          // this.setState({hasPrivateComments: this.props.entryInfo[key]})
           return
         }
 
         if (key === 'is_private') {
-          this.setState({isPrivate: this.props.entryInfo[key]})
+          state.isPrivate = this.props.entryInfo[key]
+          // this.setState({isPrivate: this.props.entryInfo[key]})
           return
         }
 
         if (key === 'otherIdentifiers') {
-          const observation = realm.objects('Submission').filtered('id = $0', this.props.entryInfo.id)[0]
-          this.setState({otherIdentifiers: observation.otherIdentifiers.map(o => o.value)})
+          const observation      = realm.objects('Submission').filtered('id = $0', this.props.entryInfo.id)[0]
+          state.otherIdentifiers = observation.otherIdentifiers.map(o => o.value)
+          // this.setState({otherIdentifiers: observation.otherIdentifiers.map(o => o.value)})
           return
         }
 
-        this.setState({[key]: this.props.entryInfo[key]})
+        state[key] = this.props.entryInfo[key]
+        // this.setState({[key]: this.props.entryInfo[key]})
       })
 
       this.primaryKey = this.props.entryInfo.id
+      this.setState(state)
     } else {
       try {
         this.primaryKey = this.generatePrimaryKey()

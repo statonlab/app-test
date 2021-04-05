@@ -43,6 +43,8 @@ export default class Errors {
     }
 
     this._extractErrors(error)
+
+    console.error(error)
   }
 
   /**

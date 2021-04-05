@@ -1,4 +1,4 @@
-import {createStackNavigator} from 'react-navigation'
+import { createStackNavigator } from 'react-navigation-stack'
 import LandingScreen from '../screens/LandingScreen'
 import SubmittedScreen from '../screens/SubmittedScreen'
 import CameraScreen from '../screens/CameraScreen'
@@ -16,7 +16,7 @@ function navigationOptions(label, icon, size) {
     drawerLabel: label,
     drawerIcon : renderedIcon,
     tabBarLabel: label,
-    tabBarIcon : renderedIcon
+    tabBarIcon : renderedIcon,
   }
 }
 
@@ -24,36 +24,36 @@ let ObserveStackNavigator = new createStackNavigator({
   Landing: {
     screen           : LandingScreen,
     navigationOptions: {
-      ...(navigationOptions('My Observations', 'md-home', 25))
-    }
+      ...(navigationOptions('My Observations', 'md-home', 25)),
+    },
   },
 
   Tree: {
     screen           : TreeScreen,
     navigationOptions: {
       gesturesEnabled: false,
-      drawerLockMode : 'locked-closed'
-    }
+      drawerLockMode : 'locked-closed',
+    },
   },
 
   Camera: {
     screen           : CameraScreen,
     navigationOptions: {
       gesturesEnabled: false,
-      drawerLockMode : 'locked-closed'
-    }
+      drawerLockMode : 'locked-closed',
+    },
   },
 
   Submitted: {
     screen           : SubmittedScreen,
     navigationOptions: {
       gesturesEnabled: false,
-      drawerLockMode : 'locked-closed'
-    }
-  }
+      drawerLockMode : 'locked-closed',
+    },
+  },
 }, {
   initialRouteName: 'Landing',
-  headerMode      : 'none'
+  headerMode      : 'none',
 })
 
 ObserveStackNavigator.navigationOptions = ({navigation}) => {
@@ -66,7 +66,7 @@ ObserveStackNavigator.navigationOptions = ({navigation}) => {
 
   return {
     drawerLockMode,
-    tabBarVisible
+    tabBarVisible,
   }
 }
 

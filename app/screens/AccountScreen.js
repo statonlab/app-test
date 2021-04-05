@@ -137,7 +137,7 @@ export default class AccountScreen extends Screen {
                   <View style={styles.row}>
                     <View
                       style={styles.touchableRow}>
-                      <Text style={[styles.label, styles.labelFullWidth]}>You are logged in using {this.user.provider === 'google' ? 'Google' : null}</Text>
+                      <Text style={[styles.label, styles.labelFullWidth]}>You are logged in using {this.user.provider}</Text>
                       <Icon name={this.user.provider === 'google' ? 'logo-google' : ''} size={22} color={this.user.provider === 'google' ? '#d34836' : '#777'}/>
                     </View>
                   </View>

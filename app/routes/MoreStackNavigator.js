@@ -1,4 +1,4 @@
-import {createStackNavigator} from 'react-navigation'
+import { createStackNavigator } from 'react-navigation-stack'
 import IntermediateAccountScreen from '../screens/IntermediateAccountScreen'
 import IOSMoreScreen from '../screens/IOSMoreScreen'
 import AboutScreen from '../screens/AboutScreen'
@@ -15,38 +15,38 @@ import AuthScreen from '../screens/AuthScreen'
  */
 const MoreStackNavigator = new createStackNavigator({
   More               : {
-    screen: IOSMoreScreen
+    screen: IOSMoreScreen,
   },
   Account            : {
-    screen: IntermediateAccountScreen
+    screen: IntermediateAccountScreen,
   },
   PersonalInformation: {
-    screen: PersonalInformationScreen
+    screen: PersonalInformationScreen,
   },
   ChangePassword     : {
-    screen: ChangePasswordScreen
+    screen: ChangePasswordScreen,
   },
   About              : {
-    screen: AboutScreen
+    screen: AboutScreen,
   },
   HealthSafety       : {
-    screen: HealthSafetyScreen
+    screen: HealthSafetyScreen,
   },
   PrivacyPolicy      : {
-    screen: PrivacyPolicyScreen
+    screen: PrivacyPolicyScreen,
   },
   Login              : {
     screen: LoginScreen,
   },
   Registration       : {
-    screen: RegistrationScreen
+    screen: RegistrationScreen,
   },
   Auth               : {
-    screen: AuthScreen
-  }
+    screen: AuthScreen,
+  },
 }, {
   initialRouteName: 'More',
-  headerMode      : 'none'
+  headerMode      : 'none',
 })
 
 MoreStackNavigator.navigationOptions = ({navigation}) => {
@@ -59,7 +59,7 @@ MoreStackNavigator.navigationOptions = ({navigation}) => {
 
   return {
     drawerLockMode,
-    tabBarVisible
+    tabBarVisible,
   }
 }
 
