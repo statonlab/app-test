@@ -1,8 +1,8 @@
 import React from 'react'
 import ObservationsScreen from '../screens/ObservationsScreen'
 import ObservationScreen from '../screens/ObservationScreen'
-import {createStackNavigator} from 'react-navigation'
-import {DeviceEventEmitter} from 'react-native'
+import { createStackNavigator } from 'react-navigation-stack'
+import { DeviceEventEmitter } from 'react-native'
 
 const Nav = new createStackNavigator({
   Observations: {
@@ -12,20 +12,20 @@ const Nav = new createStackNavigator({
         tabBarOnPress: ({scene, jumpToIndex}) => {
           DeviceEventEmitter.emit('observationsScreenRequested')
           jumpToIndex(scene.index)
-        }
+        },
       }
-    }
+    },
   },
 
   Observation: {
     screen           : ObservationScreen,
     navigationOptions: {
       drawerLockMode: 'locked-closed',
-      tabBarVisible : false
-    }
-  }
+      tabBarVisible : false,
+    },
+  },
 }, {
-  headerMode: 'none'
+  headerMode: 'none',
 })
 
 Nav.navigationOptions = ({navigation}) => {
@@ -42,7 +42,7 @@ Nav.navigationOptions = ({navigation}) => {
 
   return {
     drawerLockMode,
-    tabBarVisible
+    tabBarVisible,
   }
 }
 

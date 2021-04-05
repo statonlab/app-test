@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import {
   ScrollView,
@@ -14,11 +14,11 @@ import {
   Platform,
   KeyboardAvoidingView,
   Alert,
-  Linking
+  Linking,
 } from 'react-native'
 import realm from '../db/Schema'
 import Colors from '../helpers/Colors'
-import {ifIphoneX} from 'react-native-iphone-x-helper'
+import { ifIphoneX } from 'react-native-iphone-x-helper'
 import DateModal from './DateModal'
 import AText from './Atext'
 import User from '../db/User'
@@ -40,7 +40,7 @@ export default class WelcomeModal extends Component {
       email        : '',
       password     : '',
       dateOfBirth  : new Date().getFullYear() - 13,
-      showPassword : false
+      showPassword : false,
     }
 
     this.loggingIn = false
@@ -57,13 +57,13 @@ export default class WelcomeModal extends Component {
     realm.write(() => {
       realm.create('Guide', {
         screen : 'WelcomeModal',
-        version: 1
+        version: 1,
       })
     })
 
     this.setState({
       show         : true,
-      lastPageIndex: this.getPages().length - 1
+      lastPageIndex: this.getPages().length - 1,
     })
 
     Linking.addEventListener('url', this._handleOpenURL.bind(this))
@@ -77,7 +77,7 @@ export default class WelcomeModal extends Component {
     let {width}   = Dimensions.get('window')
     let pageStyle = [
       style.body,
-      {width}
+      {width},
     ]
 
 
@@ -118,12 +118,12 @@ export default class WelcomeModal extends Component {
           by providing accurate coordinates only to authorized
           users such as scientists and administrators.
         </Text>
-      </View>
+      </View>,
     ]
 
     if (!User.loggedIn()) {
       // Register Page
-      pages.push(this.getRegistrationPage(pageStyle, width))
+      // pages.push(this.getRegistrationPage(pageStyle, width))
     }
 
     return pages
@@ -136,7 +136,7 @@ export default class WelcomeModal extends Component {
       name      : this.state.name,
       email     : this.state.email,
       password  : this.state.password,
-      birth_year: this.state.dateOfBirth
+      birth_year: this.state.dateOfBirth,
     }).then(() => {
       if (this.spinner) {
         this.spinner.close()
@@ -177,7 +177,7 @@ export default class WelcomeModal extends Component {
           <Text style={style.title}>Take Action Today!</Text>
           <Text style={[style.bodyText, {
             marginBottom: 22,
-            alignItems  : 'flex-start'
+            alignItems  : 'flex-start',
           }]}>
             Register an account now and start snapping
           </Text>
@@ -237,7 +237,7 @@ export default class WelcomeModal extends Component {
                   color     : Colors.primary,
                   fontSize  : 12,
                   fontWeight: 'normal',
-                  textAlign : 'right'
+                  textAlign : 'right',
                 }]}>
                   {this.state.showPassword ? 'HIDE' : 'SHOW'}
                 </Text>
@@ -281,7 +281,7 @@ export default class WelcomeModal extends Component {
             <TouchableOpacity
               style={[style.button, style.isGoogle, {
                 flexDirection: 'row',
-                alignItems   : 'center'
+                alignItems   : 'center',
               }]}
               onPress={User.loginWithGoogle.bind(this)}>
               <Icon name={'logo-google'} size={20} color={Colors.googleRedText} style={{marginRight: 10}}/>
@@ -348,7 +348,7 @@ export default class WelcomeModal extends Component {
     this.scrollview.scrollTo({
       x       : width * currentPage,
       y       : 0,
-      animated: true
+      animated: true,
     })
 
     this.setState({currentPage})
@@ -366,7 +366,7 @@ export default class WelcomeModal extends Component {
     this.scrollview.scrollTo({
       x       : width * currentPage,
       y       : 0,
-      animated: true
+      animated: true,
     })
 
     this.setState({currentPage})
@@ -377,14 +377,14 @@ export default class WelcomeModal extends Component {
     let {width} = Dimensions.get('window')
 
     this.setState({
-      currentPage: Platform.OS === 'android' ? Math.ceil((x <= width ? x : x - width) / (width)) : Math.ceil(x / width)
+      currentPage: Platform.OS === 'android' ? Math.ceil((x <= width ? x : x - width) / (width)) : Math.ceil(x / width),
     })
   }
 
   render() {
     let hasBackPages = this.state.currentPage !== 0
     let hasMorePages = this.state.currentPage !== this.state.lastPageIndex
-    let doneText     = User.loggedIn() ? 'Got it' : 'Register Later'
+    let doneText     = 'Got it' // User.loggedIn() ? 'Got it' : 'Register Later'
     let doneButtonStyle
     if (User.loggedIn()) {
       doneButtonStyle = style.isPrimary
@@ -441,14 +441,14 @@ export default class WelcomeModal extends Component {
 
 WelcomeModal.propTypes = {
   onLoginRequest: PropTypes.func.isRequired,
-  onDone        : PropTypes.func.isRequired
+  onDone        : PropTypes.func.isRequired,
 }
 
 const style = StyleSheet.create({
   container: {
     flex           : 1,
     backgroundColor: '#f5f5f5',
-    justifyContent : 'space-between'
+    justifyContent : 'space-between',
   },
 
   body: {
@@ -458,10 +458,10 @@ const style = StyleSheet.create({
     paddingHorizontal: 30,
     paddingBottom    : 10,
     ...ifIphoneX({
-      paddingTop: 45
+      paddingTop: 45,
     }, {
-      paddingTop: 30
-    })
+      paddingTop: 30,
+    }),
   },
 
   footer: {
@@ -470,22 +470,22 @@ const style = StyleSheet.create({
     padding        : 10,
     backgroundColor: '#212121',
     ...ifIphoneX({
-      paddingBottom: 25
-    })
+      paddingBottom: 25,
+    }),
   },
 
   image: {
     width       : 128,
     height      : 128,
     resizeMode  : 'contain',
-    marginBottom: 22
+    marginBottom: 22,
   },
 
   title: {
     color     : '#222',
     fontWeight: '500',
     fontSize  : 16,
-    textAlign : 'center'
+    textAlign : 'center',
   },
 
   bodyText: {
@@ -493,34 +493,34 @@ const style = StyleSheet.create({
     marginTop : 22,
     fontSize  : 14,
     textAlign : 'center',
-    lineHeight: 20
+    lineHeight: 20,
   },
 
   button: {
     paddingVertical  : 10,
     paddingHorizontal: 20,
-    borderRadius     : 4
+    borderRadius     : 4,
   },
 
   buttonText: {
-    fontSize: 12
+    fontSize: 12,
   },
 
   isPrimary: {
     backgroundColor: Colors.primary,
-    ...(new Elevation(2))
+    ...(new Elevation(2)),
   },
 
   primaryText: {
-    color: Colors.primaryText
+    color: Colors.primaryText,
   },
 
   isDisabled: {
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
 
   disabledText: {
-    color: '#555'
+    color: '#555',
   },
 
   form: {
@@ -528,7 +528,7 @@ const style = StyleSheet.create({
     marginBottom   : 10,
     borderRadius   : 5,
     borderWidth    : 1,
-    borderColor    : '#ddd'
+    borderColor    : '#ddd',
   },
 
   formGroup: {
@@ -536,14 +536,14 @@ const style = StyleSheet.create({
     alignItems       : 'center',
     borderBottomWidth: 1,
     borderBottomColor: '#ddd',
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
   },
 
   label: {
     color     : '#444',
     fontWeight: '500',
     fontSize  : 12,
-    width     : 70
+    width     : 70,
   },
 
   input: {
@@ -555,33 +555,33 @@ const style = StyleSheet.create({
     backgroundColor: 'transparent',
     fontSize       : 12,
     borderRadius   : 5,
-    height         : 40
+    height         : 40,
   },
 
   mutedText: {
     fontSize: 12,
-    color   : '#888'
+    color   : '#888',
   },
 
   row: {
     justifyContent: 'space-between',
     flexDirection : 'row',
-    alignItems    : 'center'
+    alignItems    : 'center',
   },
 
   muteLink: {
     color             : '#666',
     textDecorationLine: 'underline',
-    fontSize          : 14
+    fontSize          : 14,
   },
 
   isGoogle: {
-    backgroundColor: Colors.googleRed
+    backgroundColor: Colors.googleRed,
   },
 
   googleText: {
     color     : Colors.googleRedText,
     fontSize  : 14,
-    fontWeight: 'bold'
-  }
+    fontWeight: 'bold',
+  },
 })

@@ -1,19 +1,19 @@
 import React from 'react'
-import {createStackNavigator} from 'react-navigation'
+import { createStackNavigator } from 'react-navigation-stack'
 import MapScreen from '../screens/MapScreen'
 import ObservationScreen from '../screens/ObservationScreen'
 
 const MapStackNavigator = createStackNavigator({
   Map: {
-    screen: MapScreen
+    screen: MapScreen,
   },
 
   ObservationFromMap: {
-    screen: ObservationScreen
-  }
+    screen: ObservationScreen,
+  },
 }, {
   initialRouteName: 'Map',
-  headerMode      : 'none'
+  headerMode      : 'none',
 })
 
 MapStackNavigator.navigationOptions = ({navigation}) => {
@@ -24,7 +24,7 @@ MapStackNavigator.navigationOptions = ({navigation}) => {
   }
 
   return {
-    tabBarVisible
+    tabBarVisible,
   }
 }
 

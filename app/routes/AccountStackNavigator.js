@@ -1,4 +1,4 @@
-import {createStackNavigator} from 'react-navigation'
+import { createStackNavigator } from 'react-navigation-stack'
 import IntermediateAccountScreen from '../screens/IntermediateAccountScreen'
 import PersonalInformationScreen from '../screens/PersonalInformationScreen'
 import ChangePasswordScreen from '../screens/ChangePasswordScreen'
@@ -7,18 +7,18 @@ import ChangePasswordScreen from '../screens/ChangePasswordScreen'
  * ANDROID ONLY
  */
 const AccountStackNavigator = new createStackNavigator({
-  Account      : {
-    screen: IntermediateAccountScreen
+  Account            : {
+    screen: IntermediateAccountScreen,
   },
   PersonalInformation: {
-    screen: PersonalInformationScreen
+    screen: PersonalInformationScreen,
   },
-  ChangePassword: {
-    screen: ChangePasswordScreen
+  ChangePassword     : {
+    screen: ChangePasswordScreen,
   },
 }, {
   initialRouteName: 'Account',
-  headerMode      : 'none'
+  headerMode      : 'none',
 })
 
 AccountStackNavigator.navigationOptions = ({navigation}) => {
@@ -31,7 +31,7 @@ AccountStackNavigator.navigationOptions = ({navigation}) => {
 
   return {
     drawerLockMode,
-    tabBarVisible
+    tabBarVisible,
   }
 }
 

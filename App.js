@@ -16,6 +16,7 @@ import WelcomeModal from './app/components/WelcomeModal'
 import NotificationsController from './app/components/NotificationsController'
 import ObservationLostImagesFixer from './app/components/ObservationLostImagesFixer'
 import Geolocation from '@react-native-community/geolocation'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 
 export default class App extends Component {
   constructor(props) {
@@ -93,30 +94,32 @@ export default class App extends Component {
 
     return (
       <View style={styles.container}>
-        <StatusBar
-          backgroundColor="#25897d"
-          barStyle="light-content"
-        />
-        <WelcomeModal
-          onLoginRequest={() => {
-            DeviceEventEmitter.emit('loginRequest')
-          }}
-          onDone={() => {
-            DeviceEventEmitter.emit('welcomeModalDone')
-            this.setState({requestNotifications: true})
-          }}
-        />
-        {this.state.appReady ?
-          <ObservationLostImagesFixer/>
-          : null}
-        <Navigator uriPrefix={prefix}/>
-        <SnackBarNotice
-          topLevel={true}
-          ref={(ref) => this.snackbar = ref} noticeText={this.state.snackMessage}/>
-        {this.state.requestNotifications ?
-          <NotificationsController onUploadRequest={() => {
-            DeviceEventEmitter.emit('uploadRequested')
-          }}/> : null}
+        <SafeAreaProvider>
+          <StatusBar
+            backgroundColor="#25897d"
+            barStyle="light-content"
+          />
+          <WelcomeModal
+            onLoginRequest={() => {
+              DeviceEventEmitter.emit('loginRequest')
+            }}
+            onDone={() => {
+              DeviceEventEmitter.emit('welcomeModalDone')
+              this.setState({requestNotifications: true})
+            }}
+          />
+          {this.state.appReady ?
+            <ObservationLostImagesFixer/>
+            : null}
+          <Navigator uriPrefix={prefix}/>
+          <SnackBarNotice
+            topLevel={true}
+            ref={(ref) => this.snackbar = ref} noticeText={this.state.snackMessage}/>
+          {this.state.requestNotifications ?
+            <NotificationsController onUploadRequest={() => {
+              DeviceEventEmitter.emit('uploadRequested')
+            }}/> : null}
+        </SafeAreaProvider>
       </View>
     )
   }

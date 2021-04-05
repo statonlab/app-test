@@ -264,25 +264,6 @@ export default class LoginScreen extends Screen {
                 <Text style={[styles.link]}>Register</Text>
               </TouchableOpacity>
             </View>
-
-            {isAndroid && Platform.Version <= 22 ? null :
-              <View style={styles.formGroup}>
-                <TouchableOpacity
-                  style={[styles.button, {
-                    backgroundColor: Colors.googleRed,
-                    flexDirection  : 'row',
-                    justifyContent : 'center',
-                    alignItems     : 'center',
-                    paddingVertical: 5
-                  }]}
-                  onPress={User.loginWithGoogle.bind(this)}>
-                  <Icon name={'logo-google'} size={24} color={Colors.googleRedText} style={{marginRight: 7, marginLeft: 5}}/>
-                  <Text style={[styles.buttonText, {fontWeight: 'bold', color: '#fff'}]}>
-                    Login with Google
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            }
           </View>
         </ScrollView>
       </View>
